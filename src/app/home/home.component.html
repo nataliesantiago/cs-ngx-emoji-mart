@@ -1,0 +1,65 @@
+<div>
+  <div class="img__logo down">
+    <img src="assets/images/Conecta-Soporte.png" alt="imagen" class="img_small">
+  </div>
+  <div class="texto__principal down">
+    <h2 class="text_center texto_rojo">¿Comó Podemos Ayudarte?</h2>
+  </div>
+  <div id="search-bar" class="up">
+      <span><img src="https://cdn3.iconfinder.com/data/icons/watchify-v1-0-32px/32/magnifying-glass-search-256.png" alt="icone de recherche" width="35px"></span>
+      <input type="search" placeholder="Describe el problema." id="src-b" >
+  </div>
+  <div class="historial__contenedor up">
+    <a href="" class="historial">Ver Historial</a>
+  </div> 
+  <div fxLayout="row" fxLayoutWrap="wrap" class="right">
+      <!-- column -->
+      <div fxFlex.gt-sm="70" fxFlex.gt-xs="70" fxFlex="70">
+          <mat-card>
+              <mat-card-content class="sombra__carta2">
+                  <!-- Row -->
+                  <div fxLayout="row" fxLayoutWrap="wrap">
+                      <!-- column -->
+                      <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                          <nav>
+                              <ul>
+                                <h3>Preguntas Frecuentes</h3>
+                                <hr>
+                                 <li *ngFor="let pregunta of preguntasArray">{{pregunta.id}} - <a href=""> {{pregunta.consulta}}</a></li>
+                              </ul>
+                          </nav>
+                      </div>
+                  </div>
+              </mat-card-content>
+          </mat-card>
+
+          
+      </div>
+      <div fxFlex.gt-sm="70" fxFlex.gt-xs="70" fxFlex="70" class="right">
+        <mat-card>
+            <mat-card-content class="sombra__carta">
+                <!-- Row -->
+                <div fxLayout="row" fxLayoutWrap="wrap">
+                    <!-- column -->
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" > 
+                        <nav>
+                            <ul>
+                              <h3>Últimas Busquedas</h3>
+                              <hr>
+                               <li *ngFor="let busqueda of busquedasArray">{{busqueda.id}} - <a href=""> {{busqueda.busqueda}}</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="btn__contenedor">
+            <button class="btn_sugerencias">Sugerencias</button>
+        </div>
+        
+    </div>
+      <!-- column -->
+  </div>
+  
+</div>
