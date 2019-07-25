@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HomeService } from '../services/home.service';
+import { ResponseSearch } from '../models/response-search';
 
 @Component({
   selector: 'app-home',
@@ -16,13 +17,8 @@ export class HomeComponent implements OnInit {
   searchText: string;
   myForm: FormControl;
   filteredOptions: Observable<any[]>;
-  textoPredictivo: any = [
-    { id: 1, consulta: 'Como crear mi cuenta corriente' },
-    { id: 2, consulta: 'Credito para mi casa nueva cuenta bancaria' },
-    { id: 3, consulta: 'Beneficios del banco' },
-    { id: 4, consulta: 'Davivienda desde tu celular' },
-    { id: 5, consulta: 'Cuenta de ahorro para pensionados' },
-    { id: 6, consulta: 'Puntos de atención' }
+  respuesta = new ResponseSearch;
+  textopredictivo: any = [
   ];
   preguntasArray = [
     { id: 1, consulta: 'Como crear mi cuenta corriente' },
@@ -46,22 +42,20 @@ export class HomeComponent implements OnInit {
   ) {
     this.searchText = '';
   }
-
-  ngOnInit(): void {
-
-    this.myForm = new FormControl();
-    this.filteredOptions = this.myForm.valueChanges
-      .startWith(null)
-      .map(term => this.findOption(term));
-
-
+  keyword = 'title';
+  selectEvent(item) {
+    // do something with selected item
+    debugger;
+    this.searchText = item.title;
   }
 
-  findOption(val: string) {
-    this.homeService.autocompleteText(val).subscribe((data) => 
-      console.log(data)
+  onChangeSearch(val: string) {
+    this.searchText = val;
+    this.homeService.autocompleteText(val).subscribe((data) =>
+      this.textopredictivo = data.data
     );
-    return this.textoPredictivo.filter((s) => new RegExp(val, 'gi').test(s.consulta));
+  }
+  ngOnInit(): void {
   }
 
   buscar() {
@@ -69,6 +63,7 @@ export class HomeComponent implements OnInit {
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = '';
     }
+    this.respuesta.setResultados(this.textopredictivo);
     this.router.navigate(['/search/' + this.searchText]);
   }
 }

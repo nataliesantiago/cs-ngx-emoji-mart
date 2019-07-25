@@ -7,23 +7,31 @@
     </div>
     <div id="search-bar" class="up">
             
-        <form>
-            <mat-form-field class="tp-full-width">
-                <input type="search" placeholder="Describe el problema."  [(ngModel)]="searchText" matInput [formControl]="myForm"
-                    [matAutocomplete]="auto" class="src-b">
-                    <span><img src="https://cdn3.iconfinder.com/data/icons/watchify-v1-0-32px/32/magnifying-glass-search-256.png"
-                        (click)="buscar()" alt="icone de recherche" width="35px" class="img_lupa"></span>
-                        <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
-                                imágenes</span></i>
-                        <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
-                                voz</span></i>
-                 <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let pre of filteredOptions | async" [value]="pre.consulta">
-                        {{pre.consulta}}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-        </form>
+        <div class="ng-autocomplete">
+            <ng-autocomplete 
+              [data]="textopredictivo"
+              [searchKeyword]="keyword"
+              (selected)='selectEvent($event)'
+              (inputChanged)='onChangeSearch($event)'
+              [itemTemplate]="itemTemplate"
+              [notFoundTemplate]="notFoundTemplate"
+              >                                 
+            </ng-autocomplete>
+             
+            <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.title"></a>
+            </ng-template>
+             
+            <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+            </ng-template>
+            <span><img src="https://cdn3.iconfinder.com/data/icons/watchify-v1-0-32px/32/magnifying-glass-search-256.png"
+                (click)="buscar()" alt="icone de recherche" width="35px" class="img_lupa"></span>
+                <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
+                        imágenes</span></i>
+                <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
+                        voz</span></i>
+        </div>
         
     </div>
     <div class="historial__contenedor up">

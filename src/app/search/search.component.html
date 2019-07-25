@@ -1,10 +1,8 @@
-<!-- <app-header></app-header>
-<app-sidebar></app-sidebar> -->
 <div>
   <div *ngIf="resultado">
     <h2>Resultados de la búsqueda de <b>{{busqueda}}</b></h2>
     <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida}}</b></h2>
-    <mat-card *ngFor="let busqueda of resultadosBusqueda">
+    <mat-card *ngFor="let busqueda of resultadosBus">
       <mat-card-header>
         <div mat-card-avatar>
           <img src="assets/categorias/{{busqueda.categoria}}.png" class="img-fluid img-circle" />
