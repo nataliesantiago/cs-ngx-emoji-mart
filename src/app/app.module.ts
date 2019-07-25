@@ -22,6 +22,19 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
+import * as firebase from "firebase";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCk1WFHTdfSmhcH63_iGZU_s3AvwiQI_RU",
+  authDomain: "davivienda-comunidades-col-dev.firebaseapp.com",
+  databaseURL: "https://davivienda-comunidades-col-dev.firebaseio.com",
+  projectId: "davivienda-comunidades-col-dev",
+  storageBucket: "",
+  messagingSenderId: "993073337079",
+  appId: "1:993073337079:web:4dc46bec7c927ec7"
+};
+firebase.initializeApp(firebaseConfig);
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -58,4 +71,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

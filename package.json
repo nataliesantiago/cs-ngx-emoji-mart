@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "configure":"gcloud config configurations activate davivienda-comunidades-col-dev"
+    "configure": "gcloud config configurations activate davivienda-comunidades-col-dev"
   },
   "private": true,
   "dependencies": {
@@ -33,12 +33,14 @@
     "chartist": "^0.11.0",
     "core-js": "2.4.1",
     "d3": "^4.8.0",
+    "dz-gibberish-aes": "^1.0.0",
+    "firebase": "^6.3.1",
     "hammerjs": "^2.0.8",
     "jquery": "^3.3.1",
     "moment": "^2.22.2",
     "ng-chartist": "1.1.1",
-    "ng2-charts": "1.6.0",
     "ng-multiselect-dropdown": "^0.2.3",
+    "ng2-charts": "1.6.0",
     "ng2-completer": "^2.0.8",
     "ng2-dragula": "1.5.0",
     "ng2-file-upload": "1.3.0",
