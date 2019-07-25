@@ -36,7 +36,7 @@ File: scss
     display: flex;
     flex-flow:row wrap;
     .mat-card{
-       margin: 15px 0px !important;
+       margin: 15px 0px;
        flex: 1 0 0%;
         border-left:1px solid $border;
             &:first-child{
@@ -44,9 +44,8 @@ File: scss
             }
         }
     } 
-
     
-}   
+}
 
 @media(max-width:1023px) {
     .card-group{
@@ -74,34 +73,7 @@ File: scss
             padding-top: 0px;
         }
     }
-    html {
-        .popular-plan{
-            margin: 60px 0 !important;
-        }
-    }
-}
-
-@media(max-width: 600px) {
-  .responsive-table{
-    .header-label {
-      width: 80px;
-      display: inline-block;
-      font-weight: bold;
-    }
-
-    .mat-header-row {
-      display: none;
-    }
-
-    .mat-row { 
-      flex-direction: column;
-      align-items: start;
-      padding: 8px 15px;
-      &:after{
-        min-height: unset;
-      }
-    }
-  }
+    
 }
 
 
@@ -113,6 +85,9 @@ File: scss
     .mat-toolbar-single-row{
         height: 64px!important;
     }
+    .d-flex{
+        display: block;
+    }
     .no-block{
         display: flex;
     }
@@ -123,10 +98,5 @@ File: scss
         }
     .icon-box{
         width: 50%;
-    }
-    html {
-        .popular-plan{
-            margin: 40px 0 !important;
-        }
     }
 }

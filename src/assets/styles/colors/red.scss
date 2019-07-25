@@ -9,6 +9,7 @@ File: scss
 
 /*Material Theme Colors*/
 
+@include mat-core();
 $red-app-primary: mat-palette($mat-red);
 $red-app-accent: mat-palette($mat-indigo, A200, A100, A400);
 $red-app-warn: mat-palette($mat-pink);
@@ -17,8 +18,8 @@ $red-app-theme: mat-light-theme($red-app-primary, $red-app-accent, $red-app-warn
 $themecolor:#F44336;
 $themecolor-alt: #E53935;
 $white:#fff;
-#snav {
-    .mat-nav-list .mat-list-item {
+.danger #snav {
+    .mat-list-item {
         .mat-list-item-content {
             &:hover {
                 > a {

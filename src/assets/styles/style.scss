@@ -37,20 +37,20 @@ File: scss
 
 .danger {  
 	@import 'colors/red';
-	@include angular-material-theme($red-app-theme);
+  	@include angular-material-theme($red-app-theme);
 }
 
 // Blue Theme
 
-.blue { 
-	@import 'colors/blue'; 
+.blue {  
+	@import 'colors/blue';
   	@include angular-material-theme($blue-app-theme);
 }
 
 // Green Theme
 
-.green {  
-	@import 'colors/green';
+.green { 
+	@import 'colors/green'; 
   	@include angular-material-theme($green-app-theme);
 }
 
