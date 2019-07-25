@@ -1,6 +1,13 @@
 <!-- ============================================================== -->
-<!-- Main wrapper - style you can find in pages.scss -->
+<!-- Simple four boxes Row -->
 <!-- ============================================================== -->
-<router-outlet>
-    <app-spinner></app-spinner>
-</router-outlet>
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <!-- column -->
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+        <!-- Row -->
+        <app-full-layout></app-full-layout>
+        <router-outlet></router-outlet>
+        <!-- <app-home></app-home> -->
+    </div>
+    <!-- column -->
+</div>

@@ -4,8 +4,7 @@ Author: Themedesigner
 Email: niravjoshi87@gmail.com
 File: scss
 */
-// font family, also paste this import into styles.css file.
-
+// Variables
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
 
 $bodyfont:'Poppins', sans-serif;
@@ -22,6 +21,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
 $background: map-get($theme, background);
 $foreground: map-get($theme, foreground);
 
+
 // Default Theme
 @include angular-material-theme($theme);
 
@@ -37,7 +37,7 @@ $sidebar-alt:#f2f6f8;
 $bodycolor: #eef5f9;
 $headingtext: #455a64;
 $bodytext: #67757c; 
-$sidebar-text: #8f999e;
+$sidebar-text: #607d8b;
 $sidebar-icons: #99abb4 ;
 
 $font-16: 16px;
