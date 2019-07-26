@@ -2,7 +2,7 @@
 <!-- Notification - style you can find in header.scss -->
 <!-- ============================================================== -->
 <button [matMenuTriggerFor]="notification" mat-icon-button class="m-r-10">
-    <mat-icon>message</mat-icon>
+    <img src="../../../../assets/images/SOS.svg" alt="" class="sos">
     <div class="notify">
         <span class="heartbit"></span>
         <span class="point"></span>
@@ -40,7 +40,7 @@
 <!-- Profile - style you can find in header.scss -->
 <!-- ============================================================== -->
 <button [matMenuTriggerFor]="message" mat-icon-button class="m-r-10">
-    <mat-icon>email</mat-icon>
+    <img src="../../../../assets/images/Alerta.svg" alt="" class="alerta">
     <div class="notify">
         <span class="heartbit"></span>
         <span class="point"></span>
@@ -67,7 +67,7 @@
                             <span class="time">{{mymessage.time}}</span>
                         </div>
                     </a>
-                    <!-- Message -->
+                    !-- Message -->
 
                 </div>
             </li>
@@ -77,15 +77,3 @@
 <!-- ============================================================== -->
 <!-- Profile - style you can find in header.scss -->
 <!-- ============================================================== -->
-<button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-10">
-    <img src="assets/images/users/1.jpg" alt="user" class="profile-pic"> </button>
-<mat-menu #profile="matMenu" class="mymegamenu">
-    <button mat-menu-item>
-        <mat-icon>settings</mat-icon> Settings </button>
-    <button mat-menu-item>
-        <mat-icon>account_box</mat-icon> Profile </button>
-    <button mat-menu-item>
-        <mat-icon>notifications_off</mat-icon> Disable notifications </button>
-    <button mat-menu-item>
-        <mat-icon>exit_to_app</mat-icon> Sign Out </button>
-</mat-menu>

@@ -1,65 +1,18 @@
-<!-- ============================================================== -->
-<!-- sidebar -->
-<!-- ============================================================== -->
-<div class="user-profile" style="background: url(assets/images/background/user-info.jpg) no-repeat;">
-    <!-- User profile image -->
-    <div class="profile-img">
-        <img src="assets/images/users/profile.png" alt="user"> </div>
-    <!-- User profile text-->
-    <!-- ============================================================== -->
-    <!-- Profile - style you can find in header.scss -->
-    <!-- ============================================================== -->
-    <div class="profile-text">
-        <a [matMenuTriggerFor]="sdprofile" class=""> Markarn Doe
-            <i class="ti-angle-down font-12 m-l-5"></i>
-        </a>
-    </div>
-    <mat-menu #sdprofile="matMenu" class="mymegamenu">
-        <button mat-menu-item>
-            <mat-icon>settings</mat-icon> Settings </button>
-        <button mat-menu-item>
-            <mat-icon>account_box</mat-icon> Profile </button>
-        <button mat-menu-item>
-            <mat-icon>notifications_off</mat-icon> Disable notifications </button>
-        <button mat-menu-item>
-            <mat-icon>exit_to_app</mat-icon> Sign Out </button>
-    </mat-menu>
-</div>
 <mat-nav-list appAccordion>
-    <mat-list-item appAccordionLink *ngFor="let menuitem of menuItems.getMenuitem()" routerLinkActive="selected" group="{{menuitem.state}}">
-        <a class="" appAccordionToggle [routerLink]="['/', menuitem.state]" *ngIf="menuitem.type === 'link'">
-            <mat-icon>{{ menuitem.icon }}</mat-icon>
-            <span>{{ menuitem.name }}</span>
-            <span fxFlex></span>
-            <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
-        </a>
-
-        <a class="" appAccordionToggle href="{{menuitem.state}}" *ngIf="menuitem.type === 'extLink'">
-            <mat-icon>{{ menuitem.icon }}</mat-icon>
-            <span>{{ menuitem.name }}</span>
-            <span fxFlex></span>
-            <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
-        </a>
-        <a class="" appAccordionToggle href="{{menuitem.state}}" target="_blank" *ngIf="menuitem.type === 'extTabLink'">
-            <mat-icon>{{ menuitem.icon }}</mat-icon>
-            <span>{{ menuitem.name}}</span>
-            <span fxFlex></span>
-            <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
-        </a>
-        <a class="" appAccordionToggle href="javascript:;" *ngIf="menuitem.type === 'sub'">
-            <mat-icon>{{ menuitem.icon }}</mat-icon>
-            <span>{{ menuitem.name }}</span>
-            <span fxFlex></span>
-            <span class="label label-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
-            <mat-icon class="dd-icon">keyboard_arrow_down</mat-icon>
-        </a>
-        <mat-nav-list class="sub-item" *ngIf="menuitem.type === 'sub'">
-            <mat-list-item *ngFor="let childitem of menuitem.children" routerLinkActive="selected">
-                <a [routerLink]="['/', menuitem.state, childitem.state ]" class="relative" routerLinkActive="selected">{{ childitem.name}}</a>
-            </mat-list-item>
-        </mat-nav-list>
-        <div class="saperator text-muted" *ngIf="menuitem.type === 'saperator'">
-            <span>{{ menuitem.name }}</span>
+    <img src="assets/images/Conecta-Soporte.png" alt="conecta_logo" class="img_conecta">
+    <div class="contenedor__sidebar">
+        <div>
+            <ul>
+                <li>Preguntas y respuestas</li>
+                <li>Conecta gestión</li>
+                <li>Mis chat</li>
+            </ul>
         </div>
-    </mat-list-item>
+        <div class="sidebar_mt">
+            <ul>
+                <li><a href="">Configuración</a> <i class="fa fa-cog side_gear" aria-hidden="true"></i></li>
+                <li><a href="">Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </div>
 </mat-nav-list>
