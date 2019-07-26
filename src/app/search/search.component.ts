@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResponseSearch } from '../models/response-search';
+import { HomeService } from '../services/home.service';
 
 @Component({
   selector: 'app-search',
@@ -21,6 +22,7 @@ export class SearchComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     public responseSearch: ResponseSearch,
+    private homeService: HomeService,
   ) {
     this.resultadosBus = this.responseSearch.getResultados();
     console.log('Este es el array', this.resultadosBus);
@@ -28,6 +30,10 @@ export class SearchComponent implements OnInit {
       if (this.resultadosBus !== '' && this.resultadosBus.length !== 0) {
         this.resultado = true;
       }
+    } else {
+      this.homeService.autocompleteText(this.busqueda).subscribe((data) =>
+      this.resultadosBus = data.data
+    );
     }
   }
 
