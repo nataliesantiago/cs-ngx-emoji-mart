@@ -13,8 +13,6 @@ import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './demo-material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SharedModule } from './shared/shared.module';
-import { SpinnerComponent } from './shared/spinner.component';
 import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
 import { HighlightPipe } from './home/highlight.pipe';
