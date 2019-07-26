@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
   searchText: string;
   myForm: FormControl;
   filteredOptions: Observable<any[]>;
-  respuesta = new ResponseSearch;
   textopredictivo: any = [
   ];
   preguntasArray = [
@@ -39,6 +38,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private router: Router,
     private homeService: HomeService,
+    public responseSearch: ResponseSearch,
   ) {
     this.searchText = '';
   }
@@ -63,7 +63,8 @@ export class HomeComponent implements OnInit {
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = '';
     }
-    this.respuesta.setResultados(this.textopredictivo);
+    this.responseSearch.setResultados(this.textopredictivo);
+    console.log('Este es el array', this.responseSearch.getResultados());
     this.router.navigate(['/search/' + this.searchText]);
   }
 }
