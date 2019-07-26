@@ -5,10 +5,12 @@
     <mat-card *ngFor="let busqueda of resultadosBus">
       <mat-card-header>
         <div mat-card-avatar>
-          <img src="assets/categorias/{{busqueda.categoria}}.png" class="img-fluid img-circle" />
+          <!-- <img src="assets/categorias/{{busqueda.categoria}}.png" class="img-fluid img-circle" /> -->
+          <img src="assets/categorias/aperturas.png" class="img-fluid img-circle" />
         </div>
         <div mat-card-avatar>
-          <img src="assets/origen/{{busqueda.origen}}.png" class="img-fluid img-circle" />
+          <!-- <img src="assets/origen/{{busqueda.origen}}.png" class="img-fluid img-circle" /> -->
+          <img src="assets/origen/drive.png" class="img-fluid img-circle" />
         </div>
         <mat-card-title><b><div [innerHTML]="busqueda.htmlTitle"></div></b></mat-card-title>
       </mat-card-header>
