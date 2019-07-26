@@ -20,10 +20,11 @@ import { HighlightPipe } from './home/highlight.pipe';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
+import { ResponseSearch } from './models/response-search';
 /*import * as firebase from "firebase";
 
 const firebaseConfig = {
@@ -71,8 +72,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }],
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+    },
+    //models
+    ResponseSearch
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -15,21 +15,21 @@ export class SearchComponent implements OnInit {
   ortografia: boolean = false;
   busquedaCorregida: String;
   resultadosBus;
-  respuesta = new ResponseSearch;
+  respuesta: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public responseSearch: ResponseSearch,
   ) {
-    debugger;
-    //this.respuesta.setResultados("");
-    this.resultadosBus = this.respuesta.getResultados();
+    this.resultadosBus = this.responseSearch.getResultados();
     console.log('Este es el array', this.resultadosBus);
-    console.log(this.resultadosBus);
-    if(this.resultadosBus !== '' && this.resultadosBus.length !== 0){
-      this.resultado = true;
+    if (this.resultadosBus !== undefined && this.resultadosBus !== null) {
+      if (this.resultadosBus !== '' && this.resultadosBus.length !== 0) {
+        this.resultado = true;
+      }
     }
-   }
+  }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
