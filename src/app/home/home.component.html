@@ -7,12 +7,11 @@
     </div>
     <div id="search-bar" class="up">
         <span><img src="https://cdn3.iconfinder.com/data/icons/watchify-v1-0-32px/32/magnifying-glass-search-256.png"
-                alt="icone de recherche" width="35px"></span>
-        <input type="search" placeholder="Describe el problema." id="src-b">
-        <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
-                imágenes</span></i>
-        <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
-                voz</span></i>
+            (click)="buscar()" alt="icone de recherche" width="35px" class="img_lupa"></span>
+            <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
+                    imágenes</span></i>
+            <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
+                    voz</span></i>
 
                 <div class="ng-autocomplete">
                     <ng-autocomplete 
@@ -32,12 +31,6 @@
                     <ng-template #notFoundTemplate let-notFound>
                     <div [innerHTML]="notFound"></div>
                     </ng-template>
-                    <span><img src="https://cdn3.iconfinder.com/data/icons/watchify-v1-0-32px/32/magnifying-glass-search-256.png"
-                        (click)="buscar()" alt="icone de recherche" width="35px" class="img_lupa"></span>
-                        <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
-                                imágenes</span></i>
-                        <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
-                                voz</span></i>
                 </div>        
     </div>
     <div class="historial__contenedor up">
