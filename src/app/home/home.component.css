@@ -172,6 +172,20 @@ li{
     transition: all ease 0.5s;
     }
     
+    @keyframes move-hard {
+      0% {
+        transform: scale(1, 1);
+      }
+      50% {
+        transform: scale(1.1, 1.2);
+        transform: rotate(45deg);
+        transform: translate(4px, 12px);
+        transform: skew(0, -12deg);
+      }
+      100% {
+        transform: scale(1, 1)
+      }
+    }
     .btn_sugerencias:hover{
     box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
     }

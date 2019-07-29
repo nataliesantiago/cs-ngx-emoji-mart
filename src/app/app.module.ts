@@ -16,6 +16,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
 import { HighlightPipe } from './home/highlight.pipe';
+import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
+import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -77,7 +79,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
     //models
-    ResponseSearch
+    ResponseSearch,
+    SpeechRecognizerService,
+    SpeechSynthesizerService
   ],
   bootstrap: [AppComponent]
 })
