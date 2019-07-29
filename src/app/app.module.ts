@@ -25,6 +25,7 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { ResponseSearch } from './models/response-search';
+import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
 /*import * as firebase from "firebase";
 
 const firebaseConfig = {
@@ -53,7 +54,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppSidebarComponent,
     SearchComponent,
     HomeComponent,
-    HighlightPipe
+    HighlightPipe,
+    BuzonSugerenciasComponent
   ],
   imports: [
     BrowserModule,

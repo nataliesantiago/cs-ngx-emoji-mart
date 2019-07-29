@@ -1,0 +1,16 @@
+<div>
+  <mat-form-field class="example-ripple-form-field">
+    <input matInput [(ngModel)]="nombres" type="number" placeholder="Nombres">
+  </mat-form-field>
+  <mat-form-field class="example-ripple-form-field">
+    <input matInput [(ngModel)]="apellidos" type="number" placeholder="Apellidos">
+  </mat-form-field>
+  <mat-form-field class="example-ripple-form-field">
+    <input matInput [(ngModel)]="email" type="number" placeholder="E-mail">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput [(ngModel)]="sugerencia" maxlength="256" placeholder="Sugerencia">
+    <mat-hint align="start"><strong>Describenos tu sugerencia</strong> </mat-hint>
+    <mat-hint align="end">{{sugerencia.length}}/ 256</mat-hint>
+  </mat-form-field>
+</div>
