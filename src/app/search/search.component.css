@@ -1,6 +1,12 @@
-div{
-    background: #ffffff !important;
-    color:black;
+.historial__contenedor {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+div {
+    color: black;
     font-family: "Lato", sans-serif;
 }
 
@@ -10,3 +16,37 @@ div{
     display: block;
 }
 
+.img-circle {
+    max-width: 1.5em;
+    margin-right: 1em
+}
+
+.fila {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.contenedor__texto {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    width: 40em
+}
+
+.historial__contenedor {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.fila2 {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    margin-top: -40px;
+}
