@@ -16,14 +16,19 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
 import { HighlightPipe } from './home/highlight.pipe';
+import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
+import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
-import * as firebase from "firebase";
+import { ResponseSearch } from './models/response-search';
+import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
+/*import * as firebase from "firebase";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCk1WFHTdfSmhcH63_iGZU_s3AvwiQI_RU",
@@ -36,13 +41,12 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-
+*/
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
   wheelPropagation: true
 };
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +56,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppSidebarComponent,
     SearchComponent,
     HomeComponent,
-    HighlightPipe
+    HighlightPipe,
+    BuzonSugerenciasComponent
   ],
   imports: [
     BrowserModule,
@@ -65,13 +70,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HttpClientModule,
     SharedModule,
     PerfectScrollbarModule,
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes),
+    AutocompleteLibModule
   ],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }],
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+    },
+    //models
+    ResponseSearch,
+    SpeechRecognizerService,
+    SpeechSynthesizerService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

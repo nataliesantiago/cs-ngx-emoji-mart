@@ -28,7 +28,8 @@
               "src/assets/styles/style.scss"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js"
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/js/speech-to-text-imp.js"
             ]
           },
           "configurations": {
@@ -76,7 +77,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js"
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/js/speech-to-text-imp.js"
             ],
             "styles": [
               "src/styles.css",

@@ -1,35 +1,36 @@
-<!-- <app-header></app-header>
-<app-sidebar></app-sidebar> -->
-<div>
-  <div *ngIf="resultado">
-    <h2>Resultados de la búsqueda de <b>{{busqueda}}</b></h2>
-    <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida}}</b></h2>
-    <mat-card *ngFor="let busqueda of resultadosBusqueda">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <img src="assets/categorias/{{busqueda.categoria}}.png" class="img-fluid img-circle" />
+<div class="sin_fondo">
+    <div *ngIf="resultado" class="historial__contenedor">
+        <h2>Resultados de la búsqueda de <b>{{busqueda}}</b></h2>
+        <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida | highlight:valorBusqueda}}</b></h2>
+        <div *ngFor="let busqueda of resultadosBus" class="contenedor__texto center">
+            <h2 [innerHTML]="busqueda.htmlTitle"></h2>
+            <div class="fila">
+                <h4><img src="assets/categorias/aperturas.png" class="img-fluid img-circle" /> </h4>
+                <h4 [innerHTML]="busqueda.htmlFormattedUrl"></h4>
+            </div>
+            <div class="fila2">
+                <h4><img src="assets/origen/drive.png" class="img-fluid img-circle" /></h4>
+                <p [innerHTML]="busqueda.htmlSnippet"></p>
+            </div>
+            <mat-divider ng-if="!$last"></mat-divider>
         </div>
-        <div mat-card-avatar>
-          <img src="assets/origen/{{busqueda.origen}}.png" class="img-fluid img-circle" />
-        </div>
-        <mat-card-title><b><div [innerHTML]="busqueda.titulo | highlight: valorBusqueda"></div></b></mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div [innerHTML]="busqueda.descripcion | highlight: valorBusqueda"></div>
-      </mat-card-content>
-      <figure *ngIf="busqueda.imagen !== '' && busqueda.imagen != null">
-        <img alt="preguntas" src="{{busqueda.imagen}}" class="center" />
-      </figure>
-    </mat-card>
-  </div>
-  <div *ngIf="resultado == false">
-    <h3>No hemos encontrado ninguna respuesta que coincida con <b>{{busqueda}}</b> en Conecta Soporte. </h3>
-    <div>
-      <h4>Sugerencias:</h4>
-      <ul>
-        <li>Comprueba que todas las palabras estén bien escritas.</li>
-        <li>Intenta usar otras palabras clave.</li>
-      </ul>
     </div>
-  </div>
+    <div *ngIf="resultado == false">
+        <div>
+            <h3>
+                No hemos encontrado ninguna respuesta que coincida con <b>{{busqueda}}</b> en Conecta Soporte.
+            </h3>
+        </div>
+        <div>
+            <h4>Sugerencias:</h4>
+            <ul>
+                <li>Comprueba que todas las palabras estén bien escritas.</li>
+                <li>Intenta usar otras palabras clave.</li>
+                <li>Reformula tu pregunta.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="btn__contenedor">
+        <img src="../../../assets/images/logo-davivienda.png" alt="davivienda" class="davivienda_logo">
+    </div>
 </div>
