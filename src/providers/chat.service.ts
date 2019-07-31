@@ -8,24 +8,18 @@ import * as firebase from "firebase";
 import * as uuid from 'uuid/v4';
 import { User } from '../schemas/user.schema';
 
-
+/**
+ * @description Servicio que controla toda la información que se usa en el chat
+ */
 @Injectable()
-export class UserService {
+export class ChatService {
 
-  user: User;
-  id_calendario: string;
-  public socket: io.SocketIOClient.Socket;
-  public subjectUsuario = new Subject<any>();
-  public observableUsuario = this.subjectUsuario.asObservable();
-  planeaciones_creadas = [];
+  user: User; // Objeto del usuario para contar con su iformación
 
-  public subjectScoket = new Subject<any>();
-  public observableSocket = this.subjectScoket.asObservable();
-  SCOKET_IP;
-  conectado_socket = false;
-  dataBase;
-  ref;
-  este;
+
+  public subjectChat = new Subject<any>();
+  public observableChat = this.subjectChat.asObservable();
+
 
   constructor(private ajax: AjaxService) {
 

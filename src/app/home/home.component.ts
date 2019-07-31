@@ -20,7 +20,7 @@ import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   public def = new FormControl(''); // Model del autocomplete

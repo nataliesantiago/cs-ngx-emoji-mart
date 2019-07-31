@@ -29,6 +29,9 @@ import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { ResponseSearch } from './models/response-search';
 import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
+import { ChatClienteComponent } from './chat-cliente/chat-cliente.component';
+import { AjaxService } from '../providers/ajax.service';
+import { ChatService } from '../providers/chat.service';
 /*import * as firebase from "firebase";
 
 const firebaseConfig = {
@@ -58,7 +61,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SearchComponent,
     HomeComponent,
     HighlightPipe,
-    BuzonSugerenciasComponent
+    BuzonSugerenciasComponent,
+    ChatClienteComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +83,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
+    // Providers
+    AjaxService,
+    ChatService,
     //models
     ResponseSearch,
     SpeechRecognizerService,
