@@ -46,6 +46,7 @@ hr {
 }
 
 .img__logo {
+    margin-top: 10%;
     display: flex;
     justify-content: center;
 }
@@ -64,16 +65,16 @@ hr {
     width: 830px;
     height: 50px;
     background-color: #fff;
-    border-radius: 24px;
+    border-radius: 8px;
     margin: auto;
     margin-top: 60px;
-    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 2px 4px 3px 2px rgba(0, 0, 0, 0.3);
 }
 
 span>img {
-    margin-top: 7.5px;
-    margin-left: -15px;
-    float: right;
+    margin-top: 13.5px;
+    margin-left: -4px;
+    float: left;
 }
 
 #src-b {
@@ -82,7 +83,7 @@ span>img {
     height: 35px;
     border: none;
     color: #000;
-    font-family: "Open sans";
+    font-family: Myriad Pro !important;
     font-size: 15px;
     margin-top: 10px;
     margin-left: 10px;
@@ -120,7 +121,7 @@ ul>li {
     position: relative;
     width: auto;
     list-style: none;
-    font-family: "Open sans";
+    font-family: Myriad Pro !important;
     font-size: 14px;
     margin-left: -38px;
     margin-top: -4px;
@@ -205,7 +206,7 @@ li a:hover {
     float: right;
     margin-right: 10px;
     font-size: 22px;
-    color: var(--rojo_davivienda);
+    color: #B5B5B5;
     cursor: pointer;
 }
 
@@ -215,7 +216,7 @@ li a:hover {
     float: right;
     margin-right: 15px;
     font-size: 22px;
-    color: var(--naranja_davivienda);
+    color: #B5B5B5;
     cursor: pointer;
 }
 
@@ -283,7 +284,7 @@ article div p {
     font-weight: 400;
     font-style: italic;
     margin: 1rem 0 3rem;
-    font-family: "Noticia Text", serif;
+    font-family: Myriad Pro !important;
     position: relative;
     z-index: 5;
 }
@@ -305,7 +306,7 @@ article div p:before {
 
 article div h1 {
     color: hsl(260, 5%, 55%);
-    font-family: "Lato", sans-serif;
+    font-family: Myriad Pro !important;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05rem;
@@ -380,8 +381,10 @@ a:hover .tooltip {
 .image-upload>input {
     display: none;
 }
-.labelImage{
-    background: #3f4ec0;;
+
+.labelImage {
+    background: #3f4ec0;
+    ;
     color: #fff;
     width: 100px;
     display: inline-block;
@@ -390,4 +393,10 @@ a:hover .tooltip {
     border-radius: 7px;
     text-align: center;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 414px) {
+    #search-bar {
+        width: 100%;
+    }
 }

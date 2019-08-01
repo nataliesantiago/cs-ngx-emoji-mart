@@ -15,7 +15,6 @@ import { DemoMaterialModule } from './demo-material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
-import { HighlightPipe } from './home/highlight.pipe';
 import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
 import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
 
@@ -24,28 +23,32 @@ import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
-import * as firebase from "firebase";
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { ResponseSearch } from './models/response-search';
-import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
-import { ChatClienteComponent } from './chat-cliente/chat-cliente.component';
-import { AjaxService } from '../providers/ajax.service';
-import { ChatService } from '../providers/chat.service';
-/*import * as firebase from "firebase";
+import { HistorialUsuarioComponent } from './historial-usuario/historial-usuario.component';
+import { AutenticationService } from './services/autenticacion.service';
+import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
+import { environment } from '../environments/environment';
+import { PaginaBlancoComponent } from './pagina-blanco/pagina-blanco.component';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCk1WFHTdfSmhcH63_iGZU_s3AvwiQI_RU",
-  authDomain: "davivienda-comunidades-col-dev.firebaseapp.com",
-  databaseURL: "https://davivienda-comunidades-col-dev.firebaseio.com",
-  projectId: "davivienda-comunidades-col-dev",
-  storageBucket: "",
-  messagingSenderId: "993073337079",
-  appId: "1:993073337079:web:4dc46bec7c927ec7"
-};
-firebase.initializeApp(firebaseConfig);
+let config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider(environment.CLIENT_ID)
+  }
+]);
 
-*/
+export function provideConfig() {
+  return config;
+}
+
+/* import { AuthGuard } from './services/guards/auth.guard';
+import { RoleGuard } from './services/guards/role.guard';
+import { TokenInterceptor } from './services/interceptors/token.interceptor';
+import { AuthInterceptor } from './services/interceptors/auth.interceptor';
+ */
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -60,9 +63,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppSidebarComponent,
     SearchComponent,
     HomeComponent,
-    HighlightPipe,
-    BuzonSugerenciasComponent,
-    ChatClienteComponent
+    HistorialUsuarioComponent,
+    PaginaBlancoComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,16 +78,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SharedModule,
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes),
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    SocialLoginModule,
   ],
   providers: [
     {
-      provide: PERFECT_SCROLLBAR_CONFIG,
+      provide: AuthServiceConfig,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+      useFactory: provideConfig,
     },
-    // Providers
-    AjaxService,
-    ChatService,
     //models
     ResponseSearch,
     SpeechRecognizerService,

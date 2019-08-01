@@ -1,0 +1,47 @@
+<div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+        <mat-card class="fondo">
+            <mat-card-content class="fondo">
+                <mat-card-title>Historial de busqueda</mat-card-title>
+                <div class="p-10 p-r-20 p-l-20">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                    </mat-form-field>
+                </div>
+                <div class="table-rasponsive">
+                    <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" style="max-height: 500px; overflow:auto;" class="fondo">
+
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha/Hora </mat-header-cell>
+                            <mat-cell *matCellDef="let data"> {{data.time}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="busqueda">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Busqueda </mat-header-cell>
+                            <mat-cell *matCellDef="let data"> {{data.busqueda }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="tipoBusqueda">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo busqueda </mat-header-cell>
+                            <mat-cell *matCellDef="let data"> {{data.tipoBusqueda}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="url">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> URL </mat-header-cell>
+                            <mat-cell *matCellDef="let data"> {{data.url}} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+                    </mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

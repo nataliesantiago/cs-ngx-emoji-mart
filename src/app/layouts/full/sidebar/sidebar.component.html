@@ -1,18 +1,22 @@
 <mat-nav-list appAccordion>
     <img src="assets/images/Conecta-Soporte.png" alt="conecta_logo" class="img_conecta">
+    <hr>
     <div class="contenedor__sidebar">
         <div>
             <ul>
                 <li>Preguntas y respuestas</li>
                 <li>Conecta gestión</li>
                 <li>Mis chat</li>
-                <li><a routerLink="/sugerencias">Buzón de Sugerencias</a></li>
+                <li><a href="https://docs.google.com/forms/d/1IzKM1oBhxS8H076a-ZctlRftxDzkW6Yysq0KscWh40E/viewform?edit_requested=true">Buzón
+                        de Sugerencias</a></li>
+                <li><a [routerLink]="['/historial-usuario']">Historial de usuario</a></li>
             </ul>
         </div>
         <div class="sidebar_mt">
+            <hr>
             <ul>
                 <li><a href="">Configuración</a> <i class="fa fa-cog side_gear" aria-hidden="true"></i></li>
-                <li><a href="">Cerrar sesión</a></li>
+                <li (click)="deslogueo()"><a>Cerrar sesión</a></li>
             </ul>
         </div>
     </div>

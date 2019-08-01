@@ -1,16 +1,19 @@
-<div class="sin_fondo">
-    <div *ngIf="resultado" class="historial__contenedor">
-        <h2>Resultados de la búsqueda de <b>{{busqueda}}</b></h2>
-        <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida | highlight:valorBusqueda}}</b></h2>
+<div class="sin_fondo centrado">
+    <div *ngIf="resultado">
+        <h1>Resultados de la búsqueda de <b>{{busqueda}}</b></h1>
+        <h1 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida}}</b></h1>
         <div *ngFor="let busqueda of resultadosBus" class="contenedor__texto center">
-            <h2 [innerHTML]="busqueda.htmlTitle"></h2>
-            <div class="fila">
-                <h4><img src="assets/categorias/aperturas.png" class="img-fluid img-circle" /> </h4>
-                <h4 [innerHTML]="busqueda.htmlFormattedUrl"></h4>
-            </div>
-            <div class="fila2">
-                <h4><img src="assets/origen/drive.png" class="img-fluid img-circle" /></h4>
-                <p [innerHTML]="busqueda.htmlSnippet"></p>
+            <h1 [innerHTML]="busqueda.htmlTitle"></h1>
+            <div class="fila center">
+                <div>
+                    <img src="assets/categorias/aperturas.png" class="img-fluid img-circle center" />
+                    <br>
+                    <img src="assets/origen/drive.png" class="img-fluid img-circle center" />
+                </div>
+                <div class="titulo__centrado_h4">
+                    <h4 [innerHTML]="busqueda.htmlFormattedUrl" class="titulo_h3 center"></h4>
+                    <h4 [innerHTML]="busqueda.htmlSnippet" class="titulo_h3 center"></h4>
+                </div>
             </div>
             <mat-divider ng-if="!$last"></mat-divider>
         </div>

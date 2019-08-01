@@ -4,6 +4,8 @@ Author: Themedesigner
 Email: niravjoshi87@gmail.com
 File: scss
 */
+
+
 /**
  * Table Of Content
  *
@@ -18,8 +20,6 @@ File: scss
  */
 
 @import 'variable';
-
-
 @import 'icons/themify-icons/themify-icons.css';
 @import 'icons/font-awesome/css/font-awesome.css';
 @import 'spinner';
@@ -31,38 +31,29 @@ File: scss
 @import 'dark-sidebar';
 @import 'responsive';
 @import 'rtl';
-
-
 // Red Theme
-
-.danger {  
-	@import 'colors/red';
-  	@include angular-material-theme($red-app-theme);
+.danger {
+    @import 'colors/red';
+    @include angular-material-theme($red-app-theme);
 }
 
 // Blue Theme
-
-.blue {  
-	@import 'colors/blue';
-  	@include angular-material-theme($blue-app-theme);
+.blue {
+    @import 'colors/blue';
+    @include angular-material-theme($blue-app-theme);
 }
 
 // Green Theme
-
-.green { 
-	@import 'colors/green'; 
-  	@include angular-material-theme($green-app-theme);
+.green {
+    @import 'colors/green';
+    @include angular-material-theme($green-app-theme);
 }
 
 // Dark Theme
-
-.dark { 
-	@import 'colors/dark'; 
-  	@include angular-material-theme($dark-theme); 
+.dark {
+    @import 'colors/dark';
+    @include angular-material-theme($dark-theme);
 }
-  
 
-$custom-typography: mat-typography-config( 
-  $font-family: 'Poppins'
-); 
+$custom-typography: mat-typography-config( $font-family: Myriad Pro !important);
 @include mat-core($custom-typography);

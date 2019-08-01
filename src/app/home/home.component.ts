@@ -14,7 +14,8 @@ import { SpeechRecognizerService } from './web-speech/shared/services/speech-rec
 import { SpeechNotification } from './web-speech/shared/model/speech-notification';
 import { SpeechError } from './web-speech/shared/model/speech-error';
 import { ActionContext } from './web-speech/shared/model/strategy/action-context';
-import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
+import { AutenticationService } from '../services/autenticacion.service';
+
 
 
 @Component({
@@ -58,6 +59,21 @@ export class HomeComponent implements OnInit {
   currentLanguage = this.languages[1];
   actionContext: ActionContext = new ActionContext();
 
+  constructor(
+    private router: Router,
+    private homeService: HomeService,
+    public responseSearch: ResponseSearch,
+    private changeDetector: ChangeDetectorRef,
+    private speechRecognizer: SpeechRecognizerService,
+    private nzone: NgZone,
+    private autenticationService: AutenticationService,
+  ) {
+    this.searchText = '';
+    if (!sessionStorage.getItem('token')) {
+      console.log('entro aqui')
+      this.autenticationService.signInWithGoogle();
+    }
+  }
 
   /**
    * Inicia el stream de sonido para reconocimento de voz
@@ -112,10 +128,10 @@ export class HomeComponent implements OnInit {
         this.notification = null;
       });
 
-      /**
-       * Promise : se ejecuta cuando el api detecta un resultado desde el servicio del
-       * reconocimiento
-       */
+    /**
+     * Promise : se ejecuta cuando el api detecta un resultado desde el servicio del
+     * reconocimiento
+     */
     this.speechRecognizer.onResult()
       .subscribe((data: SpeechNotification) => {
         const message = data.content.trim();
@@ -129,10 +145,10 @@ export class HomeComponent implements OnInit {
         }
       });
 
-      /**
-       * Promise : se ejecuta para actualizar la bandeja de errores generados por el servicio 
-       * de reconocimiento
-       */
+    /**
+     * Promise : se ejecuta para actualizar la bandeja de errores generados por el servicio 
+     * de reconocimiento
+     */
     this.speechRecognizer.onError()
       .subscribe(data => {
         switch (data.error) {
@@ -163,14 +179,14 @@ export class HomeComponent implements OnInit {
   */
   onFileSelected(event) {
     if (event.target.files.length > 0) {
-       this.file =  event.target.files[0];
-       const formData = new FormData();
-       formData.append('file', this.file);
-       this.homeService.searchFile(formData).subscribe((data) => {
-         debugger;
+      this.file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('file', this.file);
+      this.homeService.searchFile(formData).subscribe((data) => {
+        debugger;
         this.dataImage = data.data;
-       }
-     );
+      }
+      );
     }
   }
   selectLabel(val: string, pos: number) {
@@ -215,22 +231,12 @@ export class HomeComponent implements OnInit {
 
   /**web speech end */
 
-  constructor(
-    private router: Router,
-    private homeService: HomeService,
-    public responseSearch: ResponseSearch,
-    private changeDetector: ChangeDetectorRef,
-    private speechRecognizer: SpeechRecognizerService,
-    private nzone: NgZone
-  ) {
-    this.searchText = '';
-  }
   /**
     * @param  {} item item del json del autocomplete
     * asignar a la variable title a searchText
   */
   selectEvent(item) {
-    this.searchText = item.title; 
+    this.searchText = item.title;
   }
   /**
     * @param  {} val valor del item seleccionado
@@ -260,7 +266,7 @@ export class HomeComponent implements OnInit {
     //console.log('Este es el array', this.responseSearch.getResultados());
     this.router.navigate(['/search/' + this.searchText]);
   }
-  buscar2(){
+  buscar2() {
     this.nzone.run(() => this.buscar());
   }
 }
