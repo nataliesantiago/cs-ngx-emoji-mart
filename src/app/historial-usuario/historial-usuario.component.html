@@ -9,24 +9,25 @@
                     </mat-form-field>
                 </div>
                 <div class="table-rasponsive">
-                    <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" style="max-height: 500px; overflow:auto;" class="fondo">
+                    <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
+                        style="max-height: 500px; overflow:auto;" class="fondo">
 
                         <!-- Position Column -->
                         <ng-container matColumnDef="fecha">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha/Hora </mat-header-cell>
-                            <mat-cell *matCellDef="let data"> {{data.time}} </mat-cell>
+                            <mat-cell *matCellDef="let data"> {{data.fecha_busqueda}} </mat-cell>
                         </ng-container>
 
                         <!-- Name Column -->
                         <ng-container matColumnDef="busqueda">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Busqueda </mat-header-cell>
-                            <mat-cell *matCellDef="let data"> {{data.busqueda }} </mat-cell>
+                            <mat-cell *matCellDef="let data"> {{data.texto_busqueda }} </mat-cell>
                         </ng-container>
 
                         <!-- Weight Column -->
                         <ng-container matColumnDef="tipoBusqueda">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo busqueda </mat-header-cell>
-                            <mat-cell *matCellDef="let data"> {{data.tipoBusqueda}} </mat-cell>
+                            <mat-cell *matCellDef="let data"> {{data.id_tipo_busqueda}} </mat-cell>
                         </ng-container>
 
                         <!-- Symbol Column -->
@@ -38,8 +39,17 @@
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                     </mat-table>
-                    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
-                    </mat-paginator>
+                    <!-- ------------------------------------------------- -->
+                    <div id="pagination">
+                        <div id="pagination_pages">
+                            {{ numeroPage }} - {{ totalPages }}
+                        </div>
+                        <div id="pagination_icon">
+                            <button class="transparente" (click)="buscarBusquedaHistorial('left')" [disabled]="validarLeft()" ><i class="fa fa-arrow-left fa-2x"  aria-hidden="true" ></i></button>
+                            <button class="transparente" (click)="buscarBusquedaHistorial('right')" [disabled]="validarRight()"><i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <!-- ------------------------------------------------- -->
                 </div>
             </mat-card-content>
         </mat-card>

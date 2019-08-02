@@ -24,6 +24,15 @@ body {
     color: var(--color-font);
 }
 
+.ml {
+    margin-left: 11px;
+    transition: all ease 0.5s;
+}
+
+.ml:hover {
+    color: var(--azul_davivienda);
+}
+
 .button__aling {
     display: flex!important;
     justify-content: center!important;
@@ -54,6 +63,10 @@ body {
 
 .mat-toolbar.mat-primary {
     background: #fff!important;
+}
+
+mat-toolbar.topbar {
+    padding: 40px 15px!important;
 }
 
 .notify .point {
@@ -215,8 +228,8 @@ a {
 
 .autocomplete-container {
     box-shadow: none!important;
-    margin-left: 31px!important;
-    width: 712px!important;
+    margin-left: 3em!important;
+    width: 28em !important;
 }
 
 .texto_pequeño {
@@ -283,7 +296,7 @@ a {
 
 @media only screen and (max-width: 768px) {
     #search-bar {
-        width: 500px!important;
+        width: 500px;
     }
     .autocomplete-container {
         width: 300px!important;
@@ -292,7 +305,7 @@ a {
 
 @media only screen and (max-width: 414px) {
     .autocomplete-container {
-        width: 250px!important;
+        width: 234px!important;
     }
     .material-icons {
         margin-left: 211px!important;
@@ -307,6 +320,34 @@ a {
 
 @media only screen and (max-width: 320px) {
     .autocomplete-container {
-        width: 180px!important;
+        width: 179px!important;
     }
+}
+
+.comunidad_titulo {
+    margin-top: -45px!important;
+    margin-left: 39px!important;
+}
+
+.comunidad_titulo {
+    margin-top: -45px!important;
+    margin-left: 39px!important;
+}
+
+.lista__flex {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.btn_close {
+    margin-left: -220px!important;
+}
+
+ul li {
+    list-style: none;
+}
+
+.mat-icon {
+    margin-top: -20px;
 }

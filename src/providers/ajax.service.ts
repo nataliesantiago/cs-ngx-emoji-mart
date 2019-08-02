@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -17,7 +18,7 @@ import { Subject } from 'rxjs/Rx';
 @Injectable()
 export class AjaxService {
 
-    private host: string = ""; // URL base del API
+    private host: string = environment.URL_BACK; // URL base del API
     private modoDebug: boolean = true; // Definir si hace logs o no
     private enckey: string = "%PHLUShN_P]U$`Ay!534jhdajhs3i0Wu8m_{qUQ?"; // Clave de encriptado/desencriptado 
     private usingEnc = false; // Para configurar si se debe o no encriptar toda la data
@@ -96,7 +97,7 @@ export class AjaxService {
      * @returns {Observable<any>} Observable 
      */
     get(ruta: string, params: any): Observable<any> {
-
+        debugger;
         let parametros: HttpParams = new HttpParams();
 
         if (this.modoDebug) {

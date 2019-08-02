@@ -19,8 +19,8 @@ export class HomeService {
     var base64 = window.btoa(query);
     const url_api = `${environment.URL_BACK}home/consultar/${base64}`;
     return this.httpClient.get<any>(url_api);
-
   }
+
   searchFile(file: any) {
     const url_api = `${environment.URL_BACK}home/vision`;
     let arreglo = {
@@ -30,5 +30,8 @@ export class HomeService {
     return this.httpClient.post<any>(url_api, file);
   }
 
-  
+  guardarBusqueda(json: any) {
+    const url_api = `${environment.URL_BACK}home/busquedaUsuarios/insert`;
+    return this.httpClient.post<any>(url_api, json);
+  }
 }

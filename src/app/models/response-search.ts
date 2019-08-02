@@ -4,6 +4,10 @@ import { Injectable } from '@angular/core';
 export class ResponseSearch {
     _resultados: [];
 
+    _mostrar: Boolean = false;
+
+    _mostrarBarra: Boolean = false;
+
     _historial = [
         { id: 1, time: '2018-08-11 17:25:30.0', busqueda: 'Hola juan', tipoBusqueda: 'texto', url: 'www.notiene.com' },
         { id: 2, time: '2018-08-12 17:25:30.0', busqueda: 'Hola camilo', tipoBusqueda: 'voz', url: 'www.notiene.com' },
@@ -23,5 +27,21 @@ export class ResponseSearch {
 
     getResultados(): any {
         return this._resultados;
+    }
+
+    setActive(val: Boolean) {
+        this._mostrar = val;
+    }
+
+    isActive() {
+        return this._mostrar;
+    }
+
+    setActiveMostrarBarra(val: Boolean) {
+        this._mostrarBarra = val;
+    }
+
+    isActiveMostrarBarra() {
+        return this._mostrarBarra;
     }
 }

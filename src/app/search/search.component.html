@@ -1,9 +1,9 @@
 <div class="sin_fondo centrado">
     <div *ngIf="resultado">
-        <h1>Resultados de la búsqueda de <b>{{busqueda}}</b></h1>
-        <h1 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida}}</b></h1>
+        <h2>Resultados de la búsqueda de <b>{{busqueda}}</b></h2>
+        <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida}}</b></h2>
         <div *ngFor="let busqueda of resultadosBus" class="contenedor__texto center">
-            <h1 [innerHTML]="busqueda.htmlTitle"></h1>
+            <h2 class="titulo_h2" [innerHTML]="busqueda.htmlTitle"></h2>
             <div class="fila center">
                 <div>
                     <img src="assets/categorias/aperturas.png" class="img-fluid img-circle center" />
@@ -11,8 +11,8 @@
                     <img src="assets/origen/drive.png" class="img-fluid img-circle center" />
                 </div>
                 <div class="titulo__centrado_h4">
-                    <h4 [innerHTML]="busqueda.htmlFormattedUrl" class="titulo_h3 center"></h4>
-                    <h4 [innerHTML]="busqueda.htmlSnippet" class="titulo_h3 center"></h4>
+                    <h5 [innerHTML]="busqueda.htmlFormattedUrl" class="titulo_h3 center"></h5>
+                    <h5 [innerHTML]="busqueda.htmlSnippet" class="titulo_h3 center"></h5>
                 </div>
             </div>
             <mat-divider ng-if="!$last"></mat-divider>
