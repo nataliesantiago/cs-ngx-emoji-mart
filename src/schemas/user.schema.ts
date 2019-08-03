@@ -7,7 +7,7 @@ export class User {
     nombre: string;
     tbl_estado: number;
     rol_usuario: number;
-    
+    url_foto:string; 
     id_oficina_actual: number;
     super_admin = false;
     public isSignedIn: boolean = false;

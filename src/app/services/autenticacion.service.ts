@@ -5,6 +5,7 @@ import * as CryptoJS from 'crypto-js';
 import { AuthService } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { Router } from '@angular/router';
+import { AjaxService } from '../../providers/ajax.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,16 @@ import { Router } from '@angular/router';
 export class AutenticationService {
 
   constructor(
-    private httpClient: HttpClient
+    private ajax: AjaxService
   ) { }
 
   urlAutenticacion() {
-    const url_api = `${environment.URL_BACK}home/urlGsuite`;
-    return this.httpClient.get<any>(url_api);
+    const url_api = `home/urlGsuite`;
+    return this.ajax.get(url_api);
+  }
+
+  logOut() {
+    localStorage.removeItem('token');
+    window.location.href = '/';
   }
 }

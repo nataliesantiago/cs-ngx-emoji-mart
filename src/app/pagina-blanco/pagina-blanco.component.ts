@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Output } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { EventEmitter } from '@angular/core';
 import { ResponseSearch } from '../models/response-search';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pagina-blanco',
@@ -10,11 +11,17 @@ import { ResponseSearch } from '../models/response-search';
 })
 export class PaginaBlancoComponent implements OnInit {
 
-  constructor(private responseSearch: ResponseSearch) {
+  constructor(private responseSearch: ResponseSearch, private router: Router) {
     this.responseSearch.setActive(true);
+
+    if (localStorage.getItem('token') && localStorage.getItem('token') != '') {
+      this.router.navigate(['home']);
+    }
   }
 
   ngOnInit() {
+
+
   }
 
 }

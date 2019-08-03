@@ -46,6 +46,6 @@ export class AppSidebarComponent implements OnDestroy {
   }
 
   deslogueo() {
-    //this.autenticationService.logout();
+    this.autenticationService.logOut();
   }
 }

@@ -11,8 +11,8 @@ export const AppRoutes: Routes = [
     path: '',
     component: PaginaBlancoComponent, canActivate: [AuthGuard],
   },
-  { path: 'home', component: HomeComponent, canActivate: [HomeGuard]},
-  { path: 'home/:data', component: HomeComponent, canActivate: [HomeGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+  { path: 'home/:data', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'historial-usuario', component: HistorialUsuarioComponent, canActivate: [AuthGuard] }

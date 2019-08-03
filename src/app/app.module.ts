@@ -32,6 +32,9 @@ import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { PaginaBlancoComponent } from './pagina-blanco/pagina-blanco.component';
 import { AjaxService } from '../providers/ajax.service';
 import { HistorialUsuariosService } from '../providers/historial-usuarios.service';
+import { ChatClienteComponent } from './components/chat-cliente/chat-cliente.component';
+import { HomeProComponent } from './home-pro/home-pro.component';
+import { UserService } from '../providers/user.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -49,6 +52,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HomeComponent,
     HistorialUsuarioComponent,
     PaginaBlancoComponent,
+    ChatClienteComponent,
+    HomeProComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +80,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SpeechRecognizerService,
     SpeechSynthesizerService,
     AjaxService,
+    UserService,
     HistorialUsuariosService
   ],
   bootstrap: [AppComponent]

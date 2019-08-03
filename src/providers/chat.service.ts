@@ -10,7 +10,7 @@ import { User } from '../schemas/user.schema';
 
 
 @Injectable()
-export class UserService {
+export class ChatService {
 
   user: User;
   id_calendario: string;

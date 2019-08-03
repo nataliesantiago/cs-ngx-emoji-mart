@@ -96,8 +96,10 @@ export class AjaxService {
      * @param  {any} params - Payload de la petición
      * @returns {Observable<any>} Observable 
      */
-    get(ruta: string, params: any): Observable<any> {
-        debugger;
+    get(ruta: string, params?: any): Observable<any> {
+        if (!params) {
+            params = {};
+        }
         let parametros: HttpParams = new HttpParams();
 
         if (this.modoDebug) {

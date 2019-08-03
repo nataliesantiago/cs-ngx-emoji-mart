@@ -3,18 +3,19 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { Observable } from 'rxjs';
 import { AutenticationService } from '../services/autenticacion.service';
 import { ResponseSearch } from '../models/response-search';
+import { UserService } from '../../providers/user.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HomeGuard implements CanActivate {
 
-    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch) { }
+    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch, private userService: UserService) { }
 
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-           // debugger;
+        // debugger;
         this.responseSearch.setActive(true);
         if (this.isAuthenticated()) {
             this.responseSearch.setActive(false);
@@ -25,9 +26,10 @@ export class HomeGuard implements CanActivate {
         }
 
     }
-
+ 
     isAuthenticated() {
-        if (sessionStorage.getItem('token') != null && sessionStorage.getItem('token').toString() !== '') {
+        if (localStorage.getItem('token') != null && localStorage.getItem('token').toString() !== '') {
+            
             return true;
         }
         return false;
