@@ -29,26 +29,13 @@ import { ResponseSearch } from './models/response-search';
 import { HistorialUsuarioComponent } from './historial-usuario/historial-usuario.component';
 import { AutenticationService } from './services/autenticacion.service';
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider } from 'angularx-social-login';
-import { environment } from '../environments/environment';
 import { PaginaBlancoComponent } from './pagina-blanco/pagina-blanco.component';
+import { AjaxService } from '../providers/ajax.service';
+import { HistorialUsuariosService } from '../providers/historial-usuarios.service';
+import { ChatClienteComponent } from './components/chat-cliente/chat-cliente.component';
+import { HomeProComponent } from './home-pro/home-pro.component';
+import { UserService } from '../providers/user.service';
 
-let config = new AuthServiceConfig([
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider(environment.CLIENT_ID)
-  }
-]);
-
-export function provideConfig() {
-  return config;
-}
-
-/* import { AuthGuard } from './services/guards/auth.guard';
-import { RoleGuard } from './services/guards/role.guard';
-import { TokenInterceptor } from './services/interceptors/token.interceptor';
-import { AuthInterceptor } from './services/interceptors/auth.interceptor';
- */
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -65,6 +52,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HomeComponent,
     HistorialUsuarioComponent,
     PaginaBlancoComponent,
+    ChatClienteComponent,
+    HomeProComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,12 +74,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: AuthServiceConfig,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-      useFactory: provideConfig,
     },
     //models
     ResponseSearch,
     SpeechRecognizerService,
-    SpeechSynthesizerService
+    SpeechSynthesizerService,
+    AjaxService,
+    UserService,
+    HistorialUsuariosService
   ],
   bootstrap: [AppComponent]
 })

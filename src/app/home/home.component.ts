@@ -24,6 +24,8 @@ import { AutenticationService } from '../services/autenticacion.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  url: String = '';
+  metodo = 1;
   public def = new FormControl(''); // Model del autocomplete
   searchText: string; // ngModel del autocomplete
   defaultSelectedNgAutocomplete: string;
@@ -69,10 +71,7 @@ export class HomeComponent implements OnInit {
     private autenticationService: AutenticationService,
   ) {
     this.searchText = '';
-    if (!sessionStorage.getItem('token')) {
-      console.log('entro aqui')
-      this.autenticationService.signInWithGoogle();
-    }
+    this.responseSearch.setActiveMostrarBarra(false);
   }
 
   /**
@@ -178,13 +177,15 @@ export class HomeComponent implements OnInit {
      * al input de busqueda para realizar el metodo de buscar()
   */
   onFileSelected(event) {
+    this.metodo = 2;
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', this.file);
       this.homeService.searchFile(formData).subscribe((data) => {
         debugger;
-        this.dataImage = data.data;
+        this.dataImage = data.data.parrafos;
+        this.url = data.data.url;
       }
       );
     }
@@ -209,7 +210,7 @@ export class HomeComponent implements OnInit {
     this.speechRecognizer.stop();
     (async () => {
       await this.delay(1500);
-      this.buscar();
+      this.buscar(3);
     })();
   }
 
@@ -219,7 +220,7 @@ export class HomeComponent implements OnInit {
    * @param val valor para el elemento seleccionado
    */
   updateiconVoiceSearch(id, val) {
-    document.getElementById(id).innerHTML = val
+    document.getElementById(id).innerHTML = val;
   }
 
   /**
@@ -236,6 +237,7 @@ export class HomeComponent implements OnInit {
     * asignar a la variable title a searchText
   */
   selectEvent(item) {
+    this.metodo = 1;
     this.searchText = item.title;
   }
   /**
@@ -257,16 +259,27 @@ export class HomeComponent implements OnInit {
     /**speech recognizion */
   }
 
-  buscar() {
+  buscar(metodo) {
     //console.log('Esta es la busqueda ' + this.searchText);
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = '';
     }
     this.responseSearch.setResultados(this.textopredictivo);
     //console.log('Este es el array', this.responseSearch.getResultados());
+    var date = new Date();
+    var fecha = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+    let obj = {
+      'idUsuario': 1,
+      'textoBusqueda': this.searchText,
+      'idTipoBusqueda': metodo,
+      'fechaBusqueda': fecha,
+      'url': this.url
+    };
+    this.homeService.guardarBusqueda(obj).subscribe(data => console.log(data));
+    this.nzone.run(() => this.stopRecognizer());
     this.router.navigate(['/search/' + this.searchText]);
   }
   buscar2() {
-    this.nzone.run(() => this.buscar());
+    this.nzone.run(() => this.buscar(this.metodo));
   }
 }

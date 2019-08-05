@@ -5,9 +5,10 @@
     <!-- column -->
     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
         <!-- Row -->
-        <app-full-layout></app-full-layout>
+        <app-full-layout *ngIf="!responseSearch.isActive()"></app-full-layout>
         <router-outlet></router-outlet>
         <!-- <app-home></app-home> -->
     </div>
     <!-- column -->
 </div>
+<app-chat-cliente></app-chat-cliente>

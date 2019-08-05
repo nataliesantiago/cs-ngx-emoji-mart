@@ -10,6 +10,44 @@
         <!-- Logo - style you can find in header.scss -->
         <!-- ============================================================== -->
         <div class="navbar-header">
+            <div id="search-bar" class="up" *ngIf="responseSearch.isActiveMostrarBarra()">
+                <span><img src="../../assets/images/Lupa.svg" (click)="buscar2()" alt="icone de recherche" width="35px"
+                        class="img_lupa"></span>
+                <div class="image-upload">
+                    <label for="file-input">
+                        <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span
+                                class="tooltip">Buscar por
+                                imágenes</span></i>
+                    </label>
+                    <!-- <input id="file-input" (change)="onFileSelected($event)" type="file" /> -->
+                    <input id="file-input" type="file" />
+                </div>
+
+                <!-- <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true" (click)="startButton($event)"><span id="voice-search" class="tooltip">Búsqueda por
+                        voz</span></i> -->
+                <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span id="voice-search" class="tooltip">Búsqueda por
+                        voz</span></i>
+
+                <div class="contenedor">
+                    <ng-autocomplete id="ng-autocomplete-search" placeHolder="Describe tu problema. " [data]="textopredictivo" [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' [itemTemplate]="itemTemplate" [formControl]="def"
+                        [notFoundTemplate]="notFoundTemplate">
+                    </ng-autocomplete>
+
+
+                    <ng-template #itemTemplate let-item id="value-text">
+                        <a [innerHTML]="item.title"></a>
+                    </ng-template>
+
+                    <!-- <ng-template #notFoundTemplate let-notFound>
+                                    <div [innerHTML]="textError"></div>
+                                </ng-template> -->
+                </div>
+                <div>
+                    <div *ngFor="let data of dataImage ; let i = index" style="display: inline-block">
+                        <div (click)="selectLabel(data,i)" class="labelImage">{{ data }}</div>
+                    </div>
+                </div>
+            </div>
             <a class="navbar-brand" href="index.html">
                 <!-- Logo icon -->
                 <b>
@@ -25,13 +63,27 @@
                     <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo">
                 </span>
             </a>
+            <!-- <div>
+                <div id="search-bar" class="up">
+                    <span><img src="../../../assets/images/Lupa.svg"
+                 alt="icone de recherche" width="35px" class="img_lupa"></span>
+                    <input type="search" placeholder="Describe el problema." id="src-b">
+                    <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
+                            imágenes</span></i>
+                    <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
+                            voz</span></i>
+
+                </div>
+            </div> -->
         </div>
+
         <!-- ============================================================== -->
         <!-- sidebar toggle -->
         <!-- ============================================================== -->
 
         <button mat-icon-button (click)="snav.toggle()" value="sidebarclosed" class="btn_close">
             <mat-icon>menu</mat-icon>
+            <h5 class="comunidad_titulo">Comunidad Soporte</h5>
         </button>
         <span fxFlex></span>
         <!-- ============================================================== -->
@@ -46,8 +98,7 @@
         <!-- ============================================================== -->
         <!-- Sidebar - style you can find in sidebar.scss -->
         <!-- ============================================================== -->
-        <mat-sidenav #snav id="snav" class="pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'" fixedTopGap="0" [opened]="mobileQuery.matches"
-            [disableClose]="mobileQuery.matches" (open)="sidebarOpened = true" (close)="sidebarOpened = false">
+        <mat-sidenav #snav id="snav" class="pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'" fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches" (open)="sidebarOpened = true" (close)="sidebarOpened = false">
 
             <app-sidebar></app-sidebar>
 

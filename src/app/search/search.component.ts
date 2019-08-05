@@ -24,6 +24,7 @@ export class SearchComponent implements OnInit {
     public responseSearch: ResponseSearch,
     private homeService: HomeService,
   ) {
+    this.responseSearch.setActiveMostrarBarra(true);
     this.resultadosBus = this.responseSearch.getResultados();
     console.log('Este es el array', this.resultadosBus);
   }

@@ -1,11 +1,24 @@
 import { Component } from '@angular/core';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { UserService } from '../../../../providers/user.service';
+import { User } from '../../../../schemas/user.schema';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: []
 })
 export class AppHeaderComponent {
+
+  profileImage = '../../../../assets/images/users/profle.svg';
+
+  constructor(private userService: UserService) {
+    this.userService.observableUsuario.subscribe((u: User) => {
+      if (u) {
+        this.profileImage = u.url_foto;
+      }
+    })
+  }
+
   public config: PerfectScrollbarConfigInterface = {};
   // This is for Notifications
   notifications: Object[] = [
