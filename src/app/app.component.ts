@@ -9,5 +9,6 @@ import { ResponseSearch } from './models/response-search';
 export class AppComponent {
 
   constructor(private responseSearch: ResponseSearch) {
+    this.responseSearch.setActive(true);
   }
 }

@@ -141,12 +141,13 @@ export class UserService {
 
 
 
-    validarUsuario(u: User) {
-        return this.ajax.post('usuario/validar', { usuario: u });
+    validarUsuario(primer_login: boolean) {
+        let t = localStorage.getItem('token');
+        return this.ajax.post('user/validar', { primer_login: primer_login, token: t });
     }
 
     getModulosUsuario(u: User) {
-        return this.ajax.get('usuario/modulos', { usuario: u });
+        return this.ajax.get('user/modulos', { usuario: u });
     }
 
     cambiarVista() {
@@ -203,6 +204,14 @@ export class UserService {
             this.setUsuario(user);
         })
     }
+
+    setProfile(profile, token) {
+        let user = new User(profile.email, token, profile.nombre);
+        user.url_foto = profile.foto;
+        this.setUsuario(user);
+    }
+
+
 
 
 
