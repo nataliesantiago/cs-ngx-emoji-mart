@@ -1,14 +1,17 @@
 <!-- ============================================================== -->
 <!-- Simple four boxes Row -->
 <!-- ============================================================== -->
+
 <div fxLayout="row" fxLayoutWrap="wrap">
     <!-- column -->
     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
         <!-- Row -->
+
         <app-full-layout *ngIf="!responseSearch.isActive()"></app-full-layout>
+        <app-spinner *ngIf="responseSearch.isActive()"></app-spinner>
         <router-outlet></router-outlet>
         <!-- <app-home></app-home> -->
     </div>
     <!-- column -->
 </div>
-<app-chat-cliente></app-chat-cliente>
+<app-chat-cliente *ngIf="!responseSearch.isActive()"></app-chat-cliente>

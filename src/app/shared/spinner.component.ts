@@ -13,6 +13,7 @@ import {
   NavigationError
 } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
+import { ResponseSearch } from '../models/response-search';
 
 @Component({
   selector: 'app-spinner',
@@ -31,8 +32,15 @@ export class SpinnerComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private searchService: ResponseSearch
   ) {
+    console.log(this.searchService.isActive());
+    setTimeout(() => {
+      this.isSpinnerVisible = this.searchService.isActive();
+    }, 1);
+
+
     this.router.events.subscribe(
       event => {
         if (event instanceof NavigationStart) {
