@@ -8,8 +8,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "configure": "gcloud config configurations activate davivienda-comunidades-col-dev"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -29,10 +28,11 @@
     "@swimlane/ngx-charts": "^9.0.0",
     "@swimlane/ngx-datatable": "^13.1.0",
     "angular-ng-autocomplete": "^1.1.13",
+    "animate.css": "^3.7.2",
     "core-js": "^2.4.1",
     "d3": "^4.8.0",
     "dz-gibberish-aes": "^1.0.0",
-    "firebase": "^6.3.1",
+    "firebase": "^6.3.3",
     "hammerjs": "^2.0.8",
     "jquery": "^3.3.1",
     "moment": "^2.22.2",

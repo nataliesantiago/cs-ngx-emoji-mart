@@ -35,7 +35,74 @@
             </div>    
             <div class="btn__contenedor">
                 <img src="../../../assets/images/logo-davivienda.png" alt="davivienda" class="davivienda_logo">
+        <div class="img__logo down">
+            <img src="assets/images/FaVicon.png" alt="imagen" class="img_small">
+        </div>
+        <div class="texto__principal down">
+            <h2 class="text_center texto_gris">¿Comó Podemos Ayudarte?</h2>
+        </div>
+        <div id="search-bar" class="up" >
+            <span><img src="https://cdn3.iconfinder.com/data/icons/watchify-v1-0-32px/32/magnifying-glass-search-256.png"
+                    (click)="buscar()" alt="icone de recherche" width="35px" class="img_lupa"></span>
+            <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
+                    imágenes</span></i>
+        
+            <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true"
+                (click)="startButton($event)"><span id="voice-search" class="tooltip">Búsqueda por
+                    voz</span></i>
+    
+            <div class="ng-autocomplete" >
+                <ng-autocomplete id="ng-autocomplete-search"  [data]="textopredictivo" [searchKeyword]="keyword" (selected)='selectEvent($event)'
+                    (inputChanged)='onChangeSearch($event)' [itemTemplate]="itemTemplate"
+                    [formControl] = "def"
+                    [notFoundTemplate]="notFoundTemplate" >
+                </ng-autocomplete>
+                
+    
+                <ng-template #itemTemplate let-item id="value-text">
+                    <a [innerHTML]="item.title"></a>
+                </ng-template>
+    
+                <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                </ng-template>
             </div>
+        </div>
+        <div class="historial__contenedor up">
+        </div>
+        <div>
+            <div>
+                <div class="contenedor__img">
+                    <article>
+                        <div class="contenedor__encabezado">
+                            <h3>Nuevas Tendencias <i class="fa fa-arrow-down" aria-hidden="true"></i></h3>
+                        </div>
+                        <div>
+                            <ul>
+                                <li *ngFor="let pregunta of preguntasArray"><i class="fa fa-address-book-o"
+                                        aria-hidden="true"></i> {{pregunta.consulta}}</li>
+                            </ul>
+                        </div>
+                    </article>
+    
+                    <article>
+                        <div class="contenedor__encabezado">
+                            <h3>Lo más buscado <i class="fa fa-arrow-down" aria-hidden="true"></i></h3>
+                        </div>
+                        <div>
+                            <ul>
+                                <li *ngFor="let busqueda of busquedasArray "><i class="fa fa-address-book-o"
+                                        aria-hidden="true"></i> {{busqueda.busqueda}} </li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+    
+                <div class="btn__contenedor">
+                    <img src="../../../assets/images/logo-davivienda.png" alt="davivienda" class="davivienda_logo">
+                </div>
+            </div>
+            <!-- column -->
         </div>
         <!-- column -->
     </div>
@@ -48,3 +115,4 @@
 
 
 
+    </div>
