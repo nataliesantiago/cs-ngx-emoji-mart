@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HomeService } from '../services/home.service';
 import { ResponseSearch } from '../models/response-search';
+import { AjaxService } from '../../providers/ajax.service';
 
 //speech recognizion
 import { SpeechRecognizerService } from './web-speech/shared/services/speech-recognizer.service';
@@ -24,6 +25,7 @@ import { AutenticationService } from '../services/autenticacion.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
   url: String = '';
   metodo = 1;
   public def = new FormControl(''); // Model del autocomplete
@@ -69,6 +71,7 @@ export class HomeComponent implements OnInit {
     private speechRecognizer: SpeechRecognizerService,
     private nzone: NgZone,
     private autenticationService: AutenticationService,
+    private ajax: AjaxService
   ) {
     this.searchText = '';
     this.responseSearch.setActiveMostrarBarra(false);
@@ -257,6 +260,13 @@ export class HomeComponent implements OnInit {
     this.initRecognition();
     this.notification = null;
     /**speech recognizion */
+    
+    this.ajax.post('preguntas/obtener', { }).subscribe(d => {
+      if(d.success){
+        console.log("funciona");
+        console.log(d.preguntas);
+      }
+  })
   }
 
   buscar(metodo) {
