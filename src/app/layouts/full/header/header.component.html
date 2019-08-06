@@ -35,6 +35,7 @@
 
         </ul>
     </div>
+    
 </mat-menu>
 <!-- ============================================================== -->
 <!-- Profile - style you can find in header.scss -->
@@ -46,33 +47,34 @@
         <span class="point"></span>
     </div>
 </button>
+
+<button  mat-icon-button class="m-r-10">
+        <img src="../../../../assets/images/users/1.jpg" alt="" class="img_pequeña alerta">
+    </button>
+
+
+
+
 <mat-menu #message="matMenu" class="mymessage">
-    <div class="mailbox">
-        <ul>
-            <li>
-                <div class="drop-title">You have 4 new Mymessages</div>
-            </li>
-            <li>
-                <div class="message-center">
-
-                    <!-- Message -->
-                    <a href="#" *ngFor="let mymessage of mymessages">
-                        <div class="user-img">
-                            <img src="{{mymessage.useravatar}}" alt="user" class="img-circle" width="40">
-                            <span class="profile-status {{mymessage.status}} pull-right"></span>
-                        </div>
-                        <div class="mail-contnet">
-                            <h5>{{mymessage.from}}</h5>
-                            <span class="mail-desc">{{mymessage.subject}}</span>
-                            <span class="time">{{mymessage.time}}</span>
-                        </div>
-                    </a>
-                    !-- Message -->
-
+        <mat-nav-list appAccordion class="contenedor__campana">
+                <img src="assets/images/Conecta-Soporte.png" alt="conecta_logo" class="img_conecta">
+                <div class="texto__notificacion">
+                    <img src="../../../../assets/images/Alerta.svg" alt="" class="img__campana">
+                    <h4>Notificaciones</h4>
                 </div>
-            </li>
-        </ul>
-    </div>
+                <div>
+                    <h5>Lorem ipsum dolor sit amet</h5>
+                    <p class="texto_pequeño">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum pariatur numquam totam ration.</p>
+                    <img src="../../../../assets/images/big/img2.jpg" alt="" class="img_header">
+                    <div class="contenedor__minuto"><span class="minuto">hace 1 un minuto</span></div> 
+                </div>
+                <div>
+                        <h5>Lorem ipsum dolor sit amet</h5>
+                        <p class="texto_pequeño">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum pariatur numquam totam ration.</p>
+                        <img src="../../../../assets/images/big/img2.jpg" alt="" class="img_header">
+                        <div class="contenedor__minuto"><span class="minuto">hace 1 un minuto</span></div> 
+                </div>
+            </mat-nav-list>
 </mat-menu>
 <!-- ============================================================== -->
 <!-- Profile - style you can find in header.scss -->

@@ -1,49 +1,38 @@
 <div>
-    <div class="img__logo down">
-        <img src="assets/images/FaVicon.png" alt="imagen" class="img_small">
-    </div>
-    <div class="texto__principal down">
-        <h2 class="text_center texto_gris">¿Comó Podemos Ayudarte?</h2>
-    </div>
-    <div id="search-bar" class="up">
-        <span><img src="https://cdn3.iconfinder.com/data/icons/watchify-v1-0-32px/32/magnifying-glass-search-256.png"
-                alt="icone de recherche" width="35px"></span>
-        <input type="search" placeholder="Describe el problema." id="src-b">
-        <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
-                imágenes</span></i>
-        <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
-                voz</span></i>
-    </div>
+    
     <div class="historial__contenedor up">
     </div>
     <div>
-        <div>
-            <div class="contenedor__img">
-                <article>
-                    <div class="contenedor__encabezado">
-                        <h3>Nuevas Tendencias <i class="fa fa-arrow-down" aria-hidden="true"></i></h3>
-                    </div>
-                    <div>
-                        <ul>
-                            <li *ngFor="let pregunta of preguntasArray"><i class="fa fa-address-book-o"
-                                    aria-hidden="true"></i> {{pregunta.consulta}}</li>
-                        </ul>
-                    </div>
-                </article>
-
-                <article>
-                    <div class="contenedor__encabezado">
-                        <h3>Lo más buscado <i class="fa fa-arrow-down" aria-hidden="true"></i></h3>
-                    </div>
-                    <div>
-                        <ul>
-                            <li *ngFor="let busqueda of busquedasArray "><i class="fa fa-address-book-o"
-                                    aria-hidden="true"></i> {{busqueda.busqueda}} </li>
-                        </ul>
-                    </div>
-                </article>
+        <div> 
+            <div class="contenedor__total">
+            <div class="contenedor__card">
+                <h2>Lorem ipsum dolor sit amet, consectetur.</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur illo iste aliquam. 
+                    explicabo cum impedit delectus aliquid quasi similique?</p>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
+                <h5>¿Fue util está información?</h5>
+                <div>
+                    <button class="btn_azul">Si</button>
+                    <button class="btn_rojo">No</button>
+                </div>
+                <div>
+                    <textarea></textarea>
+                </div>
+                <button class="btn_rojo_enviar">Enviar</button>   
             </div>
-
+            <div class="contenedor__lista">
+                    <h5>ayuda</h5>
+                    <ul>
+                        <li class="texto_mediano"><i class="fa fa-address-book-o" aria-hidden="true"></i> Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                        <li class="texto_mediano"><i class="fa fa-address-book-o" aria-hidden="true"></i> Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                        <li class="texto_mediano"><i class="fa fa-address-book-o" aria-hidden="true"></i> Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                        <li class="texto_mediano"><i class="fa fa-address-book-o" aria-hidden="true"></i> Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                        <li class="texto_mediano"><i class="fa fa-address-book-o" aria-hidden="true"></i> Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                    </ul>
+                </div>
+            </div>    
             <div class="btn__contenedor">
                 <img src="../../../assets/images/logo-davivienda.png" alt="davivienda" class="davivienda_logo">
             </div>
@@ -51,3 +40,11 @@
         <!-- column -->
     </div>
 </div>
+
+
+
+
+
+
+
+

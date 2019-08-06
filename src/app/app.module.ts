@@ -16,6 +16,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
 import { HighlightPipe } from './home/highlight.pipe';
+import { QuillModule } from 'ngx-quill';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -25,6 +26,7 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { ResponseSearch } from './models/response-search';
+import { AdPreguntasComponent } from './ad-preguntas/ad-preguntas.component';
 /*import * as firebase from "firebase";
 
 const firebaseConfig = {
@@ -53,7 +55,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppSidebarComponent,
     SearchComponent,
     HomeComponent,
-    HighlightPipe
+    HighlightPipe,
+    AdPreguntasComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +68,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     HttpClientModule,
     SharedModule,
+    QuillModule,
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes),
     AutocompleteLibModule

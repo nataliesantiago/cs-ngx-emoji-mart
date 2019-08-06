@@ -1,7 +1,7 @@
 <div>
   <div *ngIf="resultado">
     <h2>Resultados de la búsqueda de <b>{{busqueda}}</b></h2>
-    <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida}}</b></h2>
+    <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida | highlight:valorBusqueda}}</b></h2>
     <mat-card *ngFor="let busqueda of resultadosBus">
       <mat-card-header>
         <div mat-card-avatar>
@@ -10,10 +10,10 @@
         <div mat-card-avatar>
           <img src="assets/origen/{{busqueda.origen}}.png" class="img-fluid img-circle" />
         </div>
-        <mat-card-title><b><div [innerHTML]="busqueda.htmlTitle | highlight: valorBusqueda"></div></b></mat-card-title>
+        <mat-card-title><b><div [innerHTML]="busqueda.htmlTitle"></div></b></mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div [innerHTML]="busqueda.htmlSnippet | highlight: valorBusqueda"></div>
+        <div [innerHTML]="busqueda.htmlSnippet"></div>
       </mat-card-content>
       <figure *ngIf="busqueda.imagen !== '' && busqueda.imagen != null">
         <img alt="preguntas" src="{{busqueda.imagen}}" class="center" />
