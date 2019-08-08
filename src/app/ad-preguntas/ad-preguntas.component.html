@@ -1,14 +1,14 @@
-<input type="text" placeholder="Escribe tu pregunta">
 
-<mat-card>
-  <mat-card-content>
-      <mat-card-title>Por favor escribe tu pregunta</mat-card-title>
-      <quill-editor [style]="{height: '200px'}"></quill-editor>
-  </mat-card-content>
-</mat-card>
+<div fxLayout="row wrap">
+  <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+      <mat-card [routerLink]="['/formulario_pregunta']">
+          <mat-card-content>
+              <mat-card-title>Edit Delete and update Table</mat-card-title>
+              <div class="table-responsive smart-table">
+                  <ng2-smart-table  [settings]="settings" [source]="DataSource" class="mat-table no-wrap" ></ng2-smart-table>
+              </div>
+          </mat-card-content>
+      </mat-card>
+  </div>
+</div>
 
-<select name="select">
-  <option value="value1">Value 1</option> 
-  <option value="value2" selected>Value 2</option>
-  <option value="value3">Value 3</option>
-</select>

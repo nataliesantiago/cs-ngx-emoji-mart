@@ -8,6 +8,7 @@ import { PaginaBlancoComponent } from './pagina-blanco/pagina-blanco.component';
 import {AdPreguntasComponent} from './ad-preguntas/ad-preguntas.component';
 import { from } from 'rxjs';
 import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
+import {FormularioPreguntasComponent} from './formulario-preguntas/formulario-preguntas.component';
 
 export const AppRoutes: Routes = [
   {
@@ -22,5 +23,7 @@ export const AppRoutes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'search/:id', component: SearchComponent },
   { path: 'ad-preguntas', component: AdPreguntasComponent },
-  { path: 'sugerencias', component: BuzonSugerenciasComponent }
+  { path: 'sugerencias', component: BuzonSugerenciasComponent },
+  {path:'administrador-preguntas', component:AdPreguntasComponent, canActivate: [AuthGuard]},
+  {path:'formulario_pregunta', component:FormularioPreguntasComponent, canActivate: [AuthGuard]}
 ];

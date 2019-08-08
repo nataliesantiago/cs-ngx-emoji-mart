@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ResponseSearch {
     _resultados: [];
-<<<<<<< HEAD
 
     _mostrar: boolean = false;
 
@@ -22,9 +21,7 @@ export class ResponseSearch {
         { id: 10, time: '2018-08-19 17:25:30.0', busqueda: 'vodka', tipoBusqueda: 'voz', url: 'www.notiene.com' },
     ];
 
-=======
     
->>>>>>> andres-spring-uno
     setResultados(val: any) {
         this._resultados = val;
     }
@@ -32,7 +29,6 @@ export class ResponseSearch {
     getResultados(): any {
         return this._resultados;
     }
-<<<<<<< HEAD
 
     setActive(val: boolean) {
         this._mostrar = val;
@@ -49,6 +45,4 @@ export class ResponseSearch {
     isActiveMostrarBarra() {
         return this._mostrarBarra;
     }
-=======
->>>>>>> andres-spring-uno
 }

@@ -1649,8 +1649,3 @@ textarea {
   border: 1px solid #ccc;
 }
 
-.autocomplete-container {
-  box-shadow: none !important;
-  margin-left: 18px !important;
-  width: 712px !important;
-}
