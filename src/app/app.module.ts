@@ -17,7 +17,8 @@ import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
 import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
 import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
-
+import { AdPreguntasComponent } from "./ad-preguntas/ad-preguntas.component";
+import { QuillModule } from "ngx-quill";
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -53,6 +54,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HistorialUsuarioComponent,
     PaginaBlancoComponent,
     ChatClienteComponent,
+    AdPreguntasComponent,
     HomeProComponent,
   ],
   imports: [
@@ -69,6 +71,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RouterModule.forRoot(AppRoutes),
     AutocompleteLibModule,
     SocialLoginModule,
+    QuillModule,
   ],
   providers: [
     {
