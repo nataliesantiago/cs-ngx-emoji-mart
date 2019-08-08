@@ -260,13 +260,6 @@ export class HomeComponent implements OnInit {
     this.initRecognition();
     this.notification = null;
     /**speech recognizion */
-    
-    this.ajax.post('preguntas/obtener', { }).subscribe(d => {
-      if(d.success){
-        console.log("funciona");
-        console.log(d.preguntas);
-      }
-  })
   }
 
   buscar(metodo) {
