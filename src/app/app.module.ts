@@ -17,6 +17,9 @@ import { SearchComponent } from './search/search.component';
 import { HomeComponent } from './home/home.component';
 import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
 import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
+import {QuillModule} from 'ngx-quill';
+import {AdPreguntasComponent} from './ad-preguntas/ad-preguntas.component';
+import {BuzonSugerenciasComponent} from './buzon-sugerencias/buzon-sugerencias.component'
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -54,6 +57,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PaginaBlancoComponent,
     ChatClienteComponent,
     HomeProComponent,
+    AdPreguntasComponent,
+    BuzonSugerenciasComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,11 +70,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     HttpClientModule,
     SharedModule,
+    QuillModule,
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes),
     AutocompleteLibModule,
     SocialLoginModule,
   ],
+
   providers: [
     {
       provide: AuthServiceConfig,
@@ -85,4 +92,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

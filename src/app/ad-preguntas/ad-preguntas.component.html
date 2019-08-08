@@ -1,0 +1,15 @@
+<input type="text" placeholder="Escribe tu pregunta" [(ngModel)]="pregunta.titulo" name="titulo">
+
+<mat-card>
+  <mat-card-content>
+      <mat-card-title>Por favor escribe tu pregunta</mat-card-title>
+      <quill-editor [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor>
+  </mat-card-content>
+</mat-card>
+
+<select [(ngModel)]="pregunta.id_producto" name="producto">
+  <option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</option>
+</select>
+<br>
+<br>
+<button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarPregunta()">Add New</button>
