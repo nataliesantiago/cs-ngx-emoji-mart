@@ -24,9 +24,23 @@ export class SearchComponent implements OnInit {
     public responseSearch: ResponseSearch,
     private homeService: HomeService,
   ) {
+<<<<<<< HEAD
     this.responseSearch.setActiveMostrarBarra(true);
     this.resultadosBus = this.responseSearch.getResultados();
     console.log('Este es el array', this.resultadosBus);
+=======
+    this.resultadosBus = this.responseSearch.getResultados();
+    console.log('Este es el array', this.resultadosBus);
+    if (this.resultadosBus !== undefined && this.resultadosBus !== null) {
+      if (this.resultadosBus !== '' && this.resultadosBus.length !== 0) {
+        this.resultado = true;
+      }
+    } else {
+      this.homeService.autocompleteText(this.busqueda).subscribe((data) =>
+      this.resultadosBus = data.data
+    );
+    }
+>>>>>>> andres-spring-uno
   }
 
   ngOnInit() {

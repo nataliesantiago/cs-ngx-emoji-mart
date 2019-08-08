@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //-core
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -5,23 +6,38 @@ import { Observable } from 'rxjs';
 import { SpeechNotification } from '../model/speech-notification';
 import { SpeechError } from '../model/speech-error';
 //-services
+=======
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { SpeechNotification } from '../model/speech-notification';
+import { SpeechError } from '../model/speech-error';
+
+>>>>>>> andres-spring-uno
 import { AppWindow } from '../model/app-window';
 const { webkitSpeechRecognition }: AppWindow = <AppWindow>window;
 
 @Injectable()
 export class SpeechRecognizerService {
 
+<<<<<<< HEAD
   recognition: any; //recognizion instance
+=======
+  recognition: any;
+>>>>>>> andres-spring-uno
   startTimestamp;
   ignoreOnEnd: boolean;
   language: string;
 
   constructor() { }
 
+<<<<<<< HEAD
   /**
    * Constructor para configurar el sistema de reconocimiento
    * @param language lenguaje de reconocimiento
    */
+=======
+>>>>>>> andres-spring-uno
   initialize(language: string): void {
     this.recognition = new webkitSpeechRecognition();
     this.recognition.continuous = true;
@@ -31,26 +47,35 @@ export class SpeechRecognizerService {
     this.recognition.interimResults = true;
   }
 
+<<<<<<< HEAD
   /**
    * Especifica el lenguaje principal de reconocimiento
    * @param language 
    */
+=======
+>>>>>>> andres-spring-uno
   setLanguage(language: string) {
     this.recognition.lang = language;
   }
 
+<<<<<<< HEAD
   /**
    * Inicia el sistema de reconocimiento y abre el stream de voz
    * @param timestamp 
    */
+=======
+>>>>>>> andres-spring-uno
   start(timestamp) {
     this.startTimestamp = timestamp;
     this.recognition.start();
   }
 
+<<<<<<< HEAD
   /**
    * Triger event : se ejecuta cuando el sistema de reconocimiento abre el stream de voz
    */
+=======
+>>>>>>> andres-spring-uno
   onStart(): Observable<SpeechNotification> {
     if (!this.recognition) {
       this.initialize(this.language);
@@ -65,9 +90,12 @@ export class SpeechRecognizerService {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Triger event : se ejecuta cuando el sistema de reconocimiento cierra el stream de voz
    */
+=======
+>>>>>>> andres-spring-uno
   onEnd(): Observable<SpeechNotification> {
     return new Observable(observer => {
       this.recognition.onend = () => {
@@ -82,10 +110,13 @@ export class SpeechRecognizerService {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Triger event : se ejecuta cuando el sistema de reconocimiento obtiene un resultado del
    * stream de voz
    */
+=======
+>>>>>>> andres-spring-uno
   onResult(): Observable<SpeechNotification> {
     return new Observable(observer => {
       this.recognition.onresult = (event) => {
@@ -112,9 +143,12 @@ export class SpeechRecognizerService {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Triger event : se ejecuta cuando el sistema de reconocimiento encuentra un error en el stream de voz
    */
+=======
+>>>>>>> andres-spring-uno
   onError(): Observable<SpeechNotification> {
     return new Observable(observer => {
       this.recognition.onerror = (event) => {
@@ -143,9 +177,12 @@ export class SpeechRecognizerService {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Detiene el stream de voz del sistema de reconocimiento 
    */
+=======
+>>>>>>> andres-spring-uno
   stop() {
     this.recognition.stop();
   }
