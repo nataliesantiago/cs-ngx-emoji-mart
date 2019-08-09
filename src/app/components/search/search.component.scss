@@ -26,7 +26,13 @@ hr {
 }
 
 .img_small {
-    max-width: 500px;
+    height: 44px;
+    width: 52px;
+    margin-top: 20px;
+    margin-left: 10px;
+    background: #fff;
+    border-radius: 50%;
+    padding: 6px;
 }
 
 .extra_small {
@@ -37,7 +43,8 @@ hr {
 .texto__principal {
     margin: 2em auto;
     margin-bottom: 1em;
-    h2{
+
+    h2 {
         margin: 0;
     }
 }
@@ -58,7 +65,7 @@ hr {
 }
 
 #search-bar {
-   /* width: 35em;
+    /* width: 35em;
     height: 50px;
     background-color: #fff;
     border-radius: 8px;
@@ -81,10 +88,15 @@ hr {
     border-radius: 8px 8px 8px 8px;
     font: normal normal 400 normal 16px / 20px Roboto, "Helvetica Neue", Helvetica, sans-serif;
     outline: rgb(32, 33, 36) none 0px;
-    padding: 0px 40px 0px 72px;
+    padding: 0px 0px 0px 7px;
     margin: auto;
     margin-top: 2em;
+    &:focus-within {
+        box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 2px 6px 2px rgba(60, 64, 67, .15);
+    }
 }
+
+
 
 span>img {
     margin-top: 13.5px;
@@ -196,16 +208,22 @@ li a:hover {
     transition: all ease 0.5s;
 }
 
+
+
+// Inicio de jey frames y media querys
+
 @keyframes move-hard {
     0% {
         transform: scale(1, 1);
     }
+
     50% {
         transform: scale(1.1, 1.2);
         transform: rotate(45deg);
         transform: translate(4px, 12px);
         transform: skew(0, -12deg);
     }
+
     100% {
         transform: scale(1, 1)
     }
@@ -386,7 +404,7 @@ a:hover .tooltip {
 .contenedor__encabezado {
     background: var(--rojo_davivienda);
     width: 100%;
-    margin: 0!important;
+    margin: 0 !important;
 }
 
 .contenedor__encabezado h3 {
@@ -409,6 +427,8 @@ a:hover .tooltip {
     text-align: center;
     cursor: pointer;
 }
+
+
 
 @media only screen and (max-width: 414px) {
     #search-bar {

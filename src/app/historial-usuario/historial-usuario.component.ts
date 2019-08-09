@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { ResponseSearch } from '../models/response-search';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { HistorialUsuariosService } from '../../providers/historial-usuarios.service';
+import { HistorialUsuariosService } from '../providers/historial-usuarios.service';
 
 @Component({
   selector: 'app-historial-usuario',

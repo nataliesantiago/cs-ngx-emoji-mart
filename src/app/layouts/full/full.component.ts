@@ -2,7 +2,7 @@ import * as $ from 'jquery';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { MenuItems } from '../../shared/menu-items/menu-items';
 import { Observable } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -12,6 +12,7 @@ import { SpeechRecognizerService } from '../../home/web-speech/shared/services/s
 import { SpeechNotification } from '../../home/web-speech/shared/model/speech-notification';
 import { SpeechError } from '../../home/web-speech/shared/model/speech-error';
 import { ActionContext } from '../../home/web-speech/shared/model/strategy/action-context';
+import { MatSidenav } from '@angular/material';
 
 /** @title Responsive sidenav */
 @Component({
@@ -54,7 +55,9 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   currentLanguage = this.languages[1];
   actionContext: ActionContext = new ActionContext();
   textError = 'no hay resultados'; // label del autocomplete
+  @ViewChild('sidenav') sidenav: MatSidenav;
 
+  reason = '';
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
@@ -81,6 +84,14 @@ export class FullComponent implements OnDestroy, AfterViewInit {
       (<any>$('.app-search')).toggle(200);
     });
     // This is for the megamenu
+  }
+  close(reason: string) {
+    this.reason = reason;
+    console.log(reason);
+    this.sidenav.close();
+  }
+  irHome() {
+    this.router.navigate(['home']);
   }
 
   /**

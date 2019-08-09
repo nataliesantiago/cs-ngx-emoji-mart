@@ -55,5 +55,5 @@ File: scss
     @include angular-material-theme($dark-theme);
 }
 
-$custom-typography: mat-typography-config( $font-family: Myriad Pro !important);
+$custom-typography: mat-typography-config( $font-family: (Roboto, 'Helvetica Neue', Helvetica, sans-serif !important));
 @include mat-core($custom-typography);

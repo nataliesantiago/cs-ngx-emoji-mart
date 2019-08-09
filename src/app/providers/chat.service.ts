@@ -6,7 +6,7 @@ import * as io from "socket.io-client";
 declare let gapi: any;
 import * as firebase from "firebase";
 import * as uuid from 'uuid/v4';
-import { User } from '../schemas/user.schema';
+import { User } from '../../schemas/user.schema';
 
 
 @Injectable()
@@ -18,7 +18,7 @@ export class ChatService {
   public subjectUsuario = new Subject<any>();
   public observableUsuario = this.subjectUsuario.asObservable();
   planeaciones_creadas = [];
-
+ 
   public subjectScoket = new Subject<any>();
   public observableSocket = this.subjectScoket.asObservable();
   SCOKET_IP;

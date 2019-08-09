@@ -1,80 +1,11 @@
 <div class="fondo">
     <div class="img__logo down">
-        <img src="assets/images/favicon.png" alt="imagen" class="img_small">
+      <img src="https://storage.googleapis.com/archivos-estaticos-aplicacion/logo.png" alt="imagen" class="img_small">
     </div>
     <div class="texto__principal down">
-        <h2 class="text_center texto_gris"><b>¿Comó Podemos Ayudarte?</b></h2>
+      <h2 class="text_center texto_gris"><b>¿Comó Podemos Ayudarte?</b></h2>
     </div>
-    <div id="search-bar" class="up">
-        <span><img src="../../assets/images/Lupa.svg" (click)="buscar2()" alt="icone de recherche" width="35px"
-                class="img_lupa"></span>
-        <div class="image-upload">
-            <label for="file-input">
-                <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
-                        imágenes</span></i>
-            </label>
-            <input id="file-input" (change)="onFileSelected($event)" type="file" />
-        </div>
-
-        <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true" (click)="startButton($event)"><span id="voice-search" class="tooltip">Búsqueda por
-                voz</span></i>
-
-        <div class="ng-autocomplete">
-            <ng-autocomplete id="ng-autocomplete-search" placeHolder="Describe tu problema. " [data]="textopredictivo" [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' [itemTemplate]="itemTemplate" [formControl]="def"
-                [notFoundTemplate]="notFoundTemplate">
-            </ng-autocomplete>
-
-
-            <ng-template #itemTemplate let-item id="value-text">
-                <a [innerHTML]="item.title"></a>
-            </ng-template>
-
-            <!-- <ng-template #notFoundTemplate let-notFound>
-                <div [innerHTML]="textError"></div>
-            </ng-template> -->
-        </div>
-        <div>
-            <div *ngFor="let data of dataImage ; let i = index" style="display: inline-block">
-                <div (click)="selectLabel(data,i)" class="labelImage">{{ data }}</div>
-            </div>
-        </div>
-    </div>
+    <app-search-component></app-search-component>    
     <div class="historial__contenedor up">
     </div>
-    <!-- <div>
-        <div>
-            <div class="contenedor__img">
-                <article>
-                    <div class="contenedor__encabezado">
-                        <h3>Nuevas Tendencias <i class="fa fa-arrow-down" aria-hidden="true"></i></h3>
-                    </div>
-                    <div>
-                        <ul>
-                            <li *ngFor="let pregunta of preguntasArray"><i class="fa fa-address-book-o"
-                                    aria-hidden="true"></i> {{pregunta.consulta}}</li>
-                        </ul>
-                    </div>
-                </article>
-
-                <article>
-                    <div class="contenedor__encabezado">
-                        <h3>Lo más buscado <i class="fa fa-arrow-down" aria-hidden="true"></i></h3>
-                    </div>
-                    <div>
-                        <ul>
-                            <li *ngFor="let busqueda of busquedasArray "><i class="fa fa-address-book-o"
-                                    aria-hidden="true"></i> {{busqueda.busqueda}} </li>
-                        </ul>
-                    </div>
-                </article>
-            </div>
-
-            <div class="btn__contenedor">
-                <img src="../../../assets/images/logo-davivienda.png" alt="davivienda" class="davivienda_logo">
-            </div>
-        </div>
-    </div> -->
-    <div class="btn__contenedor">
-        <img src="../../../assets/images/logo-davivienda.png" alt="davivienda" class="davivienda_logo">
-    </div>
-</div>
+  </div>

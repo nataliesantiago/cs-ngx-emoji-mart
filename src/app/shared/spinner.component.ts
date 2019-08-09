@@ -35,7 +35,7 @@ export class SpinnerComponent implements OnDestroy {
     @Inject(DOCUMENT) private document: Document,
     private searchService: ResponseSearch
   ) {
-    console.log(this.searchService.isActive());
+    //console.log(this.searchService.isActive());
     setTimeout(() => {
       this.isSpinnerVisible = this.searchService.isActive();
     }, 1);

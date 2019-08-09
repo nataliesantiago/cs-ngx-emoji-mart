@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { UserService } from '../../../../providers/user.service';
+import { UserService } from '../../../providers/user.service';
 import { User } from '../../../../schemas/user.schema';
 @Component({
   selector: 'app-header',
@@ -13,10 +13,14 @@ export class AppHeaderComponent {
 
   constructor(private userService: UserService) {
     this.userService.observableUsuario.subscribe((u: User) => {
+      // console.log(u);
       if (u) {
         this.profileImage = u.url_foto;
       }
-    })
+    });
+    if (this.userService.getUsuario()) {
+      this.profileImage = this.userService.getUsuario().url_foto;
+    }
   }
 
   public config: PerfectScrollbarConfigInterface = {};

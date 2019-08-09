@@ -7,11 +7,15 @@ export class User {
     nombre: string;
     tbl_estado: number;
     rol_usuario: number;
-    url_foto:string; 
+    url_foto: string;
     id_oficina_actual: number;
     super_admin = false;
     public isSignedIn: boolean = false;
     estado = { id: 0, nombre: '' };
+    id_perfil: number;
+
+    nombre_perfil: string;
+    nombre_rol: string;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;
@@ -44,7 +48,7 @@ export class User {
     }
 
     public setOficinas(o) {
-        
+
     }
     public getCorreo() {
         return this.correo;
@@ -73,11 +77,33 @@ export class User {
     public getOficina() {
         return this.id_oficina_actual;
     }
-
-    public getIdPerfil() {
-        return this.rol_usuario;
+    public getIdPerfil(): number {
+        return this.id_perfil;
+    }
+    public setIdPerfil(value: number) {
+        this.id_perfil = value;
+    }
+    id_rol: number;
+    public getIdRol(): number {
+        return this.id_rol;
+    }
+    public setIdRol(value: number) {
+        this.id_rol = value;
     }
 
+    public getNombrePerfil(): string {
+        return this.nombre_perfil;
+    }
+
+    public getNombreRol(): string {
+        return this.nombre_rol;
+    }
+    public setNombreRol(value: string) {
+        this.nombre_rol = value;
+    }
+    public setNombrePerfil(value: string) {
+        this.nombre_perfil = value;
+    }
 
 
 }

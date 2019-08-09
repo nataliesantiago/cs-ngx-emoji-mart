@@ -1,7 +1,8 @@
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
-<div class="main-container">
+<div class="main-container" [dir]="dir"
+    [ngClass]="{'minisidebar': minisidebar, 'boxed': boxed, 'danger': danger, 'blue': blue, 'green': green, 'dark': dark }">
     <!-- ============================================================== -->
     <!-- Topbar - style you can find in header.scss -->
     <!-- ============================================================== -->
@@ -9,104 +10,88 @@
         <!-- ============================================================== -->
         <!-- Logo - style you can find in header.scss -->
         <!-- ============================================================== -->
-        <div class="navbar-header">
-            <div id="search-bar" class="up" *ngIf="responseSearch.isActiveMostrarBarra()">
-                <span><img src="../../assets/images/Lupa.svg" (click)="buscar2()" alt="icone de recherche" width="35px"
-                        class="img_lupa"></span>
-                <div class="image-upload">
-                    <label for="file-input">
-                        <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span
-                                class="tooltip">Buscar por
-                                imágenes</span></i>
-                    </label>
-                    <!-- <input id="file-input" (change)="onFileSelected($event)" type="file" /> -->
-                    <input id="file-input" type="file" />
-                </div>
-
-                <!-- <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true" (click)="startButton($event)"><span id="voice-search" class="tooltip">Búsqueda por
-                        voz</span></i> -->
-                <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span id="voice-search" class="tooltip">Búsqueda por
-                        voz</span></i>
-
-                <div class="contenedor">
-                    <ng-autocomplete id="ng-autocomplete-search" placeHolder="Describe tu problema. " [data]="textopredictivo" [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' [itemTemplate]="itemTemplate" [formControl]="def"
-                        [notFoundTemplate]="notFoundTemplate">
-                    </ng-autocomplete>
-
-
-                    <ng-template #itemTemplate let-item id="value-text">
-                        <a [innerHTML]="item.title"></a>
-                    </ng-template>
-
-                    <!-- <ng-template #notFoundTemplate let-notFound>
-                                    <div [innerHTML]="textError"></div>
-                                </ng-template> -->
-                </div>
-                <div>
-                    <div *ngFor="let data of dataImage ; let i = index" style="display: inline-block">
-                        <div (click)="selectLabel(data,i)" class="labelImage">{{ data }}</div>
-                    </div>
-                </div>
-            </div>
-            <a class="navbar-brand" href="index.html">
-                <!-- Logo icon -->
-                <b>
-                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                    <!-- Dark Logo icon -->
-                    <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo">
-                    <!-- Light Logo icon -->
-                </b>
-                <!--End Logo icon -->
-                <!-- Logo text -->
-                <span fxShow="false" fxShow.gt-xs>
-                    <!-- dark Logo text -->
-                    <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo">
-                </span>
-            </a>
-            <!-- <div>
-                <div id="search-bar" class="up">
-                    <span><img src="../../../assets/images/Lupa.svg"
-                 alt="icone de recherche" width="35px" class="img_lupa"></span>
-                    <input type="search" placeholder="Describe el problema." id="src-b">
-                    <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
-                            imágenes</span></i>
-                    <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
-                            voz</span></i>
-
-                </div>
-            </div> -->
-        </div>
 
         <!-- ============================================================== -->
         <!-- sidebar toggle -->
         <!-- ============================================================== -->
 
-        <button mat-icon-button (click)="snav.toggle()" value="sidebarclosed" class="btn_close">
+        <button mat-icon-button (click)="snav.toggle()" value="sidebarclosed">
             <mat-icon>menu</mat-icon>
-            <h5 class="comunidad_titulo">Comunidad Soporte</h5>
         </button>
+        <!-- ============================================================== -->
+        <!-- Search - style you can find in header.scss -->
+        <!-- ============================================================== -->
+        <span class="comunidad_titulo" (click)="irHome()" >Comunidades de Soporte</span>
         <span fxFlex></span>
         <!-- ============================================================== -->
         <!-- app header component - style you can find in header.scss / header.component.ts-->
         <!-- ============================================================== -->
         <app-header></app-header>
+        <!-- ============================================================== -->
+        <!-- Right sidebar toggle - style you can find in rightsidebar.component.scss -->
+        <!-- ============================================================== -->
+        <!--<button (click)="end.toggle()" mat-icon-button class="ml-xs overflow-visible">
+            <mat-icon>settings</mat-icon>
+        </button>
+        -->
     </mat-toolbar>
     <!-- ============================================================== -->
     <!-- End Topbar - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0" [ngClass]="{'minisidebar': minisidebar}">
+    <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0"
+        [ngClass]="{'minisidebar': minisidebar}">
         <!-- ============================================================== -->
         <!-- Sidebar - style you can find in sidebar.scss -->
         <!-- ============================================================== -->
-        <mat-sidenav #snav id="snav" class="pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'" fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches" (open)="sidebarOpened = true" (close)="sidebarOpened = false">
+        <mat-sidenav #snav id="snav" class="pl-xs" [mode]="over" fixedTopGap="0" [opened]="false"
+            (open)="sidebarOpened = true" (close)="sidebarOpened = false" [perfectScrollbar]="config">
 
-            <app-sidebar></app-sidebar>
-
+            <app-sidebar class="app-sidebar"></app-sidebar>
 
         </mat-sidenav>
         <!-- ============================================================== -->
         <!-- Sidebar - style you can find in sidebar.scss -->
         <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Right Sidebar - style you can find in rightsidebar.component.scss -->
+        <!-- ============================================================== -->
+        <mat-sidenav #end position="end" class="chat-panel" mode="over" opened="false">
+            <div class="scroll">
+                <mat-nav-list>
+
+                    <h3 mat-subheader class="text-uppercase font-weight-bold">Settings</h3>
+                    <mat-list-item>
+                        <mat-slide-toggle color="warn" (change)="dir = (dir == 'rtl' ? 'ltr' : 'rtl')">RTL
+                        </mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-slide-toggle color="warn" [(ngModel)]="boxed">Boxed Layout</mat-slide-toggle>
+                    </mat-list-item>
+                    <!--<mat-list-item>
+                    <mat-slide-toggle [(ngModel)]="minisidebar">Mini Sidebar</mat-slide-toggle>
+                  </mat-list-item>    -->
+                    <mat-divider></mat-divider>
+                    <h3 mat-subheader class="text-uppercase font-weight-bold">Colors</h3>
+                    <mat-list-item>
+                        <mat-checkbox color="warn" [(ngModel)]="danger" (change)="green = blue = false"
+                            class="text-danger">Red</mat-checkbox>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-checkbox color="warn" [(ngModel)]="green" (change)="danger = blue = false"
+                            class="text-megna">Teal
+                            Green</mat-checkbox>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-checkbox color="warn" [(ngModel)]="blue" (change)="green = danger = false"
+                            class="text-info">Blue</mat-checkbox>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-checkbox color="warn" [(ngModel)]="dark" (change)="green = blue = danger = false">Dark
+                        </mat-checkbox>
+                    </mat-list-item>
+                </mat-nav-list>
+            </div>
+        </mat-sidenav>
 
         <!-- ============================================================== -->
         <!-- Page container - style you can find in pages.scss -->

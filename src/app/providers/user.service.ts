@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { AjaxService } from './ajax.service';
-import { User } from '../schemas/user.schema';
+import { User } from '../../schemas/user.schema';
 
 import { Subject } from 'rxjs/Subject';
 

@@ -1,29 +1,29 @@
-import { Component, ChangeDetectorRef, OnInit, NgZone } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, NgZone, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HomeService } from '../services/home.service';
-import { ResponseSearch } from '../models/response-search';
+import { HomeService } from '../../services/home.service';
+import { ResponseSearch } from '../../models/response-search';
 
 //speech recognizion
-import { SpeechRecognizerService } from './web-speech/shared/services/speech-recognizer.service';
+import { SpeechRecognizerService } from '../../home/web-speech/shared/services/speech-recognizer.service';
 
-import { SpeechNotification } from './web-speech/shared/model/speech-notification';
-import { SpeechError } from './web-speech/shared/model/speech-error';
-import { ActionContext } from './web-speech/shared/model/strategy/action-context';
-import { AutenticationService } from '../services/autenticacion.service';
-
-
+import { SpeechNotification } from '../../home/web-speech/shared/model/speech-notification';
+import { SpeechError } from '../../home/web-speech/shared/model/speech-error';
+import { ActionContext } from '../../home/web-speech/shared/model/strategy/action-context';
+import { AutenticationService } from '../../services/autenticacion.service';
+import { SearchService } from '../../providers/search.service';
+import { AutocompleteComponent } from 'angular-ng-autocomplete';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-search-component',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class AppSearchComponent implements OnInit {
   url: String = '';
   metodo = 1;
   public def = new FormControl(''); // Model del autocomplete
@@ -60,10 +60,10 @@ export class HomeComponent implements OnInit {
   languages: string[] = ['en-US', 'es-CO'];
   currentLanguage = this.languages[1];
   actionContext: ActionContext = new ActionContext();
-
+  @ViewChild('autocomplete') autocomplete: AutocompleteComponent;
   constructor(
     private router: Router,
-    private homeService: HomeService,
+    private searchService: SearchService,
     public responseSearch: ResponseSearch,
     private changeDetector: ChangeDetectorRef,
     private speechRecognizer: SpeechRecognizerService,
@@ -143,8 +143,8 @@ export class HomeComponent implements OnInit {
           this.actionContext.processMessage(message, this.currentLanguage);
           this.actionContext.runAction(message, this.currentLanguage);
           setTimeout(() => {
-           // this.nzone.runTask(() => {
-              this.buscar(3);
+            // this.nzone.runTask(() => {
+            this.buscar(3);
             //});
           }, 500);
 
@@ -189,7 +189,7 @@ export class HomeComponent implements OnInit {
       this.file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', this.file);
-      this.homeService.searchFile(formData).subscribe((data) => {
+      this.searchService.searchFile(formData).subscribe((data) => {
         debugger;
         this.dataImage = data.data.parrafos;
         this.url = data.data.url;
@@ -243,15 +243,33 @@ export class HomeComponent implements OnInit {
     this.metodo = 1;
     this.searchText = item.title;
   }
+
+  /**
+   * @description Se encarga de limpiar las opciones cuando se le da click al autocmpletar
+   */
+  clearOptions() {
+    delete this.textopredictivo;
+    document.getElementsByClassName('input-container')[0].getElementsByTagName('input')[0].focus();
+    setTimeout(() => {
+      this.autocomplete.close();
+    }, 1);
+  }
+
   /**
     * @param  {} val valor del item seleccionado
     * metodo de change del autocomplete
   */
   onChangeSearch(val: string) {
+    console.log(val);
     this.searchText = val;
-    this.homeService.autocompleteText(val).subscribe((data) =>
-      this.textopredictivo = data.data
-    );
+    if (!val || val == '') {
+      delete this.textopredictivo;
+    } else {
+      this.searchService.autocompleteText(val).subscribe((data) =>
+        this.textopredictivo = data.data
+      );
+    }
+
   }
   ngOnInit(): void {
     /**speech recognizion */
@@ -279,7 +297,7 @@ export class HomeComponent implements OnInit {
       'url': this.url
     };
     this.router.navigate(['/search/' + this.searchText]);
-    this.homeService.guardarBusqueda(obj).subscribe(data => console.log(data));
+    //this.homeService.guardarBusqueda(obj).subscribe(data => console.log(data));
     //this.nzone.run(() => this.stopRecognizer());
     //this.stopRecognizer();
 
@@ -287,4 +305,5 @@ export class HomeComponent implements OnInit {
   buscar2() {
     this.nzone.run(() => this.buscar(this.metodo));
   }
+
 }

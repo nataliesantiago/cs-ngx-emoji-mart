@@ -30,11 +30,13 @@ import { HistorialUsuarioComponent } from './historial-usuario/historial-usuario
 import { AutenticationService } from './services/autenticacion.service';
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { PaginaBlancoComponent } from './pagina-blanco/pagina-blanco.component';
-import { AjaxService } from '../providers/ajax.service';
-import { HistorialUsuariosService } from '../providers/historial-usuarios.service';
+import { AjaxService } from './providers/ajax.service';
+import { HistorialUsuariosService } from './providers/historial-usuarios.service';
 import { ChatClienteComponent } from './components/chat-cliente/chat-cliente.component';
 import { HomeProComponent } from './home-pro/home-pro.component';
-import { UserService } from '../providers/user.service';
+import { UserService } from './providers/user.service';
+import { AppSearchComponent } from './components/search/search.component';
+import { SearchService } from './providers/search.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -54,6 +56,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PaginaBlancoComponent,
     ChatClienteComponent,
     HomeProComponent,
+    AppSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -81,7 +84,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SpeechSynthesizerService,
     AjaxService,
     UserService,
-    HistorialUsuariosService
+    HistorialUsuariosService,
+    SearchService
   ],
   bootstrap: [AppComponent]
 })

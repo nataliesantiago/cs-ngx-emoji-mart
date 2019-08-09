@@ -159,7 +159,7 @@ article div p {
     font-weight: 400;
     font-style: italic;
     margin: 1rem 0 3rem;
-    font-family: Myriad Pro !important;
+    font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
     position: relative;
     z-index: 5;
 }
@@ -181,7 +181,7 @@ article div p:before {
 
 article div h1 {
     color: hsl(260, 5%, 55%);
-    font-family: Myriad Pro !important;
+    font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05rem;

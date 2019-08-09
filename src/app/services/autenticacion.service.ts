@@ -5,7 +5,7 @@ import * as CryptoJS from 'crypto-js';
 import { AuthService } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { Router } from '@angular/router';
-import { AjaxService } from '../../providers/ajax.service';
+import { AjaxService } from '../providers/ajax.service';
 
 @Injectable({
   providedIn: 'root'
