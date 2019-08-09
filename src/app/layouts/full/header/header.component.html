@@ -17,6 +17,7 @@
         </ul>
     </div>
 
+    
 </mat-menu>
 <!-- ============================================================== -->
 <!-- Profile - style you can find in header.scss -->
@@ -56,6 +57,33 @@
             <div class="contenedor__minuto"><span class="minuto">hace 1 un minuto</span></div>
         </div>
     </mat-nav-list>
+<button  mat-icon-button class="m-r-10">
+        <img src="../../../../assets/images/users/1.jpg" alt="" class="img_pequeña alerta">
+    </button>
+
+
+
+
+<mat-menu #message="matMenu" class="mymessage">
+        <mat-nav-list appAccordion class="contenedor__campana">
+                <img src="assets/images/Conecta-Soporte.png" alt="conecta_logo" class="img_conecta">
+                <div class="texto__notificacion">
+                    <img src="../../../../assets/images/Alerta.svg" alt="" class="img__campana">
+                    <h4>Notificaciones</h4>
+                </div>
+                <div>
+                    <h5>Lorem ipsum dolor sit amet</h5>
+                    <p class="texto_pequeño">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum pariatur numquam totam ration.</p>
+                    <img src="../../../../assets/images/big/img2.jpg" alt="" class="img_header">
+                    <div class="contenedor__minuto"><span class="minuto">hace 1 un minuto</span></div> 
+                </div>
+                <div>
+                        <h5>Lorem ipsum dolor sit amet</h5>
+                        <p class="texto_pequeño">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum pariatur numquam totam ration.</p>
+                        <img src="../../../../assets/images/big/img2.jpg" alt="" class="img_header">
+                        <div class="contenedor__minuto"><span class="minuto">hace 1 un minuto</span></div> 
+                </div>
+            </mat-nav-list>
 </mat-menu>
 <!-- ============================================================== -->
 <!-- Profile - style you can find in header.scss -->

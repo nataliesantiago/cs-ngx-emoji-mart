@@ -1,0 +1,26 @@
+
+
+<mat-card>
+  <mat-card-content>
+      <mat-form-field>
+        <input matInput placeholder="Digite la pregunta" [(ngModel)]="pregunta.titulo" name="titulo">
+      </mat-form-field>      
+      <br>
+      <br>
+      <mat-card-title>Por favor digite la respuesta</mat-card-title>
+      <quill-editor [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor>
+      <br>
+      <br>
+      <mat-card-title class="mb-3">Categoria (Más bajo nivel)</mat-card-title>
+      <mat-form-field>
+        <select matNativeControl [(ngModel)]="pregunta.id_producto" name="producto">
+          <option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field>      
+      <br>
+      <br>
+      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarPregunta()">Guardar</button>
+  </mat-card-content>
+</mat-card>
+
+

@@ -21,6 +21,7 @@ export class ResponseSearch {
         { id: 10, time: '2018-08-19 17:25:30.0', busqueda: 'vodka', tipoBusqueda: 'voz', url: 'www.notiene.com' },
     ];
 
+    
     setResultados(val: any) {
         this._resultados = val;
     }

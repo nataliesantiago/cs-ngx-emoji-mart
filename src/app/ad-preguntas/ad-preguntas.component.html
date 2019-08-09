@@ -1,0 +1,62 @@
+<div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                
+            <mat-card>
+                <mat-card-content>
+                    <br>
+                    <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario_pregunta']">Ingresar Pregunta</a>
+                    <br>
+                    <br>
+                    <br>
+                    <mat-card-title>Preguntas y Respuestas</mat-card-title>
+                    <div class="bg-light p-10 p-r-20 p-l-20">
+                        <mat-form-field>
+                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                        </mat-form-field>
+                    </div>
+                    <div class="responsive-table">
+                        <mat-table [dataSource]="dataSource" matSort>
+    
+                            <!-- ID Column -->
+                            <ng-container matColumnDef="id">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.idtbl_pregunta}} </mat-cell>
+                            </ng-container>
+    
+                            <!-- Progress Column -->
+                            <ng-container matColumnDef="pregunta">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Pregunta </mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.titulo}} </mat-cell>
+                            </ng-container>
+    
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="id_producto">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Categoria </mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.id_producto}} </mat-cell>
+                            </ng-container>
+    
+                            <!-- Color Column -->
+                            <ng-container matColumnDef="id_estado">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.id_estado}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="acciones">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    <i class="ti-pencil text-info m-r-10" (click)="editarElemento(row)"></i>
+                                    <i class="ti-trash text-danger m-r-10" (click)="borrarElemento(row)"></i>
+                                </mat-cell>>
+                            </ng-container>
+    
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;">
+                            </mat-row>
+                        </mat-table>
+    
+                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
