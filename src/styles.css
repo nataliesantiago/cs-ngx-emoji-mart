@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
 
 @import "~perfect-scrollbar/css/perfect-scrollbar.css";
 
@@ -1649,8 +1650,3 @@ textarea {
   border: 1px solid #ccc;
 }
 
-.autocomplete-container {
-  box-shadow: none !important;
-  margin-left: 18px !important;
-  width: 712px !important;
-}

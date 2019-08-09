@@ -1,6 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild , ChangeDetectorRef} from '@angular/core';
 import { AjaxService } from '../../providers/ajax.service';
 import { UserService } from '../../providers/user.service';
+import { LocalDataSource } from 'ng2-smart-table';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  BreakpointState
+} from '@angular/cdk/layout';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-ad-preguntas',
@@ -9,11 +17,18 @@ import { UserService } from '../../providers/user.service';
 })
 export class AdPreguntasComponent implements OnInit {
 
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+  @ViewChild(MatSort)
+  sort: MatSort;
+  displayedColumns = ['id', 'pregunta', 'id_producto', 'id_estado', 'acciones'];
+  dataSource = new MatTableDataSource([]);
   productos = [];
   pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 3, id_estado_flujo: 4 };
   usuario;
   id_usuario;
-  constructor(private ajax: AjaxService, private user: UserService) { 
+  data = [];
+  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
     this.usuario = user.getUsuario();
     console.log(this.usuario);
     this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
@@ -23,33 +38,53 @@ export class AdPreguntasComponent implements OnInit {
         this.id_usuario = d.usuario[0].idtbl_usuario;
       }
     })
-
+    this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+      if(p.success){
+        console.log("funciona");
+        console.log(p.preguntas);
+        this.data = p.preguntas;
+        this.dataSource = new MatTableDataSource(this.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }
+    })
+     // create the source
+    
   }
 
   ngOnInit() {
-
-    this.ajax.get('producto/obtener', { }).subscribe(d => {
-      if(d.success){
-        console.log("funciona");
-        console.log(d.productos);
-        this.productos = d.productos;
-      }
-    })
-
+    
   }
 
-  guardarPregunta(){
-    console.log(this.id_usuario);
-    console.log(this.pregunta);
-    this.pregunta.id_estado_flujo = 4;
-    this.pregunta.id_usuario = this.id_usuario;
-    this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-    this.ajax.post('preguntas/guardar', { pregunta: this.pregunta }).subscribe(d => {
-      if(d.success){
-        console.log("guardó");
+  editarElemento(e){
+    this.router.navigate(['/formulario_pregunta'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
+  }
+
+  borrarElemento(e){
+    this.ajax.post('preguntas/eliminar', { pregunta: e, id_usuario: this.id_usuario }).subscribe(p => {
+      if(p.success){
+        this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+          if(p.success){
+            console.log("funciona");
+            console.log(p.preguntas);
+            this.data = p.preguntas;
+            this.dataSource = new MatTableDataSource(this.data);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.cg.detectChanges();
+          }
+        })
       }
     })
-
+    
   }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+  
 
 }
+

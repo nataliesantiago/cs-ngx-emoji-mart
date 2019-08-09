@@ -14,13 +14,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './demo-material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SearchComponent } from './search/search.component';
+import {BuzonSugerenciasComponent} from './buzon-sugerencias/buzon-sugerencias.component';
 import { HomeComponent } from './home/home.component';
 import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
 import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
 import {QuillModule} from 'ngx-quill';
-import {AdPreguntasComponent} from './ad-preguntas/ad-preguntas.component';
-import {BuzonSugerenciasComponent} from './buzon-sugerencias/buzon-sugerencias.component'
+import { Ng2SmartTableModule } from 'ngx-smart-table';
 
+import { AdPreguntasComponent } from "./ad-preguntas/ad-preguntas.component";
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -38,6 +39,8 @@ import { HistorialUsuariosService } from '../providers/historial-usuarios.servic
 import { ChatClienteComponent } from './components/chat-cliente/chat-cliente.component';
 import { HomeProComponent } from './home-pro/home-pro.component';
 import { UserService } from '../providers/user.service';
+import { from } from 'rxjs';
+import { FormularioPreguntasComponent } from './formulario-preguntas/formulario-preguntas.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -56,9 +59,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HistorialUsuarioComponent,
     PaginaBlancoComponent,
     ChatClienteComponent,
-    HomeProComponent,
     AdPreguntasComponent,
     BuzonSugerenciasComponent,
+    HomeProComponent,
+    FormularioPreguntasComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +79,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RouterModule.forRoot(AppRoutes),
     AutocompleteLibModule,
     SocialLoginModule,
+    QuillModule,
+    Ng2SmartTableModule,
   ],
 
   providers: [
@@ -93,3 +99,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+
