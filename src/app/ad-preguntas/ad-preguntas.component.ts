@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild , ChangeDetectorRef} from '@angular/core';
-import { AjaxService } from '../../providers/ajax.service';
-import { UserService } from '../../providers/user.service';
+import { AjaxService } from '../providers/ajax.service';
+import { UserService } from '../providers/user.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import {

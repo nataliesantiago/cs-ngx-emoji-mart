@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AjaxService } from '../../providers/ajax.service';
-import { UserService } from '../../providers/user.service';
+import { AjaxService } from '../providers/ajax.service';
+import { UserService } from '../providers/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { RouterModule, Router } from '@angular/router';
 
