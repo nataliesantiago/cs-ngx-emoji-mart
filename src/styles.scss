@@ -204,6 +204,16 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-left: -40px;
+}
+
+.contenedor__sidebar div ul li{
+  transition: all ease 0.5s;
+}
+
+.contenedor__sidebar div ul li:hover{
+  color: var(--azul_davivienda);
+  cursor: pointer;
 }
 
 .sidebar_mt {
