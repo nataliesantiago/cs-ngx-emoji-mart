@@ -9,6 +9,10 @@ import {
   BreakpointState
 } from '@angular/cdk/layout';
 import { RouterModule, Router } from '@angular/router';
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+const moment = _rollupMoment || _moment;
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ad-preguntas',
@@ -21,13 +25,14 @@ export class AdPreguntasComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['id', 'pregunta', 'id_producto', 'id_estado', 'acciones'];
+  displayedColumns = ['id', 'pregunta', 'id_producto', 'id_estado', 'fecha_modificacion', 'acciones'];
   dataSource = new MatTableDataSource([]);
   productos = [];
   pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 3, id_estado_flujo: 4 };
   usuario;
   id_usuario;
   data = [];
+  mostrar_fecha_ultima_modificacion = false;
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
     this.usuario = user.getUsuario();
     console.log(this.usuario);
@@ -42,6 +47,9 @@ export class AdPreguntasComponent implements OnInit {
       if(p.success){
         console.log("funciona");
         console.log(p.preguntas);
+        for(let j = 0; j < p.preguntas.length; j++){                      
+          p.preguntas[j].fecha_ultima_modificacion = moment(p.preguntas[j].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
+        }
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
@@ -77,6 +85,10 @@ export class AdPreguntasComponent implements OnInit {
       }
     })
     
+  }
+
+  asociarPreguntas(e){
+    this.router.navigate(['/asociar-preguntas'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
   }
 
   applyFilter(filterValue: string) {

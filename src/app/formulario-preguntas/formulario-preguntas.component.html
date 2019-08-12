@@ -2,21 +2,103 @@
 
 <mat-card>
   <mat-card-content>
-      <mat-form-field>
-        <input matInput placeholder="Digite la pregunta" [(ngModel)]="pregunta.titulo" name="titulo">
-      </mat-form-field>      
+      <mat-form-field floatLabel="never">
+          <mat-label>Digite la pregunta</mat-label>
+          <input matInput [(ngModel)]="pregunta.titulo" name="titulo">
+      </mat-form-field>
       <br>
       <br>
       <mat-card-title>Por favor digite la respuesta</mat-card-title>
-      <quill-editor [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor>
+      <quill-editor [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor> 
       <br>
-      <br>
-      <mat-card-title class="mb-3">Categoria (Más bajo nivel)</mat-card-title>
-      <mat-form-field>
+      <mat-form-field floatLabel="never">
+        <mat-label>Categoria (Más bajo nivel)</mat-label>
         <select matNativeControl [(ngModel)]="pregunta.id_producto" name="producto">
           <option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</option>
         </select>
-      </mat-form-field>      
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field floatLabel="never">
+        <mat-label>Estado de la pregunta</mat-label>
+        <select matNativeControl [(ngModel)]="pregunta.id_estado" name="estado">
+          <option *ngFor="let i of estados_pregunta" value="{{i.idtbl_estado_pregunta}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field>
+      <div fxLayout="row wrap" class="row">
+          <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+              <mat-checkbox color="primary" [(ngModel)]="pregunta.muestra_fecha_actualizacion" (click)="mostrarEstado()">Mostrar Fecha de la Última Modificación</mat-checkbox>
+          </div>
+      </div>        
+      <br>
+      <br>
+      <button mat-raised-button color="accent" (click)="anadirSegmento()" style="width: 15%;"><span style="color: white !important;">Añadir Segmento</span></button>
+      <mat-accordion *ngIf="segmentos.length > 0">
+          <br>
+          <br>
+          <mat-expansion-panel *ngFor="let segmento of segmentos; let i = index;" (click)="validarSegmento(i)">
+              <mat-expansion-panel-header>
+                <mat-panel-title *ngIf="segmento.titulo == ''"> Nuevo Segmento </mat-panel-title>  
+                <mat-panel-title *ngIf="segmento.titulo != null"> {{segmento.titulo}} </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-form-field>
+                  <input matInput placeholder="Digite el segmento" [(ngModel)]="segmento.titulo" name="titulo" id="titulo{{i}}">
+                </mat-form-field>      
+                <br>
+                <br>
+                <mat-card-title>Por favor digite la respuesta</mat-card-title>
+                <quill-editor [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
+                <br>
+                <button mat-raised-button color="accent" (click)="anadirSubRespuestaSegmento(i)" style="width: 20%;"><span style="color: white !important;">Añadir Subrespuesta al segmento</span></button>
+                <br>
+                <br>
+                <mat-accordion *ngIf="array_mostrar.length > 0">
+                  <mat-expansion-panel *ngFor="let arr of array_mostrar; let cont = index;">                                      
+                    <mat-expansion-panel-header *ngIf="arr.pos_segmento == i">
+                      <mat-panel-title *ngIf="arr.titulo == ''"> Nueva Subrespuesta </mat-panel-title>  
+                      <mat-panel-title *ngIf="arr.titulo != null"> {{arr.titulo}} </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field>
+                      <input matInput placeholder="Digite la pregunta" [(ngModel)]="arr.titulo" name="titulo">
+                    </mat-form-field>      
+                    <br>
+                    <br>
+                    <mat-card-title>Por favor digite la respuesta</mat-card-title>
+                    <quill-editor [style]="{height: '200px'}" [(ngModel)]="arr.respuesta" name="respuesta"></quill-editor>
+                    <br>
+                    
+                  </mat-expansion-panel>
+                    
+                  <br>
+                </mat-accordion>
+                <button mat-raised-button color="warn" (click)="eliminarSubRespuestaSegmento(i)" style="width: 15%;"><span style="color: white !important;">Quitar Subrespuesta</span></button>
+
+          </mat-expansion-panel>
+          <br>
+          <button mat-raised-button color="warn" (click)="eliminarSegmento()" style="width: 15%;"><span style="color: white !important;">Quitar Segmento</span></button>
+      </mat-accordion>
+      <br>
+      <br>
+      <button mat-raised-button color="accent" (click)="anadirSubRespuesta()" style="width: 15%;"><span style="color: white !important;">Añadir Subrespuesta</span></button>
+      <mat-accordion *ngIf="subrespuestas.length > 0">
+          <br>
+          <br>
+          <mat-expansion-panel *ngFor="let subrespuesta of subrespuestas; let i = index;">
+              <mat-expansion-panel-header>
+                <mat-panel-title *ngIf="subrespuesta.titulo == ''"> Nueva Subrespuesta </mat-panel-title>  
+                <mat-panel-title *ngIf="subrespuesta.titulo != null"> {{subrespuesta.titulo}} </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-form-field>
+                  <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo">
+                </mat-form-field>      
+                <br>
+                <br>
+                <mat-card-title>Por favor digite la respuesta</mat-card-title>
+                <quill-editor [style]="{height: '200px'}" [(ngModel)]="subrespuesta.respuesta" name="respuesta"></quill-editor>
+          </mat-expansion-panel>
+          <br>
+      <button mat-raised-button color="warn" (click)="eliminarSubRespuesta()" style="width: 15%;"><span style="color: white !important;">Quitar Subrespuesta</span></button>
+      </mat-accordion>
       <br>
       <br>
       <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarPregunta()">Guardar</button>

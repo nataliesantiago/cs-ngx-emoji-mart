@@ -18,7 +18,7 @@ import {BuzonSugerenciasComponent} from './buzon-sugerencias/buzon-sugerencias.c
 import { HomeComponent } from './home/home.component';
 import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
 import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
-import {QuillModule} from 'ngx-quill';
+import { QuillModule } from 'ngx-quill';
 import { Ng2SmartTableModule } from 'ngx-smart-table';
 
 import { AdPreguntasComponent } from "./ad-preguntas/ad-preguntas.component";
@@ -43,6 +43,7 @@ import { AppSearchComponent } from './components/search/search.component';
 import { SearchService } from './providers/search.service';
 import { from } from 'rxjs';
 import { FormularioPreguntasComponent } from './formulario-preguntas/formulario-preguntas.component';
+import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -66,6 +67,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HomeProComponent,
     AppSearchComponent,
     FormularioPreguntasComponent,
+    AsociarPreguntasComponent,
   ],
   imports: [
     BrowserModule,
