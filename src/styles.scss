@@ -8,12 +8,16 @@
 /*Variables*/
 
 :root {
+    --blanco: #fff;
     --rojo_davivienda: #DA291C;
     --azul_davivienda: #0077C8;
     --amarillo_davivienda: #FFD100;
     --naranja_davivienda: #ED8B00;
     --color-font: #606060;
     --negro: #000;
+    --fuente: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+    //transiciones
+    --transicion_rapida:all ease 0.5s;
 }
 
 
@@ -21,7 +25,7 @@
 
 body {
     //font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
-    font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+    font-family: var(--fuente);
 
     color: var(--color-font);
 }
@@ -29,7 +33,7 @@ body {
 
 .ml {
     margin-left: 11px;
-    transition: all ease 0.5s;
+    transition: var(--transicion_rapida);
 }
 
 .ml:hover {
@@ -42,7 +46,7 @@ body {
 }
 
 .mat-button {
-    background: blue !important;
+    background: var(--azul_davivienda) !important;
 }
 
 .mat-button-wrapper {
@@ -55,7 +59,7 @@ body {
 }
 
 .mat-drawer-container {
-    background: #fff !important;
+    background: var(--blanco) !important;
 }
 
 .titulo_h3 {
@@ -64,7 +68,7 @@ body {
 }
 
 .mat-toolbar.mat-primary {
-    background: #fff !important;
+    background: var(--blanco)!important;
 }
 
 mat-toolbar.topbar {
@@ -198,6 +202,7 @@ a {
 
 .img_conecta {
     width: 210px;
+    cursor: pointer;
 }
 
 .contenedor__sidebar {
