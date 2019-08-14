@@ -1344,12 +1344,18 @@ border: 1px solid #ccc;
 }
 
 @media only screen and (max-width: 414px) {
+    .img_small{
+        width: 100%;
+    }
     .autocomplete-container {
         width: 234px !important;
     }
-
-    .material-icons {
-        margin-left: 211px !important;
+    .comunidad_titulo{
+        display: none;
+    }
+    .cdk-overlay-pane{
+        top: 66px!important;
+        right: 2px!important;
     }
 }
 
