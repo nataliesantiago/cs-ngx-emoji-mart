@@ -1357,6 +1357,12 @@ border: 1px solid #ccc;
         top: 66px!important;
         right: 2px!important;
     }
+    .mat-raised-button{
+        width: 100%!important;
+    }
+    .mat-checkbox-layout .mat-checkbox-label {
+        font-size: 13px;
+    }
 }
 
 @media only screen and (max-width: 360px) {
@@ -1368,6 +1374,9 @@ border: 1px solid #ccc;
 @media only screen and (max-width: 320px) {
     .autocomplete-container {
         width: 179px !important;
+    }
+    .mat-checkbox-layout .mat-checkbox-label {
+        font-size: 11px;
     }
 }
 
