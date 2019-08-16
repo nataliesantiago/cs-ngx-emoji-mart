@@ -9,8 +9,10 @@ import { HomeProComponent } from './home-pro/home-pro.component';
 import {AdPreguntasComponent} from './ad-preguntas/ad-preguntas.component';
 import { from } from 'rxjs';
 import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
-import {FormularioPreguntasComponent} from './formulario-preguntas/formulario-preguntas.component';
+import { FormularioPreguntasComponent } from './formulario-preguntas/formulario-preguntas.component';
 import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas.component';
+import { FlujoCuraduriaComponent } from './flujo-curaduria/flujo-curaduria.component';
+import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-preguntas-flujo-curaduria/formulario-preguntas-flujo-curaduria.component';
 
 export const AppRoutes: Routes = [
   {
@@ -27,6 +29,8 @@ export const AppRoutes: Routes = [
   { path: 'search/:id', component: SearchComponent },
   { path: 'ad-preguntas', component: AdPreguntasComponent },
   { path: 'asociar-preguntas', component: AsociarPreguntasComponent },
+  { path: 'flujo-curaduria', component: FlujoCuraduriaComponent },
+  { path: 'formulario-preguntas-flujo-curaduria', component: FormularioPreguntasFlujoCuraduriaComponent },
   { path: 'sugerencias', component: BuzonSugerenciasComponent },
   {path:'administrador-preguntas', component:AdPreguntasComponent, canActivate: [AuthGuard]},
   {path:'formulario_pregunta', component:FormularioPreguntasComponent, canActivate: [AuthGuard]}

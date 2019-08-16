@@ -44,12 +44,16 @@ import { SearchService } from './providers/search.service';
 import { from } from 'rxjs';
 import { FormularioPreguntasComponent } from './formulario-preguntas/formulario-preguntas.component';
 import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas.component';
+import { FlujoCuraduriaComponent } from './flujo-curaduria/flujo-curaduria.component';
+import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-preguntas-flujo-curaduria/formulario-preguntas-flujo-curaduria.component';
+import { QuillService } from './providers/quill.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
   wheelPropagation: true
 };
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,6 +72,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppSearchComponent,
     FormularioPreguntasComponent,
     AsociarPreguntasComponent,
+    FlujoCuraduriaComponent,
+    FormularioPreguntasFlujoCuraduriaComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,12 +85,23 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     HttpClientModule,
     SharedModule,
-    QuillModule,
+    QuillModule.forRoot({modules: {
+      syntax: true,
+      toolbar: {
+        container: [['bold', 'italic'],        // toggled buttons
+    
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'align': [] }],
+    
+        ['link', 'image', 'video'],],
+      }
+    }}),
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes),
     AutocompleteLibModule,
     SocialLoginModule,
-    QuillModule,
     Ng2SmartTableModule,
   ],
 
@@ -100,9 +117,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AjaxService,
     UserService,
     HistorialUsuariosService,
-    SearchService
+    SearchService,
+    QuillService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
-

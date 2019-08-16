@@ -47,9 +47,6 @@ export class AdPreguntasComponent implements OnInit {
       if(p.success){
         console.log("funciona");
         console.log(p.preguntas);
-        for(let j = 0; j < p.preguntas.length; j++){                      
-          p.preguntas[j].fecha_ultima_modificacion = moment(p.preguntas[j].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
-        }
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;

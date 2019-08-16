@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewChild , ChangeDetectorRef} from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -8,18 +8,16 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
-import { QuillEditorComponent } from 'ngx-quill';
-import { QuillService } from '../providers/quill.service';
 
 @Component({
-  selector: 'app-formulario-preguntas',
-  templateUrl: './formulario-preguntas.component.html',
-  styleUrls: ['./formulario-preguntas.component.scss']
+  selector: 'app-formulario-preguntas-flujo-curaduria',
+  templateUrl: './formulario-preguntas-flujo-curaduria.component.html',
+  styleUrls: ['./formulario-preguntas-flujo-curaduria.component.scss']
 })
-export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
+export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   productos = [];
-  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 1, muestra_fecha_actualizacion: 0};
+  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 3, muestra_fecha_actualizacion: 0};
   segmentos = [];
   subrespuestas = [];
   subrespuestas_segmentos = [];
@@ -46,11 +44,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource([]);
   file: any;
   file2;
-  quillModules;
+  notas = {notas: ''};
+  todos_usuarios = [];
 
-  @ViewChildren(QuillEditorComponent) editores?:QueryList<QuillEditorComponent>;
-
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) { 
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef) { 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
         console.log("funciona");
@@ -68,39 +65,16 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         console.log(d.usuario[0].idtbl_usuario);
         this.id_usuario = d.usuario[0].idtbl_usuario;        
       }
-    })
-    this.quillModules = {
-      syntax: true,
-      toolbar: {
-        handlers: { 
-          'image': qs.fileStorageHandler
-        }
+    });
+    this.ajax.get('user/obtener-todos', {}).subscribe(d => {
+      if(d.success){
+        console.log("funciona");
+        this.todos_usuarios = d.usuario;        
       }
-    };
+    });
   }
 
-  quillModulesFc(ql){
-    let m = {
-      syntax: true,
-      toolbar: {
-        handlers: { 
-          'image': ()=>{this.qs.fileStorageHandler(ql)}
-        }
-      }
-    };
-  }
-  ngAfterViewInit(){
-    /*console.log(this.quillModules);
-    if(this.quillModules){
-      this.quillModules.forEach(e=>{
-        console.log(e);
-        /*let a:any = e;
-        a.getModule('toolbar').addHandler('image', () => {
-          this.qs.fileStorageHandler(a);
-        });
-      })
-    }*/
-  }
+  
 
   ngOnInit() {
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
@@ -226,7 +200,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion }).subscribe(d => {
         if(d.success){
           console.log("guardó editar");
-          this.router.navigate(['/administrador-preguntas']);
+          this.router.navigate(['/flujo-curaduria']);
         }
       })
     }else{
@@ -237,17 +211,16 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       }else{
         this.pregunta.muestra_fecha_actualizacion = 0;
       }
-      this.pregunta.id_estado_flujo = 4;
       this.pregunta.id_usuario = this.id_usuario;
       this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
       for(let i = 0; i < this.array_mostrar.length; i++){
         this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
       }
       console.log(this.array_mostrar);
-      this.ajax.post('preguntas/guardar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion }).subscribe(d => {
+      this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
         if(d.success){
           console.log("guardó");
-          this.router.navigate(['/administrador-preguntas']);
+          this.router.navigate(['/flujo-curaduria']);
         }
       })
     }
@@ -547,5 +520,4 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       }
     })
   }
-
 }

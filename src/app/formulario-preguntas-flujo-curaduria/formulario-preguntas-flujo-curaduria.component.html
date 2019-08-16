@@ -55,7 +55,7 @@
                       <br>
                       <br>
                       <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                      <quill-editor [modules]="quillModulesFc(ql)" #ql [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
+                      <quill-editor (change)="onFileChange($event)" [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
                       <br>
                       <div fxLayout="row wrap">
                         <button mat-raised-button color="accent" (click)="anadirSubRespuestaSegmento(i)" style="width: 20%;"><span style="color: white !important;">Añadir Subrespuesta al segmento</span></button>
@@ -180,9 +180,30 @@
         </div>
         </div>
       </div>
+      <!--br>
+      <br>
+      <h3>Responsable</h3>
+      <hr>
+      <br>
+      <mat-form-field floatLabel="never">
+        <mat-label>Responsable</mat-label>
+        <select matNativeControl name="estado">
+          <option *ngFor="let i of todos_usuarios" value="{{i.idtbl_usuario}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field-->
       <br>
       <br>
-      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarPregunta()">Guardar</button>
+      <h3>Comentarios</h3>
+      <hr>
+      <br>
+      <mat-form-field>
+				<textarea matInput placeholder="Textarea" [value]="notas.notas" matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
+      </mat-form-field>
+      <br>
+      <br>
+      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarPregunta()">Aprobar</button>
+      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="rechazarPregunta()">Rechazar</button>
+
   </mat-card-content>
 
 
