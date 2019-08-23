@@ -18,7 +18,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['id', 'pregunta', 'id_producto', 'id_estado', 'fecha_modificacion', 'acciones'];
+  displayedColumns = ['id', 'pregunta', 'id_producto', 'id_estado', 'encargado', 'acciones'];
   dataSource = new MatTableDataSource([]);
   usuario;
   id_usuario;
@@ -27,6 +27,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   cant_revision;
   cant_aprobacion;
   cant_aprobados;
+  flujo_actual = "Preguntas en Curaduria";
 
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
     this.usuario = user.getUsuario();
@@ -36,6 +37,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         console.log("funciona");
         console.log(d.usuario[0].idtbl_usuario);
         this.id_usuario = d.usuario[0].idtbl_usuario;
+        this.cg.detectChanges();
       }
     })
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
@@ -46,22 +48,26 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p1 => {
-          if(p1.success){
-            this.cant_revision = p1.preguntas.length;
-            this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 3}).subscribe(p2 => {
-              if(p2.success){
-                this.cant_aprobacion = p2.preguntas.length;
-                this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 4}).subscribe(p3 => {
-                  if(p3.success){
-                    this.cant_aprobados = p3.preguntas.length;
-                  }
-                })
-              }
-            })
-          }
-        })
+        this.dataSource.sort = this.sort;        
+        this.cg.detectChanges();
+      }
+    })
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p1 => {
+      if(p1.success){
+        this.cant_revision = p1.preguntas.length;            
+        this.cg.detectChanges();
+      }
+    })
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 3}).subscribe(p2 => {
+      if(p2.success){
+        this.cant_aprobacion = p2.preguntas.length;            
+        this.cg.detectChanges();
+      }
+    })
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 4}).subscribe(p3 => {
+      if(p3.success){
+        this.cant_aprobados = p3.preguntas.length;
+        this.cg.detectChanges();
       }
     })
      // create the source
@@ -69,6 +75,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   cargarCuraduria(){
+    this.flujo_actual = "Preguntas en Curaduria";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
         console.log("funciona");
@@ -83,6 +90,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   cargarRevision(){
+    this.flujo_actual = "Preguntas en Revisión";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p => {
       if(p.success){
         console.log("funciona");
@@ -97,6 +105,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   cargarAprobacion(){
+    this.flujo_actual = "Preguntas por Aprobar";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 3}).subscribe(p => {
       if(p.success){
         console.log("funciona");
@@ -111,6 +120,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   cargarAprobados(){
+    this.flujo_actual = "Preguntas Aprobadas";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 4}).subscribe(p => {
       if(p.success){
         console.log("funciona");
@@ -125,10 +135,55 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   ngOnInit() {
-  
+
   }
 
-  async cambiarEstado(e){
+  previsualizar(e) {
+    this.router.navigate(['/respuestas'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
+  }
+
+  async comentarios(e){
+
+    let notas = {};
+
+    this.ajax.get('preguntas/obtener-comentarios-pregunta', {idtbl_pregunta: e.idtbl_pregunta}).subscribe(async p => {
+      if(p.success){
+        console.log("funciona");
+        console.log(p.comentarios);
+
+        let comentarios = '<div style="height: 250px; overflow-x: hidden;">';
+        
+        for(let i = 0; i < p.comentarios.length; i++){
+          comentarios += '<div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; padding: 2px 16px; width: 95%; margin-left: 2%;"><h3><strong>' + p.comentarios[i].nombre_usuario + '</strong></h3>';
+          comentarios += '<h6>' + p.comentarios[i].notas + '</strong></h6></div><br>';
+        }
+
+        comentarios += '</div>';
+
+        const { value: text } = await Swal.fire({
+          input: 'textarea',
+          inputPlaceholder: 'Nuevo Comentario',
+          inputAttributes: {
+            'aria-label': 'Nuevo Comentario'
+          },
+          html: comentarios,
+          showCancelButton: true
+        })
+        
+        if (text) {
+          notas = {notas: text, id_estado: e.id_estado, id_estado_flujo: e.id_estado_flujo, idtbl_pregunta: e.idtbl_pregunta, id_usuario: this.id_usuario}
+          this.ajax.post('preguntas/guardar-nota-curaduria', {nota: notas}).subscribe(p => {
+            if(p.success){
+              
+            }
+          })
+        }
+      }
+    })
+    
+  }
+
+  cambiarEstado(e){
     this.router.navigate(['/formulario-preguntas-flujo-curaduria'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
   }
 

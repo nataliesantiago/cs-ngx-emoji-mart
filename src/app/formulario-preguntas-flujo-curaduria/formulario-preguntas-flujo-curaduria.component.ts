@@ -8,6 +8,7 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
+import { QuillService } from '../providers/quill.service';
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -44,10 +45,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   file: any;
   file2;
-  notas = {notas: ''};
+  notas = { notas: '' };
   todos_usuarios = [];
+  notas_mostrar = [];
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef) { 
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) { 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
         console.log("funciona");
@@ -74,7 +76,20 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     });
   }
 
-  
+  quillModulesFc(ql: any){
+    //let toolbar = ql.getModule('toolbar');
+    //ql.modules = JSON.parse(JSON.stringify(this.quillModules));
+    setTimeout(()=>{ql.getModule('toolbar').addHandler('image', ()=>{this.qs.fileStorageHandler(ql)});}, 1000);
+    /*let m = {
+      syntax: true,
+      toolbar: {
+        handlers: { 
+          'image': ()=>{this.qs.fileStorageHandler(ql)}
+        }
+      }
+    };
+    return m;*/
+  }
 
   ngOnInit() {
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
@@ -108,66 +123,75 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         console.log(d.productos);
         this.productos = d.productos;
         if(this.id_pregunta_editar){
-          this.editar = true;
-          this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(p => {
-            if(p.success){
-              console.log("funciona");
-              console.log(p.pregunta[0]);
-              this.pregunta = p.pregunta[0];
-              this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
-              this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sr => {
-                if(sr.success){
-                  console.log("funciona subrespuesta");
-                  console.log(sr.subrespuesta);
-                  this.subrespuestas = sr.subrespuesta;   
-                  for(let i = 0; i < this.segmentos.length; i++){
-                    this.subrespuestas[i].respuesta = this.subrespuestas[i].texto;
-                  }               
-                  console.log(this.subrespuestas);
-                  this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sg => {
-                    if(sg.success){
-                      console.log("funciona segmentos");
-                      console.log(sg.segmentos);
-                      this.segmentos = sg.segmentos;
-                      for(let i = 0; i < this.segmentos.length; i++){
-                        this.segmentos[i].respuesta = this.segmentos[i].texto;
-                      }
-                      console.log(this.segmentos);
-                      this.ajax.get('preguntas/obtener-subrespuesta-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(srsg => {
-                        if(srsg.success){
-                          console.log("funciona segmentos");
-                          console.log(srsg.subrespuestaSegmento);
-                          this.array_mostrar = srsg.subrespuestaSegmento;
-                          for(let i = 0; i < this.array_mostrar.length; i++){
-                            this.array_mostrar[i].respuesta = this.array_mostrar[i].texto;
-                            for(let j = 0; j < this.segmentos.length; j++){
-                              if(this.array_mostrar[i].id_segmento == this.segmentos[j].idtbl_segmento){
-                                this.array_mostrar[i].pos_segmento = j;
-                                j = this.segmentos.length + 1;
+          if(this.id_pregunta_editar != "sugerida"){
+            this.editar = true;
+            this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(p => {
+              if(p.success){
+                console.log("funciona");
+                console.log(p.pregunta[0]);
+                this.pregunta = p.pregunta[0];
+                this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
+                this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sr => {
+                  if(sr.success){
+                    console.log("funciona subrespuesta");
+                    console.log(sr.subrespuesta);
+                    this.subrespuestas = sr.subrespuesta;   
+                    for(let i = 0; i < this.subrespuestas.length; i++){
+                      this.subrespuestas[i].respuesta = this.subrespuestas[i].texto;
+                    }               
+                    console.log(this.subrespuestas);
+                    this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sg => {
+                      if(sg.success){
+                        console.log("funciona segmentos");
+                        console.log(sg.segmentos);
+                        this.segmentos = sg.segmentos;
+                        for(let i = 0; i < this.segmentos.length; i++){
+                          this.segmentos[i].respuesta = this.segmentos[i].texto;
+                        }
+                        console.log(this.segmentos);
+                        this.ajax.get('preguntas/obtener-subrespuesta-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(srsg => {
+                          if(srsg.success){
+                            console.log("funciona segmentos");
+                            console.log(srsg.subrespuestaSegmento);
+                            this.array_mostrar = srsg.subrespuestaSegmento;
+                            for(let i = 0; i < this.array_mostrar.length; i++){
+                              this.array_mostrar[i].respuesta = this.array_mostrar[i].texto;
+                              for(let j = 0; j < this.segmentos.length; j++){
+                                if(this.array_mostrar[i].id_segmento == this.segmentos[j].idtbl_segmento){
+                                  this.array_mostrar[i].pos_segmento = j;
+                                  j = this.segmentos.length + 1;
+                                }
                               }
                             }
+                            console.log(this.array_mostrar);
+                            this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(pras => {
+                              if(pras.success){
+                                console.log("funciona");
+                                console.log(pras.preguntas_asociadas);
+                                this.preguntas_adicion = pras.preguntas_asociadas;
+                                this.dataSource = new MatTableDataSource(this.preguntas_adicion);
+                                this.dataSource.paginator = this.paginator;
+                                this.dataSource.sort = this.sort;                              
+                                this.ajax.get('preguntas/obtener-comentarios-pregunta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(com => {
+                                  if(com.success){
+                                    console.log("funciona");
+                                    console.log(com.comentarios);
+                                    this.notas_mostrar = com.comentarios;
+                                    this.cg.detectChanges();
+                                  }
+                                })       
+                              }
+                            })
                           }
-                          console.log(this.array_mostrar);
-                          this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(pras => {
-                            if(pras.success){
-                              console.log("funciona");
-                              console.log(pras.preguntas_asociadas);
-                              this.preguntas_adicion = pras.preguntas_asociadas;
-                              this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-                              this.dataSource.paginator = this.paginator;
-                              this.dataSource.sort = this.sort;
-                              this.cg.detectChanges();       
-                            }
-                          })
-                        }
-                      })
-                    }
-                  })
-                }
-              })
-              console.log(this.pregunta);
-            }
-          })
+                        })
+                      }
+                    })
+                  }
+                })
+                console.log(this.pregunta);
+              }
+            })
+          }
         }
       }
     })
@@ -192,12 +216,21 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       }else{
         this.pregunta.muestra_fecha_actualizacion = 0;
       }
+      if(this.pregunta.id_estado_flujo == 1){
+        this.pregunta.id_estado_flujo = 2;
+      }else if(this.pregunta.id_estado_flujo == 2){
+        this.pregunta.id_estado_flujo = 3;
+      }else if(this.pregunta.id_estado_flujo == 3){
+        this.pregunta.id_estado_flujo = 4;
+      }else if(this.pregunta.id_estado_flujo == 4){
+        this.pregunta.id_estado_flujo = 3;
+      }
       console.log("editada", this.pregunta);
       this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
       for(let i = 0; i < this.array_mostrar.length; i++){
         this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
       }
-      this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion }).subscribe(d => {
+      this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
         if(d.success){
           console.log("guardó editar");
           this.router.navigate(['/flujo-curaduria']);
@@ -206,6 +239,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     }else{
       console.log(this.id_usuario);
       console.log(this.pregunta);
+      console.log(this.notas);
       if(this.pregunta.muestra_fecha_actualizacion){
         this.pregunta.muestra_fecha_actualizacion = 1;
       }else{
@@ -215,6 +249,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
       for(let i = 0; i < this.array_mostrar.length; i++){
         this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+      }
+      if(this.id_pregunta_editar == "sugerida"){
+        this.pregunta.id_estado_flujo = 2;
       }
       console.log(this.array_mostrar);
       this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
@@ -228,12 +265,43 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     
   }
 
+  rechazarPregunta(){
+
+    console.log(this.id_usuario);
+    console.log(this.pregunta);
+    if(this.pregunta.muestra_fecha_actualizacion){
+      this.pregunta.muestra_fecha_actualizacion = 1;
+    }else{
+      this.pregunta.muestra_fecha_actualizacion = 0;
+    }
+    if(this.pregunta.id_estado_flujo == 2){
+      this.pregunta.id_estado_flujo = 1;
+    }else if(this.pregunta.id_estado_flujo == 3){
+      this.pregunta.id_estado_flujo = 2;
+    }else if(this.pregunta.id_estado_flujo == 4){
+      this.pregunta.id_estado_flujo = 3;
+    }
+    console.log("editada", this.pregunta);
+    this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+    for(let i = 0; i < this.array_mostrar.length; i++){
+      this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+    }
+    this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
+      if(d.success){
+        console.log("guardó editar");
+        this.router.navigate(['/flujo-curaduria']);
+      }
+    })
+
+    
+  }
+
   anadirSegmento(){
     this.segmentos.push({ titulo: '', respuesta: ''});
   }
 
   anadirSubRespuesta(){
-    this.subrespuestas.push({ titulo: '', respuesta: ''});
+    this.subrespuestas.push({ titulo: '', respuesta: '', posicion: '', categoria: ''});
   }
 
   eliminarSegmento(e, pos){

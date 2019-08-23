@@ -18,8 +18,18 @@
     --fuente: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
     //transiciones
     --transicion_rapida:all ease 0.5s;
+    --primary-color: #fff;
+    --background-color: #e5e5e5;
 }
 
+/*:root {
+    --primary-color: #fff;
+    --background-color: #e5e5e5;
+    --text-color: #2d2d2d;
+    --fuente: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+}*/
+
+  
 
 /*Importatns*/
 
@@ -28,6 +38,8 @@ body {
     font-family: var(--fuente);
 
     color: var(--color-font);
+    background-color: var(--background-color);
+    //color: var(--text-color);
 }
 
 

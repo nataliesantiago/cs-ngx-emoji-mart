@@ -81,7 +81,7 @@
               <br>
               <br>
               <br>
-              <mat-card-title>Preguntas y Respuestas</mat-card-title>
+              <mat-card-title>{{flujo_actual}}</mat-card-title>
               <br>
               <div class="bg-light p-10 p-r-20 p-l-20">
                   <mat-form-field>
@@ -116,18 +116,17 @@
                           <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.nombre_estado}} </mat-cell>
                       </ng-container>
 
-                      <ng-container matColumnDef="fecha_modificacion">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Fecha Modificación </mat-header-cell>
-                              <mat-cell *matCellDef="let row" style="max-width:15%;">
-                                  <span *ngIf="row.muestra_fecha_actualizacion == 1">Si</span>
-                                  <span *ngIf="row.muestra_fecha_actualizacion == 0">No</span>
-                              </mat-cell>
+                      <ng-container matColumnDef="encargado">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Encargado </mat-header-cell>
+                              <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.nombre}} </mat-cell>
                           </ng-container>
 
                       <ng-container matColumnDef="acciones">
-                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Estado </mat-header-cell>
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>
                           <mat-cell *matCellDef="let row" style="max-width:10%;">
                               <i class="ti-pencil text-info m-r-10" (click)="cambiarEstado(row)"></i>
+                              <i class="ti-comment-alt text-info m-r-10" (click)="comentarios(row)"></i>
+                              <i class="ti-eye text-info m-r-10" (click)="previsualizar(row)"></i>
                           </mat-cell>
                       </ng-container>
 

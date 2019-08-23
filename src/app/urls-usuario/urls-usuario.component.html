@@ -1,0 +1,49 @@
+<br>
+<br>
+<div class="responsive-table">
+
+    <a mat-raised-button class="nuevo-registro" (click)="nuevoRegistro()"><span class="texto-boton">Añadir</span></a>
+    <br>
+
+    <mat-table [dataSource]="dataSource" matSort>
+    
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
+            <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_url_menu}} </mat-cell>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let row" style="max-width:70%;">
+              <span *ngIf="!row.editando">{{row.label}}</span>
+              <span *ngIf="row.editando"><input [(ngModel)]="row.label"></span>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="valor">
+            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> URL </mat-header-cell>
+            <mat-cell *matCellDef="let row" style="max-width:70%;">
+              <span *ngIf="!row.editando">{{row.url}}</span>
+              <span *ngIf="row.editando"><input [(ngModel)]="row.url"></span>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let row" style="max-width:15%;">
+                <i *ngIf="!row.editando" class="ti-pencil text-info m-r-10" (click)="editarRegistro(row)"></i>
+                <i *ngIf="!row.editando" class="ti-trash text-danger m-r-10" (click)="eliminarRegistro(row)"></i>
+                <i *ngIf="row.editando" class="ti-save text-success m-r-10" (click)="guardarRegistro(row)"></i>
+                <i *ngIf="row.editando" class="ti-close text-danger m-r-10" (click)="cancelarEdicion(row)"></i>                
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

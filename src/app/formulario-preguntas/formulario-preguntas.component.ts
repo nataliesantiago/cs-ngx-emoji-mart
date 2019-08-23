@@ -72,22 +72,20 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     this.quillModules = {
       syntax: true,
       toolbar: {
-        handlers: { 
-          'image': qs.fileStorageHandler
-        }
+        container: [['bold', 'italic'],        // toggled buttons
+    
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'align': [] }],
+    
+        ['link', 'image', 'video'],],
       }
     };
   }
 
-  quillModulesFc(ql){
-    let m = {
-      syntax: true,
-      toolbar: {
-        handlers: { 
-          'image': ()=>{this.qs.fileStorageHandler(ql)}
-        }
-      }
-    };
+  quillModulesFc(ql: any){
+    setTimeout(()=>{ql.getModule('toolbar').addHandler('image', ()=>{this.qs.fileStorageHandler(ql)});}, 1000);
   }
   ngAfterViewInit(){
     /*console.log(this.quillModules);
@@ -146,7 +144,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                   console.log("funciona subrespuesta");
                   console.log(sr.subrespuesta);
                   this.subrespuestas = sr.subrespuesta;   
-                  for(let i = 0; i < this.segmentos.length; i++){
+                  for(let i = 0; i < this.subrespuestas.length; i++){
                     this.subrespuestas[i].respuesta = this.subrespuestas[i].texto;
                   }               
                   console.log(this.subrespuestas);
@@ -237,7 +235,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       }else{
         this.pregunta.muestra_fecha_actualizacion = 0;
       }
-      this.pregunta.id_estado_flujo = 4;
+      //this.pregunta.id_estado_flujo = 4;
       this.pregunta.id_usuario = this.id_usuario;
       this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
       for(let i = 0; i < this.array_mostrar.length; i++){
@@ -260,7 +258,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   anadirSubRespuesta(){
-    this.subrespuestas.push({ titulo: '', respuesta: ''});
+    this.subrespuestas.push({ titulo: '', respuesta: '', posicion: '', categoria: ''});
   }
 
   eliminarSegmento(e, pos){

@@ -47,6 +47,11 @@ import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas
 import { FlujoCuraduriaComponent } from './flujo-curaduria/flujo-curaduria.component';
 import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-preguntas-flujo-curaduria/formulario-preguntas-flujo-curaduria.component';
 import { QuillService } from './providers/quill.service';
+import { RespuestasComponent } from './respuestas/respuestas.component';
+import { AdministracionComponent } from './administracion/administracion.component';
+import { CategoriasComponent } from './categorias/categorias.component';
+import { FormularioCategoriasComponent } from './formulario-categorias/formulario-categorias.component';
+import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -74,6 +79,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AsociarPreguntasComponent,
     FlujoCuraduriaComponent,
     FormularioPreguntasFlujoCuraduriaComponent,
+    RespuestasComponent,
+    AdministracionComponent,
+    CategoriasComponent,
+    FormularioCategoriasComponent,
+    UrlsUsuarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +95,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     HttpClientModule,
     SharedModule,
-    QuillModule.forRoot({modules: {
+    /*QuillModule.forRoot({modules: {
       syntax: true,
       toolbar: {
         container: [['bold', 'italic'],        // toggled buttons
@@ -97,7 +107,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     
         ['link', 'image', 'video'],],
       }
-    }}),
+    }}),*/
+    QuillModule,
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes),
     AutocompleteLibModule,
