@@ -14,7 +14,7 @@ export class RespuestasComponent implements OnInit {
   id_pregunta_visualizar;
   id_usuario;
   usuario;
-  pregunta :   any;
+  pregunta = [];
   subrespuestas = [];
   segmentos = [];
   array_mostrar = [];
@@ -46,7 +46,7 @@ export class RespuestasComponent implements OnInit {
       .filter(params => params.id_pregunta)
       .subscribe(params => {
         // console.log(params); // {order: "popular"}
-
+        {order: "popular"}
         this.id_pregunta_visualizar = params.id_pregunta;
         // console.log(this.id_pregunta_visualizar); // popular
       });
@@ -54,9 +54,8 @@ export class RespuestasComponent implements OnInit {
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if(p.success){
         // console.log("funciona");
-        // console.log(p.pregunta[0]);
+        //console.log(p.pregunta[0]);
         this.pregunta = p.pregunta[0];
-        this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
         this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
           if(sr.success){
             // console.log("funciona subrespuesta");
@@ -160,7 +159,6 @@ export class RespuestasComponent implements OnInit {
         // console.log("funciona");
         // console.log(p.pregunta[0]);
         this.pregunta = p.pregunta[0];
-        this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
         this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
           if(sr.success){
             // console.log("funciona subrespuesta");
