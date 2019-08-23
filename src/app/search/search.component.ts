@@ -26,9 +26,9 @@ export class SearchComponent implements OnInit {
   ) {
     this.responseSearch.setActiveMostrarBarra(true);
     this.resultadosBus = this.responseSearch.getResultados();
-    console.log('Este es el array', this.resultadosBus);
+    // console.log('Este es el array', this.resultadosBus);
     this.resultadosBus = this.responseSearch.getResultados();
-    console.log('Este es el array', this.resultadosBus);
+    // console.log('Este es el array', this.resultadosBus);
     if (this.resultadosBus !== undefined && this.resultadosBus !== null) {
       if (this.resultadosBus !== '' && this.resultadosBus.length !== 0) {
         this.resultado = true;
@@ -43,7 +43,7 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.busqueda = params.get('id');
-      console.log('Esta es la palabra de busqueda ' + this.busqueda);
+      // console.log('Esta es la palabra de busqueda ' + this.busqueda);
       if (this.busqueda !== undefined && this.busqueda !== null && this.busqueda !== '') {
         if (this.busqueda === 'omo') {
           this.ortografia = true;
@@ -78,10 +78,10 @@ export class SearchComponent implements OnInit {
   }
   resultados() {
     const valor = window.btoa(this.valorBusqueda.toString());
-    console.log(valor);
+    // console.log(valor);
   }
   buscar() {
-    console.log('Esta es la busqueda ' + this.valorBusqueda);
+    // console.log('Esta es la busqueda ' + this.valorBusqueda);
     this.router.navigate(['/search/' + this.valorBusqueda]);
   }
 

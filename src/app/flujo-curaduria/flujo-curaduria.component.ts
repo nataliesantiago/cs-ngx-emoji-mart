@@ -31,19 +31,19 @@ export class FlujoCuraduriaComponent implements OnInit {
 
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
     this.usuario = user.getUsuario();
-    console.log(this.usuario);
+    // console.log(this.usuario);
     this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
       if(d.success){
-        console.log("funciona");
-        console.log(d.usuario[0].idtbl_usuario);
+        // console.log("funciona");
+        // console.log(d.usuario[0].idtbl_usuario);
         this.id_usuario = d.usuario[0].idtbl_usuario;
         this.cg.detectChanges();
       }
     })
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.preguntas);
+        // console.log("funciona");
+        // console.log(p.preguntas);
         this.cant_curaduria = p.preguntas.length;
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
@@ -78,8 +78,8 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.flujo_actual = "Preguntas en Curaduria";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.preguntas);
+        // console.log("funciona");
+        // console.log(p.preguntas);
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
@@ -93,8 +93,8 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.flujo_actual = "Preguntas en Revisión";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.preguntas);
+        // console.log("funciona");
+        // console.log(p.preguntas);
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
@@ -108,8 +108,8 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.flujo_actual = "Preguntas por Aprobar";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 3}).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.preguntas);
+        // console.log("funciona");
+        // console.log(p.preguntas);
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
@@ -123,8 +123,8 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.flujo_actual = "Preguntas Aprobadas";
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 4}).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.preguntas);
+        // console.log("funciona");
+        // console.log(p.preguntas);
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
@@ -148,8 +148,8 @@ export class FlujoCuraduriaComponent implements OnInit {
 
     this.ajax.get('preguntas/obtener-comentarios-pregunta', {idtbl_pregunta: e.idtbl_pregunta}).subscribe(async p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.comentarios);
+        // console.log("funciona");
+        // console.log(p.comentarios);
 
         let comentarios = '<div style="height: 250px; overflow-x: hidden;">';
         

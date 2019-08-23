@@ -29,11 +29,11 @@ export class RespuestasComponent implements OnInit {
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef) {
 
     this.usuario = user.getUsuario();
-    console.log(this.usuario);
+    // console.log(this.usuario);
     this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
       if(d.success){
-        console.log("funciona");
-        console.log(d.usuario[0].idtbl_usuario);
+        // console.log("funciona");
+        // console.log(d.usuario[0].idtbl_usuario);
         this.id_usuario = d.usuario[0].idtbl_usuario;        
       }
     })
@@ -45,24 +45,24 @@ export class RespuestasComponent implements OnInit {
     this.route.queryParams
       .filter(params => params.id_pregunta)
       .subscribe(params => {
-        console.log(params); // {order: "popular"}
+        // console.log(params); // {order: "popular"}
 
         this.id_pregunta_visualizar = params.id_pregunta;
-        console.log(this.id_pregunta_visualizar); // popular
+        // console.log(this.id_pregunta_visualizar); // popular
       });
     
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.pregunta[0]);
+        // console.log("funciona");
+        // console.log(p.pregunta[0]);
         this.pregunta = p.pregunta[0];
         this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
         this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
           if(sr.success){
-            console.log("funciona subrespuesta");
-            console.log(sr.subrespuesta);
+            // console.log("funciona subrespuesta");
+            // console.log(sr.subrespuesta);
             this.subrespuestas = sr.subrespuesta;                
-            console.log(this.subrespuestas);
+            // console.log(this.subrespuestas);
             for(let i = 0; i < this.subrespuestas.length; i++){
               let validador = 0;
               if(this.categorias_subrespuestas_superior.length == 0 && this.subrespuestas[i].posicion == 1){
@@ -98,21 +98,21 @@ export class RespuestasComponent implements OnInit {
                 }
               }
             }
-            console.log(this.categorias_subrespuestas_superior);
-            console.log(this.categorias_subrespuestas_inferior);
+            // console.log(this.categorias_subrespuestas_superior);
+            // console.log(this.categorias_subrespuestas_inferior);
             this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sg => {
               if(sg.success){
-                console.log("funciona segmentos");
-                console.log(sg.segmentos);
+                // console.log("funciona segmentos");
+                // console.log(sg.segmentos);
                 this.segmentos = sg.segmentos;
                 for(let i = 0; i < this.segmentos.length; i++){
                   this.segmentos[i].respuesta = this.segmentos[i].texto;
                 }
-                console.log(this.segmentos);
+                // console.log(this.segmentos);
                 this.ajax.get('preguntas/obtener-subrespuesta-segmentos', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(srsg => {
                   if(srsg.success){
-                    console.log("funciona segmentos");
-                    console.log(srsg.subrespuestaSegmento);
+                    // console.log("funciona segmentos");
+                    // console.log(srsg.subrespuestaSegmento);
                     this.array_mostrar = srsg.subrespuestaSegmento;
                     for(let i = 0; i < this.array_mostrar.length; i++){
                       this.array_mostrar[i].respuesta = this.array_mostrar[i].texto;
@@ -123,11 +123,11 @@ export class RespuestasComponent implements OnInit {
                         }
                       }
                     }
-                    console.log(this.array_mostrar);
+                    // console.log(this.array_mostrar);
                     this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
                       if(pras.success){
-                        console.log("funciona");
-                        console.log(pras.preguntas_asociadas);
+                        // console.log("funciona");
+                        // console.log(pras.preguntas_asociadas);
                         this.preguntas_adicion = pras.preguntas_asociadas;
                         this.cg.detectChanges();       
                       }
@@ -138,7 +138,7 @@ export class RespuestasComponent implements OnInit {
             })
           }
         })
-        console.log(this.pregunta);
+        // console.log(this.pregunta);
       }
     })
 
@@ -157,16 +157,16 @@ export class RespuestasComponent implements OnInit {
     this.id_pregunta_visualizar = e;
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.pregunta[0]);
+        // console.log("funciona");
+        // console.log(p.pregunta[0]);
         this.pregunta = p.pregunta[0];
         this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
         this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
           if(sr.success){
-            console.log("funciona subrespuesta");
-            console.log(sr.subrespuesta);
+            // console.log("funciona subrespuesta");
+            // console.log(sr.subrespuesta);
             this.subrespuestas = sr.subrespuesta;                
-            console.log(this.subrespuestas);
+            // console.log(this.subrespuestas);
             for(let i = 0; i < this.subrespuestas.length; i++){
               let validador = 0;
               if(this.categorias_subrespuestas_superior.length == 0 && this.subrespuestas[i].posicion == 1){
@@ -202,21 +202,21 @@ export class RespuestasComponent implements OnInit {
                 }
               }
             }
-            console.log(this.categorias_subrespuestas_superior);
-            console.log(this.categorias_subrespuestas_inferior);
+            // console.log(this.categorias_subrespuestas_superior);
+            // console.log(this.categorias_subrespuestas_inferior);
             this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sg => {
               if(sg.success){
-                console.log("funciona segmentos");
-                console.log(sg.segmentos);
+                // console.log("funciona segmentos");
+                // console.log(sg.segmentos);
                 this.segmentos = sg.segmentos;
                 for(let i = 0; i < this.segmentos.length; i++){
                   this.segmentos[i].respuesta = this.segmentos[i].texto;
                 }
-                console.log(this.segmentos);
+                // console.log(this.segmentos);
                 this.ajax.get('preguntas/obtener-subrespuesta-segmentos', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(srsg => {
                   if(srsg.success){
-                    console.log("funciona segmentos");
-                    console.log(srsg.subrespuestaSegmento);
+                    // console.log("funciona segmentos");
+                    // console.log(srsg.subrespuestaSegmento);
                     this.array_mostrar = srsg.subrespuestaSegmento;
                     for(let i = 0; i < this.array_mostrar.length; i++){
                       this.array_mostrar[i].respuesta = this.array_mostrar[i].texto;
@@ -227,11 +227,11 @@ export class RespuestasComponent implements OnInit {
                         }
                       }
                     }
-                    console.log(this.array_mostrar);
+                    // console.log(this.array_mostrar);
                     this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
                       if(pras.success){
-                        console.log("funciona");
-                        console.log(pras.preguntas_asociadas);
+                        // console.log("funciona");
+                        // console.log(pras.preguntas_asociadas);
                         this.preguntas_adicion = pras.preguntas_asociadas;
                         this.cg.detectChanges();       
                       }
@@ -242,7 +242,7 @@ export class RespuestasComponent implements OnInit {
             })
           }
         })
-        console.log(this.pregunta);
+        // console.log(this.pregunta);
       }
     })
   }
@@ -255,7 +255,7 @@ export class RespuestasComponent implements OnInit {
   enviarCalificacion(){
     this.ajax.post('preguntas/observaciones-respuesta', { comentario: this.observaciones, positivo: this.valor_calificacion, id_usuario: this.id_usuario, id_pregunta: this.id_pregunta_visualizar }).subscribe(d => {
       if(d.success){
-        console.log("guardó editar");
+        // console.log("guardó editar");
         if(this.valor_calificacion == 2){
           swal.fire({
             title: '¿Deseas buscar un experto?',

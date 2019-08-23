@@ -16,7 +16,7 @@ export class AppHeaderComponent {
   constructor(private userService: UserService, private chatService: ChatService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
-      // console.log(u);
+      // // console.log(u);
       if (u) {
         this.user = u;
         this.profileImage = u.url_foto;

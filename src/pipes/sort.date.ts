@@ -7,7 +7,7 @@ const moment = _rollupMoment || _moment;
 })
 export class SortDatePipe implements PipeTransform {
     transform(value: any, args?: any): any {
-        console.log(value);
+        // console.log(value);
         if (typeof args[0] === "undefined") {
             return value;
         }
@@ -18,7 +18,7 @@ export class SortDatePipe implements PipeTransform {
                 let inicial = moment(a[column]);
                 let final = moment(b[column]);
                 let diff = final.diff(inicial);
-                console.log('diferencia', diff);
+                // console.log('diferencia', diff);
                 return (direction === "-") ? diff : (diff * -1);
             });
         })

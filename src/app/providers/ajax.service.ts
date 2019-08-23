@@ -103,7 +103,7 @@ export class AjaxService {
         let parametros: HttpParams = new HttpParams();
 
         if (this.modoDebug) {
-            console.log('Peticion get. Parametros: ', params);
+            // console.log('Peticion get. Parametros: ', params);
         }
         params.access_token = this.token;
         parametros = parametros.append('data', (JSON.stringify(params)));
@@ -125,7 +125,7 @@ export class AjaxService {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         if (this.modoDebug) {
-            console.log('Peticion post. Parametros: ', params);
+            // console.log('Peticion post. Parametros: ', params);
         }
         let data: any = {};
         data.encrypt = this.usingEnc;
@@ -148,7 +148,7 @@ export class AjaxService {
         let headers = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
 
         if (this.modoDebug) {
-            console.log('Peticion post. Parametros: ', params);
+            // console.log('Peticion post. Parametros: ', params);
         }
         let data: any = {};
         data.encrypt = this.usingEnc;
