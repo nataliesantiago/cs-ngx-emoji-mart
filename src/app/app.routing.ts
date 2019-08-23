@@ -11,6 +11,12 @@ import { from } from 'rxjs';
 import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
 import { FormularioPreguntasComponent } from './formulario-preguntas/formulario-preguntas.component';
 import { ChatExpertoComponent } from './chat-experto/chat-experto.component';
+import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas.component';
+import { FlujoCuraduriaComponent } from './flujo-curaduria/flujo-curaduria.component';
+import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-preguntas-flujo-curaduria/formulario-preguntas-flujo-curaduria.component';
+import { RespuestasComponent } from './respuestas/respuestas.component';
+import { AdministracionComponent } from './administracion/administracion.component';
+import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -24,6 +30,12 @@ export const AppRoutes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'search/:id', component: SearchComponent },
   { path: 'ad-preguntas', component: AdPreguntasComponent },
+  { path: 'respuestas', component: RespuestasComponent },
+  { path: 'asociar-preguntas', component: AsociarPreguntasComponent },
+  { path: 'administrador', component: AdministracionComponent },
+  { path: 'flujo-curaduria', component: FlujoCuraduriaComponent },
+  { path: 'administracion-urls', component: UrlsUsuarioComponent },
+  { path: 'formulario-preguntas-flujo-curaduria', component: FormularioPreguntasFlujoCuraduriaComponent },
   { path: 'sugerencias', component: BuzonSugerenciasComponent },
   { path: 'administrador-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'formulario_pregunta', component: FormularioPreguntasComponent, canActivate: [AuthGuard] },

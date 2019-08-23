@@ -57,11 +57,21 @@ import { ChatService } from './providers/chat.service';
 import { MatSelectModule, MatListOption, MatListModule, MatDividerModule } from '@angular/material';
 import { ScrollDirective } from '../directives/scroll.directive';
 import { MinuteSecondsPipe } from '../directives/minutes.pipe';
+import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas.component';
+import { FlujoCuraduriaComponent } from './flujo-curaduria/flujo-curaduria.component';
+import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-preguntas-flujo-curaduria/formulario-preguntas-flujo-curaduria.component';
+import { RespuestasComponent } from './respuestas/respuestas.component';
+import { AdministracionComponent } from './administracion/administracion.component';
+import { CategoriasComponent } from './categorias/categorias.component';
+import { FormularioCategoriasComponent } from './formulario-categorias/formulario-categorias.component';
+import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
+import { QuillService } from './providers/quill.service';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
   wheelPropagation: true
 };
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,8 +96,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SortDatePipe,
     ChatExpertoComponent,
     ScrollDirective,
-    MinuteSecondsPipe
-
+    MinuteSecondsPipe,
+    AsociarPreguntasComponent,
+    FlujoCuraduriaComponent,
+    FormularioPreguntasFlujoCuraduriaComponent,
+    RespuestasComponent,
+    AdministracionComponent,
+    CategoriasComponent,
+    FormularioCategoriasComponent,
+    UrlsUsuarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,6 +116,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     HttpClientModule,
     SharedModule,
+    /*QuillModule.forRoot({modules: {
+      syntax: true,
+      toolbar: {
+        container: [['bold', 'italic'],        // toggled buttons
+    
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'align': [] }],
+    
+        ['link', 'image', 'video'],],
+      }
+    }}),*/
     QuillModule,
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes, { useHash: true }),
@@ -125,9 +155,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     UserService,
     HistorialUsuariosService,
     SearchService,
-    ChatService
+    ChatService,
+    QuillService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-

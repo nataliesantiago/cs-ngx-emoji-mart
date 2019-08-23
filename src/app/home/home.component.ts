@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { HomeService } from '../services/home.service';
 import { ResponseSearch } from '../models/response-search';
 
-
 //speech recognizion
 import { SpeechRecognizerService } from "./web-speech/shared/services/speech-recognizer.service";
 
@@ -17,6 +16,7 @@ import { SpeechError } from "./web-speech/shared/model/speech-error";
 import { ActionContext } from "./web-speech/shared/model/strategy/action-context";
 import { AutenticationService } from "../services/autenticacion.service";
 import { AjaxService } from '../providers/ajax.service';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: "app-home",
@@ -24,6 +24,8 @@ import { AjaxService } from '../providers/ajax.service';
   styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent implements OnInit {
+
+  texto_home = "";
   url: String = "";
   metodo = 1;
   public def = new FormControl(""); // Model del autocomplete
@@ -122,7 +124,7 @@ export class HomeComponent implements OnInit {
       this.detectChanges();
     });
   }
-
+  
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -149,10 +151,18 @@ export class HomeComponent implements OnInit {
     private speechRecognizer: SpeechRecognizerService,
     private nzone: NgZone,
     private autenticationService: AutenticationService,
-    private ajax: AjaxService
+    private ajax: AjaxService,
   ) {
     this.searchText = "";
     this.responseSearch.setActiveMostrarBarra(false);
+    this.ajax.get('administracion/obtener-texto-home', {}).subscribe(p => {
+      if(p.success){
+        console.log("funciona");
+        console.log(p.item);
+        this.texto_home = p.item[0].valor;
+        console.log(this.texto_home);
+      }
+    })
   }
 
   /**
