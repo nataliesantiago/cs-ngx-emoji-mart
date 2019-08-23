@@ -35,18 +35,18 @@ export class AdPreguntasComponent implements OnInit {
   mostrar_fecha_ultima_modificacion = false;
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
     this.usuario = user.getUsuario();
-    console.log(this.usuario);
+    // console.log(this.usuario);
     this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
       if(d.success){
-        console.log("funciona");
-        console.log(d.usuario[0].idtbl_usuario);
+        // console.log("funciona");
+        // console.log(d.usuario[0].idtbl_usuario);
         this.id_usuario = d.usuario[0].idtbl_usuario;
       }
     })
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
-        console.log("funciona");
-        console.log(p.preguntas);
+        // console.log("funciona");
+        // console.log(p.preguntas);
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
@@ -70,8 +70,8 @@ export class AdPreguntasComponent implements OnInit {
       if(p.success){
         this.ajax.get('preguntas/obtener', {}).subscribe(p => {
           if(p.success){
-            console.log("funciona");
-            console.log(p.preguntas);
+            // console.log("funciona");
+            // console.log(p.preguntas);
             this.data = p.preguntas;
             this.dataSource = new MatTableDataSource(this.data);
             this.dataSource.paginator = this.paginator;

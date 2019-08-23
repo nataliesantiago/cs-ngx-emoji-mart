@@ -61,6 +61,9 @@ import { MultiselectComponent } from './multiselect/multiselect.component';
     UploadComponent,
     WizardComponent,
     MultiselectComponent
+  ],
+  exports: [
+    TreeComponent
   ]
 })
-export class FormModule {}
+export class FormModule { }

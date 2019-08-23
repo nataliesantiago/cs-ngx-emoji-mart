@@ -87,7 +87,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
   close(reason: string) {
     this.reason = reason;
-    console.log(reason);
+    // console.log(reason);
     this.sidenav.close();
   }
   irHome() {
@@ -280,12 +280,12 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
 
   buscar(metodo) {
-    //console.log('Esta es la busqueda ' + this.searchText);
+    //// console.log('Esta es la busqueda ' + this.searchText);
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = '';
     }
     this.responseSearch.setResultados(this.textopredictivo);
-    //console.log('Este es el array', this.responseSearch.getResultados());
+    //// console.log('Este es el array', this.responseSearch.getResultados());
     let obj = {
       "idUsuario": 1,
       "textoBusqueda": this.searchText,
@@ -293,7 +293,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
       "fechaBusqueda": "2012-11-04",
       "url": this.url
     };
-    this.homeService.guardarBusqueda(obj).subscribe(data => console.log(data));
+    this.homeService.guardarBusqueda(obj).subscribe(data => { });
     this.router.navigate(['/search/' + this.searchText]);
   }
   buscar2() {

@@ -9,6 +9,8 @@ declare let gapi: any;
 import * as firebase from "firebase";
 import * as uuid from 'uuid/v4';
 import { ThrowStmt } from '@angular/compiler';
+import { xhrFilasExperto } from '../../schemas/xhr.schema';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Injectable()
@@ -20,19 +22,25 @@ export class UserService {
     public subjectUsuario = new Subject<any>();
     public observableUsuario = this.subjectUsuario.asObservable();
     planeaciones_creadas = [];
-
-    public subjectScoket = new Subject<any>();
-    public observableSocket = this.subjectScoket.asObservable();
     SCOKET_IP;
     conectado_socket = false;
     dataBase;
     ref;
     este;
 
-    constructor(private ajax: AjaxService) {
+    constructor(private ajax: AjaxService, private fireStore: AngularFirestore) {
 
         this.ajax.sethost('http://localhost:8080/api/');
-
+        window.onbeforeunload = () => {
+            if (this.user && this.user.getIdRol() == 2) {
+                this.setActivoExperto(false);
+            }
+        };
+        window.onunload = () => {
+            if (this.user && this.user.getIdRol() == 2) {
+                this.setActivoExperto(false);
+            }
+        };
     }
 
 
@@ -59,7 +67,7 @@ export class UserService {
         }
         let messaging = firebase.messaging();
         messaging.onMessage((payload: any) => {
-            // //// //console.log("Message received. ", payload);
+            // //// //// console.log("Message received. ", payload);
             if (this.planeaciones_creadas.indexOf(payload.data.id_planeacion) == (-1)) {
                 this.planeaciones_creadas.push(payload.data.id_planeacion);
 
@@ -69,7 +77,7 @@ export class UserService {
         });
         messaging.requestPermission()
             .then(() => {
-                // //// //console.log('Notification permission granted.');
+                // //// //// console.log('Notification permission granted.');
                 // TODO(developer): Retrieve an Instance ID token for use with FCM.
                 // ...
                 messaging.getToken()
@@ -80,21 +88,21 @@ export class UserService {
                             this.enviarToeknServidor(currentToken);
                         } else {
                             // Show permission request.
-                            // //// //console.log('No Instance ID token available. Request permission to generate one.');
+                            // //// //// console.log('No Instance ID token available. Request permission to generate one.');
                             // Show permission UI.
                             //updateUIForPushPermissionRequired();
                             //setTokenSentToServer(false);
                         }
                     })
                     .catch(function (err) {
-                        // //// //console.log('An error occurred while retrieving token. ', err);
+                        // //// //// console.log('An error occurred while retrieving token. ', err);
                         //showToken('Error retrieving Instance ID token. ', err);
                         // setTokenSentToServer(false);
                     });
                 messaging.onTokenRefresh(() => {
                     messaging.getToken()
                         .then((refreshedToken) => {
-                            // //// //console.log('Token refreshed.');
+                            // //// //// console.log('Token refreshed.');
                             this.enviarToeknServidor(refreshedToken);
                             // Indicate that the new Instance ID token has not yet been sent to the
                             // app server.
@@ -104,7 +112,7 @@ export class UserService {
                             // ...
                         })
                         .catch(function (err) {
-                            // //// //console.log('Unable to retrieve refreshed token ', err);
+                            // //// //// console.log('Unable to retrieve refreshed token ', err);
                             //showToken('Unable to retrieve refreshed token ', err);
                         });
                 });
@@ -113,7 +121,7 @@ export class UserService {
 
             })
             .catch(function (err) {
-                // //// //console.log('Unable to get permission to notify.', err);
+                // //// //// console.log('Unable to get permission to notify.', err);
             });
 
     }
@@ -125,7 +133,7 @@ export class UserService {
 
             this.ref.set(this.este);
             this.ref.on('value', snap => {
-                //console.log(snap.val());
+                //// console.log(snap.val());
                 if (snap.val() != this.este) {
                     alert('Su sesión se inició desde otro dispositivo o ventana');
                     this.ref.off();
@@ -134,7 +142,7 @@ export class UserService {
             });
         }).catch(error => {
             // Handle Errors here.
-            console.log('Fallo firebase')
+            // console.log('Fallo firebase')
 
         });
     }
@@ -193,7 +201,7 @@ export class UserService {
 
     enviarToeknServidor(token) {
         this.ajax.post('usuario/firebase/actualiza-token', { id_usuario: this.user.idtbl_usuario, token: token }).subscribe(data => {
-            // //// //console.log(data);
+            // //// //// console.log(data);
         });
     }
 
@@ -211,6 +219,39 @@ export class UserService {
         this.setUsuario(user);
     }
 
+
+    getFilasExperto(): Promise<any> {
+        return new Promise((resolve, reject) => {
+
+
+            this.ajax.get('user/experto/getFilas', { id_usuario: this.user.getId() }).subscribe((d: xhrFilasExperto) => {
+                if (d.success) {
+                    this.user.filas = d.filas;
+                    this.user.filas.forEach(f => {
+                        let r = this.fireStore.collection('expertos').doc('' + this.user.getId()).ref;
+                        this.fireStore.collection('categorias_experticia/' + f.id_categoria_experticia + '/expertos').doc('' + this.user.getId()).set({ experto: r });
+                    });
+                    resolve();
+                } else {
+                    reject();
+                }
+            });
+        });
+    }
+
+    setActivoExperto(activo) {
+        this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo });
+    }
+
+    getInfoUsuario(id): Promise<User> {
+        return new Promise((r, re) => {
+            this.ajax.get('user/getInfo', { id_usuario: id }).subscribe(d => {
+                if (d.success) {
+                    r(d.usuario);
+                }
+            });
+        })
+    }
 
 
 

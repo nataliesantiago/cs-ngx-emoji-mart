@@ -14,7 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './demo-material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SearchComponent } from './search/search.component';
-import {BuzonSugerenciasComponent} from './buzon-sugerencias/buzon-sugerencias.component';
+import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
 import { HomeComponent } from './home/home.component';
 import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
 import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
@@ -25,7 +25,7 @@ import { AdPreguntasComponent } from "./ad-preguntas/ad-preguntas.component";
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { AutocompleteLibModule } from 'angular-ng-autocomplete'; 
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
@@ -43,11 +43,29 @@ import { AppSearchComponent } from './components/search/search.component';
 import { SearchService } from './providers/search.service';
 import { from } from 'rxjs';
 import { FormularioPreguntasComponent } from './formulario-preguntas/formulario-preguntas.component';
+import { TreeComponent } from './forms/tree/tree.component';
+import { HighlightPipe } from './home/highlight.pipe';
+import { AppBlankComponent } from './layouts/blank/blank.component';
+import { AutosizeDirective } from '../directives/autosize.directive';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { environment } from '../environments/environment';
+import { FechaChatPipe } from '../pipes/fecha-chat.pipe';
+import { SortDatePipe } from '../pipes/sort.date';
+import { ChatExpertoComponent } from './chat-experto/chat-experto.component';
+import { ChatService } from './providers/chat.service';
+import { MatSelectModule, MatListOption, MatListModule, MatDividerModule } from '@angular/material';
+import { ScrollDirective } from '../directives/scroll.directive';
+import { MinuteSecondsPipe } from '../directives/minutes.pipe';
 import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas.component';
 import { FlujoCuraduriaComponent } from './flujo-curaduria/flujo-curaduria.component';
 import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-preguntas-flujo-curaduria/formulario-preguntas-flujo-curaduria.component';
+import { RespuestasComponent } from './respuestas/respuestas.component';
+import { AdministracionComponent } from './administracion/administracion.component';
+import { CategoriasComponent } from './categorias/categorias.component';
+import { FormularioCategoriasComponent } from './formulario-categorias/formulario-categorias.component';
+import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
 import { QuillService } from './providers/quill.service';
-
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -71,9 +89,22 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HomeProComponent,
     AppSearchComponent,
     FormularioPreguntasComponent,
+    HighlightPipe,
+    AppBlankComponent,
+    AutosizeDirective,
+    FechaChatPipe,
+    SortDatePipe,
+    ChatExpertoComponent,
+    ScrollDirective,
+    MinuteSecondsPipe,
     AsociarPreguntasComponent,
     FlujoCuraduriaComponent,
     FormularioPreguntasFlujoCuraduriaComponent,
+    RespuestasComponent,
+    AdministracionComponent,
+    CategoriasComponent,
+    FormularioCategoriasComponent,
+    UrlsUsuarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +116,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     HttpClientModule,
     SharedModule,
-    QuillModule.forRoot({modules: {
+    /*QuillModule.forRoot({modules: {
       syntax: true,
       toolbar: {
         container: [['bold', 'italic'],        // toggled buttons
@@ -97,12 +128,18 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     
         ['link', 'image', 'video'],],
       }
-    }}),
+    }}),*/
+    QuillModule,
     PerfectScrollbarModule,
-    RouterModule.forRoot(AppRoutes),
+    RouterModule.forRoot(AppRoutes, { useHash: true }),
     AutocompleteLibModule,
     SocialLoginModule,
     Ng2SmartTableModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule,
+    MatListModule,
+    MatSelectModule,
+    MatDividerModule
   ],
 
   providers: [
@@ -118,8 +155,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     UserService,
     HistorialUsuariosService,
     SearchService,
+    ChatService,
     QuillService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

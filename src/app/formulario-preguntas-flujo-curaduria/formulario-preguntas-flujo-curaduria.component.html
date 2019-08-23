@@ -11,7 +11,7 @@
       <br>
       <br>
       <mat-card-title>Por favor digite la respuesta</mat-card-title>
-      <quill-editor [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor> 
+      <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor> 
       <br>
       <mat-form-field floatLabel="never">
         <mat-label>Categoria (Más bajo nivel)</mat-label>
@@ -55,7 +55,7 @@
                       <br>
                       <br>
                       <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                      <quill-editor (change)="onFileChange($event)" [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
+                      <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
                       <br>
                       <div fxLayout="row wrap">
                         <button mat-raised-button color="accent" (click)="anadirSubRespuestaSegmento(i)" style="width: 20%;"><span style="color: white !important;">Añadir Subrespuesta al segmento</span></button>
@@ -75,7 +75,7 @@
                                 <br>
                                 <br>
                                 <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                                <quill-editor [style]="{height: '200px'}" [(ngModel)]="arr.respuesta" name="respuesta"></quill-editor>
+                                <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="arr.respuesta" name="respuesta"></quill-editor>
                                 <br>
                               </mat-expansion-panel>
                               <br>
@@ -109,11 +109,25 @@
                   </mat-expansion-panel-header>
                   <mat-form-field>
                       <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo">
-                    </mat-form-field>      
+                    </mat-form-field>
+                    <br>
+                  <br>
+                  <mat-form-field>
+                    <input matInput placeholder="Digite la categoria" [(ngModel)]="subrespuesta.categoria" name="categoria-subrespuesta">
+                  </mat-form-field>
+                  <br>
+                  <br>
+                  <mat-form-field>
+                    <mat-label>Seleccione la ubicación</mat-label>
+                    <select matNativeControl [(ngModel)]="subrespuesta.posicion" name="posicion">
+                      <option value="1">Previo a los segmentos</option>
+                      <option value="2">Posterior a los segmentos</option>
+                    </select>
+                  </mat-form-field>      
                     <br>
                     <br>
                     <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                    <quill-editor [style]="{height: '200px'}" [(ngModel)]="subrespuesta.respuesta" name="respuesta"></quill-editor>
+                    <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="subrespuesta.respuesta" name="respuesta"></quill-editor>
               </mat-expansion-panel>              
           </mat-accordion>
           <div fxFlex.gt-sm="1" fxFlex="100"></div>
@@ -196,8 +210,28 @@
       <h3>Comentarios</h3>
       <hr>
       <br>
+      <div *ngIf="notas_mostrar.length > 0">
+        <div fxLayout="row wrap" *ngFor="let i of notas_mostrar">
+          <div fxFlex.gt-sm="50" fxFlex="100">
+            <mat-card>
+                <mat-card-content>
+                    <!-- Row -->
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                        <div>
+                            <h4 class="m-0"><strong>{{i.nombre_usuario}}</strong></h4>
+                            <br>
+                            <h6 class="text-muted m-0">{{i.notas}}</h6>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <br>
+          </div>
+        </div>
+        <br>
+      </div>
       <mat-form-field>
-				<textarea matInput placeholder="Textarea" [value]="notas.notas" matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
+				<textarea matInput placeholder="Nuevo Comentario" name="notas" [(ngModel)]="notas.notas" matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
       </mat-form-field>
       <br>
       <br>
