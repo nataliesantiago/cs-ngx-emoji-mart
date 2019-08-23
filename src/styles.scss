@@ -53,7 +53,7 @@
     --primary-color: #fff;
     --background-color: #e5e5e5;
     --text-color: #2d2d2d;
-    --fuente: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+    --fuente:'Roboto, "Helvetica Neue", sans-serif' !important;
 }*/
 
   
@@ -61,8 +61,8 @@
 /*Importatns*/
 
 body {
-  //font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
-  font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+  //font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+  font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
 
   color: var(--color-font);
 }
@@ -398,7 +398,7 @@ h3,
 h4,
 p,
 a {
-  font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+  font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
   color: var(--color-font);
 }
 
@@ -651,7 +651,7 @@ a {
 }
 
 .font-family-comunidades {
-  font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+  font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
 }
 
 
