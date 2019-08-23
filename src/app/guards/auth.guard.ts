@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AutenticationService } from '../services/autenticacion.service';
 import { ResponseSearch } from '../models/response-search';
 import { UserService } from '../providers/user.service';
 import { User } from '../../schemas/user.schema';
+import { reject } from 'q';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
     primer_login: boolean = true; // Se enmcarga de controlar cuando el usuario abre la aplicacion por primera vez
-    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch, private userService: UserService) { }
+    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch, private userService: UserService, private route: ActivatedRoute) { }
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -19,12 +20,18 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         if (!this.userService.getUsuario()) {
             this.responseSearch.setActive(true);
         }
-        if (state.root.queryParams.data != null && state.root.queryParams.data !== "") {
+        let d = next.params.data;
+        if (d != null && d !== "") {
             this.responseSearch.setActive(false);
             return new Promise<boolean>(resolve => {
-                let data = JSON.parse(state.root.queryParams.data);
-                let user = new User(data.profile.email, data.token, data.profile.nombre);
-                user.url_foto = data.profile.foto;
+                let data = JSON.parse(atob(d));
+                
+                //console.log(data);
+                let user = new User(data.email, data.token, data.nombre);
+                user.setId(data.idtbl_usuario);
+                user.setIdPerfil(data.id_perfil);
+                user.setIdRol(data.id_rol);
+                user.url_foto = data.foto;
                 this.userService.setUsuario(user);
                 localStorage.setItem("token", data.token);
                 // console.log('usuario d', this.userService.getUsuario());
@@ -45,32 +52,37 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
 
         } else {
             console.log('loading...');
+
             return new Promise<boolean>(resolve => {
+
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
+                    //debugger;
                     this.primer_login = false;
-                    this.responseSearch.setActive(false);
-                    setTimeout(() => {
-                        if (d.url) {
-                            window.location.href = d.url;
-                            resolve(false);
-                        } else if (d.profile) {
-                            let user = new User(d.profile.email, localStorage.getItem('token'), d.profile.nombre);
-                            user.setId(d.profile.idtbl_usuario);
-                            user.setIdPerfil(d.profile.id_perfil);
-                            user.setIdRol(d.profile.id_rol);
-                            user.url_foto = d.profile.foto;
-                            this.userService.setUsuario(user);
+                    if (d.url) {
+                        window.location.href = d.url;
+                        reject(false);
+                    } else if (d.profile) {
+                        let user = new User(d.profile.email, localStorage.getItem('token'), d.profile.nombre);
+                        user.setId(d.profile.idtbl_usuario);
+                        user.setIdPerfil(d.profile.id_perfil);
+                        user.setIdRol(d.profile.id_rol);
+                        user.url_foto = d.profile.foto;
+                        this.userService.setUsuario(user);
+                        this.responseSearch.setActive(false);
+                        setTimeout(() => {
                             if (next.routeConfig.path == "") {
                                 this.router.navigate(['home']);
                             } else {
                                 //this.router.navigate([next.routeConfig.path]);
                             }
                             resolve(true);
-                        } else {
-                            console.error('No se puede cargar la aplicación');
-                            resolve(false);
-                        }
-                    }, 1);
+                        }, 1);
+                    } else {
+                        console.error('No se puede cargar la aplicación');
+                        reject(false);
+                    }
+
+
 
                 })
             });

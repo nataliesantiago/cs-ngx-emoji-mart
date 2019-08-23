@@ -18,7 +18,7 @@ import { Subject } from 'rxjs/Rx';
 @Injectable()
 export class AjaxService {
 
-    private host: string = environment.URL_BACK; // URL base del API
+    host: string = environment.URL_BACK; // URL base del API
     private modoDebug: boolean = false; // Definir si hace logs o no
     private enckey: string = "p2=5DT^lvk7/JbvCP^J_!o#*~I[TH"; // Clave de encriptado/desencriptado 
     private usingEnc = false; // Para configurar si se debe o no encriptar toda la data
@@ -134,6 +134,29 @@ export class AjaxService {
         data.data = params;
         let obs = this.$http.post(this.host + ruta, (data), { headers: headers }).catch((error: any) => Observable.throw(error || 'Error procesando la solicitud'));
 
+        return obs;
+
+    }
+
+    /**
+     * @description Encapsula todas las peticiones POST de la aplicación
+     * @param  {string} ruta - Endpoint especifico
+     * @param  {any} params - Payload de la petición
+     * @returns {Observable<any>} Observable 
+     */
+    postData(ruta: string, params: FormData): Observable</*Comment*/any> {
+        let headers = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
+
+        if (this.modoDebug) {
+            console.log('Peticion post. Parametros: ', params);
+        }
+        let data: any = {};
+        data.encrypt = this.usingEnc;
+        params.append('access_token', this.token);
+        data.csrftk = this.csrftk;
+        data.data = params;
+        params.append('data', data);
+        let obs = this.$http.post(this.host + ruta, params).catch((error: any) => Observable.throw(error || 'Error procesando la solicitud'));
         return obs;
 
     }

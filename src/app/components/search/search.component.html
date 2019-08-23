@@ -1,5 +1,5 @@
 <div id="search-bar" class="up">
-  <span><img src="../../assets/images/Lupa.svg" (click)="buscar()" alt="icone de recherche" width="35px"
+  <span><img src="../../assets/images/Lupa.svg" (click)="buscar(1)" alt="icone de recherche" width="35px"
       class="img_lupa"></span>
   <div class="image-upload">
     <label for="file-input">
@@ -16,7 +16,7 @@
   <div class="ng-autocomplete">
     <ng-autocomplete id="ng-autocomplete-search" placeHolder="Describe tu problema. " [data]="textopredictivo"
       [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
-      [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="notFoundTemplate" (inputCleared)="clearOptions()" #autocomplete>
+      [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'" (inputCleared)="clearOptions()" #autocomplete>
     </ng-autocomplete>
 
 

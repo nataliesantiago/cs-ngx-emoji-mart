@@ -1,10 +1,256 @@
 .flotante {
     position: relative;
-    
+    width: 100%;
+
     .content {
         position: fixed;
         bottom: 15px;
         right: 15px;
         z-index: 100;
+    }
+}
+
+.mat-drawer-content {
+    overflow: hidden;
+}
+
+.contenedores-chat {
+    width: 100%;
+    position: relative;
+    bottom: -15px;
+    right: -15px;
+    height: 380px;
+    padding-right: 10px;
+
+    .panel-chat {
+        max-width: 262px;
+        height: 380px;
+        float: right;
+        margin-right: 5px;
+
+        &.minimizado {
+            position: relative;
+            top: 344px;
+        }
+
+        .ventana-chat {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+
+            .barra-superior {
+                height: 36px !important;
+                padding: 0;
+                border-bottom: 1px solid #e4e4e4;
+                color: #888888;
+                cursor: pointer;
+                width: 262px;
+
+                .nombre-asesor {
+                    flex: 1;
+                    display: inline-block;
+                    width: calc(100% - 52px);
+                    height: 35px;
+                    display: flex;
+                    flex-direction: row;
+
+                    span {
+                        text-overflow: ellipsis;
+                        display: inline-block;
+                        overflow: hidden;
+                        padding-top: 3px;
+                        flex: 1;
+                    }
+                }
+
+                .icono-mensaje {
+                    position: relative;
+                    top: 8px;
+                    margin: 0 4px;
+                }
+            }
+
+            .contenedor-grande {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .contenedor-mensajes {
+                height: calc(100% - 43px);
+                padding: 0;
+                overflow: hidden;
+                width: 100%;
+                flex: 0 1 auto;
+
+                .contenedor {
+                    height: 300px;
+
+                    .chat-list {
+                        padding: 0 3px;
+                        margin-top: 5px;
+                        margin-bottom: 0;
+                        padding-right: 11px;
+
+                        .chat-message {
+                            width: 100%;
+                            position: relative;
+                        }
+
+                        .chat-block {
+                            font-size: 13px;
+                        }
+
+                        &.even {
+                            .chat-block {
+                                text-align: left !important;
+                                display: inline-block;
+                                padding: 3px 8px;
+                                padding-right: 23px;
+                                padding-bottom: 4px;
+                                position: relative;
+                                max-width: 88%;
+                            }
+
+                        }
+
+
+                        .foto-mensaje {
+                            position: absolute;
+                            bottom: 15px;
+
+                            img {
+                                width: 30px;
+                                margin-left: 3px;
+                            }
+                        }
+
+                        &.odd {
+                            .chat-block {
+                                background-color: #dcdcdc;
+                                text-align: left !important;
+                                max-width: 80%;
+                                display: inline-block;
+                                padding: 3px 8px;
+                                position: relative;
+                            }
+                        }
+
+                        .chat-date {
+                            width: 100%;
+                            font-size: 11px;
+                        }
+                    }
+                }
+            }
+
+            .acciones-chat {
+                //min-height: 38px;
+                padding: 1px !important;
+                /*position: absolute;*/
+                bottom: 0;
+                width: 100%;
+
+                .input-mensaje {
+                    resize: none;
+                    //overflow: auto;
+                    padding: 0;
+                    margin-top: 6px;
+                    font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+                    padding-top: 6px;
+                    margin-left: 5px;
+                    border: none;
+                    flex: 1;
+                    height: 22px;
+
+                    &>div {
+                        display: block;
+                        height: auto;
+                    }
+                }
+            }
+
+            .panel-buscando-experto {
+                width: 262px;
+                height: 364px;
+
+                .barra-buscando {
+                    height: 56px;
+
+                    .titulo-buscando {
+                        text-align: center;
+                        font-size: 16px;
+                        width: 100%;
+                    }
+                }
+
+                .loading-gif {
+                    display: flex;
+                    height: 280px;
+
+                    img {
+                        margin: auto;
+                        width: 100%;
+                    }
+                }
+
+                .no-filas {
+                    padding: 15px;
+                    color: #adadad;
+                }
+            }
+        }
+    }
+
+    .mat-card {
+        margin: 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+.boton-abrir-chat {
+    position: absolute;
+    bottom: 15px;
+    left: -68px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.mat-icon-button {
+    width: 26px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 768px) {
+
+    .mat-icon-button {
+        width: 26px;
     }
 }

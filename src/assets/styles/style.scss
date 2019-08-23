@@ -31,6 +31,8 @@ File: scss
 @import 'dark-sidebar';
 @import 'responsive';
 @import 'rtl';
+@import 'animate';
+@import 'quill.bubble';
 // Red Theme
 .danger {
     @import 'colors/red';

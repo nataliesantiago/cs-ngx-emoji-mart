@@ -1,5 +1,182 @@
 <div class="flotante">
   <div class="content">
-    <button mat-fab color="primary">Chat</button>
+    <div class="contenedores-chat">
+      <!--<button mat-fab color="primary" (click)="openChat()" class="boton-abrir-chat">Chat</button>-->
+      {{texto_mensaje}}
+      <div *ngFor="let chat of chats" class="panel-chat" [ngClass]="{'minimizado':chat.minimizado}">
+        <div fxLayout="row" fxLayoutAlign="center start">
+          <div fxFlex.gt-md="100" fxFlex.gt-sm="100" fxFlex="100">
+            <mat-card class="mat-card-top">
+              <mat-sidenav-container
+                [ngClass]="{ 'side-panel-opened': sidePanelOpened, 'side-panel-closed': !sidePanelOpened }"
+                class="ventana-chat">
+
+                <mat-toolbar class="no-shadow chat-right-panel barra-superior" color="basic"
+                  (click)="chat.minimizado=!chat.minimizado">
+
+
+                  <div class="font-14 nombre-asesor">
+                    <mat-icon class="icono-mensaje">message</mat-icon>
+                    <span *ngIf="!chat.asesor_actual">Chat de experto</span>
+                    <span *ngIf="chat.asesor_actual">{{chat.asesor_actual.nombre}}</span>
+                  </div>
+
+                  <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                  <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #them="matMenu" x-position="before">
+                    <button mat-menu-item>Contact info</button>
+                    <button mat-menu-item>Mute</button>
+                    <button mat-menu-item>Delete chat</button>
+                  </mat-menu>
+
+                </mat-toolbar>
+                <div *ngIf="chat.id_experto_actual" class="contenedor-grande">
+                  <mat-card-content class="chat-middle-box contenedor-mensajes">
+                    <perfect-scrollbar class="contenedor" [config]="config" scroll-down="true"
+                      refresh-on-change="chat.mensajes" [attr.data-conversacion-id]="chat.codigo" scrollDirective
+                      [componentRef]="este" #este [chat]="chat">
+
+
+                      <div
+                        [ngClass]="{'odd': m.id_usuario!=user.idtbl_usuario,'even': m.id_usuario==user.idtbl_usuario}"
+                        *ngFor="let m of chat.mensajes" class="chat-list">
+                        <div class="chat-message">
+                          <div class="chat-block">
+                            <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
+                              <div *ngIf="m.es_archivo">
+                                <a [href]="m.url" target="_blank">
+                                  <img [src]="m.url" *ngIf="m.tipo_archivo==1" />
+                                </a>
+                                <video [src]="m.url" controls *ngIf="m.tipo_archivo==2"></video>
+                                <div *ngIf="m.tipo_archivo==3" class="archivo-defecto"><a [href]="m.url"
+                                    target="_blank">
+                                    <mat-icon>attach_file</mat-icon>
+                                    {{m.nombre_archivo}}
+                                    <span *ngIf="!m.nombre_archivo">Descargar Adjuntos</span>
+                                  </a></div>
+                              </div>
+                              <div *ngIf="m.es_nota_voz">
+                                <div class="reproductor-audio" *ngIf="m.audio && m.audioControls">
+                                  <button mat-icon-button (click)="toggleAudio(chat,m)">
+                                    <mat-icon *ngIf="!m.audioControls.reproduciendo">play_arrow</mat-icon>
+                                    <mat-icon *ngIf="m.audioControls.reproduciendo">pause</mat-icon>
+                                  </button>
+                                  <mat-slider [max]="m.audioControls.max" [min]="m.audioControls.min" [step]="1"
+                                    [(ngModel)]="m.audioControls.segundo" (change)="cambiarSegundoAudio(m)">
+                                  </mat-slider>
+                                  <div class="tiempo-audio"><span>{{m.audioControls.segundo | minuteSeconds}}</span>
+
+                                  </div>
+
+                                </div>
+                                <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>
+                              </div>
+                            </div>
+                            {{m.texto}}
+                            <span *ngIf="m.id_usuario==user.idtbl_usuario">
+                              <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
+                              <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>
+                              <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==3">done_all</mat-icon>
+                            </span>
+                          </div>
+                          <span class="foto-mensaje" *ngIf="m.id_usuario!=user.idtbl_usuario && m.user">
+                            <img src="{{m.user.url_imagen_gsuite}}" class="img-circle" width="40"
+                              title="{{m.user.nombre}}">
+                          </span>
+                          <div class="chat-date" *ngIf="m.muestra_hora">{{ m.fecha_mensaje | datechat }}</div>
+                        </div>
+                      </div>
+                      <div *ngIf="chat.archivo_adjunto" class="archivo-adjunto">
+                        <div class="contenedor-adjunto">
+                          <div class="boton-cerrar">
+                            <button mat-icon-button color="basic" class=""
+                              (click)="quitarArchivoAdjunto(chat,adjuntos)">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+                          <img [src]="chat.archivo_adjunto.url" *ngIf="chat.archivo_adjunto.tipo_archivo==1" />
+                          <video [src]="chat.archivo_adjunto.url" *ngIf="chat.archivo_adjunto.tipo_archivo==2"></video>
+                          <div *ngIf="chat.archivo_adjunto.tipo_archivo==3" class="archivo-defecto"><a
+                              [href]="chat.archivo_adjunto.url" target="_blank">
+                              <mat-icon>attach_file</mat-icon>
+                              {{chat.archivo_adjunto.name}}
+                            </a></div>
+                          <button mat-icon-button color="basic" class="boton-enviar"
+                            (click)="enviarMensaje(chat,2,null,null,este)">
+                            <mat-icon>send</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div *ngIf="chat.grabando_nota" class="ventana-grabacion-nota">
+                        <div class="contenedor-adjunto">
+                          <div class="boton-cerrar">
+                            <button mat-icon-button color="basic" class="" (click)="quitarNotaVoz(chat)">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+                          <button mat-icon-button color="basic" class="boton-mic">
+                            <mat-icon>mic</mat-icon>
+                          </button>
+                          <div class="cuenta-regresiva">
+                            <div>{{chat.cuenta_regresiva}}</div>
+                            <div>
+                              <button mat-icon-button color="basic" class="boton-enviar" (click)="enviarNota(chat)">
+                                <mat-icon>send</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </perfect-scrollbar>
+                    <div [hidden]="chat.ocultar_nuevos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
+                        (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
+                  </mat-card-content>
+
+                  <mat-card-actions class="chat-footer acciones-chat">
+                    <mat-progress-bar mode="indeterminate" *ngIf="chat.cargando_archivo"></mat-progress-bar>
+                    <div fxLayout="row" layout-align="start center">
+                      <button mat-icon-button color="primary">
+                        <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
+                      </button>
+                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
+                        (keydown.enter)="enviarMensaje(chat,1,null,$event,este)"
+                        [(ngModel)]="chat.texto_mensaje"></textarea>
+                      <button mat-icon-button color="primary" (click)="adjuntos.click()"
+                        [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
+                        <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
+                      </button>
+                      <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat)"
+                        [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto">
+                        <mat-icon aria-label="Example icon-button with a heart icon">mic</mat-icon>
+                      </button>
+                    </div>
+                  </mat-card-actions>
+                  <form [hidden]="true" #formulario method="POST" enctype="multipart/form-data" [action]="urlAdjuntos">
+                    <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,this)" #adjuntos />
+                  </form>
+                </div>
+                <div class="panel-buscando-experto" *ngIf="!chat.id_experto_actual">
+                  <mat-toolbar class="no-shadow bg-green font-family-comunidades barra-buscando" color="green"
+                    *ngIf="!chat.no_hay_filas">
+                    <div class="titulo-buscando">Buscando un Experto...</div>
+
+                  </mat-toolbar>
+                  <div class="loading-gif" *ngIf="!chat.no_hay_filas">
+                    <img src="assets/images/loading.gif" />
+
+                  </div>
+                  <h3 *ngIf="chat.no_hay_filas" class="no-filas">En el momento no hay asesores que puedan atender tu
+                    solicitud</h3>
+                </div>
+              </mat-sidenav-container>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

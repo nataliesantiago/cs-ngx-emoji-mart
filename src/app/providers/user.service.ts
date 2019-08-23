@@ -9,6 +9,8 @@ declare let gapi: any;
 import * as firebase from "firebase";
 import * as uuid from 'uuid/v4';
 import { ThrowStmt } from '@angular/compiler';
+import { xhrFilasExperto } from '../../schemas/xhr.schema';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Injectable()
@@ -20,19 +22,25 @@ export class UserService {
     public subjectUsuario = new Subject<any>();
     public observableUsuario = this.subjectUsuario.asObservable();
     planeaciones_creadas = [];
-
-    public subjectScoket = new Subject<any>();
-    public observableSocket = this.subjectScoket.asObservable();
     SCOKET_IP;
     conectado_socket = false;
     dataBase;
     ref;
     este;
 
-    constructor(private ajax: AjaxService) {
+    constructor(private ajax: AjaxService, private fireStore: AngularFirestore) {
 
         this.ajax.sethost('http://localhost:8080/api/');
-
+        window.onbeforeunload = () => {
+            if (this.user && this.user.getIdRol() == 2) {
+                this.setActivoExperto(false);
+            }
+        };
+        window.onunload = () => {
+            if (this.user && this.user.getIdRol() == 2) {
+                this.setActivoExperto(false);
+            }
+        };
     }
 
 
@@ -211,6 +219,39 @@ export class UserService {
         this.setUsuario(user);
     }
 
+
+    getFilasExperto(): Promise<any> {
+        return new Promise((resolve, reject) => {
+
+
+            this.ajax.get('user/experto/getFilas', { id_usuario: this.user.getId() }).subscribe((d: xhrFilasExperto) => {
+                if (d.success) {
+                    this.user.filas = d.filas;
+                    this.user.filas.forEach(f => {
+                        let r = this.fireStore.collection('expertos').doc('' + this.user.getId()).ref;
+                        this.fireStore.collection('categorias_experticia/' + f.id_categoria_experticia + '/expertos').doc('' + this.user.getId()).set({ experto: r });
+                    });
+                    resolve();
+                } else {
+                    reject();
+                }
+            });
+        });
+    }
+
+    setActivoExperto(activo) {
+        this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo });
+    }
+
+    getInfoUsuario(id): Promise<User> {
+        return new Promise((r, re) => {
+            this.ajax.get('user/getInfo', { id_usuario: id }).subscribe(d => {
+                if (d.success) {
+                    r(d.usuario);
+                }
+            });
+        })
+    }
 
 
 

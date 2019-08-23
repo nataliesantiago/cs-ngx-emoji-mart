@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserService } from '../../../providers/user.service';
 import { User } from '../../../../schemas/user.schema';
+import { ChatService } from '../../../providers/chat.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -10,17 +11,31 @@ import { User } from '../../../../schemas/user.schema';
 export class AppHeaderComponent {
 
   profileImage = '../../../../assets/images/users/profle.svg';
-
-  constructor(private userService: UserService) {
+  estados_operador = [{ id: 1, nombre: 'Activo' }, { id: 2, nombre: 'Inactivo' }];
+  user: User;
+  constructor(private userService: UserService, private chatService: ChatService) {
+    this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       // console.log(u);
       if (u) {
+        this.user = u;
         this.profileImage = u.url_foto;
+        if (this.user.getIdRol() == 2) {
+          this.cambiarEstadoExperto({ value: 1 });
+        }
       }
     });
     if (this.userService.getUsuario()) {
       this.profileImage = this.userService.getUsuario().url_foto;
+      if (this.user.getIdRol() == 2) {
+        this.cambiarEstadoExperto({ value: 1 });
+      }
     }
+  }
+
+  cambiarEstadoExperto(e) {
+    let activo = (e.value == 1) ? true : false;
+    this.userService.setActivoExperto(activo);
   }
 
   public config: PerfectScrollbarConfigInterface = {};
@@ -87,4 +102,7 @@ export class AppHeaderComponent {
       time: '9:00 AM'
     }
   ];
+  abrirChat() {
+    this.chatService.crearConversacion();
+  }
 }

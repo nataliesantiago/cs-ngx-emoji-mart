@@ -13,9 +13,12 @@ export class User {
     public isSignedIn: boolean = false;
     estado = { id: 0, nombre: '' };
     id_perfil: number;
-
+    estado_experto: number = 1;
     nombre_perfil: string;
     nombre_rol: string;
+    filas: Array<any>;
+    url_imagen_gsuite: string;
+    id_rol: number;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;
@@ -83,7 +86,7 @@ export class User {
     public setIdPerfil(value: number) {
         this.id_perfil = value;
     }
-    id_rol: number;
+    
     public getIdRol(): number {
         return this.id_rol;
     }
