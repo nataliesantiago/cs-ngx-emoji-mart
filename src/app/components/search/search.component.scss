@@ -86,7 +86,7 @@ hr {
     caret-color: rgb(32, 33, 36);
     border: 0px none rgb(32, 33, 36);
     border-radius: 8px 8px 8px 8px;
-    font: normal normal 400 normal 16px / 20px'Roboto, "Helvetica Neue", sans-serif', "Helvetica Neue", Helvetica, sans-serif;
+    font: normal normal 400 normal 16px / 20pxRoboto, "Helvetica Neue", sans-serif, "Helvetica Neue", Helvetica, sans-serif;
     outline: rgb(32, 33, 36) none 0px;
     padding: 0px 0px 0px 7px;
     margin: auto;
@@ -110,7 +110,7 @@ span>img {
     height: 35px;
     border: none;
     color: #000;
-    font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+    font-family:Roboto, "Helvetica Neue", sans-serif !important;
     font-size: 15px;
     margin-top: 10px;
     margin-left: 10px;
@@ -148,7 +148,7 @@ ul>li {
     position: relative;
     width: auto;
     list-style: none;
-    font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+    font-family:Roboto, "Helvetica Neue", sans-serif !important;
     font-size: 14px;
     margin-left: -38px;
     margin-top: -4px;
@@ -317,7 +317,7 @@ article div p {
     font-weight: 400;
     font-style: italic;
     margin: 1rem 0 3rem;
-    font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+    font-family:Roboto, "Helvetica Neue", sans-serif !important;
     position: relative;
     z-index: 5;
 }
@@ -339,7 +339,7 @@ article div p:before {
 
 article div h1 {
     color: hsl(260, 5%, 55%);
-    font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+    font-family:Roboto, "Helvetica Neue", sans-serif !important;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05rem;

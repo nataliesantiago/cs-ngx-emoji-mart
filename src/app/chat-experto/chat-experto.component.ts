@@ -10,6 +10,7 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
 import { Configuracion } from '../../schemas/interfaces';
+import { SonidosService } from '../providers/sonidos.service';
 const moment = _rollupMoment || _moment;
 
 declare var MediaRecorder: any;
@@ -64,7 +65,7 @@ export class ChatExpertoComponent {
   @ViewChild('contenedor') componentRef?: PerfectScrollbarComponent;
   configuraciones = [];
 
-  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone) {
+  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService) {
     this.selectedMessage = this.messages[1];
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -97,7 +98,7 @@ export class ChatExpertoComponent {
         });
         let chats = this.fireStore.collection('expertos/' + this.user.getId() + '/chats').valueChanges();
         chats.subscribe((chats: Array<Conversacion>) => {
-
+          this.soundService.sonar(2);
           //this.chats_experto = [];
           let temporal = [];
           chats.forEach((c: any, index) => {
@@ -137,6 +138,7 @@ export class ChatExpertoComponent {
 
   agregarListenerMensajes(c: Conversacion) {
     c.mensajes = [];
+    let primera_vez = true;
     c.messages = this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
@@ -149,6 +151,9 @@ export class ChatExpertoComponent {
         }
         if (!c.mensajes[i]) {
           c.mensajes[i] = m;
+          if (!primera_vez && !c.focuseado) {
+            this.soundService.sonar(1);
+          }
         } else {
           c.mensajes[i].estado = m.estado;
         }
@@ -317,6 +322,7 @@ export class ChatExpertoComponent {
         }, 1);
       }
       //this.fireStore.collection('conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
+
       this.chatService.enviarMensaje(m);
       delete chat.texto_mensaje;
       delete chat.archivo_adjunto;

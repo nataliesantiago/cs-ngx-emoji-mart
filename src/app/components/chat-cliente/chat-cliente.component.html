@@ -2,6 +2,7 @@
   <div class="content">
     <div class="contenedores-chat">
       <!--<button mat-fab color="primary" (click)="openChat()" class="boton-abrir-chat">Chat</button>-->
+      
       {{texto_mensaje}}
       <div *ngFor="let chat of chats" class="panel-chat" [ngClass]="{'minimizado':chat.minimizado}">
         <div fxLayout="row" fxLayoutAlign="center start">
@@ -11,7 +12,7 @@
                 [ngClass]="{ 'side-panel-opened': sidePanelOpened, 'side-panel-closed': !sidePanelOpened }"
                 class="ventana-chat">
 
-                <mat-toolbar class="no-shadow chat-right-panel barra-superior" color="basic"
+                <mat-toolbar class="no-shadow chat-right-panel barra-superior" [ngClass]="{'mensajes-nuevos':chat.mnesajes_nuevos}"  color="basic"
                   (click)="chat.minimizado=!chat.minimizado">
 
 
@@ -143,8 +144,8 @@
                         <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                       </button>
                       <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
-                        (keydown.enter)="enviarMensaje(chat,1,null,$event,este)"
-                        [(ngModel)]="chat.texto_mensaje"></textarea>
+                        (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" [(ngModel)]="chat.texto_mensaje"
+                        (focus)="setFocus(chat,true)" (blur)="setFocus(chat,false)"></textarea>
                       <button mat-icon-button color="primary" (click)="adjuntos.click()"
                         [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
                         <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>

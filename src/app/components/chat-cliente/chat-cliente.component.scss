@@ -37,7 +37,7 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
-            font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+            font-family: Roboto, "Helvetica Neue", sans-serif !important;
 
             .barra-superior {
                 height: 36px !important;
@@ -68,6 +68,11 @@
                     position: relative;
                     top: 8px;
                     margin: 0 4px;
+                }
+
+                &.mensajes-nuevos {
+                    -webkit-animation: titila 2s infinite;
+                    animation: titila 2s infinite;
                 }
             }
 
@@ -157,7 +162,7 @@
                     //overflow: auto;
                     padding: 0;
                     margin-top: 6px;
-                    font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+                    font-family: Roboto, "Helvetica Neue", sans-serif !important;
                     padding-top: 6px;
                     margin-left: 5px;
                     border: none;

@@ -19,7 +19,7 @@ export class ScrollDirective implements AfterViewInit {
                     setTimeout(() => {
                         this.chat.ocultar_nuevos_mensajes = true;
                         this.componentRef.directiveRef.scrollToBottom();
-                    }, 15 * m.length);
+                    }, 5 * m.length);
                 } else {
                     this.chat.ocultar_nuevos_mensajes = false;
                 }

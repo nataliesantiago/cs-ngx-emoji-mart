@@ -12,6 +12,7 @@ import { PerfectScrollbarDirective, PerfectScrollbarComponent } from 'ngx-perfec
 import { ChatService } from '../../providers/chat.service';
 import { Experto } from '../../../schemas/xhr.schema';
 import { Configuracion } from '../../../schemas/interfaces';
+import { SonidosService } from '../../providers/sonidos.service';
 const moment = _rollupMoment || _moment;
 
 declare var MediaRecorder: any;
@@ -27,7 +28,9 @@ export class ChatClienteComponent implements OnInit {
   archivo_adjunto: any;
   urlAdjuntos: string;
   configuraciones;
-  constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone) {
+  nombre_pestana = 'Conecta';
+  intervalo;
+  constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
     if (this.user) {
@@ -94,6 +97,14 @@ export class ChatClienteComponent implements OnInit {
     com.directiveRef.scrollToBottom();
   }
 
+  setFocus(c: Conversacion, estado: boolean) {
+    c.focuseado = estado;
+    if (estado) {
+      c.mnesajes_nuevos = false;
+      window.clearInterval(this.intervalo);
+      document.title = this.nombre_pestana;
+    }
+  }
   agregarListenerMensajes(c: Conversacion) {
     let query = this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
@@ -110,6 +121,8 @@ export class ChatClienteComponent implements OnInit {
     });
     c.messages = query.valueChanges();
     c.mensajes = [];
+    let primera_vez = true;
+
     c.messages.subscribe(d => {
 
       d.forEach((m: Mensaje, i) => {
@@ -119,6 +132,20 @@ export class ChatClienteComponent implements OnInit {
         }
         if (!c.mensajes[i]) {
           c.mensajes[i] = m;
+          if (!primera_vez && !c.focuseado) {
+            this.soundService.sonar(1);
+            c.mnesajes_nuevos = true;
+            if (this.intervalo) {
+              window.clearInterval(this.intervalo);
+            }
+            this.intervalo = setInterval(() => {
+              if (document.title == this.nombre_pestana) {
+                document.title = 'Mensaje nuevo en el chat';
+              } else {
+                document.title = this.nombre_pestana;
+              }
+            }, 1400);
+          }
         } else {
           c.mensajes[i].estado = m.estado;
         }
@@ -126,7 +153,7 @@ export class ChatClienteComponent implements OnInit {
       this.ngZone.runOutsideAngular(() => {
         this.passByMensajes(c.mensajes, 0);
       });
-
+      primera_vez = false;
     });
   }
 
@@ -236,7 +263,7 @@ export class ChatClienteComponent implements OnInit {
   procesaFilas(c: Conversacion) {
     let expertos = [];
     let finaliza = true;
-    
+
     c.filas.forEach((ce, index) => {
       let r = this.fireStore.collection('conversaciones/').doc(c.codigo).ref;
       this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').set({ conversacion: r });
@@ -244,7 +271,7 @@ export class ChatClienteComponent implements OnInit {
         let e = this.fireStore.collection('categorias_experticia/' + ce.id + '/expertos').valueChanges();
 
         e.subscribe(expertosFila => {
-          
+
           expertos = expertos.concat(expertosFila);
           if (index == (c.filas.length - 1) && finaliza) {
             finaliza = false;
@@ -252,18 +279,18 @@ export class ChatClienteComponent implements OnInit {
           }
         });
       } else {
-        
+
       }
     });
   }
 
   asignarAsesor(c: Conversacion, expertos: Array<any>) {
-    
+
     expertos.forEach(e => {
       let a = this.fireStore.doc(e.experto).ref;
       let b = this.fireStore.doc(e.experto).valueChanges();
       b.subscribe((data: any) => {
-        
+
         if (c.expertos.length < expertos.length) {
           if (!data) {
             data = { activo: false };
@@ -285,7 +312,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   procesaChats(c: Conversacion) {
-    
+
     let asignado = 0;
     c.expertos = c.expertos.filter(e => {
       return e.activo;
