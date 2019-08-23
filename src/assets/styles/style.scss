@@ -33,6 +33,7 @@ File: scss
 @import 'rtl';
 @import 'animate';
 @import 'quill.bubble';
+
 // Red Theme
 .danger {
     @import 'colors/red';
@@ -57,5 +58,5 @@ File: scss
     @include angular-material-theme($dark-theme);
 }
 
-$custom-typography: mat-typography-config( $font-family: (Roboto, 'Helvetica Neue', Helvetica, sans-serif !important));
+$custom-typography: mat-typography-config($font-family: 'Roboto,"Helvetica Neue",Helvetica,sans-serif');
 @include mat-core($custom-typography);
