@@ -58,5 +58,5 @@ File: scss
     @include angular-material-theme($dark-theme);
 }
 
-$custom-typography: mat-typography-config($font-family: 'Roboto,"Helvetica Neue",Helvetica,sans-serif');
+$custom-typography: mat-typography-config($font-family: "Roboto, \"Helvetica Neue\", sans-serif !important");
 @include mat-core($custom-typography);

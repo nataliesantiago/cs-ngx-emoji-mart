@@ -66,6 +66,7 @@ import { CategoriasComponent } from './categorias/categorias.component';
 import { FormularioCategoriasComponent } from './formulario-categorias/formulario-categorias.component';
 import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
 import { QuillService } from './providers/quill.service';
+import { SonidosComponent } from './components/sonidos/sonidos.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -105,6 +106,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CategoriasComponent,
     FormularioCategoriasComponent,
     UrlsUsuarioComponent,
+    SonidosComponent,
   ],
   imports: [
     BrowserModule,

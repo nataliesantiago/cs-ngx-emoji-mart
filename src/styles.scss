@@ -19,20 +19,91 @@
 
 
 
-/*:root {
-    --primary-color: #fff;
-    --background-color: #e5e5e5;
-    --text-color: #2d2d2d;
-    --fuente:'Roboto, "Helvetica Neue", sans-serif' !important;
-}*/
+@keyframes colorchange {
+  0% {
+    background: red;
+  }
 
-  
+  25% {
+    background: yellow;
+  }
+
+  50% {
+    background: blue;
+  }
+
+  75% {
+    background: green;
+  }
+
+  100% {
+    background: red;
+  }
+}
+
+@-webkit-keyframes colorchange
+
+/* Safari and Chrome - necessary duplicate */
+  {
+  0% {
+    background: red;
+  }
+
+  25% {
+    background: yellow;
+  }
+
+  50% {
+    background: blue;
+  }
+
+  75% {
+    background: green;
+  }
+
+  100% {
+    background: red;
+  }
+}
+
+@keyframes titila {
+  0% {
+    color: #888888;
+    background: whitesmoke;
+  }
+
+  25% {
+    background: orange;
+    color: white;
+  }
+
+  50% {
+    color: #888888;
+    background: whitesmoke;
+  }
+
+  75% {
+    background: orange;
+    color: white;
+  }
+
+  100% {
+    color: #888888;
+    background: whitesmoke;
+  }
+}
+
+
+
+
+
+
 
 /*Importatns*/
 
 body {
   //font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
-  font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
 
   color: var(--color-font);
 }
@@ -45,13 +116,18 @@ body {
 }
 
 .boton-nuevos-mensajes {
-  position: relative;
+  position: absolute;
   z-index: 100;
   bottom: 55px;
   text-align: center;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+  padding: 8px 0;
 
   button {
     color: black;
+    border-radius: 20px;
   }
 }
 
@@ -373,7 +449,7 @@ h3,
 h4,
 p,
 a {
-  font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
   color: var(--color-font);
 }
 
@@ -387,7 +463,7 @@ a {
   color: var(--color-font);
 }
 
-.ql-container.ql-snow{
+.ql-container.ql-snow {
   height: 250px;
 }
 
@@ -668,7 +744,7 @@ a {
 }
 
 .font-family-comunidades {
-  font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 
 

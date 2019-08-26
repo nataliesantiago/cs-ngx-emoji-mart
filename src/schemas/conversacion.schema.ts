@@ -40,9 +40,11 @@ export class Conversacion {
     grabando_nota: boolean = false;
     cuenta_regresiva: string;
     interval_grabando: any;
-    mediaRecorder:any;
-    minimizado:boolean;
-    expandido:boolean;
+    mediaRecorder: any;
+    minimizado: boolean;
+    expandido: boolean;
+    focuseado: boolean;
+    mnesajes_nuevos: boolean;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;
