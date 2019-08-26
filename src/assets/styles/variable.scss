@@ -22,6 +22,7 @@ $background: map-get($theme, background);
 $foreground: map-get($theme, foreground);
 
 
+
 // Default Theme
 @include angular-material-theme($theme);
 
@@ -98,3 +99,9 @@ $dark-text: #848a96;
 $radius: 4px;
 $form-brd: #d9d9d9;
 
+/* Varaibles Aplicacion */
+
+$gris-chat-texto: #bcbcbc;
+$gris-bordes-panel: #bcbcbc;
+$gris-chat-titulo: #888888;
+$gris-chat-icono: #b5aeae;

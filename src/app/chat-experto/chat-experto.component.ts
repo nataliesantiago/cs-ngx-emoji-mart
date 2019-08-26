@@ -106,22 +106,29 @@ export class ChatExpertoComponent {
             this.fireStore.doc(refConversacion).valueChanges().subscribe((d: Conversacion) => {
               let c = d;
               c.codigo = refConversacion.id;
-              this.agregarListenerMensajes(c);
-              this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
-                //// console.log(d);
-                c.cliente = d;
-                temporal.push(c);
-                if (!this.chat) {
-                  this.obligaCambio = false;
-                  this.onSelect(c);
-                }
-                if (index == (chats.length - 1)) {
-                  if (temporal.length > this.chats_experto.length) {
-                    // AQUI SE REPRODUCE EL SONIDO
-                  }
-                  this.chats_experto = temporal;
-                }
+              let test = this.chats_experto.find(co => {
+                return co.codigo == c.codigo;
               });
+              if (!test) {
+                this.agregarListenerMensajes(c);
+                this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
+                  //// console.log(d);
+                  c.cliente = d;
+                  temporal.push(c);
+                  if (!this.chat) {
+                    this.obligaCambio = false;
+                    this.onSelect(c);
+                  }
+                  if (index == (chats.length - 1)) {
+                    if (temporal.length > this.chats_experto.length) {
+                      // AQUI SE REPRODUCE EL SONIDO
+                    }
+                    this.chats_experto = temporal;
+                  }
+                });
+              } else {
+                test.id_estado_conversacion = c.id_estado_conversacion;
+              }
             });
           });
 
@@ -153,6 +160,7 @@ export class ChatExpertoComponent {
           c.mensajes[i] = m;
           if (!primera_vez && !c.focuseado) {
             this.soundService.sonar(1);
+            c.mensajes_nuevos = true;
           }
         } else {
           c.mensajes[i].estado = m.estado;
@@ -161,7 +169,7 @@ export class ChatExpertoComponent {
       this.ngZone.runOutsideAngular(() => {
         this.passByMensajes(c.mensajes, 0);
       });
-
+      primera_vez = false;
 
 
     });
@@ -174,6 +182,34 @@ export class ChatExpertoComponent {
           this.chatService.cambiaEstadoMensajes(data, c);
         }
       })
+    });
+    c.usuarios_escribiendo = [];
+    this.fireStore.collection('conversaciones/' + c.codigo + '/usuarios_escribiendo/').snapshotChanges().subscribe((changes: any) => {
+      let tmp = [];
+      changes.forEach(a => {
+        let data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+
+        if (id != this.user.getId()) {
+          let u = c.usuarios_escribiendo.find(u => {
+            return u.id == id;
+          });
+          if (!u) {
+            let ue = { id: id, nombre: data.nombre, timeout: null };
+            tmp.push(ue);
+            ue.timeout = setTimeout(() => {
+              this.chatService.usuarioDejaEscribir(c, id);
+            }, 4000);
+          } else {
+            tmp.push(u);
+            window.clearTimeout(u.timeout);
+            u.timeout = setTimeout(() => {
+              this.chatService.usuarioDejaEscribir(c, id);
+            }, 4000);
+          }
+        }
+      });
+      c.usuarios_escribiendo = tmp;
     });
   }
 
@@ -202,7 +238,7 @@ export class ChatExpertoComponent {
     m.audio = audio;
     audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
-      m.audioControls.max = Math.ceil(target.duration);
+      m.audioControls.max = Math.floor(target.duration);
       //// console.log('Entro', e);
     });
     audio.addEventListener('timeupdate', e => {
@@ -267,12 +303,50 @@ export class ChatExpertoComponent {
 
   onSelect(chat: Conversacion): void {
     this.chat = chat;
+    chat.mensajes_nuevos = false;
+  }
 
+  remplazaEmoji(c: Conversacion) {
+    c.texto_mensaje = this.chatService.findEmojiData(c.texto_mensaje);
+  }
+
+  setFocus(c: Conversacion, estado: boolean) {
+    c.focuseado = estado;
+    if (estado) {
+      c.mensajes_nuevos = false;
+    }
+  }
+
+  seleccionarEmoji(evento, c: Conversacion) {
+    console.log(evento);
+    if (c.texto_mensaje) {
+      c.texto_mensaje += '' + evento.emoji.native;
+    } else {
+      c.texto_mensaje = '';
+      c.texto_mensaje += evento.emoji.native;
+    }
+    //c.mostrar_emojis = false;
+  }
+
+  toggleEmojis(c: Conversacion) {
+    if (c.mostrar_emojis) {
+      c.mostrar_emojis = false;
+    } else {
+      c.mostrar_emojis = true;
+    }
+  }
+
+  toggleDatosCliente(c: Conversacion) {
+    if (!c.mostrar_datos_cliente) {
+      c.mostrar_datos_cliente = true;
+    } else {
+      c.mostrar_datos_cliente = false;
+    }
   }
 
   enviarMensaje(chat: Conversacion, tipo_mensaje: number, url?: string, event?: Event, comp?: PerfectScrollbarComponent, duration?: number) {
-    if (event) {
-      event.preventDefault();
+    if (chat.texto_mensaje) {
+      chat.texto_mensaje = chat.texto_mensaje.trim();
     }
     if ((chat.texto_mensaje && chat.texto_mensaje != '') || chat.archivo_adjunto || tipo_mensaje == 3) {
       if (!chat.texto_mensaje) {
@@ -314,6 +388,7 @@ export class ChatExpertoComponent {
         chat.mensajes.push(m);
         this.passByMensajes(chat.mensajes, 0);
       });
+      this.chatService.usuarioDejaEscribir(chat, this.user.getId());
       chat.texto_mensaje = '';
       if (comp) {
         setTimeout(() => {
@@ -379,6 +454,7 @@ export class ChatExpertoComponent {
 
         c.mediaRecorder.addEventListener("start", event => {
           calculaTiempo.fechaIni = moment();
+          c.grabando_nota = true;
         });
 
         c.mediaRecorder.addEventListener("stop", () => {
@@ -387,7 +463,7 @@ export class ChatExpertoComponent {
           const audioBlob = new Blob(audioChunks);
           var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: "audio/wav" });
           delete c.mediaRecorder;
-          var duration = Math.ceil(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
+          var duration = Math.floor(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
           // console.log(duration);
           this.adjuntarNotaVoz(c, voice_file, duration);
           if (!detenido) {
@@ -413,7 +489,7 @@ export class ChatExpertoComponent {
 
 
     return new Promise((resolve, reject) => {
-      c.grabando_nota = true;
+
       c.mediaRecorder.start();
       minutes = Math.floor(timer / 60);
       seconds = Math.floor(timer % 60);
@@ -421,7 +497,7 @@ export class ChatExpertoComponent {
       seconds = seconds < 10 ? "0" + seconds : seconds;
       c.cuenta_regresiva = minutes + ":" + seconds;
       timer -= 1;
-      c.interval_grabando = setInterval(function () {
+      c.interval_grabando = setInterval(() => {
         timer -= 1;
         minutes = Math.floor(timer / 60);
         seconds = Math.floor(timer % 60);
@@ -452,4 +528,13 @@ export class ChatExpertoComponent {
     window.clearInterval(c.interval_grabando);
   }
 
+  escribiendo(c: Conversacion, event: KeyboardEvent) {
+    let code = event.which || event.keyCode;
+    if (code != 13 && code != 8) {
+      this.chatService.usuarioEscribiendoConversacion(c);
+    }
+  }
+  toggleNotas(c: Conversacion) {
+    this.fireStore.doc('conversaciones/' + c.codigo).set({ notas_voz: c.notas_voz }, { merge: true });
+  }
 }

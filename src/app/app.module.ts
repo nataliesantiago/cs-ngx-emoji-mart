@@ -67,6 +67,9 @@ import { FormularioCategoriasComponent } from './formulario-categorias/formulari
 import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
 import { QuillService } from './providers/quill.service';
 import { SonidosComponent } from './components/sonidos/sonidos.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { ReplaceEmojisPipe } from '../pipes/emojis.pipe';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -107,6 +110,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormularioCategoriasComponent,
     UrlsUsuarioComponent,
     SonidosComponent,
+    ReplaceEmojisPipe
   ],
   imports: [
     BrowserModule,
@@ -141,7 +145,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AngularFirestoreModule,
     MatListModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    PickerModule
   ],
 
   providers: [

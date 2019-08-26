@@ -4,7 +4,7 @@
 @import '~@swimlane/ngx-datatable/release/index.css';
 @import '~@swimlane/ngx-datatable/release/themes/material.css';
 @import '~@swimlane/ngx-datatable/release/assets/icons.css';
-
+@import './assets/styles/variable.scss';
 
 /*Variables*/
 
@@ -176,6 +176,7 @@ body {
 }
 
 .chat-block {
+  word-break: break-word;
   audio {
     display: none;
   }
@@ -223,6 +224,8 @@ body {
       }
     }
   }
+
+
 }
 
 .reproductor-audio {
@@ -323,6 +326,62 @@ body {
   }
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+.contenedor-grande {
+  .usuarios-escribiendo {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    background: rgba(255, 255, 255, .78);
+    /*box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24);*/
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    padding: 1px 6px;
+    height: 26px;
+
+    .usuario-escribiendo {
+      color: $gris-chat-texto;
+      font-size: 11px;
+      font-style: italic;
+    }
+  }
+
+  .informacion-detallada-cliente {
+    padding: 5px;
+    color: $gris-chat-titulo;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    background: #fff;
+    z-index: 1;
+    border-bottom: 1px solid $gris-bordes-panel;
+
+    .mat-figure {
+      justify-content: left;
+      align-items: start;
+    }
+  }
+}
+
+.puntos-escribiendo {
+  width: 20px;
+  height: 1px;
+  display: inline-block;
+  margin-left: -6px;
+
+  .hijo {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-image: url('assets/images/puntos.gif');
+    background-position: center;
+    background-size: cover;
+    transform: scale(2.5);
+  }
+}
+
 .archivo-adjunto {
   width: 100%;
   background: white;
@@ -414,7 +473,7 @@ body {
   }
 
   &:focus-within {
-    border: 1px solid #4d90fe;
+    border: 1px solid #4d90fe !important;
   }
 }
 
@@ -426,11 +485,22 @@ body {
   }
 }
 
+.emojis-panel {
+  position: absolute;
+  bottom: 42px;
+  z-index: 3;
+  left: 15px;
+
+  .emoji-mart-preview {
+    display: none !important;
+  }
+}
+
 .icono-burbuja-mensaje {
   font-size: 13px !important;
   position: absolute !important;
-  right: -10px !important;
-  bottom: -11px !important;
+  right: -9px !important;
+  bottom: -10px !important;
   color: #9c9c9c !important;
 
   &.montado {

@@ -100,12 +100,17 @@ export class ChatClienteComponent implements OnInit {
   setFocus(c: Conversacion, estado: boolean) {
     c.focuseado = estado;
     if (estado) {
-      c.mnesajes_nuevos = false;
+      c.mensajes_nuevos = false;
       window.clearInterval(this.intervalo);
       document.title = this.nombre_pestana;
     }
   }
   agregarListenerMensajes(c: Conversacion) {
+    this.fireStore.doc('conversaciones/' + c.codigo).valueChanges().subscribe((con: Conversacion) => {
+      c.id_estado_conversacion = con.id_estado_conversacion;
+      c.notas_voz = con.notas_voz;
+    });
+
     let query = this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     );
@@ -118,6 +123,35 @@ export class ChatClienteComponent implements OnInit {
           this.chatService.cambiaEstadoMensajes(data, c);
         }
       })
+    });
+    c.usuarios_escribiendo = [];
+    this.fireStore.collection('conversaciones/' + c.codigo + '/usuarios_escribiendo/').snapshotChanges().subscribe((changes: any) => {
+      let tmp = [];
+
+      changes.forEach(a => {
+        let data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+
+        if (id != this.user.getId()) {
+          let u = c.usuarios_escribiendo.find(u => {
+            return u.id == id;
+          });
+          if (!u) {
+            let ue = { id: id, nombre: data.nombre, timeout: null };
+            tmp.push(ue);
+            ue.timeout = setTimeout(() => {
+              this.chatService.usuarioDejaEscribir(c, id);
+            }, 4000);
+          } else {
+            tmp.push(u);
+            window.clearTimeout(u.timeout);
+            u.timeout = setTimeout(() => {
+              this.chatService.usuarioDejaEscribir(c, id);
+            }, 4000);
+          }
+        }
+      });
+      c.usuarios_escribiendo = tmp;
     });
     c.messages = query.valueChanges();
     c.mensajes = [];
@@ -134,7 +168,7 @@ export class ChatClienteComponent implements OnInit {
           c.mensajes[i] = m;
           if (!primera_vez && !c.focuseado) {
             this.soundService.sonar(1);
-            c.mnesajes_nuevos = true;
+            c.mensajes_nuevos = true;
             if (this.intervalo) {
               window.clearInterval(this.intervalo);
             }
@@ -222,7 +256,7 @@ export class ChatClienteComponent implements OnInit {
     m.audio = audio;
     audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
-      m.audioControls.max = Math.ceil(target.duration);
+      m.audioControls.max = Math.floor(target.duration);
       //// console.log('Entro', e);
     });
     audio.addEventListener('timeupdate', e => {
@@ -375,8 +409,8 @@ export class ChatClienteComponent implements OnInit {
   }
 
   enviarMensaje(chat: Conversacion, tipo_mensaje: number, url?: string, event?: Event, comp?: PerfectScrollbarComponent, duration?: number) {
-    if (event) {
-      event.preventDefault();
+    if (chat.texto_mensaje) {
+      chat.texto_mensaje = chat.texto_mensaje.trim();
     }
     if ((chat.texto_mensaje && chat.texto_mensaje != '') || chat.archivo_adjunto || tipo_mensaje == 3) {
       if (!chat.texto_mensaje) {
@@ -410,7 +444,7 @@ export class ChatClienteComponent implements OnInit {
           m.url = url;
           chat.texto_mensaje = '';
           m.tipo_archivo = 4;
-          m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: duration };
+          m.audioControls = { reproduciendo: false, segundo: duration, min: 0, max: duration };
           m.duracion = duration;
           break;
       }
@@ -420,7 +454,7 @@ export class ChatClienteComponent implements OnInit {
         chat.mensajes.push(m);
         this.passByMensajes(chat.mensajes, 0);
       });
-
+      this.chatService.usuarioDejaEscribir(chat, this.user.getId());
       chat.texto_mensaje = '';
       if (comp) {
         setTimeout(() => {
@@ -485,6 +519,7 @@ export class ChatClienteComponent implements OnInit {
 
         c.mediaRecorder.addEventListener("start", event => {
           calculaTiempo.fechaIni = moment();
+          c.grabando_nota = true;
         });
 
         c.mediaRecorder.addEventListener("stop", () => {
@@ -493,7 +528,7 @@ export class ChatClienteComponent implements OnInit {
           const audioBlob = new Blob(audioChunks);
           var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: "audio/wav" });
           delete c.mediaRecorder;
-          var duration = Math.ceil(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
+          var duration = Math.floor(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
           // console.log(duration);
           this.adjuntarNotaVoz(c, voice_file, duration);
           if (!detenido) {
@@ -519,7 +554,7 @@ export class ChatClienteComponent implements OnInit {
 
 
     return new Promise((resolve, reject) => {
-      c.grabando_nota = true;
+
       c.mediaRecorder.start();
       minutes = Math.floor(timer / 60);
       seconds = Math.floor(timer % 60);
@@ -527,7 +562,7 @@ export class ChatClienteComponent implements OnInit {
       seconds = seconds < 10 ? "0" + seconds : seconds;
       c.cuenta_regresiva = minutes + ":" + seconds;
       timer -= 1;
-      c.interval_grabando = setInterval(function () {
+      c.interval_grabando = setInterval(() => {
         timer -= 1;
         minutes = Math.floor(timer / 60);
         seconds = Math.floor(timer % 60);
@@ -556,5 +591,34 @@ export class ChatClienteComponent implements OnInit {
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
     window.clearInterval(c.interval_grabando);
+  }
+  remplazaEmoji(c: Conversacion) {
+    c.texto_mensaje = this.chatService.findEmojiData(c.texto_mensaje);
+  }
+
+  escribiendo(c: Conversacion, event: KeyboardEvent) {
+
+    let code = event.which || event.keyCode;
+    if (code != 13 && code != 8) {
+      this.chatService.usuarioEscribiendoConversacion(c);
+    }
+  }
+  seleccionarEmoji(evento, c: Conversacion) {
+    console.log(evento);
+    if (c.texto_mensaje) {
+      c.texto_mensaje += '' + evento.emoji.native;
+    } else {
+      c.texto_mensaje = '';
+      c.texto_mensaje += evento.emoji.native;
+    }
+    //c.mostrar_emojis = false;
+  }
+
+  toggleEmojis(c: Conversacion) {
+    if (c.mostrar_emojis) {
+      c.mostrar_emojis = false;
+    } else {
+      c.mostrar_emojis = true;
+    }
   }
 }

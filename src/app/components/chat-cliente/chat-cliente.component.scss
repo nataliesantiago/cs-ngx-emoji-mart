@@ -4,8 +4,8 @@
 
     .content {
         position: fixed;
-        bottom: 15px;
-        right: 15px;
+        bottom: 0px;
+        right: 0px;
         z-index: 100;
     }
 }
@@ -17,20 +17,44 @@
 .contenedores-chat {
     width: 100%;
     position: relative;
-    bottom: -15px;
-    right: -15px;
+    bottom: 0px;
+    right: 0px;
     height: 380px;
     padding-right: 10px;
 
     .panel-chat {
-        max-width: 262px;
+        width: 262px;
         height: 380px;
         float: right;
         margin-right: 5px;
+        position: relative;
+        bottom: 0px;
 
         &.minimizado {
-            position: relative;
-            top: 344px;
+
+
+            .contenedor-grande {
+                height: 0px !important;
+            }
+        }
+
+        .subpanel {
+            position: absolute;
+            bottom: 0px;
+            height: 100%;
+            width: 100%;
+
+            .hijo {
+                height: 100%;
+
+                .mat-card-top {
+                    height: 100%;
+
+                    .ventana-chat {
+                        height: 100%;
+                    }
+                }
+            }
         }
 
         .ventana-chat {
@@ -71,8 +95,7 @@
                 }
 
                 &.mensajes-nuevos {
-                    -webkit-animation: titila 2s infinite;
-                    animation: titila 2s infinite;
+                    animation: titila 4s infinite;
                 }
             }
 
@@ -151,11 +174,18 @@
             }
 
             .acciones-chat {
-                //min-height: 38px;
                 padding: 1px !important;
-                /*position: absolute;*/
                 bottom: 0;
                 width: 100%;
+                position: absolute;
+
+                /*border: 1px solid transparent;
+                border-top: 1px solid rgba(120, 130, 140, 0.13);
+                border-left: 1px solid rgba(120, 130, 140, 0.13);
+                */
+                .star.center {
+                    width: 100%;
+                }
 
                 .input-mensaje {
                     resize: none;

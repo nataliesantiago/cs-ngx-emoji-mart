@@ -30,7 +30,7 @@ export class AutosizeDirective implements AfterViewInit {
         this.updateMaxHeight();
     }
 
-    @HostListener('window:resize', ['$event.target'])
+    @HostListener('window:resize', ['$event'])
     onResize(textArea: HTMLTextAreaElement): void {
         // Only apply adjustment if element width had changed.
         if (this.el.clientWidth === this._clientWidth) {
@@ -40,12 +40,33 @@ export class AutosizeDirective implements AfterViewInit {
         this.adjust();
     }
 
-    @HostListener('input', ['$event.target'])
-    onInput(textArea: HTMLTextAreaElement): void {
+    @HostListener('input', ['$event'])
+    onInput(event: KeyboardEvent): void {
+
         this.adjust();
     }
 
+    @HostListener('keydown.enter', ['$event'])
+    onkeydown(event: KeyboardEvent): void {
+        let code = event.which || event.keyCode;
+        if (code == 13) {
+            event.preventDefault();
+        }
+        setTimeout(() => {
+            if (!this.element.nativeElement.value || this.element.nativeElement.value == '') {
+                this.element.nativeElement.style.height = 0;
+                this.element.nativeElement.style.height = '30px'
+            }
+        }, 1);
+
+    }
+
     @HostListener('ngModelChange') ngOnChanges() {
+        setTimeout(() => {
+            if (!this.element.nativeElement.value || this.element.nativeElement.value == '') {
+                this.element.nativeElement.style.height = '30px'
+            }
+        }, 1);
         this.adjust();
     }
 
