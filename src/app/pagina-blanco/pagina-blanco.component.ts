@@ -13,14 +13,14 @@ export class PaginaBlancoComponent implements OnInit {
 
   constructor(private responseSearch: ResponseSearch, private router: Router) {
     this.responseSearch.setActive(true);
-    // console.log('algo')
+    
     if (localStorage.getItem('token') && localStorage.getItem('token') != '') {
       this.router.navigate(['home']);
     }
   }
 
   ngOnInit() {
-    // console.log('algox')
+    
 
   }
 

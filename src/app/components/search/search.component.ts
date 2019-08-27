@@ -260,7 +260,7 @@ export class AppSearchComponent implements OnInit {
     * metodo de change del autocomplete
   */
   onChangeSearch(val: string) {
-    // console.log(val);
+    
     this.searchText = val;
     if (!val || val == '') {
       delete this.textopredictivo;
@@ -281,12 +281,12 @@ export class AppSearchComponent implements OnInit {
   }
 
   buscar(metodo) {
-    // console.log('Esta es la busqueda ' + this.searchText);
+    
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = '';
     }
     this.responseSearch.setResultados(this.textopredictivo);
-    //// console.log('Este es el array', this.responseSearch.getResultados());
+    
     var date = new Date();
     var fecha = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
     let obj = {
@@ -297,7 +297,7 @@ export class AppSearchComponent implements OnInit {
       'url': this.url
     };
     this.router.navigate(['/search/' + this.searchText]);
-    //this.homeService.guardarBusqueda(obj).subscribe(data => // console.log(data));
+    //this.homeService.guardarBusqueda(obj).subscribe(data => );
     //this.nzone.run(() => this.stopRecognizer());
     //this.stopRecognizer();
 

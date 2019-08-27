@@ -67,7 +67,7 @@ export class UserService {
         }
         let messaging = firebase.messaging();
         messaging.onMessage((payload: any) => {
-            // //// //// console.log("Message received. ", payload);
+            
             if (this.planeaciones_creadas.indexOf(payload.data.id_planeacion) == (-1)) {
                 this.planeaciones_creadas.push(payload.data.id_planeacion);
 
@@ -77,7 +77,7 @@ export class UserService {
         });
         messaging.requestPermission()
             .then(() => {
-                // //// //// console.log('Notification permission granted.');
+                
                 // TODO(developer): Retrieve an Instance ID token for use with FCM.
                 // ...
                 messaging.getToken()
@@ -88,21 +88,21 @@ export class UserService {
                             this.enviarToeknServidor(currentToken);
                         } else {
                             // Show permission request.
-                            // //// //// console.log('No Instance ID token available. Request permission to generate one.');
+                            
                             // Show permission UI.
                             //updateUIForPushPermissionRequired();
                             //setTokenSentToServer(false);
                         }
                     })
                     .catch(function (err) {
-                        // //// //// console.log('An error occurred while retrieving token. ', err);
+                        
                         //showToken('Error retrieving Instance ID token. ', err);
                         // setTokenSentToServer(false);
                     });
                 messaging.onTokenRefresh(() => {
                     messaging.getToken()
                         .then((refreshedToken) => {
-                            // //// //// console.log('Token refreshed.');
+                            
                             this.enviarToeknServidor(refreshedToken);
                             // Indicate that the new Instance ID token has not yet been sent to the
                             // app server.
@@ -112,7 +112,7 @@ export class UserService {
                             // ...
                         })
                         .catch(function (err) {
-                            // //// //// console.log('Unable to retrieve refreshed token ', err);
+                            
                             //showToken('Unable to retrieve refreshed token ', err);
                         });
                 });
@@ -121,7 +121,7 @@ export class UserService {
 
             })
             .catch(function (err) {
-                // //// //// console.log('Unable to get permission to notify.', err);
+                
             });
 
     }
@@ -133,7 +133,7 @@ export class UserService {
 
             this.ref.set(this.este);
             this.ref.on('value', snap => {
-                //// console.log(snap.val());
+                
                 if (snap.val() != this.este) {
                     alert('Su sesión se inició desde otro dispositivo o ventana');
                     this.ref.off();
@@ -142,7 +142,7 @@ export class UserService {
             });
         }).catch(error => {
             // Handle Errors here.
-            // console.log('Fallo firebase')
+            
 
         });
     }
@@ -201,7 +201,7 @@ export class UserService {
 
     enviarToeknServidor(token) {
         this.ajax.post('usuario/firebase/actualiza-token', { id_usuario: this.user.idtbl_usuario, token: token }).subscribe(data => {
-            // //// //// console.log(data);
+            
         });
     }
 
