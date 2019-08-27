@@ -9,9 +9,7 @@
     border-top-left-radius: 15px;
     margin-right: 10px;
 
-    &.primero {
-        
-    }
+    &.primero {}
 
     &.segundo {
         margin-top: 20px;
@@ -39,10 +37,12 @@
 .sidenav-panel {
     border: none !important;
 }
-.mat-card-top{
+
+.mat-card-top {
     margin: 0;
     padding: 15px !important;
 }
+
 .chat-right-panel {
     background: white !important;
     border-bottom: 1px solid #bcbcbc !important;
@@ -140,6 +140,9 @@
     }
 }
 
+.mensajes-nuevos {
+    animation: titila 4s infinite;
+}
 
 .acciones-chat {
     //min-height: 38px;
@@ -157,7 +160,7 @@
         //overflow: auto;
         padding: 0;
         margin-top: 6px;
-        font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif !important;
+        font-family: Roboto, "Helvetica Neue", sans-serif !important;
         padding-top: 6px;
         margin-left: 5px;
         border: none;

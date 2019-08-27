@@ -22,10 +22,9 @@
                         ],
                         "styles": [
                             "src/styles.scss",
-
                             "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
-
-                            "src/assets/styles/style.scss"
+                            "src/assets/styles/style.scss",
+                            "node_modules/@ctrl/ngx-emoji-mart/picker.css"
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",

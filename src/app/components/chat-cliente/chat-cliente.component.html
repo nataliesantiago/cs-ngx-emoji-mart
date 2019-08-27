@@ -2,16 +2,18 @@
   <div class="content">
     <div class="contenedores-chat">
       <!--<button mat-fab color="primary" (click)="openChat()" class="boton-abrir-chat">Chat</button>-->
+
       {{texto_mensaje}}
       <div *ngFor="let chat of chats" class="panel-chat" [ngClass]="{'minimizado':chat.minimizado}">
-        <div fxLayout="row" fxLayoutAlign="center start">
-          <div fxFlex.gt-md="100" fxFlex.gt-sm="100" fxFlex="100">
+        <div fxLayout="row" fxLayoutAlign="center start" class="subpanel">
+          <div fxFlex.gt-md="100" fxFlex.gt-sm="100" fxFlex="100" class="hijo">
             <mat-card class="mat-card-top">
               <mat-sidenav-container
                 [ngClass]="{ 'side-panel-opened': sidePanelOpened, 'side-panel-closed': !sidePanelOpened }"
                 class="ventana-chat">
 
-                <mat-toolbar class="no-shadow chat-right-panel barra-superior" color="basic"
+                <mat-toolbar class="no-shadow chat-right-panel barra-superior"
+                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}" color="basic"
                   (click)="chat.minimizado=!chat.minimizado">
 
 
@@ -131,25 +133,35 @@
                           </div>
                         </div>
                       </div>
+                      <div class="usuarios-escribiendo"
+                        *ngIf="chat.usuarios_escribiendo && chat.usuarios_escribiendo.length>0">
+                        <div class="usuario-escribiendo" *ngFor="let u of chat.usuarios_escribiendo">{{u.nombre}} está
+                          escriendo <div class="puntos-escribiendo">
+                            <div class="hijo"></div>
+                          </div>
+                        </div>
+                      </div>
                     </perfect-scrollbar>
                     <div [hidden]="chat.ocultar_nuevos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
                         (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
                   </mat-card-content>
 
                   <mat-card-actions class="chat-footer acciones-chat">
+
                     <mat-progress-bar mode="indeterminate" *ngIf="chat.cargando_archivo"></mat-progress-bar>
                     <div fxLayout="row" layout-align="start center">
-                      <button mat-icon-button color="primary">
+                      <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                         <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                       </button>
-                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
-                        (keydown.enter)="enviarMensaje(chat,1,null,$event,este)"
-                        [(ngModel)]="chat.texto_mensaje"></textarea>
+                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30" 
+                        (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)" (keyup)="remplazaEmoji(chat)"
+                        [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
+                        (blur)="setFocus(chat,false)"></textarea>
                       <button mat-icon-button color="primary" (click)="adjuntos.click()"
                         [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
                         <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
                       </button>
-                      <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat)"
+                      <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat)" *ngIf="chat.notas_voz"
                         [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto">
                         <mat-icon aria-label="Example icon-button with a heart icon">mic</mat-icon>
                       </button>
@@ -175,6 +187,10 @@
               </mat-sidenav-container>
             </mat-card>
           </div>
+          <emoji-mart set="google" sheetSize="64" class="emojis-panel" perLine="6" *ngIf="chat.mostrar_emojis" showPreview="false"
+             (emojiSelect)="seleccionarEmoji($event,chat)" 
+            [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
+          </emoji-mart>
         </div>
       </div>
     </div>

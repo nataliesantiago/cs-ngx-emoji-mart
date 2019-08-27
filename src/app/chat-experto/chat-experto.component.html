@@ -8,7 +8,8 @@
           <div class="panel-chats primero">
             <perfect-scrollbar class="contenido">
               <mat-nav-list>
-                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto">
+                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto"
+                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
                     [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1)}">
@@ -46,18 +47,21 @@
                 <mat-icon>short_text</mat-icon>
               </button>
               <span class="top-avatar m-r-10">
-
               </span>
-              <div fxFlex>
-                <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}</div>
+              <div fxFlex (click)="toggleDatosCliente(chat)" class="pointer">
+                <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
+                </div>
               </div>
               <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #them="matMenu" x-position="before">
-                <button mat-menu-item>Contact info</button>
-                <button mat-menu-item>Mute</button>
-                <button mat-menu-item>Delete chat</button>
+                <div mat-menu-item>
+                  <mat-slide-toggle [color]="megna" [(ngModel)]="chat.notas_voz" (click)="$event.stopPropagation();" (change)="toggleNotas(chat)">
+                    Habilitar notas de voz
+                  </mat-slide-toggle>
+                </div>
+                <button mat-menu-item>Cerrar Conversación</button>
               </mat-menu>
             </div>
           </mat-toolbar>
@@ -65,7 +69,15 @@
           <mat-card-content class="chat-middle-box contenedor-mensajes">
             <perfect-scrollbar class="contenedor" [attr.id]="chat.codigo" scrollDirective [componentRef]="este" #este
               [chat]="chat">
-
+              <div class="informacion-detallada-cliente animated"
+                [ngClass]="{'slideInDown':chat.mostrar_datos_cliente,'slideOutUp':!chat.mostrar_datos_cliente}">
+                <mat-grid-list cols="2" rowHeight="20px">
+                  <mat-grid-tile><b>Nombre:</b> {{chat.cliente.nombre}}</mat-grid-tile>
+                  <mat-grid-tile><b>Correo:</b> {{chat.cliente.correo}}</mat-grid-tile>
+                  <mat-grid-tile><b>Perfil:</b> {{chat.cliente.nombre_perfil}}</mat-grid-tile>
+                  <mat-grid-tile><b>Rol:</b> {{chat.cliente.nombre_rol}}</mat-grid-tile>
+                </mat-grid-list>
+              </div>
 
               <div class="chat-list">
                 <div class="chat-message"
@@ -153,6 +165,13 @@
                   </div>
                 </div>
               </div>
+              <div class="usuarios-escribiendo" *ngIf="chat.usuarios_escribiendo && chat.usuarios_escribiendo.length>0">
+                <div class="usuario-escribiendo" *ngFor="let u of chat.usuarios_escribiendo">{{u.nombre}} está
+                  escriendo <div class="puntos-escribiendo">
+                    <div class="hijo"></div>
+                  </div>
+                </div>
+              </div>
             </perfect-scrollbar>
             <div [hidden]="chat.ocultar_nuevos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
                 (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
@@ -161,11 +180,13 @@
           <mat-card-actions class="chat-footer acciones-chat">
             <mat-progress-bar mode="indeterminate" *ngIf="chat.cargando_archivo"></mat-progress-bar>
             <div fxLayout="row" layout-align="start center">
-              <button mat-icon-button color="primary">
+              <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                 <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
               </button>
               <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
-                (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" [(ngModel)]="chat.texto_mensaje"></textarea>
+                (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
+                (keyup)="remplazaEmoji(chat)" [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
+                (blur)="setFocus(chat,false)"></textarea>
               <button mat-icon-button color="primary" (click)="adjuntos.click()"
                 [disabled]="chat.cargando_archivo || chat.grabando_nota">
                 <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
@@ -179,6 +200,10 @@
           <form [hidden]="true" #formulario method="POST" enctype="multipart/form-data" [action]="urlAdjuntos">
             <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,this)" #adjuntos />
           </form>
+          <emoji-mart set="google" sheetSize="64" class="emojis-panel" perLine="6" *ngIf="chat.mostrar_emojis"
+            showPreview="false" (emojiSelect)="seleccionarEmoji($event,chat)"
+            [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
+          </emoji-mart>
         </div>
       </mat-sidenav-container>
     </mat-card>

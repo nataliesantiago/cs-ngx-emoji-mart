@@ -12,6 +12,7 @@ import { PerfectScrollbarDirective, PerfectScrollbarComponent } from 'ngx-perfec
 import { ChatService } from '../../providers/chat.service';
 import { Experto } from '../../../schemas/xhr.schema';
 import { Configuracion } from '../../../schemas/interfaces';
+import { SonidosService } from '../../providers/sonidos.service';
 const moment = _rollupMoment || _moment;
 
 declare var MediaRecorder: any;
@@ -27,7 +28,9 @@ export class ChatClienteComponent implements OnInit {
   archivo_adjunto: any;
   urlAdjuntos: string;
   configuraciones;
-  constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone) {
+  nombre_pestana = 'Conecta';
+  intervalo;
+  constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
     if (this.user) {
@@ -94,7 +97,20 @@ export class ChatClienteComponent implements OnInit {
     com.directiveRef.scrollToBottom();
   }
 
+  setFocus(c: Conversacion, estado: boolean) {
+    c.focuseado = estado;
+    if (estado) {
+      c.mensajes_nuevos = false;
+      window.clearInterval(this.intervalo);
+      document.title = this.nombre_pestana;
+    }
+  }
   agregarListenerMensajes(c: Conversacion) {
+    this.fireStore.doc('conversaciones/' + c.codigo).valueChanges().subscribe((con: Conversacion) => {
+      c.id_estado_conversacion = con.id_estado_conversacion;
+      c.notas_voz = con.notas_voz;
+    });
+
     let query = this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     );
@@ -108,8 +124,39 @@ export class ChatClienteComponent implements OnInit {
         }
       })
     });
+    c.usuarios_escribiendo = [];
+    this.fireStore.collection('conversaciones/' + c.codigo + '/usuarios_escribiendo/').snapshotChanges().subscribe((changes: any) => {
+      let tmp = [];
+
+      changes.forEach(a => {
+        let data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+
+        if (id != this.user.getId()) {
+          let u = c.usuarios_escribiendo.find(u => {
+            return u.id == id;
+          });
+          if (!u) {
+            let ue = { id: id, nombre: data.nombre, timeout: null };
+            tmp.push(ue);
+            ue.timeout = setTimeout(() => {
+              this.chatService.usuarioDejaEscribir(c, id);
+            }, 4000);
+          } else {
+            tmp.push(u);
+            window.clearTimeout(u.timeout);
+            u.timeout = setTimeout(() => {
+              this.chatService.usuarioDejaEscribir(c, id);
+            }, 4000);
+          }
+        }
+      });
+      c.usuarios_escribiendo = tmp;
+    });
     c.messages = query.valueChanges();
     c.mensajes = [];
+    let primera_vez = true;
+
     c.messages.subscribe(d => {
 
       d.forEach((m: Mensaje, i) => {
@@ -119,6 +166,20 @@ export class ChatClienteComponent implements OnInit {
         }
         if (!c.mensajes[i]) {
           c.mensajes[i] = m;
+          if (!primera_vez && !c.focuseado) {
+            this.soundService.sonar(1);
+            c.mensajes_nuevos = true;
+            if (this.intervalo) {
+              window.clearInterval(this.intervalo);
+            }
+            this.intervalo = setInterval(() => {
+              if (document.title == this.nombre_pestana) {
+                document.title = 'Mensaje nuevo en el chat';
+              } else {
+                document.title = this.nombre_pestana;
+              }
+            }, 1400);
+          }
         } else {
           c.mensajes[i].estado = m.estado;
         }
@@ -126,7 +187,7 @@ export class ChatClienteComponent implements OnInit {
       this.ngZone.runOutsideAngular(() => {
         this.passByMensajes(c.mensajes, 0);
       });
-
+      primera_vez = false;
     });
   }
 
@@ -236,7 +297,7 @@ export class ChatClienteComponent implements OnInit {
   procesaFilas(c: Conversacion) {
     let expertos = [];
     let finaliza = true;
-    
+
     c.filas.forEach((ce, index) => {
       let r = this.fireStore.collection('conversaciones/').doc(c.codigo).ref;
       this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').set({ conversacion: r });
@@ -244,7 +305,7 @@ export class ChatClienteComponent implements OnInit {
         let e = this.fireStore.collection('categorias_experticia/' + ce.id + '/expertos').valueChanges();
 
         e.subscribe(expertosFila => {
-          
+
           expertos = expertos.concat(expertosFila);
           if (index == (c.filas.length - 1) && finaliza) {
             finaliza = false;
@@ -252,18 +313,18 @@ export class ChatClienteComponent implements OnInit {
           }
         });
       } else {
-        
+
       }
     });
   }
 
   asignarAsesor(c: Conversacion, expertos: Array<any>) {
-    
+
     expertos.forEach(e => {
       let a = this.fireStore.doc(e.experto).ref;
       let b = this.fireStore.doc(e.experto).valueChanges();
       b.subscribe((data: any) => {
-        
+
         if (c.expertos.length < expertos.length) {
           if (!data) {
             data = { activo: false };
@@ -285,7 +346,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   procesaChats(c: Conversacion) {
-    
+
     let asignado = 0;
     c.expertos = c.expertos.filter(e => {
       return e.activo;
@@ -348,8 +409,8 @@ export class ChatClienteComponent implements OnInit {
   }
 
   enviarMensaje(chat: Conversacion, tipo_mensaje: number, url?: string, event?: Event, comp?: PerfectScrollbarComponent, duration?: number) {
-    if (event) {
-      event.preventDefault();
+    if (chat.texto_mensaje) {
+      chat.texto_mensaje = chat.texto_mensaje.trim();
     }
     if ((chat.texto_mensaje && chat.texto_mensaje != '') || chat.archivo_adjunto || tipo_mensaje == 3) {
       if (!chat.texto_mensaje) {
@@ -383,7 +444,7 @@ export class ChatClienteComponent implements OnInit {
           m.url = url;
           chat.texto_mensaje = '';
           m.tipo_archivo = 4;
-          m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: duration };
+          m.audioControls = { reproduciendo: false, segundo: duration, min: 0, max: duration };
           m.duracion = duration;
           break;
       }
@@ -393,7 +454,7 @@ export class ChatClienteComponent implements OnInit {
         chat.mensajes.push(m);
         this.passByMensajes(chat.mensajes, 0);
       });
-
+      this.chatService.usuarioDejaEscribir(chat, this.user.getId());
       chat.texto_mensaje = '';
       if (comp) {
         setTimeout(() => {
@@ -458,6 +519,7 @@ export class ChatClienteComponent implements OnInit {
 
         c.mediaRecorder.addEventListener("start", event => {
           calculaTiempo.fechaIni = moment();
+          c.grabando_nota = true;
         });
 
         c.mediaRecorder.addEventListener("stop", () => {
@@ -492,7 +554,7 @@ export class ChatClienteComponent implements OnInit {
 
 
     return new Promise((resolve, reject) => {
-      c.grabando_nota = true;
+
       c.mediaRecorder.start();
       minutes = Math.floor(timer / 60);
       seconds = Math.floor(timer % 60);
@@ -500,7 +562,7 @@ export class ChatClienteComponent implements OnInit {
       seconds = seconds < 10 ? "0" + seconds : seconds;
       c.cuenta_regresiva = minutes + ":" + seconds;
       timer -= 1;
-      c.interval_grabando = setInterval(function () {
+      c.interval_grabando = setInterval(() => {
         timer -= 1;
         minutes = Math.floor(timer / 60);
         seconds = Math.floor(timer % 60);
@@ -529,5 +591,34 @@ export class ChatClienteComponent implements OnInit {
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
     window.clearInterval(c.interval_grabando);
+  }
+  remplazaEmoji(c: Conversacion) {
+    c.texto_mensaje = this.chatService.findEmojiData(c.texto_mensaje);
+  }
+
+  escribiendo(c: Conversacion, event: KeyboardEvent) {
+
+    let code = event.which || event.keyCode;
+    if (code != 13 && code != 8) {
+      this.chatService.usuarioEscribiendoConversacion(c);
+    }
+  }
+  seleccionarEmoji(evento, c: Conversacion) {
+    console.log(evento);
+    if (c.texto_mensaje) {
+      c.texto_mensaje += '' + evento.emoji.native;
+    } else {
+      c.texto_mensaje = '';
+      c.texto_mensaje += evento.emoji.native;
+    }
+    //c.mostrar_emojis = false;
+  }
+
+  toggleEmojis(c: Conversacion) {
+    if (c.mostrar_emojis) {
+      c.mostrar_emojis = false;
+    } else {
+      c.mostrar_emojis = true;
+    }
   }
 }

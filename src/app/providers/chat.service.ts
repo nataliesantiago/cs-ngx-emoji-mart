@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 import { Conversacion } from '../../schemas/conversacion.schema';
 import { reject } from 'q';
 import { xhr, xhrConversaciones } from '../../schemas/xhr.schema';
-
+import { emojis, EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
@@ -34,11 +34,11 @@ export class ChatService {
 
   chats_cliente: Array<Conversacion> = [];
 
-  constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore) {
+  constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore, private emojiService: EmojiService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
-    })
+    });
   }
   /**
    * @description Se encarga de buscar las conversaciones activas del cliente y las aloja en memoria ram para futuras consultas
@@ -99,7 +99,11 @@ export class ChatService {
     mensaje.estado = 3;
     this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes').doc(mensaje.id).set(mensaje);
   }
-
+  /**
+   * @description Esta función se encarga de subir los archivos al servidor que se adjuntan en el chat
+   * @param  {File} file
+   * @returns Promise
+   */
   adjuntarArchivosServidor(file: File): Promise<any> {
     return new Promise((resolve, re) => {
       const fd = new FormData();
@@ -114,7 +118,10 @@ export class ChatService {
     })
   }
 
-
+  /**
+   * @description Carga desde el servidor las configuracionesa asociadas al chat
+   * @returns Promise
+   */
   getConfiguracionesChat(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.get('chat/getConfiguraciones', {}).subscribe(d => {
@@ -125,9 +132,46 @@ export class ChatService {
 
     })
   }
-
+  /**
+   * @description Crea una conversación de un cliente segun una categoria(producto) y si tiene una busqueda asociada, dadon que ambos parámetros son opcionales funciona y bsuca todos los expertos disponibles en caso de que ningun parametro sea enviado
+   * @param  {number} categoria?
+   * @param  {number} id_busqueda?
+   */
   crearConversacion(categoria?: number, id_busqueda?: number) {
     this.subjectConversacion.next({ id_producto: categoria, id_busqueda: id_busqueda });
+  }
+
+  usuarioEscribiendoConversacion(c: Conversacion) {
+    if (c.timeout_escribiendo) {
+      window.clearTimeout(c.timeout_escribiendo);
+    }
+    this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).set({ escribiendo: true, nombre: this.user.nombre, fecha: new Date() });
+    c.timeout_escribiendo = setTimeout(() => {
+      this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).delete();
+    }, 4000);
+  }
+
+  usuarioDejaEscribir(c: Conversacion, id: number) {
+
+    this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + id).delete();
+
+  }
+
+  findEmojiData(texto: string): string {
+    if (texto) {
+      let tmp = texto.split(' ');
+      tmp.forEach((t, i) => {
+        let a = this.emojiService.emojis.find(e => {
+          return (e.text != "" && e.text == t);
+        });
+        if (a) {
+          tmp[i] = '' + a.native;
+        }
+      });
+      return tmp.join(' ');
+    } else {
+      return '';
+    }
   }
 
 }
