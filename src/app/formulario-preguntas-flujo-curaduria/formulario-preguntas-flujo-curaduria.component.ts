@@ -48,27 +48,23 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   notas = { notas: '' };
   todos_usuarios = [];
   notas_mostrar = [];
+  validar_flujo;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) { 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
-        
         this.preguntas_todas = p.preguntas;
-        
-        
       }
     })
     this.usuario = user.getUsuario();
     
     this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
       if(d.success){
-        
         this.id_usuario = d.usuario[0].idtbl_usuario;        
       }
     });
     this.ajax.get('user/obtener-todos', {}).subscribe(d => {
       if(d.success){
-        
         this.todos_usuarios = d.usuario;        
       }
     });
@@ -125,6 +121,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               if(p.success){
                 
                 this.pregunta = p.pregunta[0];
+                this.validar_flujo = p.pregunta[0].id_usuario_revision;
+                
                 this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
                 this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sr => {
                   if(sr.success){
@@ -213,8 +211,12 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       }else if(this.pregunta.id_estado_flujo == 4){
         this.pregunta.id_estado_flujo = 3;
       }
+
+      if(!this.validar_flujo && this.id_pregunta_editar != "sugerida"){
+        this.pregunta.id_estado_flujo = 1;
+      }
       
-      this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+      //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
       for(let i = 0; i < this.array_mostrar.length; i++){
         this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
       }
@@ -232,7 +234,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         this.pregunta.muestra_fecha_actualizacion = 0;
       }
       this.pregunta.id_usuario = this.id_usuario;
-      this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+      //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
       for(let i = 0; i < this.array_mostrar.length; i++){
         this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
       }
@@ -511,7 +513,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         if(this.editar){
-          
           if(e.idtbl_respuesta_asociada != undefined){
             this.ajax.post('preguntas/eliminar-asociacion', { preguna_asociada: e }).subscribe(d => {
               if(d.success){

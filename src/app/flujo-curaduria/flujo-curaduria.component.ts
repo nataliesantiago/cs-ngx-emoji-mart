@@ -27,6 +27,10 @@ export class FlujoCuraduriaComponent implements OnInit {
   cant_revision;
   cant_aprobacion;
   cant_aprobados;
+  activo_curaduria = true;
+  activo_revision = false;
+  activo_aprobacion = false;
+  activo_aprobados = false;
   flujo_actual = "Preguntas en Curaduria";
 
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
@@ -74,6 +78,10 @@ export class FlujoCuraduriaComponent implements OnInit {
 
   cargarCuraduria(){
     this.flujo_actual = "Preguntas en Curaduria";
+    this.activo_curaduria = true;
+    this.activo_revision = false;
+    this.activo_aprobacion = false;
+    this.activo_aprobados = false;
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
         
@@ -88,6 +96,10 @@ export class FlujoCuraduriaComponent implements OnInit {
 
   cargarRevision(){
     this.flujo_actual = "Preguntas en Revisión";
+    this.activo_curaduria = false;
+    this.activo_revision = true;
+    this.activo_aprobacion = false;
+    this.activo_aprobados = false;
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p => {
       if(p.success){
         
@@ -102,6 +114,10 @@ export class FlujoCuraduriaComponent implements OnInit {
 
   cargarAprobacion(){
     this.flujo_actual = "Preguntas por Aprobar";
+    this.activo_curaduria = false;
+    this.activo_revision = false;
+    this.activo_aprobacion = true;
+    this.activo_aprobados = false;
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 3}).subscribe(p => {
       if(p.success){
         
@@ -116,6 +132,10 @@ export class FlujoCuraduriaComponent implements OnInit {
 
   cargarAprobados(){
     this.flujo_actual = "Preguntas Aprobadas";
+    this.activo_curaduria = false;
+    this.activo_revision = false;
+    this.activo_aprobacion = false;
+    this.activo_aprobados = true;
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 4}).subscribe(p => {
       if(p.success){
         
@@ -129,6 +149,36 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
+      if(p.success){
+        
+        this.cant_curaduria = p.preguntas.length;
+        this.data = p.preguntas;
+        this.dataSource = new MatTableDataSource(this.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;        
+        this.cg.detectChanges();
+      }
+    })
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p1 => {
+      if(p1.success){
+        this.cant_revision = p1.preguntas.length;            
+        this.cg.detectChanges();
+      }
+    })
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 3}).subscribe(p2 => {
+      if(p2.success){
+        this.cant_aprobacion = p2.preguntas.length;            
+        this.cg.detectChanges();
+      }
+    })
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 4}).subscribe(p3 => {
+      if(p3.success){
+        this.cant_aprobados = p3.preguntas.length;
+        this.cg.detectChanges();
+      }
+    })
 
   }
 

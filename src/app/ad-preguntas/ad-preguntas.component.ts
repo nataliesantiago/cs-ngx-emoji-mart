@@ -17,7 +17,7 @@ import swal from 'sweetalert2';
 @Component({
   selector: 'app-ad-preguntas',
   templateUrl: './ad-preguntas.component.html',
-  styleUrls: ['./ad-preguntas.component.css']
+  styleUrls: ['./ad-preguntas.component.scss']
 })
 export class AdPreguntasComponent implements OnInit {
 
@@ -89,6 +89,10 @@ export class AdPreguntasComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  previsualizar(e) {
+    this.router.navigate(['/respuestas'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
   }
   
 

@@ -17,6 +17,8 @@ import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-pregunt
 import { RespuestasComponent } from './respuestas/respuestas.component';
 import { AdministracionComponent } from './administracion/administracion.component';
 import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
+import { CreacionProductosComponent } from './creacion-productos/creacion-productos.component';
+import { FormularioProductosComponent } from './formulario-productos/formulario-productos.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -35,9 +37,11 @@ export const AppRoutes: Routes = [
   { path: 'administrador', component: AdministracionComponent, canActivate: [AuthGuard] },
   { path: 'flujo-curaduria', component: FlujoCuraduriaComponent, canActivate: [AuthGuard] },
   { path: 'administracion-urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'productos', component: CreacionProductosComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-productos', component: FormularioProductosComponent, canActivate: [AuthGuard] },
   { path: 'formulario-preguntas-flujo-curaduria', component: FormularioPreguntasFlujoCuraduriaComponent, canActivate: [AuthGuard] },
   { path: 'sugerencias', component: BuzonSugerenciasComponent, canActivate: [AuthGuard] },
   { path: 'administrador-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'formulario_pregunta', component: FormularioPreguntasComponent, canActivate: [AuthGuard] },
-  { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] }
+  { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
 ];

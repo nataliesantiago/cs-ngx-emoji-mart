@@ -31,7 +31,14 @@
           <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
               <mat-checkbox color="primary" [(ngModel)]="pregunta.muestra_fecha_actualizacion">Mostrar Fecha de la Última Modificación</mat-checkbox>
           </div>
-      </div>        
+      </div>
+      <br>
+      <mat-form-field floatLabel="never">
+        <mat-label>Seleccionar Curador</mat-label>
+        <select matNativeControl [(ngModel)]="pregunta.id_usuario_revision" name="estado">
+          <option *ngFor="let i of todos_usuarios" value="{{i.idtbl_usuario}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field>        
       <br>
       <br>
       <h3>Segmentos</h3>
