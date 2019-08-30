@@ -15,7 +15,7 @@ export class CreacionProductosComponent implements OnInit {
   usuario;
   id_usuario;
   productos = [];
-  displayedColumns = ['id', 'nombre', 'acciones'];
+  displayedColumns = ['acciones', 'id', 'nombre', 'icono'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)

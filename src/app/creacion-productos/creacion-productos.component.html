@@ -15,12 +15,17 @@
   
           <!-- Progress Column -->
           <ng-container matColumnDef="nombre">
-              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Nombre </mat-header-cell>
-              <mat-cell *matCellDef="let row" style="max-width:70%;"> {{row.nombre}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
           </ng-container>
+
+          <ng-container matColumnDef="icono">
+            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Icono </mat-header-cell>
+            <mat-cell *matCellDef="let row" style="max-width:35%;"><mat-icon class="icon">{{row.nombre_icono}}</mat-icon></mat-cell>
+        </ng-container>
   
           <ng-container matColumnDef="acciones">
-              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
               <mat-cell *matCellDef="let row" style="max-width:15%;">
                   <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>             
               </mat-cell>

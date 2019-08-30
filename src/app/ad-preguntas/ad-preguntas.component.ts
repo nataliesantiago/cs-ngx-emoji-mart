@@ -25,7 +25,7 @@ export class AdPreguntasComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['id', 'pregunta', 'id_producto', 'id_estado', 'fecha_modificacion', 'acciones'];
+  displayedColumns = ['acciones', 'id', 'pregunta', 'id_producto', 'id_estado', 'fecha_modificacion'];
   dataSource = new MatTableDataSource([]);
   productos = [];
   pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 3, id_estado_flujo: 4 };

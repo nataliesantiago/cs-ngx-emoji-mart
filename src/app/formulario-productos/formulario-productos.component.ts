@@ -36,7 +36,6 @@ export class FormularioProductosComponent implements OnInit {
   usuario;
   id_usuario;
   productos = [];
-  displayedColumns = ['id', 'nombre', 'acciones'];
   myControl = new FormControl();
   options = [];
   filteredOptions: Observable<string[]>;
@@ -47,6 +46,8 @@ export class FormularioProductosComponent implements OnInit {
   icons = [];
   file: any;
   impresion = [];
+  nivel_producto;
+  id_producto_editar;
 
   private _transformer = (node: FoodNode, level: number) => {
     return {
@@ -81,6 +82,16 @@ export class FormularioProductosComponent implements OnInit {
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
+
+    this.route.queryParams
+    .filter(params => params.id_producto)
+    .subscribe(params => {
+      
+
+      this.id_producto_editar = params.id_producto;
+      
+    });
+
     this.ajax.get('producto/obtener', {}).subscribe(p => {
       if(p.success){
         this.productos = p.productos;
@@ -92,7 +103,23 @@ export class FormularioProductosComponent implements OnInit {
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => this._filter(value))
-        );                           
+        );
+        
+        if(this.id_producto_editar){
+          this.ajax.get('producto/obtener-editar', { idtbl_producto : this.id_producto_editar }).subscribe(p2 => {
+            if(p2.success){
+              this.categoria = p2.producto[0];
+              this.myControl = new FormControl(p2.producto[0].nombre_padre);
+              this.filteredOptions = this.myControl.valueChanges.pipe(
+                startWith(''),
+                map(value => this._filter(value))
+              );
+              this.producto_padre_seleccionado = p2.producto[0].id_producto_padre;
+              this.crearArbol(p2.producto[0]);
+              this.cg.detectChanges();
+            }
+          })
+        }
       }
     })
 
@@ -142,7 +169,6 @@ export class FormularioProductosComponent implements OnInit {
       this.ajax.get('producto/obtener-hijos', { idtbl_producto : this.producto_padre_seleccionado }).subscribe(p => {
         if(p.success){
           productos_hijo = p.producto;
-          console.log(productos_hijo);
           for(let i = this.arbol.length - 1; i >= 0; i--){
             this.arbol_mostrar.push(this.arbol[i]);
           }
@@ -164,7 +190,9 @@ export class FormularioProductosComponent implements OnInit {
           for(let i = 1; i < this.arbol_mostrar.length; i++){
     
           }
-    
+          
+
+          this.nivel_producto = this.arbol_mostrar.length - 1;
           /*prueba = [
             { name: 'Producto 1', id: 1, id_padre: null },
             { name: 'Subproducto 1', id: 2, id_padre: 1 },
@@ -173,12 +201,9 @@ export class FormularioProductosComponent implements OnInit {
           
           let topManager = this.employeesForManager(json_arbol, null)[0]
           let result = this.giveShape(json_arbol, topManager)  
-          
-          console.log(result)
             
           TREE_DATA = [result];
           
-          console.log(TREE_DATA)
           this.dataSource.data = TREE_DATA;
           this.cg.detectChanges();
         }
@@ -225,12 +250,21 @@ giveShape(employees, manager) {
   }
 
   guardarProducto(){
-    this.ajax.post('producto/guardar', { producto: this.categoria }).subscribe(d => {
-      if(d.success){
-        console.log(d.producto);
-        this.router.navigate(['/productos']);
-      }
-    })
+
+    if(this.id_producto_editar){
+      this.ajax.post('producto/editar', { producto: this.categoria }).subscribe(d => {
+        if(d.success){
+          this.router.navigate(['/productos']);
+        }
+      })
+    }else{
+      this.ajax.post('producto/guardar', { producto: this.categoria }).subscribe(d => {
+        if(d.success){
+          this.router.navigate(['/productos']);
+        }
+      })
+    }
+    
   }
 
 }

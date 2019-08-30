@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 export class UrlsUsuarioComponent implements OnInit {
 
   items_administracion = [];
-  displayedColumns = ['id', 'nombre', 'valor', 'acciones'];
+  displayedColumns = ['acciones', 'id', 'nombre', 'valor'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
