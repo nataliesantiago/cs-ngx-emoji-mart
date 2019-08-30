@@ -10,6 +10,7 @@ export class SonidosComponent implements OnInit {
   mensaje: HTMLAudioElement;
   cliente: HTMLAudioElement;
   sos: HTMLAudioElement;
+  notificacion: HTMLAudioElement;
   constructor(private soundService: SonidosService) {
     this.soundService.sonidoObserver.subscribe(t => {
       switch (t) {
@@ -21,6 +22,9 @@ export class SonidosComponent implements OnInit {
           break;
         case 3:
           this.sos.play();
+          break;
+        case 4:
+          this.notificacion.play();
           break;
       }
     })
@@ -39,6 +43,9 @@ export class SonidosComponent implements OnInit {
         break;
       case 3:
         this.sos = element;
+        break;
+      case 4:
+        this.notificacion = element;
         break;
     }
   }

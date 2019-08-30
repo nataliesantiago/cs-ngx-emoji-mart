@@ -11,6 +11,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
 import { Configuracion } from '../../schemas/interfaces';
 import { SonidosService } from '../providers/sonidos.service';
+import swal from 'sweetalert2';
 const moment = _rollupMoment || _moment;
 
 declare var MediaRecorder: any;
@@ -416,6 +417,11 @@ export class ChatExpertoComponent {
         c.archivo_adjunto = archivo;
         input.value = "";
         c.cargando_archivo = false;
+      }, e => {
+        delete c.archivo_adjunto;
+        c.cargando_archivo = false;
+        input.value = "";
+        swal.fire({ type: 'error', text: e });
       });
     }
   }
@@ -424,7 +430,7 @@ export class ChatExpertoComponent {
     // // console.log(evento);
     c.cargando_archivo = true;
     c.grabando_nota = false;
-    this.chatService.adjuntarArchivosServidor(file).then(archivo => {
+    this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
       this.enviarMensaje(c, 3, archivo.url, null, null, duration);
       c.cargando_archivo = false;
     });
@@ -441,7 +447,7 @@ export class ChatExpertoComponent {
     let tiempo = minutos * 60;
     const options = { mimeType: 'video/webm;codecs=vp9' };
     let detenido = false;
-    let calculaTiempo = { fechaIni: null, fechaFin: null };
+    let calculaTiempo = { fechaIni: null, fechaFin: null, audioBitsPerSecond: 48000 };
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
         c.mediaRecorder = new MediaRecorder(stream, options);

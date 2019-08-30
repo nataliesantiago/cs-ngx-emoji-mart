@@ -8,24 +8,33 @@ import { Conversacion } from '../schemas/conversacion.schema';
 export class ScrollDirective implements AfterViewInit {
     @Input() componentRef: PerfectScrollbarComponent;
     @Input() chat: Conversacion;
+    primera_vez = true;
     constructor(el: ElementRef) {
 
     }
 
-    ngAfterViewInit() { 
+    ngAfterViewInit() {
         this.chat.messages.subscribe(m => {
-            if (m && m.length > 0 && this.chat.mensajes && this.chat.mensajes.length > 0) {
-                if (this.componentRef.directiveRef.position().y === 'end') {
-                    setTimeout(() => {
+            if (this.primera_vez) {
+                this.primera_vez = false;
+                this.chat.ocultar_nuevos_mensajes = true;
+                this.componentRef.directiveRef.scrollToBottom();
+            } else
+                if (m && m.length > 0 && this.chat.mensajes && this.chat.mensajes.length > 0) {
+                    if (this.componentRef.directiveRef.position().y === 'end') {
                         this.chat.ocultar_nuevos_mensajes = true;
                         this.componentRef.directiveRef.scrollToBottom();
-                    }, 5 * m.length);
+                        setTimeout(() => {
+                            if (this.componentRef.directiveRef.position().y != 'end') {
+                                this.componentRef.directiveRef.scrollToBottom();
+                            }
+                        }, 400);
+                    } else {
+                        this.chat.ocultar_nuevos_mensajes = false;
+                    }
                 } else {
-                    this.chat.ocultar_nuevos_mensajes = false;
+                    this.chat.ocultar_nuevos_mensajes = true;
                 }
-            } else {
-                this.chat.ocultar_nuevos_mensajes = true;
-            }
         })
     }
 }

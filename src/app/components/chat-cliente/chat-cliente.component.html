@@ -8,7 +8,7 @@
         <div fxLayout="row" fxLayoutAlign="center start" class="subpanel">
           <div fxFlex.gt-md="100" fxFlex.gt-sm="100" fxFlex="100" class="hijo">
             <mat-card class="mat-card-top">
-              <mat-sidenav-container
+              <mat-sidenav-container [hidden]="chat.minimizado"
                 [ngClass]="{ 'side-panel-opened': sidePanelOpened, 'side-panel-closed': !sidePanelOpened }"
                 class="ventana-chat">
 
@@ -153,9 +153,9 @@
                       <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                         <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                       </button>
-                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30" 
-                        (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)" (keyup)="remplazaEmoji(chat)"
-                        [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
+                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
+                        (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
+                        (keyup)="remplazaEmoji(chat)" [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
                         (blur)="setFocus(chat,false)"></textarea>
                       <button mat-icon-button color="primary" (click)="adjuntos.click()"
                         [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
@@ -184,11 +184,19 @@
                   <h3 *ngIf="chat.no_hay_filas" class="no-filas">En el momento no hay asesores que puedan atender tu
                     solicitud</h3>
                 </div>
+
               </mat-sidenav-container>
+              <div class="componente-pequeno" [hidden]="!chat.minimizado" (click)="chat.minimizado=!chat.minimizado">
+                <div class="font-14 nombre-asesor">
+                  <mat-icon class="icono-mensaje">message</mat-icon>
+                  <span *ngIf="!chat.asesor_actual">Chat de experto</span>
+                  <span *ngIf="chat.asesor_actual">{{chat.asesor_actual.nombre}}</span>
+                </div>
+              </div>
             </mat-card>
           </div>
-          <emoji-mart set="google" sheetSize="64" class="emojis-panel" perLine="6" *ngIf="chat.mostrar_emojis" showPreview="false"
-             (emojiSelect)="seleccionarEmoji($event,chat)" 
+          <emoji-mart set="google" sheetSize="64" class="emojis-panel" perLine="6" *ngIf="chat.mostrar_emojis"
+            showPreview="false" (emojiSelect)="seleccionarEmoji($event,chat)"
             [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
           </emoji-mart>
         </div>

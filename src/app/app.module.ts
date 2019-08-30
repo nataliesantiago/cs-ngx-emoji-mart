@@ -69,6 +69,7 @@ import { QuillService } from './providers/quill.service';
 import { SonidosComponent } from './components/sonidos/sonidos.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ReplaceEmojisPipe } from '../pipes/emojis.pipe';
+import { AdminsitradorExtensionesChatComponent } from './adminsitrador-extensiones-chat/adminsitrador-extensiones-chat.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -110,7 +111,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormularioCategoriasComponent,
     UrlsUsuarioComponent,
     SonidosComponent,
-    ReplaceEmojisPipe
+    ReplaceEmojisPipe,
+    AdminsitradorExtensionesChatComponent
   ],
   imports: [
     BrowserModule,

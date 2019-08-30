@@ -13,6 +13,8 @@ import { ChatService } from '../../providers/chat.service';
 import { Experto } from '../../../schemas/xhr.schema';
 import { Configuracion } from '../../../schemas/interfaces';
 import { SonidosService } from '../../providers/sonidos.service';
+import swal from 'sweetalert2';
+
 const moment = _rollupMoment || _moment;
 
 declare var MediaRecorder: any;
@@ -30,6 +32,7 @@ export class ChatClienteComponent implements OnInit {
   configuraciones;
   nombre_pestana = 'Conecta';
   intervalo;
+  extensiones_archivos = [];
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
@@ -63,7 +66,10 @@ export class ChatClienteComponent implements OnInit {
 
   init() {
     this.chatService.getConfiguracionesChat().then(configs => {
-      this.configuraciones = configs;
+      this.configuraciones = configs.configuraciones;
+      configs.extensiones.forEach(e => {
+        this.extensiones_archivos.push(e.extension);
+      });
       this.chatService.getConversacionesCLiente().then(chats => {
         this.chats = chats;
         this.chats.forEach(c => {
@@ -186,6 +192,7 @@ export class ChatClienteComponent implements OnInit {
       });
       this.ngZone.runOutsideAngular(() => {
         this.passByMensajes(c.mensajes, 0);
+        this.changeRef.detectChanges();
       });
       primera_vez = false;
     });
@@ -481,6 +488,11 @@ export class ChatClienteComponent implements OnInit {
         c.archivo_adjunto = archivo;
         input.value = "";
         c.cargando_archivo = false;
+      }, e => {
+        delete c.archivo_adjunto;
+        c.cargando_archivo = false;
+        input.value = "";
+        swal.fire({ type: 'error', text: e });
       });
     }
   }
@@ -489,7 +501,7 @@ export class ChatClienteComponent implements OnInit {
     // // console.log(evento);
     c.cargando_archivo = true;
     c.grabando_nota = false;
-    this.chatService.adjuntarArchivosServidor(file).then(archivo => {
+    this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
       this.enviarMensaje(c, 3, archivo.url, null, null, duration);
       c.cargando_archivo = false;
     });
@@ -504,7 +516,7 @@ export class ChatClienteComponent implements OnInit {
 
     let minutos = parseInt(this.buscarConfiguracion(7).valor);
     let tiempo = minutos * 60;
-    const options = { mimeType: 'video/webm;codecs=vp9' };
+    const options = { audioBitsPerSecond: 16000 };
     let detenido = false;
     let calculaTiempo = { fechaIni: null, fechaFin: null };
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -525,8 +537,8 @@ export class ChatClienteComponent implements OnInit {
         c.mediaRecorder.addEventListener("stop", () => {
 
           calculaTiempo.fechaFin = moment();
-          const audioBlob = new Blob(audioChunks);
-          var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: "audio/wav" });
+          const audioBlob = new Blob(audioChunks, { 'type': 'audio/wav; base64' });
+          var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.ogg');
           delete c.mediaRecorder;
           var duration = Math.floor(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
           // console.log(duration);
