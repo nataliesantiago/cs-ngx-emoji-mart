@@ -70,6 +70,10 @@ import { SonidosComponent } from './components/sonidos/sonidos.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { ReplaceEmojisPipe } from '../pipes/emojis.pipe';
 import { AdminsitradorExtensionesChatComponent } from './adminsitrador-extensiones-chat/adminsitrador-extensiones-chat.component';
+import { FormularioProductosComponent } from './formulario-productos/formulario-productos.component';
+
+import {MatTreeModule} from '@angular/material/tree';
+import { CreacionProductosComponent } from './creacion-productos/creacion-productos.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -112,7 +116,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     UrlsUsuarioComponent,
     SonidosComponent,
     ReplaceEmojisPipe,
-    AdminsitradorExtensionesChatComponent
+    AdminsitradorExtensionesChatComponent,
+    CreacionProductosComponent,
+    FormularioProductosComponent
   ],
   imports: [
     BrowserModule,
@@ -124,6 +130,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     HttpClientModule,
     SharedModule,
+    MatTreeModule,
     /*QuillModule.forRoot({modules: {
       syntax: true,
       toolbar: {

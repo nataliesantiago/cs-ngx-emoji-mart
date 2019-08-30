@@ -48,7 +48,7 @@ export class ChatClienteComponent implements OnInit {
         this.chats = [];
       }
     });
-    //// console.log(this.user.getId());
+    
     this.chatService.nuevasConversaciones.subscribe(d => {
       this.openChat(d);
     });
@@ -263,8 +263,8 @@ export class ChatClienteComponent implements OnInit {
     m.audio = audio;
     audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
-      m.audioControls.max = Math.floor(target.duration);
-      //// console.log('Entro', e);
+      m.audioControls.max = Math.ceil(target.duration);
+      
     });
     audio.addEventListener('timeupdate', e => {
       let target = <HTMLAudioElement>e.target;
@@ -479,12 +479,12 @@ export class ChatClienteComponent implements OnInit {
   }
 
   adjuntarArchivo(c: Conversacion, evento: Event, form: HTMLFormElement, input: HTMLInputElement) {
-    // // console.log(evento);
+    
     let target = <any>evento.target;
     c.cargando_archivo = true;
     if (target.files && target.files.length > 0) {
       this.chatService.adjuntarArchivosServidor(target.files[0]).then(archivo => {
-        // // console.log(archivo);
+        
         c.archivo_adjunto = archivo;
         input.value = "";
         c.cargando_archivo = false;
@@ -498,7 +498,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   adjuntarNotaVoz(c: Conversacion, file: File, duration: number) {
-    // // console.log(evento);
+    
     c.cargando_archivo = true;
     c.grabando_nota = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
@@ -540,8 +540,8 @@ export class ChatClienteComponent implements OnInit {
           const audioBlob = new Blob(audioChunks, { 'type': 'audio/wav; base64' });
           var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.ogg');
           delete c.mediaRecorder;
-          var duration = Math.floor(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
-          // console.log(duration);
+          var duration = Math.ceil(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
+          
           this.adjuntarNotaVoz(c, voice_file, duration);
           if (!detenido) {
             detenido = true;

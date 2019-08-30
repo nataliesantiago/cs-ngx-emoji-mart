@@ -91,7 +91,7 @@ export class ChatExpertoComponent {
         this.user.filas.forEach(f => {
           let cola = this.fireStore.collection('categorias_experticia/' + f.id_categoria_experticia + '/chats').valueChanges();
           cola.subscribe(chats => {
-            // // console.log(chats);
+            
             chats.forEach((c: any) => {
               let refConversacion = c.conversacion;
             })
@@ -239,8 +239,8 @@ export class ChatExpertoComponent {
     m.audio = audio;
     audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
-      m.audioControls.max = Math.floor(target.duration);
-      //// console.log('Entro', e);
+      m.audioControls.max = Math.ceil(target.duration);
+      
     });
     audio.addEventListener('timeupdate', e => {
       let target = <HTMLAudioElement>e.target;
@@ -290,7 +290,7 @@ export class ChatExpertoComponent {
     }
   }
   cambiaScroll(e) {
-    // console.log(e);
+    
   }
   verNuevosMensajes(comp: PerfectScrollbarComponent, c: Conversacion) {
     this.ocultar_nuevos_mensajes = true;
@@ -408,12 +408,12 @@ export class ChatExpertoComponent {
   }
 
   adjuntarArchivo(c: Conversacion, evento: Event, form: HTMLFormElement, input: HTMLInputElement) {
-    // // console.log(evento);
+    
     let target = <any>evento.target;
     c.cargando_archivo = true;
     if (target.files && target.files.length > 0) {
       this.chatService.adjuntarArchivosServidor(target.files[0]).then(archivo => {
-        // // console.log(archivo);
+        
         c.archivo_adjunto = archivo;
         input.value = "";
         c.cargando_archivo = false;
@@ -427,7 +427,7 @@ export class ChatExpertoComponent {
   }
 
   adjuntarNotaVoz(c: Conversacion, file: File, duration: number) {
-    // // console.log(evento);
+    
     c.cargando_archivo = true;
     c.grabando_nota = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
@@ -469,8 +469,8 @@ export class ChatExpertoComponent {
           const audioBlob = new Blob(audioChunks);
           var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: "audio/wav" });
           delete c.mediaRecorder;
-          var duration = Math.floor(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
-          // console.log(duration);
+          var duration = Math.ceil(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
+          
           this.adjuntarNotaVoz(c, voice_file, duration);
           if (!detenido) {
             detenido = true;

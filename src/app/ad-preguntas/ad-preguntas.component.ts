@@ -17,7 +17,7 @@ import swal from 'sweetalert2';
 @Component({
   selector: 'app-ad-preguntas',
   templateUrl: './ad-preguntas.component.html',
-  styleUrls: ['./ad-preguntas.component.css']
+  styleUrls: ['./ad-preguntas.component.scss']
 })
 export class AdPreguntasComponent implements OnInit {
 
@@ -25,7 +25,7 @@ export class AdPreguntasComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['id', 'pregunta', 'id_producto', 'id_estado', 'fecha_modificacion', 'acciones'];
+  displayedColumns = ['acciones', 'id', 'pregunta', 'id_producto', 'id_estado', 'fecha_modificacion'];
   dataSource = new MatTableDataSource([]);
   productos = [];
   pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 3, id_estado_flujo: 4 };
@@ -35,18 +35,16 @@ export class AdPreguntasComponent implements OnInit {
   mostrar_fecha_ultima_modificacion = false;
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
     this.usuario = user.getUsuario();
-    // console.log(this.usuario);
+    
     this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
       if(d.success){
-        // console.log("funciona");
-        // console.log(d.usuario[0].idtbl_usuario);
+        
         this.id_usuario = d.usuario[0].idtbl_usuario;
       }
     })
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
-        // console.log("funciona");
-        // console.log(p.preguntas);
+        
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
@@ -70,8 +68,7 @@ export class AdPreguntasComponent implements OnInit {
       if(p.success){
         this.ajax.get('preguntas/obtener', {}).subscribe(p => {
           if(p.success){
-            // console.log("funciona");
-            // console.log(p.preguntas);
+            
             this.data = p.preguntas;
             this.dataSource = new MatTableDataSource(this.data);
             this.dataSource.paginator = this.paginator;
@@ -92,6 +89,10 @@ export class AdPreguntasComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  previsualizar(e) {
+    this.router.navigate(['/respuestas'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
   }
   
 

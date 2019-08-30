@@ -31,10 +31,10 @@
         <ng-container matColumnDef="acciones">
             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
             <mat-cell *matCellDef="let row" style="max-width:15%;">
-                <i *ngIf="!row.editando" class="ti-pencil text-info m-r-10" (click)="editarRegistro(row)"></i>
-                <i *ngIf="!row.editando" class="ti-trash text-danger m-r-10" (click)="eliminarRegistro(row)"></i>
-                <i *ngIf="row.editando" class="ti-save text-success m-r-10" (click)="guardarRegistro(row)"></i>
-                <i *ngIf="row.editando" class="ti-close text-danger m-r-10" (click)="cancelarEdicion(row)"></i>
+                <i *ngIf="!row.editando" class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                <i *ngIf="!row.editando" class="ti-trash text-danger m-r-10 mouse-over" (click)="eliminarRegistro(row)"></i>
+                <i *ngIf="row.editando" class="ti-save text-success m-r-10 mouse-over" (click)="guardarRegistro(row)"></i>
+                <i *ngIf="row.editando" class="ti-close text-danger m-r-10 mouse-over" (click)="cancelarEdicion(row)"></i>
             </mat-cell>
         </ng-container>
 

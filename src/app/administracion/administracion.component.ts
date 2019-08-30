@@ -14,7 +14,7 @@ import swal from 'sweetalert2';
 export class AdministracionComponent implements OnInit {
 
   items_administracion = [];
-  displayedColumns = ['id', 'nombre', 'valor', 'acciones'];
+  displayedColumns = ['acciones', 'id', 'nombre', 'valor'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
@@ -28,21 +28,19 @@ export class AdministracionComponent implements OnInit {
 
     this.ajax.get('administracion/obtener', {}).subscribe(p => {
       if(p.success){
-        // console.log("funciona");
-        // console.log(p.items);
+        
         this.items_administracion = p.items;
-        // console.log(this.items_administracion);
+        
         this.dataSource = new MatTableDataSource(this.items_administracion);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;                              
       }
     })
     this.usuario = user.getUsuario();
-    // console.log(this.usuario);
+    
     this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
       if(d.success){
-        // console.log("funciona");
-        // console.log(d.usuario[0].idtbl_usuario);
+        
         this.id_usuario = d.usuario[0].idtbl_usuario;        
       }
     });
@@ -76,7 +74,7 @@ export class AdministracionComponent implements OnInit {
       if (result.value) {
         this.ajax.post('administracion/editar', { item: u }).subscribe(d => {
           if(d.success){
-            // console.log("guardó editar");
+            
             u.editando = false;
             swal.fire(  
               'Se guardó el registro correctamente.',

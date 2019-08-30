@@ -98,8 +98,7 @@ export class HomeComponent implements OnInit {
         this.detectChanges();
         this.actionContext.runAction(message, this.currentLanguage);
 
-        // console.log(this.finalTranscript);
-        // console.log(`${message}`);
+        
       }
     });
 
@@ -157,10 +156,9 @@ export class HomeComponent implements OnInit {
     this.responseSearch.setActiveMostrarBarra(false);
     this.ajax.get('administracion/obtener-texto-home', {}).subscribe(p => {
       if(p.success){
-        // console.log("funciona");
-        // console.log(p.item);
+        
         this.texto_home = p.item[0].valor;
-        // console.log(this.texto_home);
+        
       }
     })
   }
@@ -243,12 +241,12 @@ export class HomeComponent implements OnInit {
   }
 
   buscar(metodo) {
-    // console.log('Esta es la busqueda ' + this.searchText);
+    
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = "";
     }
     this.responseSearch.setResultados(this.textopredictivo);
-    //// console.log('Este es el array', this.responseSearch.getResultados());
+    
     var date = new Date();
     var fecha =
       date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
@@ -260,7 +258,7 @@ export class HomeComponent implements OnInit {
       url: this.url
     };
     this.router.navigate(['/search/' + this.searchText]);
-    //this.homeService.guardarBusqueda(obj).subscribe(data =>{console.log(data)});
+    //this.homeService.guardarBusqueda(obj).subscribe(data =>{});
     this.nzone.run(() => this.stopRecognizer());
     this.stopRecognizer();
 

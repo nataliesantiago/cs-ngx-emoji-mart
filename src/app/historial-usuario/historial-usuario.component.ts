@@ -45,7 +45,7 @@ export class HistorialUsuarioComponent implements OnInit {
       data.url = data.url.toLowerCase();
       return data;
     }); */
-    // console.log(this.data);
+    
   }
 
   applyFilter(filterValue: string) {

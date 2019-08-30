@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
             return new Promise<boolean>(resolve => {
                 let data = JSON.parse(atob(d));
                 
-                //// console.log(data);
+                
                 let user = new User(data.email, data.token, data.nombre);
                 user.setId(data.idtbl_usuario);
                 user.setIdPerfil(data.id_perfil);
@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                 user.url_foto = data.foto;
                 this.userService.setUsuario(user);
                 localStorage.setItem("token", data.token);
-                // // console.log('usuario d', this.userService.getUsuario());
+                
                 this.router.navigate(['home']);
                 setTimeout(() => {
                     resolve(true);
@@ -42,7 +42,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
             })
 
         } else if (this.userService.getUsuario()) {
-            // // console.log('usuario', this.userService.getUsuario());
+            
             this.responseSearch.setActive(false);
             return new Promise<boolean>(resolve => {
                 setTimeout(() => {
@@ -91,7 +91,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         }
     }
     canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-        // console.log('pp')
+        
         return true;
     }
     isAuthenticated() {

@@ -89,7 +89,7 @@ export class AutosizeDirective implements AfterViewInit {
 
     adjust(): void {
         /* // perform height adjustments after input changes, if height is different
-         // console.log(this.el.style.height, this.element.nativeElement.scrollHeight);
+         
          if (this.el.style.height == this.element.nativeElement.scrollHeight + 'px') {
              return;
          }

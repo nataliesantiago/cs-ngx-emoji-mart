@@ -1,15 +1,27 @@
 <div fxLayout="row wrap" style="text-align: center;">
         <!-- column -->
         <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
-            <mat-card (click)="cargarCuraduria()">
-                <mat-card-content>
+            <mat-card *ngIf="activo_curaduria" class="activo mouse-over" (click)="cargarCuraduria()">
+                <mat-card-content>  
                     <!-- Row -->
                     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
                         <div>
                             <h3 class="m-0">{{cant_curaduria}}</h3>
                             <h6 class="text-muted m-0">En Flujo de Curaduria</h6>
                         </div>
-    
+
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="!activo_curaduria" class="mouse-over" (click)="cargarCuraduria()">
+                <mat-card-content>  
+                    <!-- Row -->
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                        <div>
+                            <h3 class="m-0">{{cant_curaduria}}</h3>
+                            <h6 class="text-muted m-0">En Flujo de Curaduria</h6>
+                        </div>
+
                     </div>
                 </mat-card-content>
             </mat-card>
@@ -17,7 +29,20 @@
         <!-- column -->
         <!-- column -->
         <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
-            <mat-card (click)="cargarRevision()">
+            <mat-card *ngIf="activo_revision" class="activo mouse-over" (click)="cargarRevision()">
+                <mat-card-content>
+                    <!-- Row -->
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                        <!-- column -->
+                        <div>
+                            <h3 class="m-0">{{cant_revision}}</h3>
+                            <h6 class="text-muted m-0">En Flujo de Revisión</h6>
+                        </div>
+    
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="!activo_revision" class="mouse-over" (click)="cargarRevision()">
                 <mat-card-content>
                     <!-- Row -->
                     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -34,7 +59,20 @@
         <!-- column -->
         <!-- column -->
         <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
-            <mat-card (click)="cargarAprobacion()">
+            <mat-card *ngIf="activo_aprobacion" class="activo mouse-over" (click)="cargarAprobacion()">
+                <mat-card-content>
+                    <!-- Row -->
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                        <!-- column -->
+                        <div>
+                            <h3 class="m-0">{{cant_aprobacion}}</h3>
+                            <h6 class="text-muted m-0">En Estado por Aprobar</h6>
+                        </div>
+    
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="!activo_aprobacion" class="mouse-over" (click)="cargarAprobacion()">
                 <mat-card-content>
                     <!-- Row -->
                     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -51,7 +89,20 @@
         <!-- column -->
         <!-- column -->
         <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
-            <mat-card (click)="cargarAprobados()">
+            <mat-card *ngIf="activo_aprobados" class="activo mouse-over" (click)="cargarAprobados()">
+                <mat-card-content>
+                    <!-- Row -->
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                        <!-- column -->
+                        <div>
+                            <h3 class="m-0">{{cant_aprobados}}</h3>
+                            <h6 class="text-muted m-0">Aprobadas</h6>
+                        </div>
+    
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="!activo_aprobados" class="mouse-over" (click)="cargarAprobados()">
                 <mat-card-content>
                     <!-- Row -->
                     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -124,9 +175,9 @@
                       <ng-container matColumnDef="acciones">
                           <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>
                           <mat-cell *matCellDef="let row" style="max-width:10%;">
-                              <i class="ti-pencil text-info m-r-10" (click)="cambiarEstado(row)"></i>
-                              <i class="ti-comment-alt text-info m-r-10" (click)="comentarios(row)"></i>
-                              <i class="ti-eye text-info m-r-10" (click)="previsualizar(row)"></i>
+                              <i class="ti-pencil text-info m-r-10 mouse-over" (click)="cambiarEstado(row)"></i>
+                              <i class="ti-comment-alt text-info m-r-10 mouse-over" (click)="comentarios(row)"></i>
+                              <i class="ti-eye text-info m-r-10 mouse-over" (click)="previsualizar(row)"></i>
                           </mat-cell>
                       </ng-container>
 

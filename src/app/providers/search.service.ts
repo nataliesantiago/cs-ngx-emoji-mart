@@ -13,7 +13,7 @@ export class SearchService {
 
 
   autocompleteText(query: any) {
-    // console.log(query)
+    
     var base64 = window.btoa(query);
     const url_api = `home/consultar/${base64}`;
     return this.ajax.get(url_api, {});
