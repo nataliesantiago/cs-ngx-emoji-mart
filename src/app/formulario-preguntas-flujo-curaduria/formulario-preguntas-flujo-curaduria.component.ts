@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -18,7 +18,7 @@ import { QuillService } from '../providers/quill.service';
 export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   productos = [];
-  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 3, muestra_fecha_actualizacion: 0};
+  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 3, muestra_fecha_actualizacion: 0, id_usuario_revision: null };
   segmentos = [];
   subrespuestas = [];
   subrespuestas_segmentos = [];
@@ -50,30 +50,30 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   notas_mostrar = [];
   validar_flujo;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) { 
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-      if(p.success){
+      if (p.success) {
         this.preguntas_todas = p.preguntas;
       }
     })
     this.usuario = user.getUsuario();
-    
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
-      if(d.success){
-        this.id_usuario = d.usuario[0].idtbl_usuario;        
+
+    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo }).subscribe(d => {
+      if (d.success) {
+        this.id_usuario = d.usuario[0].idtbl_usuario;
       }
     });
     this.ajax.get('user/obtener-todos', {}).subscribe(d => {
-      if(d.success){
-        this.todos_usuarios = d.usuario;        
+      if (d.success) {
+        this.todos_usuarios = d.usuario;
       }
     });
   }
 
-  quillModulesFc(ql: any){
+  quillModulesFc(ql: any) {
     //let toolbar = ql.getModule('toolbar');
     //ql.modules = JSON.parse(JSON.stringify(this.quillModules));
-    setTimeout(()=>{ql.getModule('toolbar').addHandler('image', ()=>{this.qs.fileStorageHandler(ql)});}, 1000);
+    setTimeout(() => { ql.getModule('toolbar').addHandler('image', () => { this.qs.fileStorageHandler(ql) }); }, 1000);
     /*let m = {
       syntax: true,
       toolbar: {
@@ -87,87 +87,87 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   ngOnInit() {
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-      if(p.success){
-        
+      if (p.success) {
+
         this.options = p.preguntas;
         /*for(let i = 0; i < p.preguntas.length; i++){
           this.options.push(p.preguntas[i].titulo);
         }*/
-        
+
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => this._filter(value))
         );
       }
     })
-    
+
     this.route.queryParams
       .filter(params => params.id_pregunta)
       .subscribe(params => {
-        
+
 
         this.id_pregunta_editar = params.id_pregunta;
-        
+
       });
 
-    this.ajax.get('producto/obtener', { }).subscribe(d => {
-      if(d.success){
-        
+    this.ajax.get('producto/obtener', {}).subscribe(d => {
+      if (d.success) {
+
         this.productos = d.productos;
-        if(this.id_pregunta_editar){
-          if(this.id_pregunta_editar != "sugerida"){
+        if (this.id_pregunta_editar) {
+          if (this.id_pregunta_editar != "sugerida") {
             this.editar = true;
             this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(p => {
-              if(p.success){
-                
+              if (p.success) {
+
                 this.pregunta = p.pregunta[0];
                 this.validar_flujo = p.pregunta[0].id_usuario_revision;
-                
+
                 this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
                 this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sr => {
-                  if(sr.success){
-                    
-                    this.subrespuestas = sr.subrespuesta;   
-                    for(let i = 0; i < this.subrespuestas.length; i++){
+                  if (sr.success) {
+
+                    this.subrespuestas = sr.subrespuesta;
+                    for (let i = 0; i < this.subrespuestas.length; i++) {
                       this.subrespuestas[i].respuesta = this.subrespuestas[i].texto;
-                    }               
-                    
+                    }
+
                     this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sg => {
-                      if(sg.success){
-                        
+                      if (sg.success) {
+
                         this.segmentos = sg.segmentos;
-                        for(let i = 0; i < this.segmentos.length; i++){
+                        for (let i = 0; i < this.segmentos.length; i++) {
                           this.segmentos[i].respuesta = this.segmentos[i].texto;
                         }
-                        
+
                         this.ajax.get('preguntas/obtener-subrespuesta-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(srsg => {
-                          if(srsg.success){
-                            
+                          if (srsg.success) {
+
                             this.array_mostrar = srsg.subrespuestaSegmento;
-                            for(let i = 0; i < this.array_mostrar.length; i++){
+                            for (let i = 0; i < this.array_mostrar.length; i++) {
                               this.array_mostrar[i].respuesta = this.array_mostrar[i].texto;
-                              for(let j = 0; j < this.segmentos.length; j++){
-                                if(this.array_mostrar[i].id_segmento == this.segmentos[j].idtbl_segmento){
+                              for (let j = 0; j < this.segmentos.length; j++) {
+                                if (this.array_mostrar[i].id_segmento == this.segmentos[j].idtbl_segmento) {
                                   this.array_mostrar[i].pos_segmento = j;
                                   j = this.segmentos.length + 1;
                                 }
                               }
                             }
-                            
+
                             this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(pras => {
-                              if(pras.success){
-                                
+                              if (pras.success) {
+
                                 this.preguntas_adicion = pras.preguntas_asociadas;
                                 this.dataSource = new MatTableDataSource(this.preguntas_adicion);
                                 this.dataSource.paginator = this.paginator;
-                                this.dataSource.sort = this.sort;                              
+                                this.dataSource.sort = this.sort;
                                 this.ajax.get('preguntas/obtener-comentarios-pregunta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(com => {
-                                  if(com.success){
-                                    
+                                  if (com.success) {
+
                                     this.notas_mostrar = com.comentarios;
                                     this.cg.detectChanges();
                                   }
-                                })       
+                                })
                               }
                             })
                           }
@@ -176,7 +176,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                     })
                   }
                 })
-                
+
               }
             })
           }
@@ -184,115 +184,115 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       }
     })
 
-    this.ajax.get('estado-pregunta/obtener', { }).subscribe(d => {
-      if(d.success){
-        
+    this.ajax.get('estado-pregunta/obtener', {}).subscribe(d => {
+      if (d.success) {
+
         this.estados_pregunta = d.estados_pregunta;
       }
     })
 
   }
 
-  guardarPregunta(){
+  guardarPregunta() {
 
-    if(this.editar){
-      
-      if(this.pregunta.muestra_fecha_actualizacion){
+    if (this.editar) {
+
+      if (this.pregunta.muestra_fecha_actualizacion) {
         this.pregunta.muestra_fecha_actualizacion = 1;
-      }else{
+      } else {
         this.pregunta.muestra_fecha_actualizacion = 0;
       }
-      if(this.pregunta.id_estado_flujo == 1){
+      if (this.pregunta.id_estado_flujo == 1) {
         this.pregunta.id_estado_flujo = 2;
-      }else if(this.pregunta.id_estado_flujo == 2){
+      } else if (this.pregunta.id_estado_flujo == 2) {
         this.pregunta.id_estado_flujo = 3;
-      }else if(this.pregunta.id_estado_flujo == 3){
+      } else if (this.pregunta.id_estado_flujo == 3) {
         this.pregunta.id_estado_flujo = 4;
-      }else if(this.pregunta.id_estado_flujo == 4){
+      } else if (this.pregunta.id_estado_flujo == 4) {
         this.pregunta.id_estado_flujo = 3;
       }
 
-      if(!this.validar_flujo && this.id_pregunta_editar != "sugerida"){
+      if (!this.validar_flujo && this.id_pregunta_editar != "sugerida") {
         this.pregunta.id_estado_flujo = 1;
       }
-      
+
       //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-      for(let i = 0; i < this.array_mostrar.length; i++){
+      for (let i = 0; i < this.array_mostrar.length; i++) {
         this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
       }
       this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
-        if(d.success){
-          
+        if (d.success) {
+
           this.router.navigate(['/flujo-curaduria']);
         }
       })
-    }else{
-      
-      if(this.pregunta.muestra_fecha_actualizacion){
+    } else {
+
+      if (this.pregunta.muestra_fecha_actualizacion) {
         this.pregunta.muestra_fecha_actualizacion = 1;
-      }else{
+      } else {
         this.pregunta.muestra_fecha_actualizacion = 0;
       }
       this.pregunta.id_usuario = this.id_usuario;
       //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-      for(let i = 0; i < this.array_mostrar.length; i++){
+      for (let i = 0; i < this.array_mostrar.length; i++) {
         this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
       }
-      if(this.id_pregunta_editar == "sugerida"){
+      if (this.id_pregunta_editar == "sugerida") {
         this.pregunta.id_estado_flujo = 2;
       }
-      
+
       this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
-        if(d.success){
-          
+        if (d.success) {
+
           this.router.navigate(['/flujo-curaduria']);
         }
       })
     }
 
-    
+
   }
 
-  rechazarPregunta(){
+  rechazarPregunta() {
 
-    
-    if(this.pregunta.muestra_fecha_actualizacion){
+
+    if (this.pregunta.muestra_fecha_actualizacion) {
       this.pregunta.muestra_fecha_actualizacion = 1;
-    }else{
+    } else {
       this.pregunta.muestra_fecha_actualizacion = 0;
     }
-    if(this.pregunta.id_estado_flujo == 2){
+    if (this.pregunta.id_estado_flujo == 2) {
       this.pregunta.id_estado_flujo = 1;
-    }else if(this.pregunta.id_estado_flujo == 3){
+    } else if (this.pregunta.id_estado_flujo == 3) {
       this.pregunta.id_estado_flujo = 2;
-    }else if(this.pregunta.id_estado_flujo == 4){
+    } else if (this.pregunta.id_estado_flujo == 4) {
       this.pregunta.id_estado_flujo = 3;
     }
-    
+
     this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-    for(let i = 0; i < this.array_mostrar.length; i++){
+    for (let i = 0; i < this.array_mostrar.length; i++) {
       this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
     }
     this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
-      if(d.success){
-        
+      if (d.success) {
+
         this.router.navigate(['/flujo-curaduria']);
       }
     })
 
-    
+
   }
 
-  anadirSegmento(){
-    this.segmentos.push({ titulo: '', respuesta: ''});
+  anadirSegmento() {
+    this.segmentos.push({ titulo: '', respuesta: '' });
   }
 
-  anadirSubRespuesta(){
-    this.subrespuestas.push({ titulo: '', respuesta: '', posicion: '', categoria: ''});
+  anadirSubRespuesta() {
+    this.subrespuestas.push({ titulo: '', respuesta: '', posicion: '', categoria: '' });
   }
 
-  eliminarSegmento(e, pos){
-    
+  eliminarSegmento(e, pos) {
+
     swal.fire({
       title: 'Eliminar Segmento',
       text: "Confirme para eliminar el segmento",
@@ -303,14 +303,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       confirmButtonText: 'Eliminar'
     }).then((result) => {
       if (result.value) {
-        if(this.editar){
-          
-          if(e.idtbl_segmento != undefined){
+        if (this.editar) {
+
+          if (e.idtbl_segmento != undefined) {
             this.ajax.post('preguntas/eliminar-segmento', { segmento: e }).subscribe(d => {
-              if(d.success){
+              if (d.success) {
                 this.segmentos.splice(pos, 1);
-                for(let i = 0; i < this.array_mostrar.length; i++){
-                  if(this.array_mostrar[i].pos_segmento == pos){
+                for (let i = 0; i < this.array_mostrar.length; i++) {
+                  if (this.array_mostrar[i].pos_segmento == pos) {
                     this.array_mostrar.splice(i, 1);
                     i = 0;
                   }
@@ -323,26 +323,26 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                 )
               }
             })
-          }else{
+          } else {
             this.segmentos.splice(pos, 1);
-            for(let i = 0; i < this.array_mostrar.length; i++){
-              if(this.array_mostrar[i].pos_segmento == pos){
+            for (let i = 0; i < this.array_mostrar.length; i++) {
+              if (this.array_mostrar[i].pos_segmento == pos) {
                 this.array_mostrar.splice(i, 1);
                 i = 0;
               }
             }
             this.cg.detectChanges();
-            
+
             swal.fire(
               'Eliminado',
               'El segmento fue eliminado con exito.',
               'success'
             )
           }
-        }else{
+        } else {
           this.segmentos.splice(pos, 1);
-          for(let i = 0; i < this.array_mostrar.length; i++){
-            if(this.array_mostrar[i].pos_segmento == pos){
+          for (let i = 0; i < this.array_mostrar.length; i++) {
+            if (this.array_mostrar[i].pos_segmento == pos) {
               this.array_mostrar.splice(i, 1);
               i = 0;
             }
@@ -358,7 +358,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
-  eliminarSubRespuesta(e, pos){
+  eliminarSubRespuesta(e, pos) {
     swal.fire({
       title: 'Eliminar Subrespuesta',
       text: "Confirme para eliminar la subrespuesta",
@@ -369,11 +369,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       confirmButtonText: 'Eliminar'
     }).then((result) => {
       if (result.value) {
-        if(this.editar){
-          
-          if(e.idtbl_subrespuesta != undefined){
+        if (this.editar) {
+
+          if (e.idtbl_subrespuesta != undefined) {
             this.ajax.post('preguntas/eliminar-subrespuesta', { subrespuesta: e }).subscribe(d => {
-              if(d.success){
+              if (d.success) {
                 this.subrespuestas.splice(pos, 1);
                 this.cg.detectChanges();
                 swal.fire(
@@ -383,7 +383,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                 )
               }
             })
-          }else{
+          } else {
             this.subrespuestas.splice(pos, 1);
             this.cg.detectChanges();
             swal.fire(
@@ -392,7 +392,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               'success'
             )
           }
-        }else{
+        } else {
           this.subrespuestas.splice(pos, 1);
           this.cg.detectChanges();
           swal.fire(
@@ -405,7 +405,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
-  validarSegmento(e){
+  validarSegmento(e) {
     /*this.array_mostrar = [];
     this.cant_subrespuestas_segmento = 0;
     for(let i of this.subrespuestas_segmentos){
@@ -415,18 +415,18 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     }*/
   }
 
-  anadirSubRespuestaSegmento(e){
-    this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: e, segmento: ''});
-    
+  anadirSubRespuestaSegmento(e) {
+    this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: e, segmento: '' });
+
     /*for(let i of this.subrespuestas_segmentos){
       if(i.pos_segmento == e){
         this.array_mostrar.push(i);
       }
     }*/
-    
+
   }
 
-  eliminarSubRespuestaSegmento(e, pos){
+  eliminarSubRespuestaSegmento(e, pos) {
     swal.fire({
       title: 'Eliminar Subrespuesta del segmento',
       text: "Confirme para eliminar la subrespuesta del segmento",
@@ -437,11 +437,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       confirmButtonText: 'Eliminar'
     }).then((result) => {
       if (result.value) {
-        if(this.editar){
-          
-          if(e.idtbl_subrespuesta != undefined){
+        if (this.editar) {
+
+          if (e.idtbl_subrespuesta != undefined) {
             this.ajax.post('preguntas/eliminar-subrespuesta', { subrespuesta: e }).subscribe(d => {
-              if(d.success){
+              if (d.success) {
                 this.array_mostrar.splice(pos, 1);
                 this.cg.detectChanges();
                 swal.fire(
@@ -451,7 +451,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                 )
               }
             })
-          }else{
+          } else {
             this.array_mostrar.splice(pos, 1);
             this.cg.detectChanges();
             swal.fire(
@@ -460,7 +460,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               'success'
             )
           }
-        }else{
+        } else {
           this.array_mostrar.splice(pos, 1);
           this.cg.detectChanges();
           swal.fire(
@@ -474,24 +474,24 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   private _filter(value: any): string[] {
-    
-    if(value.titulo){
+
+    if (value.titulo) {
       const filterValue = value.titulo.toLowerCase();
       return this.options.filter(option => option.titulo.toLowerCase().indexOf(filterValue) === 0);
-    }else{
+    } else {
       const filterValue = value.toLowerCase();
       return this.options.filter(option => option.titulo.toLowerCase().indexOf(filterValue) === 0);
     }
-    
+
   }
 
-  anadirPreguntaAsociada(e){
+  anadirPreguntaAsociada(e) {
     this.preguntas_adicion.push(e);
-    
+
     this.dataSource = new MatTableDataSource(this.preguntas_adicion);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    
+
     this.myControl = new FormControl(e.titulo);
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
@@ -500,7 +500,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     this.cg.detectChanges();
   }
 
-  borrarElemento(e){
+  borrarElemento(e) {
 
     swal.fire({
       title: 'Desasociar pregunta',
@@ -512,17 +512,17 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       confirmButtonText: 'Eliminar'
     }).then((result) => {
       if (result.value) {
-        if(this.editar){
-          if(e.idtbl_respuesta_asociada != undefined){
+        if (this.editar) {
+          if (e.idtbl_respuesta_asociada != undefined) {
             this.ajax.post('preguntas/eliminar-asociacion', { preguna_asociada: e }).subscribe(d => {
-              if(d.success){
+              if (d.success) {
                 let pos = 0;
-                for(let i = 0; i < this.preguntas_adicion.length; i++){
-                  if(this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta){
+                for (let i = 0; i < this.preguntas_adicion.length; i++) {
+                  if (this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta) {
                     pos = i;
                   }
                 }
-                this.preguntas_adicion.splice(pos,1);
+                this.preguntas_adicion.splice(pos, 1);
                 this.dataSource = new MatTableDataSource(this.preguntas_adicion);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
@@ -534,14 +534,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                 )
               }
             })
-          }else{
+          } else {
             let pos = 0;
-            for(let i = 0; i < this.preguntas_adicion.length; i++){
-              if(this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta){
+            for (let i = 0; i < this.preguntas_adicion.length; i++) {
+              if (this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta) {
                 pos = i;
               }
             }
-            this.preguntas_adicion.splice(pos,1);
+            this.preguntas_adicion.splice(pos, 1);
             this.dataSource = new MatTableDataSource(this.preguntas_adicion);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -552,14 +552,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               'success'
             )
           }
-        }else{
+        } else {
           let pos = 0;
-          for(let i = 0; i < this.preguntas_adicion.length; i++){
-            if(this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta){
+          for (let i = 0; i < this.preguntas_adicion.length; i++) {
+            if (this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta) {
               pos = i;
             }
           }
-          this.preguntas_adicion.splice(pos,1);
+          this.preguntas_adicion.splice(pos, 1);
           this.dataSource = new MatTableDataSource(this.preguntas_adicion);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

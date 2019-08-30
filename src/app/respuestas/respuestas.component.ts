@@ -14,7 +14,7 @@ export class RespuestasComponent implements OnInit {
   id_pregunta_visualizar;
   id_usuario;
   usuario;
-  pregunta = [];
+  pregunta:any;
   subrespuestas = [];
   segmentos = [];
   array_mostrar = [];

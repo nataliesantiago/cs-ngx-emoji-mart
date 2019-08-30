@@ -30,7 +30,8 @@ export class UserService {
 
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore) {
 
-        this.ajax.sethost('http://localhost:8080/api/');
+        this.ajax.sethost('http://localhost:8080/api/'); // Desarrollo
+        //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
         window.onbeforeunload = () => {
             if (this.user && this.user.getIdRol() == 2) {
                 this.setActivoExperto(false);
@@ -67,7 +68,7 @@ export class UserService {
         }
         let messaging = firebase.messaging();
         messaging.onMessage((payload: any) => {
-            
+
             if (this.planeaciones_creadas.indexOf(payload.data.id_planeacion) == (-1)) {
                 this.planeaciones_creadas.push(payload.data.id_planeacion);
 
@@ -77,7 +78,7 @@ export class UserService {
         });
         messaging.requestPermission()
             .then(() => {
-                
+
                 // TODO(developer): Retrieve an Instance ID token for use with FCM.
                 // ...
                 messaging.getToken()
@@ -88,21 +89,21 @@ export class UserService {
                             this.enviarToeknServidor(currentToken);
                         } else {
                             // Show permission request.
-                            
+
                             // Show permission UI.
                             //updateUIForPushPermissionRequired();
                             //setTokenSentToServer(false);
                         }
                     })
                     .catch(function (err) {
-                        
+
                         //showToken('Error retrieving Instance ID token. ', err);
                         // setTokenSentToServer(false);
                     });
                 messaging.onTokenRefresh(() => {
                     messaging.getToken()
                         .then((refreshedToken) => {
-                            
+
                             this.enviarToeknServidor(refreshedToken);
                             // Indicate that the new Instance ID token has not yet been sent to the
                             // app server.
@@ -112,7 +113,7 @@ export class UserService {
                             // ...
                         })
                         .catch(function (err) {
-                            
+
                             //showToken('Unable to retrieve refreshed token ', err);
                         });
                 });
@@ -121,7 +122,7 @@ export class UserService {
 
             })
             .catch(function (err) {
-                
+
             });
 
     }
@@ -133,7 +134,7 @@ export class UserService {
 
             this.ref.set(this.este);
             this.ref.on('value', snap => {
-                
+
                 if (snap.val() != this.este) {
                     alert('Su sesión se inició desde otro dispositivo o ventana');
                     this.ref.off();
@@ -142,7 +143,7 @@ export class UserService {
             });
         }).catch(error => {
             // Handle Errors here.
-            
+
 
         });
     }
@@ -201,7 +202,7 @@ export class UserService {
 
     enviarToeknServidor(token) {
         this.ajax.post('usuario/firebase/actualiza-token', { id_usuario: this.user.idtbl_usuario, token: token }).subscribe(data => {
-            
+
         });
     }
 
@@ -253,7 +254,7 @@ export class UserService {
         })
     }
 
-    
+
 
 
 

@@ -2,8 +2,6 @@
   <div class="content">
     <div class="contenedores-chat">
       <!--<button mat-fab color="primary" (click)="openChat()" class="boton-abrir-chat">Chat</button>-->
-
-      {{texto_mensaje}}
       <div *ngFor="let chat of chats" class="panel-chat" [ngClass]="{'minimizado':chat.minimizado}">
         <div fxLayout="row" fxLayoutAlign="center start" class="subpanel">
           <div fxFlex.gt-md="100" fxFlex.gt-sm="100" fxFlex="100" class="hijo">
