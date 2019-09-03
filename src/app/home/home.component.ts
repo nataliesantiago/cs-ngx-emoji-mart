@@ -17,6 +17,7 @@ import { ActionContext } from "./web-speech/shared/model/strategy/action-context
 import { AutenticationService } from "../services/autenticacion.service";
 import { AjaxService } from '../providers/ajax.service';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { UserService } from '../providers/user.service';
 
 @Component({
   selector: "app-home",
@@ -26,6 +27,10 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 export class HomeComponent implements OnInit {
 
   texto_home = "";
+  nuevos_contenidos = [];
+  usuario;
+  correo_usuario = "";
+  validacion_pais_usuario = [];
   url: String = "";
   metodo = 1;
   public def = new FormControl(""); // Model del autocomplete
@@ -151,6 +156,7 @@ export class HomeComponent implements OnInit {
     private nzone: NgZone,
     private autenticationService: AutenticationService,
     private ajax: AjaxService,
+    private user: UserService
   ) {
     this.searchText = "";
     this.responseSearch.setActiveMostrarBarra(false);
@@ -161,6 +167,26 @@ export class HomeComponent implements OnInit {
         
       }
     })
+
+    this.usuario = user.getUsuario();
+    
+    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
+      if(d.success){
+        
+        this.correo_usuario = d.usuario[0].correo;
+        this.validacion_pais_usuario = this.correo_usuario.split(".");
+        this.correo_usuario = this.validacion_pais_usuario[(this.validacion_pais_usuario.length - 1)];
+      }
+    })
+
+    this.ajax.get('preguntas/obtener-home', {}).subscribe(p => {
+      if(p.success){
+        
+        this.nuevos_contenidos = p.preguntas;
+        
+      }
+    })
+      
   }
 
   /**

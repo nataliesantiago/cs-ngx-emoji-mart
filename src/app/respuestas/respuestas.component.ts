@@ -253,7 +253,7 @@ export class RespuestasComponent implements OnInit {
           }).then((result) => {
             if (result.value) {
               swal.fire(  
-                'Supongamos que se abre el chat',
+                'Se abre el chat',
               )
             }
           })  
