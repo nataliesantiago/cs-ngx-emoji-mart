@@ -1,0 +1,134 @@
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div class="main-container">
+    <!-- ============================================================== -->
+    <!-- Topbar - style you can find in header.scss -->
+    <!-- ============================================================== -->
+    <mat-toolbar color="primary" class="topbar telative">
+        <!-- ============================================================== -->
+        <!-- Logo - style you can find in header.scss -->
+        <!-- ============================================================== -->
+        <div class="navbar-header">
+            <div id="search-bar" class="up" *ngIf="responseSearch.isActiveMostrarBarra()">
+                <span><img src="../../assets/images/Lupa.svg" (click)="buscar2()" alt="icone de recherche" width="35px"
+                        class="img_lupa"></span>
+                <div class="image-upload">
+                    <label for="file-input">
+                        <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span
+                                class="tooltip">Buscar por
+                                imágenes</span></i>
+                    </label>
+                    <!-- <input id="file-input" (change)="onFileSelected($event)" type="file" /> -->
+                    <input id="file-input" type="file" />
+                </div>
+
+                <!-- <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true" (click)="startButton($event)"><span id="voice-search" class="tooltip">Búsqueda por
+                        voz</span></i> -->
+                <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span
+                        id="voice-search" class="tooltip">Búsqueda por
+                        voz</span></i>
+
+                <div class="contenedor">
+                    <ng-autocomplete id="ng-autocomplete-search" placeHolder="Describe tu problema. "
+                        [data]="textopredictivo" [searchKeyword]="keyword" (selected)='selectEvent($event)'
+                        (inputChanged)='onChangeSearch($event)' [itemTemplate]="itemTemplate" [formControl]="def"
+                        [notFoundTemplate]="notFoundTemplate">
+                    </ng-autocomplete>
+
+
+                    <ng-template #itemTemplate let-item id="value-text">
+                        <a [innerHTML]="item.title"></a>
+                    </ng-template>
+
+                    <!-- <ng-template #notFoundTemplate let-notFound>
+                                    <div [innerHTML]="textError"></div>
+                                </ng-template> -->
+                </div>
+                <div>
+                    <div *ngFor="let data of dataImage ; let i = index" style="display: inline-block">
+                        <div (click)="selectLabel(data,i)" class="labelImage">{{ data }}</div>
+                    </div>
+                </div>
+            </div>
+            <a class="navbar-brand" href="index.html">
+                <!-- Logo icon -->
+                <b>
+                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                    <!-- Dark Logo icon -->
+                    <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo">
+                    <!-- Light Logo icon -->
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text -->
+                <span fxShow="false" fxShow.gt-xs>
+                    <!-- dark Logo text -->
+                    <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo">
+                </span>
+            </a>
+            <!-- <div>
+                <div id="search-bar" class="up">
+                    <span><img src="../../../assets/images/Lupa.svg"
+                 alt="icone de recherche" width="35px" class="img_lupa"></span>
+                    <input type="search" placeholder="Describe el problema." id="src-b">
+                    <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
+                            imágenes</span></i>
+                    <i class="fa fa-microphone microfono tooltip-container" aria-hidden="true"><span class="tooltip">Búsqueda por
+                            voz</span></i>
+
+                </div>
+            </div> -->
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- sidebar toggle -->
+        <!-- ============================================================== -->
+
+        <button mat-icon-button (click)="snav.toggle()" value="sidebarclosed" class="btn_close">
+            <mat-icon class="gris-icon">menu</mat-icon>
+        </button>
+        <label class="comunidad_titulo" (click)="irHome()" >Comunidad Soporte</label>
+        <span fxFlex></span>
+        <!-- ============================================================== -->
+        <!-- app header component - style you can find in header.scss / header.component.ts-->
+        <!-- ============================================================== -->
+        <app-header></app-header>
+    </mat-toolbar>
+    <!-- ============================================================== -->
+    <!-- End Topbar - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0"
+        [ngClass]="{'minisidebar': minisidebar}">
+        <!-- ============================================================== -->
+        <!-- Sidebar - style you can find in sidebar.scss -->
+        <!-- ============================================================== -->
+        <mat-sidenav #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0" [opened]="false"
+            (open)="sidebarOpened = true" (close)="sidebarOpened = false" (backdropClick)="close('backdrop')">
+
+            <app-sidebar></app-sidebar>
+
+
+        </mat-sidenav>
+        <!-- ============================================================== -->
+        <!-- Sidebar - style you can find in sidebar.scss -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- Page container - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <mat-sidenav-content class="page-wrapper">
+
+            <div class="page-content">
+
+                <router-outlet>
+                    <app-spinner></app-spinner>
+                </router-outlet>
+
+            </div>
+
+        </mat-sidenav-content>
+        <!-- ============================================================== -->
+        <!-- Page container - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+    </mat-sidenav-container>
+</div>

@@ -1,0 +1,86 @@
+<div class="contendor-principal">
+  <mat-card *ngIf="creando_extension">
+    <mat-card-content>
+      <mat-card-title>Basic Inputs</mat-card-title>
+
+      <form class="m-t-20">
+        <mat-form-field class="example-full-width">
+          <input matInput name="extension" placeholder="Extension ejp: jpg, xls, gif" value="" maxlength="45"
+            type="text" #extension="ngModel" [(ngModel)]="nueva_extension.extension" pattern="[a-z]*"
+            autocomplete="off">
+          <mat-error *ngIf="extension.invalid">La extensión
+            no debe contener "." ni ningún otro caracter especial
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Tamaño máximo en megabytes(Mb)" min="1" type="number" #size="ngModel" name="size"
+            pattern="^[1-9]+([0-9]*)$" [(ngModel)]="nueva_extension.megabytes_maximos">
+          <mat-error *ngIf="size.invalid">El tamaño debe ser mínimo 1
+          </mat-error>
+        </mat-form-field>
+        <div>
+          <button mat-raised-button color="primary" [disabled]="extension.invalid || size.invalid"
+            (click)="crearExtension()">Crear</button> &nbsp;
+          <button mat-raised-button color="basic" (click)="creando_extension=!creando_extension">Cancelar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <div class="botones" *ngIf="!creando_extension">
+    <button mat-button color="primary" (click)="creando_extension=!creando_extension">
+      <mat-icon>add</mat-icon> Crear Extension
+    </button>
+  </div>
+  <div class="p-10 p-r-20 p-l-20">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+  <div class="responsive-table">
+    <mat-table [dataSource]="dataSource" matSort>
+
+
+
+      <!-- Progress Column -->
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <div *ngIf="!row.editando">
+            <mat-icon class="pointer" (click)="row.editando=true">edit</mat-icon>
+            <mat-icon class="pointer" (click)="eliminarExtension(row)">delete</mat-icon>
+          </div>
+          <div *ngIf="row.editando">
+            <mat-icon class="pointer" (click)="editarExtension(row)">check</mat-icon>
+            <mat-icon class="pointer" (click)="row.editando=false">clear</mat-icon>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="extension">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Extensión </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.extension}} </mat-cell>
+      </ng-container>
+
+      <!-- Color Column -->
+      <ng-container matColumnDef="size">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Megabytes </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <span *ngIf="!row.editando">{{row.megabytes_maximos}}mb</span>
+          <mat-form-field *ngIf="row.editando">
+            <input matInput placeholder="Tamaño máximo en megabytes(Mb)" min="1" type="number" name="size"
+              [formControl]="row.control_megabytes" [(ngModel)]="row.megas_tmp">
+            <mat-error *ngIf="row.control_megabytes.invalid">El tamaño debe ser mínimo 1
+            </mat-error>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  </div>
+</div>

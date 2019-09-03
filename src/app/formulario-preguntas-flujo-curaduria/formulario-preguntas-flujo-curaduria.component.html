@@ -1,0 +1,253 @@
+
+
+<mat-card>  
+  <mat-card-content>
+      <h3>Formulario de Registro de Preguntas y Respuestas</h3>
+      <hr>
+      <mat-form-field floatLabel="never">
+          <mat-label>Digite la pregunta</mat-label>
+          <input matInput [(ngModel)]="pregunta.titulo" name="titulo">
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-card-title>Por favor digite la respuesta</mat-card-title>
+      <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor> 
+      <br>
+      <mat-form-field floatLabel="never">
+        <mat-label>Categoria (Más bajo nivel)</mat-label>
+        <select matNativeControl [(ngModel)]="pregunta.id_producto" name="producto">
+          <option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field floatLabel="never">
+        <mat-label>Estado de la pregunta</mat-label>
+        <select matNativeControl [(ngModel)]="pregunta.id_estado" name="estado">
+          <option *ngFor="let i of estados_pregunta" value="{{i.idtbl_estado_pregunta}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field>
+      <div fxLayout="row wrap" class="row">
+          <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+              <mat-checkbox color="primary" [(ngModel)]="pregunta.muestra_fecha_actualizacion">Mostrar Fecha de la Última Modificación</mat-checkbox>
+          </div>
+      </div>
+      <br>
+      <mat-form-field floatLabel="never">
+        <mat-label>Seleccionar Curador</mat-label>
+        <select matNativeControl [(ngModel)]="pregunta.id_usuario_revision" name="estado">
+          <option *ngFor="let i of todos_usuarios" value="{{i.idtbl_usuario}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field>        
+      <br>
+      <br>
+      <h3>Segmentos</h3>
+      <hr>
+      <br>
+      <div fxLayout="row wrap">
+          <button mat-raised-button color="accent" (click)="anadirSegmento()" style="width: 15%;"><span style="color: white !important;">Añadir Segmento</span></button>
+      </div>
+      <br>
+      <div *ngIf="segmentos.length > 0" fxLayout="row wrap">
+        <div *ngFor="let segmento of segmentos; let i = index;" fxFlex.gt-sm="98" fxFlex="100">
+            <mat-accordion >
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title *ngIf="segmento.titulo == ''"> Nuevo Segmento </mat-panel-title>  
+                      <mat-panel-title *ngIf="segmento.titulo != null"> {{segmento.titulo}} </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field>
+                        <input matInput placeholder="Digite el segmento" [(ngModel)]="segmento.titulo" name="titulo" id="titulo{{i}}">
+                      </mat-form-field>      
+                      <br>
+                      <br>
+                      <mat-card-title>Por favor digite la respuesta</mat-card-title>
+                      <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
+                      <br>
+                      <div fxLayout="row wrap">
+                        <button mat-raised-button color="accent" (click)="anadirSubRespuestaSegmento(i)" style="width: 20%;"><span style="color: white !important;">Añadir Subrespuesta al segmento</span></button>
+                      </div>
+                      <br>
+                      <div *ngIf="array_mostrar.length > 0" fxLayout="row wrap">
+                        <div *ngFor="let arr of array_mostrar; let cont = index;" fxFlex.gt-sm="98" fxFlex="100">
+                          <mat-accordion *ngIf="arr.pos_segmento == i">
+                              <mat-expansion-panel>                                      
+                                <mat-expansion-panel-header>
+                                  <mat-panel-title *ngIf="arr.titulo == ''"> Nueva Subrespuesta </mat-panel-title>  
+                                  <mat-panel-title *ngIf="arr.titulo != null"> {{arr.titulo}} </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-form-field>
+                                  <input matInput placeholder="Digite la pregunta" [(ngModel)]="arr.titulo" name="titulo">
+                                </mat-form-field>      
+                                <br>
+                                <br>
+                                <mat-card-title>Por favor digite la respuesta</mat-card-title>
+                                <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="arr.respuesta" name="respuesta"></quill-editor>
+                                <br>
+                              </mat-expansion-panel>
+                              <br>
+                            </mat-accordion>
+                            <div fxFlex.gt-sm="1" fxFlex="100" *ngIf="arr.pos_segmento == i"></div>
+                            <a *ngIf="arr.pos_segmento == i" (click)="eliminarSubRespuestaSegmento(arr, cont)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>
+                        </div>
+                      </div>
+                </mat-expansion-panel>
+                <br>
+            </mat-accordion>
+            <div fxFlex.gt-sm="1" fxFlex="100"></div>
+            <a (click)="eliminarSegmento(segmento, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>
+        </div>
+      </div>
+      <h3>Subrespuestas</h3>
+      <hr>
+      <br>
+      <div fxLayout="row wrap">
+        <button mat-raised-button color="accent" (click)="anadirSubRespuesta()" style="width: 15%;"><span style="color: white !important;">Añadir Subrespuesta</span></button>
+      </div>
+      <br>
+      <div *ngIf="subrespuestas.length > 0" fxLayout="row wrap">
+        <div *ngFor="let subrespuesta of subrespuestas; let i = index;" fxFlex.gt-sm="98" fxFlex="100">
+          <br>
+          <mat-accordion style="margin-bottom: 1%;">
+              <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title *ngIf="subrespuesta.titulo == ''"> Nueva Subrespuesta </mat-panel-title>  
+                    <mat-panel-title *ngIf="subrespuesta.titulo != null"> {{subrespuesta.titulo}} </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-form-field>
+                      <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo">
+                    </mat-form-field>
+                    <br>
+                  <br>
+                  <mat-form-field>
+                    <input matInput placeholder="Digite la categoria" [(ngModel)]="subrespuesta.categoria" name="categoria-subrespuesta">
+                  </mat-form-field>
+                  <br>
+                  <br>
+                  <mat-form-field>
+                    <mat-label>Seleccione la ubicación</mat-label>
+                    <select matNativeControl [(ngModel)]="subrespuesta.posicion" name="posicion">
+                      <option value="1">Previo a los segmentos</option>
+                      <option value="2">Posterior a los segmentos</option>
+                    </select>
+                  </mat-form-field>      
+                    <br>
+                    <br>
+                    <mat-card-title>Por favor digite la respuesta</mat-card-title>
+                    <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="subrespuesta.respuesta" name="respuesta"></quill-editor>
+              </mat-expansion-panel>              
+          </mat-accordion>
+          <div fxFlex.gt-sm="1" fxFlex="100"></div>
+          <a (click)="eliminarSubRespuesta(subrespuesta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>         
+        </div>
+        <br>
+      </div>
+      <br>
+      <br>
+      <h3>Asociar Preguntas</h3>
+      <hr>
+      <br>
+      <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="40" fxFlex="100">
+          <mat-card-title>Preguntas</mat-card-title>
+          <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <input type="text" placeholder="Seleccione la pregunta" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='anadirPreguntaAsociada($event.option.value)'>
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.titulo}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+          <br>
+        </div>
+        <div fxFlex.gt-sm="10" fxFlex="100"></div>
+        <div fxFlex.gt-sm="40" fxFlex="100" *ngIf = "preguntas_adicion.length > 0">
+          <div class="bg-light p-10 p-r-20 p-l-20">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+        <div class="responsive-table">
+            
+            <mat-table [dataSource]="dataSource" matSort>
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_pregunta}} </mat-cell>
+                </ng-container>
+
+                <!-- Progress Column -->
+                <ng-container matColumnDef="pregunta">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Pregunta </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="max-width:70%;"> {{row.titulo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="max-width:15%;">
+                        <i class="ti-trash text-danger m-r-10" (click)="borrarElemento(row)"></i>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;">
+                </mat-row>
+            </mat-table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+        </div>
+      </div>
+      <!--br>
+      <br>
+      <h3>Responsable</h3>
+      <hr>
+      <br>
+      <mat-form-field floatLabel="never">
+        <mat-label>Responsable</mat-label>
+        <select matNativeControl name="estado">
+          <option *ngFor="let i of todos_usuarios" value="{{i.idtbl_usuario}}">{{i.nombre}}</option>
+        </select>
+      </mat-form-field-->
+      <br>
+      <br>
+      <h3>Comentarios</h3>
+      <hr>
+      <br>
+      <div *ngIf="notas_mostrar.length > 0">
+        <div fxLayout="row wrap" *ngFor="let i of notas_mostrar">
+          <div fxFlex.gt-sm="50" fxFlex="100">
+            <mat-card>
+                <mat-card-content>
+                    <!-- Row -->
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
+                        <div>
+                            <h4 class="m-0"><strong>{{i.nombre_usuario}}</strong></h4>
+                            <br>
+                            <h6 class="text-muted m-0">{{i.notas}}</h6>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <br>
+          </div>
+        </div>
+        <br>
+      </div>
+      <mat-form-field>
+				<textarea matInput placeholder="Nuevo Comentario" name="notas" [(ngModel)]="notas.notas" matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
+      </mat-form-field>
+      <br>
+      <br>
+      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarPregunta()">Aprobar</button>
+      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted danger" (click)="rechazarPregunta()">Rechazar</button>
+
+  </mat-card-content>
+
+
+</mat-card>
+
+

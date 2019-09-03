@@ -1,0 +1,26 @@
+.danger{
+    transform: all ease .5s;
+    &:hover{
+        background: red;
+        color: #FFF;
+    }
+}
+
+
+@media only screen and (max-width: 414px){
+    .page{
+        width: 100%;
+        margin: 0;
+    }
+    .ql-editor{
+        width: 98%;
+        overflow: hidden;
+    }
+    .mat-form-field-autofill-control{
+        overflow: hidden;
+    }
+    .mat-card-title{
+        width: calc(100% - 2px);
+    }
+
+}

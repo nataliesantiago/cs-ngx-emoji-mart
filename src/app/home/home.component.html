@@ -1,0 +1,29 @@
+<div class="fondo">
+    <div class="img__logo down">
+      <img src="https://storage.googleapis.com/archivos-estaticos-aplicacion/logo.png" alt="imagen" class="img_small">
+    </div>
+    <div class="texto__principal down" *ngIf="texto_home">
+      <h2 class="text_center texto_gris"><b>{{texto_home}}</b></h2>
+    </div>
+    <app-search-component></app-search-component>
+    <div class="historial__contenedor up" *ngIf="correo_usuario != 'com'">
+      <mat-card>
+          <mat-card-header class="bg-danger text-white">
+              <mat-card-title class="titulo-card">Nuevos Conteidos</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="contenido-card">
+              <p *ngFor="let i of nuevos_contenidos">{{ i.titulo }}</p>
+          </mat-card-content>
+      </mat-card>
+      <mat-card>
+          <mat-card-header class="bg-danger text-white">
+              <mat-card-title class="titulo-card">Lo más buscado</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="contenido-card">
+              <p *ngFor="let i of nuevos_contenidos">{{ i.titulo }}</p>
+          </mat-card-content>
+      </mat-card>
+    </div>
+    <!--label for="darkTheme">Dark Theme</label>
+    <input id="darkTheme" type="checkbox" [formControl]="darkTheme"-->
+  </div>
