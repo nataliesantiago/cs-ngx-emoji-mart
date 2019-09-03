@@ -5,16 +5,17 @@
 
 export const environment = {
   production: false,
-  URL_BACK: 'https://davivienda-comunidades-col-dev.appspot.com/api/',
+  URL_BACK: 'https://comusoporte-desarrollo.appspot.com/api/',
   CLIENT_ID: '993073337079-0qt03a4l3pk7psfnpk1nto8m5bt14vnt.apps.googleusercontent.com', //id de cliente de google para la aplicacion
   firebaseConfig: {
-    apiKey: "AIzaSyCk1WFHTdfSmhcH63_iGZU_s3AvwiQI_RU",
-    authDomain: "davivienda-comunidades-col-dev.firebaseapp.com",
-    databaseURL: "https://davivienda-comunidades-col-dev.firebaseio.com",
-    projectId: "davivienda-comunidades-col-dev",
-    storageBucket: "davivienda-comunidades-col-dev.appspot.com",
-    messagingSenderId: "993073337079",
-    appId: "1:993073337079:web:4dc46bec7c927ec7"
-  }
+    apiKey: "AIzaSyBEKRnunoggWof_mmJDfHRG9-fgKYfYOF8",
+    authDomain: "comusoporte-desarrollo.firebaseapp.com",
+    databaseURL: "https://comusoporte-desarrollo.firebaseio.com",
+    projectId: "comusoporte-desarrollo",
+    storageBucket: "",
+    messagingSenderId: "537955814682",
+    appId: "1:537955814682:web:b726049a21de1c69"
+  },
+  ambiente: 'col'
 };
 
