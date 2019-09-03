@@ -316,11 +316,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                   }
                 }
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'El segmento fue eliminado con exito.',
-                  'success'
-                )
               }
             })
           } else {
@@ -332,12 +327,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               }
             }
             this.cg.detectChanges();
-
-            swal.fire(
-              'Eliminado',
-              'El segmento fue eliminado con exito.',
-              'success'
-            )
           }
         } else {
           this.segmentos.splice(pos, 1);
@@ -348,11 +337,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             }
           }
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminado',
-            'El segmento fue eliminado con exito.',
-            'success'
-          )
         }
       }
     })
@@ -376,30 +360,15 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               if (d.success) {
                 this.subrespuestas.splice(pos, 1);
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'La subrespuesta fue eliminada con exito.',
-                  'success'
-                )
               }
             })
           } else {
             this.subrespuestas.splice(pos, 1);
             this.cg.detectChanges();
-            swal.fire(
-              'Eliminado',
-              'La subrespuesta fue eliminada con exito.',
-              'success'
-            )
           }
         } else {
           this.subrespuestas.splice(pos, 1);
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminada',
-            'La subrespuesta fue eliminada con exito.',
-            'success'
-          )
         }
       }
     })
@@ -444,30 +413,15 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               if (d.success) {
                 this.array_mostrar.splice(pos, 1);
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'La subrespuesta del segmento fue eliminada con exito.',
-                  'success'
-                )
               }
             })
           } else {
             this.array_mostrar.splice(pos, 1);
             this.cg.detectChanges();
-            swal.fire(
-              'Eliminado',
-              'La subrespuesta del segmento fue eliminada con exito.',
-              'success'
-            )
           }
         } else {
           this.array_mostrar.splice(pos, 1);
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminada',
-            'La subrespuesta del segmento fue eliminada con exito.',
-            'success'
-          )
         }
       }
     })
@@ -527,11 +481,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'La asociación fue eliminada con exito.',
-                  'success'
-                )
               }
             })
           } else {
@@ -546,11 +495,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.cg.detectChanges();
-            swal.fire(
-              'Eliminado',
-              'La asociación fue eliminada con exito.',
-              'success'
-            )
           }
         } else {
           let pos = 0;
@@ -564,11 +508,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminado',
-            'La asociación fue eliminada con exito.',
-            'success'
-          )
         }
       }
     })
