@@ -17,8 +17,8 @@ import swal from 'sweetalert2';
 
 const moment = _rollupMoment || _moment;
 
-declare var MediaRecorder: any;
 
+declare var StereoAudioRecorder: any;
 @Component({
   selector: 'app-chat-cliente',
   templateUrl: './chat-cliente.component.html',
@@ -33,6 +33,7 @@ export class ChatClienteComponent implements OnInit {
   nombre_pestana = 'Conecta';
   intervalo;
   extensiones_archivos = [];
+  stream: any;
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
@@ -48,7 +49,7 @@ export class ChatClienteComponent implements OnInit {
         this.chats = [];
       }
     });
-    
+
     this.chatService.nuevasConversaciones.subscribe(d => {
       this.openChat(d);
     });
@@ -101,6 +102,7 @@ export class ChatClienteComponent implements OnInit {
   verNuevosMensajes(com: PerfectScrollbarComponent, c: Conversacion) {
     c.ocultar_nuevos_mensajes = true;
     com.directiveRef.scrollToBottom();
+    this.setFocus(c, true);
   }
 
   setFocus(c: Conversacion, estado: boolean) {
@@ -190,10 +192,10 @@ export class ChatClienteComponent implements OnInit {
           c.mensajes[i].estado = m.estado;
         }
       });
-      this.ngZone.runOutsideAngular(() => {
+      /*this.ngZone.runOutsideAngular(() => {
         this.passByMensajes(c.mensajes, 0);
         this.changeRef.detectChanges();
-      });
+      });*/
       primera_vez = false;
     });
   }
@@ -264,7 +266,7 @@ export class ChatClienteComponent implements OnInit {
     audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
       m.audioControls.max = Math.ceil(target.duration);
-      
+
     });
     audio.addEventListener('timeupdate', e => {
       let target = <HTMLAudioElement>e.target;
@@ -307,44 +309,62 @@ export class ChatClienteComponent implements OnInit {
 
     c.filas.forEach((ce, index) => {
       let r = this.fireStore.collection('conversaciones/').doc(c.codigo).ref;
-      this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').set({ conversacion: r });
+      this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').set({ conversacion: r.id });
       if (c.id_estado_conversacion == 1) {
         let e = this.fireStore.collection('categorias_experticia/' + ce.id + '/expertos').valueChanges();
 
-        e.subscribe(expertosFila => {
-
-          expertos = expertos.concat(expertosFila);
-          if (index == (c.filas.length - 1) && finaliza) {
-            finaliza = false;
-            this.asignarAsesor(c, expertos);
-          }
-        });
-      } else {
-
+        if (ce.expertos && ce.expertos.length > 0) {
+          expertos = expertos.concat(ce.expertos);
+        }
+        if (index == (c.filas.length - 1) && finaliza) {
+          finaliza = false;
+          this.asignarAsesor(c, expertos);
+        }
       }
     });
   }
 
   asignarAsesor(c: Conversacion, expertos: Array<any>) {
 
-    expertos.forEach(e => {
-      let a = this.fireStore.doc(e.experto).ref;
-      let b = this.fireStore.doc(e.experto).valueChanges();
-      b.subscribe((data: any) => {
-
-        if (c.expertos.length < expertos.length) {
-          if (!data) {
-            data = { activo: false };
-          }
-          let e = { idtbl_usuario: parseInt(a.id), chats: null, activo: data.activo };
-          c.expertos.push(e);
-          this.fireStore.doc(a).collection('chats').valueChanges().subscribe(chats => {
-            e.chats = chats;
-            if (c.expertos.length == expertos.length && !c.asesor_actual) {
-              this.procesaChats(c);
+    expertos.forEach((e, index) => {
+      let a = this.fireStore.doc('expertos/' + e.id_usuario).ref;
+      let b = this.fireStore.doc('expertos/' + e.id_usuario).snapshotChanges();
+      b.subscribe((datos: any) => {
+        if (datos) {
+          let data = datos.payload.data();
+          if (c.expertos.length < expertos.length) {
+            if (!data) {
+              data = { activo: false };
             }
-          });
-        } else {
+            let ex = { idtbl_usuario: parseInt(a.id), chats: [], activo: data.activo, ultima_conexion: data.fecha };
+            c.expertos.push(ex);
+            this.fireStore.doc('expertos/' + e.id_usuario).collection('chats').snapshotChanges().subscribe(changes => {
+              changes.forEach((a, i) => {
+                const data = a.payload.doc.data();
+                const id = a.payload.doc.id;
+                ex.chats.push({ id, ...data });
+                if (index == expertos.length - 1 && i == changes.length - 1) {
+                  this.procesaChats(c);
+                }
+              });
+              if (changes.length < 1 && index == expertos.length - 1) {
+                this.procesaChats(c);
+              }
+            });
+            /* .pipe(
+               map(actions => actions.map((a, i) => {
+                 const data = a.payload.doc.data();
+                 const id = a.payload.doc.id;
+                 ex.chats.push({ id, ...data });
+                 console.log(index, i);
+                 if (index == expertos.length - 1 && i == actions.length - 1) {
+                   this.procesaChats(c);
+                 }
+               }))
+             );*/
+
+
+          }
 
         }
       })
@@ -356,8 +376,13 @@ export class ChatClienteComponent implements OnInit {
 
     let asignado = 0;
     c.expertos = c.expertos.filter(e => {
-      return e.activo;
-    })
+      if (!e.ultima_conexion) {
+        return false;
+      }
+      var duration = moment().unix() - e.ultima_conexion.seconds;
+      // console.log(duration, e);
+      return e.activo && duration < 11;
+    });
     c.expertos.sort((a, b) => {
       if (!a.chats && !b.chats) {
         return 0;
@@ -370,17 +395,34 @@ export class ChatClienteComponent implements OnInit {
       }
     });
     let experto: Experto = c.expertos.pop();
-    c.filas.forEach((ce, index) => {
-      this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').delete();
-    });
-    this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo).then(u => {
-      c.id_experto_actual = u.idtbl_usuario;
-      c.nombre_experto_actual = u.nombre;
-      c.asesor_actual = new User(null, null, null);
-      c.asesor_actual.url_foto = u.url_foto;
-      c.asesor_actual.idtbl_usuario = c.id_experto_actual;
-      c.asesor_actual.nombre = c.nombre_experto_actual;
-    });
+    // console.log(experto, parseInt(this.buscarConfiguracion(2).valor), experto.chats.length);
+    if (parseInt(this.buscarConfiguracion(2).valor) > experto.chats.length) {
+      c.filas.forEach((ce, index) => {
+        this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').delete();
+      });
+      this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+        c.id_experto_actual = u.idtbl_usuario;
+        c.nombre_experto_actual = u.nombre;
+        c.asesor_actual = new User(null, null, null);
+        c.asesor_actual.url_foto = u.url_foto;
+        c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+        c.asesor_actual.nombre = c.nombre_experto_actual;
+      });
+    } else {
+      this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+        let data = datos.payload.data() as Conversacion;
+        if (data.id_estado_conversacion == 2) {
+          this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
+            c.id_experto_actual = u.idtbl_usuario;
+            c.nombre_experto_actual = u.nombre;
+            c.asesor_actual = new User(null, null, null);
+            c.asesor_actual.url_foto = u.url_foto;
+            c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+            c.asesor_actual.nombre = c.nombre_experto_actual;
+          });
+        }
+      });
+    }
   }
   ngOnInit() {
 
@@ -456,11 +498,11 @@ export class ChatClienteComponent implements OnInit {
           break;
       }
 
-
-      this.ngZone.runOutsideAngular(() => {
+      chat.mensajes.push(m);
+      /*this.ngZone.runOutsideAngular(() => {
         chat.mensajes.push(m);
         this.passByMensajes(chat.mensajes, 0);
-      });
+      });*/
       this.chatService.usuarioDejaEscribir(chat, this.user.getId());
       chat.texto_mensaje = '';
       if (comp) {
@@ -479,12 +521,12 @@ export class ChatClienteComponent implements OnInit {
   }
 
   adjuntarArchivo(c: Conversacion, evento: Event, form: HTMLFormElement, input: HTMLInputElement) {
-    
+
     let target = <any>evento.target;
     c.cargando_archivo = true;
     if (target.files && target.files.length > 0) {
       this.chatService.adjuntarArchivosServidor(target.files[0]).then(archivo => {
-        
+
         c.archivo_adjunto = archivo;
         input.value = "";
         c.cargando_archivo = false;
@@ -498,7 +540,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   adjuntarNotaVoz(c: Conversacion, file: File, duration: number) {
-    
+
     c.cargando_archivo = true;
     c.grabando_nota = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
@@ -516,46 +558,53 @@ export class ChatClienteComponent implements OnInit {
 
     let minutos = parseInt(this.buscarConfiguracion(7).valor);
     let tiempo = minutos * 60;
-    const options = { audioBitsPerSecond: 16000 };
+    const options = { mimeType: 'audio/webm' };
     let detenido = false;
     let calculaTiempo = { fechaIni: null, fechaFin: null };
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        c.mediaRecorder = new MediaRecorder(stream, options);
+    if (!this.stream) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          this.stream = stream;
+          c.mediaRecorder = new StereoAudioRecorder(stream, {
+            sampleRate: 48000,
+            get16BitAudio: true,
+            bufferSize: 4096,
+            numberOfAudioChannels: 1
+          });
+          this.startTimer(tiempo, c).then(() => {
+            c.mediaRecorder.stop(audioBlob => {
+              this.onStopRecordingNotaVoz(audioBlob, c);
 
+            });
+          });
 
-        const audioChunks = [];
-        c.mediaRecorder.addEventListener("dataavailable", event => {
-          audioChunks.push(event.data);
         });
-
-        c.mediaRecorder.addEventListener("start", event => {
-          calculaTiempo.fechaIni = moment();
-          c.grabando_nota = true;
-        });
-
-        c.mediaRecorder.addEventListener("stop", () => {
-
-          calculaTiempo.fechaFin = moment();
-          const audioBlob = new Blob(audioChunks, { 'type': 'audio/wav; base64' });
-          var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.ogg');
-          delete c.mediaRecorder;
-          var duration = Math.ceil(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
-          
-          this.adjuntarNotaVoz(c, voice_file, duration);
-          if (!detenido) {
-            detenido = true;
-            stream.getTracks().forEach(track => track.stop());
-          }
-          /*const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          audio.play();*/
-        });
-        this.startTimer(tiempo, c).then(() => {
-          c.mediaRecorder.stop();
-        });
-
+    } else {
+      c.mediaRecorder = new StereoAudioRecorder(this.stream, {
+        sampleRate: 48000,
+        get16BitAudio: true,
+        bufferSize: 4096,
+        numberOfAudioChannels: 1
       });
+      this.startTimer(tiempo, c).then(() => {
+        c.mediaRecorder.stop(audioBlob => {
+          this.onStopRecordingNotaVoz(audioBlob, c);
+
+        });
+      });
+    }
+
+
+
+  }
+
+  onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion) {
+    var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
+    delete c.mediaRecorder;
+    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
+    this.adjuntarNotaVoz(c, voice_file, duration);
+    this.stream.getTracks().forEach(track => track.stop());
+
   }
 
   startTimer(duration: number, c: Conversacion): Promise<any> {
@@ -567,13 +616,15 @@ export class ChatClienteComponent implements OnInit {
 
     return new Promise((resolve, reject) => {
 
-      c.mediaRecorder.start();
+
       minutes = Math.floor(timer / 60);
       seconds = Math.floor(timer % 60);
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
       c.cuenta_regresiva = minutes + ":" + seconds;
-      timer -= 1;
+      c.mediaRecorder.record();
+      c.grabando_nota = true;
+      c.inicia_grabacion = new Date();
       c.interval_grabando = setInterval(() => {
         timer -= 1;
         minutes = Math.floor(timer / 60);
@@ -596,13 +647,18 @@ export class ChatClienteComponent implements OnInit {
   }
 
   enviarNota(c: Conversacion) {
+    c.mediaRecorder.stop(audioBlob => {
+      this.onStopRecordingNotaVoz(audioBlob, c);
+    });
     window.clearInterval(c.interval_grabando);
-    c.mediaRecorder.stop();
+
   }
 
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
+    c.mediaRecorder.stop();
     window.clearInterval(c.interval_grabando);
+    this.stream.getTracks().forEach(track => track.stop());
   }
   remplazaEmoji(c: Conversacion) {
     c.texto_mensaje = this.chatService.findEmojiData(c.texto_mensaje);

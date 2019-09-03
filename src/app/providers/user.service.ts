@@ -3,7 +3,7 @@ import { AjaxService } from './ajax.service';
 import { User } from '../../schemas/user.schema';
 
 import { Subject } from 'rxjs/Subject';
-
+import { AngularFireAuth } from '@angular/fire/auth';
 import * as io from "socket.io-client";
 declare let gapi: any;
 import * as firebase from "firebase";
@@ -11,7 +11,7 @@ import * as uuid from 'uuid/v4';
 import { ThrowStmt } from '@angular/compiler';
 import { xhrFilasExperto } from '../../schemas/xhr.schema';
 import { AngularFirestore } from '@angular/fire/firestore';
-
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class UserService {
@@ -28,9 +28,9 @@ export class UserService {
     ref;
     este;
 
-    constructor(private ajax: AjaxService, private fireStore: AngularFirestore) {
+    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth) {
 
-        this.ajax.sethost('http://localhost:8080/api/'); // Desarrollo
+        this.ajax.sethost(environment.URL_BACK); // Desarrollo
         //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
         window.onbeforeunload = () => {
             if (this.user && this.user.getIdRol() == 2) {
@@ -127,25 +127,29 @@ export class UserService {
 
     }
 
-    initFirebase() {
-        firebase.auth().signInAnonymously().then(() => {
-            let ruta = 'users/' + btoa(this.user.getEmail());
-            this.ref = this.dataBase.ref(ruta);
-
-            this.ref.set(this.este);
-            this.ref.on('value', snap => {
-
-                if (snap.val() != this.este) {
-                    alert('Su sesión se inició desde otro dispositivo o ventana');
-                    this.ref.off();
-                    this.logOut();
-                }
+    initFirebase(): Promise<any> {
+        return new Promise((res, rej) => {
+            this.firebaseAuth.auth.signInWithEmailAndPassword(this.user.getEmail(), this.user.pass_firebase).then(() => {
+                /* let ruta = 'users/' + btoa(this.user.getEmail());
+                 this.ref = this.dataBase.ref(ruta);
+     
+                 this.ref.set(this.este);
+                 this.ref.on('value', snap => {
+     
+                     if (snap.val() != this.este) {
+                         alert('Su sesión se inició desde otro dispositivo o ventana');
+                         this.ref.off();
+                         this.logOut();
+                     }
+                 });*/
+                res();
+            }).catch(error => {
+                // Handle Errors here.
+                console.log('Invalid login firebase');
+                rej();
             });
-        }).catch(error => {
-            // Handle Errors here.
-
-
         });
+
     }
 
 
@@ -171,15 +175,22 @@ export class UserService {
 
     }
 
-    setUsuario(u: User) {
-        this.user = u;
-        //localStorage.setItem('user', JSON.stringify(u));
-        this.subjectUsuario.next(u);
-        if (u) {
-            //this.initializeSocket();
-            //this.initFirebase();
-        }
+    setUsuario(u: User): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.user = u;
+            //localStorage.setItem('user', JSON.stringify(u));
+            this.subjectUsuario.next(u);
+            if (u) {
+                //this.initializeSocket();
+                this.initFirebase().then(() => {
+                    resolve();
+                });
+            }
+        });
+
     }
+
+
 
     getUsuario(): User {
         return this.user;
@@ -241,7 +252,7 @@ export class UserService {
     }
 
     setActivoExperto(activo) {
-        this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo });
+        this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
     }
 
     getInfoUsuario(id): Promise<User> {

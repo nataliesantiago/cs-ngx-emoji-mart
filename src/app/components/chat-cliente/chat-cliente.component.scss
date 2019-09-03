@@ -37,6 +37,7 @@
         display: flex;
         flex-direction: row;
         white-space: nowrap;
+
         span {
             text-overflow: ellipsis;
             display: inline-block;
@@ -63,7 +64,6 @@
     position: relative;
     bottom: 0px;
     right: 0px;
-    height: 380px;
     padding-right: 10px;
 
     .panel-chat {
@@ -73,10 +73,18 @@
         margin-right: 5px;
         position: relative;
         bottom: 0px;
+        transition: all .5s linear;
+        &.agrandado {
+            width: 600px !important;
+            height: 458px !important;
+            .icono-agrandar{
+                transform: rotate(90deg);
+            }
+        }
 
         &.minimizado {
-
-
+            height: 36px !important;
+            transition: none !important;
             .contenedor-grande {
                 height: 0px !important;
             }
@@ -126,8 +134,10 @@
                 border-bottom: 1px solid #e4e4e4;
                 color: #888888;
                 cursor: pointer;
-                width: 262px;
 
+                .icono-agrandar{
+                    transition: all .5s linear;
+                }
                 .nombre-asesor {
                     flex: 1;
                     display: inline-block;
@@ -163,14 +173,14 @@
             }
 
             .contenedor-mensajes {
-                height: calc(100% - 43px);
+                height: calc(100% - 79px);
                 padding: 0;
                 overflow: hidden;
                 width: 100%;
                 flex: 0 1 auto;
 
                 .contenedor {
-                    height: 300px;
+                    height: 100%;
 
                     .chat-list {
                         padding: 0 3px;

@@ -6,13 +6,13 @@ import { ResponseSearch } from '../models/response-search';
 import { UserService } from '../providers/user.service';
 import { User } from '../../schemas/user.schema';
 import { reject } from 'q';
-
+import { AngularFireAuth } from '@angular/fire/auth';
 @Injectable({
     providedIn: 'root'
 })
 export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
     primer_login: boolean = true; // Se enmcarga de controlar cuando el usuario abre la aplicacion por primera vez
-    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch, private userService: UserService, private route: ActivatedRoute) { }
+    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch, private userService: UserService, private route: ActivatedRoute, private firebaseAuth: AngularFireAuth) { }
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -25,24 +25,28 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
             this.responseSearch.setActive(false);
             return new Promise<boolean>(resolve => {
                 let data = JSON.parse(atob(d));
-                
-                
+
+
                 let user = new User(data.email, data.token, data.nombre);
                 user.setId(data.idtbl_usuario);
                 user.setIdPerfil(data.id_perfil);
                 user.setIdRol(data.id_rol);
                 user.url_foto = data.foto;
-                this.userService.setUsuario(user);
-                localStorage.setItem("token", data.token);
-                
-                this.router.navigate(['home']);
-                setTimeout(() => {
-                    resolve(true);
-                }, 1);
+                user.codigo_firebase = data.codigo_firebase;
+                user.pass_firebase = data.pass_firebase;
+                this.userService.setUsuario(user).then(() => {
+                    localStorage.setItem("token", data.token);
+                    this.router.navigate(['home']);
+
+                    setTimeout(() => {
+                        resolve(true);
+                    }, 1);
+                });
+
             })
 
         } else if (this.userService.getUsuario()) {
-            
+
             this.responseSearch.setActive(false);
             return new Promise<boolean>(resolve => {
                 setTimeout(() => {
@@ -67,16 +71,19 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.setIdPerfil(d.profile.id_perfil);
                         user.setIdRol(d.profile.id_rol);
                         user.url_foto = d.profile.foto;
-                        this.userService.setUsuario(user);
-                        this.responseSearch.setActive(false);
-                        setTimeout(() => {
-                            if (next.routeConfig.path == "") {
-                                this.router.navigate(['home']);
-                            } else {
-                                //this.router.navigate([next.routeConfig.path]);
-                            }
-                            resolve(true);
-                        }, 1);
+                        user.codigo_firebase = d.profile.codigo_firebase;
+                        user.pass_firebase = d.profile.pass_firebase;
+                        this.userService.setUsuario(user).then(() => {
+                            this.responseSearch.setActive(false);
+                            setTimeout(() => {
+                                if (next.routeConfig.path == "") {
+                                    this.router.navigate(['home']);
+                                } else {
+                                    //this.router.navigate([next.routeConfig.path]);
+                                }
+                                resolve(true);
+                            }, 1);
+                        });
                     } else {
                         console.error('No se puede cargar la aplicación');
                         reject(false);
@@ -91,7 +98,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         }
     }
     canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-        
+
         return true;
     }
     isAuthenticated() {

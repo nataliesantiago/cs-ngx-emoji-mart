@@ -21,6 +21,7 @@ export class Mensaje {
     audio: HTMLAudioElement;
     duracion: number;
     nombre_archivo: string;
+    label: string;
     constructor(id_usuario?, tipo_mensaje?, url?) {
         this.id_usuario = id_usuario;
         this.tipo_mensaje = tipo_mensaje;

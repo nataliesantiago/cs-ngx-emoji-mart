@@ -19,6 +19,8 @@ export class User {
     filas: Array<any>;
     url_imagen_gsuite: string;
     id_rol: number;
+    codigo_firebase: string;
+    pass_firebase: string;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;
@@ -86,7 +88,7 @@ export class User {
     public setIdPerfil(value: number) {
         this.id_perfil = value;
     }
-    
+
     public getIdRol(): number {
         return this.id_rol;
     }
