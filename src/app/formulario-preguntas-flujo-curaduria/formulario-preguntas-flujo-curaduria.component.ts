@@ -131,7 +131,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                     for (let i = 0; i < this.subrespuestas.length; i++) {
                       this.subrespuestas[i].respuesta = this.subrespuestas[i].texto;
                     }
-
+                    console.log("Subrespuestas-cargadas", this.subrespuestas);
                     this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sg => {
                       if (sg.success) {
 
