@@ -72,8 +72,11 @@ import { ReplaceEmojisPipe } from '../pipes/emojis.pipe';
 import { AdminsitradorExtensionesChatComponent } from './adminsitrador-extensiones-chat/adminsitrador-extensiones-chat.component';
 import { FormularioProductosComponent } from './formulario-productos/formulario-productos.component';
 
-import {MatTreeModule} from '@angular/material/tree';
+import { MatTreeModule } from '@angular/material/tree';
 import { CreacionProductosComponent } from './creacion-productos/creacion-productos.component';
+import { MensajeClientePipe } from '../pipes/mensaje-cliente.pipe';
+import { MensajesExpertoPipe } from '../pipes/mensajes-experto.pipe';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -118,7 +121,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReplaceEmojisPipe,
     AdminsitradorExtensionesChatComponent,
     CreacionProductosComponent,
-    FormularioProductosComponent
+    FormularioProductosComponent,
+    MensajeClientePipe,
+    MensajesExpertoPipe
   ],
   imports: [
     BrowserModule,
@@ -155,7 +160,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatListModule,
     MatSelectModule,
     MatDividerModule,
-    PickerModule
+    PickerModule,
+    AngularFireAuthModule
   ],
 
   providers: [

@@ -20,9 +20,10 @@ import { resolve } from 'url';
 import { ExtensionArchivoChat } from '../../schemas/interfaces';
 const moment = _rollupMoment || _moment;
 
+
+
 @Injectable()
 export class ChatService {
-
   user: User;
   id_calendario: string;
   public socket: io.SocketIOClient.Socket;
@@ -32,16 +33,20 @@ export class ChatService {
 
   public subjectConversacion = new Subject<any>();
   public nuevasConversaciones = this.subjectConversacion.asObservable();
-
+  flac_encoder;
   chats_cliente: Array<Conversacion> = [];
   configuraciones_chat: any;
   extensiones_archivos = [];
+  flac_ok: any;
+  flacLength: any;
+  flacBuffers: any;
   constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore, private emojiService: EmojiService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
     });
     this.getConfiguracionesChat();
+    
   }
   /**
    * @description Se encarga de buscar las conversaciones activas del cliente y las aloja en memoria ram para futuras consultas
@@ -256,5 +261,6 @@ export class ChatService {
       })
     });
   }
+
 
 }

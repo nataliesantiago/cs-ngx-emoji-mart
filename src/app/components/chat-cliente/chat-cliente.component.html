@@ -2,7 +2,8 @@
   <div class="content">
     <div class="contenedores-chat">
       <!--<button mat-fab color="primary" (click)="openChat()" class="boton-abrir-chat">Chat</button>-->
-      <div *ngFor="let chat of chats" class="panel-chat" [ngClass]="{'minimizado':chat.minimizado}">
+      <div *ngFor="let chat of chats" class="panel-chat"
+        [ngClass]="{'minimizado':chat.minimizado,'agrandado':chat.agrandado}">
         <div fxLayout="row" fxLayoutAlign="center start" class="subpanel">
           <div fxFlex.gt-md="100" fxFlex.gt-sm="100" fxFlex="100" class="hijo">
             <mat-card class="mat-card-top">
@@ -11,21 +12,20 @@
                 class="ventana-chat">
 
                 <mat-toolbar class="no-shadow chat-right-panel barra-superior"
-                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}" color="basic"
-                  (click)="chat.minimizado=!chat.minimizado">
+                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}" color="basic">
 
 
-                  <div class="font-14 nombre-asesor">
+                  <div class="font-14 nombre-asesor" (click)="chat.minimizado=!chat.minimizado">
                     <mat-icon class="icono-mensaje">message</mat-icon>
                     <span *ngIf="!chat.asesor_actual">Chat de experto</span>
                     <span *ngIf="chat.asesor_actual">{{chat.asesor_actual.nombre}}</span>
                   </div>
 
-                  <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
-                    <mat-icon>open_in_new</mat-icon>
+                  <button mat-icon-button class="ml-1 hidden-mobile" (click)="chat.agrandado=!chat.agrandado" >
+                    <mat-icon class="icono-agrandar">open_in_new</mat-icon>
                   </button>
                   <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
-                    <mat-icon>more_vert</mat-icon>
+                    <mat-icon >more_vert</mat-icon> 
                   </button>
                   <mat-menu #them="matMenu" x-position="before">
                     <button mat-menu-item>Contact info</button>
@@ -43,7 +43,7 @@
 
                       <div
                         [ngClass]="{'odd': m.id_usuario!=user.idtbl_usuario,'even': m.id_usuario==user.idtbl_usuario}"
-                        *ngFor="let m of chat.mensajes" class="chat-list">
+                        *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="chat-list">
                         <div class="chat-message">
                           <div class="chat-block">
                             <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
@@ -76,7 +76,7 @@
                                 <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>
                               </div>
                             </div>
-                            {{m.texto}}
+                            <div *ngIf="!m.es_nota_voz">{{m.texto}}</div>
                             <span *ngIf="m.id_usuario==user.idtbl_usuario">
                               <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
                               <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>
@@ -184,7 +184,8 @@
                 </div>
 
               </mat-sidenav-container>
-              <div class="componente-pequeno" [hidden]="!chat.minimizado" (click)="chat.minimizado=!chat.minimizado">
+              <div class="componente-pequeno" [hidden]="!chat.minimizado" (click)="chat.minimizado=!chat.minimizado"
+                [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}">
                 <div class="font-14 nombre-asesor">
                   <mat-icon class="icono-mensaje">message</mat-icon>
                   <span *ngIf="!chat.asesor_actual">Chat de experto</span>

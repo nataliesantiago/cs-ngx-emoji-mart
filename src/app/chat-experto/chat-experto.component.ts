@@ -14,7 +14,7 @@ import { SonidosService } from '../providers/sonidos.service';
 import swal from 'sweetalert2';
 const moment = _rollupMoment || _moment;
 
-declare var MediaRecorder: any;
+declare var StereoAudioRecorder: any;
 
 @Component({
   selector: 'app-chat',
@@ -27,6 +27,7 @@ export class ChatExpertoComponent {
   sidePanelOpened = true;
   texto_mensaje: string;
   // MESSAGE
+  stream: any;
   selectedMessage: any;
   messages: Object[] = [{
     from: 'Nirav Joshi',
@@ -61,6 +62,7 @@ export class ChatExpertoComponent {
   user: User;
   ocultar_nuevos_mensajes = false;
   chats_experto = [];
+  chats_cola = [];
   chat: Conversacion;
   obligaCambio = true;
   @ViewChild('contenedor') componentRef?: PerfectScrollbarComponent;
@@ -82,60 +84,107 @@ export class ChatExpertoComponent {
 
   init() {
     this.chatService.getConfiguracionesChat().then(configs => {
-      this.configuraciones = configs;
+      this.configuraciones = configs.configuraciones;
       this.userService.getFilasExperto().then(() => {
         this.fireStore.collection('expertos').doc('' + this.user.getId()).valueChanges().subscribe((d: any) => {
           d.activo = true;
           this.fireStore.collection('expertos').doc('' + this.user.getId()).set(d);
         });
         this.user.filas.forEach(f => {
+          let fila = { chats: null, id: f.id_categoria_experticia };
+          //this.chats_cola.push(fila)
           let cola = this.fireStore.collection('categorias_experticia/' + f.id_categoria_experticia + '/chats').valueChanges();
           cola.subscribe(chats => {
-            
-            chats.forEach((c: any) => {
-              let refConversacion = c.conversacion;
-            })
+
+            let tmp = [];
+
+            if (chats.length < 1) {
+              fila.chats = [];
+              this.procesaFilas(fila);
+            } else {
+              chats.forEach((c: any, index) => {
+                let refConversacion = c.conversacion;
+                this.fireStore.doc('conversaciones/' + refConversacion).snapshotChanges().subscribe(datos => {
+                  let c: Conversacion = datos.payload.data() as Conversacion;
+                  c.codigo = refConversacion;
+                  if (c.id_estado_conversacion == 1 && chats.length > 0) {
+                    this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
+                      c.cliente = d;
+                      tmp.push(c);
+                      if (index == chats.length - 1) {
+                        fila.chats = tmp;
+                        this.procesaFilas(fila);
+                      }
+                    });
+                  } else {
+                    this.chats_cola[index].chats = [];
+                  }
+                });
+              });
+            }
           })
         });
         let chats = this.fireStore.collection('expertos/' + this.user.getId() + '/chats').valueChanges();
         chats.subscribe((chats: Array<Conversacion>) => {
-          this.soundService.sonar(2);
           //this.chats_experto = [];
           let temporal = [];
+          //this.chats_experto = [];
           chats.forEach((c: any, index) => {
             let refConversacion = c.conversacion;
-            this.fireStore.doc(refConversacion).valueChanges().subscribe((d: Conversacion) => {
-              let c = d;
-              c.codigo = refConversacion.id;
-              let test = this.chats_experto.find(co => {
-                return co.codigo == c.codigo;
-              });
-              if (!test) {
-                this.agregarListenerMensajes(c);
-                this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
-                  //// console.log(d);
-                  c.cliente = d;
-                  temporal.push(c);
-                  if (!this.chat) {
-                    this.obligaCambio = false;
-                    this.onSelect(c);
-                  }
-                  if (index == (chats.length - 1)) {
-                    if (temporal.length > this.chats_experto.length) {
-                      // AQUI SE REPRODUCE EL SONIDO
-                    }
-                    this.chats_experto = temporal;
-                  }
-                });
-              } else {
-                test.id_estado_conversacion = c.id_estado_conversacion;
-              }
+            let test = this.chats_experto.find(co => {
+              return co.codigo == refConversacion;
             });
+
+
+            this.fireStore.doc('conversaciones/' + refConversacion).valueChanges().subscribe((d: Conversacion) => {
+              let c = d;
+              c.codigo = refConversacion;
+
+              this.agregarListenerMensajes(c);
+              this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
+                //// console.log(d);
+                c.cliente = d;
+                if (c.id_estado_conversacion != 1)
+                  temporal.push(c);
+                if (!this.chat) {
+                  this.obligaCambio = false;
+                  this.onSelect(c);
+                }
+                if (index == (chats.length - 1)) {
+                  if (temporal.length > this.chats_experto.length) {
+                    this.soundService.sonar(2);
+                  }
+                  this.chats_experto = temporal
+                  this.changeRef.detectChanges();
+                }
+              });
+
+            });
+
           });
 
         });
       });
     });
+  }
+
+  procesaFilas(fila: any) {
+    let existe = false;
+    let indice;
+    this.chats_cola.forEach((f, i) => {
+
+      if (f.id == fila.id) {
+        existe = true;
+        indice = i;
+      }
+    });
+    if (!existe) {
+
+      this.chats_cola.push(fila);
+    } else {
+      this.chats_cola[indice].chats = fila.chats;
+    }
+
   }
 
   buscarConfiguracion(id: number): Configuracion {
@@ -166,10 +215,20 @@ export class ChatExpertoComponent {
         } else {
           c.mensajes[i].estado = m.estado;
         }
+        if (i == d.length - 1) {
+          c.ultimo_mensaje = m;
+          if (m.es_nota_voz) {
+            c.ultimo_mensaje.label = 'Nota de voz';
+          } else if (m.es_archivo) {
+            c.ultimo_mensaje.label = 'Archivo adjunto';
+          } else {
+            c.ultimo_mensaje.label = m.texto;
+          }
+        }
       });
-      this.ngZone.runOutsideAngular(() => {
+      /*this.ngZone.runOutsideAngular(() => {
         this.passByMensajes(c.mensajes, 0);
-      });
+      });*/
       primera_vez = false;
 
 
@@ -240,7 +299,7 @@ export class ChatExpertoComponent {
     audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
       m.audioControls.max = Math.ceil(target.duration);
-      
+
     });
     audio.addEventListener('timeupdate', e => {
       let target = <HTMLAudioElement>e.target;
@@ -290,7 +349,7 @@ export class ChatExpertoComponent {
     }
   }
   cambiaScroll(e) {
-    
+
   }
   verNuevosMensajes(comp: PerfectScrollbarComponent, c: Conversacion) {
     this.ocultar_nuevos_mensajes = true;
@@ -305,6 +364,15 @@ export class ChatExpertoComponent {
   onSelect(chat: Conversacion): void {
     this.chat = chat;
     chat.mensajes_nuevos = false;
+    this.setFocus(chat, true);
+  }
+
+  onSelectCola(c: Conversacion): void {
+    // this.chat = chat;
+    // chat.mensajes_nuevos = false;
+    this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo).then(u => {
+
+    });
   }
 
   remplazaEmoji(c: Conversacion) {
@@ -319,7 +387,6 @@ export class ChatExpertoComponent {
   }
 
   seleccionarEmoji(evento, c: Conversacion) {
-    console.log(evento);
     if (c.texto_mensaje) {
       c.texto_mensaje += '' + evento.emoji.native;
     } else {
@@ -385,10 +452,11 @@ export class ChatExpertoComponent {
           m.duracion = duration;
           break;
       }
-      this.ngZone.runOutsideAngular(() => {
+      chat.mensajes.push(m);
+      /*this.ngZone.runOutsideAngular(() => {
         chat.mensajes.push(m);
         this.passByMensajes(chat.mensajes, 0);
-      });
+      });*/
       this.chatService.usuarioDejaEscribir(chat, this.user.getId());
       chat.texto_mensaje = '';
       if (comp) {
@@ -408,12 +476,12 @@ export class ChatExpertoComponent {
   }
 
   adjuntarArchivo(c: Conversacion, evento: Event, form: HTMLFormElement, input: HTMLInputElement) {
-    
+
     let target = <any>evento.target;
     c.cargando_archivo = true;
     if (target.files && target.files.length > 0) {
       this.chatService.adjuntarArchivosServidor(target.files[0]).then(archivo => {
-        
+
         c.archivo_adjunto = archivo;
         input.value = "";
         c.cargando_archivo = false;
@@ -427,7 +495,7 @@ export class ChatExpertoComponent {
   }
 
   adjuntarNotaVoz(c: Conversacion, file: File, duration: number) {
-    
+
     c.cargando_archivo = true;
     c.grabando_nota = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
@@ -445,46 +513,53 @@ export class ChatExpertoComponent {
 
     let minutos = parseInt(this.buscarConfiguracion(7).valor);
     let tiempo = minutos * 60;
-    const options = { mimeType: 'video/webm;codecs=vp9' };
+    const options = { mimeType: 'audio/webm' };
     let detenido = false;
-    let calculaTiempo = { fechaIni: null, fechaFin: null, audioBitsPerSecond: 48000 };
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        c.mediaRecorder = new MediaRecorder(stream, options);
+    let calculaTiempo = { fechaIni: null, fechaFin: null };
+    if (!this.stream) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          this.stream = stream;
+          c.mediaRecorder = new StereoAudioRecorder(stream, {
+            sampleRate: 48000,
+            get16BitAudio: true,
+            bufferSize: 4096,
+            numberOfAudioChannels: 1
+          });
+          this.startTimer(tiempo, c).then(() => {
+            c.mediaRecorder.stop(audioBlob => {
+              this.onStopRecordingNotaVoz(audioBlob, c);
 
+            });
+          });
 
-        const audioChunks = [];
-        c.mediaRecorder.addEventListener("dataavailable", event => {
-          audioChunks.push(event.data);
         });
-
-        c.mediaRecorder.addEventListener("start", event => {
-          calculaTiempo.fechaIni = moment();
-          c.grabando_nota = true;
-        });
-
-        c.mediaRecorder.addEventListener("stop", () => {
-
-          calculaTiempo.fechaFin = moment();
-          const audioBlob = new Blob(audioChunks);
-          var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: "audio/wav" });
-          delete c.mediaRecorder;
-          var duration = Math.ceil(calculaTiempo.fechaFin.unix() - calculaTiempo.fechaIni.unix());
-          
-          this.adjuntarNotaVoz(c, voice_file, duration);
-          if (!detenido) {
-            detenido = true;
-            stream.getTracks().forEach(track => track.stop());
-          }
-          /*const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          audio.play();*/
-        });
-        this.startTimer(tiempo, c).then(() => {
-          c.mediaRecorder.stop();
-        });
-
+    } else {
+      c.mediaRecorder = new StereoAudioRecorder(this.stream, {
+        sampleRate: 48000,
+        get16BitAudio: true,
+        bufferSize: 4096,
+        numberOfAudioChannels: 1
       });
+      this.startTimer(tiempo, c).then(() => {
+        c.mediaRecorder.stop(audioBlob => {
+          this.onStopRecordingNotaVoz(audioBlob, c);
+
+        });
+      });
+    }
+
+
+
+  }
+
+  onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion) {
+    var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
+    delete c.mediaRecorder;
+    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
+    this.adjuntarNotaVoz(c, voice_file, duration);
+    this.stream.getTracks().forEach(track => track.stop());
+
   }
 
   startTimer(duration: number, c: Conversacion): Promise<any> {
@@ -496,13 +571,15 @@ export class ChatExpertoComponent {
 
     return new Promise((resolve, reject) => {
 
-      c.mediaRecorder.start();
+
       minutes = Math.floor(timer / 60);
       seconds = Math.floor(timer % 60);
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
       c.cuenta_regresiva = minutes + ":" + seconds;
-      timer -= 1;
+      c.mediaRecorder.record();
+      c.grabando_nota = true;
+      c.inicia_grabacion = new Date();
       c.interval_grabando = setInterval(() => {
         timer -= 1;
         minutes = Math.floor(timer / 60);
@@ -525,13 +602,18 @@ export class ChatExpertoComponent {
   }
 
   enviarNota(c: Conversacion) {
+    c.mediaRecorder.stop(audioBlob => {
+      this.onStopRecordingNotaVoz(audioBlob, c);
+    });
     window.clearInterval(c.interval_grabando);
-    c.mediaRecorder.stop();
+
   }
 
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
+    c.mediaRecorder.stop();
     window.clearInterval(c.interval_grabando);
+    this.stream.getTracks().forEach(track => track.stop());
   }
 
   escribiendo(c: Conversacion, event: KeyboardEvent) {

@@ -2,6 +2,7 @@ import { Observable } from "rxjs";
 import { User } from "./user.schema";
 import { Experto } from "./xhr.schema";
 import { AudioControls } from "./interfaces";
+import { Mensaje } from "./mensaje.schema";
 
 
 
@@ -41,6 +42,7 @@ export class Conversacion {
     cuenta_regresiva: string;
     interval_grabando: any;
     mediaRecorder: any;
+    nodo_audio: any;
     minimizado: boolean;
     expandido: boolean;
     focuseado: boolean;
@@ -50,6 +52,10 @@ export class Conversacion {
     mostrar_datos_cliente: boolean;
     mostrar_emojis: boolean;
     notas_voz: boolean;
+    ultimo_mensaje: Mensaje;
+    agrandado: boolean;
+    inicia_grabacion: Date;
+    tiempo_cola: boolean;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;

@@ -12,9 +12,10 @@ export interface xhrFilasExperto {
 }
 
 export interface Experto {
-    idtbl_usuario:number;
-    activo:boolean;
-    chats:Array<any>;
+    idtbl_usuario: number;
+    activo: boolean;
+    chats: Array<any>;
+    ultima_conexion: any;
 }
 
 

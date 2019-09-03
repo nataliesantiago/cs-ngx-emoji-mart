@@ -3,6 +3,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserService } from '../../../providers/user.service';
 import { User } from '../../../../schemas/user.schema';
 import { ChatService } from '../../../providers/chat.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -13,10 +14,11 @@ export class AppHeaderComponent {
   profileImage = '../../../../assets/images/users/profle.svg';
   estados_operador = [{ id: 1, nombre: 'Activo' }, { id: 2, nombre: 'Inactivo' }];
   user: User;
+  intervalo: any;
   constructor(private userService: UserService, private chatService: ChatService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
-      
+
       if (u) {
         this.user = u;
         this.profileImage = u.url_foto;
@@ -34,8 +36,16 @@ export class AppHeaderComponent {
   }
 
   cambiarEstadoExperto(e) {
+    if (this.intervalo) {
+      window.clearInterval(this.intervalo);
+    }
     let activo = (e.value == 1) ? true : false;
     this.userService.setActivoExperto(activo);
+    if (activo) {
+      this.intervalo = setInterval(() => {
+        this.userService.setActivoExperto(true);
+      }, 10000);
+    }
   }
 
   public config: PerfectScrollbarConfigInterface = {};

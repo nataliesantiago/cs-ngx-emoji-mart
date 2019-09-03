@@ -8,14 +8,32 @@
           <div class="panel-chats primero">
             <perfect-scrollbar class="contenido">
               <mat-nav-list>
-                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto"
+                <div *ngFor="let f of chats_cola">
+                  <mat-list-item (click)="onSelectCola(chat)" *ngFor="let chat of f.chats" class="espera">
+                    <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
+                    <div class="punt-estado-chat"
+                      [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola)}">
+                    </div>
+                    <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
+                  </mat-list-item>
+                </div>
+                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos"
                   [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
                     [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1)}">
                   </div>
                   <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
+                  <p matLine class="text-muted preview-mensaje" [ngClass]="{'bold':chat.mensajes_nuevos}"
+                    *ngIf="chat.mensajes && chat.ultimo_mensaje">
+                    <span *ngIf="chat.ultimo_mensaje.id_usuario==user.idtbl_usuario">
+                      <mat-icon *ngIf="chat.ultimo_mensaje.estado==1">access_time</mat-icon>
+                      <mat-icon *ngIf="chat.ultimo_mensaje.estado==2">done</mat-icon>
+                      <mat-icon *ngIf="chat.ultimo_mensaje.estado==3">done_all</mat-icon>
+                    </span>
+                    {{chat.ultimo_mensaje.label}} </p>
                 </mat-list-item>
+
               </mat-nav-list>
             </perfect-scrollbar>
           </div>
@@ -57,7 +75,8 @@
               </button>
               <mat-menu #them="matMenu" x-position="before">
                 <div mat-menu-item>
-                  <mat-slide-toggle [color]="megna" [(ngModel)]="chat.notas_voz" (click)="$event.stopPropagation();" (change)="toggleNotas(chat)">
+                  <mat-slide-toggle [color]="megna" [(ngModel)]="chat.notas_voz" (click)="$event.stopPropagation();"
+                    (change)="toggleNotas(chat)">
                     Habilitar notas de voz
                   </mat-slide-toggle>
                 </div>
@@ -82,7 +101,7 @@
               <div class="chat-list">
                 <div class="chat-message"
                   [ngClass]="{'odd': m.id_usuario!==user.idtbl_usuario,'even': m.id_usuario===user.idtbl_usuario}"
-                  *ngFor="let m of chat.mensajes">
+                  *ngFor="let m of chat.mensajes | mensajesExperto: [1]">
                   <div class="chat-block">
                     <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
                       <div *ngIf="m.es_archivo">
@@ -111,7 +130,7 @@
                         <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>
                       </div>
                     </div>
-                    {{m.texto}}
+                    <div *ngIf="!m.es_nota_voz">{{m.texto}}</div>
                     <span *ngIf="m.id_usuario==user.idtbl_usuario">
                       <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
                       <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>

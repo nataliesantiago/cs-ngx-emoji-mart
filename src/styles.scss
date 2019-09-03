@@ -122,7 +122,8 @@ body {
   color: red !important;
 }
 
-.mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple,
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
   background-color: red !important;
 }
 
@@ -265,7 +266,6 @@ body {
   text-align: center;
   height: 188px;
   display: flex;
-  border: 1px solid #bcbcbc;
   z-index: 5;
 
   .boton-cerrar {
@@ -315,6 +315,10 @@ body {
 
 .pointer {
   cursor: pointer;
+}
+
+.bold {
+  font-weight: bold !important;
 }
 
 .contenedor-grande {
@@ -453,6 +457,7 @@ body {
 
 .acciones-chat {
 
+  border: 1px solid rgba(120, 130, 140, 0.13) !important;
 
   .mat-button-wrapper {
     color: #b5aeae;
@@ -936,7 +941,9 @@ ul li {
   .autocomplete-container {
     width: 300px !important;
   }
-
+  .hidden-mobile{
+    display: none !important;
+  }
 
 }
 

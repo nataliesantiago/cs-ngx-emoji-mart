@@ -12,20 +12,45 @@ export class SonidosComponent implements OnInit {
   sos: HTMLAudioElement;
   notificacion: HTMLAudioElement;
   constructor(private soundService: SonidosService) {
+    this.mensaje = new Audio();
+    this.mensaje.src = 'assets/sounds/message.mp3';
+    this.mensaje.load();
+    this.cliente = new Audio();
+    this.cliente.src = 'assets/sounds/cliente.wav';
+    this.cliente.load();
+    this.sos = new Audio();
+    this.sos.src = 'assets/sounds/alarma.wav';
+    this.sos.load();
+    this.notificacion = new Audio();
+    this.notificacion.src = 'assets/sounds/notificacion.mp3';
+    this.notificacion.load();
     this.soundService.sonidoObserver.subscribe(t => {
+      let media;
+
+
       switch (t) {
         case 1:
-          this.mensaje.play();
+          if (this.mensaje)
+            media = this.mensaje;
           break;
         case 2:
-          this.cliente.play();
+          if (this.cliente)
+            media = this.cliente;
           break;
         case 3:
-          this.sos.play();
+          if (this.sos)
+            media = this.sos;
           break;
         case 4:
-          this.notificacion.play();
+          if (this.notificacion)
+            media = this.notificacion;
           break;
+      }
+      if (media) {
+        const playPromise = media.play();
+        if (playPromise !== null) {
+          playPromise.catch(() => { media.play(); })
+        }
       }
     })
   }
@@ -33,21 +58,6 @@ export class SonidosComponent implements OnInit {
   ngOnInit() {
   }
 
-  asignarAudioMensaje(element: HTMLAudioElement, tipo: number) {
-    switch (tipo) {
-      case 1:
-        this.mensaje = element;
-        break;
-      case 2:
-        this.cliente = element;
-        break;
-      case 3:
-        this.sos = element;
-        break;
-      case 4:
-        this.notificacion = element;
-        break;
-    }
-  }
+  
 
 }
