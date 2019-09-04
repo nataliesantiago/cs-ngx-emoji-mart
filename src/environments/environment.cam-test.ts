@@ -5,15 +5,15 @@
 
 export const environment = {
     production: false,
-    URL_BACK: 'http://localhost:8080/api/',
-    CLIENT_ID: '993073337079-0qt03a4l3pk7psfnpk1nto8m5bt14vnt.apps.googleusercontent.com', //id de cliente de google para la aplicacion
+    URL_BACK: 'https://comusoportecam-desarrollo.appspot.com/api/',
+    CLIENT_ID: '659384240459-jfjf9poq9fra3focm0hajoalvnbcu525.apps.googleusercontent.com', //id de cliente de google para la aplicacion
     firebaseConfig: {
-      apiKey: "AIzaSyCk1WFHTdfSmhcH63_iGZU_s3AvwiQI_RU",
-      authDomain: "davivienda-comunidades-col-dev.firebaseapp.com",
-      databaseURL: "https://davivienda-comunidades-col-dev.firebaseio.com",
-      projectId: "davivienda-comunidades-col-dev",
-      storageBucket: "davivienda-comunidades-col-dev.appspot.com",
-      messagingSenderId: "993073337079",
-      appId: "1:993073337079:web:4dc46bec7c927ec7"
+        apiKey: "AIzaSyAx-GuSyaatybFcHxajdLBo9pcU7UYwP98",
+        authDomain: "comusoportecam-desarrollo.firebaseapp.com",
+        databaseURL: "https://comusoportecam-desarrollo.firebaseio.com",
+        projectId: "comusoportecam-desarrollo",
+        storageBucket: "",
+        messagingSenderId: "659384240459",
+        appId: "1:659384240459:web:5c39de166992d5aa"
     }
   };

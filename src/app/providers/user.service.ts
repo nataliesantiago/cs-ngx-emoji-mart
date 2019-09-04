@@ -31,6 +31,7 @@ export class UserService {
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth) {
 
         this.ajax.sethost(environment.URL_BACK); // Desarrollo
+        console.log(environment.firebaseConfig);
         //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
         window.onbeforeunload = () => {
             if (this.user && this.user.getIdRol() == 2) {

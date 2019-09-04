@@ -54,16 +54,12 @@ import { MultiselectComponent } from './multiselect/multiselect.component';
     InputfieldComponent,
     SortheaderComponent,
     SelectfieldComponent,
-    TreeComponent,
     EditorComponent,
     PaginatiorComponent,
     FormValidationComponent,
     UploadComponent,
     WizardComponent,
     MultiselectComponent
-  ],
-  exports: [
-    TreeComponent
   ]
 })
 export class FormModule { }

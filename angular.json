@@ -117,6 +117,10 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "material:build:production"
+                        },
+                        "cam": {
+                            "browserTarget": "material:build:cam"
+                            
                         }
                     }
                 },
