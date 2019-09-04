@@ -43,7 +43,7 @@ import { AppSearchComponent } from './components/search/search.component';
 import { SearchService } from './providers/search.service';
 import { from } from 'rxjs';
 import { FormularioPreguntasComponent } from './formulario-preguntas/formulario-preguntas.component';
-import { TreeComponent } from './forms/Tree/tree.component';
+import { TreeComponent } from "./forms/tree/treecomponent";
 import { HighlightPipe } from './home/highlight.pipe';
 import { AppBlankComponent } from './layouts/blank/blank.component';
 import { AutosizeDirective } from '../directives/autosize.directive';
@@ -123,8 +123,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CreacionProductosComponent,
     FormularioProductosComponent,
     MensajeClientePipe,
-    MensajesExpertoPipe,
-    TreeComponent
+    MensajesExpertoPipe
   ],
   imports: [
     BrowserModule,
