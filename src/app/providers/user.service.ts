@@ -179,11 +179,11 @@ export class UserService {
         return new Promise((resolve, reject) => {
             this.user = u;
             //localStorage.setItem('user', JSON.stringify(u));
-            this.subjectUsuario.next(u);
             if (u) {
                 //this.initializeSocket();
                 this.initFirebase().then(() => {
                     resolve();
+                    this.subjectUsuario.next(u);
                 });
             }
         });

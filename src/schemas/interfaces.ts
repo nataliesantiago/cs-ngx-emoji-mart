@@ -31,3 +31,21 @@ export interface ExtensionArchivoChat {
     control_megabytes?: FormControl;
     megas_tmp?: number;
 }
+
+
+export interface IntencionChat {
+    idbl_intencion_chat?: number
+    id_usuario?: number;
+    frase?: string;
+    activo?: boolean;
+    fecha_creacion?: Date;
+    id_categoria_experticia?: number;
+    nombre_categoria?: string;
+}
+
+export interface CategoriaExperticia {
+    idtbl_categoria_experticia: number;
+    nombre: string;
+    fecha_creacion: Date;
+    activo: boolean;
+}

@@ -1,0 +1,49 @@
+<div class="contenedor-principal">
+  <mat-card *ngIf="creando_intencion">
+    <mat-card-content>
+      <mat-card-title>Datos Intención</mat-card-title>
+
+      <form class="m-t-20">
+        <mat-form-field class="example-full-width">
+          <input matInput name="extension" placeholder="Frase que un usuario pueda consultar" value="" maxlength="3900"
+            type="text" #extension="ngModel" [(ngModel)]="nueva_intencion.frase" autocomplete="off">
+
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="Selecciona una categoría" aria-label="Number" matInput
+            [formControl]="createControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoriaNueva($event.option.value)'>
+            <mat-option *ngFor="let option of categorias" [value]="option">
+              {{option.nombre}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div>
+          <button mat-raised-button color="primary" [disabled]="!createControl.value || !nueva_intencion.frase"
+            (click)="crearIntencion()">Crear</button> &nbsp;
+          <button mat-raised-button color="basic" (click)="creando_intencion=!creando_intencion">Cancelar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <div class="botones" *ngIf="!creando_intencion">
+    <button mat-button color="primary" (click)="creando_intencion=!creando_intencion">
+      <mat-icon>add</mat-icon> Crear Intención
+    </button>
+  </div>
+  <div>
+    <mat-form-field class="example-full-width">
+      <input type="text" placeholder="Selecciona la categoría de experticia" aria-label="Number" matInput
+        [formControl]="myControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoria($event.option.value)'>
+        <mat-option *ngFor="let option of categorias" [value]="option">
+          {{option.nombre}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <div *ngIf="!myControl.value">
+      <p>Acá se muestran las intenciones de las categorías</p>
+    </div>
+    <div *ngFor="let intencion of intenciones" class="intencion-chat-lista">{{intencion.frase}}</div>
+  </div>
+</div>

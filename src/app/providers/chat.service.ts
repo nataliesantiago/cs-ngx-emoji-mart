@@ -17,7 +17,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { resolve } from 'url';
-import { ExtensionArchivoChat } from '../../schemas/interfaces';
+import { ExtensionArchivoChat, IntencionChat } from '../../schemas/interfaces';
 const moment = _rollupMoment || _moment;
 
 
@@ -46,7 +46,7 @@ export class ChatService {
       this.user = u;
     });
     this.getConfiguracionesChat();
-    
+
   }
   /**
    * @description Se encarga de buscar las conversaciones activas del cliente y las aloja en memoria ram para futuras consultas
@@ -207,7 +207,10 @@ export class ChatService {
   crearConversacion(categoria?: number, id_busqueda?: number) {
     this.subjectConversacion.next({ id_producto: categoria, id_busqueda: id_busqueda });
   }
-
+  /**
+   * @description Envia la notificación de escribiendo en una conversación
+   * @param  {Conversacion} c
+   */
   usuarioEscribiendoConversacion(c: Conversacion) {
     if (c.timeout_escribiendo) {
       window.clearTimeout(c.timeout_escribiendo);
@@ -217,13 +220,21 @@ export class ChatService {
       this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).delete();
     }, 4000);
   }
-
+  /**
+   * @description Retira la notificacion de escribiendo en una conversación segun el id del usuario
+   * @param  {Conversacion} c
+   * @param  {number} id Id del usuario
+   */
   usuarioDejaEscribir(c: Conversacion, id: number) {
 
     this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + id).delete();
 
   }
-
+  /**
+   * @description Segun el texto introducido por el usuario busca el emoji correspondiente
+   * @param  {string} texto
+   * @returns string
+   */
   findEmojiData(texto: string): string {
     if (texto) {
       let tmp = texto.split(' ');
@@ -240,27 +251,86 @@ export class ChatService {
       return '';
     }
   }
-
+  /**
+   * @description Agrega una nueva extensión en el chat para que se puedan ajuntar archivos de ese tipo
+   * @param  {ExtensionArchivoChat} d
+   * @returns Promise
+   */
   crearExtensionArchivo(d: ExtensionArchivoChat): Promise<any> {
     return new Promise((res, rejec) => {
       this.ajax.post('chat/extensionesAdjuntos/crear', d).subscribe(data => {
         if (data.success) {
           res(data.id);
+        } else {
+          rejec();
         }
       })
     });
 
   }
-
+  /**
+   * @description Edita una extensión creada anteriormente
+   * @param  {ExtensionArchivoChat} d
+   * @returns Promise
+   */
   editarExtension(d: ExtensionArchivoChat): Promise<any> {
     return new Promise((res, rejec) => {
       this.ajax.post('chat/extensionesAdjuntos/actualizar', d).subscribe(data => {
         if (data.success) {
           res(data.id);
+        } else {
+          rejec();
         }
       })
     });
   }
 
+  /**
+   * @description Obtiene las categorias de experticia del servidor
+   * @returns Promise
+   */
+  getCategoriasExperticia(): Promise<any> {
+    return new Promise((resolve, rej) => {
+      this.ajax.get('chat/getCategoriasExperticia', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.categorias_experticia);
+        } else {
+          rej();
+        }
+      })
+    });
+  }
 
+  /**
+   * @description Agrega una intencion a la categoría de experticia
+   * @param  {IntencionChat} i
+   * @returns Promise
+   */
+  crearIntencionChat(i: IntencionChat): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/admin/intenciones/crear', i).subscribe(d => {
+        if (d.success) {
+          resolve();
+        } else {
+          reject();
+        }
+      })
+    })
+  }
+
+  /**
+   * @description Obtiene las categorias de experticia del servidor
+   * @returns Promise
+   */
+  getIntencionesCategoriasExperticia(id_categoria): Promise<any> {
+    return new Promise((resolve, rej) => {
+      this.ajax.get('chat/getIntencionesCategoriasExperticia', { id_categoria: id_categoria }).subscribe(d => {
+        if (d.success) {
+          resolve(d.intenciones);
+        } else {
+          rej();
+        }
+      })
+    });
+  }
 }

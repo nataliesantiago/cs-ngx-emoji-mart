@@ -77,6 +77,7 @@ import { CreacionProductosComponent } from './creacion-productos/creacion-produc
 import { MensajeClientePipe } from '../pipes/mensaje-cliente.pipe';
 import { MensajesExpertoPipe } from '../pipes/mensajes-experto.pipe';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { IntencionesChatComponent } from './intenciones-chat/intenciones-chat.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -123,7 +124,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CreacionProductosComponent,
     FormularioProductosComponent,
     MensajeClientePipe,
-    MensajesExpertoPipe
+    MensajesExpertoPipe,
+    IntencionesChatComponent
   ],
   imports: [
     BrowserModule,
