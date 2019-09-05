@@ -18,6 +18,8 @@ import { AutenticationService } from "../services/autenticacion.service";
 import { AjaxService } from '../providers/ajax.service';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserService } from '../providers/user.service';
+import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: "app-home",
@@ -65,7 +67,7 @@ export class HomeComponent implements OnInit {
   languages: string[] = ["en-US", "es-CO"];
   currentLanguage = this.languages[1];
   actionContext: ActionContext = new ActionContext();
-
+  ambiente = environment.ambiente;
   initRecognition() {
     this.speechRecognizer.setLanguage(this.currentLanguage);
     this.speechRecognizer.onStart().subscribe(data => {
@@ -103,7 +105,6 @@ export class HomeComponent implements OnInit {
         this.detectChanges();
         this.actionContext.runAction(message, this.currentLanguage);
 
-        
       }
     });
 
@@ -128,7 +129,6 @@ export class HomeComponent implements OnInit {
       this.detectChanges();
     });
   }
-  
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -161,18 +161,18 @@ export class HomeComponent implements OnInit {
     this.searchText = "";
     this.responseSearch.setActiveMostrarBarra(false);
     this.ajax.get('administracion/obtener-texto-home', {}).subscribe(p => {
-      if(p.success){
-        
+      if (p.success) {
+
         this.texto_home = p.item[0].valor;
-        
+
       }
     })
 
     this.usuario = user.getUsuario();
-    
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
-      if(d.success){
-        
+
+    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo }).subscribe(d => {
+      if (d.success) {
+
         this.correo_usuario = d.usuario[0].correo;
         this.validacion_pais_usuario = this.correo_usuario.split(".");
         this.correo_usuario = this.validacion_pais_usuario[(this.validacion_pais_usuario.length - 1)];
@@ -180,13 +180,13 @@ export class HomeComponent implements OnInit {
     })
 
     this.ajax.get('preguntas/obtener-home', {}).subscribe(p => {
-      if(p.success){
-        
+      if (p.success) {
+
         this.nuevos_contenidos = p.preguntas;
-        
+
       }
     })
-      
+
   }
 
   /**
@@ -267,12 +267,10 @@ export class HomeComponent implements OnInit {
   }
 
   buscar(metodo) {
-    
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = "";
     }
     this.responseSearch.setResultados(this.textopredictivo);
-    
     var date = new Date();
     var fecha =
       date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();

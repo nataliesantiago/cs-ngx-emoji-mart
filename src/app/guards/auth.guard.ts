@@ -89,8 +89,6 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         reject(false);
                     }
 
-
-
                 })
             });
 

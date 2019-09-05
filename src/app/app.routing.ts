@@ -20,6 +20,7 @@ import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
 import { AdminsitradorExtensionesChatComponent } from './adminsitrador-extensiones-chat/adminsitrador-extensiones-chat.component';
 import { CreacionProductosComponent } from './creacion-productos/creacion-productos.component';
 import { FormularioProductosComponent } from './formulario-productos/formulario-productos.component';
+import { IntencionesChatComponent } from './intenciones-chat/intenciones-chat.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -47,4 +48,5 @@ export const AppRoutes: Routes = [
   { path: 'formulario_pregunta', component: FormularioPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
+  { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
 ];

@@ -6,7 +6,7 @@
       <h2 class="text_center texto_gris"><b>{{texto_home}}</b></h2>
     </div>
     <app-search-component></app-search-component>
-    <div class="historial__contenedor up" *ngIf="correo_usuario != 'com'">
+    <div class="historial__contenedor up" *ngIf="correo_usuario != 'com' && ambiente && ambiente=='cam'">
       <mat-card>
           <mat-card-header class="bg-danger text-white">
               <mat-card-title class="titulo-card">Nuevos Conteidos</mat-card-title>

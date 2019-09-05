@@ -31,7 +31,6 @@ export class UserService {
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth) {
 
         this.ajax.sethost(environment.URL_BACK); // Desarrollo
-        console.log(environment.firebaseConfig);
         //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
         window.onbeforeunload = () => {
             if (this.user && this.user.getIdRol() == 2) {
@@ -180,11 +179,11 @@ export class UserService {
         return new Promise((resolve, reject) => {
             this.user = u;
             //localStorage.setItem('user', JSON.stringify(u));
-            this.subjectUsuario.next(u);
             if (u) {
                 //this.initializeSocket();
                 this.initFirebase().then(() => {
                     resolve();
+                    this.subjectUsuario.next(u);
                 });
             }
         });
