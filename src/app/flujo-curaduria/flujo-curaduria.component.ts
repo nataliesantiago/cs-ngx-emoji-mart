@@ -230,6 +230,10 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.router.navigate(['/formulario-preguntas-flujo-curaduria'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
   }
 
-  
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 
 }

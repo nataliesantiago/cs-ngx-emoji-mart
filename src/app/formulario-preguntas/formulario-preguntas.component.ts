@@ -197,46 +197,57 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   guardarPregunta(){
 
-    if(this.editar){
-      
-      if(this.pregunta.muestra_fecha_actualizacion){
-        this.pregunta.muestra_fecha_actualizacion = 1;
-      }else{
-        this.pregunta.muestra_fecha_actualizacion = 0;
-      }
-      console.log("Subrespuestas-cargadas", this.subrespuestas);
-      this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-      for(let i = 0; i < this.array_mostrar.length; i++){
-        this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
-      }
-      this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion }).subscribe(d => {
-        if(d.success){
-        
-          this.router.navigate(['/ad-preguntas']);
-        }
-      })
-    }else{
-      
-      if(this.pregunta.muestra_fecha_actualizacion){
-        this.pregunta.muestra_fecha_actualizacion = 1;
-      }else{
-        this.pregunta.muestra_fecha_actualizacion = 0;
-      }
-      //this.pregunta.id_estado_flujo = 4;
-      this.pregunta.id_usuario = this.id_usuario;
-      this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-      for(let i = 0; i < this.array_mostrar.length; i++){
-        this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
-      }
-      
-      this.ajax.post('preguntas/guardar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion }).subscribe(d => {
-        if(d.success){
-          
-          this.router.navigate(['/ad-preguntas']);
-        }
-      })
-    }
+    if(this.pregunta.titulo == "" || this.pregunta.id_producto == "" || this.pregunta.id_estado == ""){
 
+      swal.fire(
+        'Complete los campos obligatorios',
+        '',
+        'warning'
+      )
+
+    }else{
+
+      if(this.editar){
+      
+        if(this.pregunta.muestra_fecha_actualizacion){
+          this.pregunta.muestra_fecha_actualizacion = 1;
+        }else{
+          this.pregunta.muestra_fecha_actualizacion = 0;
+        }
+        console.log("Subrespuestas-cargadas", this.subrespuestas);
+        this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+        for(let i = 0; i < this.array_mostrar.length; i++){
+          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+        }
+        this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion }).subscribe(d => {
+          if(d.success){
+          
+            this.router.navigate(['/ad-preguntas']);
+          }
+        })
+      }else{
+        
+        if(this.pregunta.muestra_fecha_actualizacion){
+          this.pregunta.muestra_fecha_actualizacion = 1;
+        }else{
+          this.pregunta.muestra_fecha_actualizacion = 0;
+        }
+        //this.pregunta.id_estado_flujo = 4;
+        this.pregunta.id_usuario = this.id_usuario;
+        this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+        for(let i = 0; i < this.array_mostrar.length; i++){
+          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+        }
+        
+        this.ajax.post('preguntas/guardar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion }).subscribe(d => {
+          if(d.success){
+            
+            this.router.navigate(['/ad-preguntas']);
+          }
+        })
+      }
+
+    }
     
   }
 
@@ -257,7 +268,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if(this.editar){
@@ -307,7 +319,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if(this.editar){
@@ -360,7 +373,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if(this.editar){
@@ -420,7 +434,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if(this.editar){

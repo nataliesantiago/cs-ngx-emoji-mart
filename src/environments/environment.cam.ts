@@ -15,5 +15,6 @@ export const environment = {
         storageBucket: "",
         messagingSenderId: "659384240459",
         appId: "1:659384240459:web:5c39de166992d5aa"
-    }
+    },
+    ambiente: 'cam'
   };

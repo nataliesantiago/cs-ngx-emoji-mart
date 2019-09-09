@@ -6,6 +6,10 @@
   <div fxFlex.gt-sm="5" fxFlex="100"></div>
   <div fxFlex.gt-sm="70" fxFlex="100" class="container-principal">
     <div class="container-texto">
+      <div class="fecha-modificacion" *ngIf="pregunta.muestra_fecha_actualizacion == 1">
+        <strong>Última modificación: {{pregunta.fecha_ultima_modificacion}}</strong>
+        <br>
+      </div>
       <h3><strong>{{pregunta.titulo}}</strong></h3>
       <div [innerHTML]="pregunta.respuesta"></div>
       <div *ngIf="categorias_subrespuestas_superior.length > 0">
