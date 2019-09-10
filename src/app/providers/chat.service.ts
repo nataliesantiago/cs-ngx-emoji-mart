@@ -46,7 +46,6 @@ export class ChatService {
       this.user = u;
     });
     this.getConfiguracionesChat();
-
   }
   /**
    * @description Se encarga de buscar las conversaciones activas del cliente y las aloja en memoria ram para futuras consultas

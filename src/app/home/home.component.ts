@@ -105,7 +105,6 @@ export class HomeComponent implements OnInit {
         this.detectChanges();
         this.actionContext.runAction(message, this.currentLanguage);
 
-
       }
     });
 
@@ -130,7 +129,6 @@ export class HomeComponent implements OnInit {
       this.detectChanges();
     });
   }
-
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -269,12 +267,10 @@ export class HomeComponent implements OnInit {
   }
 
   buscar(metodo) {
-
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = "";
     }
     this.responseSearch.setResultados(this.textopredictivo);
-
     var date = new Date();
     var fecha =
       date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();

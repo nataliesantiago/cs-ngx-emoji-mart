@@ -3,6 +3,9 @@ import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert2';
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'app-respuestas',
@@ -37,6 +40,102 @@ export class RespuestasComponent implements OnInit {
       }
     })
 
+    this.route.queryParams
+      .filter(params => params.id_pregunta)
+      .subscribe(params => {
+        
+        {order: "popular"}
+        this.id_pregunta_visualizar = params.id_pregunta;
+        
+      });
+    
+    this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
+      if(p.success){
+        
+        p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
+
+        this.pregunta = p.pregunta[0];
+
+        this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
+          if(sr.success){
+            
+            this.subrespuestas = sr.subrespuesta;                
+            
+            for(let i = 0; i < this.subrespuestas.length; i++){
+              let validador = 0;
+              if(this.categorias_subrespuestas_superior.length == 0 && this.subrespuestas[i].posicion == 1){
+                this.categorias_subrespuestas_superior.push({categoria: this.subrespuestas[i].categoria});
+              }else{
+                if(this.subrespuestas[i].posicion == 1){
+                  for(let j = 0; j < this.categorias_subrespuestas_superior.length; j++){
+                    if(this.subrespuestas[i].categoria == this.categorias_subrespuestas_superior[j].categoria){
+                      validador++;
+                    }
+                  }
+                  if(validador == 0){
+                    this.categorias_subrespuestas_superior.push({categoria: this.subrespuestas[i].categoria});
+                  }
+                }
+              }
+            }
+
+            for(let i = 0; i < this.subrespuestas.length; i++){
+              let validador = 0;
+              if(this.categorias_subrespuestas_inferior.length == 0 && this.subrespuestas[i].posicion == 2){
+                this.categorias_subrespuestas_inferior.push({categoria: this.subrespuestas[i].categoria});
+              }else{
+                if(this.subrespuestas[i].posicion == 2){
+                  for(let j = 0; j < this.categorias_subrespuestas_inferior.length; j++){
+                    if(this.subrespuestas[i].categoria == this.categorias_subrespuestas_inferior[j].categoria){
+                      validador++;
+                    }
+                  }
+                  if(validador == 0){
+                    this.categorias_subrespuestas_inferior.push({categoria: this.subrespuestas[i].categoria});
+                  }
+                }
+              }
+            }
+            
+            this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sg => {
+              if(sg.success){
+                
+                this.segmentos = sg.segmentos;
+                for(let i = 0; i < this.segmentos.length; i++){
+                  this.segmentos[i].respuesta = this.segmentos[i].texto;
+                }
+                
+                this.ajax.get('preguntas/obtener-subrespuesta-segmentos', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(srsg => {
+                  if(srsg.success){
+                    
+                    this.array_mostrar = srsg.subrespuestaSegmento;
+                    for(let i = 0; i < this.array_mostrar.length; i++){
+                      this.array_mostrar[i].respuesta = this.array_mostrar[i].texto;
+                      for(let j = 0; j < this.segmentos.length; j++){
+                        if(this.array_mostrar[i].id_segmento == this.segmentos[j].idtbl_segmento){
+                          this.array_mostrar[i].pos_segmento = j;
+                          j = this.segmentos.length + 1;
+                        }
+                      }
+                    }
+                    
+                    this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
+                      if(pras.success){
+                        
+                        this.preguntas_adicion = pras.preguntas_asociadas;
+                        this.cg.detectChanges();       
+                      }
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
+        
+      }
+    })
+
    }
 
   ngOnInit() {
@@ -53,7 +152,10 @@ export class RespuestasComponent implements OnInit {
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if(p.success){
         
+        p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
+
         this.pregunta = p.pregunta[0];
+
         this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
           if(sr.success){
             

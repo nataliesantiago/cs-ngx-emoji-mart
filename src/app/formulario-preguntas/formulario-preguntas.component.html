@@ -5,7 +5,7 @@
       <h3>Formulario de Registro de Preguntas y Respuestas</h3>
       <hr>
       <mat-form-field floatLabel="never">
-          <mat-label>Digite la pregunta</mat-label>
+          <mat-label>Digite la pregunta*</mat-label>
           <input matInput [(ngModel)]="pregunta.titulo" name="titulo">
       </mat-form-field>
       <br>
@@ -14,20 +14,23 @@
       <!--quill-editor (onEditorCreated)="quillModulesFc($event)"></quill-editor-->
       <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor> 
       <br>
-      <mat-form-field floatLabel="never">
-        <mat-label>Categoria (Más bajo nivel)</mat-label>
-        <select matNativeControl [(ngModel)]="pregunta.id_producto" name="producto">
-          <option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</option>
-        </select>
-      </mat-form-field>
+      <div fxLayout="row wrap">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Categoria (Más bajo nivel)*</mat-label>
+          <select matNativeControl [(ngModel)]="pregunta.id_producto" name="producto">
+            <option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</option>
+          </select>
+        </mat-form-field>
+        <div fxFlex.gt-sm="10" fxFlex="100">
+        </div>
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Estado de la pregunta*</mat-label>
+          <select matNativeControl [(ngModel)]="pregunta.id_estado" name="estado">
+            <option *ngFor="let i of estados_pregunta" value="{{i.idtbl_estado_pregunta}}">{{i.nombre}}</option>
+          </select>
+        </mat-form-field>
+      </div>
       <br>
-      <br>
-      <mat-form-field floatLabel="never">
-        <mat-label>Estado de la pregunta</mat-label>
-        <select matNativeControl [(ngModel)]="pregunta.id_estado" name="estado">
-          <option *ngFor="let i of estados_pregunta" value="{{i.idtbl_estado_pregunta}}">{{i.nombre}}</option>
-        </select>
-      </mat-form-field>
       <div fxLayout="row wrap" class="row">
           <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
               <mat-checkbox color="primary" [(ngModel)]="pregunta.muestra_fecha_actualizacion">Mostrar Fecha de la Última Modificación</mat-checkbox>
@@ -197,7 +200,18 @@
       </div>
       <br>
       <br>
-      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarPregunta()">Guardar</button>
+      <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex="100">
+          <div fxFlex.gt-sm="10" fxFlex="100">
+            <button class="boton-calificacion si" mat-raised-button (click)="guardarPregunta()">Guardar</button>
+          </div>
+          <div fxFlex.gt-sm="2" fxFlex="100"></div>
+          <div fxFlex.gt-sm="10" fxFlex="100">
+            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/ad-preguntas']"><span class="texto-boton">Cancelar</span></a>
+          </div>
+        </div>
+      </div>
+      
   </mat-card-content>
 
 

@@ -23,7 +23,7 @@ import { FormLayoutComponent } from './form-layouts/form-layout.component';
 import { PaginatiorComponent } from './paginator/paginator.component';
 import { SortheaderComponent } from './sortheader/sortheader.component';
 import { SelectfieldComponent } from './select/select.component';
-import { TreeComponent } from './tree/tree.component';
+import { TreeComponent } from "./tree/treecomponent";
 import { EditorComponent } from './editor/editor.component';
 import { FormValidationComponent } from './form-validation/form-validation.component';
 import { UploadComponent } from './file-upload/upload.component';

@@ -18,7 +18,7 @@ import { QuillService } from '../providers/quill.service';
 export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   productos = [];
-  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 3, muestra_fecha_actualizacion: 0, id_usuario_revision: null };
+  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 1, id_estado_flujo: 2, muestra_fecha_actualizacion: 0, id_usuario_revision: null };
   segmentos = [];
   subrespuestas = [];
   subrespuestas_segmentos = [];
@@ -45,7 +45,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   file: any;
   file2;
-  notas = { notas: '' };
+  notas = { notas: '', id_usuario_comentario: 0 };
   todos_usuarios = [];
   notas_mostrar = [];
   validar_flujo;
@@ -195,92 +195,119 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   guardarPregunta() {
 
-    if (this.editar) {
+    if(this.pregunta.titulo == "" || this.pregunta.id_producto == ""){
 
-      if (this.pregunta.muestra_fecha_actualizacion) {
-        this.pregunta.muestra_fecha_actualizacion = 1;
-      } else {
-        this.pregunta.muestra_fecha_actualizacion = 0;
-      }
-      if (this.pregunta.id_estado_flujo == 1) {
-        this.pregunta.id_estado_flujo = 2;
-      } else if (this.pregunta.id_estado_flujo == 2) {
-        this.pregunta.id_estado_flujo = 3;
-      } else if (this.pregunta.id_estado_flujo == 3) {
-        this.pregunta.id_estado_flujo = 4;
-      } else if (this.pregunta.id_estado_flujo == 4) {
-        this.pregunta.id_estado_flujo = 3;
-      }
+      swal.fire(
+        'Complete los campos obligatorios',
+        '',
+        'warning'
+      )
 
-      if (!this.validar_flujo && this.id_pregunta_editar != "sugerida") {
-        this.pregunta.id_estado_flujo = 1;
-      }
+    }else{
 
-      //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-      for (let i = 0; i < this.array_mostrar.length; i++) {
-        this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
-      }
-      this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
-        if (d.success) {
+      if (this.editar) {
 
-          this.router.navigate(['/flujo-curaduria']);
+        if (this.pregunta.muestra_fecha_actualizacion) {
+          this.pregunta.muestra_fecha_actualizacion = 1;
+        } else {
+          this.pregunta.muestra_fecha_actualizacion = 0;
         }
-      })
-    } else {
-
-      if (this.pregunta.muestra_fecha_actualizacion) {
-        this.pregunta.muestra_fecha_actualizacion = 1;
-      } else {
-        this.pregunta.muestra_fecha_actualizacion = 0;
-      }
-      this.pregunta.id_usuario = this.id_usuario;
-      //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-      for (let i = 0; i < this.array_mostrar.length; i++) {
-        this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
-      }
-      if (this.id_pregunta_editar == "sugerida") {
-        this.pregunta.id_estado_flujo = 2;
-      }
-
-      this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
-        if (d.success) {
-
-          this.router.navigate(['/flujo-curaduria']);
+        if (this.pregunta.id_estado_flujo == 1) {
+          this.pregunta.id_estado_flujo = 2;
+        } else if (this.pregunta.id_estado_flujo == 2) {
+          this.pregunta.id_estado_flujo = 3;
+        } else if (this.pregunta.id_estado_flujo == 3) {
+          this.pregunta.id_estado_flujo = 4;
+        } else if (this.pregunta.id_estado_flujo == 4) {
+          this.pregunta.id_estado_flujo = 3;
         }
-      })
+  
+        if (!this.validar_flujo && this.id_pregunta_editar != "sugerida") {
+          this.pregunta.id_estado_flujo = 1;
+        }
+
+        this.notas.id_usuario_comentario = this.id_usuario;
+  
+        //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+        for (let i = 0; i < this.array_mostrar.length; i++) {
+          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+        }
+        this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
+          if (d.success) {
+  
+            this.router.navigate(['/flujo-curaduria']);
+          }
+        })
+      } else {
+  
+        if (this.pregunta.muestra_fecha_actualizacion) {
+          this.pregunta.muestra_fecha_actualizacion = 1;
+        } else {
+          this.pregunta.muestra_fecha_actualizacion = 0;
+        }
+        this.pregunta.id_usuario = this.id_usuario;
+        //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+        for (let i = 0; i < this.array_mostrar.length; i++) {
+          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+        }
+        if (this.id_pregunta_editar == "sugerida") {
+          this.pregunta.id_estado_flujo = 2;
+          this.pregunta.id_estado = 1;
+          this.pregunta.id_usuario_revision = null;
+        }else{
+          this.pregunta.id_usuario_revision = this.id_usuario;
+        }
+  
+        this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
+          if (d.success) {
+  
+            this.router.navigate(['/flujo-curaduria']);
+          }
+        })
+      }
+
     }
-
 
   }
 
   rechazarPregunta() {
 
-
-    if (this.pregunta.muestra_fecha_actualizacion) {
-      this.pregunta.muestra_fecha_actualizacion = 1;
-    } else {
-      this.pregunta.muestra_fecha_actualizacion = 0;
-    }
-    if (this.pregunta.id_estado_flujo == 2) {
-      this.pregunta.id_estado_flujo = 1;
-    } else if (this.pregunta.id_estado_flujo == 3) {
-      this.pregunta.id_estado_flujo = 2;
-    } else if (this.pregunta.id_estado_flujo == 4) {
-      this.pregunta.id_estado_flujo = 3;
-    }
-
-    this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-    for (let i = 0; i < this.array_mostrar.length; i++) {
-      this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
-    }
-    this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
-      if (d.success) {
-
-        this.router.navigate(['/flujo-curaduria']);
+    swal.fire({
+      title: 'Rechazar Pregunta',
+      text: "Confirme para rechazar la pregunta",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if(result.value){
+        if (this.pregunta.muestra_fecha_actualizacion) {
+          this.pregunta.muestra_fecha_actualizacion = 1;
+        } else {
+          this.pregunta.muestra_fecha_actualizacion = 0;
+        }
+        if (this.pregunta.id_estado_flujo == 2) {
+          this.pregunta.id_estado_flujo = 1;
+        } else if (this.pregunta.id_estado_flujo == 3) {
+          this.pregunta.id_estado_flujo = 2;
+        } else if (this.pregunta.id_estado_flujo == 4) {
+          this.pregunta.id_estado_flujo = 3;
+        }
+    
+        this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+        for (let i = 0; i < this.array_mostrar.length; i++) {
+          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+        }
+        this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
+          if (d.success) {
+    
+            this.router.navigate(['/flujo-curaduria']);
+          }
+        })
       }
     })
-
-
   }
 
   anadirSegmento() {
@@ -300,7 +327,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if (this.editar) {
@@ -316,11 +344,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                   }
                 }
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'El segmento fue eliminado con exito.',
-                  'success'
-                )
               }
             })
           } else {
@@ -332,12 +355,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               }
             }
             this.cg.detectChanges();
-
-            swal.fire(
-              'Eliminado',
-              'El segmento fue eliminado con exito.',
-              'success'
-            )
           }
         } else {
           this.segmentos.splice(pos, 1);
@@ -348,11 +365,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             }
           }
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminado',
-            'El segmento fue eliminado con exito.',
-            'success'
-          )
         }
       }
     })
@@ -366,7 +378,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if (this.editar) {
@@ -376,30 +389,15 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               if (d.success) {
                 this.subrespuestas.splice(pos, 1);
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'La subrespuesta fue eliminada con exito.',
-                  'success'
-                )
               }
             })
           } else {
             this.subrespuestas.splice(pos, 1);
             this.cg.detectChanges();
-            swal.fire(
-              'Eliminado',
-              'La subrespuesta fue eliminada con exito.',
-              'success'
-            )
           }
         } else {
           this.subrespuestas.splice(pos, 1);
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminada',
-            'La subrespuesta fue eliminada con exito.',
-            'success'
-          )
         }
       }
     })
@@ -434,7 +432,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if (this.editar) {
@@ -444,30 +443,15 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               if (d.success) {
                 this.array_mostrar.splice(pos, 1);
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'La subrespuesta del segmento fue eliminada con exito.',
-                  'success'
-                )
               }
             })
           } else {
             this.array_mostrar.splice(pos, 1);
             this.cg.detectChanges();
-            swal.fire(
-              'Eliminado',
-              'La subrespuesta del segmento fue eliminada con exito.',
-              'success'
-            )
           }
         } else {
           this.array_mostrar.splice(pos, 1);
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminada',
-            'La subrespuesta del segmento fue eliminada con exito.',
-            'success'
-          )
         }
       }
     })
@@ -509,7 +493,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         if (this.editar) {
@@ -527,11 +512,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
                 this.cg.detectChanges();
-                swal.fire(
-                  'Eliminado',
-                  'La asociación fue eliminada con exito.',
-                  'success'
-                )
               }
             })
           } else {
@@ -546,11 +526,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.cg.detectChanges();
-            swal.fire(
-              'Eliminado',
-              'La asociación fue eliminada con exito.',
-              'success'
-            )
           }
         } else {
           let pos = 0;
@@ -564,11 +539,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.cg.detectChanges();
-          swal.fire(
-            'Eliminado',
-            'La asociación fue eliminada con exito.',
-            'success'
-          )
         }
       }
     })

@@ -9,7 +9,7 @@
     <div class="historial__contenedor up" *ngIf="correo_usuario != 'com' && ambiente && ambiente=='cam'">
       <mat-card>
           <mat-card-header class="bg-danger text-white">
-              <mat-card-title class="titulo-card">Nuevos Conteidos</mat-card-title>
+              <mat-card-title class="titulo-card">Nuevos Contenidos</mat-card-title>
           </mat-card-header>
           <mat-card-content class="contenido-card">
               <p *ngFor="let i of nuevos_contenidos">{{ i.titulo }}</p>

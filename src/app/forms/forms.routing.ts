@@ -10,7 +10,7 @@ import { PaginatiorComponent } from './paginator/paginator.component';
 import { SortheaderComponent } from './sortheader/sortheader.component';
 import { SelectfieldComponent } from './select/select.component';
 import { InputfieldComponent } from './input/input.component';
-import { TreeComponent } from './tree/tree.component';
+import { TreeComponent } from "./tree/treecomponent";
 import { EditorComponent } from './editor/editor.component';
 import { FormValidationComponent } from './form-validation/form-validation.component';
 import { UploadComponent } from './file-upload/upload.component';
