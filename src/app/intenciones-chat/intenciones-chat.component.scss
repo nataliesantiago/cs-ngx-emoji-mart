@@ -7,6 +7,28 @@
     .intencion-chat-lista {
         border: 1px solid #cccccc;
         margin: 4px 0;
-        padding: 10px 10px;
+        display: flex;
+
+        .frase {
+            flex: 1;
+            padding: 11px;
+        }
+
+        .icono-borrar {
+            display: none;
+        }
+
+        &:hover {
+            .icono-borrar {
+                display: inline-block;
+            }
+        }
     }
+}
+
+.loading {
+    padding: 0px 26px;
+    top: 14px;
+
+
 }

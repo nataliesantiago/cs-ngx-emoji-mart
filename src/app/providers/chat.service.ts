@@ -333,4 +333,22 @@ export class ChatService {
       })
     });
   }
+
+  /**
+    * @description Elimina una intencion en la categoría de experticia
+    * @param  {IntencionChat} i
+    * @returns Promise
+    */
+  eliminarIntencionChat(i: IntencionChat): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/admin/intenciones/eliminar', i).subscribe(d => {
+        if (d.success) {
+          resolve();
+        } else {
+          reject();
+        }
+      })
+    })
+  }
+
 }

@@ -20,12 +20,15 @@
                     <span *ngIf="!chat.asesor_actual">Chat de experto</span>
                     <span *ngIf="chat.asesor_actual">{{chat.asesor_actual.nombre}}</span>
                   </div>
-
-                  <button mat-icon-button class="ml-1 hidden-mobile" (click)="chat.agrandado=!chat.agrandado" >
+                  <button mat-icon-button class="ml-1" (click)="chat.minimizado=!chat.minimizado">
+                    <mat-icon *ngIf="!chat.minimizado">minimize</mat-icon>
+                    <mat-icon *ngIf="chat.minimizado">maximize</mat-icon>
+                  </button>
+                  <button mat-icon-button class="ml-1 hidden-mobile" (click)="chat.agrandado=!chat.agrandado">
                     <mat-icon class="icono-agrandar">open_in_new</mat-icon>
                   </button>
                   <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
-                    <mat-icon >more_vert</mat-icon> 
+                    <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #them="matMenu" x-position="before">
                     <button mat-menu-item>Contact info</button>
@@ -184,13 +187,18 @@
                 </div>
 
               </mat-sidenav-container>
-              <div class="componente-pequeno" [hidden]="!chat.minimizado" (click)="chat.minimizado=!chat.minimizado"
+              <div class="componente-pequeno" [hidden]="!chat.minimizado"
                 [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}">
                 <div class="font-14 nombre-asesor">
                   <mat-icon class="icono-mensaje">message</mat-icon>
-                  <span *ngIf="!chat.asesor_actual">Chat de experto</span>
-                  <span *ngIf="chat.asesor_actual">{{chat.asesor_actual.nombre}}</span>
+                  <span *ngIf="!chat.asesor_actual" (click)="chat.minimizado=!chat.minimizado">Chat de experto</span>
+                  <span *ngIf="chat.asesor_actual"
+                    (click)="chat.minimizado=!chat.minimizado">{{chat.asesor_actual.nombre}}</span>
+                  <button mat-icon-button class="ml-1" (click)="chat.minimizado=false">
+                    <mat-icon>maximize</mat-icon>
+                  </button>
                 </div>
+
               </div>
             </mat-card>
           </div>

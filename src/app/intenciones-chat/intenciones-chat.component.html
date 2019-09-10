@@ -20,7 +20,13 @@
         </mat-form-field>
         <div>
           <button mat-raised-button color="primary" [disabled]="!createControl.value || !nueva_intencion.frase"
-            (click)="crearIntencion()">Crear</button> &nbsp;
+            [ngClass]="{'loading':creando_intencion_xhr}" (click)="crearIntencion()">
+            <span *ngIf="!creando_intencion_xhr">Crear</span>
+            <span *ngIf="creando_intencion_xhr"> </span>
+            <mat-progress-spinner class="loading-spinner-button" color="basic" [mode]="'indeterminate'" [diameter]="36"
+              *ngIf="creando_intencion_xhr">
+            </mat-progress-spinner>
+          </button> &nbsp;
           <button mat-raised-button color="basic" (click)="creando_intencion=!creando_intencion">Cancelar</button>
         </div>
       </form>
@@ -44,6 +50,20 @@
     <div *ngIf="!myControl.value">
       <p>Acá se muestran las intenciones de las categorías</p>
     </div>
-    <div *ngFor="let intencion of intenciones" class="intencion-chat-lista">{{intencion.frase}}</div>
+    <div class="p-10 p-r-20 p-l-20" *ngIf="categoria && intenciones">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar" autocomplete="off"
+          [(ngModel)]="filtro_intenciones">
+        <button mat-button *ngIf="filtro_intenciones" matSuffix mat-icon-button aria-label="Clear" (click)="filtro_intenciones='';applyFilter()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div *ngFor="let intencion of intenciones" class="intencion-chat-lista">
+      <span class="frase"> {{intencion.frase}}</span>
+      <button mat-icon-button class="ml-1" (click)="eliminarIntencion(intencion)">
+        <mat-icon class="icono-borrar">delete</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

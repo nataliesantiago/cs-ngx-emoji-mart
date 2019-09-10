@@ -55,7 +55,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   currentLanguage = this.languages[1];
   actionContext: ActionContext = new ActionContext();
   textError = 'no hay resultados'; // label del autocomplete
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild('snav') sidenav: MatSidenav;
 
   reason = '';
   constructor(
@@ -298,5 +298,9 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
   buscar2() {
     this.nzone.run(() => this.buscar(this.metodo));
+  }
+
+  cerrarMenu(){
+    this.sidenav.close();
   }
 }

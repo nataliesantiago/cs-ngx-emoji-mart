@@ -78,6 +78,7 @@ import { MensajeClientePipe } from '../pipes/mensaje-cliente.pipe';
 import { MensajesExpertoPipe } from '../pipes/mensajes-experto.pipe';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { IntencionesChatComponent } from './intenciones-chat/intenciones-chat.component';
+import { UtilsService } from './providers/utils.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -180,7 +181,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HistorialUsuariosService,
     SearchService,
     ChatService,
-    QuillService
+    QuillService,
+    UtilsService
   ],
   bootstrap: [AppComponent]
 })

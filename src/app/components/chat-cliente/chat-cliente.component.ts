@@ -34,6 +34,7 @@ export class ChatClienteComponent implements OnInit {
   intervalo;
   extensiones_archivos = [];
   stream: any;
+  cantidad_mensajes_sin_leer = 0;
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
@@ -109,11 +110,14 @@ export class ChatClienteComponent implements OnInit {
     c.focuseado = estado;
     if (estado) {
       c.mensajes_nuevos = false;
+      c.cantidad_mensajes_nuevos = 0;
       window.clearInterval(this.intervalo);
       document.title = this.nombre_pestana;
+      c.mostrar_emojis = false;
     }
   }
   agregarListenerMensajes(c: Conversacion) {
+    c.cantidad_mensajes_nuevos = 0;
     this.fireStore.doc('conversaciones/' + c.codigo).valueChanges().subscribe((con: Conversacion) => {
       c.id_estado_conversacion = con.id_estado_conversacion;
       c.notas_voz = con.notas_voz;
@@ -176,13 +180,18 @@ export class ChatClienteComponent implements OnInit {
           c.mensajes[i] = m;
           if (!primera_vez && !c.focuseado) {
             this.soundService.sonar(1);
+            c.cantidad_mensajes_nuevos++;
             c.mensajes_nuevos = true;
             if (this.intervalo) {
               window.clearInterval(this.intervalo);
             }
             this.intervalo = setInterval(() => {
               if (document.title == this.nombre_pestana) {
-                document.title = 'Mensaje nuevo en el chat';
+                this.cantidad_mensajes_sin_leer = 0;
+                this.chats.forEach(chat => {
+                  this.cantidad_mensajes_sin_leer += chat.cantidad_mensajes_nuevos;
+                });
+                document.title = 'Mensajes(' + this.cantidad_mensajes_sin_leer + ') nuevo en el chat';
               } else {
                 document.title = this.nombre_pestana;
               }

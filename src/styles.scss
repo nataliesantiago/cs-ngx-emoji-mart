@@ -152,11 +152,15 @@ body {
   }
 }
 
-.cdk-overlay-pane {
-  top: 65px !important;
-  margin-left: 11px;
-  transition: all ease 0.5s;
+.loading-spinner-button {
+  display: block;
+  svg {
+    circle {
+      stroke: #888 !important;
+    }
+  }
 }
+
 
 .button__aling {
   display: flex !important;
@@ -941,7 +945,8 @@ ul li {
   .autocomplete-container {
     width: 300px !important;
   }
-  .hidden-mobile{
+
+  .hidden-mobile {
     display: none !important;
   }
 

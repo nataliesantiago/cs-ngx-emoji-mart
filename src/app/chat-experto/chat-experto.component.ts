@@ -383,6 +383,7 @@ export class ChatExpertoComponent {
     c.focuseado = estado;
     if (estado) {
       c.mensajes_nuevos = false;
+      c.mostrar_emojis = false;
     }
   }
 

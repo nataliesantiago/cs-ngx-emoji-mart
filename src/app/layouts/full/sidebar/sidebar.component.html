@@ -1,20 +1,22 @@
 <mat-nav-list appAccordion>
-    <img src="https://storage.googleapis.com/archivos-estaticos-aplicacion/logo.png" [routerLink]="['/home']" alt="conecta_logo" class="img_conecta">
+    <img src="https://storage.googleapis.com/archivos-estaticos-aplicacion/logo.png" [routerLink]="['/home']"
+        alt="conecta_logo" class="img_conecta">
     <hr>
     <div class="contenedor__sidebar">
         <div>
             <ul>
-                <li><a href="https://docs.google.com/forms/d/1IzKM1oBhxS8H076a-ZctlRftxDzkW6Yysq0KscWh40E/viewform?edit_requested=true">Buzón
+                <li><a
+                        href="https://docs.google.com/forms/d/1IzKM1oBhxS8H076a-ZctlRftxDzkW6Yysq0KscWh40E/viewform?edit_requested=true">Buzón
                         de Sugerencias</a></li>
-                <li><a [routerLink]="['/historial-usuario']">Historial de usuario</a></li>
-                <li><a [routerLink]="['/ad-preguntas']">Administrador de preguntas</a></li>
-                <li><a [routerLink]="['/flujo-curaduria']">Flujo de Curaduria</a></li>
-                <li><a (click)="sugerirPreguntas()">Sugerir Pregunta</a></li>
-                <!--li><a [routerLink]="['/admin']">Administración</a></li>
-                <li><a [routerLink]="['/productos']">Categorias</a></li>
-                <li><a [routerLink]="['/administracion-urls']">Administración de URL's</a></li>
-                <li *ngFor="let i of nuevas_urls"><a href="{{i.url}}" target="_blank">{{i.label}}</a></li-->
-                  
+                <li><a [routerLink]="['/historial-usuario']" (click)="cerrarMenu()">Historial de usuario</a></li>
+                <li><a [routerLink]="['/ad-preguntas']" (click)="cerrarMenu()">Administrador de preguntas</a></li>
+                <li><a [routerLink]="['/flujo-curaduria']" (click)="cerrarMenu()">Flujo de Curaduria</a></li>
+                <li><a (click)="sugerirPreguntas()" (click)="cerrarMenu()">Sugerir Pregunta</a></li>
+                <!--li><a [routerLink]="['/admin']" (click)="cerrarMenu()">Administración</a></li>
+                <li><a [routerLink]="['/productos']" (click)="cerrarMenu()">Categorias</a></li>
+                <li><a [routerLink]="['/administracion-urls']" (click)="cerrarMenu()">Administración de URL's</a></li>
+                <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()"><a href="{{i.url}}" target="_blank">{{i.label}}</a></li-->
+
             </ul>
         </div>
         <div class="sidebar_mt">

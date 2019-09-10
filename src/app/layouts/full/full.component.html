@@ -21,7 +21,7 @@
         <!-- ============================================================== -->
         <!-- Search - style you can find in header.scss -->
         <!-- ============================================================== -->
-        <span class="comunidad_titulo" (click)="irHome()" >Comunidades de Soporte</span>
+        <span class="comunidad_titulo" (click)="irHome()">Comunidades de Soporte</span>
         <span fxFlex></span>
         <!-- ============================================================== -->
         <!-- app header component - style you can find in header.scss / header.component.ts-->
@@ -46,7 +46,7 @@
         <mat-sidenav #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0" [opened]="false"
             (open)="sidebarOpened = true" (close)="sidebarOpened = false" [perfectScrollbar]="config">
 
-            <app-sidebar class="app-sidebar"></app-sidebar>
+            <app-sidebar class="app-sidebar" (cerrado)="cerrarMenu()"></app-sidebar>
 
         </mat-sidenav>
         <!-- ============================================================== -->
