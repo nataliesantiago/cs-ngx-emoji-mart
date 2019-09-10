@@ -154,6 +154,7 @@ body {
 
 .loading-spinner-button {
   display: block;
+
   svg {
     circle {
       stroke: #888 !important;
@@ -721,15 +722,15 @@ a {
 }
 
 .sos {
-  height: 30px;
+  width: 30px;
   margin-right: 10px;
-  margin-top: -18px;
+
 }
 
 .alerta {
-  height: 25px;
+  width: 30px;
   margin-right: 10px;
-  margin-top: -12px;
+
 }
 
 .autocomplete-container {
