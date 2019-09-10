@@ -84,10 +84,10 @@
       <div *ngIf="nueva_observacion">
         <br>
         <mat-form-field>
-          <textarea matInput placeholder="Observaciones" name="notas" [(ngModel)]="observaciones" matAutosizeMinRows=1
+          <textarea matInput placeholder="Dejanos tus comentarios" name="notas" [(ngModel)]="observaciones" matAutosizeMinRows=1
             matAutosizeMaxRows=10></textarea>
         </mat-form-field>
-        <a mat-raised-button class="no" (click)="enviarCalificacion()"><span class="texto-boton">Enviar</span></a>
+        <a mat-raised-button class="no" (click)="enviarCalificacion()"><span class="texto-boton">{{boton}}</span></a>
       </div>
 
 

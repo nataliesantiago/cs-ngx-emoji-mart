@@ -34,7 +34,7 @@ export const AppRoutes: Routes = [
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
-  { path: 'respuestas', component: RespuestasComponent, canActivate: [AuthGuard] },
+  { path: 'respuestas/:id_pregunta', component: RespuestasComponent, canActivate: [AuthGuard] },
   { path: 'asociar-preguntas', component: AsociarPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdministracionComponent, canActivate: [AuthGuard] },
   { path: 'flujo-curaduria', component: FlujoCuraduriaComponent, canActivate: [AuthGuard] },
