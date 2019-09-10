@@ -23,9 +23,8 @@ export class QuillService {
     // Listen upload local image and save to server
     input.onchange = () => {
       const file = input.files[0];
-
       // file type is only image.
-      if (/^image\//.test(file.type)) {
+      if (/^image\//.test(file.type) || /^video\//.test(file.type)) {
         this.saveToServer(file);
       } else {
         console.warn('You could only upload images.');
