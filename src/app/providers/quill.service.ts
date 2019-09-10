@@ -42,37 +42,12 @@ export class QuillService {
     var resultado = this.editor.insertEmbed(range.index, 'image', '/assets/images/loading-image.gif');
     
     const fd = new FormData();
-    fd.append('image', file);
-    
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      
-      let tmp = (<string>reader.result).split(',');
-      
-      let archiv_string = tmp[1];
-      let tmp2 = tmp[0].split(';');
-      let tmp3 = tmp2[0].split(':');
-      let mime_type = tmp3[1];
-      
-      let tmp4 = file.name.split('.');
-      
-      let extension = tmp4[tmp4.length - 1];
-      let file_enviar = { datos: archiv_string, mime: mime_type, ext: extension, name: tmp4[0] };
-      //this.ajax.post('admin/crear/categoria', datos).subscribe(data => {});
-      
-      this.ajax.post('preguntas/cargar-imagen', { file: file_enviar }).subscribe(d => {
-        if (d.success) {
-          
-          this.insertToEditor(range.index, d.url);
-        }
-      })
-    };
-    reader.onerror = function (error) {
-      
-    };
-
-
+    fd.append('archivo', file);
+    this.ajax.postData('preguntas/cargar-imagen', fd).subscribe(d => {
+      if (d.success) {
+        this.insertToEditor(range.index, d.archivo.url, d.archivo.tipo_archivo);
+      }
+    });
   }
 
   /**
@@ -80,11 +55,16 @@ export class QuillService {
    *
    * @param {string} url
    */
-  insertToEditor(rango, url: string) {
+  insertToEditor(rango, url: string, tipo_archivo: number) {
     // push image url to rich editor.
     this.editor.deleteText(rango, 1);
     const range = this.editor.getSelection();
-    this.editor.insertEmbed(range.index, 'image', `${url}`);
+    if (tipo_archivo === 1) {
+      this.editor.insertEmbed(range.index, 'image', `${url}`);
+  } else if (tipo_archivo === 2) {
+      this.editor.insertEmbed(range.index, 'video', `${url}`);
+  }
+    
   }
 
 }
