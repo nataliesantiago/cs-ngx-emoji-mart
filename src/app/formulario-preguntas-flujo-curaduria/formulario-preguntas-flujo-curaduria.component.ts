@@ -9,6 +9,9 @@ import { map, startWith } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 import { QuillService } from '../providers/quill.service';
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -163,7 +166,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                                 this.dataSource.sort = this.sort;
                                 this.ajax.get('preguntas/obtener-comentarios-pregunta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(com => {
                                   if (com.success) {
-
+                                    for(let i = 0; i < com.comentarios.length; i++){
+                                      com.comentarios[i].fecha = moment(com.comentarios[i].fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm');
+                                    }
                                     this.notas_mostrar = com.comentarios;
                                     this.cg.detectChanges();
                                   }

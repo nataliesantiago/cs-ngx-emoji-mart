@@ -140,7 +140,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                   for(let i = 0; i < this.subrespuestas.length; i++){
                     this.subrespuestas[i].respuesta = this.subrespuestas[i].texto;
                   }               
-                  console.log(this.subrespuestas);
+                  
                   this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sg => {
                     if(sg.success){
                       
@@ -214,7 +214,6 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         }else{
           this.pregunta.muestra_fecha_actualizacion = 0;
         }
-        console.log("Subrespuestas-cargadas", this.subrespuestas);
         this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
         for(let i = 0; i < this.array_mostrar.length; i++){
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
