@@ -16,7 +16,7 @@ const moment = _rollupMoment || _moment;
 })
 export class AppComponent {
   user: User;
-
+  version: '0.0.10'
   constructor(public responseSearch: ResponseSearch, private userService: UserService) {
     this.responseSearch.setActive(true);
     moment.locale('es');
@@ -34,9 +34,10 @@ export class AppComponent {
   }
 
   init() {
-      // ACA EMPIEZA SI EL USUARIO ES EXPERTO
-      if(this.user.getIdRol()==2){
-        this.userService.getFilasExperto();
-      }
+    // ACA EMPIEZA SI EL USUARIO ES EXPERTO
+    console.log('Versión: ', this.version);
+    if (this.user.getIdRol() == 2) {
+      this.userService.getFilasExperto();
+    }
   }
 }
