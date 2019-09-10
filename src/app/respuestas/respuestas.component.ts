@@ -29,6 +29,8 @@ export class RespuestasComponent implements OnInit {
   nueva_observacion = false;
   valor_calificacion;
   boton = "Enviar";
+  activadoSi = false;
+  activadoNo = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef) {
 
@@ -165,8 +167,12 @@ export class RespuestasComponent implements OnInit {
     this.valor_calificacion = valor;
     if(valor == 1){
       this.boton = "Enviar";
+      this.activadoSi = true;
+      this.activadoNo = false;
     }else{
       this.boton = "Buscar Experto";
+      this.activadoNo = true;
+      this.activadoSi = false;
     }
   }
 
