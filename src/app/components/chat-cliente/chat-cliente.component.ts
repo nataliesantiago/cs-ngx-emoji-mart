@@ -570,39 +570,23 @@ export class ChatClienteComponent implements OnInit {
     const options = { mimeType: 'audio/webm' };
     let detenido = false;
     let calculaTiempo = { fechaIni: null, fechaFin: null };
-    if (!this.stream) {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-          this.stream = stream;
-          c.mediaRecorder = new StereoAudioRecorder(stream, {
-            sampleRate: 48000,
-            get16BitAudio: true,
-            bufferSize: 4096,
-            numberOfAudioChannels: 1
-          });
-          this.startTimer(tiempo, c).then(() => {
-            c.mediaRecorder.stop(audioBlob => {
-              this.onStopRecordingNotaVoz(audioBlob, c);
-
-            });
-          });
-
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        this.stream = stream;
+        c.mediaRecorder = new StereoAudioRecorder(stream, {
+          sampleRate: 48000,
+          get16BitAudio: true,
+          bufferSize: 4096,
+          numberOfAudioChannels: 1
         });
-    } else {
-      c.mediaRecorder = new StereoAudioRecorder(this.stream, {
-        sampleRate: 48000,
-        get16BitAudio: true,
-        bufferSize: 4096,
-        numberOfAudioChannels: 1
-      });
-      this.startTimer(tiempo, c).then(() => {
-        c.mediaRecorder.stop(audioBlob => {
-          this.onStopRecordingNotaVoz(audioBlob, c);
+        this.startTimer(tiempo, c).then(() => {
+          c.mediaRecorder.stop(audioBlob => {
+            this.onStopRecordingNotaVoz(audioBlob, c);
 
+          });
         });
-      });
-    }
 
+      });
 
 
   }

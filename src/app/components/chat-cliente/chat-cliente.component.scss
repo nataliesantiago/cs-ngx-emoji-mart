@@ -1,12 +1,14 @@
 .flotante {
     position: relative;
     width: 100%;
+    pointer-events: none;
 
     .content {
         position: fixed;
         bottom: 0px;
         right: 0px;
         z-index: 100;
+        pointer-events: none;
     }
 }
 
@@ -30,6 +32,8 @@
     cursor: pointer;
     width: 262px;
     background: white;
+    pointer-events: all;
+
     .nombre-asesor {
         flex: 1;
         width: 100%;
@@ -65,6 +69,7 @@
     bottom: 0px;
     right: 0px;
     padding-right: 10px;
+    pointer-events: none;
 
     .panel-chat {
         width: 262px;
@@ -74,10 +79,13 @@
         position: relative;
         bottom: 0px;
         transition: all .5s linear;
+        pointer-events: none;
+
         &.agrandado {
             width: 600px !important;
             height: 458px !important;
-            .icono-agrandar{
+
+            .icono-agrandar {
                 transform: rotate(90deg);
             }
         }
@@ -85,6 +93,7 @@
         &.minimizado {
             /*height: 36px !important;*/
             transition: none !important;
+
             .contenedor-grande {
                 height: 0px !important;
             }
@@ -106,17 +115,21 @@
             bottom: 0px;
             height: 100%;
             width: 100%;
+            pointer-events: none;
 
             .hijo {
                 height: 100%;
+                pointer-events: none;
 
                 .mat-card-top {
                     height: 100%;
                     background: none;
                     box-shadow: none !important;
+                    pointer-events: none;
 
                     .ventana-chat {
                         height: 100%;
+                        pointer-events: all;
                     }
                 }
             }
@@ -135,9 +148,10 @@
                 color: #888888;
                 cursor: pointer;
 
-                .icono-agrandar{
+                .icono-agrandar {
                     transition: all .5s linear;
                 }
+
                 .nombre-asesor {
                     flex: 1;
                     display: inline-block;
