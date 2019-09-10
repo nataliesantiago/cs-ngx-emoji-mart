@@ -76,7 +76,6 @@ export class AppSidebarComponent implements OnDestroy {
   }
 
   cerrarMenu() {
-    console.log('algo')
     this.cerrado.emit(false);
   }
 

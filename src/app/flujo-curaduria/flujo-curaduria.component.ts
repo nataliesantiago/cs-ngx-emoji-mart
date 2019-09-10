@@ -5,7 +5,9 @@ import { RouterModule, Router } from '@angular/router';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import Swal from 'sweetalert2';
-
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'app-flujo-curaduria',
@@ -193,11 +195,13 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.ajax.get('preguntas/obtener-comentarios-pregunta', {idtbl_pregunta: e.idtbl_pregunta}).subscribe(async p => {
       if(p.success){
         
-
+        for(let i = 0; i < p.comentarios.length; i++){
+          p.comentarios[i].fecha = moment(p.comentarios[i].fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm');
+        }
         let comentarios = '<div style="height: 250px; overflow-x: hidden;">';
         
         for(let i = 0; i < p.comentarios.length; i++){
-          comentarios += '<div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; padding: 2px 16px; width: 95%; margin-left: 2%;"><h3><strong>' + p.comentarios[i].nombre_usuario + '</strong></h3>';
+          comentarios += '<div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; padding: 2px 16px; width: 95%; margin-left: 2%;"><h3><strong>' + p.comentarios[i].nombre_usuario + ' ' + p.comentarios[i].fecha + '</strong></h3>';
           comentarios += '<h6>' + p.comentarios[i].notas + '</strong></h6></div><br>';
         }
 
