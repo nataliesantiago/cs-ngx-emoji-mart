@@ -231,7 +231,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   cambiarEstado(e){
-    this.router.navigate(['/formulario-preguntas-flujo-curaduria'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
+    this.router.navigate(['/formulario-preguntas-flujo-curaduria', e.idtbl_pregunta]);
   }
 
   applyFilter(filterValue: string) {
