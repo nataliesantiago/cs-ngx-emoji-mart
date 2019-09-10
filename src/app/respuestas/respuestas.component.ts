@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert2';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
+import { ChatService } from '../providers/chat.service';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -29,7 +30,7 @@ export class RespuestasComponent implements OnInit {
   nueva_observacion = false;
   valor_calificacion;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef) {
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private chatService: ChatService) {
 
     this.usuario = user.getUsuario();
     
@@ -351,12 +352,11 @@ export class RespuestasComponent implements OnInit {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si'
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar',
           }).then((result) => {
             if (result.value) {
-              swal.fire(  
-                'Se abre el chat',
-              )
+              this.chatService.crearConversacion();
             }
           })  
         }else{
