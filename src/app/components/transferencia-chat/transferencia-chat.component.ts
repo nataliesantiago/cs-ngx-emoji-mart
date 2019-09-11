@@ -72,7 +72,6 @@ export class TransferenciaChatComponent implements OnInit {
   transferirChat() {
     this.dialogRef.close();
   }
-
   onNoClick() {
     this.dialogRef.close();
   }

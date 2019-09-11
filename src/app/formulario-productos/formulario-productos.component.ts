@@ -266,7 +266,7 @@ giveShape(employees, manager) {
         }
       })
     }else{
-      this.ajax.post('producto/guardar', { producto: this.categoria }).subscribe(d => {
+      this.ajax.post('producto/guardar', { producto: this.categoria, id_usuario: this.id_usuario }).subscribe(d => {
         if(d.success){
           this.router.navigate(['/productos']);
         }
