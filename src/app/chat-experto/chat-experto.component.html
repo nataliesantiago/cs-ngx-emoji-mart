@@ -217,7 +217,7 @@
             </div>
           </mat-card-actions>
           <form [hidden]="true" #formulario method="POST" enctype="multipart/form-data" [action]="urlAdjuntos">
-            <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,this)" #adjuntos />
+            <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,adjuntos)" #adjuntos />
           </form>
           <emoji-mart set="google" sheetSize="64" class="emojis-panel" perLine="6" *ngIf="chat.mostrar_emojis"
             showPreview="false" (emojiSelect)="seleccionarEmoji($event,chat)"

@@ -486,6 +486,7 @@ body {
   bottom: 42px;
   z-index: 3;
   left: 15px;
+  pointer-events: all;
 
   .emoji-mart-preview {
     display: none !important;

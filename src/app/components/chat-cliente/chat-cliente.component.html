@@ -169,7 +169,7 @@
                     </div>
                   </mat-card-actions>
                   <form [hidden]="true" #formulario method="POST" enctype="multipart/form-data" [action]="urlAdjuntos">
-                    <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,this)" #adjuntos />
+                    <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,adjuntos)" #adjuntos />
                   </form>
                 </div>
                 <div class="panel-buscando-experto" *ngIf="!chat.id_experto_actual">
