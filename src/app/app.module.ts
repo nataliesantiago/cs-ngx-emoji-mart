@@ -80,6 +80,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { IntencionesChatComponent } from './intenciones-chat/intenciones-chat.component';
 import { UtilsService } from './providers/utils.service';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { TransferenciaChatComponent } from './components/transferencia-chat/transferencia-chat.component';
+import { ExpertosActivosePipe } from '../pipes/expertos-activos.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -128,8 +130,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MensajeClientePipe,
     MensajesExpertoPipe,
     IntencionesChatComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    TransferenciaChatComponent,
+    ExpertosActivosePipe
   ],
+  entryComponents:[TransferenciaChatComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

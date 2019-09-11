@@ -70,17 +70,19 @@
     right: 0px;
     padding-right: 10px;
     pointer-events: none;
+    display: flex;
 
     .panel-chat {
         width: 262px;
         height: 380px;
         float: right;
-        margin-right: 5px;
         position: relative;
         bottom: 0px;
         transition: all .5s linear;
         pointer-events: none;
-
+        margin: auto;
+        margin-right: 5px;
+        margin-bottom: 0;
         &.agrandado {
             width: 600px !important;
             height: 458px !important;

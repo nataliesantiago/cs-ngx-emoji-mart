@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>Transferencia de cliente</h1>
+<div mat-dialog-content>
+  <p>Seleccione el tipo de transferencia:</p>
+  <mat-form-field>
+    <mat-label>Tipo</mat-label>
+    <mat-select [(ngModel)]="tipo" (change)="update()">
+      <mat-option value="1">
+        Categoría de experticia
+      </mat-option>
+      <mat-option value="2">
+        Experto de chat
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="tipo==1">
+    <mat-form-field class="example-full-width">
+      <input type="text" placeholder="Buscar categoría de experticia" matInput (change)="update(1)"
+        [formControl]="categoria_experticia_control" [matAutocomplete]="auto">
+        <button mat-button *ngIf="categoria_experticia_control.value" matSuffix mat-icon-button aria-label="Clear" (click)="update()">
+          <mat-icon>close</mat-icon>
+        </button>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoriaNueva($event.option.value)'>
+        <mat-option *ngFor="let option of filas" [value]="option">
+          {{option.nombre}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div *ngIf="tipo==2">
+    <mat-form-field class="example-full-width">
+      <input type="text" placeholder="Buscar experto" matInput [formControl]="experto_control" [matAutocomplete]="auto"
+        (change)="update(1)">
+        <button mat-button *ngIf="experto_control.value" matSuffix mat-icon-button aria-label="Clear" (click)="update()">
+          <mat-icon>close</mat-icon>
+        </button>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarExperto($event.option.value)'>
+        <mat-option *ngFor="let option of expertos | expertosActivos" [value]="option">
+          {{option.nombre}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="transferirChat()"
+    [disabled]="!tipo || (tipo==1 && !categoria) || (tipo==2 && !experto)">Ok</button>
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+</div>

@@ -12,6 +12,9 @@ import { Mensaje } from '../../schemas/mensaje.schema';
 import { Configuracion } from '../../schemas/interfaces';
 import { SonidosService } from '../providers/sonidos.service';
 import swal from 'sweetalert2';
+import { UtilsService } from '../providers/utils.service';
+import { MatDialog } from '@angular/material';
+import { TransferenciaChatComponent } from '../components/transferencia-chat/transferencia-chat.component';
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -29,36 +32,9 @@ export class ChatExpertoComponent {
   // MESSAGE
   stream: any;
   selectedMessage: any;
-  messages: Object[] = [{
-    from: 'Nirav Joshi',
-    photo: 'assets/images/users/1.jpg',
-    subject: 'Hey, how are you?',
-  }, {
-    from: 'Sunil Joshi',
-    photo: 'assets/images/users/2.jpg',
-    subject: 'Lorem ipsum done dkaghdka',
-  }, {
-    from: 'Vishal bhatt',
-    photo: 'assets/images/users/3.jpg',
-    subject: 'Thanks mate',
-  }, {
-    from: 'Genelia Desouza',
-    photo: 'assets/images/users/4.jpg',
-    subject: 'This is my shot',
-  }, {
-    from: 'Linda muke',
-    photo: 'assets/images/users/5.jpg',
-    subject: 'You have to do it with your self',
-  }, {
-    from: 'Vaibhav Zala',
-    photo: 'assets/images/users/6.jpg',
-    subject: 'No mate this is not',
-  }, {
-    from: 'Kalu valand',
-    photo: 'assets/images/users/1.jpg',
-    subject: 'Arti thai gai ne?',
-  }];
-
+  expertos: Array<User>;
+  expertos_filtro: Array<User>;
+  buscar_experto: string;
   user: User;
   ocultar_nuevos_mensajes = false;
   chats_experto = [];
@@ -68,8 +44,8 @@ export class ChatExpertoComponent {
   @ViewChild('contenedor') componentRef?: PerfectScrollbarComponent;
   configuraciones = [];
 
-  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService) {
-    this.selectedMessage = this.messages[1];
+  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
+
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
@@ -166,6 +142,34 @@ export class ChatExpertoComponent {
         });
       });
     });
+    this.chatService.getExpertos().then(e => {
+      this.expertos = this.expertos_filtro = e.filter(experto => {
+        return experto.idtbl_usuario != this.user.getId();
+      });
+    })
+  }
+
+  filtraExpertos() {
+    this.expertos_filtro = this.expertos.filter(e => {
+      return (this.utilService.normalizeText(e.nombre).toLowerCase().indexOf(this.buscar_experto.toLowerCase()) != (-1) || this.utilService.normalizeText(e.correo).toLowerCase().indexOf(this.buscar_experto.toLowerCase()) != (-1));
+    })
+  }
+
+  abrirConversacionExperto(e: User) {
+    if (e.conversacion_experto) {
+      this.onSelect(e.conversacion_experto);
+    } else {
+      this.chatService.getConversacionExperto(e.idtbl_usuario).then(codigo => {
+        e.conversacion_experto = new Conversacion(this.user.getId(), 2, codigo);
+        e.conversacion_experto.cliente = JSON.parse(JSON.stringify(e));
+        this.agregarListenerMensajes(e.conversacion_experto);
+        this.onSelect(e.conversacion_experto);
+      })
+    }
+  }
+
+  trasnferirChat(c: Conversacion) {
+    this.dialog.open(TransferenciaChatComponent, { width: '400px' });
   }
 
   procesaFilas(fila: any) {

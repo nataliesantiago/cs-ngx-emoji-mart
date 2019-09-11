@@ -349,5 +349,27 @@ export class ChatService {
       })
     })
   }
+  /**
+   * @description Obtiene todos los expertos de la herramienta
+   * @returns Promise
+   */
+  getExpertos(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getExpertos', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.expertos);
+        }
+      })
+    });
+  }
 
+  getConversacionExperto(id_experto: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getConversacionExperto', { id_usuario: this.user.getId(), id_experto: id_experto }).subscribe(d => {
+        if (d.success) {
+          resolve(d.codigo);
+        }
+      })
+    });
+  }
 }

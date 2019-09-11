@@ -12,18 +12,7 @@ export class SonidosComponent implements OnInit {
   sos: HTMLAudioElement;
   notificacion: HTMLAudioElement;
   constructor(private soundService: SonidosService) {
-    this.mensaje = new Audio();
-    this.mensaje.src = 'assets/sounds/message.mp3';
-    this.mensaje.load();
-    this.cliente = new Audio();
-    this.cliente.src = 'assets/sounds/cliente.wav';
-    this.cliente.load();
-    this.sos = new Audio();
-    this.sos.src = 'assets/sounds/alarma.wav';
-    this.sos.load();
-    this.notificacion = new Audio();
-    this.notificacion.src = 'assets/sounds/notificacion.mp3';
-    this.notificacion.load();
+
     this.soundService.sonidoObserver.subscribe(t => {
       let media;
 
@@ -49,15 +38,33 @@ export class SonidosComponent implements OnInit {
       if (media) {
         const playPromise = media.play();
         if (playPromise !== null) {
-          playPromise.catch(() => { media.play(); })
+          playPromise.catch(() => {
+            setTimeout(() => {
+              media.play().catch(() => {
+                console.log('No se puede reproducir el sonido ahora');
+              });
+            }, 1000);
+          })
         }
       }
     })
   }
 
   ngOnInit() {
+    this.mensaje = new Audio();
+    this.mensaje.src = 'assets/sounds/message.mp3';
+    this.mensaje.load();
+    this.cliente = new Audio();
+    this.cliente.src = 'assets/sounds/cliente.wav';
+    this.cliente.load();
+    this.sos = new Audio();
+    this.sos.src = 'assets/sounds/alarma.wav';
+    this.sos.load();
+    this.notificacion = new Audio();
+    this.notificacion.src = 'assets/sounds/notificacion.mp3';
+    this.notificacion.load();
   }
 
-  
+
 
 }

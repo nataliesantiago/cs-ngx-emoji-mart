@@ -1,3 +1,4 @@
+import { Conversacion } from "./conversacion.schema";
 
 
 export class User {
@@ -21,6 +22,7 @@ export class User {
     id_rol: number;
     codigo_firebase: string;
     pass_firebase: string;
+    conversacion_experto: Conversacion;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;

@@ -405,7 +405,7 @@ export class ChatClienteComponent implements OnInit {
     });
     let experto: Experto = c.expertos.pop();
     // console.log(experto, parseInt(this.buscarConfiguracion(2).valor), experto.chats.length);
-    if (parseInt(this.buscarConfiguracion(2).valor) > experto.chats.length) {
+    if (experto && experto.chats && parseInt(this.buscarConfiguracion(2).valor) > experto.chats.length) {
       c.filas.forEach((ce, index) => {
         this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').delete();
       });

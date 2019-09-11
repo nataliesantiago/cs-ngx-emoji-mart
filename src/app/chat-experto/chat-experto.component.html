@@ -40,16 +40,16 @@
           <div class="panel-chats segundo">
             <div class="cabecero">
               <mat-form-field class="mr-1 ml-1 filtro" fxFlex>
-                <input type="text" matInput placeholder="Buscar Experto" />
+                <input type="text" matInput placeholder="Buscar Experto" (keyup)="filtraExpertos()" [(ngModel)]="buscar_experto" />
               </mat-form-field>
             </div>
 
             <perfect-scrollbar class="contenido">
               <mat-nav-list>
-                <mat-list-item (click)="onSelect(message)" *ngFor="let message of messages">
-                  <img mat-list-avatar src="{{message.photo}}" alt="">
-                  <h3 matLine> {{message.from}} </h3>
-                  <p matLine class="text-muted"> {{message.subject}} </p>
+                <mat-list-item (click)="abrirConversacionExperto(experto)" *ngFor="let experto of expertos_filtro">
+                  <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
+                  <h3 matLine> {{experto.nombre}} </h3>
+                  <!--<p matLine class="text-muted"> {{message.subject}} </p>-->
                 </mat-list-item>
               </mat-nav-list>
             </perfect-scrollbar>
@@ -70,7 +70,7 @@
                 <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
                 </div>
               </div>
-              <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
+              <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #them="matMenu" x-position="before">
@@ -80,6 +80,7 @@
                     Habilitar notas de voz
                   </mat-slide-toggle>
                 </div>
+                <button mat-menu-item (click)="trasnferirChat(chat)">Transferir cliente</button>
                 <button mat-menu-item>Cerrar Conversación</button>
               </mat-menu>
             </div>
@@ -186,7 +187,7 @@
               </div>
               <div class="usuarios-escribiendo" *ngIf="chat.usuarios_escribiendo && chat.usuarios_escribiendo.length>0">
                 <div class="usuario-escribiendo" *ngFor="let u of chat.usuarios_escribiendo">{{u.nombre}} está
-                  escriendo <div class="puntos-escribiendo">
+                  escribiendo <div class="puntos-escribiendo">
                     <div class="hijo"></div>
                   </div>
                 </div>
