@@ -360,17 +360,7 @@ export class ChatClienteComponent implements OnInit {
                 this.procesaChats(c);
               }
             });
-            /* .pipe(
-               map(actions => actions.map((a, i) => {
-                 const data = a.payload.doc.data();
-                 const id = a.payload.doc.id;
-                 ex.chats.push({ id, ...data });
-                 console.log(index, i);
-                 if (index == expertos.length - 1 && i == actions.length - 1) {
-                   this.procesaChats(c);
-                 }
-               }))
-             );*/
+          
 
 
           }
@@ -665,7 +655,7 @@ export class ChatClienteComponent implements OnInit {
     }
   }
   seleccionarEmoji(evento, c: Conversacion) {
-    console.log(evento);
+    // console.log(evento);
     if (c.texto_mensaje) {
       c.texto_mensaje += '' + evento.emoji.native;
     } else {
