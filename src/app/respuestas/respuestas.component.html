@@ -71,12 +71,12 @@
       <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex="100">
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <a class="boton-calificacion si" mat-raised-button (click)="calificacion(1)"><span
+            <a [ngClass]="{ 'siActivado': activadoSi }" class="boton-calificacion si" mat-raised-button (click)="calificacion(1)"><span
                 class="texto-boton">Si</span></a>
           </div>
           <div fxFlex.gt-sm="5" fxFlex="100"></div>
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <a class="boton-calificacion no" mat-raised-button (click)="calificacion(2)"><span
+            <a [ngClass]="{ 'noActivado': activadoNo }" class="boton-calificacion no" mat-raised-button (click)="calificacion(0)"><span
                 class="texto-boton">No</span></a>
           </div>
         </div>
@@ -84,10 +84,10 @@
       <div *ngIf="nueva_observacion">
         <br>
         <mat-form-field>
-          <textarea matInput placeholder="Observaciones" name="notas" [(ngModel)]="observaciones" matAutosizeMinRows=1
+          <textarea matInput placeholder="Dejanos tus comentarios" name="notas" [(ngModel)]="observaciones" matAutosizeMinRows=1
             matAutosizeMaxRows=10></textarea>
         </mat-form-field>
-        <a mat-raised-button class="no" (click)="enviarCalificacion()"><span class="texto-boton">Enviar</span></a>
+        <a mat-raised-button class="no" (click)="enviarCalificacion()"><span class="texto-boton">{{boton}}</span></a>
       </div>
 
 

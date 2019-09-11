@@ -106,17 +106,29 @@ export class FormularioProductosComponent implements OnInit {
         );
         
         if(this.id_producto_editar){
-          this.ajax.get('producto/obtener-editar', { idtbl_producto : this.id_producto_editar }).subscribe(p2 => {
-            if(p2.success){
-              this.categoria = p2.producto[0];
-              this.myControl = new FormControl(p2.producto[0].nombre_padre);
-              this.filteredOptions = this.myControl.valueChanges.pipe(
-                startWith(''),
-                map(value => this._filter(value))
-              );
-              this.producto_padre_seleccionado = p2.producto[0].id_producto_padre;
-              this.crearArbol(p2.producto[0]);
-              this.cg.detectChanges();
+
+          this.ajax.get('producto/obtener-editar-validar', { idtbl_producto : this.id_producto_editar }).subscribe(p2i => {
+            if(p2i.success){
+              this.categoria = p2i.producto[0];
+              
+              if(p2i.producto[0].id_producto_padre){
+                this.ajax.get('producto/obtener-editar', { idtbl_producto : this.id_producto_editar }).subscribe(p2 => {
+                  if(p2.success){
+                    this.categoria = p2.producto[0];
+                    
+                    this.myControl = new FormControl(p2.producto[0].nombre_padre);
+                    this.filteredOptions = this.myControl.valueChanges.pipe(
+                      startWith(''),
+                      map(value => this._filter(value))
+                    );
+                    this.producto_padre_seleccionado = p2.producto[0].id_producto_padre;
+                    this.crearArbol(p2.producto[0]);
+                    this.cg.detectChanges();
+                  }
+                })
+              }else{
+                this.cg.detectChanges();
+              }
             }
           })
         }
@@ -184,14 +196,9 @@ export class FormularioProductosComponent implements OnInit {
           }
     
           let TREE_DATA: FoodNode[] = [];
-    
+        
           TREE_DATA.push({ name: this.arbol_mostrar[0].nombre });
-    
-          for(let i = 1; i < this.arbol_mostrar.length; i++){
-    
-          }
           
-
           this.nivel_producto = this.arbol_mostrar.length - 1;
           /*prueba = [
             { name: 'Producto 1', id: 1, id_padre: null },
@@ -206,6 +213,7 @@ export class FormularioProductosComponent implements OnInit {
           
           this.dataSource.data = TREE_DATA;
           this.cg.detectChanges();
+        
         }
       })
 
