@@ -1,11 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ChatService } from '../../providers/chat.service';
 import { UserService } from '../../providers/user.service';
 import { User } from '../../../schemas/user.schema';
 import { CategoriaExperticia } from '../../../schemas/interfaces';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
+import { Conversacion } from '../../../schemas/conversacion.schema';
+
+export interface TransferenciaData {
+  conversacion: Conversacion;
+}
+
 
 @Component({
   selector: 'app-transferencia-chat',
@@ -21,7 +27,8 @@ export class TransferenciaChatComponent implements OnInit {
   experto_control = new FormControl();
   categoria: CategoriaExperticia;
   experto: User;
-  constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore) {
+  error_transferencia: string;
+  constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore, @Inject(MAT_DIALOG_DATA) private data: TransferenciaData) {
     this.user = this.userService.getUsuario();
     this.chatService.getCategoriasExperticia().then(c => {
       this.filas = c;
@@ -70,9 +77,22 @@ export class TransferenciaChatComponent implements OnInit {
     this.experto_control.setValue(c.nombre)
   }
   transferirChat() {
-    this.dialogRef.close();
+    let id: number;
+    delete this.error_transferencia;
+    if (this.tipo == 1) {
+      id = this.categoria.idtbl_categoria_experticia;
+    } else {
+      id = this.experto.idtbl_usuario;
+    }
+    this.chatService.transferirChat(this.data.conversacion, id, this.tipo).then(() => {
+      this.dialogRef.close({ success: true });
+    }, () => {
+      this.error_transferencia = 'Error realizando la transferencia, por intente más tarde';
+    })
+
   }
   onNoClick() {
     this.dialogRef.close();
   }
 }
+

@@ -76,7 +76,7 @@
                                   </div>
 
                                 </div>
-                                <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>
+                                <!--<audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>-->
                               </div>
                             </div>
                             <div *ngIf="!m.es_nota_voz">{{m.texto}}</div>
@@ -127,7 +127,7 @@
                           <div class="cuenta-regresiva">
                             <div>{{chat.cuenta_regresiva}}</div>
                             <div>
-                              <button mat-icon-button color="basic" class="boton-enviar" (click)="enviarNota(chat)">
+                              <button mat-icon-button color="basic" class="boton-enviar" (click)="enviarNota(chat,este)">
                                 <mat-icon>send</mat-icon>
                               </button>
                             </div>
@@ -162,7 +162,7 @@
                         [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
                         <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
                       </button>
-                      <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat)" *ngIf="chat.notas_voz"
+                      <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat,este)" *ngIf="chat.notas_voz"
                         [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto">
                         <mat-icon aria-label="Example icon-button with a heart icon">mic</mat-icon>
                       </button>

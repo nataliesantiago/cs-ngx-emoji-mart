@@ -40,6 +40,7 @@
       </mat-autocomplete>
     </mat-form-field>
   </div>
+  <div class="error-message" *ngIf="error_transferencia">{{error_transferencia}}</div>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="transferirChat()"

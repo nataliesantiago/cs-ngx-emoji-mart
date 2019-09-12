@@ -362,12 +362,35 @@ export class ChatService {
       })
     });
   }
-
+  /**
+   * @description Obtienes la conversacion segun el usuario actual y otro experto
+   * @param  {number} id_experto EL otro experto con el cual se intenta abrior el chat
+   * @returns Promise
+   */
   getConversacionExperto(id_experto: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.get('chat/getConversacionExperto', { id_usuario: this.user.getId(), id_experto: id_experto }).subscribe(d => {
         if (d.success) {
           resolve(d.codigo);
+        }
+      })
+    });
+  }
+  /**
+   * @description Transifiere un cliente a un operador o a una fila
+   * @param  {Conversacion} c
+   * @param  {number} id_transferencia
+   * @param  {number} id_tipo
+   * @returns Promise
+   */
+  transferirChat(c: Conversacion, id_transferencia: number, id_tipo: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo_chat).delete();
+      this.ajax.post('chat/conversacion/transferir', { id_experto: this.user.getId(), id_conversacion: c.idtbl_conversacion, id_cliente: c.cliente.idtbl_usuario, codigo: c.codigo, id_tipo: id_tipo, coidgo_chat: c.codigo_chat, id_transferencia: id_transferencia }).subscribe(d => {
+        if (d.success) {
+          resolve();
+        } else {
+          reject();
         }
       })
     });

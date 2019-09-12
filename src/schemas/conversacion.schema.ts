@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { User } from "./user.schema";
 import { Experto } from "./xhr.schema";
 import { AudioControls } from "./interfaces";
@@ -57,6 +57,9 @@ export class Conversacion {
     inicia_grabacion: Date;
     tiempo_cola: boolean;
     cantidad_mensajes_nuevos = 0;
+    codigo_chat: string;
+    listener_conversacion: Subscription;
+    listener_mensajes: Subscription;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;

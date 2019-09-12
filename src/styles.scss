@@ -115,6 +115,11 @@ body {
   background: transparent !important;
 }
 
+.error-message{
+  font-size: 12px;
+  color: red;
+}
+
 .mat-form-field.mat-form-field-invalid .mat-form-field-label,
 .mat-error,
 .mat-form-field.mat-form-field-invalid .mat-form-field-ripple,

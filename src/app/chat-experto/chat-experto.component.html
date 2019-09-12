@@ -102,7 +102,7 @@
               <div class="chat-list">
                 <div class="chat-message"
                   [ngClass]="{'odd': m.id_usuario!==user.idtbl_usuario,'even': m.id_usuario===user.idtbl_usuario}"
-                  *ngFor="let m of chat.mensajes | mensajesExperto: [1]">
+                  *ngFor="let m of chat.mensajes | mensajesExperto: [1,usuarios]">
                   <div class="chat-block">
                     <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
                       <div *ngIf="m.es_archivo">
@@ -128,7 +128,7 @@
                           <div class="tiempo-audio"><span>{{m.audioControls.segundo | minuteSeconds}}</span>
                           </div>
                         </div>
-                        <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>
+                       <!-- <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>-->
                       </div>
                     </div>
                     <div *ngIf="!m.es_nota_voz">{{m.texto}}</div>
@@ -139,8 +139,8 @@
                     </span>
                   </div>
                   <span class="foto-mensaje" *ngIf="m.id_usuario!=user.idtbl_usuario && m.muestra_hora">
-                    <img src="{{chat.cliente.url_imagen_gsuite}}" class="img-circle" width="40" *ngIf="chat.cliente"
-                      title="{{chat.cliente.nombre}}">
+                    <img src="{{m.user.url_imagen_gsuite}}" class="img-circle" width="40" *ngIf="m.user"
+                      title="{{m.user.nombre}}">
                   </span>
                   <div class="chat-date" *ngIf="m.muestra_hora">{{ m.fecha_mensaje | datechat }}</div>
                 </div>
@@ -177,8 +177,8 @@
                   </button>
                   <div class="cuenta-regresiva">
                     <div>{{chat.cuenta_regresiva}}</div>
-                    <div>
-                      <button mat-icon-button color="basic" class="boton-enviar" (click)="enviarNota(chat)">
+                    <div> 
+                      <button mat-icon-button color="basic" class="boton-enviar" (click)="enviarNota(chat,este)">
                         <mat-icon>send</mat-icon>
                       </button>
                     </div>
@@ -211,7 +211,7 @@
                 [disabled]="chat.cargando_archivo || chat.grabando_nota">
                 <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat)"
+              <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat,este)"
                 [disabled]="chat.cargando_archivo || chat.grabando_nota">
                 <mat-icon aria-label="Example icon-button with a heart icon">mic</mat-icon>
               </button>

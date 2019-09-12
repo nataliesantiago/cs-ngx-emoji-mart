@@ -25,7 +25,7 @@ export class MensajesExpertoPipe implements PipeTransform {
   }
 
   passByMensajes(tipo, mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {
-    if (tipo == 1) {
+    if (tipo == 3) {
       let m = mensajes[index];
       if (m) {
         m.muestra_hora = true;
