@@ -48,6 +48,7 @@ export class FormularioProductosComponent implements OnInit {
   impresion = [];
   nivel_producto;
   id_producto_editar;
+  valor_id;
 
   private _transformer = (node: FoodNode, level: number) => {
     return {
@@ -115,7 +116,6 @@ export class FormularioProductosComponent implements OnInit {
                 this.ajax.get('producto/obtener-editar', { idtbl_producto : this.id_producto_editar }).subscribe(p2 => {
                   if(p2.success){
                     this.categoria = p2.producto[0];
-                    
                     this.myControl = new FormControl(p2.producto[0].nombre_padre);
                     this.filteredOptions = this.myControl.valueChanges.pipe(
                       startWith(''),
@@ -150,6 +150,7 @@ export class FormularioProductosComponent implements OnInit {
   }
 
   seleccionarProducto(e){
+    
     this.categoria.id_producto_padre = e.idtbl_producto;
     this.arbol = [];
     this.arbol_mostrar = [];
@@ -259,8 +260,11 @@ giveShape(employees, manager) {
 
   guardarProducto(){
 
+    if(this.myControl.value == ""){
+      this.categoria.id_producto_padre = "";
+    }
     if(this.id_producto_editar){
-      this.ajax.post('producto/editar', { producto: this.categoria }).subscribe(d => {
+      this.ajax.post('producto/editar', { producto: this.categoria, id_usuario: this.id_usuario }).subscribe(d => {
         if(d.success){
           this.router.navigate(['/productos']);
         }
