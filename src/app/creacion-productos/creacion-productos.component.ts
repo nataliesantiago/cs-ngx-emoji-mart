@@ -31,6 +31,16 @@ export class CreacionProductosComponent implements OnInit {
       }
     });
 
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      if (this.usuario) {
+      }
+    })
+
     this.ajax.get('producto/obtener', {}).subscribe(p => {
       if(p.success){
         

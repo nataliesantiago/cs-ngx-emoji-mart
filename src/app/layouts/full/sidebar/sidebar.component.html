@@ -15,6 +15,7 @@
                 <li><a [routerLink]="['/admin/chat/extensiones']" (click)="cerrarMenu()">Administración de extensiones chat</a></li>
                 <li><a [routerLink]="['/admin/chat/intenciones']" (click)="cerrarMenu()">Administración de intenciones chat</a></li>
                 <li><a [routerLink]="['/ad-encuestas']" (click)="cerrarMenu()">Administración de encuestas</a></li>
+                <li><a [routerLink]="['/encuesta/1']" (click)="cerrarMenu()">Encuenta Cliente</a></li>
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()"><a href="{{i.url}}" target="_blank"
                         (click)="cerrarMenu()">{{i.label}}</a></li>
 

@@ -31,9 +31,18 @@ export class AdEncuestasComponent implements OnInit {
       }
     });
 
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      if (this.usuario) {
+      }
+    })
+
     this.ajax.get('encuestas/obtener', {}).subscribe(p => {
       if(p.success){
-        
         this.encuestas = p.encuestas;
         this.dataSource = new MatTableDataSource(this.encuestas);
         this.dataSource.paginator = this.paginator;
@@ -47,7 +56,7 @@ export class AdEncuestasComponent implements OnInit {
   }
 
   editarRegistro(e){
-    this.router.navigate(['/formulario-productos'], {queryParams: {id_producto: e.idtbl_producto}});
+    this.router.navigate(['/formulario-encuestas', e.idtbl_encuesta]);
   }
 
 }

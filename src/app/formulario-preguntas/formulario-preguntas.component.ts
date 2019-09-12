@@ -58,14 +58,19 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         
       }
     })
-    this.usuario = user.getUsuario();
-    
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
-      if(d.success){
-        
-        this.id_usuario = d.usuario[0].idtbl_usuario;        
+
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+      this.init();
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      if (this.usuario) {
+        this.init();
       }
     })
+
     this.quillModules = {
       syntax: true,
       toolbar: {
@@ -98,6 +103,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    
+  }
+
+  init(){
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
         
@@ -192,7 +201,6 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         this.estados_pregunta = d.estados_pregunta;
       }
     })
-
   }
 
   guardarPregunta(){

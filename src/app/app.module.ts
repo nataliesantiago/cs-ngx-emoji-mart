@@ -84,6 +84,7 @@ import { TransferenciaChatComponent } from './components/transferencia-chat/tran
 import { ExpertosActivosePipe } from '../pipes/expertos-activos.pipe';
 import { FormularioEncuestasComponent } from './formulario-encuestas/formulario-encuestas.component';
 import { AdEncuestasComponent } from './ad-encuestas/ad-encuestas.component';
+import { VisualizarEncuestaComponent } from './visualizar-encuesta/visualizar-encuesta.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -136,7 +137,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TransferenciaChatComponent,
     ExpertosActivosePipe,
     FormularioEncuestasComponent,
-    AdEncuestasComponent
+    AdEncuestasComponent,
+    VisualizarEncuestaComponent
   ],
   entryComponents:[TransferenciaChatComponent],
   imports: [

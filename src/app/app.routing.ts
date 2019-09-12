@@ -23,6 +23,7 @@ import { FormularioProductosComponent } from './formulario-productos/formulario-
 import { IntencionesChatComponent } from './intenciones-chat/intenciones-chat.component';
 import { FormularioEncuestasComponent } from './formulario-encuestas/formulario-encuestas.component';
 import { AdEncuestasComponent } from './ad-encuestas/ad-encuestas.component';
+import { VisualizarEncuestaComponent } from './visualizar-encuesta/visualizar-encuesta.component';
 
 
 export const AppRoutes: Routes = [
@@ -46,7 +47,8 @@ export const AppRoutes: Routes = [
   { path: 'productos', component: CreacionProductosComponent, canActivate: [AuthGuard] },
   { path: 'ad-encuestas', component: AdEncuestasComponent, canActivate: [AuthGuard] },
   { path: 'formulario-productos', component: FormularioProductosComponent, canActivate: [AuthGuard] },
-  { path: 'formulario-encuestas', component: FormularioEncuestasComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-encuestas/:id_encuesta', component: FormularioEncuestasComponent, canActivate: [AuthGuard] },
+  { path: 'encuesta/:tipo_encuesta', component: VisualizarEncuestaComponent, canActivate: [AuthGuard] },
   { path: 'formulario-preguntas-flujo-curaduria', component: FormularioPreguntasFlujoCuraduriaComponent, canActivate: [AuthGuard] },
   { path: 'sugerencias', component: BuzonSugerenciasComponent, canActivate: [AuthGuard] },
   { path: 'admin/preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },

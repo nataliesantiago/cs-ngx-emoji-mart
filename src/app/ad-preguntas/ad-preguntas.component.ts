@@ -34,14 +34,17 @@ export class AdPreguntasComponent implements OnInit {
   data = [];
   mostrar_fecha_ultima_modificacion = false;
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
-    this.usuario = user.getUsuario();
-    
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
-      if(d.success){
-        
-        this.id_usuario = d.usuario[0].idtbl_usuario;
+
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      if (this.usuario) {
       }
     })
+
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
         

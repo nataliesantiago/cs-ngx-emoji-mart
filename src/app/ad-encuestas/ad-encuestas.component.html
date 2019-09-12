@@ -2,7 +2,7 @@
   <div class="responsive-table">
 
       <br>
-      <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario-encuestas']">Ingresar Encuesta</a>
+      <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario-encuestas/nuevo']">Ingresar Encuesta</a>
       <br>
       <br>
       <mat-table [dataSource]="dataSource" matSort>
@@ -21,8 +21,8 @@
 
           <ng-container matColumnDef="estado">
             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Estado </mat-header-cell>
-            <mat-cell *matCellDef="let row" style="max-width:35%;"><mat-icon class="icon">{{row.activo}}</mat-icon></mat-cell>
-        </ng-container>
+            <mat-cell *matCellDef="let row" style="max-width:35%;">{{row.activo}}</mat-cell>
+          </ng-container>
   
           <ng-container matColumnDef="acciones">
               <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
