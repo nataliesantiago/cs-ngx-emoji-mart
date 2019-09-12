@@ -1,3 +1,71 @@
-<p>
-  formulario-encuestas works!
-</p>
+
+
+<mat-card>  
+  <mat-card-content>
+      <h3>Formulario de Encuestas</h3>
+      <hr>
+      <div fxLayout="row wrap">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Digite la pregunta*</mat-label>
+          <input matInput [(ngModel)]="encuesta.nombre" name="titulo">
+        </mat-form-field>
+        <div fxFlex.gt-sm="10" fxFlex="100">
+        </div>
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Tipo Encuestas</mat-label>
+          <select matNativeControl [(ngModel)]="encuesta.id_tipo_encuesta" name="producto">
+            <option *ngFor="let i of tipo_encuesta" value="{{i.idtbl_tipo_encuesta}}">{{i.nombre}}</option>
+          </select>
+        </mat-form-field>
+      </div>
+      <h3>Preguntas</h3>
+      <hr>
+      <br>
+      <!--div fxLayout="row wrap">
+        <button mat-raised-button color="accent" (click)="anadirSubRespuesta()" style="width: 15%;"><span style="color: white !important;">Añadir Subrespuesta</span></button>
+      </div>
+      <br>
+      <div *ngIf="subrespuestas.length > 0" fxLayout="row wrap">
+        <div *ngFor="let subrespuesta of subrespuestas; let i = index;" fxFlex.gt-sm="98" fxFlex="100">
+          <br>
+          <mat-accordion style="margin-bottom: 1%;">
+              <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title *ngIf="subrespuesta.titulo == ''"> Nueva Subrespuesta </mat-panel-title>  
+                    <mat-panel-title *ngIf="subrespuesta.titulo != null"> {{subrespuesta.titulo}} </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-form-field>
+                    <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo">
+                  </mat-form-field>      
+                  <br>
+                  <br>
+                  <mat-form-field>
+                    <input matInput placeholder="Digite la categoria" [(ngModel)]="subrespuesta.categoria" name="categoria-subrespuesta">
+                  </mat-form-field>
+                  <br>
+                  <br>
+                  <mat-form-field>
+                    <mat-label>Seleccione la ubicación</mat-label>
+                    <select matNativeControl [(ngModel)]="subrespuesta.posicion" name="posicion">
+                      <option value="1">Previo a los segmentos</option>
+                      <option value="2">Posterior a los segmentos</option>
+                    </select>
+                  </mat-form-field>
+                  <br>
+                  <br>
+                  <mat-card-title>Por favor digite la respuesta</mat-card-title>
+                  <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="subrespuesta.respuesta" name="respuesta"></quill-editor>
+              </mat-expansion-panel>              
+          </mat-accordion>
+          <div fxFlex.gt-sm="1" fxFlex="100"></div>
+          <a (click)="eliminarSubRespuesta(subrespuesta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>         
+        </div>
+        <br>
+      </div-->
+      
+  </mat-card-content>
+
+
+</mat-card>
+
+
