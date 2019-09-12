@@ -58,4 +58,12 @@ export class FormularioEncuestasComponent implements OnInit {
   ngOnInit() {
   }
 
+  anadirPregunta(){
+
+  }
+
+  eliminarPregunta(e, pos){
+
+  }
+
 }
