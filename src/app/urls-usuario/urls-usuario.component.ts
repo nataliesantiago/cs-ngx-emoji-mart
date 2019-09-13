@@ -26,25 +26,29 @@ export class UrlsUsuarioComponent implements OnInit {
   nuevo = { label: '', url: '', id_usuario_creador: '' };
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
-    this.usuario = user.getUsuario();
     
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo }).subscribe(d => {
-      if (d.success) {
-        
-        this.id_usuario = d.usuario[0].idtbl_usuario;
-        this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
-          if (p.success) {
-            
-            this.items_administracion = p.items;
-            
-            this.dataSource = new MatTableDataSource(this.items_administracion);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.cg.detectChanges();
-          }
-        })
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
+        if (p.success) {
+          
+          this.items_administracion = p.items;
+          
+          this.dataSource = new MatTableDataSource(this.items_administracion);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.cg.detectChanges();
+        }
+      })
+      if (this.usuario) {
       }
-    });
+    })
+    
   }
 
   ngOnInit() {

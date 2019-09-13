@@ -68,13 +68,18 @@ export class FormularioProductosComponent implements OnInit {
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient) { 
 
-    this.usuario = user.getUsuario();
-    
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
-      if(d.success){
-        this.id_usuario = d.usuario[0].idtbl_usuario;        
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
+      this.init();
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      if (this.usuario) {
+        this.init();
       }
-    });
+    })
 
     this.cargarIcons();
 
@@ -83,6 +88,10 @@ export class FormularioProductosComponent implements OnInit {
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
+
+  }
+
+  init(){
 
     this.route.queryParams
     .filter(params => params.id_producto)

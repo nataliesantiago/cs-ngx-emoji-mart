@@ -1,0 +1,47 @@
+/*mat-card{
+    text-align: center;
+}*/
+
+.icono-inicial{
+    color: #c3b029;
+}
+
+.icono-seleccionado{
+    background: #badfff;
+}
+
+.icono-manos{
+    color: #badfff;
+}
+
+.contador{
+    margin-right: 10px;
+}
+
+.centrado{
+    justify-content: center;
+    text-align: center;
+}
+
+.container-principal{
+    border: thin solid #dadce0;
+    border-radius: .5rem;
+    margin: 2.625rem 0 0;
+}
+
+.texto{
+    width: 90%;    
+}
+
+textarea{
+    resize: none !important;
+}
+
+.boton-calificacion{
+    color: white;
+    margin-bottom: 10px;
+}
+
+.si{
+    background-color: #3f51b5;
+}

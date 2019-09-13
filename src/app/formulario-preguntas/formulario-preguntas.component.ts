@@ -58,14 +58,22 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         
       }
     })
-    this.usuario = user.getUsuario();
-    
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
-      if(d.success){
-        
-        this.id_usuario = d.usuario[0].idtbl_usuario;        
+
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
+      this.init();
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      console.log(u);
+      console.log(this.id_usuario);
+      if (this.usuario) {
+        this.init();
       }
     })
+
     this.quillModules = {
       syntax: true,
       toolbar: {
@@ -98,6 +106,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    
+  }
+
+  init(){
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
         
@@ -113,7 +125,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       }
     })
     
-    this.route.queryParams
+    this.route.params
       .filter(params => params.id_pregunta)
       .subscribe(params => {
         
@@ -126,7 +138,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       if(d.success){
         
         this.productos = d.productos;
-        if(this.id_pregunta_editar){
+        if(this.id_pregunta_editar != "nuevo"){
           this.editar = true;
           this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(p => {
             if(p.success){
@@ -192,7 +204,6 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         this.estados_pregunta = d.estados_pregunta;
       }
     })
-
   }
 
   guardarPregunta(){

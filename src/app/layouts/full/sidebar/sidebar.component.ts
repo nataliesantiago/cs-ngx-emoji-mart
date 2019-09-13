@@ -80,7 +80,7 @@ export class AppSidebarComponent implements OnDestroy {
   }
 
   sugerirPreguntas() {
-    this.router.navigate(['/formulario-preguntas-flujo-curaduria'], { queryParams: { id_pregunta: 'sugerida' } });
+    this.router.navigate(['/formulario-preguntas-flujo-curaduria', 'sugerida']);
   }
 
 }

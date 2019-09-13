@@ -19,6 +19,7 @@
                 <li><a [routerLink]="['/ad-encuestas']" (click)="cerrarMenu()">Administración de encuestas</a></li>
                 <li><a [routerLink]="['/chat-experto']" (click)="cerrarMenu()" *ngIf="usuario && usuario.id_rol==2">Chat
                         experto</a></li>
+                <li><a [routerLink]="['/encuesta/1']" (click)="cerrarMenu()">Encuenta Cliente</a></li>
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()"><a href="{{i.url}}" target="_blank"
                         (click)="cerrarMenu()">{{i.label}}</a></li>
 
