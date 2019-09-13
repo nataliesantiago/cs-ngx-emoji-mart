@@ -39,6 +39,7 @@ export class AdministracionComponent implements OnInit {
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;

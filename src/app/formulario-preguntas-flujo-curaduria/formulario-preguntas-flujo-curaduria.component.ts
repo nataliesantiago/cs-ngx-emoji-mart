@@ -62,6 +62,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
       this.init();
     }
     this.user.observableUsuario.subscribe(u => {
@@ -115,7 +116,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       }
     })
 
-    this.route.queryParams
+    this.route.params
       .filter(params => params.id_pregunta)
       .subscribe(params => {
 
@@ -128,7 +129,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       if (d.success) {
 
         this.productos = d.productos;
-        if (this.id_pregunta_editar) {
+        if (this.id_pregunta_editar != "nuevo") {
           if (this.id_pregunta_editar != "sugerida") {
             this.editar = true;
             this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(p => {

@@ -26,15 +26,18 @@ export class FormularioEncuestasComponent implements OnInit {
   permitir_envio = true;
   editar = false;
   id_encuesta;
+  id_usuario;
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
+      this.id_usuario = this.user.idtbl_usuario;
       this.init();
     }
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
+      this.id_usuario = u.idtbl_usuario;
       if (this.user) {
         this.init();
       }

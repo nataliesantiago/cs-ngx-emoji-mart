@@ -70,6 +70,7 @@ export class FormularioProductosComponent implements OnInit {
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
       this.init();
     }
     this.user.observableUsuario.subscribe(u => {

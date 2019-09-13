@@ -37,6 +37,7 @@ export class AdPreguntasComponent implements OnInit {
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
@@ -63,7 +64,7 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   editarElemento(e){
-    this.router.navigate(['/formulario_pregunta'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
+    this.router.navigate(['/formulario_pregunta', e.idtbl_pregunta]);
   }
 
   borrarElemento(e){
