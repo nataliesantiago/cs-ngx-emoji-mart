@@ -23,6 +23,7 @@ export class User {
     codigo_firebase: string;
     pass_firebase: string;
     conversacion_experto: Conversacion;
+    activo_chat:boolean;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;

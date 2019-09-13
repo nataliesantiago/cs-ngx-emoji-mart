@@ -12,9 +12,13 @@
                 <li><a [routerLink]="['/admin']" (click)="cerrarMenu()">Administración</a></li>
                 <li><a [routerLink]="['/productos']" (click)="cerrarMenu()">Categorias</a></li>
                 <!--li><a [routerLink]="['/administracion-urls']" (click)="cerrarMenu()">Administración de URL's</a></li-->
-                <li><a [routerLink]="['/admin/chat/extensiones']" (click)="cerrarMenu()">Administración de extensiones chat</a></li>
-                <li><a [routerLink]="['/admin/chat/intenciones']" (click)="cerrarMenu()">Administración de intenciones chat</a></li>
+                <li><a [routerLink]="['/admin/chat/extensiones']" (click)="cerrarMenu()">Administración de extensiones
+                        chat</a></li>
+                <li><a [routerLink]="['/admin/chat/intenciones']" (click)="cerrarMenu()">Administración de intenciones
+                        chat</a></li>
                 <li><a [routerLink]="['/ad-encuestas']" (click)="cerrarMenu()">Administración de encuestas</a></li>
+                <li><a [routerLink]="['/chat-experto']" (click)="cerrarMenu()" *ngIf="usuario && usuario.id_rol==2">Chat
+                        experto</a></li>
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()"><a href="{{i.url}}" target="_blank"
                         (click)="cerrarMenu()">{{i.label}}</a></li>
 
