@@ -68,7 +68,7 @@ export class ChatExpertoComponent {
           this.fireStore.collection('expertos').doc('' + this.user.getId()).set(d);
         });
         this.user.filas.forEach(f => {
-          let fila = { chats: null, id: f.id_categoria_experticia };
+          let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
           //this.chats_cola.push(fila)
           let cola = this.fireStore.collection('categorias_experticia/' + f.id_categoria_experticia + '/chats').valueChanges();
           cola.subscribe(chats => {
@@ -76,15 +76,22 @@ export class ChatExpertoComponent {
             let tmp = [];
 
             if (chats.length < 1) {
+              if (fila.listener_conversacion) {
+                fila.listener_conversacion.unsubscribe();
+              }
               fila.chats = [];
               this.procesaFilas(fila);
             } else {
               chats.forEach((c: any, index) => {
                 let refConversacion = c.conversacion;
-                this.fireStore.doc('conversaciones/' + refConversacion).snapshotChanges().subscribe(datos => {
+                fila.listener_conversacion = this.fireStore.doc('conversaciones/' + refConversacion).snapshotChanges().subscribe(datos => {
                   let c: Conversacion = datos.payload.data() as Conversacion;
                   c.codigo = refConversacion;
-                  if (c.id_estado_conversacion == 1 && chats.length > 0) {
+                  let busqueda = tmp.find(t => {
+                    return t.codigo === c.codigo;
+                  });
+
+                  if (!busqueda && c.id_estado_conversacion == 1) {
                     this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
                       c.cliente = d;
                       tmp.push(c);
@@ -94,7 +101,8 @@ export class ChatExpertoComponent {
                       }
                     });
                   } else {
-                    this.chats_cola[index].chats = [];
+                    fila.listener_conversacion.unsubscribe();
+                    //this.chats_cola[index].chats = [];
                   }
                 });
               });
@@ -143,8 +151,10 @@ export class ChatExpertoComponent {
                   }
                 } else {
                   let cc = temporal.splice(index, 1)[0] as Conversacion;
-                  cc.listener_conversacion.unsubscribe();
-                  cc.listener_mensajes.unsubscribe();
+                  if (cc) {
+                    cc.listener_conversacion.unsubscribe();
+                    cc.listener_mensajes.unsubscribe();
+                  }
                 }
                 if (index == (chat.length - 1)) {
                   if (temporal.length > this.chats_experto.length) {
@@ -166,25 +176,42 @@ export class ChatExpertoComponent {
       this.expertos = this.expertos_filtro = e.filter(experto => {
         return experto.idtbl_usuario != this.user.getId();
       });
+      this.expertos.forEach(e => {
+        this.abrirConversacionExperto(e, true);
+        this.fireStore.doc('expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
+          if (!experto || !experto.fecha) {
+            e.activo_chat = false;
+          } else {
+            var duration = moment().unix() - experto.fecha.seconds;
+            if (experto.activo && duration < 11) {
+              e.activo_chat = true;
+            } else {
+              e.activo_chat = false;
+            }
+          }
+        });
+      });
     })
   }
 
   filtraExpertos() {
     this.expertos_filtro = this.expertos.filter(e => {
       return (this.utilService.normalizeText(e.nombre).toLowerCase().indexOf(this.buscar_experto.toLowerCase()) != (-1) || this.utilService.normalizeText(e.correo).toLowerCase().indexOf(this.buscar_experto.toLowerCase()) != (-1));
-    })
+    });
   }
 
-  abrirConversacionExperto(e: User) {
-    if (e.conversacion_experto) {
+  abrirConversacionExperto(e: User, oculta?: boolean) {
+    if (e.conversacion_experto && !oculta) {
       this.onSelect(e.conversacion_experto);
     } else {
       this.chatService.getConversacionExperto(e.idtbl_usuario).then(codigo => {
         e.conversacion_experto = new Conversacion(this.user.getId(), 2, codigo);
         e.conversacion_experto.cliente = JSON.parse(JSON.stringify(e));
         this.agregarListenerMensajes(e.conversacion_experto);
-        this.onSelect(e.conversacion_experto);
-      })
+        if (!oculta) {
+          this.onSelect(e.conversacion_experto);
+        }
+      });
     }
   }
 
