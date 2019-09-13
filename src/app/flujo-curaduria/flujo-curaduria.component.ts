@@ -194,7 +194,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   previsualizar(e) {
-    this.router.navigate(['/respuestas'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
+    this.router.navigate(['/respuestas', e.idtbl_pregunta]);
   }
 
   async comentarios(e){

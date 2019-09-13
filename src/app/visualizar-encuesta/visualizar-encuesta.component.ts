@@ -90,4 +90,12 @@ export class VisualizarEncuestaComponent implements OnInit {
     return respuesta < valor;
   }
 
+  enviarFormulario(){
+    let validacion_respuestas = 0;
+    for(let i = 0; i < this.preguntas.length; i++){
+    
+    }
+
+  }
+
 }
