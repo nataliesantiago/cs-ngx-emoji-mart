@@ -13,8 +13,10 @@ export class VisualizarEncuestaComponent implements OnInit {
 
   user;
   id_tipo_encuesta;
-  encuesta = [];
+  encuesta: [];
   preguntas = [];
+  respuestas = [];
+  idtbl_encuesta;
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
     this.user = this.userService.getUsuario();
@@ -43,9 +45,19 @@ export class VisualizarEncuestaComponent implements OnInit {
     this.ajax.get('encuestas/obtener-encuesta-tipo', { id_tipo: this.id_tipo_encuesta }).subscribe(d => {
       if(d.success){
         this.encuesta = d.encuesta[0];
+        this.idtbl_encuesta = d.encuesta[0].idtbl_encuesta;
         this.ajax.get('encuestas/obtener-preguntas', { id_encuesta: d.encuesta[0].idtbl_encuesta }).subscribe(d2 => {
           if(d2.success){              
-            this.preguntas = d2.preguntas;              
+            this.preguntas = d2.preguntas;
+            for(let i = 0; i < this.preguntas.length; i++){
+              if(this.preguntas[i].id_tipo == 2){
+                this.preguntas[i].respuesta = -1;
+              }else{
+                this.preguntas[i].respuesta = '';
+              }
+              
+            }
+            console.log(this.preguntas);
           }
         })
       }
@@ -54,6 +66,28 @@ export class VisualizarEncuestaComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  arrayOne(n: number, n2: number): any[] {
+    let valor = n2 - n + 1;
+    return Array(valor);
+  }
+
+  agregarRespuesta(pos, valor){
+    this.preguntas[pos].respuesta = valor;
+    console.log(this.preguntas);
+  }
+
+  activarBoton(respuesta, validador){
+    return respuesta == validador;
+  }
+
+  validarEstrellasMayor(respuesta, valor){
+    return respuesta >= valor;
+  }
+
+  validarEstrellasMenor(respuesta, valor){
+    return respuesta < valor;
   }
 
 }
