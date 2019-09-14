@@ -385,12 +385,40 @@ export class ChatService {
    */
   transferirChat(c: Conversacion, id_transferencia: number, id_tipo: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo_chat).delete();
+      this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
       this.ajax.post('chat/conversacion/transferir', { id_experto: this.user.getId(), id_conversacion: c.idtbl_conversacion, id_cliente: c.cliente.idtbl_usuario, codigo: c.codigo, id_tipo: id_tipo, coidgo_chat: c.codigo_chat, id_transferencia: id_transferencia }).subscribe(d => {
         if (d.success) {
           resolve();
         } else {
           reject();
+        }
+      })
+    });
+  }
+  /**
+   * @description trae el snapshot de un documento en firebase
+   * @param  {string} url
+   * @returns Promise
+   */
+  getDocumentoFirebase(url: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getFirebaseDoc', { doc: url }).subscribe(d => {
+        if (d.success) {
+          resolve(d.doc);
+        }
+      })
+    });
+  }
+  /**
+   * @description trae el snapshot de una coleccion en firebase
+   * @param  {string} url
+   * @returns Promise
+   */
+  getCollectionFirebase(url: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getFirebaseCollection', { doc: url }).subscribe(d => {
+        if (d.success) {
+          resolve(d.collection);
         }
       })
     });

@@ -3,10 +3,11 @@ import { AutenticationService } from './services/autenticacion.service';
 import { ResponseSearch } from './models/response-search';
 import { User } from '../schemas/user.schema';
 import { UserService } from './providers/user.service';
-
+import { environment } from '../environments/environment';
 
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
+import { AjaxService } from './providers/ajax.service';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -16,10 +17,11 @@ const moment = _rollupMoment || _moment;
 })
 export class AppComponent {
   user: User;
-  version = '0.0.12'
-  constructor(public responseSearch: ResponseSearch, private userService: UserService) {
+  version = '0.0.15'
+  constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService) {
     this.responseSearch.setActive(true);
     moment.locale('es');
+    this.ajax.sethost(environment.URL_BACK);
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();

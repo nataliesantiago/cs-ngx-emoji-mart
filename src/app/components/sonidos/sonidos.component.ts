@@ -38,10 +38,10 @@ export class SonidosComponent implements OnInit {
       if (media) {
         const playPromise = media.play();
         if (playPromise !== null) {
-          playPromise.catch(() => {
+          playPromise.catch((e) => {
             setTimeout(() => {
-              media.play().catch(() => {
-                console.log('No se puede reproducir el sonido ahora');
+              media.play().catch((err) => {
+                console.log('No se puede reproducir el sonido ahora', e, err);
               });
             }, 1000);
           })
@@ -53,16 +53,16 @@ export class SonidosComponent implements OnInit {
   ngOnInit() {
     this.mensaje = new Audio();
     this.mensaje.src = 'assets/sounds/message.mp3';
-    this.mensaje.load();
+    //this.mensaje.load();
     this.cliente = new Audio();
     this.cliente.src = 'assets/sounds/cliente.wav';
-    this.cliente.load();
+    //this.cliente.load();
     this.sos = new Audio();
     this.sos.src = 'assets/sounds/alarma.wav';
-    this.sos.load();
+    //this.sos.load();
     this.notificacion = new Audio();
     this.notificacion.src = 'assets/sounds/notificacion.mp3';
-    this.notificacion.load();
+    //this.notificacion.load();
   }
 
 

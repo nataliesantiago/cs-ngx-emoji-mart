@@ -19,6 +19,7 @@ import { AjaxService } from '../providers/ajax.service';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserService } from '../providers/user.service';
 import { environment } from '../../environments/environment';
+import { User } from '../../schemas/user.schema';
 
 
 @Component({
@@ -68,6 +69,8 @@ export class HomeComponent implements OnInit {
   currentLanguage = this.languages[1];
   actionContext: ActionContext = new ActionContext();
   ambiente = environment.ambiente;
+  user: User;
+
   initRecognition() {
     this.speechRecognizer.setLanguage(this.currentLanguage);
     this.speechRecognizer.onStart().subscribe(data => {
@@ -148,45 +151,40 @@ export class HomeComponent implements OnInit {
   /**web speech end */
 
   constructor(
-    private router: Router,
-    private homeService: HomeService,
-    public responseSearch: ResponseSearch,
-    private changeDetector: ChangeDetectorRef,
-    private speechRecognizer: SpeechRecognizerService,
-    private nzone: NgZone,
-    private autenticationService: AutenticationService,
-    private ajax: AjaxService,
-    private user: UserService
-  ) {
+    private router: Router, private homeService: HomeService, public responseSearch: ResponseSearch, private changeDetector: ChangeDetectorRef, private speechRecognizer: SpeechRecognizerService, private nzone: NgZone, private autenticationService: AutenticationService, private ajax: AjaxService, private userService: UserService) {
+    this.user = this.userService.getUsuario();
+    if (this.user) {
+      this.init();
+    }
+    this.userService.observableUsuario.subscribe(u => {
+      if (u) {
+        this.user = u;
+        this.init();
+      }
+    });
     this.searchText = "";
     this.responseSearch.setActiveMostrarBarra(false);
+
+
+  }
+  init() {
     this.ajax.get('administracion/obtener-texto-home', {}).subscribe(p => {
       if (p.success) {
 
         this.texto_home = p.item[0].valor;
 
       }
-    })
-
-    this.usuario = user.getUsuario();
-
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo }).subscribe(d => {
-      if (d.success) {
-
-        this.correo_usuario = d.usuario[0].correo;
-        this.validacion_pais_usuario = this.correo_usuario.split(".");
-        this.correo_usuario = this.validacion_pais_usuario[(this.validacion_pais_usuario.length - 1)];
-      }
-    })
-
+    });
+    this.correo_usuario = this.user.getCorreo();
+    this.validacion_pais_usuario = this.correo_usuario.split(".");
+    this.correo_usuario = this.validacion_pais_usuario[(this.validacion_pais_usuario.length - 1)];
     this.ajax.get('preguntas/obtener-home', {}).subscribe(p => {
       if (p.success) {
 
         this.nuevos_contenidos = p.preguntas;
 
       }
-    })
-
+    });
   }
 
   /**

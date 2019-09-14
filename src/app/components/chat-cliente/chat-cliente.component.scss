@@ -83,6 +83,7 @@
         margin: auto;
         margin-right: 5px;
         margin-bottom: 0;
+
         &.agrandado {
             width: 600px !important;
             height: 458px !important;
@@ -290,8 +291,8 @@
             }
 
             .panel-buscando-experto {
-                width: 262px;
-                height: 364px;
+
+                height: 100%;
 
                 .barra-buscando {
                     height: 56px;
@@ -305,11 +306,12 @@
 
                 .loading-gif {
                     display: flex;
-                    height: 280px;
+                    height: calc(100% - 92px);
 
                     img {
                         margin: auto;
                         width: 100%;
+                        max-width: 262px;
                     }
                 }
 

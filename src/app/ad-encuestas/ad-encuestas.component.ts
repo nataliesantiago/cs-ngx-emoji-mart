@@ -4,6 +4,7 @@ import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { User } from '../../schemas/user.schema';
 
 @Component({
   selector: 'app-ad-encuestas',
@@ -21,42 +22,34 @@ export class AdEncuestasComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
-
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
-    this.usuario = user.getUsuario();
-    
-    this.ajax.get('user/obtenerUsuario', { correo: this.usuario.correo}).subscribe(d => {
-      if(d.success){
-        this.id_usuario = d.usuario[0].idtbl_usuario;        
+  user: User;
+  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
+    this.usuario = this.userService.getUsuario();
+    this.userService.observableUsuario.subscribe(u => {
+      if (u) {
+        this.user = u;
       }
     });
 
-    this.usuario = this.user.getUsuario();
-    if (this.usuario) {
-      this.id_usuario = this.usuario.idtbl_usuario;
-    }
-    this.user.observableUsuario.subscribe(u => {
-      this.usuario = u;
-      this.id_usuario = u.idtbl_usuario;
-      if (this.usuario) {
-      }
-    })
-
     this.ajax.get('encuestas/obtener', {}).subscribe(p => {
-      if(p.success){
+      if (p.success) {
         this.encuestas = p.encuestas;
         this.dataSource = new MatTableDataSource(this.encuestas);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;                              
+        this.dataSource.sort = this.sort;
       }
     })
 
-   }
+  }
+
+  init() {
+
+  }
 
   ngOnInit() {
   }
 
-  editarRegistro(e){
+  editarRegistro(e) {
     this.router.navigate(['/formulario-encuestas', e.idtbl_encuesta]);
   }
 

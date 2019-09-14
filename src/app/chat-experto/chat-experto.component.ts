@@ -82,27 +82,17 @@ export class ChatExpertoComponent {
               fila.chats = [];
               this.procesaFilas(fila);
             } else {
+              this.soundService.sonar(2);
               chats.forEach((c: any, index) => {
                 let refConversacion = c.conversacion;
-                fila.listener_conversacion = this.fireStore.doc('conversaciones/' + refConversacion).snapshotChanges().subscribe(datos => {
-                  let c: Conversacion = datos.payload.data() as Conversacion;
+                this.chatService.getDocumentoFirebase('conversaciones/' + refConversacion).then(async datos => {
+                  let c: Conversacion = datos;
                   c.codigo = refConversacion;
-                  let busqueda = tmp.find(t => {
-                    return t.codigo === c.codigo;
-                  });
-
-                  if (!busqueda && c.id_estado_conversacion == 1) {
-                    this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
-                      c.cliente = d;
-                      tmp.push(c);
-                      if (index == chats.length - 1) {
-                        fila.chats = tmp;
-                        this.procesaFilas(fila);
-                      }
-                    });
-                  } else {
-                    fila.listener_conversacion.unsubscribe();
-                    //this.chats_cola[index].chats = [];
+                  c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
+                  tmp.push(c);
+                  if (index == chats.length - 1) {
+                    fila.chats = tmp;
+                    this.procesaFilas(fila);
                   }
                 });
               });
@@ -112,61 +102,34 @@ export class ChatExpertoComponent {
         let chats = this.fireStore.collection('expertos/' + this.user.getId() + '/chats').snapshotChanges(['added', 'removed']);
         chats.subscribe(chat => {
 
-          //this.chats_experto = [];
           let temporal: Array<Conversacion> = [];
-          //this.chats_experto = [];
-          if (this.chats_experto.length > chat.length) {
-            this.chats_experto.forEach((c: Conversacion) => {
-              c.listener_conversacion.unsubscribe();
-              c.listener_mensajes.unsubscribe();
-            });
-            this.chats_experto = [];
+
+          this.chats_experto.forEach((c: Conversacion) => {
+            c.listener_mensajes.unsubscribe();
+          });
+          if (chat.length > 0) {
+            this.soundService.sonar(2);
           }
           chat.forEach((change: any, index) => {
-            let c = change.payload.doc.data();
-            let codigo_chat = change.payload.doc.id;
-
-            let refConversacion = c.conversacion;
-            let test = this.chats_experto.find(co => {
-              return co.codigo == refConversacion;
-            });
-
-
-            let listener = this.fireStore.doc('conversaciones/' + refConversacion).valueChanges().subscribe((d: Conversacion) => {
+            let codigo = change.payload.doc.id;
+            this.chatService.getDocumentoFirebase('conversaciones/' + codigo).then((d: Conversacion) => {
               let c = d;
-              c.listener_conversacion = listener;
-              c.codigo = refConversacion;
-              c.codigo_chat = codigo_chat;
-
-
+              c.codigo = codigo;
               this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
                 //// console.log(d);
                 c.cliente = d;
-                if (c.id_estado_conversacion != 1 && c.id_experto_actual == this.user.getId()) {
-                  this.agregarListenerMensajes(c);
-                  temporal.push(c);
-                  if (!this.chat) {
-                    this.obligaCambio = false;
-                    this.onSelect(c);
-                  }
-                } else {
-                  let cc = temporal.splice(index, 1)[0] as Conversacion;
-                  if (cc) {
-                    cc.listener_conversacion.unsubscribe();
-                    cc.listener_mensajes.unsubscribe();
-                  }
+                this.agregarListenerMensajes(c);
+                temporal.push(c);
+                if (!this.chat) {
+                  this.obligaCambio = false;
+                  this.onSelect(c);
                 }
                 if (index == (chat.length - 1)) {
-                  if (temporal.length > this.chats_experto.length) {
-                    this.soundService.sonar(2);
-                  }
-                  this.chats_experto = temporal
+                  this.chats_experto = temporal;
                   this.changeRef.detectChanges();
                 }
               });
-
             });
-
           });
 
         });
@@ -267,6 +230,8 @@ export class ChatExpertoComponent {
           if (!primera_vez && !c.focuseado) {
             this.soundService.sonar(1);
             c.mensajes_nuevos = true;
+          } else {
+
           }
         } else {
           c.mensajes[i].estado = m.estado;

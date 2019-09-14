@@ -14,11 +14,13 @@ import { Experto } from '../../../schemas/xhr.schema';
 import { Configuracion } from '../../../schemas/interfaces';
 import { SonidosService } from '../../providers/sonidos.service';
 import swal from 'sweetalert2';
+import { UtilsService } from '../../providers/utils.service';
 
 const moment = _rollupMoment || _moment;
 
 
 declare var StereoAudioRecorder: any;
+declare var Set: any;
 @Component({
   selector: 'app-chat-cliente',
   templateUrl: './chat-cliente.component.html',
@@ -35,7 +37,7 @@ export class ChatClienteComponent implements OnInit {
   extensiones_archivos = [];
   stream: any;
   cantidad_mensajes_sin_leer = 0;
-  constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService) {
+  constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
     if (this.user) {
@@ -75,6 +77,7 @@ export class ChatClienteComponent implements OnInit {
       this.chatService.getConversacionesCLiente().then(chats => {
         this.chats = chats;
         this.chats.forEach(c => {
+          this.agregaListenerConversacion(c);
           this.agregarListenerMensajes(c);
           c.expertos = [];
           if (c.id_experto_actual) {
@@ -84,7 +87,10 @@ export class ChatClienteComponent implements OnInit {
             c.asesor_actual.url_foto = c.url_foto;
           }
           if (c.filas && c.id_estado_conversacion == 1) {
-            this.procesaFilas(c);
+            this.chatService.getDocumentoFirebase('conversaciones/' + c.codigo).then(conversa => {
+              c.transferido = conversa.transferido;
+              this.procesaFilas(c);
+            })
           } else {
             c.no_hay_filas = "1";
           }
@@ -116,6 +122,7 @@ export class ChatClienteComponent implements OnInit {
       c.mostrar_emojis = false;
     }
   }
+
   agregarListenerMensajes(c: Conversacion) {
     c.cantidad_mensajes_nuevos = 0;
     this.fireStore.doc('conversaciones/' + c.codigo).valueChanges().subscribe((con: Conversacion) => {
@@ -210,64 +217,6 @@ export class ChatClienteComponent implements OnInit {
     });
   }
 
-  passByMensajes(mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {
-    let m = mensajes[index];
-    if (m) {
-
-      m.muestra_hora = true;
-      if (m.id_usuario != this.user.getId()) {
-        let experto = this.expertos.find((e: User) => {
-          return e.idtbl_usuario == m.id_usuario;
-        });
-        if (experto) {
-          m.user = experto;
-          index++;
-          if (mensaje_anterior && m.id_usuario == mensaje_anterior.id_usuario) {
-            /*&& m.id_usuario == mensaje_anterior.id_usuario) {*/
-
-            let a = moment(mensaje_anterior.fecha_mensaje);
-            let b = moment(m.fecha_mensaje);
-            let minutes = a.diff(b, 'minutes');
-            if (minutes == 0) {
-              mensaje_anterior.muestra_hora = false;
-              delete mensaje_anterior.user;
-            }
-          }
-          this.passByMensajes(mensajes, index, m);
-        } else {
-          this.userService.getInfoUsuario(m.id_usuario).then((u: User) => {
-            m.user = u;
-            this.expertos.push(u);
-            index++;
-            if (mensaje_anterior) {
-              let a = moment(mensaje_anterior.fecha_mensaje);
-              let b = moment(m.fecha_mensaje);
-              let minutes = a.diff(b, 'minutes');
-
-              if (minutes == 0) {
-                mensaje_anterior.muestra_hora = false;
-                delete mensaje_anterior.user;
-              }
-            }
-            this.passByMensajes(mensajes, index, m);
-          })
-        }
-      } else {
-        index++;
-        if (mensaje_anterior && m.id_usuario == mensaje_anterior.id_usuario) {
-          let a = moment(mensaje_anterior.fecha_mensaje);
-          let b = moment(m.fecha_mensaje);
-          let minutes = a.diff(b, 'minutes');
-
-          if (minutes == 0) {
-            mensaje_anterior.muestra_hora = false;
-            delete mensaje_anterior.user;
-          }
-        }
-        this.passByMensajes(mensajes, index, m);
-      }
-    }
-  }
 
   asignarAudio(m: Mensaje, audio?: HTMLAudioElement) {
     //audio.load();
@@ -323,69 +272,41 @@ export class ChatClienteComponent implements OnInit {
     let finaliza = true;
 
     c.filas.forEach((ce, index) => {
-      let r = this.fireStore.collection('conversaciones/').doc(c.codigo).ref;
-      this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').set({ conversacion: r.id });
       if (c.id_estado_conversacion == 1) {
-        let e = this.fireStore.collection('categorias_experticia/' + ce.id + '/expertos').valueChanges();
-
         if (ce.expertos && ce.expertos.length > 0) {
           expertos = expertos.concat(ce.expertos);
         }
-        if (index == (c.filas.length - 1) && finaliza) {
-          finaliza = false;
-          this.asignarAsesor(c, expertos);
-        }
       }
     });
+    this.asignarAsesor(c, expertos);
   }
 
   asignarAsesor(c: Conversacion, expertos: Array<any>) {
 
-    expertos.forEach((e, index) => {
-      let a = this.fireStore.doc('expertos/' + e.id_usuario).ref;
-      let b = this.fireStore.doc('expertos/' + e.id_usuario).snapshotChanges();
-      b.subscribe((datos: any) => {
-        if (datos) {
-          let data = datos.payload.data();
-          if (c.expertos.length < expertos.length) {
-            if (!data) {
-              data = { activo: false };
-            }
-            let ex = { idtbl_usuario: parseInt(a.id), chats: [], activo: data.activo, ultima_conexion: data.fecha };
-            c.expertos.push(ex);
-            this.fireStore.doc('expertos/' + e.id_usuario).collection('chats').snapshotChanges().subscribe(changes => {
-              changes.forEach((a, i) => {
-                const data = a.payload.doc.data();
-                const id = a.payload.doc.id;
-                ex.chats.push({ id, ...data });
-                if (index == expertos.length - 1 && i == changes.length - 1) {
-                  this.procesaChats(c);
-                }
-              });
-              if (changes.length < 1 && index == expertos.length - 1) {
-                this.procesaChats(c);
-              }
-            });
-
-
-
-          }
-
-        }
-      })
-
+    expertos.forEach(async (e, index) => {
+      let data = await this.chatService.getDocumentoFirebase('expertos/' + e.id_usuario);
+      if (!data) {
+        data = { activo: false };
+      }
+      let ex = { idtbl_usuario: e.id_usuario, chats: [], activo: data.activo, ultima_conexion: data.fecha };
+      ex.chats = await this.chatService.getCollectionFirebase('expertos/' + e.id_usuario + '/chats');
+      c.expertos.push(ex);
+      if (index == expertos.length - 1) {
+        this.procesaChats(c);
+      }
     });
+
   }
 
-  procesaChats(c: Conversacion) {
 
+  procesaChats(c: Conversacion) {
+    c.expertos = this.utilService.getUnique(c.expertos, 'idtbl_usuario');
     let asignado = 0;
     c.expertos = c.expertos.filter(e => {
       if (!e.ultima_conexion) {
         return false;
       }
-      var duration = moment().unix() - e.ultima_conexion.seconds;
-      // console.log(duration, e);
+      var duration = moment().unix() - e.ultima_conexion._seconds;
       return e.activo && duration < 11;
     });
     c.expertos.sort((a, b) => {
@@ -400,6 +321,7 @@ export class ChatClienteComponent implements OnInit {
       }
     });
     let experto: Experto = c.expertos.pop();
+    
     // console.log(experto, parseInt(this.buscarConfiguracion(2).valor), experto.chats.length);
     if (experto && experto.chats && parseInt(this.buscarConfiguracion(2).valor) > experto.chats.length) {
       c.filas.forEach((ce, index) => {
@@ -413,10 +335,33 @@ export class ChatClienteComponent implements OnInit {
         c.asesor_actual.idtbl_usuario = c.id_experto_actual;
         c.asesor_actual.nombre = c.nombre_experto_actual;
       });
-    } else {
-      this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
-        let data = datos.payload.data() as Conversacion;
-        if (data.id_estado_conversacion == 2) {
+    } else if (!c.transferido) {
+      c.filas.forEach((ce, index) => {
+        this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').set({ conversacion: c.codigo });
+      });
+
+      /* let listener = this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+         let data = datos.payload.data() as Conversacion;
+         if (data.id_estado_conversacion == 2) {
+           listener.unsubscribe();
+           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
+             c.id_experto_actual = u.idtbl_usuario;
+             c.nombre_experto_actual = u.nombre;
+             c.asesor_actual = new User(null, null, null);
+             c.asesor_actual.url_foto = u.url_foto;
+             c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+             c.asesor_actual.nombre = c.nombre_experto_actual;
+           });
+         }
+       });*/
+    }
+  }
+
+  agregaListenerConversacion(c: Conversacion) {
+    this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+      let data = datos.payload.data() as Conversacion;
+      if (c.asesor_actual) {
+        if (c.asesor_actual.idtbl_usuario != data.id_experto_actual && data.id_experto_actual) {
           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
             c.id_experto_actual = u.idtbl_usuario;
             c.nombre_experto_actual = u.nombre;
@@ -425,10 +370,32 @@ export class ChatClienteComponent implements OnInit {
             c.asesor_actual.idtbl_usuario = c.id_experto_actual;
             c.asesor_actual.nombre = c.nombre_experto_actual;
           });
+        } else if (!data.id_experto_actual) {
+          delete c.asesor_actual;
+          delete c.nombre_experto_actual;
+          delete c.id_experto_actual;
+          delete c.no_hay_filas;
         }
-      });
-    }
+      } else {
+        if (data.id_estado_conversacion == 2) {
+          //listener.unsubscribe();
+          this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
+            c.id_experto_actual = u.idtbl_usuario;
+            c.nombre_experto_actual = u.nombre;
+            c.asesor_actual = new User(null, null, null);
+            c.asesor_actual.url_foto = u.url_foto;
+            c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+            c.asesor_actual.nombre = c.nombre_experto_actual;
+          });
+        } else if (data.id_estado_conversacion == 1) {
+          delete c.asesor_actual;
+          delete c.nombre_experto_actual;
+          delete c.id_experto_actual;
+        }
+      }
+    });
   }
+
   ngOnInit() {
 
   }
@@ -440,16 +407,10 @@ export class ChatClienteComponent implements OnInit {
         c.codigo = d.codigo_conversacion;
         c.filas = d.filas;
         c.id_estado_conversacion = 1;
+        this.agregaListenerConversacion(c);
         this.agregarListenerMensajes(c);
         c.expertos = [];
         this.procesaFilas(c);
-
-        /* setTimeout(() => { // ESTO SE DEBE BORRAR SOLO ES PARA PRUEBAS
-           c.asesor_actual = new User('david.tobar20@gmail.com', null, 'David Tobar');
-           c.asesor_actual.setId(7);
-           c.id_experto_actual = c.asesor_actual.getId();
-           this.changeRef.detectChanges();
-         }, 10000);*/
       }
     });
     this.chats.push(c);
