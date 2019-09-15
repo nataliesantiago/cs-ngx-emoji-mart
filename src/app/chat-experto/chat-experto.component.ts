@@ -79,6 +79,12 @@ export class ChatExpertoComponent {
               if (fila.listener_conversacion) {
                 fila.listener_conversacion.unsubscribe();
               }
+              if (f.chats)
+                f.chats.forEach((c: Conversacion) => {
+                  if (c.interval_tiempo_cola) {
+                    window.clearInterval(c.interval_tiempo_cola);
+                  }
+                });
               fila.chats = [];
               this.procesaFilas(fila);
             } else {
@@ -90,7 +96,27 @@ export class ChatExpertoComponent {
                   c.codigo = refConversacion;
                   c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
                   tmp.push(c);
+                  this.utilService.getConfiguraciones().then(configs => {
+                    let tiempo_cola = configs.find((c: Configuracion) => {
+                      return c.idtbl_configuracion == 6;
+                    });
+                    c.interval_tiempo_cola = setInterval(() => {
+                      let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
+                      if (duration > (tiempo_cola.valor * 60)) {
+                        c.tiempo_cola = true;
+                        window.clearInterval(c.interval_tiempo_cola);
+                        delete c.interval_tiempo_cola;
+                      }
+                    }, 1000);
+                  });
+
                   if (index == chats.length - 1) {
+                    if (f.chats)
+                      f.chats.forEach((c: Conversacion) => {
+                        if (c.interval_tiempo_cola) {
+                          window.clearInterval(c.interval_tiempo_cola);
+                        }
+                      });
                     fila.chats = tmp;
                     this.procesaFilas(fila);
                   }
@@ -218,38 +244,8 @@ export class ChatExpertoComponent {
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
     c.listener_mensajes = c.messages.subscribe(d => {
+      this.procesarMensajes(d, c, primera_vez, 0);
 
-      d.forEach((m: Mensaje, i) => {
-
-        if (m.es_nota_voz) {
-          m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
-          this.asignarAudio(m);
-        }
-        if (!c.mensajes[i]) {
-          c.mensajes[i] = m;
-          if (!primera_vez && !c.focuseado) {
-            this.soundService.sonar(1);
-            c.mensajes_nuevos = true;
-          } else {
-
-          }
-        } else {
-          c.mensajes[i].estado = m.estado;
-        }
-        if (i == d.length - 1) {
-          c.ultimo_mensaje = m;
-          if (m.es_nota_voz) {
-            c.ultimo_mensaje.label = 'Nota de voz';
-          } else if (m.es_archivo) {
-            c.ultimo_mensaje.label = 'Archivo adjunto';
-          } else {
-            c.ultimo_mensaje.label = m.texto;
-          }
-        }
-      });
-      /*this.ngZone.runOutsideAngular(() => {
-        this.passByMensajes(c.mensajes, 0);
-      });*/
       primera_vez = false;
 
 
@@ -292,6 +288,46 @@ export class ChatExpertoComponent {
       });
       c.usuarios_escribiendo = tmp;
     });
+  }
+
+  async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number) {
+    let m = d.shift();
+    if (m) {
+      let experto = this.usuarios.find((e: User) => {
+        return e.idtbl_usuario == m.id_usuario;
+      });
+      if (!experto) {
+        let u = await this.userService.getInfoUsuario(m.id_usuario);
+        this.usuarios.push(u);
+      }
+      if (m.es_nota_voz) {
+        m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
+        this.asignarAudio(m);
+      }
+      if (!c.mensajes[i]) {
+        c.mensajes[i] = m;
+        if (!primera_vez && !c.focuseado) {
+          this.soundService.sonar(1);
+          c.mensajes_nuevos = true;
+        } else {
+
+        }
+      } else {
+        c.mensajes[i].estado = m.estado;
+      }
+      if (d.length < 1) {
+        c.ultimo_mensaje = m;
+        if (m.es_nota_voz) {
+          c.ultimo_mensaje.label = 'Nota de voz';
+        } else if (m.es_archivo) {
+          c.ultimo_mensaje.label = 'Archivo adjunto';
+        } else {
+          c.ultimo_mensaje.label = m.texto;
+        }
+      }
+      i++;
+      this.procesarMensajes(d, c, primera_vez, i);
+    }
   }
 
   passByMensajes(mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {

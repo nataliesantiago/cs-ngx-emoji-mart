@@ -24,7 +24,7 @@ export class MensajesExpertoPipe implements PipeTransform {
     return mensajes;
   }
 
-  passByMensajes(tipo, mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {
+  async passByMensajes(tipo, mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {
     if (tipo == 3) {
       let m = mensajes[index];
       if (m) {
@@ -67,22 +67,21 @@ export class MensajesExpertoPipe implements PipeTransform {
             }
             this.passByMensajes(tipo, mensajes, index, m);
           } else {
-            this.userService.getInfoUsuario(m.id_usuario).then((u: User) => {
-              m.user = u;
-              this.expertos.push(u);
-              index++;
-              if (mensaje_anterior) {
-                let a = moment(mensaje_anterior.fecha_mensaje);
-                let b = moment(m.fecha_mensaje);
-                let minutes = a.diff(b, 'minutes');
+            console.log('buscando data idiota');
+            let u = m.user = await this.userService.getInfoUsuario(m.id_usuario);
+            this.expertos.push(u);
+            index++;
+            if (mensaje_anterior) {
+              let a = moment(mensaje_anterior.fecha_mensaje);
+              let b = moment(m.fecha_mensaje);
+              let minutes = a.diff(b, 'minutes');
 
-                if (minutes == 0) {
-                  mensaje_anterior.muestra_hora = false;
-                  delete mensaje_anterior.user;
-                }
+              if (minutes == 0) {
+                mensaje_anterior.muestra_hora = false;
+                delete mensaje_anterior.user;
               }
-              this.passByMensajes(tipo, mensajes, index, m);
-            })
+            }
+            this.passByMensajes(tipo, mensajes, index, m);
           }
         } else {
           index++;
