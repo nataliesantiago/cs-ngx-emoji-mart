@@ -29,6 +29,11 @@ export class VisualizarEncuestaComponent implements OnInit {
         this.init();
       }
     })
+    route.params.subscribe(val => {
+      if(this.user){
+        this.init();
+      }
+    });
   }
 
   init(){
@@ -50,12 +55,7 @@ export class VisualizarEncuestaComponent implements OnInit {
           if(d2.success){              
             this.preguntas = d2.preguntas;
             for(let i = 0; i < this.preguntas.length; i++){
-              if(this.preguntas[i].id_tipo == 2){
-                this.preguntas[i].respuesta = -1;
-              }else{
-                this.preguntas[i].respuesta = '';
-              }
-              
+              this.preguntas[i].respuesta = '';
             }
             console.log(this.preguntas);
           }
@@ -91,11 +91,13 @@ export class VisualizarEncuestaComponent implements OnInit {
   }
 
   enviarFormulario(){
-    let validacion_respuestas = 0;
-    for(let i = 0; i < this.preguntas.length; i++){
-    
-    }
-
+    this.ajax.post('encuestas/guardar-respuesta', { preguntas: this.preguntas }).subscribe(d => {
+      if (d.success) {
+        console.log("Entra");
+      }else{
+        console.log("No entra");
+      }
+    })
   }
 
 }

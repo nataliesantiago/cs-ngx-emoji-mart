@@ -27,6 +27,7 @@ export class FormularioEncuestasComponent implements OnInit {
   editar = false;
   id_encuesta;
   id_usuario;
+  orden_preguntas = [];
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
 
@@ -69,12 +70,16 @@ export class FormularioEncuestasComponent implements OnInit {
     });
 
     if(this.id_encuesta != "nuevo"){
+      this.editar = true;
       this.ajax.get('encuestas/obtener-ind', { idtbl_encuesta: this.id_encuesta }).subscribe(d => {
         if(d.success){
           this.encuesta = d.encuesta[0];
           this.ajax.get('encuestas/obtener-preguntas', { id_encuesta: d.encuesta[0].idtbl_encuesta }).subscribe(d2 => {
             if(d2.success){              
-              this.preguntas = d2.preguntas;              
+              this.preguntas = d2.preguntas;
+              for(let i = 1; i <= d2.preguntas.length; i++){
+                this.orden_preguntas.push({valor: i});
+              }
             }
           })
         }
@@ -88,6 +93,7 @@ export class FormularioEncuestasComponent implements OnInit {
 
   anadirPregunta(){
     this.preguntas.push({ enunciado: '', id_tipo: '', peso: '', minimo: '', maximo: '', orden: ''});
+    this.orden_preguntas.push({ valor: this.preguntas.length});
   }
 
   eliminarPregunta(e, pos){
@@ -103,23 +109,8 @@ export class FormularioEncuestasComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
-        if(this.editar){
-          
-          if(e.idtbl_pregunta_encuest != undefined){
-            this.ajax.post('preguntas/eliminar-subrespuesta', { subrespuesta: e }).subscribe(d => {
-              if(d.success){
-                this.preguntas.splice(pos, 1);
-                this.cg.detectChanges();
-              }
-            })
-          }else{
-            this.preguntas.splice(pos, 1);
-            this.cg.detectChanges();
-          }
-        }else{
-          this.preguntas.splice(pos, 1);
-          this.cg.detectChanges();
-        }
+        this.preguntas.splice(pos, 1);
+        this.cg.detectChanges();
       }
     })
     
@@ -156,7 +147,7 @@ export class FormularioEncuestasComponent implements OnInit {
 
   enviarDato(){
     let suma_total = 0;
-    let cont_orden = 1;
+    let validar_orden = true;
     if(this.permitir_envio){
 
       if(this.preguntas.length == 0){
@@ -167,35 +158,63 @@ export class FormularioEncuestasComponent implements OnInit {
         )
       }else{
         for(let i = 0; i < this.preguntas.length; i++){
-          this.preguntas[i].orden = cont_orden;
+          
           suma_total = this.preguntas[i].peso + suma_total;
-          if(this.preguntas[i].id_tipo != 1){
+          
+          if(this.preguntas[i].orden == ""){
+            validar_orden = false;
+          }
+          if(this.preguntas[i].id_tipo != 1 && this.preguntas[i].id_tipo != 5){
             this.preguntas[i].minimo = null;
             this.preguntas[i].maximo = null;
           }
-          cont_orden++;
         }
-  
-        if(suma_total == 100){
-          this.ajax.post('encuestas/guardar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
-            if(d.success){
-              
-              this.router.navigate(['/ad-encuestas']);
+        for(let i = 0; i < this.preguntas.length; i++){
+          for(let j = i + 1; j < this.preguntas.length; j++){
+            if(this.preguntas[i].orden == this.preguntas[j].orden){
+              validar_orden = false;
             }
-          })
-        }else if(suma_total < 100){
+          }
+        }
+        if(validar_orden){
+          if(suma_total == 100){
+            if(this.editar){
+              this.ajax.post('encuestas/editar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
+                if(d.success){
+                  
+                  this.router.navigate(['/ad-encuestas']);
+                }
+              })
+            }else{
+              this.ajax.post('encuestas/guardar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
+                if(d.success){
+                  
+                  this.router.navigate(['/ad-encuestas']);
+                }
+              })
+            }
+            
+          }else if(suma_total < 100){
+            swal.fire(
+              'Peso incorrecto',
+              'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar.',
+              'warning'
+            )  
+          }else if (suma_total > 100){
+            swal.fire(
+              'Peso incorrecto',
+              'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar.',
+              'warning'
+            )
+          }
+        }else{
           swal.fire(
-            'Peso incorrecto',
-            'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar.',
-            'warning'
-          )  
-        }else if (suma_total > 100){
-          swal.fire(
-            'Peso incorrecto',
-            'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar.',
+            'Orden Incorrecto',
+            'Seleccione el orden de las preguntas adecuadamente.',
             'warning'
           )
         }
+        
       }
     }else{
       swal.fire(

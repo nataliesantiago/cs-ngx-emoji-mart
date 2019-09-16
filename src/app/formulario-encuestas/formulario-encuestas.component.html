@@ -32,39 +32,53 @@
               <mat-expansion-panel>
                   <mat-expansion-panel-header>
                     <mat-panel-title *ngIf="pregunta.enunciado == ''"> Pregunta {{i + 1}} </mat-panel-title>  
-                    <mat-panel-title *ngIf="pregunta.enunciado != null"> {{pregunta.enunciado}} </mat-panel-title>
+                    <mat-panel-title *ngIf="pregunta.enunciado != null"> {{pregunta.orden}}. {{pregunta.enunciado}} </mat-panel-title>
                   </mat-expansion-panel-header>
 
                   <div fxLayout="row wrap">
                     <mat-form-field floatLabel="never" fxFlex.gt-sm="100" fxFlex="100">
                       <mat-label>Digite la pregunta</mat-label>
-                      <input matInput [(ngModel)]="pregunta.enunciado" name="titulo">
+                      <input *ngIf="!pregunta.idtbl_pregunta_encuesta" matInput [(ngModel)]="pregunta.enunciado" name="titulo">
+                      <input *ngIf="pregunta.idtbl_pregunta_encuesta" matInput [(ngModel)]="pregunta.enunciado" name="titulo" disabled>
                     </mat-form-field>
                   </div>
                   <div fxLayout="row wrap">
-                    <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
                       <mat-label>Tipo Pregunta</mat-label>
-                      <select matNativeControl [(ngModel)]="pregunta.id_tipo" name="tipo" (change)="reiniciarValores(pregunta)">
+                      <select *ngIf="!pregunta.idtbl_pregunta_encuesta" matNativeControl [(ngModel)]="pregunta.id_tipo" name="tipo" (change)="reiniciarValores(pregunta)">
+                        <option *ngFor="let i of tipo_pregunta" value="{{i.idtbl_tipo_pregunta}}">{{i.nombre}}</option>
+                      </select>
+                      <select *ngIf="pregunta.idtbl_pregunta_encuesta" matNativeControl [(ngModel)]="pregunta.id_tipo" name="tipo" (change)="reiniciarValores(pregunta)" disabled>
                         <option *ngFor="let i of tipo_pregunta" value="{{i.idtbl_tipo_pregunta}}">{{i.nombre}}</option>
                       </select>
                     </mat-form-field>                      
-                    <div fxFlex.gt-sm="10" fxFlex="100">
+                    <div fxFlex.gt-sm="5" fxFlex="100">
                     </div>
-                    <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
                       <mat-label>Digite el peso de la pregunta</mat-label>
                       <input type="number" matInput [(ngModel)]="pregunta.peso" name="peso">
                     </mat-form-field>
+                    <div fxFlex.gt-sm="5" fxFlex="100">
+                    </div>
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
+                      <mat-label>Seleccione el número de la pregunta</mat-label>
+                      <select matNativeControl [(ngModel)]="pregunta.orden" name="tipo">
+                        <option *ngFor="let i of orden_preguntas" value="{{i.valor}}">{{i.valor}}</option>
+                      </select>
+                    </mat-form-field>
                   </div>
-                  <div fxLayout="row wrap" *ngIf="pregunta.id_tipo == 1">
-                    <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+                  <div fxLayout="row wrap" *ngIf="pregunta.id_tipo == 1 || pregunta.id_tipo == 5">
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100" *ngIf="pregunta.id_tipo != 5">
                       <mat-label>Digite el valor minimo</mat-label>
-                      <input type="number" matInput [(ngModel)]="pregunta.minimo" name="minimo">
+                      <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.minimo" name="minimo">
+                      <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.minimo" name="minimo" disabled>
                     </mat-form-field>                    
-                    <div fxFlex.gt-sm="10" fxFlex="100">
+                    <div fxFlex.gt-sm="10" fxFlex="100" *ngIf="pregunta.id_tipo != 5">
                     </div>
                     <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
                       <mat-label>Digite el valor maximo</mat-label>
-                      <input type="number" matInput [(ngModel)]="pregunta.maximo" (change)="validarDato(pregunta)" name="maximo">
+                      <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.maximo" (change)="validarDato(pregunta)" name="maximo">
+                      <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.maximo" (change)="validarDato(pregunta)" name="maximo" disabled>
                     </mat-form-field>
                   </div>
                   <br>
@@ -72,7 +86,8 @@
               </mat-expansion-panel>              
           </mat-accordion>
           <div fxFlex.gt-sm="1" fxFlex="100"></div>
-          <a (click)="eliminarPregunta(pregunta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>         
+          <a *ngIf="!pregunta.idtbl_pregunta_encuesta" (click)="eliminarPregunta(pregunta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>         
+          <div *ngIf="pregunta.idtbl_pregunta_encuesta" fxFlex.gt-sm="1" fxFlex="100"></div>
         </div>
         <br>
       </div>
