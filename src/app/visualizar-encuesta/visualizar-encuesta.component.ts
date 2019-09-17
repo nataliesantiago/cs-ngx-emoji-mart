@@ -39,6 +39,9 @@ export class VisualizarEncuestaComponent implements OnInit {
 
   init(){
 
+  }
+
+  ngOnInit() {
     this.route.params
       .filter(params => params.tipo_encuesta)
       .subscribe(params => {
@@ -47,7 +50,7 @@ export class VisualizarEncuestaComponent implements OnInit {
         this.id_tipo_encuesta = params.tipo_encuesta;
         
     });
-
+    console.log(this.tipo_encuesta_componente);
     if(this.tipo_encuesta_componente){
       this.id_tipo_encuesta = this.tipo_encuesta_componente;
     }
@@ -67,10 +70,6 @@ export class VisualizarEncuestaComponent implements OnInit {
         })
       }
     })
-
-  }
-
-  ngOnInit() {
   }
 
   arrayOne(n: number, n2: number): any[] {
