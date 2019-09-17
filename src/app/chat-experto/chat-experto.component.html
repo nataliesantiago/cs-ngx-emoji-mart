@@ -46,12 +46,14 @@
             </div>
             <perfect-scrollbar class="contenido">
               <mat-nav-list>
-                <mat-list-item (click)="abrirConversacionExperto(experto)" *ngFor="let experto of expertos_filtro" [ngClass]="{'mensajes-nuevos':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}">
+                <mat-list-item (click)="abrirConversacionExperto(experto)" *ngFor="let experto of expertos_filtro"
+                  [ngClass]="{'mensajes-nuevos':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}">
                   <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
                   <div class="punt-estado-chat" [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat}">
                   </div>
                   <h3 matLine> {{experto.nombre}} </h3>
-                  <p matLine class="text-muted preview-mensaje" [ngClass]="{'bold':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}"
+                  <p matLine class="text-muted preview-mensaje"
+                    [ngClass]="{'bold':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}"
                     *ngIf="experto.conversacion_experto && experto.conversacion_experto.mensajes && experto.conversacion_experto.ultimo_mensaje">
                     <span *ngIf="experto.conversacion_experto.ultimo_mensaje.id_usuario==user.idtbl_usuario">
                       <mat-icon *ngIf="experto.conversacion_experto.ultimo_mensaje.estado==1">access_time</mat-icon>
@@ -195,8 +197,10 @@
                 </div>
               </div>
               <div class="usuarios-escribiendo" *ngIf="chat.usuarios_escribiendo && chat.usuarios_escribiendo.length>0">
-                <div class="usuario-escribiendo" *ngFor="let u of chat.usuarios_escribiendo">{{u.nombre}} está
-                  escribiendo <div class="puntos-escribiendo">
+                <div class="usuario-escribiendo" *ngFor="let u of chat.usuarios_escribiendo">{{u.nombre}} <span
+                    *ngIf="u.tipo==1">está
+                    escribiendo </span><span *ngIf="u.tipo==2"> está grabando una nota de voz </span>
+                  <div class="puntos-escribiendo">
                     <div class="hijo"></div>
                   </div>
                 </div>

@@ -156,7 +156,7 @@ export class ChatClienteComponent implements OnInit {
             return u.id == id;
           });
           if (!u) {
-            let ue = { id: id, nombre: data.nombre, timeout: null };
+            let ue = { id: id, nombre: data.nombre, timeout: null, tipo: data.tipo };
             tmp.push(ue);
             ue.timeout = setTimeout(() => {
               this.chatService.usuarioDejaEscribir(c, id);
@@ -178,7 +178,7 @@ export class ChatClienteComponent implements OnInit {
 
     c.messages.subscribe(d => {
       this.procesarMensajes(d, c, primera_vez, 0);
-      
+
       primera_vez = false;
     });
   }
@@ -520,6 +520,7 @@ export class ChatClienteComponent implements OnInit {
     c.cargando_archivo = true;
     c.grabando_nota = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
+      this.chatService.usuarioDejaEscribir(c, this.user.getId());
       this.enviarMensaje(c, 3, archivo.url, null, comp, duration);
       c.cargando_archivo = false;
     });
@@ -547,6 +548,7 @@ export class ChatClienteComponent implements OnInit {
           numberOfAudioChannels: 1,
           disableLogs: true
         });
+
         this.startTimer(tiempo, c).then(() => {
           c.mediaRecorder.stop(audioBlob => {
             this.onStopRecordingNotaVoz(audioBlob, c, comp);
@@ -560,6 +562,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
+
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
     var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
@@ -586,6 +589,7 @@ export class ChatClienteComponent implements OnInit {
       c.mediaRecorder.record();
       c.grabando_nota = true;
       c.inicia_grabacion = new Date();
+      this.chatService.usuarioEscribiendoConversacion(c, 2);
       c.interval_grabando = setInterval(() => {
         timer -= 1;
         minutes = Math.floor(timer / 60);
@@ -602,6 +606,7 @@ export class ChatClienteComponent implements OnInit {
           window.clearInterval(c.interval_grabando);
           resolve();
         }
+        this.chatService.usuarioEscribiendoConversacion(c, 2);
       }, 1000);
     });
 
@@ -649,5 +654,21 @@ export class ChatClienteComponent implements OnInit {
     } else {
       c.mostrar_emojis = true;
     }
+  }
+
+  cerrarChat(c: Conversacion) {
+    let estado;
+    if (c.id_estado_conversacion == 1) {
+      if (c.transferido) {
+        estado = 3;
+      } else {
+        estado = 9;
+      }
+    } else {
+      estado = 3;
+    }
+    this.chatService.cerrarConversacion(c,estado).then(()=>{
+      
+    });
   }
 }

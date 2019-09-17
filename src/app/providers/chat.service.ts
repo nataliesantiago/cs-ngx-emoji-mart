@@ -210,11 +210,14 @@ export class ChatService {
    * @description Envia la notificación de escribiendo en una conversación
    * @param  {Conversacion} c
    */
-  usuarioEscribiendoConversacion(c: Conversacion) {
+  usuarioEscribiendoConversacion(c: Conversacion, tipo?: number) {
+    if (!tipo) {
+      tipo = 1;
+    }
     if (c.timeout_escribiendo) {
       window.clearTimeout(c.timeout_escribiendo);
     }
-    this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).set({ escribiendo: true, nombre: this.user.nombre, fecha: new Date() });
+    this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).set({ escribiendo: true, nombre: this.user.nombre, fecha: new Date(), tipo: tipo });
     c.timeout_escribiendo = setTimeout(() => {
       this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).delete();
     }, 4000);
@@ -419,6 +422,22 @@ export class ChatService {
       this.ajax.get('chat/getFirebaseCollection', { doc: url }).subscribe(d => {
         if (d.success) {
           resolve(d.collection);
+        }
+      })
+    });
+  }
+
+
+  /**
+   * @description CIerra uan conversacion en la base de datos y en firebase
+   * @param  {Conversacion} c
+   * @returns Promise
+   */
+  cerrarConversacion(c: Conversacion, id_estado: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/conversacion/cerrar', { id_conversacion: c.idtbl_conversacion, codigo: c.codigo, id_usuario: this.user.getId(), id_estado: id_estado }).subscribe(d => {
+        if (d.success) {
+          resolve();
         }
       })
     });
