@@ -607,7 +607,7 @@ export class ChatExpertoComponent {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-    
+
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
     var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
@@ -680,5 +680,12 @@ export class ChatExpertoComponent {
   }
   toggleNotas(c: Conversacion) {
     this.fireStore.doc('conversaciones/' + c.codigo).set({ notas_voz: c.notas_voz }, { merge: true });
+  }
+
+  cerrarChat(c: Conversacion) {
+    let estado = 3;
+    this.chatService.cerrarConversacion(c, estado).then(() => {
+      c.mostrar_encuesta = true;
+    });
   }
 }

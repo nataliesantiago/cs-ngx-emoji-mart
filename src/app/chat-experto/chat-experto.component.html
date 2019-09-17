@@ -69,7 +69,7 @@
 
 
         </mat-sidenav>
-        <div *ngIf="chat" class="contenedor-grande">
+        <div *ngIf="chat && !chat.mostrar_encuesta" class="contenedor-grande">
           <mat-toolbar class="no-shadow chat-right-panel" color="basic">
             <div fxLayout="row" fxFlex="100" fxLayoutAlign="center center">
               <button (click)="chatnav.toggle()" class="mr-1" mat-icon-button>
@@ -92,7 +92,7 @@
                   </mat-slide-toggle>
                 </div>
                 <button mat-menu-item (click)="trasnferirChat(chat)">Transferir cliente</button>
-                <button mat-menu-item>Cerrar Conversación</button>
+                <button mat-menu-item (click)="cerrarChat(chat)">Cerrar Chat</button>
               </mat-menu>
             </div>
           </mat-toolbar>
@@ -196,7 +196,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="usuarios-escribiendo" *ngIf="chat.usuarios_escribiendo && chat.usuarios_escribiendo.length>0">
                 <div class="usuario-escribiendo" *ngFor="let u of chat.usuarios_escribiendo">{{u.nombre}} <span
                     *ngIf="u.tipo==1">está
@@ -211,7 +211,7 @@
                 (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
           </mat-card-content>
 
-          <mat-card-actions class="chat-footer acciones-chat">
+          <mat-card-actions class="chat-footer acciones-chat" *ngIf="!chat.mostrar_encuesta">
             <mat-progress-bar mode="indeterminate" *ngIf="chat.cargando_archivo"></mat-progress-bar>
             <div fxLayout="row" layout-align="start center">
               <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
@@ -241,6 +241,9 @@
             showPreview="false" (emojiSelect)="seleccionarEmoji($event,chat)"
             [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
           </emoji-mart>
+        </div>
+        <div *ngIf="chat.mostrar_encuesta">
+          <app-visualizar-encuesta [tipo_encuesta_componente]="'2'"></app-visualizar-encuesta>
         </div>
       </mat-sidenav-container>
     </mat-card>
