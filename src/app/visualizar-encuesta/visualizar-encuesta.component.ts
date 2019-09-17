@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,7 @@ export class VisualizarEncuestaComponent implements OnInit {
   preguntas = [];
   respuestas = [];
   idtbl_encuesta;
+  @Input() tipo_encuesta_componente: number; 
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
     this.user = this.userService.getUsuario();
@@ -46,6 +47,10 @@ export class VisualizarEncuestaComponent implements OnInit {
         this.id_tipo_encuesta = params.tipo_encuesta;
         
     });
+
+    if(this.tipo_encuesta_componente){
+      this.id_tipo_encuesta = this.tipo_encuesta_componente;
+    }
 
     this.ajax.get('encuestas/obtener-encuesta-tipo', { id_tipo: this.id_tipo_encuesta }).subscribe(d => {
       if(d.success){
