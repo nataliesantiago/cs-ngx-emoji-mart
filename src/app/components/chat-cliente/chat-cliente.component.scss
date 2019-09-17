@@ -91,6 +91,11 @@
             .icono-agrandar {
                 transform: rotate(90deg);
             }
+
+            &.minimizado {
+                width: 262px !important;
+                height: 50px !important;
+            }
         }
 
         &.minimizado {
@@ -158,7 +163,7 @@
                 .nombre-asesor {
                     flex: 1;
                     display: inline-block;
-                    width: calc(100% - 52px);
+                    width: calc(100% - 78px);
                     height: 35px;
                     display: flex;
                     flex-direction: row;

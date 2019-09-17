@@ -272,7 +272,7 @@ export class ChatExpertoComponent {
             return u.id == id;
           });
           if (!u) {
-            let ue = { id: id, nombre: data.nombre, timeout: null };
+            let ue = { id: id, nombre: data.nombre, timeout: null, tipo: data.tipo };
             tmp.push(ue);
             ue.timeout = setTimeout(() => {
               this.chatService.usuarioDejaEscribir(c, id);
@@ -565,6 +565,7 @@ export class ChatExpertoComponent {
     c.cargando_archivo = true;
     c.grabando_nota = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
+      this.chatService.usuarioDejaEscribir(c, this.user.getId());
       this.enviarMensaje(c, 3, archivo.url, null, comp, duration);
       c.cargando_archivo = false;
     });
@@ -606,6 +607,7 @@ export class ChatExpertoComponent {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
+    
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
     var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
@@ -632,6 +634,7 @@ export class ChatExpertoComponent {
       c.mediaRecorder.record();
       c.grabando_nota = true;
       c.inicia_grabacion = new Date();
+      this.chatService.usuarioEscribiendoConversacion(c, 2);
       c.interval_grabando = setInterval(() => {
         timer -= 1;
         minutes = Math.floor(timer / 60);
@@ -648,6 +651,7 @@ export class ChatExpertoComponent {
           window.clearInterval(c.interval_grabando);
           resolve();
         }
+        this.chatService.usuarioEscribiendoConversacion(c, 2);
       }, 1000);
     });
 
