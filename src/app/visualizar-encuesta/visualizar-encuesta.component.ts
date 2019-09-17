@@ -97,9 +97,9 @@ export class VisualizarEncuestaComponent implements OnInit {
   enviarFormulario(){
     this.ajax.post('encuestas/guardar-respuesta', { preguntas: this.preguntas }).subscribe(d => {
       if (d.success) {
-        console.log("Entra");
+        
       }else{
-        console.log("No entra");
+        
       }
     })
   }

@@ -1,7 +1,7 @@
 <mat-card>  
   <mat-card-content *ngIf="encuesta">
     <div class="row wrap centrado">
-      <div fxFlex.gt-sm="40" fxFlex="100" class="container-principal">
+      <div class="container-principal">
           <h3>{{encuesta.nombre}}</h3>
           <div *ngIf="preguntas.length > 0">
             <div *ngFor="let pregunta of preguntas; let i = index;">
