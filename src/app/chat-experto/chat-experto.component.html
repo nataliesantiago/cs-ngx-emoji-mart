@@ -196,6 +196,7 @@
                   </div>
                 </div>
               </div>
+              
               <div class="usuarios-escribiendo" *ngIf="chat.usuarios_escribiendo && chat.usuarios_escribiendo.length>0">
                 <div class="usuario-escribiendo" *ngFor="let u of chat.usuarios_escribiendo">{{u.nombre}} <span
                     *ngIf="u.tipo==1">está
@@ -230,6 +231,9 @@
               </button>
             </div>
           </mat-card-actions>
+          <div *ngIf="chat.mostrar_encuesta">
+            <app-visualizar-encuesta [tipo_encuesta_componente]="'2'"></app-visualizar-encuesta>
+          </div>
           <form [hidden]="true" #formulario method="POST" enctype="multipart/form-data" [action]="urlAdjuntos">
             <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,adjuntos)" #adjuntos />
           </form>

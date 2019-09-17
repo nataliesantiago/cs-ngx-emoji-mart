@@ -667,8 +667,8 @@ export class ChatClienteComponent implements OnInit {
     } else {
       estado = 3;
     }
-    this.chatService.cerrarConversacion(c,estado).then(()=>{
-      
+    this.chatService.cerrarConversacion(c, estado).then(() => {
+      c.mostrar_encuesta = true;
     });
   }
 }
