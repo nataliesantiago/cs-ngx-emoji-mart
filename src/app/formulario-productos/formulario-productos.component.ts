@@ -49,6 +49,7 @@ export class FormularioProductosComponent implements OnInit {
   nivel_producto;
   id_producto_editar;
   valor_id;
+  mostrar_iconos = false;
 
   private _transformer = (node: FoodNode, level: number) => {
     return {
@@ -136,6 +137,7 @@ export class FormularioProductosComponent implements OnInit {
                   }
                 })
               }else{
+                this.mostrar_iconos = true;
                 this.cg.detectChanges();
               }
             }
@@ -286,6 +288,10 @@ giveShape(employees, manager) {
       })
     }
     
+  }
+
+  mostrarIconos(){
+    this.mostrar_iconos = true;
   }
 
 }

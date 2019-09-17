@@ -50,21 +50,43 @@
           </mat-tree>
         </div>
       </div>
-
       <br>
-      <br>
-      <div fxLayout="row wrap" class="div-iconos">
+      <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex="100">
-          <mat-radio-group class="example-radio-group" [(ngModel)]="categoria.nombre_icono">
-            <mat-radio-button class="example-radio-button" *ngFor="let i of icons" [value]="i">
-                <mat-icon class="icon">{{i}}</mat-icon>
-            </mat-radio-button>
-          </mat-radio-group>
+          <div fxFlex.gt-sm="10" fxFlex="100">
+            <button class="boton-calificacion si" mat-raised-button (click)="mostrarIconos()">Mostrar Íconos</button>
+          </div>
+        </div>
+      </div>
+      
+      <br>
+      <br>
+      <div *ngIf="mostrar_iconos">
+        <h3>Íconos</h3>
+        <hr>
+        <div fxLayout="row wrap" class="div-iconos">
+          <div fxFlex.gt-sm="100" fxFlex="100">
+            <mat-radio-group class="example-radio-group" [(ngModel)]="categoria.nombre_icono">
+              <mat-radio-button class="example-radio-button" *ngFor="let i of icons" [value]="i">
+                  <mat-icon class="icon">{{i}}</mat-icon>
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
         </div>
       </div> 
       <br>
       <br>
-      <button class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="guardarProducto()">Guardar</button>    
+      <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex="100">
+          <div fxFlex.gt-sm="10" fxFlex="100">
+            <button class="boton-calificacion si" mat-raised-button (click)="guardarProducto()">Guardar</button>
+          </div>
+          <div fxFlex.gt-sm="2" fxFlex="100"></div>
+          <div fxFlex.gt-sm="10" fxFlex="100">
+            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/productos']"><span class="texto-boton">Cancelar</span></a>
+          </div>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
   

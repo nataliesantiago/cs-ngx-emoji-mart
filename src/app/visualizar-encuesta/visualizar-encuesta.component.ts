@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,7 @@ export class VisualizarEncuestaComponent implements OnInit {
   preguntas = [];
   respuestas = [];
   idtbl_encuesta;
+  @Input() tipo_encuesta_componente: number; 
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
     this.user = this.userService.getUsuario();
@@ -29,10 +30,18 @@ export class VisualizarEncuestaComponent implements OnInit {
         this.init();
       }
     })
+    route.params.subscribe(val => {
+      if(this.user){
+        this.init();
+      }
+    });
   }
 
   init(){
 
+  }
+
+  ngOnInit() {
     this.route.params
       .filter(params => params.tipo_encuesta)
       .subscribe(params => {
@@ -41,6 +50,10 @@ export class VisualizarEncuestaComponent implements OnInit {
         this.id_tipo_encuesta = params.tipo_encuesta;
         
     });
+    console.log(this.tipo_encuesta_componente);
+    if(this.tipo_encuesta_componente){
+      this.id_tipo_encuesta = this.tipo_encuesta_componente;
+    }
 
     this.ajax.get('encuestas/obtener-encuesta-tipo', { id_tipo: this.id_tipo_encuesta }).subscribe(d => {
       if(d.success){
@@ -50,22 +63,13 @@ export class VisualizarEncuestaComponent implements OnInit {
           if(d2.success){              
             this.preguntas = d2.preguntas;
             for(let i = 0; i < this.preguntas.length; i++){
-              if(this.preguntas[i].id_tipo == 2){
-                this.preguntas[i].respuesta = -1;
-              }else{
-                this.preguntas[i].respuesta = '';
-              }
-              
+              this.preguntas[i].respuesta = '';
             }
             console.log(this.preguntas);
           }
         })
       }
     })
-
-  }
-
-  ngOnInit() {
   }
 
   arrayOne(n: number, n2: number): any[] {
@@ -91,11 +95,13 @@ export class VisualizarEncuestaComponent implements OnInit {
   }
 
   enviarFormulario(){
-    let validacion_respuestas = 0;
-    for(let i = 0; i < this.preguntas.length; i++){
-    
-    }
-
+    this.ajax.post('encuestas/guardar-respuesta', { preguntas: this.preguntas }).subscribe(d => {
+      if (d.success) {
+        console.log("Entra");
+      }else{
+        console.log("No entra");
+      }
+    })
   }
 
 }
