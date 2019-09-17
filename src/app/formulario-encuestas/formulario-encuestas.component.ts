@@ -94,6 +94,7 @@ export class FormularioEncuestasComponent implements OnInit {
   anadirPregunta(){
     this.preguntas.push({ enunciado: '', id_tipo: '', peso: '', minimo: '', maximo: '', orden: ''});
     this.orden_preguntas.push({ valor: this.preguntas.length});
+    //console.log(this.preguntas);
   }
 
   eliminarPregunta(e, pos){
@@ -168,6 +169,7 @@ export class FormularioEncuestasComponent implements OnInit {
             this.preguntas[i].minimo = null;
             this.preguntas[i].maximo = null;
           }
+          //if(this.preguntas[i].)
         }
         for(let i = 0; i < this.preguntas.length; i++){
           for(let j = i + 1; j < this.preguntas.length; j++){
