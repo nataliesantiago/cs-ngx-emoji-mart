@@ -80,10 +80,10 @@
               <div *ngIf="pregunta.id_tipo == 5">
                 <br>
                 <mat-form-field appearance="outline" class="texto">  
-                  <textarea matInput maxlength="{{pregunta.maximo}}" name="notas" [(ngModel)]="pregunta.respuesta_texto"></textarea>
+                  <textarea matInput class="campo-texto" maxlength="{{pregunta.maximo}}" name="notas" [(ngModel)]="pregunta.respuesta_texto"></textarea>
                  </mat-form-field> 
                  <br>
-              </div>              
+              </div>
             </div>
             <button class="boton-calificacion si" mat-raised-button (click)="enviarFormulario()">Enviar</button>
           </div>
