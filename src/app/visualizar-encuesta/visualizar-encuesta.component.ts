@@ -3,6 +3,7 @@ import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
+import { Conversacion } from '../../schemas/conversacion.schema';
 
 @Component({
   selector: 'app-visualizar-encuesta',
@@ -18,6 +19,8 @@ export class VisualizarEncuestaComponent implements OnInit {
   respuestas = [];
   idtbl_encuesta;
   @Input() tipo_encuesta_componente: number; 
+  @Input() chat: Conversacion;
+  estilos_cliente = false;
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
     this.user = this.userService.getUsuario();
@@ -51,8 +54,13 @@ export class VisualizarEncuestaComponent implements OnInit {
         
     });
     console.log(this.tipo_encuesta_componente);
+    console.log(this.chat);
     if(this.tipo_encuesta_componente){
       this.id_tipo_encuesta = this.tipo_encuesta_componente;
+    }
+
+    if(this.tipo_encuesta_componente == 1){
+      this.estilos_cliente = true;
     }
 
     this.ajax.get('encuestas/obtener-encuesta-tipo', { id_tipo: this.id_tipo_encuesta }).subscribe(d => {
@@ -95,7 +103,7 @@ export class VisualizarEncuestaComponent implements OnInit {
   }
 
   enviarFormulario(){
-    this.ajax.post('encuestas/guardar-respuesta', { preguntas: this.preguntas }).subscribe(d => {
+    this.ajax.post('encuestas/guardar-respuesta', { preguntas: this.preguntas, id_conversacion: this.chat.idtbl_conversacion, id_usuario: this.user.idtbl_usuario, id_encuesta: this.idtbl_encuesta }).subscribe(d => {
       if (d.success) {
         
       }else{

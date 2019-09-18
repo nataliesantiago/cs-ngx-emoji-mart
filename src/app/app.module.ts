@@ -63,7 +63,6 @@ import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-pregunt
 import { RespuestasComponent } from './respuestas/respuestas.component';
 import { AdministracionComponent } from './administracion/administracion.component';
 import { CategoriasComponent } from './categorias/categorias.component';
-import { FormularioCategoriasComponent } from './formulario-categorias/formulario-categorias.component';
 import { UrlsUsuarioComponent } from './urls-usuario/urls-usuario.component';
 import { QuillService } from './providers/quill.service';
 import { SonidosComponent } from './components/sonidos/sonidos.component';
@@ -86,6 +85,8 @@ import { FormularioEncuestasComponent } from './formulario-encuestas/formulario-
 import { AdEncuestasComponent } from './ad-encuestas/ad-encuestas.component';
 import { VisualizarEncuestaComponent } from './visualizar-encuesta/visualizar-encuesta.component';
 import { TiempoColaPipe } from '../pipes/tiempo-cola.pipe';
+import { AdExpertizComponent } from './ad-expertiz/ad-expertiz.component';
+import { FormularioExpertizComponent } from './formulario-expertiz/formulario-expertiz.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -124,7 +125,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RespuestasComponent,
     AdministracionComponent,
     CategoriasComponent,
-    FormularioCategoriasComponent,
     UrlsUsuarioComponent,
     SonidosComponent,
     ReplaceEmojisPipe,
@@ -140,7 +140,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormularioEncuestasComponent,
     AdEncuestasComponent,
     VisualizarEncuestaComponent,
-    TiempoColaPipe
+    TiempoColaPipe,
+    AdExpertizComponent,
+    FormularioExpertizComponent
   ],
   entryComponents: [TransferenciaChatComponent],
   imports: [

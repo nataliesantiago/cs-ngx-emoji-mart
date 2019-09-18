@@ -1,16 +1,15 @@
 <mat-card>  
-  <mat-card-content *ngIf="encuesta">
+  <mat-card-content [ngClass]="{ 'conversacion-chat': estilos_cliente }" *ngIf="encuesta">
     <div class="row wrap centrado">
       <div class="container-principal">
           <h3>{{encuesta.nombre}}</h3>
           <div *ngIf="preguntas.length > 0">
             <div *ngFor="let pregunta of preguntas; let i = index;">
               {{i + 1}}. {{pregunta.enunciado}}
-
               <div *ngIf="pregunta.id_tipo == 1">
                 <br>
-                <div class="row wrap">
-                  <a *ngFor="let item of arrayOne(pregunta.minimo, pregunta.maximo); let j = index" mat-mini-fab color="basic" class="contador" [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, (j + pregunta.minimo)) }" (click)="agregarRespuesta(i, (j + pregunta.minimo))"> {{ j + pregunta.minimo }} </a>
+                <div class="row wrap contador-padre">
+                  <button *ngFor="let item of arrayOne(pregunta.minimo, pregunta.maximo); let j = index" mat-mini-fab color="basic" class="contador" [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, (j + pregunta.minimo)) }" (click)="agregarRespuesta(i, (j + pregunta.minimo))"> {{ j + pregunta.minimo }} </button>
                 </div>
                 <br>
               </div>
