@@ -21,6 +21,7 @@ export class VisualizarEncuestaComponent implements OnInit {
   @Input() tipo_encuesta_componente: number; 
   @Input() chat: Conversacion;
   estilos_cliente = false;
+  
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
     this.user = this.userService.getUsuario();

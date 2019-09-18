@@ -1,3 +1,110 @@
-<p>
-  formulario-expertiz works!
-</p>
+
+
+<mat-card>  
+  <mat-card-content>
+      <h3>Formulario de Encuestas</h3>
+      <hr>
+      <div fxLayout="row wrap">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Digite el nombre de la encuesta*</mat-label>
+          <input matInput [(ngModel)]="encuesta.nombre" name="titulo">
+        </mat-form-field>
+        <div fxFlex.gt-sm="10" fxFlex="100">
+        </div>
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Tipo Encuesta</mat-label>
+          <select matNativeControl [(ngModel)]="encuesta.id_tipo_encuesta" name="producto">
+            <option *ngFor="let i of tipo_encuesta" value="{{i.idtbl_tipo_encuesta}}">{{i.nombre}}</option>
+          </select>
+        </mat-form-field>
+      </div>
+      <h3>Preguntas</h3>
+      <hr>
+      <br>
+      <div fxLayout="row wrap">
+        <button mat-raised-button color="accent" (click)="anadirPregunta()" style="width: 15%;"><span style="color: white !important;">Añadir Pregunta</span></button>
+      </div>
+      <br>
+      <div *ngIf="preguntas.length > 0" fxLayout="row wrap">
+        <div *ngFor="let pregunta of preguntas; let i = index;" fxFlex.gt-sm="98" fxFlex="100">
+          <br>
+          <mat-accordion style="margin-bottom: 1%;" fxFlex.gt-sm="100" fxFlex="100">
+              <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title *ngIf="pregunta.enunciado == ''"> Pregunta {{i + 1}} </mat-panel-title>  
+                    <mat-panel-title *ngIf="pregunta.enunciado != null"> {{pregunta.orden}}. {{pregunta.enunciado}} </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div fxLayout="row wrap">
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="100" fxFlex="100">
+                      <mat-label>Digite la pregunta</mat-label>
+                      <input *ngIf="!pregunta.idtbl_pregunta_encuesta" matInput [(ngModel)]="pregunta.enunciado" name="titulo">
+                      <input *ngIf="pregunta.idtbl_pregunta_encuesta" matInput [(ngModel)]="pregunta.enunciado" name="titulo" disabled>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row wrap">
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
+                      <mat-label>Tipo Pregunta</mat-label>
+                      <select *ngIf="!pregunta.idtbl_pregunta_encuesta" matNativeControl [(ngModel)]="pregunta.id_tipo" name="tipo" (change)="reiniciarValores(pregunta)">
+                        <option *ngFor="let i of tipo_pregunta" value="{{i.idtbl_tipo_pregunta}}">{{i.nombre}}</option>
+                      </select>
+                      <select *ngIf="pregunta.idtbl_pregunta_encuesta" matNativeControl [(ngModel)]="pregunta.id_tipo" name="tipo" (change)="reiniciarValores(pregunta)" disabled>
+                        <option *ngFor="let i of tipo_pregunta" value="{{i.idtbl_tipo_pregunta}}">{{i.nombre}}</option>
+                      </select>
+                    </mat-form-field>                      
+                    <div fxFlex.gt-sm="5" fxFlex="100">
+                    </div>
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
+                      <mat-label>Digite el peso de la pregunta</mat-label>
+                      <input type="number" matInput [(ngModel)]="pregunta.peso" name="peso">
+                    </mat-form-field>
+                    <div fxFlex.gt-sm="5" fxFlex="100">
+                    </div>
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
+                      <mat-label>Seleccione el número de la pregunta</mat-label>
+                      <select matNativeControl [(ngModel)]="pregunta.orden" name="tipo">
+                        <option *ngFor="let i of orden_preguntas" value="{{i.valor}}">{{i.valor}}</option>
+                      </select>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row wrap" *ngIf="pregunta.id_tipo == 1 || pregunta.id_tipo == 5">
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100" *ngIf="pregunta.id_tipo != 5">
+                      <mat-label>Digite el valor minimo</mat-label>
+                      <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.minimo" name="minimo">
+                      <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.minimo" name="minimo" disabled>
+                    </mat-form-field>                    
+                    <div fxFlex.gt-sm="10" fxFlex="100" *ngIf="pregunta.id_tipo != 5">
+                    </div>
+                    <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+                      <mat-label>Digite el valor maximo</mat-label>
+                      <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.maximo" (change)="validarDato(pregunta)" name="maximo">
+                      <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" matInput [(ngModel)]="pregunta.maximo" (change)="validarDato(pregunta)" name="maximo" disabled>
+                    </mat-form-field>
+                  </div>
+                  <br>
+                  <br>
+              </mat-expansion-panel>              
+          </mat-accordion>
+          <div fxFlex.gt-sm="1" fxFlex="100"></div>
+          <button mat-icon-button *ngIf="!pregunta.idtbl_pregunta_encuesta" (click)="eliminarPregunta(pregunta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></button>
+          <div *ngIf="pregunta.idtbl_pregunta_encuesta" fxFlex.gt-sm="1" fxFlex="100"></div>
+        </div>
+        <br>
+      </div>
+      <br>
+      <br>
+      <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex="100">
+          <div fxFlex.gt-sm="10" fxFlex="100">
+            <button class="boton-calificacion si" mat-raised-button (click)="enviarDato()">Guardar</button>
+          </div>
+          <div fxFlex.gt-sm="2" fxFlex="100"></div>
+          <div fxFlex.gt-sm="10" fxFlex="100">
+            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/ad-encuestas']"><span class="texto-boton">Cancelar</span></a>
+          </div>
+        </div>
+      </div>
+  </mat-card-content>
+</mat-card>
+
+
