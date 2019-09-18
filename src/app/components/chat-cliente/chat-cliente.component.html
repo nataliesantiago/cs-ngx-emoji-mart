@@ -188,7 +188,7 @@
                 </div>
 
                 <div *ngIf="chat.mostrar_encuesta">
-                  <app-visualizar-encuesta [tipo_encuesta_componente]="'1'" [chat]="chat"></app-visualizar-encuesta>
+                  <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)" ></app-visualizar-encuesta>
                 </div>
 
               </mat-sidenav-container>
