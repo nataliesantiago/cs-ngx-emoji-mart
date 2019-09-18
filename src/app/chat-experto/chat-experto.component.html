@@ -231,9 +231,6 @@
               </button>
             </div>
           </mat-card-actions>
-          <div *ngIf="chat.mostrar_encuesta">
-            <app-visualizar-encuesta [tipo_encuesta_componente]="'2'"></app-visualizar-encuesta>
-          </div>
           <form [hidden]="true" #formulario method="POST" enctype="multipart/form-data" [action]="urlAdjuntos">
             <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,adjuntos)" #adjuntos />
           </form>
@@ -242,8 +239,8 @@
             [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
           </emoji-mart>
         </div>
-        <div *ngIf="chat.mostrar_encuesta">
-          <app-visualizar-encuesta [tipo_encuesta_componente]="'2'"></app-visualizar-encuesta>
+        <div *ngIf="chat && chat.mostrar_encuesta">
+          <app-visualizar-encuesta [tipo]="'2'" [chat]="chat"></app-visualizar-encuesta>
         </div>
       </mat-sidenav-container>
     </mat-card>

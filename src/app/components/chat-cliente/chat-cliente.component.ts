@@ -671,4 +671,13 @@ export class ChatClienteComponent implements OnInit {
       c.mostrar_encuesta = true;
     });
   }
+
+  finalizaEncuesta(c: Conversacion) {
+    let index = this.chats.findIndex(chat => {
+      return chat.codigo === c.codigo;
+    })
+    if (index !== (-1)) {
+      this.chats.splice(index, 1);
+    }
+  }
 }
