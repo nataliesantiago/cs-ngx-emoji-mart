@@ -60,6 +60,7 @@ export class ChatExpertoComponent {
   }
 
   init() {
+    let paso_por_chats = false;
     this.chatService.getConfiguracionesChat().then(configs => {
       this.configuraciones = configs.configuraciones;
       this.userService.getFilasExperto().then(() => {
@@ -119,6 +120,9 @@ export class ChatExpertoComponent {
                       });
                     fila.chats = tmp;
                     this.procesaFilas(fila);
+                    if (paso_por_chats)
+                      this.recibirChatAutomatico();
+
                   }
                 });
               });
@@ -155,6 +159,7 @@ export class ChatExpertoComponent {
                   this.onSelect(c);
                 }
                 if (index == (chat.length - 1)) {
+                  paso_por_chats = true;
                   this.chats_experto = temporal;
                   this.changeRef.detectChanges();
                 }
@@ -187,12 +192,42 @@ export class ChatExpertoComponent {
     })
   }
 
+  recibirChatAutomatico() {
+    let config = this.buscarConfiguracion(2);
+    this.chatService.getConversacionesExperto().then((conversaciones: Array<Conversacion>) => {
+      if (parseInt(config.valor) > conversaciones.length) {
+        let chats = [];
+        this.chats_cola.forEach(f => {
+          chats = chats.concat(f.chats);
+        });
+
+        chats.sort((a, b) => {
+          if (a.peso_chat > b.peso_chat) {
+            return 1;
+          } else if (a.peso_chat < b.peso_chat) {
+            return -1;
+          } else {
+
+            return (new Date(a.fecha_creacion) < new Date(b.fecha_creacion)) ? 1 : -1;
+          }
+        });
+        let c = chats.pop();
+
+        if (c) {
+          this.onSelectCola(c);
+        }
+      }
+    });
+
+  }
+
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       c.id_estado_conversacion = data.id_estado_conversacion;
       if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
         c.mostrar_encuesta = true;
+        this.recibirChatAutomatico();
       }
     });
   }
@@ -700,6 +735,7 @@ export class ChatExpertoComponent {
     let estado = 3;
     this.chatService.cerrarConversacion(c, estado).then(() => {
       c.mostrar_encuesta = true;
+      this.recibirChatAutomatico();
     });
   }
 

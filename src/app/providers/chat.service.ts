@@ -65,6 +65,25 @@ export class ChatService {
       }
     })
   }
+
+  /**
+  * @description Se encarga de buscar las conversaciones activas del cliente y las aloja en memoria ram para futuras consultas
+  * @returns Promise
+  */
+  getConversacionesExperto(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.user) {
+        this.ajax.get('chat/conversacion/experto/get', { id_usuario: this.user.getId() }).subscribe((d: xhrConversaciones) => {
+          if (d.success) {
+            resolve(d.conversaciones);
+          } else {
+            reject();
+          }
+        });
+      }
+    })
+  }
+
   /**
    * @description Asigna el experto al chat y abre la ventana de conversación
    * @param  {number} id_usuario

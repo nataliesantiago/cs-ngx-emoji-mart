@@ -239,8 +239,22 @@
             [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
           </emoji-mart>
         </div>
-        <div *ngIf="chat && chat.mostrar_encuesta">
-          <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)"></app-visualizar-encuesta>
+        <div *ngIf="chat && chat.mostrar_encuesta" class="contenedor-grande">
+          <mat-toolbar class="no-shadow chat-right-panel" color="basic">
+            <div fxLayout="row" fxFlex="100" fxLayoutAlign="center center">
+              <button (click)="chatnav.toggle()" class="mr-1" mat-icon-button>
+                <mat-icon>short_text</mat-icon>
+              </button>
+              <span class="top-avatar m-r-10">
+              </span>
+              <div fxFlex>
+                <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
+                </div>
+              </div>
+            </div>
+          </mat-toolbar>
+          <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
+          </app-visualizar-encuesta>
         </div>
       </mat-sidenav-container>
     </mat-card>
