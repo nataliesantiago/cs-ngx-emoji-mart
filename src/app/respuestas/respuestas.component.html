@@ -71,13 +71,11 @@
       <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex="100">
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <a [ngClass]="{ 'siActivado': activadoSi }" class="boton-calificacion si" mat-raised-button (click)="calificacion(1)"><span
-                class="texto-boton">Si</span></a>
+            <a [ngClass]="{ 'si': activadoSi }" class="boton-calificacion" mat-raised-button (click)="calificacion(1)"><mat-icon class="icono-inicial">thumb_up</mat-icon></a>
           </div>
           <div fxFlex.gt-sm="5" fxFlex="100"></div>
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <a [ngClass]="{ 'noActivado': activadoNo }" class="boton-calificacion no" mat-raised-button (click)="calificacion(0)"><span
-                class="texto-boton">No</span></a>
+            <a [ngClass]="{ 'no': activadoNo }" class="boton-calificacion" mat-raised-button (click)="calificacion(0)"><mat-icon class="icono-inicial">thumb_down</mat-icon></a>
           </div>
         </div>
       </div>
@@ -100,7 +98,7 @@
   <div fxFlex.gt-sm="25" fxFlex="100">
     <div class="preguntas-asociadas">
       <strong>Preguntas Asociadas</strong>
-      <p *ngFor="let pregunta_asociada of preguntas_adicion"
+      <p class="mouse-over" *ngFor="let pregunta_asociada of preguntas_adicion"
         (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">{{pregunta_asociada.titulo}}</p>
     </div>
   </div>

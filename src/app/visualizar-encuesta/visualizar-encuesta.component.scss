@@ -16,21 +16,26 @@
 
 .contador {
     margin: auto;
+    max-width: 250px;
 }
 
 .centrado {
     justify-content: center;
     text-align: center;
     margin: 10px !important;
+    max-width: 600px;
 }
 
 .contador-padre {
     display: flex;
     margin-bottom: 5px;
+    max-width: 250px;
 }
+
 .contenedor-encuesta{
     padding: 10px !important;
 }
+
 .container-principal {
     /*border: thin solid #dadce0;
     border-radius: .5rem;

@@ -174,17 +174,17 @@
 
                       <ng-container matColumnDef="usuario_creacion">
                           <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Creación </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_creador}} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="usuario_modificacion">
                           <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Modificación </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_modificacion}} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="fecha_modificacion">
                           <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Fecha Modificación </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.fecha_ultima_modificacion | date:'medium' }} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="acciones">

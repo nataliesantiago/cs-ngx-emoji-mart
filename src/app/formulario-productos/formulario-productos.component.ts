@@ -50,6 +50,7 @@ export class FormularioProductosComponent implements OnInit {
   id_producto_editar;
   valor_id;
   mostrar_iconos = false;
+  icono_padre;
 
   private _transformer = (node: FoodNode, level: number) => {
     return {
@@ -184,6 +185,7 @@ export class FormularioProductosComponent implements OnInit {
       this.ajax.get('producto/obtener-padre', { idtbl_producto : e.id_producto_padre }).subscribe(p => {
         if(p.success){
           producto_actual = p.producto[0];
+          this.icono_padre = p.producto[0].nombre_icono;
           this.arbol.push(producto_actual);
           this.crearArbol(producto_actual);
         }

@@ -35,6 +35,7 @@
               <button mat-icon-button></button>
               <strong *ngIf="nivel_producto == node.level">{{node.name}}</strong>
               <span *ngIf="nivel_producto != node.level">{{node.name}}</span>
+              <mat-icon *ngIf="node.level == 0" class="icono-padre"> {{icono_padre}} </mat-icon>
             </mat-tree-node>
             <!-- This is the tree node template for expandable nodes -->
             <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
@@ -44,8 +45,9 @@
                   {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>
               </button>              
-              <strong *ngIf="nivel_producto == node.level">{{node.name}}</strong>
-              <span *ngIf="nivel_producto != node.level">{{node.name}}</span>
+              <strong *ngIf="nivel_producto == node.level"> {{node.name}}</strong>
+              <span *ngIf="nivel_producto != node.level"> {{node.name}} </span>
+              <mat-icon *ngIf="node.level == 0" class="icono-padre"> {{icono_padre}} </mat-icon>
             </mat-tree-node>
           </mat-tree>
         </div>

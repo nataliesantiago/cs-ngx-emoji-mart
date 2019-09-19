@@ -28,10 +28,12 @@ mat-expansion-panel{
 .boton-calificacion{
     color: white;
     width: 100%;
+    background-color: gray;
 }
 
 .si{
     background-color: #1e88e5;
+    color: white;
 }
 
 .fecha-modificacion{
@@ -41,6 +43,7 @@ mat-expansion-panel{
 
 .no{
     background-color: rgb(221, 51, 51);
+    color: white;
 }
 
 .texto-boton{
@@ -53,4 +56,8 @@ mat-expansion-panel{
 
 .noActivado{
     background-color: green;
+}
+
+.mouse-over{
+    cursor: pointer;
 }

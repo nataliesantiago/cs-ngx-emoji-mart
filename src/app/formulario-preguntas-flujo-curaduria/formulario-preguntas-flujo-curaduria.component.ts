@@ -69,6 +69,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
       if (this.usuario) {
+        this.id_usuario = this.usuario.idtbl_usuario;
         this.init();
       }
     })
@@ -240,7 +241,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         }
   
         if (!this.validar_flujo && this.id_pregunta_editar != "sugerida") {
-          this.pregunta.id_estado_flujo = 1;
+          this.pregunta.id_estado_flujo = 2;
+          if(this.pregunta.id_usuario_revision){
+            this.pregunta.id_estado_flujo = 1;
+          }
         }
 
         this.notas.id_usuario_comentario = this.id_usuario;
