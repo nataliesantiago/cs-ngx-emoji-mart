@@ -1,5 +1,5 @@
 <mat-card>  
-  <mat-card-content [ngClass]="{ 'conversacion-chat': estilos_cliente }" *ngIf="encuesta">
+<mat-card-content *ngIf="encuesta">
     <div class="row wrap centrado">
       <div class="container-principal">
           <h3>{{encuesta.nombre}}</h3>
@@ -80,8 +80,8 @@
                 <br>
                 <mat-form-field appearance="outline" class="texto">  
                   <textarea matInput class="campo-texto" maxlength="{{pregunta.maximo}}" name="notas" [(ngModel)]="pregunta.respuesta_texto"></textarea>
-                 </mat-form-field> 
-                 <br>
+                  </mat-form-field> 
+                  <br>
               </div>
             </div>
             <button class="boton-calificacion si" mat-raised-button (click)="enviarFormulario()">Enviar</button>
