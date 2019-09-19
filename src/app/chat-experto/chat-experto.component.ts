@@ -70,7 +70,7 @@ export class ChatExpertoComponent {
         this.user.filas.forEach(f => {
           let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
           //this.chats_cola.push(fila)
-          let cola = this.fireStore.collection('categorias_experticia/' + f.id_categoria_experticia + '/chats').valueChanges();
+          let cola = this.fireStore.collection('categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
           cola.subscribe(chats => {
 
             let tmp = [];
@@ -90,7 +90,7 @@ export class ChatExpertoComponent {
             } else {
               this.soundService.sonar(2);
               chats.forEach((c: any, index) => {
-                let refConversacion = c.conversacion;
+                let refConversacion = c.payload.doc.id;
                 this.chatService.getDocumentoFirebase('conversaciones/' + refConversacion).then(async datos => {
                   let c: Conversacion = datos;
                   c.codigo = refConversacion;
@@ -125,7 +125,7 @@ export class ChatExpertoComponent {
             }
           })
         });
-        let chats = this.fireStore.collection('expertos/' + this.user.getId() + '/chats').snapshotChanges(['added', 'removed']);
+        let chats = this.fireStore.collection('expertos/' + this.user.getId() + '/chats').snapshotChanges();
         chats.subscribe(chat => {
 
           let temporal: Array<Conversacion> = [];
@@ -136,6 +136,9 @@ export class ChatExpertoComponent {
           if (chat.length > 0) {
             this.soundService.sonar(2);
           }
+          if (chat.length < 1) {
+            this.chats_experto = [];
+          }
           chat.forEach((change: any, index) => {
             let codigo = change.payload.doc.id;
             this.chatService.getDocumentoFirebase('conversaciones/' + codigo).then((d: Conversacion) => {
@@ -145,6 +148,7 @@ export class ChatExpertoComponent {
                 //// console.log(d);
                 c.cliente = d;
                 this.agregarListenerMensajes(c);
+                this.agregaListenerConversacion(c);
                 temporal.push(c);
                 if (!this.chat) {
                   this.obligaCambio = false;
@@ -181,6 +185,16 @@ export class ChatExpertoComponent {
         });
       });
     })
+  }
+
+  agregaListenerConversacion(c: Conversacion) {
+    this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+      let data = datos.payload.data() as Conversacion;
+      c.id_estado_conversacion = data.id_estado_conversacion;
+      if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
+        c.mostrar_encuesta = true;
+      }
+    });
   }
 
   filtraExpertos() {
@@ -687,5 +701,12 @@ export class ChatExpertoComponent {
     this.chatService.cerrarConversacion(c, estado).then(() => {
       c.mostrar_encuesta = true;
     });
+  }
+
+  finalizaEncuesta(c: Conversacion) {
+    if (this.chat.codigo == c.codigo) {
+      delete this.chat;
+    }
+    this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
   }
 }
