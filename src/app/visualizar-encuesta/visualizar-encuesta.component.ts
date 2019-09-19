@@ -4,7 +4,6 @@ import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import { Conversacion } from '../../schemas/conversacion.schema';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'app-visualizar-encuesta',
@@ -84,9 +83,27 @@ export class VisualizarEncuestaComponent implements OnInit {
     })
   }
 
-  arrayOne(n: number, n2: number): any[] {
-    let valor = n2 - n + 1;
-    return Array(valor);
+  arrayOne(n: number, n2: number, h: number): any[] {      
+      let contador = (h + 1) * 5;
+      let valor = 0;
+      if(contador > n2){
+        valor = n2 - (contador - 5);
+      }else{
+        valor = 5;  
+      }
+      
+      return Array(valor);
+    
+  }
+
+  arrayDos(n: number): any[] {
+    let cont = 0;
+    for(let i = 0; i < n; i++){
+      if((i%5) == 0){
+        cont++;
+      }
+    }
+    return Array(cont);
   }
 
   agregarRespuesta(pos, valor) {

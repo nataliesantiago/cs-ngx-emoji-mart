@@ -185,7 +185,7 @@ export class RespuestasComponent implements OnInit {
             text: "",
             type: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#3f51b5',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Si',
             cancelButtonText: 'Cancelar'

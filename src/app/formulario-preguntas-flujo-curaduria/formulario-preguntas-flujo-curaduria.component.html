@@ -14,33 +14,34 @@
       <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor> 
       <br>
       <div fxLayout="row wrap">
-        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
           <mat-label>Categoria (Más bajo nivel)*</mat-label>
           <select matNativeControl [(ngModel)]="pregunta.id_producto" name="producto">
             <option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</option>
           </select>
         </mat-form-field>
-        <div fxFlex.gt-sm="10" fxFlex="100">
+        <div fxFlex.gt-sm="5" fxFlex="100">
         </div>
-        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
           <mat-label>Estado de la pregunta</mat-label>
           <select matNativeControl [(ngModel)]="pregunta.id_estado" name="estado">
             <option *ngFor="let i of estados_pregunta" value="{{i.idtbl_estado_pregunta}}">{{i.nombre}}</option>
           </select>
         </mat-form-field>
+        <div fxFlex.gt-sm="5" fxFlex="100">
+        </div>
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="30" fxFlex="100">
+          <mat-label>Seleccionar Curador</mat-label>
+          <select matNativeControl [(ngModel)]="pregunta.id_usuario_revision" name="estado">
+            <option *ngFor="let i of todos_usuarios" value="{{i.idtbl_usuario}}">{{i.nombre}}</option>
+          </select>
+        </mat-form-field>        
       </div>
       <div fxLayout="row wrap" class="row">
           <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
               <mat-checkbox color="primary" [(ngModel)]="pregunta.muestra_fecha_actualizacion">Mostrar Fecha de la Última Modificación</mat-checkbox>
           </div>
       </div>
-      <br>
-      <mat-form-field floatLabel="never">
-        <mat-label>Seleccionar Curador</mat-label>
-        <select matNativeControl [(ngModel)]="pregunta.id_usuario_revision" name="estado">
-          <option *ngFor="let i of todos_usuarios" value="{{i.idtbl_usuario}}">{{i.nombre}}</option>
-        </select>
-      </mat-form-field>        
       <br>
       <br>
       <h3>Segmentos</h3>

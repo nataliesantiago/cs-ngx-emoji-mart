@@ -151,26 +151,41 @@
 
                       <!-- Progress Column -->
                       <ng-container matColumnDef="pregunta">
-                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:40%;"> Pregunta </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:40%;"> {{row.titulo}} </mat-cell>
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Pregunta </mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.titulo}} </mat-cell>
                       </ng-container>
 
                       <!-- Name Column -->
                       <ng-container matColumnDef="id_producto">
-                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Categoria </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.nombre_producto}} </mat-cell>
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Categoria </mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_producto}} </mat-cell>
                       </ng-container>
 
                       <!-- Color Column -->
                       <ng-container matColumnDef="id_estado">
-                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.nombre_estado}} </mat-cell>
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Estado </mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_estado}} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="encargado">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Encargado </mat-header-cell>
-                              <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.nombre}} </mat-cell>
-                          </ng-container>
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Encargado </mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="usuario_creacion">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Creación </mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="usuario_modificacion">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Modificación </mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="fecha_modificacion">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Fecha Modificación </mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                      </ng-container>
 
                       <ng-container matColumnDef="acciones">
                           <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>

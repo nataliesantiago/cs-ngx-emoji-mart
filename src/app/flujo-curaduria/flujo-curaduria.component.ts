@@ -20,7 +20,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['acciones', 'id', 'pregunta', 'id_producto', 'id_estado', 'encargado'];
+  displayedColumns = ['acciones', 'id', 'pregunta', 'id_producto', 'id_estado', 'encargado', 'usuario_creacion', 'usuario_modificacion', 'fecha_modificacion'];
   dataSource = new MatTableDataSource([]);
   usuario;
   id_usuario;

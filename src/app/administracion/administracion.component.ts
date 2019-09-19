@@ -70,7 +70,7 @@ export class AdministracionComponent implements OnInit {
       text: "Confirme para guardar los cambios",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#3f51b5',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Guardar'
     }).then((result) => {
