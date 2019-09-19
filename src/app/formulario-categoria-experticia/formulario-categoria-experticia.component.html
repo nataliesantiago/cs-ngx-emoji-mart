@@ -2,21 +2,21 @@
 
 <mat-card>  
   <mat-card-content>
-      <h3>Formulario de Experticias</h3>
+      <h3>Formulario de Categorías de Experticia</h3>
       <hr>
       <div fxLayout="row wrap">
         <mat-form-field floatLabel="never" fxFlex.gt-sm="40" fxFlex="100">
-          <mat-label>Digite el nombre de la experticia*</mat-label>
-          <input matInput [(ngModel)]="expertiz.nombre" name="titulo">
+          <mat-label>Digite el nombre de la categoría*</mat-label>
+          <input matInput [(ngModel)]="categoria_expertiz.nombre" name="titulo">
         </mat-form-field>
       </div>
-      <h3>Categorías</h3>
+      <h3>Experticias</h3>
       <hr>
       <div fxLayout="row wrap">
         <div fxFlex.gt-sm="40" fxFlex="100">
           <form class="example-form">
             <mat-form-field class="example-full-width">
-              <input type="text" placeholder="Seleccione la categoria a agregar" matInput [formControl]="myControl" [matAutocomplete]="auto">
+              <input type="text" placeholder="Seleccione la experticia a agregar" matInput [formControl]="myControl" [matAutocomplete]="auto">
               <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='anadirPreguntaAsociada($event.option.value)'>
                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                   {{option.nombre}}
@@ -27,7 +27,7 @@
           <br>
         </div>
         <div fxFlex.gt-sm="10" fxFlex="100"></div>
-        <div fxFlex.gt-sm="40" fxFlex="100" *ngIf = "producto_asociado.length > 0">
+        <div fxFlex.gt-sm="40" fxFlex="100" *ngIf = "experticia_asociada.length > 0">
           <div class="bg-light p-10 p-r-20 p-l-20">
             <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
@@ -40,12 +40,12 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                     <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                    <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_producto}} </mat-cell>
+                    <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_experticia}} </mat-cell>
                 </ng-container>
 
                 <!-- Progress Column -->
-                <ng-container matColumnDef="categoria">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Categoria </mat-header-cell>
+                <ng-container matColumnDef="experticia">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Experticia </mat-header-cell>
                     <mat-cell *matCellDef="let row" style="max-width:70%;"> {{row.nombre}} </mat-cell>
                 </ng-container>
 
@@ -65,6 +65,14 @@
         </div>
         </div>
       </div>
+      <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex="100">
+          <div fxFlex.gt-sm="15" fxFlex="100">
+            <button class="boton-calificacion si" mat-raised-button (click)="habilitarExperticia()">Crear Experticia</button>
+          </div>
+        </div>
+      </div>
+      <app-formulario-expertiz *ngIf="crear_experticia"></app-formulario-expertiz>
       <br>
       <br>
       <div fxLayout="row wrap">
@@ -74,7 +82,7 @@
           </div>
           <div fxFlex.gt-sm="2" fxFlex="100"></div>
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/ad-expertiz']"><span class="texto-boton">Cancelar</span></a>
+            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/ad-categoria-expertiz']"><span class="texto-boton">Cancelar</span></a>
           </div>
         </div>
       </div>

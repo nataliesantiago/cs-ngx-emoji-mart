@@ -22,6 +22,7 @@ export class VisualizarEncuestaComponent implements OnInit {
   @Input() chat: Conversacion;
   @Output() onfinish = new EventEmitter<boolean>();
   estilos_cliente = false;
+  
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
     this.user = this.userService.getUsuario();
@@ -54,8 +55,6 @@ export class VisualizarEncuestaComponent implements OnInit {
         this.id_tipo_encuesta = params.tipo_encuesta;
 
       });
-    console.log(this.tipo_encuesta_componente);
-    console.log(this.chat);
     if (this.tipo_encuesta_componente) {
       this.id_tipo_encuesta = this.tipo_encuesta_componente;
     }
@@ -68,7 +67,7 @@ export class VisualizarEncuestaComponent implements OnInit {
       if (d.success) {
         this.encuesta = d.encuesta[0];
         this.idtbl_encuesta = d.encuesta[0].idtbl_encuesta;
-        if (!this.encuesta) {
+        if (d.encuesta.length == 0) {
           this.onfinish.emit(true);
         } else {
           this.ajax.get('encuestas/obtener-preguntas', { id_encuesta: d.encuesta[0].idtbl_encuesta }).subscribe(d2 => {
@@ -77,7 +76,6 @@ export class VisualizarEncuestaComponent implements OnInit {
               for (let i = 0; i < this.preguntas.length; i++) {
                 this.preguntas[i].respuesta = '';
               }
-              console.log(this.preguntas);
             }
           });
         }
@@ -92,7 +90,6 @@ export class VisualizarEncuestaComponent implements OnInit {
 
   agregarRespuesta(pos, valor) {
     this.preguntas[pos].respuesta = valor;
-    console.log(this.preguntas);
   }
 
   activarBoton(respuesta, validador) {

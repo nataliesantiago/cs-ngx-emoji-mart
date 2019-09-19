@@ -11,28 +11,29 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-formulario-expertiz',
-  templateUrl: './formulario-expertiz.component.html',
-  styleUrls: ['./formulario-expertiz.component.scss']
+  selector: 'app-formulario-categoria-experticia',
+  templateUrl: './formulario-categoria-experticia.component.html',
+  styleUrls: ['./formulario-categoria-experticia.component.scss']
 })
-export class FormularioExpertizComponent implements OnInit {
+export class FormularioCategoriaExperticiaComponent implements OnInit {
 
   myControl = new FormControl();
   options = [];
   filteredOptions: Observable<string[]>;
   usuario;
   id_usuario;
-  productos=[];
-  id_expertiz;
-  expertiz = { nombre: ''};
-  displayedColumns = ['id', 'categoria', 'acciones'];
+  experticias=[];
+  id_categoria_expertiz;
+  categoria_expertiz = { nombre: ''};
+  displayedColumns = ['id', 'experticia', 'acciones'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
-  producto_asociado = [];
+  experticia_asociada = [];
   editar = false;
+  crear_experticia = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient){
     
@@ -54,18 +55,18 @@ export class FormularioExpertizComponent implements OnInit {
   init(){
 
     this.route.params
-    .filter(params => params.id_expertiz)
+    .filter(params => params.id_categoria_expertiz)
     .subscribe(params => {
       
 
-      this.id_expertiz = params.id_expertiz;
+      this.id_categoria_expertiz = params.id_categoria_expertiz;
       
     });
 
-    this.ajax.get('producto/obtener', {}).subscribe(p => {
+    this.ajax.get('experticia/obtener', {}).subscribe(p => {
       if(p.success){
-        this.productos = p.productos;
-        this.options = p.productos;
+        this.experticias = p.experticias;
+        this.options = p.experticias;
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => this._filter(value))
@@ -73,14 +74,14 @@ export class FormularioExpertizComponent implements OnInit {
       }
     });
 
-    if(this.id_expertiz != "nuevo" && this.id_expertiz){
+    if(this.id_categoria_expertiz != "nuevo"){
       this.editar = true;
-      this.ajax.get('experticia/obtener-experticia', {id_experticia: this.id_expertiz}).subscribe(p => {
+      this.ajax.get('experticia/obtener-categoria-experticia', {id_categoria_experticia: this.id_categoria_expertiz}).subscribe(p => {
         if(p.success){
-          this.expertiz = p.experticia[0];
-          this.expertiz = this.expertiz[0];
-          this.producto_asociado = p.experticia[1];
-          this.dataSource = new MatTableDataSource(this.producto_asociado);
+          this.categoria_expertiz = p.categoria[0];
+          this.categoria_expertiz = this.categoria_expertiz[0];
+          this.experticia_asociada = p.categoria[1];
+          this.dataSource = new MatTableDataSource(this.experticia_asociada);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.cg.detectChanges();
@@ -102,8 +103,8 @@ export class FormularioExpertizComponent implements OnInit {
   }
 
   anadirPreguntaAsociada(e){
-    this.producto_asociado.push(e);
-    this.dataSource = new MatTableDataSource(this.producto_asociado);
+    this.experticia_asociada.push(e);
+    this.dataSource = new MatTableDataSource(this.experticia_asociada);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     
@@ -118,8 +119,8 @@ export class FormularioExpertizComponent implements OnInit {
   borrarElemento(e){
 
     swal.fire({
-      title: 'Desvincular Categoría',
-      text: "Confirme para desvincular la categoría",
+      title: 'Desvincular Experticia',
+      text: "Confirme para desvincular la experticia",
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -130,17 +131,17 @@ export class FormularioExpertizComponent implements OnInit {
       if (result.value) {
         if(this.editar){
           
-          if(e.idtbl_producto != undefined){
-            this.ajax.post('experticia/eliminar-asociacion', { categoria_asociada: e }).subscribe(d => {
+          if(e.idtbl_categoria_experticia != undefined){
+            this.ajax.post('experticia/eliminar-asociacion-experticia', { experticia_asociada: e }).subscribe(d => {
               if(d.success){
                 let pos = 0;
-                for(let i = 0; i < this.producto_asociado.length; i++){
-                  if(this.producto_asociado[i].idtbl_pregunta == e.idtbl_pregunta){
+                for(let i = 0; i < this.experticia_asociada.length; i++){
+                  if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
                     pos = i;
                   }
                 }
-                this.producto_asociado.splice(pos,1);
-                this.dataSource = new MatTableDataSource(this.producto_asociado);
+                this.experticia_asociada.splice(pos,1);
+                this.dataSource = new MatTableDataSource(this.experticia_asociada);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
                 this.cg.detectChanges();
@@ -148,26 +149,26 @@ export class FormularioExpertizComponent implements OnInit {
             })
           }else{
             let pos = 0;
-            for(let i = 0; i < this.producto_asociado.length; i++){
-              if(this.producto_asociado[i].idtbl_pregunta == e.idtbl_pregunta){
+            for(let i = 0; i < this.experticia_asociada.length; i++){
+              if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
                 pos = i;
               }
             }
-            this.producto_asociado.splice(pos,1);
-            this.dataSource = new MatTableDataSource(this.producto_asociado);
+            this.experticia_asociada.splice(pos,1);
+            this.dataSource = new MatTableDataSource(this.experticia_asociada);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.cg.detectChanges();
           }
         }else{
           let pos = 0;
-          for(let i = 0; i < this.producto_asociado.length; i++){
-            if(this.producto_asociado[i].idtbl_pregunta == e.idtbl_pregunta){
+          for(let i = 0; i < this.experticia_asociada.length; i++){
+            if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
               pos = i;
             }
           }
-          this.producto_asociado.splice(pos,1);
-          this.dataSource = new MatTableDataSource(this.producto_asociado);
+          this.experticia_asociada.splice(pos,1);
+          this.dataSource = new MatTableDataSource(this.experticia_asociada);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.cg.detectChanges();
@@ -178,10 +179,10 @@ export class FormularioExpertizComponent implements OnInit {
 
   enviarDato(){
 
-    if(this.expertiz.nombre == ""){
+    if(this.categoria_expertiz.nombre == ""){
 
       swal.fire(
-        'Digite el nombre de la experticia',
+        'Digite el nombre de la categoría de experticia',
         '',
         'warning'
       )
@@ -190,18 +191,18 @@ export class FormularioExpertizComponent implements OnInit {
 
       if(this.editar){
       
-        this.ajax.post('experticia/editar', { expertiz: this.expertiz, productos_asociados: this.producto_asociado }).subscribe(d => {
+        this.ajax.post('experticia/editar-categoria', { categoria_expertiz: this.categoria_expertiz, experticia_asociada: this.experticia_asociada }).subscribe(d => {
           if(d.success){
           
-            this.router.navigate(['/ad-expertiz']);
+            this.router.navigate(['/ad-categoria-expertiz']);
           }
         })
       }else{
         
-        this.ajax.post('experticia/guardar', { expertiz: this.expertiz, productos_asociados: this.producto_asociado }).subscribe(d => {
+        this.ajax.post('experticia/guardar-categoria', { categoria_expertiz: this.categoria_expertiz, experticia_asociada: this.experticia_asociada }).subscribe(d => {
           if(d.success){
             
-            this.router.navigate(['/ad-expertiz']);
+            this.router.navigate(['/ad-categoria-expertiz']);
           }
         })
       }
@@ -210,8 +211,11 @@ export class FormularioExpertizComponent implements OnInit {
     
   }
 
+  habilitarExperticia(){
+    this.crear_experticia = true;
+  }
+  
   ngOnInit() {
-
   }
 
 }

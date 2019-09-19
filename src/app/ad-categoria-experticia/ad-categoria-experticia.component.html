@@ -2,7 +2,7 @@
   <div class="responsive-table">
 
       <br>
-      <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario-expertiz/nuevo']">Ingresar Expertiz</a>
+      <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario-categoria-expertiz/nuevo']">Ingresar Categoria de Experticia</a>
       <br>
       <br>
       <mat-table [dataSource]="dataSource" matSort>
@@ -10,7 +10,7 @@
           <!-- ID Column -->
           <ng-container matColumnDef="id">
               <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-              <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_experticia}} </mat-cell>
+              <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_categoria_experticia}} </mat-cell>
           </ng-container>
   
           <!-- Progress Column -->
@@ -23,6 +23,7 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
               <mat-cell *matCellDef="let row" style="max-width:15%;">
                   <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                  <i class="ti-trash text-danger m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
               </mat-cell>
           </ng-container>
   

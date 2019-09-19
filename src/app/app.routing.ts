@@ -24,6 +24,10 @@ import { IntencionesChatComponent } from './intenciones-chat/intenciones-chat.co
 import { FormularioEncuestasComponent } from './formulario-encuestas/formulario-encuestas.component';
 import { AdEncuestasComponent } from './ad-encuestas/ad-encuestas.component';
 import { VisualizarEncuestaComponent } from './visualizar-encuesta/visualizar-encuesta.component';
+import { AdExpertizComponent } from './ad-expertiz/ad-expertiz.component';
+import { FormularioExpertizComponent } from './formulario-expertiz/formulario-expertiz.component';
+import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-categoria-experticia.component';
+import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
 
 
 export const AppRoutes: Routes = [
@@ -46,6 +50,10 @@ export const AppRoutes: Routes = [
   { path: 'administracion-urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'productos', component: CreacionProductosComponent, canActivate: [AuthGuard] },
   { path: 'ad-encuestas', component: AdEncuestasComponent, canActivate: [AuthGuard] },
+  { path: 'ad-expertiz', component: AdExpertizComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-expertiz/:id_expertiz', component: FormularioExpertizComponent, canActivate: [AuthGuard] },
+  { path: 'ad-categoria-expertiz', component: AdCategoriaExperticiaComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-categoria-expertiz/:id_categoria_expertiz', component: FormularioCategoriaExperticiaComponent, canActivate: [AuthGuard] },
   { path: 'formulario-productos', component: FormularioProductosComponent, canActivate: [AuthGuard] },
   { path: 'formulario-encuestas/:id_encuesta', component: FormularioEncuestasComponent, canActivate: [AuthGuard] },
   { path: 'encuesta/:tipo_encuesta', component: VisualizarEncuestaComponent, canActivate: [AuthGuard] },

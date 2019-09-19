@@ -87,6 +87,8 @@ import { VisualizarEncuestaComponent } from './visualizar-encuesta/visualizar-en
 import { TiempoColaPipe } from '../pipes/tiempo-cola.pipe';
 import { AdExpertizComponent } from './ad-expertiz/ad-expertiz.component';
 import { FormularioExpertizComponent } from './formulario-expertiz/formulario-expertiz.component';
+import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-categoria-experticia.component';
+import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -142,7 +144,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     VisualizarEncuestaComponent,
     TiempoColaPipe,
     AdExpertizComponent,
-    FormularioExpertizComponent
+    FormularioExpertizComponent,
+    AdCategoriaExperticiaComponent,
+    FormularioCategoriaExperticiaComponent
   ],
   entryComponents: [TransferenciaChatComponent],
   imports: [

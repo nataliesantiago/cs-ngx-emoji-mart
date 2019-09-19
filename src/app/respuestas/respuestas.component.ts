@@ -55,7 +55,6 @@ export class RespuestasComponent implements OnInit {
 
   init(){
 
-    // console.log("reloading...");
     this.route.params
       .filter(params => params.id_pregunta)
       .subscribe(params => {
