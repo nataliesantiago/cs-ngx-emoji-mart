@@ -2,69 +2,79 @@
     text-align: center;
 }*/
 
-.icono-inicial{
+.icono-inicial {
     color: #c3b029;
 }
 
-.icono-seleccionado{
+.icono-seleccionado {
     background: #badfff;
 }
 
-.icono-manos{
+.icono-manos {
     color: #badfff;
 }
 
-.contador{
+.contador {
     margin: auto;
 }
 
-.centrado{
+.centrado {
     justify-content: center;
     text-align: center;
 }
 
-.contador-padre{
+.contador-padre {
     display: flex;
 }
-
-.container-principal{
+.contenedor-encuesta{
+    padding: 10px !important;
+}
+.container-principal {
     /*border: thin solid #dadce0;
     border-radius: .5rem;
     margin: 2.625rem 0 0;*/
     font-size: 12px;
+    padding-bottom: 40px;
+    
 }
 
-.texto{
-    width: 90%;    
+.texto {
+    width: 90%;
 }
 
-textarea{
+textarea {
     resize: none !important;
 }
 
-.boton-calificacion{
+.boton-calificacion {
     color: white;
     margin-bottom: 10px;
 }
 
-.si{
+.si {
     background-color: #3f51b5;
 }
 
-.campo-texto{
+.campo-texto {
     height: 100px;
 }
 
-mat-card{
+mat-card {
     margin: 0;
     padding: 0;
 }
 
-mat-card-content{
+.mat-card-content {
+    margin: 0;
     padding: 10px;
 }
 
-.conversacion-chat{
+.conversacion-chat {
     height: 343px;
     overflow-y: scroll;
+}
+
+.encuesta {
+    height: 100%;
+    padding: 0 !important;
 }

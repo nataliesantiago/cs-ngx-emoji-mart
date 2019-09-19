@@ -1,7 +1,8 @@
-<mat-card>  
-<mat-card-content *ngIf="encuesta">
-    <div class="row wrap centrado">
-      <div class="container-principal">
+<div class="encuesta">
+  <perfect-scrollbar class="contenedor-encuesta" [config]="{suppressScrollX:true}">
+    <div *ngIf="encuesta">
+      <div class="row wrap centrado">
+        <div class="container-principal">
           <h3>{{encuesta.nombre}}</h3>
           <div *ngIf="preguntas.length > 0">
             <div *ngFor="let pregunta of preguntas; let i = index;">
@@ -9,7 +10,10 @@
               <div *ngIf="pregunta.id_tipo == 1">
                 <br>
                 <div class="row wrap contador-padre">
-                  <button *ngFor="let item of arrayOne(pregunta.minimo, pregunta.maximo); let j = index" mat-mini-fab color="basic" class="contador" [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, (j + pregunta.minimo)) }" (click)="agregarRespuesta(i, (j + pregunta.minimo))"> {{ j + pregunta.minimo }} </button>
+                  <button *ngFor="let item of arrayOne(pregunta.minimo, pregunta.maximo); let j = index" mat-mini-fab
+                    color="basic" class="contador"
+                    [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, (j + pregunta.minimo)) }"
+                    (click)="agregarRespuesta(i, (j + pregunta.minimo))"> {{ j + pregunta.minimo }} </button>
                 </div>
                 <br>
               </div>
@@ -18,10 +22,12 @@
                 <br>
                 <div class="row wrap centrado">
                   <a mat-icon-button (click)="agregarRespuesta(i, 1)">
-                    <mat-icon [ngClass]="{ 'icono-manos': activarBoton(pregunta.respuesta, 1) }" class="icono-inicial">thumb_up</mat-icon>
+                    <mat-icon [ngClass]="{ 'icono-manos': activarBoton(pregunta.respuesta, 1) }" class="icono-inicial">
+                      thumb_up</mat-icon>
                   </a>
                   <a mat-icon-button (click)="agregarRespuesta(i, 2)">
-                    <mat-icon [ngClass]="{ 'icono-manos': activarBoton(pregunta.respuesta, 2) }" class="icono-inicial">thumb_down</mat-icon>
+                    <mat-icon [ngClass]="{ 'icono-manos': activarBoton(pregunta.respuesta, 2) }" class="icono-inicial">
+                      thumb_down</mat-icon>
                   </a>
                 </div>
                 <br>
@@ -53,23 +59,28 @@
                 </div>
                 <br>
               </div>
-    
+
               <div *ngIf="pregunta.id_tipo == 4">
                 <br>
                 <div class="row wrap">
-                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 1) }" (click)="agregarRespuesta(i, 1)">
+                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 1) }"
+                    (click)="agregarRespuesta(i, 1)">
                     ️☹️
                   </a>
-                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 2) }" (click)="agregarRespuesta(i, 2)">
+                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 2) }"
+                    (click)="agregarRespuesta(i, 2)">
                     🙁
                   </a>
-                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 3) }" (click)="agregarRespuesta(i, 3)">
+                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 3) }"
+                    (click)="agregarRespuesta(i, 3)">
                     😐
                   </a>
-                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 4) }" (click)="agregarRespuesta(i, 4)">
+                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 4) }"
+                    (click)="agregarRespuesta(i, 4)">
                     🙂
                   </a>
-                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 5) }" (click)="agregarRespuesta(i, 5)">
+                  <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 5) }"
+                    (click)="agregarRespuesta(i, 5)">
                     😀
                   </a>
                 </div>
@@ -78,16 +89,17 @@
 
               <div *ngIf="pregunta.id_tipo == 5">
                 <br>
-                <mat-form-field appearance="outline" class="texto">  
-                  <textarea matInput class="campo-texto" maxlength="{{pregunta.maximo}}" name="notas" [(ngModel)]="pregunta.respuesta_texto"></textarea>
-                  </mat-form-field> 
-                  <br>
+                <mat-form-field appearance="outline" class="texto">
+                  <textarea matInput class="campo-texto" maxlength="{{pregunta.maximo}}" name="notas"
+                    [(ngModel)]="pregunta.respuesta_texto"></textarea>
+                </mat-form-field>
+                <br>
               </div>
             </div>
             <button class="boton-calificacion si" mat-raised-button (click)="enviarFormulario()">Enviar</button>
           </div>
+        </div>
       </div>
     </div>
-  </mat-card-content>
-</mat-card>
-
+  </perfect-scrollbar>
+</div>
