@@ -334,7 +334,7 @@ export class ChatClienteComponent implements OnInit {
     // console.log(experto, parseInt(this.buscarConfiguracion(2).valor), experto.chats.length);
     if (experto && experto.chats && parseInt(this.buscarConfiguracion(2).valor) > experto.chats.length) {
       c.filas.forEach((ce, index) => {
-        this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').delete();
+        this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).delete();
       });
       this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo).then(u => {
         c.id_experto_actual = u.idtbl_usuario;
@@ -346,7 +346,7 @@ export class ChatClienteComponent implements OnInit {
       });
     } else if (!c.transferido) {
       c.filas.forEach((ce, index) => {
-        this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(this.user.getId() + '').set({ conversacion: c.codigo });
+        this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
       });
 
       /* let listener = this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
@@ -369,7 +369,9 @@ export class ChatClienteComponent implements OnInit {
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
-      if (c.asesor_actual) {
+      if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2) {
+        c.mostrar_encuesta = true;
+      } else if (c.asesor_actual) {
         if (c.asesor_actual.idtbl_usuario != data.id_experto_actual && data.id_experto_actual) {
           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
             c.id_experto_actual = u.idtbl_usuario;

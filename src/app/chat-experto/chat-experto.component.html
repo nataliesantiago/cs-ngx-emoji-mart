@@ -21,7 +21,7 @@
                   [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
-                    [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1)}">
+                    [ngClass]="{'green':(chat.id_estado_conversacion==2),'gris':(chat.id_estado_conversacion!=2)}">
                   </div>
                   <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
                   <p matLine class="text-muted preview-mensaje" [ngClass]="{'bold':chat.mensajes_nuevos}"
@@ -240,7 +240,7 @@
           </emoji-mart>
         </div>
         <div *ngIf="chat && chat.mostrar_encuesta">
-          <app-visualizar-encuesta [tipo]="'2'" [chat]="chat"></app-visualizar-encuesta>
+          <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)"></app-visualizar-encuesta>
         </div>
       </mat-sidenav-container>
     </mat-card>
