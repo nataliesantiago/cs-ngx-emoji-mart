@@ -214,6 +214,20 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   habilitarExperticia(){
     this.crear_experticia = true;
   }
+
+  actualizarLista(){
+    this.ajax.get('experticia/obtener', {}).subscribe(p => {
+      if(p.success){
+        this.experticias = p.experticias;
+        this.options = p.experticias;
+        this.filteredOptions = this.myControl.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(value))
+        );
+      }
+    });
+    this.crear_experticia = false;
+  }
   
   ngOnInit() {
   }

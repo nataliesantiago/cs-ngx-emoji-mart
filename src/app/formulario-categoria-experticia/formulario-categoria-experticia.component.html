@@ -72,7 +72,7 @@
           </div>
         </div>
       </div>
-      <app-formulario-expertiz *ngIf="crear_experticia"></app-formulario-expertiz>
+      <app-formulario-expertiz *ngIf="crear_experticia" [validar_seccion]="'1'" (respuesta_componente)="actualizarLista()"></app-formulario-expertiz>
       <br>
       <br>
       <div fxLayout="row wrap">

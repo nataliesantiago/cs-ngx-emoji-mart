@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AjaxService } from '../providers/ajax.service';
@@ -33,6 +33,8 @@ export class FormularioExpertizComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   producto_asociado = [];
   editar = false;
+  @Input() public validar_seccion: number;
+  @Output() public respuesta_componente = new EventEmitter<boolean>();
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient){
     
@@ -200,14 +202,29 @@ export class FormularioExpertizComponent implements OnInit {
         
         this.ajax.post('experticia/guardar', { expertiz: this.expertiz, productos_asociados: this.producto_asociado }).subscribe(d => {
           if(d.success){
-            
-            this.router.navigate(['/ad-expertiz']);
+            if(this.validar_seccion){
+              this.respuesta_componente.emit(true);
+              this.expertiz = { nombre: ''};
+              this.producto_asociado = [];
+            }else{
+              this.router.navigate(['/ad-expertiz']);
+            }
           }
         })
       }
 
     }
     
+  }
+
+  volver(){
+    if(this.validar_seccion){
+      this.respuesta_componente.emit(true);
+      this.expertiz = { nombre: ''};
+      this.producto_asociado = [];
+    }else{
+      this.router.navigate(['/ad-expertiz']);
+    }
   }
 
   ngOnInit() {

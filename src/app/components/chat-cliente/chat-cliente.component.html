@@ -187,8 +187,10 @@
                     solicitud</h3>
                 </div>
 
-                <div *ngIf="chat.mostrar_encuesta">
-                  <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)" ></app-visualizar-encuesta>
+                <div class="contenedor-mensajes" *ngIf="chat.mostrar_encuesta">
+                    <perfect-scrollbar class="contenedor" scroll-down="true" scrollDirective>
+                      <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)" ></app-visualizar-encuesta>
+                    </perfect-scrollbar>
                 </div>
 
               </mat-sidenav-container>
