@@ -1,21 +1,21 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { User } from '../../schemas/user.schema';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
-import { User } from '../../schemas/user.schema';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
-  selector: 'app-ad-expertiz',
-  templateUrl: './ad-expertiz.component.html',
-  styleUrls: ['./ad-expertiz.component.scss']
+  selector: 'app-ad-categoria-experticia',
+  templateUrl: './ad-categoria-experticia.component.html',
+  styleUrls: ['./ad-categoria-experticia.component.scss']
 })
-export class AdExpertizComponent implements OnInit {
+export class AdCategoriaExperticiaComponent implements OnInit {
 
   user: User;
   id_usuario;
-  experticias = [];
+  categorias = [];
   displayedColumns = ['acciones', 'id', 'nombre'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -31,10 +31,10 @@ export class AdExpertizComponent implements OnInit {
       }
     });
 
-    this.ajax.get('experticia/obtener', {}).subscribe(p => {
+    this.ajax.get('experticia/obtener-categorias', {}).subscribe(p => {
       if (p.success) {
-        this.experticias = p.experticias;
-        this.dataSource = new MatTableDataSource(this.experticias);
+        this.categorias = p.categorias;
+        this.dataSource = new MatTableDataSource(this.categorias);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       }
@@ -42,7 +42,7 @@ export class AdExpertizComponent implements OnInit {
   }
 
   editarRegistro(e) {
-    this.router.navigate(['/formulario-expertiz', e.idtbl_experticia]);
+    this.router.navigate(['/formulario-categoria-expertiz', e.idtbl_categoria_experticia]);
   }
 
   ngOnInit() {

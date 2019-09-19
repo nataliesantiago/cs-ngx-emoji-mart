@@ -69,7 +69,7 @@ export class VisualizarEncuestaComponent implements OnInit {
       if (d.success) {
         this.encuesta = d.encuesta[0];
         this.idtbl_encuesta = d.encuesta[0].idtbl_encuesta;
-        if (!this.encuesta) {
+        if (d.encuesta.length == 0) {
           this.onfinish.emit(true);
         } else {
           this.ajax.get('encuestas/obtener-preguntas', { id_encuesta: d.encuesta[0].idtbl_encuesta }).subscribe(d2 => {

@@ -22,6 +22,7 @@
                 <li><a [routerLink]="['/encuesta/1']" (click)="cerrarMenu()">Encuenta Cliente</a></li>
                 <li><a [routerLink]="['/encuesta/2']" (click)="cerrarMenu()">Encuenta Experto</a></li>
                 <li><a [routerLink]="['/ad-expertiz']" (click)="cerrarMenu()">Administrador de Experticias</a></li>
+                <li><a [routerLink]="['/ad-categoria-expertiz']" (click)="cerrarMenu()">Administrador de Categorías de Experticia</a></li>
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()"><a href="{{i.url}}" target="_blank"
                         (click)="cerrarMenu()">{{i.label}}</a></li>
 
