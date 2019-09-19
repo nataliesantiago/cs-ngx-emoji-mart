@@ -65,6 +65,14 @@
         </div>
         </div>
       </div>
+      <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex="100">
+          <div fxFlex.gt-sm="15" fxFlex="100">
+            <button class="boton-calificacion si" mat-raised-button (click)="habilitarExperticia()">Crear Experticia</button>
+          </div>
+        </div>
+      </div>
+      <app-formulario-expertiz *ngIf="crear_experticia"></app-formulario-expertiz>
       <br>
       <br>
       <div fxLayout="row wrap">

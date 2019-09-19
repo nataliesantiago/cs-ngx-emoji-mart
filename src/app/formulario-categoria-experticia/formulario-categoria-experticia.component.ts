@@ -33,6 +33,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   experticia_asociada = [];
   editar = false;
+  crear_experticia = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient){
     
@@ -66,7 +67,6 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
       if(p.success){
         this.experticias = p.experticias;
         this.options = p.experticias;
-        console.log(this.experticias);
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => this._filter(value))
@@ -78,7 +78,6 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
       this.editar = true;
       this.ajax.get('experticia/obtener-categoria-experticia', {id_categoria_experticia: this.id_categoria_expertiz}).subscribe(p => {
         if(p.success){
-          console.log(p.categoria);
           this.categoria_expertiz = p.categoria[0];
           this.categoria_expertiz = this.categoria_expertiz[0];
           this.experticia_asociada = p.categoria[1];
@@ -105,7 +104,6 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
 
   anadirPreguntaAsociada(e){
     this.experticia_asociada.push(e);
-    console.log(this.experticia_asociada);
     this.dataSource = new MatTableDataSource(this.experticia_asociada);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -134,7 +132,6 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
         if(this.editar){
           
           if(e.idtbl_categoria_experticia != undefined){
-            console.log("Entra");
             this.ajax.post('experticia/eliminar-asociacion-experticia', { experticia_asociada: e }).subscribe(d => {
               if(d.success){
                 let pos = 0;
@@ -212,6 +209,10 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
 
     }
     
+  }
+
+  habilitarExperticia(){
+    this.crear_experticia = true;
   }
   
   ngOnInit() {

@@ -67,8 +67,6 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
-      console.log(u);
-      console.log(this.id_usuario);
       if (this.usuario) {
         this.init();
       }
@@ -130,9 +128,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       .subscribe(params => {
         
 
-        this.id_pregunta_editar = params.id_pregunta;
+      this.id_pregunta_editar = params.id_pregunta;
         
-      });
+    });
 
     this.ajax.get('producto/obtener', { }).subscribe(d => {
       if(d.success){

@@ -68,20 +68,37 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   borrarElemento(e){
-    this.ajax.post('preguntas/eliminar', { pregunta: e, id_usuario: this.id_usuario }).subscribe(p => {
-      if(p.success){
-        this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+
+    swal.fire({
+      title: 'Eliminar Pregunta',
+      text: "Confirme para pasar la pregunta a estado Inactivo",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.ajax.post('preguntas/eliminar', { pregunta: e, id_usuario: this.id_usuario }).subscribe(p => {
           if(p.success){
-            
-            this.data = p.preguntas;
-            this.dataSource = new MatTableDataSource(this.data);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.cg.detectChanges();
+            this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+              if(p.success){
+                
+                this.data = p.preguntas;
+                this.dataSource = new MatTableDataSource(this.data);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
+                this.cg.detectChanges();
+              }
+            })
           }
         })
       }
     })
+
+
+    
     
   }
 

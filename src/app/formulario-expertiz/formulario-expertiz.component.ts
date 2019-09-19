@@ -66,7 +66,6 @@ export class FormularioExpertizComponent implements OnInit {
       if(p.success){
         this.productos = p.productos;
         this.options = p.productos;
-        console.log(this.productos);
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => this._filter(value))
@@ -74,11 +73,10 @@ export class FormularioExpertizComponent implements OnInit {
       }
     });
 
-    if(this.id_expertiz != "nuevo"){
+    if(this.id_expertiz != "nuevo" && this.id_expertiz){
       this.editar = true;
       this.ajax.get('experticia/obtener-experticia', {id_experticia: this.id_expertiz}).subscribe(p => {
         if(p.success){
-          console.log(p.experticia);
           this.expertiz = p.experticia[0];
           this.expertiz = this.expertiz[0];
           this.producto_asociado = p.experticia[1];
@@ -105,7 +103,6 @@ export class FormularioExpertizComponent implements OnInit {
 
   anadirPreguntaAsociada(e){
     this.producto_asociado.push(e);
-    console.log(this.producto_asociado);
     this.dataSource = new MatTableDataSource(this.producto_asociado);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -134,7 +131,6 @@ export class FormularioExpertizComponent implements OnInit {
         if(this.editar){
           
           if(e.idtbl_producto != undefined){
-            console.log("Entra");
             this.ajax.post('experticia/eliminar-asociacion', { categoria_asociada: e }).subscribe(d => {
               if(d.success){
                 let pos = 0;
@@ -215,6 +211,7 @@ export class FormularioExpertizComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
 }

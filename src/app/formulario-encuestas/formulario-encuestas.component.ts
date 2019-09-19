@@ -94,7 +94,6 @@ export class FormularioEncuestasComponent implements OnInit {
   anadirPregunta(){
     this.preguntas.push({ enunciado: '', id_tipo: '', peso: '', minimo: '', maximo: '', orden: ''});
     this.orden_preguntas.push({ valor: this.preguntas.length});
-    //console.log(this.preguntas);
   }
 
   eliminarPregunta(e, pos){
