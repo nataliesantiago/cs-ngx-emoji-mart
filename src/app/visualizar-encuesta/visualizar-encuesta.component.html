@@ -7,17 +7,17 @@
           <div *ngIf="preguntas.length > 0">
             <div *ngFor="let pregunta of preguntas; let i = index;">
               {{i + 1}}. {{pregunta.enunciado}}
-              <div *ngIf="pregunta.id_tipo == 1">
-                <br>
+              <div *ngIf="pregunta.id_tipo == 1" class="padre-contador">
+
                 <div class="row wrap contador-padre" *ngFor="let itemDos of arrayDos(pregunta.maximo); let h = index">
-                  <br>
-                  <button *ngFor="let item of arrayOne(pregunta.minimo, pregunta.maximo, h); let j = index" mat-mini-fab
-                    color="basic" class="contador"
-                    [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, ((h * 5) + (j + 1))) }"
-                    (click)="agregarRespuesta(i, ((h * 5) + (j + 1)))"> {{ (h * 5) + (j + 1) }} </button>
-                    <br>
+                  <div class="hijo">
+                    <button *ngFor="let item of arrayOne(pregunta.minimo, pregunta.maximo, h); let j = index"
+                      mat-mini-fab color="basic" class="contador"
+                      [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, ((h * 5) + (j + 1))) }"
+                      (click)="agregarRespuesta(i, ((h * 5) + (j + 1)))"> {{ (h * 5) + (j + 1) }} </button>
+                  </div>
                 </div>
-                <br>
+
               </div>
 
               <div *ngIf="pregunta.id_tipo == 2">
