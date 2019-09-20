@@ -71,19 +71,23 @@
       <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex="100">
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <a [ngClass]="{ 'si': activadoSi }" class="boton-calificacion" mat-raised-button (click)="calificacion(1)"><mat-icon class="icono-inicial">thumb_up</mat-icon></a>
+            <a [ngClass]="{ 'si': activadoSi }" class="boton-calificacion" mat-raised-button (click)="calificacion(1)">
+              <mat-icon class="icono-inicial">thumb_up</mat-icon>
+            </a>
           </div>
           <div fxFlex.gt-sm="5" fxFlex="100"></div>
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <a [ngClass]="{ 'no': activadoNo }" class="boton-calificacion" mat-raised-button (click)="calificacion(0)"><mat-icon class="icono-inicial">thumb_down</mat-icon></a>
+            <a [ngClass]="{ 'no': activadoNo }" class="boton-calificacion" mat-raised-button (click)="calificacion(0)">
+              <mat-icon class="icono-inicial">thumb_down</mat-icon>
+            </a>
           </div>
         </div>
       </div>
       <div *ngIf="nueva_observacion">
         <br>
         <mat-form-field>
-          <textarea matInput placeholder="Dejanos tus comentarios" name="notas" [(ngModel)]="observaciones" matAutosizeMinRows=1
-            matAutosizeMaxRows=10></textarea>
+          <textarea matInput placeholder="Dejanos tus comentarios" name="notas" [(ngModel)]="observaciones"
+            matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
         </mat-form-field>
         <a mat-raised-button class="no" (click)="enviarCalificacion()"><span class="texto-boton">{{boton}}</span></a>
       </div>
@@ -95,8 +99,9 @@
 
   </div>
 
-  <div fxFlex.gt-sm="25" fxFlex="100">
-    <div class="preguntas-asociadas">
+  <div class="preguntas-asociadas" fxFlex.gt-sm="25" fxFlex="100">
+    <div class="panel-respuestas">
+      <div class="respuestas"></div>
       <strong>Preguntas Asociadas</strong>
       <p class="mouse-over" *ngFor="let pregunta_asociada of preguntas_adicion"
         (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">{{pregunta_asociada.titulo}}</p>

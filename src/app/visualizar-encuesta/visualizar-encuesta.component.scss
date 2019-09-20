@@ -22,17 +22,28 @@
 .centrado {
     justify-content: center;
     text-align: center;
-    margin: 10px !important;
+    margin: 10px auto !important;
     max-width: 600px;
+}
+
+.padre-contador {
+    padding: 0 10px;
+    margin: 10px 0;
 }
 
 .contador-padre {
     display: flex;
     margin-bottom: 5px;
-    max-width: 250px;
+
+    .hijo {
+
+        margin: auto;
+        width: 250px;
+        display: flex;
+    }
 }
 
-.contenedor-encuesta{
+.contenedor-encuesta {
     padding: 10px !important;
     justify-content: center !important;
     text-align: center !important;
@@ -44,7 +55,7 @@
     margin: 2.625rem 0 0;*/
     font-size: 12px;
     padding-bottom: 40px;
-    
+
 }
 
 .texto {
@@ -86,4 +97,5 @@ mat-card {
 .encuesta {
     height: 100%;
     padding: 0 !important;
+    display: flex;
 }

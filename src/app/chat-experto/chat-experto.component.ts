@@ -255,7 +255,8 @@ export class ChatExpertoComponent {
 
   trasnferirChat(c: Conversacion) {
     this.dialog.open(TransferenciaChatComponent, { width: '400px', data: { conversacion: c } }).afterClosed().subscribe((result) => {
-      if (result.success) {
+      if (result && result.success) {
+        this.recibirChatAutomatico();
         this.onSelect(null);
       }
     });
