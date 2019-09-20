@@ -155,10 +155,10 @@
                       <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                         <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                       </button>
-                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
+                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje"  [minHeight]="30"
                         (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
                         (keyup)="remplazaEmoji(chat)" [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
-                        (blur)="setFocus(chat,false)"></textarea>
+                        (blur)="setFocus(chat,false)" maxlength="{{limite_texto_chat}}"></textarea>
                       <button mat-icon-button color="primary" (click)="adjuntos.click()"
                         [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
                         <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>

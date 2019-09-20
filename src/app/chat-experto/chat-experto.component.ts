@@ -44,6 +44,7 @@ export class ChatExpertoComponent {
   usuarios = [];
   @ViewChild('contenedor') componentRef?: PerfectScrollbarComponent;
   configuraciones = [];
+  limite_texto_chat;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
 
@@ -60,6 +61,9 @@ export class ChatExpertoComponent {
   }
 
   init() {
+    this.chatService.obtenerLimiteTexto().then(valor => {
+      this.limite_texto_chat = valor;
+    });
     let paso_por_chats = false;
     this.chatService.getConfiguracionesChat().then(configs => {
       this.configuraciones = configs.configuraciones;

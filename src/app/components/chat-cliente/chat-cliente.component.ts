@@ -37,6 +37,7 @@ export class ChatClienteComponent implements OnInit {
   extensiones_archivos = [];
   stream: any;
   cantidad_mensajes_sin_leer = 0;
+  limite_texto_chat;
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
@@ -69,6 +70,10 @@ export class ChatClienteComponent implements OnInit {
   };
 
   init() {
+    this.chatService.obtenerLimiteTexto().then(valor => {
+      this.limite_texto_chat = valor;
+    });
+    
     this.chatService.getConfiguracionesChat().then(configs => {
       this.configuraciones = configs.configuraciones;
       configs.extensiones.forEach(e => {

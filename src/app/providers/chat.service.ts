@@ -117,6 +117,24 @@ export class ChatService {
       });
     })
   }
+
+
+  /**
+   * @description Se obtiene el limite de carateres que se pueden envíar en el chat
+   * @returns Promise
+   */
+  obtenerLimiteTexto(): Promise<any>{
+    return new Promise((r, re) => {
+      this.ajax.get('administracion/obtener-limite-texto', {}).subscribe(p => {
+        if (p.success) {
+          r(p.item[0].valor);
+        } else {
+          reject();
+        }
+      });
+    })
+  }
+
   /**
    * @description Actualiza a estado 3 todos los mensajes recbidos de forma asyncrona
    * @param  {Array<Mensaje>} mensajes
