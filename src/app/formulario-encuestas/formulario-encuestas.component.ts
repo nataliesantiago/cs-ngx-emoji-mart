@@ -148,6 +148,8 @@ export class FormularioEncuestasComponent implements OnInit {
   enviarDato(){
     let suma_total = 0;
     let validar_orden = true;
+    let validar_campos = true;
+    console.log(this.permitir_envio);
     if(this.permitir_envio){
 
       if(this.preguntas.length == 0){
@@ -168,7 +170,20 @@ export class FormularioEncuestasComponent implements OnInit {
             this.preguntas[i].minimo = null;
             this.preguntas[i].maximo = null;
           }
-          //if(this.preguntas[i].)
+          if(this.preguntas[i].id_tipo == 1){
+            if(this.preguntas[i].minimo == "" || this.preguntas[i].maximo == ""){
+              validar_campos = false;
+            }
+          }
+          if(this.preguntas[i].id_tipo == 5){
+            if(this.preguntas[i].maximo == ""){
+              validar_campos = false;
+            }
+          }
+          if(this.preguntas[i].enunciado == "" || this.preguntas[i].id_tipo == ""){
+            validar_campos = false;
+          }
+          
         }
         for(let i = 0; i < this.preguntas.length; i++){
           for(let j = i + 1; j < this.preguntas.length; j++){
@@ -177,44 +192,58 @@ export class FormularioEncuestasComponent implements OnInit {
             }
           }
         }
-        if(validar_orden){
-          if(suma_total == 100){
-            if(this.editar){
-              this.ajax.post('encuestas/editar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
-                if(d.success){
-                  
-                  this.router.navigate(['/ad-encuestas']);
-                }
-              })
-            }else{
-              this.ajax.post('encuestas/guardar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
-                if(d.success){
-                  
-                  this.router.navigate(['/ad-encuestas']);
-                }
-              })
+
+        if(this.encuesta.nombre == "" || this.encuesta.id_tipo_encuesta == ""){
+          validar_campos = false;
+        }
+
+        if(validar_campos){
+          if(validar_orden){
+            if(suma_total == 100){
+              if(this.editar){
+                this.ajax.post('encuestas/editar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
+                  if(d.success){
+                    
+                    this.router.navigate(['/ad-encuestas']);
+                  }
+                })
+              }else{
+                this.ajax.post('encuestas/guardar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
+                  if(d.success){
+                    
+                    this.router.navigate(['/ad-encuestas']);
+                  }
+                })
+              }
+              
+            }else if(suma_total < 100){
+              swal.fire(
+                'Peso incorrecto',
+                'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar.',
+                'warning'
+              )  
+            }else if (suma_total > 100){
+              swal.fire(
+                'Peso incorrecto',
+                'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar.',
+                'warning'
+              )
             }
-            
-          }else if(suma_total < 100){
+          }else{
             swal.fire(
-              'Peso incorrecto',
-              'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar.',
-              'warning'
-            )  
-          }else if (suma_total > 100){
-            swal.fire(
-              'Peso incorrecto',
-              'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar.',
+              'Orden Incorrecto',
+              'Seleccione el orden de las preguntas adecuadamente.',
               'warning'
             )
           }
         }else{
           swal.fire(
-            'Orden Incorrecto',
-            'Seleccione el orden de las preguntas adecuadamente.',
+            'Datos Incompletos',
+            'Digite todos los campos en el formulario.',
             'warning'
           )
         }
+        
         
       }
     }else{
