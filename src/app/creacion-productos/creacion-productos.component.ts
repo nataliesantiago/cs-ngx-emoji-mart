@@ -49,4 +49,10 @@ export class CreacionProductosComponent implements OnInit {
     this.router.navigate(['/formulario-productos'], { queryParams: { id_producto: e.idtbl_producto } });
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
 }

@@ -5,6 +5,11 @@
       <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario-productos']">Ingresar Categoria</a>
       <br>
       <br>
+      <div class="bg-light p-10 p-r-20 p-l-20">
+        <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+        </mat-form-field>
+      </div>
       <mat-table [dataSource]="dataSource" matSort>
   
           <!-- ID Column -->
