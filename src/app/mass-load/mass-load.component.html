@@ -1,0 +1,109 @@
+<div fxLayout="row wrap">
+  <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+          
+      <mat-card>
+          <mat-card-content>
+              <br>
+                <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="downloadCsvFile()">Descargar formato</a>
+              <br>
+              <!-- contenedor subir formato  -->
+                <div class="upload-file-wrapper" *ngIf="active_download">
+                  <mat-card-title>Cargar Formato Preguntas y Respuestas</mat-card-title>
+               
+                      <mat-card-content>
+                        <mat-label>Seleccione un archivo .csv</mat-label>
+                        <div fxLayout="row" fxLayoutAlign="start center" class="m-t-20">
+                            <span class="m-r-20" *ngIf="file_name == ''; else fileUploadName">Ningún archivo seleccionado</span>
+                            <ng-template #fileUploadName>
+                              <span class="m-r-20">{{file_name}}</span>
+                            </ng-template>
+                            <input type="file" #inputFile (change)="uploadCsvFile($event)">
+                            <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="inputFile.click()">
+                              <i class="ti-upload upload-icon m-r-10 mouse-ove"></i>
+                              Seleccionar archivo
+                            </a>
+                        </div>
+                      </mat-card-content>
+                  
+                  <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted upload-file" (click)="sendCsvFile()">Cargar formato</a>
+                </div>
+
+              <br>
+              <br>
+
+              <mat-card-title>Carga Masiva Preguntas y Respuestas</mat-card-title>
+              <br>
+
+              <div class="bg-light p-10 p-r-20 p-l-20">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+                </mat-form-field>
+              </div>
+
+              <div class="responsive-table">
+                <mat-table [dataSource]="dataSource" matSort>
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="title">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Pregunta </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.Pregunta}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="user_id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Correo usuario creador </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.Correo_usuario_creador}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="create_date">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Fecha creación </mat-header-cell>
+                      <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.Fecha_creacion}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="state_id">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Estado </mat-header-cell>
+                      <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.Estado}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="details">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Detalles </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;">
+                            <i class="ti-info text-warning m-r-10 mouse-ove" (click)="moreInfo(row)"></i>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="create">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Creado con exito </mat-header-cell>
+                      <mat-cell *matCellDef="let row" style="max-width:10%;text-align: center;">
+                          <i *ngIf="isEmptyObject(row.errors)" class="ti-check text-success m-r-10 mouse-ove"></i>
+                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-close text-danger m-r-10 mouse-ove"></i>
+                          <!-- ti-close -->
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="errors">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Errores </mat-header-cell>
+                      <mat-cell *matCellDef="let row" style="max-width:10%;">
+                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-help text-info m-r-10 mouse-ove" (click)="showErrors(row)"></i>
+                      </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </mat-row>
+                </mat-table>
+
+                <div fxLayout="row" fxLayoutAlign="center center" class="p-t-20" *ngIf="loading">
+                  <mat-progress-spinner class="loading-spinner-button" color="basic" [mode]="'indeterminate'" [diameter]="36"></mat-progress-spinner>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+              </div>
+          </mat-card-content>
+      </mat-card>
+  </div>
+  
+</div>
+

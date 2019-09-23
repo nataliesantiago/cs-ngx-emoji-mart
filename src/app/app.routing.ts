@@ -28,6 +28,7 @@ import { AdExpertizComponent } from './ad-expertiz/ad-expertiz.component';
 import { FormularioExpertizComponent } from './formulario-expertiz/formulario-expertiz.component';
 import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-categoria-experticia.component';
 import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
+import { MassLoadComponent } from './mass-load/mass-load.component';
 
 
 export const AppRoutes: Routes = [
@@ -64,4 +65,5 @@ export const AppRoutes: Routes = [
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
+  { path: 'carga-masiva', component: MassLoadComponent, canActivate: [AuthGuard] },
 ];

@@ -89,6 +89,7 @@ import { AdExpertizComponent } from './ad-expertiz/ad-expertiz.component';
 import { FormularioExpertizComponent } from './formulario-expertiz/formulario-expertiz.component';
 import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-categoria-experticia.component';
 import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
+import { MassLoadComponent, DialogOverviewDetailQuestion } from './mass-load/mass-load.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -146,9 +147,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdExpertizComponent,
     FormularioExpertizComponent,
     AdCategoriaExperticiaComponent,
-    FormularioCategoriaExperticiaComponent
+    FormularioCategoriaExperticiaComponent,
+    MassLoadComponent,
+    DialogOverviewDetailQuestion
   ],
-  entryComponents: [TransferenciaChatComponent],
+  entryComponents: [
+    TransferenciaChatComponent,
+    DialogOverviewDetailQuestion
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
