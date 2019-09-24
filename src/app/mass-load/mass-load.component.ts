@@ -30,29 +30,27 @@ export class MassLoadComponent implements OnInit {
     
   }
 
+  /**
+   * Funcion para descargar el archivo csv con el formato definido
+   */
   downloadCsvFile() {
     let csv_headers = [
       ['Pregunta,Respuesta,Correo_usuario_creador,Fecha_creacion,Correo_usuario_ultima_modificacion,Fecha_ultima_modificacion,Identificador_producto,Estado,Estado_flujo,Muestra_fecha_actualizacion'],
       [',,,,,,,,,0']
     ];
-    let universalBOM = "\uFEFF";
     let csv_content = csv_headers.map(e => e.join(",")).join("\n");
 
-    // let csv_blob = new Blob(["\uFEFF"+csv_content], {
-    //   type: 'text/csv; charset=utf-8'
-    //   });
-    // let link = document.createElement("a");
-    // link.download = "formato-preguntas-respuestas.csv";
-    // link.href = window.URL.createObjectURL(csv_blob);
-
     let link = document.createElement("a");
-    link.href = 'data:text/csv; charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv_content);
+    link.href = 'data:text/csv; charset=utf-8,' + encodeURIComponent(csv_content);
     link.download = "formato-preguntas-respuestas.csv";
     window.document.body.appendChild(link);
     link.click();
     this.active_download = true;
   }
 
+  /**
+   * Funcion para validar que el archivo cargado sea .csv
+  */
   uploadCsvFile(event) {
     let extension = event.target.files[0].name.split('.').pop().toLowerCase();
     if(extension == 'csv') {
@@ -63,6 +61,9 @@ export class MassLoadComponent implements OnInit {
     }
   }
 
+  /**
+   * Funcion para mostrar una alerta informando que el la extension es invalida
+  */
   showExtensionAlert(event) {
     swal.fire({
       title: 'Formato no permitido',
@@ -80,6 +81,9 @@ export class MassLoadComponent implements OnInit {
     });
   }
 
+  /**
+   * Funcion para enviar el archivo a procesar
+  */
   sendCsvFile() {
     if(this.csv_file != undefined || this.csv_file != null) {
       this.loading = true;
@@ -101,6 +105,9 @@ export class MassLoadComponent implements OnInit {
     }   
   }
 
+  /**
+   * Funcion para visualizar toda la informacion de cada pregunta
+  */
   moreInfo(row) {
     let action = 'show_details';
     this.dialog.open(DialogOverviewDetailQuestion, {
@@ -110,6 +117,9 @@ export class MassLoadComponent implements OnInit {
     });
   }
 
+  /**
+   * Funcion para visualizar los errores de cada pregunta
+  */
   showErrors(row) {
     let action = 'show_errors';
     this.dialog.open(DialogOverviewDetailQuestion, {
@@ -119,10 +129,16 @@ export class MassLoadComponent implements OnInit {
     });
   }
 
+  /**
+   * Funcion para validar si un objeto esta vacio
+  */
   isEmptyObject(obj) {
     return (obj && (Object.keys(obj).length === 0));
   }
 
+  /**
+   * Funcion para aplicar el filtro de la tabla
+  */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); 
     filterValue = filterValue.toLowerCase(); 
