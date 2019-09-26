@@ -698,22 +698,6 @@ a {
   cursor: pointer;
 }
 
-.contenedor__sidebar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: -40px;
-}
-
-.contenedor__sidebar div ul li {
-  transition: all ease 0.5s;
-
-  &:hover {
-    color: var(--azul_davivienda);
-    cursor: pointer;
-  }
-}
-
 .sidebar_mt {
   margin-top: 260px;
 }
@@ -2181,3 +2165,52 @@ ul li {
 .ql-container.ql-snow {
   border: 1px solid #ccc;
 }
+
+/* Custom Styles */
+.custom__btn {
+  cursor: pointer;
+  border: none;
+  -webkit-appearance: none;
+  font-size: 16px;
+  height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  border-radius: 4px;
+  transition: all 0.3s;
+  &:hover {
+    -webkit-box-shadow: -1px 4px 10px 0px rgba(0,0,0,0.24);
+    -moz-box-shadow: -1px 4px 10px 0px rgba(0,0,0,0.24);
+    box-shadow: -1px 4px 10px 0px rgba(0,0,0,0.24);
+    transform: translateY(-3px);
+  }
+  &--primary {
+    background-color: #1e88e5;
+    color: #ffffff;
+  }
+  &--accept {
+    background-color: #3f51b5;
+    color: #ffffff;
+  }
+  &--cancel{
+    background-color: #dd3333;
+    color: #ffffff;
+  }
+}
+.info-color {
+  color: #1e88e5 ;
+}
+.danger-color {
+  color: #fc4b6c;
+}
+.success-color {
+  color: #26c6da;
+}
+.warning-color {
+  color: #ffb22b;
+}
+.mouse-over{
+  cursor: pointer;
+}
+

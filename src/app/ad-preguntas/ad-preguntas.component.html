@@ -5,7 +5,10 @@
             <mat-card>
                 <mat-card-content>
                     <br>
-                    <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario_pregunta/nuevo']">Ingresar Pregunta</a>
+                    <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario_pregunta/nuevo']">
+                        <mat-icon>add</mat-icon>
+                        Ingresar Pregunta 
+                    </a>
                     <br>
                     <br>
                     <br>
@@ -13,7 +16,7 @@
                     <br>
                     <div class="bg-light p-10 p-r-20 p-l-20">
                         <mat-form-field>
-                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
                         </mat-form-field>
                     </div>
                     <div class="responsive-table">
@@ -55,9 +58,9 @@
                             <ng-container matColumnDef="acciones">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:10%;">
-                                    <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarElemento(row)"></i>
-                                    <i class="ti-trash text-danger m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
-                                    <i class="ti-eye text-info m-r-10 mouse-over" (click)="previsualizar(row)"></i>
+                                    <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarElemento(row)"></i>
+                                    <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
+                                    <i class="ti-eye info-color m-r-10 mouse-over" (click)="previsualizar(row)"></i>
                                 </mat-cell>
                             </ng-container>
     
@@ -66,7 +69,7 @@
                             </mat-row>
                         </mat-table>
     
-                        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
                     </div>
                 </mat-card-content>
             </mat-card>

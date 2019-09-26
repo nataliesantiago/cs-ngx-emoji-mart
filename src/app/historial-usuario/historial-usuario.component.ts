@@ -74,6 +74,7 @@ export class HistorialUsuarioComponent implements OnInit {
       }
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
   /**

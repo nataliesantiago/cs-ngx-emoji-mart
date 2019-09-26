@@ -4,7 +4,7 @@
       <mat-card>
           <mat-card-content>
               <br>
-                <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="downloadCsvFile()">Descargar formato</a>
+                <button class="custom__btn custom__btn--primary" (click)="downloadCsvFile()">Descargar formato</button>
               <br>
               <!-- contenedor subir formato  -->
                 <div class="upload-file-wrapper" *ngIf="active_download">
@@ -18,14 +18,14 @@
                               <span class="m-r-20">{{file_name}}</span>
                             </ng-template>
                             <input type="file" #inputFile (change)="uploadCsvFile($event)">
-                            <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="inputFile.click()">
+                            <button class="custom__btn custom__btn--primary" (click)="inputFile.click()">
                               <i class="ti-upload upload-icon m-r-10 mouse-ove"></i>
                               Seleccionar archivo
-                            </a>
+                            </button>
                         </div>
                       </mat-card-content>
                   
-                  <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted upload-file" (click)="sendCsvFile()">Cargar formato</a>
+                  <button class="custom__btn custom__btn--accept" (click)="sendCsvFile()">Cargar formato</button>
                 </div>
 
               <br>
@@ -36,7 +36,7 @@
 
               <div class="bg-light p-10 p-r-20 p-l-20">
                 <mat-form-field>
-                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
                 </mat-form-field>
               </div>
 
@@ -69,15 +69,15 @@
                     <ng-container matColumnDef="details">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Detalles </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:10%;">
-                            <i class="ti-info text-warning m-r-10 mouse-ove" (click)="moreInfo(row)"></i>
+                            <i class="ti-info warning-color m-r-10 mouse-ove" (click)="moreInfo(row)"></i>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="create">
                       <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Creado con exito </mat-header-cell>
                       <mat-cell *matCellDef="let row" style="max-width:10%;text-align: center;">
-                          <i *ngIf="isEmptyObject(row.errors)" class="ti-check text-success m-r-10 mouse-ove"></i>
-                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-close text-danger m-r-10 mouse-ove"></i>
+                          <i *ngIf="isEmptyObject(row.errors)" class="ti-check success-color m-r-10 mouse-ove"></i>
+                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-close danger-color m-r-10 mouse-ove"></i>
                           <!-- ti-close -->
                       </mat-cell>
                     </ng-container>
@@ -85,7 +85,7 @@
                     <ng-container matColumnDef="errors">
                       <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Errores </mat-header-cell>
                       <mat-cell *matCellDef="let row" style="max-width:10%;">
-                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-help text-info m-r-10 mouse-ove" (click)="showErrors(row)"></i>
+                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-help info-color m-r-10 mouse-ove" (click)="showErrors(row)"></i>
                       </mat-cell>
                     </ng-container>
 
@@ -98,7 +98,7 @@
                   <mat-progress-spinner class="loading-spinner-button" color="basic" [mode]="'indeterminate'" [diameter]="36"></mat-progress-spinner>
                 </div>
 
-                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
 
               </div>
           </mat-card-content>

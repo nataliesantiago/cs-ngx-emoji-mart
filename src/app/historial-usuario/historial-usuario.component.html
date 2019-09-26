@@ -3,14 +3,14 @@
         <mat-card class="fondo">
             <mat-card-content class="fondo">
                 <mat-card-title>Historial de busqueda</mat-card-title>
-                <div class="p-10 p-r-20 p-l-20">
+                <br>
+                <div class="bg-light p-10 p-r-20 p-l-20">
                     <mat-form-field>
                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
                     </mat-form-field>
                 </div>
-                <div class="table-rasponsive">
-                    <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
-                        style="max-height: 500px; overflow:auto;" class="fondo">
+                <div class="responsive-table">
+                    <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
 
                         <!-- Position Column -->
                         <ng-container matColumnDef="fecha">
@@ -40,15 +40,7 @@
                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                     </mat-table>
                     <!-- ------------------------------------------------- -->
-                    <div id="pagination">
-                        <div id="pagination_pages">
-                            {{ numeroPage }} - {{ totalPages }}
-                        </div>
-                        <div id="pagination_icon">
-                            <button class="transparente" (click)="buscarBusquedaHistorial('left')" [disabled]="validarLeft()" ><i class="fa fa-arrow-left fa-2x"  aria-hidden="true" ></i></button>
-                            <button class="transparente" (click)="buscarBusquedaHistorial('right')" [disabled]="validarRight()"><i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
+                    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
                     <!-- ------------------------------------------------- -->
                 </div>
             </mat-card-content>

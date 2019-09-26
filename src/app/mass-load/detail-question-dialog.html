@@ -1,6 +1,6 @@
 <mat-card class="card-detail" *ngIf="data.action === 'show_errors'">
     <mat-card-header>
-        <mat-card-title class="card-title text-danger m-t-20">Detalle de errores</mat-card-title>
+        <mat-card-title class="card-title danger-color m-t-20">Detalle de errores</mat-card-title>
         <mat-card-subtitle>Errores encontrados:</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -9,13 +9,13 @@
             <p class="p-l-10">{{ data_question[key] }}</p>
             <mat-divider class="background-divider"></mat-divider>
         </div>
-        <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="closeDialog()">Aceptar</a>
+        <a class="custom__btn custom__btn--accept" (click)="closeDialog()">Aceptar</a>
     </mat-card-content>   
 </mat-card>
 
 <mat-card class="card-detail" *ngIf="data.action === 'show_details'">
     <mat-card-header>
-        <mat-card-title class="card-title text-warning m-t-20">Detalle de la pregunta</mat-card-title>
+        <mat-card-title class="card-title warning-color m-t-20">Detalle de la pregunta</mat-card-title>
     </mat-card-header>
     <mat-card-content>
         <div class="item-detail m-b-20" fxLayout="column wrap" *ngFor="let key of keys">
@@ -23,7 +23,7 @@
             <p class="p-l-10">{{ data_question[key] }}</p>
             <mat-divider class="background-divider"></mat-divider>
         </div>
-        <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" (click)="closeDialog()">Aceptar</a>
+        <a class="custom__btn custom__btn--accept" (click)="closeDialog()">Aceptar</a>
     </mat-card-content>   
 </mat-card>
 
