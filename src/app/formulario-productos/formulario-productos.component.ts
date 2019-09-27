@@ -135,6 +135,7 @@ export class FormularioProductosComponent implements OnInit {
                     this.producto_padre_seleccionado = p2.producto[0].id_producto_padre;
                     this.crearArbol(p2.producto[0]);
                     this.cg.detectChanges();
+                    console.log("Entra");
                   }
                 })
               }else{

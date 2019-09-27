@@ -89,6 +89,8 @@ import { AdExpertizComponent } from './ad-expertiz/ad-expertiz.component';
 import { FormularioExpertizComponent } from './formulario-expertiz/formulario-expertiz.component';
 import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-categoria-experticia.component';
 import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
+import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
+import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -146,7 +148,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdExpertizComponent,
     FormularioExpertizComponent,
     AdCategoriaExperticiaComponent,
-    FormularioCategoriaExperticiaComponent
+    FormularioCategoriaExperticiaComponent,
+    AdExpertosComponent,
+    FormularioExpertoComponent
   ],
   entryComponents: [TransferenciaChatComponent],
   imports: [

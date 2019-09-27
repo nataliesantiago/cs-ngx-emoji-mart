@@ -1,0 +1,32 @@
+<div class="contenedor">
+  <div class="responsive-table">
+
+      <mat-table [dataSource]="dataSource" matSort>
+  
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_usuario}} </mat-cell>
+          </ng-container>
+  
+          <!-- Progress Column -->
+          <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:15%;">
+                  <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+              </mat-cell>
+          </ng-container>
+  
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;">
+          </mat-row>
+      </mat-table>
+  
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+</div>
