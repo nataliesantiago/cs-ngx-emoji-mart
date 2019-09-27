@@ -28,7 +28,7 @@
         <div fxFlex.gt-sm="100" fxFlex="100" *ngIf = "experticia_asociada.length > 0">
           <div class="bg-light p-10 p-r-20 p-l-20">
             <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
             </mat-form-field>
         </div>
         <div class="responsive-table">
@@ -115,7 +115,7 @@
                 <ng-container matColumnDef="acciones">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Accion </mat-header-cell>
                     <mat-cell *matCellDef="let row">
-                        <i class="ti-trash text-danger m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
+                        <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
                     </mat-cell>
                 </ng-container>
 
@@ -124,7 +124,7 @@
                 </mat-row>
             </mat-table>
 
-            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
         </div>
         </div>
       </div>
@@ -132,14 +132,9 @@
       <br>
       <br>
       <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="100" fxFlex="100">
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <button class="boton-calificacion si" mat-raised-button (click)="enviarDato()">Guardar</button>
-          </div>
-          <div fxFlex.gt-sm="2" fxFlex="100"></div>
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/ad-experto']"><span class="texto-boton">Cancelar</span></a>
-          </div>
+        <div fxFlex="25" fxLayoutAlign="space-between center">
+            <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarDato()">Guardar</button>
+            <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/ad-expertos']"><span class="texto-boton">Cancelar</span></a>
         </div>
       </div>
   </mat-card-content>

@@ -2178,7 +2178,7 @@ ul li {
   justify-content: center;
   padding: 0 15px;
   border-radius: 4px;
-  transition: all 0.3s;
+  transition: all 0.15s;
   &:hover {
     -webkit-box-shadow: -1px 4px 10px 0px rgba(0,0,0,0.24);
     -moz-box-shadow: -1px 4px 10px 0px rgba(0,0,0,0.24);
@@ -2213,4 +2213,9 @@ ul li {
 .mouse-over{
   cursor: pointer;
 }
-
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}

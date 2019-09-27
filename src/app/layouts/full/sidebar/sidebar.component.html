@@ -49,7 +49,7 @@
                     <a [routerLink]="['/ad-categoria-expertiz']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Categorías de Experticia</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/ad-expertos']" (click)="cerrarMenu()">Administrador de Expertos</a>
+                    <a [routerLink]="['/ad-expertos']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Expertos</a>
                 </li>
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()">
                     <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}}</a>

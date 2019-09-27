@@ -149,9 +149,10 @@ export class FormularioExpertoComponent implements OnInit {
       text: "Confirme para eliminar la categoría experticia",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
@@ -223,11 +224,14 @@ export class FormularioExpertoComponent implements OnInit {
       }
 
     }else{
-      swal.fire(
-        'Datos Incompletos',
-        'Porfavor seleccione horario para todas las categorias de expertiz',
-        'warning'
-      );
+      swal.fire({
+        title: 'Datos Incompletos',
+        text: 'Porfavor seleccione horario para todas las categorias de expertiz',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar'
+      });
     }
     
   }
