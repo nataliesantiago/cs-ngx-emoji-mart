@@ -74,9 +74,10 @@ export class AdPreguntasComponent implements OnInit {
       text: "Confirme para pasar la pregunta a estado Inactivo",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {

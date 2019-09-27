@@ -68,7 +68,7 @@
                       <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
                       <br>
                       <div fxLayout="row wrap">
-                        <button class="custom__btn custom__btn--primary" (click)="anadirSubRespuestaSegmento(i)"><mat-icon>add</mat-icon>Añadir Subrespuesta al segmento</button>
+                        <button class="custom__btn custom__btn--primary" (click)="anadirSubRespuestaSegmento(i)">Añadir Subrespuesta al segmento</button>
                       </div>
                       <br>
                       <div *ngIf="array_mostrar.length > 0" fxLayout="row wrap">

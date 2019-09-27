@@ -66,9 +66,7 @@
         </div>
         <div *ngFor="let intencion of intenciones" class="intencion-chat-lista">
           <span class="frase"> {{intencion.frase}}</span>
-          <button mat-icon-button class="ml-1" (click)="eliminarIntencion(intencion)">
-            <i class="icono-borrar ti-trash danger-color m-r-10 mouse-over"></i>
-          </button>
+            <i class="icono-borrar ti-trash danger-color m-r-10 mouse-over ml-1" (click)="eliminarIntencion(intencion)"></i>
         </div>
       </div>
     </mat-card-content>

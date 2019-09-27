@@ -69,8 +69,8 @@ export class MassLoadComponent implements OnInit {
       title: 'Formato no permitido',
       text: "Formato del archivo no permitido, por favor suba un archivo .csv",
       type: 'warning',
-      showCancelButton: false,
-      confirmButtonColor: '#3085d6',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Aceptar'
     }).then((result) => {
       if(result.value) {
