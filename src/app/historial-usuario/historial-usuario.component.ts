@@ -81,8 +81,8 @@ export class HistorialUsuarioComponent implements OnInit {
      * Asignar valores al sort y paginacion
   */
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
   }
   /**
      *Validar la paginacion boton izquierda

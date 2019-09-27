@@ -707,6 +707,12 @@ a {
   color: #6f6868;
 }
 
+.sidebar_mt ul li {
+  display: flex;
+  align-items: center;
+  padding: 0 15px 0 0;
+}
+
 .sidebar_mt ul li a {
   color: var(--azul_davivienda);
 }

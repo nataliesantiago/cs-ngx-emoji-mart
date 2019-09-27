@@ -1,6 +1,13 @@
 <div class="contenedor">
     <mat-card>
         <mat-card-content>
+            <mat-card-title>Administrador de Expertos</mat-card-title>
+            <div class="bg-light p-10 p-r-20 p-l-20">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                </mat-form-field>
+            </div>
+
             <div class="responsive-table">
 
                 <mat-table [dataSource]="dataSource" matSort>
