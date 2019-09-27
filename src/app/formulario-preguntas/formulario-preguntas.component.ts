@@ -208,11 +208,14 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
     if(this.pregunta.titulo == "" || this.pregunta.id_producto == "" || this.pregunta.id_estado == ""){
 
-      swal.fire(
-        'Complete los campos obligatorios',
-        '',
-        'warning'
-      )
+      swal.fire({
+        title: 'Complete los campos obligatorios',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+      })
 
     }else{
 
@@ -274,9 +277,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       text: "Confirme para eliminar el segmento",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
@@ -325,9 +329,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       text: "Confirme para eliminar la subrespuesta",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
@@ -379,9 +384,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       text: "Confirme para eliminar la subrespuesta del segmento",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
@@ -440,9 +446,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       text: "Confirme para eliminar la asociación",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {

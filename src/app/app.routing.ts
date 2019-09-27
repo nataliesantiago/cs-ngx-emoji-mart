@@ -30,6 +30,7 @@ import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-cat
 import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
+import { MassLoadComponent } from './mass-load/mass-load.component';
 
 
 export const AppRoutes: Routes = [
@@ -47,7 +48,7 @@ export const AppRoutes: Routes = [
   { path: 'ad-expertos', component: AdExpertosComponent, canActivate: [AuthGuard] },
   { path: 'respuestas/:id_pregunta', component: RespuestasComponent, canActivate: [AuthGuard] },
   { path: 'asociar-preguntas', component: AsociarPreguntasComponent, canActivate: [AuthGuard] },
-  { path: 'admin', component: AdministracionComponent, canActivate: [AuthGuard] },
+  { path: 'administracion', component: AdministracionComponent, canActivate: [AuthGuard] },
   { path: 'flujo-curaduria', component: FlujoCuraduriaComponent, canActivate: [AuthGuard] },
   { path: 'admin/menu/urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'administracion-urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
@@ -68,4 +69,5 @@ export const AppRoutes: Routes = [
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
+  { path: 'carga-masiva', component: MassLoadComponent, canActivate: [AuthGuard] },
 ];

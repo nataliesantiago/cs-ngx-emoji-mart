@@ -41,7 +41,7 @@
       <hr>
       <br>
       <div fxLayout="row wrap">
-          <button mat-raised-button color="accent" (click)="anadirSegmento()" style="width: 15%;"><span style="color: white !important;">Añadir Segmento</span></button>
+          <button class="custom__btn custom__btn--primary" (click)="anadirSegmento()"><mat-icon>add</mat-icon> Añadir Segmento</button>
       </div>
       <br>
       <div *ngIf="segmentos.length > 0" fxLayout="row wrap">
@@ -61,7 +61,7 @@
                       <quill-editor (onEditorCreated)="quillModulesFc($event)" #ql [style]="{height: '200px'}" [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>                
                       <br>
                       <div fxLayout="row wrap">
-                        <button mat-raised-button color="accent" (click)="anadirSubRespuestaSegmento(i)" style="width: 20%;"><span style="color: white !important;">Añadir Subrespuesta al segmento</span></button>
+                        <button class="custom__btn custom__btn--primary" (click)="anadirSubRespuestaSegmento(i)">Añadir Subrespuesta al segmento</button>
                       </div>
                       <br>
                       <div *ngIf="array_mostrar.length > 0" fxLayout="row wrap">
@@ -84,21 +84,21 @@
                               <br>
                             </mat-accordion>
                             <div fxFlex.gt-sm="1" fxFlex="100" *ngIf="arr.pos_segmento == i"></div>
-                            <a *ngIf="arr.pos_segmento == i" (click)="eliminarSubRespuestaSegmento(arr, cont)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>
+                            <a *ngIf="arr.pos_segmento == i" (click)="eliminarSubRespuestaSegmento(arr, cont)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash danger-color"></i></a>
                         </div>
                       </div>
                 </mat-expansion-panel>
                 <br>
             </mat-accordion>
             <div fxFlex.gt-sm="1" fxFlex="100"></div>
-            <a (click)="eliminarSegmento(segmento, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>
+            <a (click)="eliminarSegmento(segmento, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash danger-color"></i></a>
         </div>
       </div>
       <h3>Subrespuestas</h3>
       <hr>
       <br>
       <div fxLayout="row wrap">
-        <button mat-raised-button color="accent" (click)="anadirSubRespuesta()" style="width: 15%;"><span style="color: white !important;">Añadir Subrespuesta</span></button>
+        <button class="custom__btn custom__btn--primary" (click)="anadirSubRespuesta()"><mat-icon>add</mat-icon> Añadir Subrespuesta</button>
       </div>
       <br>
       <div *ngIf="subrespuestas.length > 0" fxLayout="row wrap">
@@ -134,7 +134,7 @@
               </mat-expansion-panel>              
           </mat-accordion>
           <div fxFlex.gt-sm="1" fxFlex="100"></div>
-          <a (click)="eliminarSubRespuesta(subrespuesta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash text-danger"></i></a>         
+          <a (click)="eliminarSubRespuesta(subrespuesta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash danger-color"></i></a>         
         </div>
         <br>
       </div>
@@ -184,7 +184,7 @@
                 <ng-container matColumnDef="acciones">
                     <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
                     <mat-cell *matCellDef="let row" style="max-width:15%;">
-                        <i class="ti-trash text-danger m-r-10" (click)="borrarElemento(row)"></i>
+                        <i class="ti-trash danger-color m-r-10" (click)="borrarElemento(row)"></i>
                     </mat-cell>
                 </ng-container>
 
@@ -200,14 +200,9 @@
       <br>
       <br>
       <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="100" fxFlex="100">
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <button class="boton-calificacion si" mat-raised-button (click)="guardarPregunta()">Guardar</button>
-          </div>
-          <div fxFlex.gt-sm="2" fxFlex="100"></div>
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/ad-preguntas']"><span class="texto-boton">Cancelar</span></a>
-          </div>
+        <div fxFlex="25" fxLayoutAlign="space-between center">
+            <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="guardarPregunta()">Guardar</button>
+            <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/ad-preguntas']">Cancelar</a>
         </div>
       </div>
       

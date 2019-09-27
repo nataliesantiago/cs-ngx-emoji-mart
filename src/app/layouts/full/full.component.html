@@ -43,7 +43,7 @@
         <!-- ============================================================== -->
         <!-- Sidebar - style you can find in sidebar.scss -->
         <!-- ============================================================== -->
-        <mat-sidenav #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0" [opened]="false"
+        <mat-sidenav class="sidenav-menu" #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0" [opened]="false"
             (open)="sidebarOpened = true" (close)="sidebarOpened = false" [perfectScrollbar]="config">
 
             <app-sidebar class="app-sidebar" (cerrado)="cerrarMenu()"></app-sidebar>
@@ -74,7 +74,7 @@
                     <h3 mat-subheader class="text-uppercase font-weight-bold">Colors</h3>
                     <mat-list-item>
                         <mat-checkbox color="warn" [(ngModel)]="danger" (change)="green = blue = false"
-                            class="text-danger">Red</mat-checkbox>
+                            class="danger-color">Red</mat-checkbox>
                     </mat-list-item>
                     <mat-list-item>
                         <mat-checkbox color="warn" [(ngModel)]="green" (change)="danger = blue = false"
@@ -83,7 +83,7 @@
                     </mat-list-item>
                     <mat-list-item>
                         <mat-checkbox color="warn" [(ngModel)]="blue" (change)="green = danger = false"
-                            class="text-info">Blue</mat-checkbox>
+                            class="info-color">Blue</mat-checkbox>
                     </mat-list-item>
                     <mat-list-item>
                         <mat-checkbox color="warn" [(ngModel)]="dark" (change)="green = blue = danger = false">Dark

@@ -56,7 +56,7 @@
       <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex="100">
           <div fxFlex.gt-sm="10" fxFlex="100">
-            <button class="boton-calificacion si" mat-raised-button (click)="mostrarIconos()">Mostrar Íconos</button>
+            <button class="custom__btn custom__btn--primary" (click)="mostrarIconos()">Mostrar Íconos</button>
           </div>
         </div>
       </div>
@@ -79,14 +79,9 @@
       <br>
       <br>
       <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="100" fxFlex="100">
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <button class="boton-calificacion si" mat-raised-button (click)="guardarProducto()">Guardar</button>
-          </div>
-          <div fxFlex.gt-sm="2" fxFlex="100"></div>
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/productos']"><span class="texto-boton">Cancelar</span></a>
-          </div>
+        <div fxFlex="25" fxLayoutAlign="space-between center">
+          <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="guardarProducto()">Guardar</button>
+          <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/productos']"><span class="texto-boton">Cancelar</span></a>
         </div>
       </div>
     </mat-card-content>

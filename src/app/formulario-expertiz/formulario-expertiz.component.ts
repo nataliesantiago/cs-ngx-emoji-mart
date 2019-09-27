@@ -124,9 +124,10 @@ export class FormularioExpertizComponent implements OnInit {
       text: "Confirme para desvincular la categoría",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
@@ -182,11 +183,14 @@ export class FormularioExpertizComponent implements OnInit {
 
     if(this.expertiz.nombre == ""){
 
-      swal.fire(
-        'Digite el nombre de la experticia',
-        '',
-        'warning'
-      )
+      swal.fire({
+        title: 'Digite el nombre de la experticia',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar',
+      })
 
     }else{
 

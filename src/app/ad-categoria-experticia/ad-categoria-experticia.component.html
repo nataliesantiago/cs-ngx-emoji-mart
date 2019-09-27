@@ -1,37 +1,49 @@
 <div class="contenedor">
-  <div class="responsive-table">
+    <mat-card>
+        <mat-card-content>
+            
+            <div class="responsive-table">
 
-      <br>
-      <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario-categoria-expertiz/nuevo']">Ingresar Categoria de Experticia</a>
-      <br>
-      <br>
-      <mat-table [dataSource]="dataSource" matSort>
-  
-          <!-- ID Column -->
-          <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-              <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_categoria_experticia}} </mat-cell>
-          </ng-container>
-  
-          <!-- Progress Column -->
-          <ng-container matColumnDef="nombre">
-              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
-              <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
-          </ng-container>
+                <br>
+                <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-categoria-expertiz/nuevo']"><mat-icon>add</mat-icon> Ingresar Categoria de Experticia</a>
+                <br>
+                <br>
 
-          <ng-container matColumnDef="acciones">
-              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
-              <mat-cell *matCellDef="let row" style="max-width:15%;">
-                  <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
-                  <i class="ti-trash text-danger m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
-              </mat-cell>
-          </ng-container>
+                <div class="bg-light p-10 p-r-20 p-l-20">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                    </mat-form-field>
+                </div>
+                <mat-table [dataSource]="dataSource" matSort>
+            
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_categoria_experticia}} </mat-cell>
+                    </ng-container>
+            
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="nombre">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:15%;">
+                            <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                            <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
+                        </mat-cell>
+                    </ng-container>
+            
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </mat-row>
+                </mat-table>
+            
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
   
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;">
-          </mat-row>
-      </mat-table>
-  
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-  </div>
 </div>

@@ -52,7 +52,7 @@
                 <ng-container matColumnDef="acciones">
                     <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
                     <mat-cell *matCellDef="let row" style="max-width:15%;">
-                        <i class="ti-trash text-danger m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
+                        <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
                     </mat-cell>
                 </ng-container>
 
@@ -68,7 +68,7 @@
       <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex="100">
           <div fxFlex.gt-sm="15" fxFlex="100">
-            <button class="boton-calificacion si" mat-raised-button (click)="habilitarExperticia()">Crear Experticia</button>
+            <button class="custom__btn custom__btn--primary" (click)="habilitarExperticia()"><mat-icon>add</mat-icon> Crear Experticia</button>
           </div>
         </div>
       </div>
@@ -76,14 +76,9 @@
       <br>
       <br>
       <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="100" fxFlex="100">
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <button class="boton-calificacion si" mat-raised-button (click)="enviarDato()">Guardar</button>
-          </div>
-          <div fxFlex.gt-sm="2" fxFlex="100"></div>
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <a class="boton-calificacion no" mat-raised-button [routerLink]="['/ad-categoria-expertiz']"><span class="texto-boton">Cancelar</span></a>
-          </div>
+        <div fxFlex="25" fxLayoutAlign="space-between center">
+          <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarDato()">Guardar</button>
+          <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/ad-categoria-expertiz']"><span class="texto-boton">Cancelar</span></a>
         </div>
       </div>
   </mat-card-content>

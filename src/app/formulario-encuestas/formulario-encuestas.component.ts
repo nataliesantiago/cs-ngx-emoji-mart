@@ -103,9 +103,10 @@ export class FormularioEncuestasComponent implements OnInit {
       text: "Confirme para eliminar la pregunta",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
@@ -126,18 +127,24 @@ export class FormularioEncuestasComponent implements OnInit {
       e.minimo = 0;
     }
     if(e.maximo < e.minimo){
-      swal.fire(
-        'Dato Incorrecto',
-        'Debe digitar un valor mayor al minimo',
-        'warning'
-      );
+      swal.fire({
+        title: 'Dato Incorrecto',
+        text: 'Debe digitar un valor mayor al minimo',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+      });
       this.permitir_envio = false;
     }else if (e.maximo == e.minimo){
-      swal.fire(
-        'Dato Incorrecto',
-        'Debe digitar un valor diferente al minimo',
-        'warning'
-      )
+      swal.fire({
+          title: 'Dato Incorrecto',
+          text: 'Debe digitar un valor diferente al minimo',
+          type: 'warning',
+          buttonsStyling: false,
+          confirmButtonClass: 'custom__btn custom__btn--accept',
+          confirmButtonText: 'Aceptar',
+      })
       this.permitir_envio = false;
     }else{
       this.permitir_envio = true;
@@ -153,11 +160,14 @@ export class FormularioEncuestasComponent implements OnInit {
     if(this.permitir_envio){
 
       if(this.preguntas.length == 0){
-        swal.fire(
-          'Datos Incorrectos',
-          'Debe ingresr al menos una pregunta antes de guardar.',
-          'warning'
-        )
+        swal.fire({
+          title: 'Dato Incorrecto',
+          text: 'Debe ingresr al menos una pregunta antes de guardar',
+          type: 'warning',
+          buttonsStyling: false,
+          confirmButtonClass: 'custom__btn custom__btn--accept',
+          confirmButtonText: 'Aceptar',
+      })
       }else{
         for(let i = 0; i < this.preguntas.length; i++){
           
@@ -217,41 +227,56 @@ export class FormularioEncuestasComponent implements OnInit {
               }
               
             }else if(suma_total < 100){
-              swal.fire(
-                'Peso incorrecto',
-                'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar.',
-                'warning'
-              )  
+              swal.fire({
+                title: 'Peso incorrecto',
+                text: 'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar',
+                type: 'warning',
+                buttonsStyling: false,
+                confirmButtonClass: 'custom__btn custom__btn--accept',
+                confirmButtonText: 'Aceptar',
+            })  
             }else if (suma_total > 100){
-              swal.fire(
-                'Peso incorrecto',
-                'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar.',
-                'warning'
-              )
+              swal.fire({
+                title: 'Peso incorrecto',
+                text: 'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar',
+                type: 'warning',
+                buttonsStyling: false,
+                confirmButtonClass: 'custom__btn custom__btn--accept',
+                confirmButtonText: 'Aceptar',
+            })
             }
           }else{
-            swal.fire(
-              'Orden Incorrecto',
-              'Seleccione el orden de las preguntas adecuadamente.',
-              'warning'
-            )
+            swal.fire({
+              title: 'Orden Incorrecto',
+              text: 'Seleccione el orden de las preguntas adecuadamente',
+              type: 'warning',
+              buttonsStyling: false,
+              confirmButtonClass: 'custom__btn custom__btn--accept',
+              confirmButtonText: 'Aceptar',
+          })
           }
         }else{
-          swal.fire(
-            'Datos Incompletos',
-            'Digite todos los campos en el formulario.',
-            'warning'
-          )
+          swal.fire({
+            title: 'Datos Incompletos',
+            text: 'Digite todos los campos en el formulario',
+            type: 'warning',
+            buttonsStyling: false,
+            confirmButtonClass: 'custom__btn custom__btn--accept',
+            confirmButtonText: 'Aceptar',
+        })
         }
         
         
       }
     }else{
-      swal.fire(
-        'Datos Incorrectos',
-        'Verifique que todos los valores sean correctos',
-        'warning'
-      )
+      swal.fire({
+        title: 'Datos Incorrectos',
+        text: 'Verifique que todos los valores sean correctos',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+    })
     }
 
   }
