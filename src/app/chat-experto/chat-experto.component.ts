@@ -39,6 +39,7 @@ export class ChatExpertoComponent {
   ocultar_nuevos_mensajes = false;
   chats_experto = [];
   chats_cola = [];
+  fila_chats = [];
   chat: Conversacion;
   obligaCambio = true;
   usuarios = [];
@@ -123,6 +124,7 @@ export class ChatExpertoComponent {
                         }
                       });
                     fila.chats = tmp;
+
                     this.procesaFilas(fila);
                     if (paso_por_chats)
                       this.recibirChatAutomatico();
@@ -269,13 +271,18 @@ export class ChatExpertoComponent {
   procesaFilas(fila: any) {
     let existe = false;
     let indice;
+    let tmp = [];
     this.chats_cola.forEach((f, i) => {
 
       if (f.id == fila.id) {
         existe = true;
         indice = i;
       }
+      if (f.chats) {
+        tmp = tmp.concat(f.chats);
+      }
     });
+    this.fila_chats = tmp;
     if (!existe) {
 
       this.chats_cola.push(fila);
@@ -541,6 +548,7 @@ export class ChatExpertoComponent {
       let m = new Mensaje();
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
+      chat.texto_mensaje = '';
       m.fecha_mensaje = moment();
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
@@ -578,7 +586,7 @@ export class ChatExpertoComponent {
         this.passByMensajes(chat.mensajes, 0);
       });*/
       this.chatService.usuarioDejaEscribir(chat, this.user.getId());
-      chat.texto_mensaje = '';
+
       if (comp) {
         setTimeout(() => {
           chat.ocultar_nuevos_mensajes = true;

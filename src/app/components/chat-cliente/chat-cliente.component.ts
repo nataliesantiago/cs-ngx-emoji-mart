@@ -73,7 +73,7 @@ export class ChatClienteComponent implements OnInit {
     this.chatService.obtenerLimiteTexto().then(valor => {
       this.limite_texto_chat = valor;
     });
-    
+
     this.chatService.getConfiguracionesChat().then(configs => {
       this.configuraciones = configs.configuraciones;
       configs.extensiones.forEach(e => {
@@ -450,6 +450,7 @@ export class ChatClienteComponent implements OnInit {
       let m = new Mensaje();
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
+      chat.texto_mensaje = '';
       m.fecha_mensaje = moment();
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
@@ -487,7 +488,7 @@ export class ChatClienteComponent implements OnInit {
         this.passByMensajes(chat.mensajes, 0);
       });*/
       this.chatService.usuarioDejaEscribir(chat, this.user.getId());
-      chat.texto_mensaje = '';
+
       if (comp) {
         setTimeout(() => {
           comp.directiveRef.scrollToBottom();

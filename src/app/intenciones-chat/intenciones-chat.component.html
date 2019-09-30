@@ -11,7 +11,10 @@
         </mat-form-field>
         <mat-form-field class="example-full-width">
           <input type="text" placeholder="Selecciona una categoría" aria-label="Number" matInput
-            [formControl]="createControl" [matAutocomplete]="auto">
+            [formControl]="createControl" [matAutocomplete]="auto" />
+            <button mat-button *ngIf="createControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="createControl.setValue()">
+              <mat-icon>close</mat-icon>
+            </button>
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoriaNueva($event.option.value)'>
             <mat-option *ngFor="let option of categorias" [value]="option">
               {{option.nombre}}
@@ -19,7 +22,7 @@
           </mat-autocomplete>
         </mat-form-field>
         <div>
-          <button mat-raised-button color="primary" [disabled]="!createControl.value || !nueva_intencion.frase"
+          <button mat-raised-button color="primary" [disabled]="!createControl.value || !nueva_intencion.frase || creando_intencion_xhr"
             [ngClass]="{'loading':creando_intencion_xhr}" (click)="crearIntencion()">
             <span *ngIf="!creando_intencion_xhr">Crear</span>
             <span *ngIf="creando_intencion_xhr"> </span>

@@ -72,6 +72,7 @@ export class IntencionesChatComponent implements OnInit {
     this.creando_intencion_xhr = true;
     this.chatService.crearIntencionChat(this.nueva_intencion).then(() => {
       this.nueva_intencion = { activo: true };
+      this.createControl = new FormControl();
       this.creando_intencion = false;
       this.creando_intencion_xhr = false;
       if (this.categoria && this.categoria_creando && this.categoria.idtbl_categoria_experticia == this.categoria_creando.idtbl_categoria_experticia) {

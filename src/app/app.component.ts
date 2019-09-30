@@ -8,6 +8,7 @@ import { environment } from '../environments/environment';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { AjaxService } from './providers/ajax.service';
+import { SearchService } from './providers/search.service';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -18,7 +19,7 @@ const moment = _rollupMoment || _moment;
 export class AppComponent {
   user: User;
   version = '0.0.17'
-  constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService) {
+  constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService) {
     this.responseSearch.setActive(true);
     moment.locale('es');
     this.ajax.sethost(environment.URL_BACK);
@@ -41,5 +42,8 @@ export class AppComponent {
     if (this.user.getIdRol() == 2) {
       this.userService.getFilasExperto();
     }
+    this.searchService.queryCloudSearch().then(d => {
+      console.log('it worked');
+    })
   }
 }
