@@ -92,7 +92,7 @@ import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-e
 import { FilaChatsPipe } from '../pipes/fila-chats.pipe';
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
-import { MassLoadComponent, DialogOverviewDetailQuestion } from './mass-load/mass-load.component';
+import { CargaMasivaComponent, DialogOverviewDetailQuestion } from './carga-masiva/carga-masiva.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -155,7 +155,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormularioCategoriaExperticiaComponent,
     AdExpertosComponent,
     FormularioExpertoComponent,
-    MassLoadComponent,
+    CargaMasivaComponent,
     DialogOverviewDetailQuestion
   ],
   entryComponents: [

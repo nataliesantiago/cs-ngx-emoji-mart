@@ -19,7 +19,7 @@
                             </ng-template>
                             <input type="file" #inputFile (change)="uploadCsvFile($event)">
                             <button class="custom__btn custom__btn--primary" (click)="inputFile.click()">
-                              <i class="ti-upload upload-icon m-r-10 mouse-ove"></i>
+                              <i class="ti-upload upload-icon m-r-10 mouse-over"></i>
                               Seleccionar archivo
                             </button>
                         </div>
@@ -69,15 +69,15 @@
                     <ng-container matColumnDef="details">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Detalles </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:10%;">
-                            <i class="ti-info warning-color m-r-10 mouse-ove" (click)="moreInfo(row)"></i>
+                            <i class="ti-info warning-color m-r-10 mouse-over" (click)="moreInfo(row)"></i>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="create">
                       <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Creado con exito </mat-header-cell>
                       <mat-cell *matCellDef="let row" style="max-width:10%;text-align: center;">
-                          <i *ngIf="isEmptyObject(row.errors)" class="ti-check success-color m-r-10 mouse-ove"></i>
-                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-close danger-color m-r-10 mouse-ove"></i>
+                          <i *ngIf="isEmptyObject(row.errors)" class="ti-check success-color m-r-10 mouse-over"></i>
+                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-close danger-color m-r-10 mouse-over"></i>
                           <!-- ti-close -->
                       </mat-cell>
                     </ng-container>
@@ -85,7 +85,7 @@
                     <ng-container matColumnDef="errors">
                       <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Errores </mat-header-cell>
                       <mat-cell *matCellDef="let row" style="max-width:10%;">
-                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-help info-color m-r-10 mouse-ove" (click)="showErrors(row)"></i>
+                          <i *ngIf="!isEmptyObject(row.errors)" class="ti-help info-color m-r-10 mouse-over" (click)="showErrors(row)"></i>
                       </mat-cell>
                     </ng-container>
 
