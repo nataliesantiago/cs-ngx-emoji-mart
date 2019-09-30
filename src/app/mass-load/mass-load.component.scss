@@ -1,0 +1,43 @@
+.upload-file-wrapper{
+    margin-top: 30px;
+    input{
+        display: none;
+    }
+    span{
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 0.8rem;
+        display: block;
+        height: 39px;
+        line-height: 39px;
+        border-bottom: 1px dotted;
+        width: 220px;
+    }
+    .upload-icon{
+        color: #ffffff;
+    }
+    .upload-file{
+        background-color: #3f51b5;
+    }
+}
+.card-detail{
+    .card-title{
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .item-detail{
+        width: 100%;
+        span{
+            margin: 0;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        p{
+            margin: 0;
+            width: 100%;
+        }
+        .background-divider{
+            position: relative;
+        }
+    }
+}

@@ -12,61 +12,70 @@
         <mat-form-field class="example-full-width">
           <input type="text" placeholder="Selecciona una categoría" aria-label="Number" matInput
             [formControl]="createControl" [matAutocomplete]="auto" />
-            <button mat-button *ngIf="createControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="createControl.setValue()">
-              <mat-icon>close</mat-icon>
-            </button>
+          <button mat-button *ngIf="createControl.value" matSuffix mat-icon-button aria-label="Clear"
+            (click)="createControl.setValue()">
+            <mat-icon>close</mat-icon>
+          </button>
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoriaNueva($event.option.value)'>
             <mat-option *ngFor="let option of categorias" [value]="option">
               {{option.nombre}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <div>
-          <button mat-raised-button color="primary" [disabled]="!createControl.value || !nueva_intencion.frase || creando_intencion_xhr"
-            [ngClass]="{'loading':creando_intencion_xhr}" (click)="crearIntencion()">
-            <span *ngIf="!creando_intencion_xhr">Crear</span>
-            <span *ngIf="creando_intencion_xhr"> </span>
-            <mat-progress-spinner class="loading-spinner-button" color="basic" [mode]="'indeterminate'" [diameter]="36"
-              *ngIf="creando_intencion_xhr">
-            </mat-progress-spinner>
-          </button> &nbsp;
-          <button mat-raised-button color="basic" (click)="creando_intencion=!creando_intencion">Cancelar</button>
+        <div fxLayout="row wrap">
+          <div fxFlex="25" fxLayoutAlign="space-between center">
+            <button fxFlex="45" class="custom__btn custom__btn--accept"
+              [disabled]="!createControl.value || !nueva_intencion.frase" [ngClass]="{'loading':creando_intencion_xhr}"
+              (click)="crearIntencion()">
+              <span *ngIf="!creando_intencion_xhr">Crear</span>
+              <span *ngIf="creando_intencion_xhr"> </span>
+              <mat-progress-spinner class="loading-spinner-button" color="basic" [mode]="'indeterminate'"
+                [diameter]="36" *ngIf="creando_intencion_xhr">
+              </mat-progress-spinner>
+            </button>
+            <button fxFlex="45" class="custom__btn custom__btn--cancel"
+              (click)="creando_intencion=!creando_intencion">Cancelar</button>
+          </div>
         </div>
       </form>
     </mat-card-content>
   </mat-card>
-  <div class="botones" *ngIf="!creando_intencion">
-    <button mat-button color="primary" (click)="creando_intencion=!creando_intencion">
-      <mat-icon>add</mat-icon> Crear Intención
-    </button>
-  </div>
-  <div>
-    <mat-form-field class="example-full-width">
-      <input type="text" placeholder="Selecciona la categoría de experticia" aria-label="Number" matInput
-        [formControl]="myControl" [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoria($event.option.value)'>
-        <mat-option *ngFor="let option of categorias" [value]="option">
-          {{option.nombre}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <div *ngIf="!myControl.value">
-      <p>Acá se muestran las intenciones de las categorías</p>
-    </div>
-    <div class="p-10 p-r-20 p-l-20" *ngIf="categoria && intenciones">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar" autocomplete="off"
-          [(ngModel)]="filtro_intenciones">
-        <button mat-button *ngIf="filtro_intenciones" matSuffix mat-icon-button aria-label="Clear" (click)="filtro_intenciones='';applyFilter()">
-          <mat-icon>close</mat-icon>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="botones" *ngIf="!creando_intencion">
+        <button class="custom__btn custom__btn--primary" (click)="creando_intencion=!creando_intencion">
+          <mat-icon>add</mat-icon> Crear Intención
         </button>
-      </mat-form-field>
-    </div>
-    <div *ngFor="let intencion of intenciones" class="intencion-chat-lista">
-      <span class="frase"> {{intencion.frase}}</span>
-      <button mat-icon-button class="ml-1" (click)="eliminarIntencion(intencion)">
-        <mat-icon class="icono-borrar">delete</mat-icon>
-      </button>
-    </div>
-  </div>
+      </div>
+      <div>
+        <mat-form-field class="example-full-width m-t-20">
+          <input type="text" placeholder="Selecciona la categoría de experticia" aria-label="Number" matInput
+            [formControl]="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoria($event.option.value)'>
+            <mat-option *ngFor="let option of categorias" [value]="option">
+              {{option.nombre}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="!myControl.value">
+          <p>Acá se muestran las intenciones de las categorías</p>
+        </div>
+        <div class="bg-light p-10 p-r-20 p-l-20" *ngIf="categoria && intenciones">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda" autocomplete="off"
+              [(ngModel)]="filtro_intenciones">
+            <!-- <button mat-button *ngIf="filtro_intenciones" matSuffix mat-icon-button aria-label="Clear" (click)="filtro_intenciones='';applyFilter()">
+              <mat-icon>close</mat-icon>
+            </button> -->
+          </mat-form-field>
+        </div>
+        <div *ngFor="let intencion of intenciones" class="intencion-chat-lista">
+          <span class="frase"> {{intencion.frase}}</span>
+          <i class="icono-borrar ti-trash danger-color m-r-10 mouse-over ml-1"
+            (click)="eliminarIntencion(intencion)"></i>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

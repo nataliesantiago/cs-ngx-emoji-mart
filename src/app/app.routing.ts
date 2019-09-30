@@ -28,6 +28,9 @@ import { AdExpertizComponent } from './ad-expertiz/ad-expertiz.component';
 import { FormularioExpertizComponent } from './formulario-expertiz/formulario-expertiz.component';
 import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-categoria-experticia.component';
 import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
+import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
+import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
+import { MassLoadComponent } from './mass-load/mass-load.component';
 
 
 export const AppRoutes: Routes = [
@@ -42,9 +45,10 @@ export const AppRoutes: Routes = [
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
+  { path: 'ad-expertos', component: AdExpertosComponent, canActivate: [AuthGuard] },
   { path: 'respuestas/:id_pregunta', component: RespuestasComponent, canActivate: [AuthGuard] },
   { path: 'asociar-preguntas', component: AsociarPreguntasComponent, canActivate: [AuthGuard] },
-  { path: 'admin', component: AdministracionComponent, canActivate: [AuthGuard] },
+  { path: 'administracion', component: AdministracionComponent, canActivate: [AuthGuard] },
   { path: 'flujo-curaduria', component: FlujoCuraduriaComponent, canActivate: [AuthGuard] },
   { path: 'admin/menu/urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'administracion-urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
@@ -54,6 +58,7 @@ export const AppRoutes: Routes = [
   { path: 'formulario-expertiz/:id_expertiz', component: FormularioExpertizComponent, canActivate: [AuthGuard] },
   { path: 'ad-categoria-expertiz', component: AdCategoriaExperticiaComponent, canActivate: [AuthGuard] },
   { path: 'formulario-categoria-expertiz/:id_categoria_expertiz', component: FormularioCategoriaExperticiaComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-ad-experto/:id_experto', component: FormularioExpertoComponent, canActivate: [AuthGuard] },
   { path: 'formulario-productos', component: FormularioProductosComponent, canActivate: [AuthGuard] },
   { path: 'formulario-encuestas/:id_encuesta', component: FormularioEncuestasComponent, canActivate: [AuthGuard] },
   { path: 'encuesta/:tipo_encuesta', component: VisualizarEncuestaComponent, canActivate: [AuthGuard] },
@@ -64,4 +69,5 @@ export const AppRoutes: Routes = [
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
+  { path: 'carga-masiva', component: MassLoadComponent, canActivate: [AuthGuard] },
 ];

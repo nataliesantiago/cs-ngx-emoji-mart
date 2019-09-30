@@ -74,14 +74,15 @@ export class HistorialUsuarioComponent implements OnInit {
       }
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
   /**
      * Asignar valores al sort y paginacion
   */
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
   }
   /**
      *Validar la paginacion boton izquierda

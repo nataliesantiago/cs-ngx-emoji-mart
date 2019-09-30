@@ -1,25 +1,21 @@
 <div class="contenedor">
     <mat-card>
         <mat-card-content>
+            <mat-card-title>Administrador de Expertos</mat-card-title>
+            <div class="bg-light p-10 p-r-20 p-l-20">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                </mat-form-field>
+            </div>
+
             <div class="responsive-table">
 
-                <br>
-                <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-expertiz/nuevo']"><mat-icon>add</mat-icon> Ingresar Expertiz</a>
-                <br>
-                <br>
-
-                <div class="bg-light p-10 p-r-20 p-l-20">
-                    <mat-form-field>
-                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-                    </mat-form-field>
-                </div>
-                
                 <mat-table [dataSource]="dataSource" matSort>
             
                     <!-- ID Column -->
                     <ng-container matColumnDef="id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_experticia}} </mat-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_usuario}} </mat-cell>
                     </ng-container>
             
                     <!-- Progress Column -->
@@ -31,7 +27,7 @@
                     <ng-container matColumnDef="acciones">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:15%;">
-                            <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                            <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
                         </mat-cell>
                     </ng-container>
             
@@ -44,5 +40,4 @@
             </div>
         </mat-card-content>
     </mat-card>
-  
 </div>

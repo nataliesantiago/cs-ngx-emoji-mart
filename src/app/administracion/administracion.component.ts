@@ -70,9 +70,11 @@ export class AdministracionComponent implements OnInit {
       text: "Confirme para guardar los cambios",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Guardar'
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Guardar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
         this.ajax.post('administracion/editar', { item: u }).subscribe(d => {
@@ -87,6 +89,12 @@ export class AdministracionComponent implements OnInit {
         
       }
     });
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
 }

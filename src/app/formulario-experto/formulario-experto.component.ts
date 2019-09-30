@@ -11,21 +11,21 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-formulario-categoria-experticia',
-  templateUrl: './formulario-categoria-experticia.component.html',
-  styleUrls: ['./formulario-categoria-experticia.component.scss']
+  selector: 'app-formulario-experto',
+  templateUrl: './formulario-experto.component.html',
+  styleUrls: ['./formulario-experto.component.scss']
 })
-export class FormularioCategoriaExperticiaComponent implements OnInit {
+export class FormularioExpertoComponent implements OnInit {
 
   myControl = new FormControl();
   options = [];
   filteredOptions: Observable<string[]>;
   usuario;
   id_usuario;
-  experticias=[];
-  id_categoria_expertiz;
+  categorias=[];
+  id_experto;
   categoria_expertiz = { nombre: ''};
-  displayedColumns = ['id', 'experticia', 'acciones'];
+  displayedColumns = ['experticia', 'id_horario', 'horario', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo', 'acciones'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
@@ -34,6 +34,8 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   experticia_asociada = [];
   editar = false;
   crear_experticia = false;
+  nombre_experto;
+  horarios = [];
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient){
     
@@ -55,18 +57,18 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   init(){
 
     this.route.params
-    .filter(params => params.id_categoria_expertiz)
+    .filter(params => params.id_experto)
     .subscribe(params => {
       
 
-      this.id_categoria_expertiz = params.id_categoria_expertiz;
+      this.id_experto = params.id_experto;
       
     });
 
-    this.ajax.get('experticia/obtener', {}).subscribe(p => {
+    this.ajax.get('experticia/obtener-categorias', {}).subscribe(p => {
       if(p.success){
-        this.experticias = p.experticias;
-        this.options = p.experticias;
+        this.categorias = p.categorias;
+        this.options = p.categorias;
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => this._filter(value))
@@ -74,13 +76,19 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
       }
     });
 
-    if(this.id_categoria_expertiz != "nuevo"){
+    this.ajax.get('user/obtener-horarios', {}).subscribe(p => {
+      if(p.success){
+        this.horarios = p.horarios;
+      }
+    });
+
+    if(this.id_experto != "nuevo"){
       this.editar = true;
-      this.ajax.get('experticia/obtener-categoria-experticia', {id_categoria_experticia: this.id_categoria_expertiz}).subscribe(p => {
+      this.ajax.get('user/obtener-informacion-experto', {id_experto: this.id_experto}).subscribe(p => {
         if(p.success){
-          this.categoria_expertiz = p.categoria[0];
-          this.categoria_expertiz = this.categoria_expertiz[0];
-          this.experticia_asociada = p.categoria[1];
+          this.nombre_experto = p.informacion[0];
+          this.nombre_experto = this.nombre_experto[0].nombre;
+          this.experticia_asociada = p.informacion[1];
           this.dataSource = new MatTableDataSource(this.experticia_asociada);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -102,8 +110,9 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
     
   }
 
-  anadirPreguntaAsociada(e){
+  anadirHorarioExperto(e){
     this.experticia_asociada.push(e);
+    this.experticia_asociada[this.experticia_asociada.length - 1].nuevo = 1
     this.dataSource = new MatTableDataSource(this.experticia_asociada);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -116,11 +125,28 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
     this.cg.detectChanges();
   }
 
+  agregarHorario(e){
+    this.ajax.get('user/horario-id', { id_horario_chat: e.idtbl_horario_chat}).subscribe(p => {
+      if(p.success){
+        e.hora_inicio = p.horario[0].hora_inicio;
+        e.hora_fin = p.horario[0].hora_fin;
+        e.lunes = p.horario[0].lunes;
+        e.martes = p.horario[0].martes;
+        e.miercoles = p.horario[0].miercoles;
+        e.jueves = p.horario[0].jueves;
+        e.viernes = p.horario[0].viernes;
+        e.sabado = p.horario[0].sabado;
+        e.domingo = p.horario[0].domingo;
+        this.cg.detectChanges();
+      }
+    });
+  }
+
   borrarElemento(e){
 
     swal.fire({
-      title: 'Desvincular Experticia',
-      text: "Confirme para desvincular la experticia",
+      title: 'Eliminar Categoría de Experticia',
+      text: "Confirme para eliminar la categoría experticia",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,
@@ -133,11 +159,11 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
         if(this.editar){
           
           if(e.idtbl_categoria_experticia != undefined){
-            this.ajax.post('experticia/eliminar-asociacion-experticia', { experticia_asociada: e }).subscribe(d => {
+            this.ajax.post('user/eliminar-asociacion-categoria-experticia', { experticia_asociada: e, id_experto: this.id_experto }).subscribe(d => {
               if(d.success){
                 let pos = 0;
                 for(let i = 0; i < this.experticia_asociada.length; i++){
-                  if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
+                  if((this.experticia_asociada[i].idtbl_categoria_experticia == e.idtbl_categoria_experticia) && (this.experticia_asociada[i].idtbl_horario_chat == e.idtbl_horario_chat)){
                     pos = i;
                   }
                 }
@@ -179,38 +205,33 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   }
 
   enviarDato(){
-
-    if(this.categoria_expertiz.nombre == ""){
-
-      swal.fire({
-        title: 'Digite el nombre de la categoría de experticia',
-        text: '',
-        type: 'warning',
-        buttonsStyling: false,
-        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-        confirmButtonText: 'Aceptar'
-      })
-
-    }else{
-
+    let enviarInfo = true;
+    for(let i = 0; i < this.experticia_asociada.length; i++){
+      if(!this.experticia_asociada[i].idtbl_horario_chat){
+        enviarInfo = false;
+      }
+    }
+    
+    if(enviarInfo){
       if(this.editar){
-      
-        this.ajax.post('experticia/editar-categoria', { categoria_expertiz: this.categoria_expertiz, experticia_asociada: this.experticia_asociada }).subscribe(d => {
+    
+        this.ajax.post('user/agregar-expertiz', { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto }).subscribe(d => {
           if(d.success){
           
-            this.router.navigate(['/ad-categoria-expertiz']);
-          }
-        })
-      }else{
-        
-        this.ajax.post('experticia/guardar-categoria', { categoria_expertiz: this.categoria_expertiz, experticia_asociada: this.experticia_asociada }).subscribe(d => {
-          if(d.success){
-            
-            this.router.navigate(['/ad-categoria-expertiz']);
+            this.router.navigate(['/ad-expertos']);
           }
         })
       }
 
+    }else{
+      swal.fire({
+        title: 'Datos Incompletos',
+        text: 'Porfavor seleccione horario para todas las categorias de expertiz',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar'
+      });
     }
     
   }
@@ -220,10 +241,10 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   }
 
   actualizarLista(){
-    this.ajax.get('experticia/obtener', {}).subscribe(p => {
+    this.ajax.get('experticia/obtener-categorias', {}).subscribe(p => {
       if(p.success){
-        this.experticias = p.experticias;
-        this.options = p.experticias;
+        this.categorias = p.categorias;
+        this.options = p.categorias;
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
           map(value => this._filter(value))

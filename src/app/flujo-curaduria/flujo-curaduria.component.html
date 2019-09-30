@@ -29,7 +29,7 @@
         <!-- column -->
         <!-- column -->
         <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
-            <mat-card *ngIf="activo_revision" class="activo mouse-over" (click)="cargarRevision()">
+            <mat-card *ngIf="activo_revision" [ngClass]="{'class': true}" class="activo mouse-over" (click)="cargarRevision()">
                 <mat-card-content>
                     <!-- Row -->
                     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -128,7 +128,7 @@
       <mat-card>
           <mat-card-content>
               <br>
-              <a class="ng2-smart-action ng2-smart-action-add-add ng-star-inserted" [routerLink]="['/formulario-preguntas-flujo-curaduria/nuevo']">Ingresar Pregunta</a>
+              <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-preguntas-flujo-curaduria/nuevo']"><mat-icon>add</mat-icon> Ingresar Pregunta</a>
               <br>
               <br>
               <br>
@@ -136,7 +136,7 @@
               <br>
               <div class="bg-light p-10 p-r-20 p-l-20">
                   <mat-form-field>
-                      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
                   </mat-form-field>
               </div>
               <div class="responsive-table">
@@ -190,9 +190,9 @@
                       <ng-container matColumnDef="acciones">
                           <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>
                           <mat-cell *matCellDef="let row" style="max-width:10%;">
-                              <i class="ti-pencil text-info m-r-10 mouse-over" (click)="cambiarEstado(row)"></i>
-                              <i class="ti-comment-alt text-info m-r-10 mouse-over" (click)="comentarios(row)"></i>
-                              <i class="ti-eye text-info m-r-10 mouse-over" (click)="previsualizar(row)"></i>
+                              <i class="ti-pencil info-color m-r-10 mouse-over" (click)="cambiarEstado(row)"></i>
+                              <i class="ti-comment-alt info-color m-r-10 mouse-over" (click)="comentarios(row)"></i>
+                              <i class="ti-eye info-color m-r-10 mouse-over" (click)="previsualizar(row)"></i>
                           </mat-cell>
                       </ng-container>
 
@@ -201,7 +201,7 @@
                       </mat-row>
                   </mat-table>
 
-                  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                  <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
               </div>
           </mat-card-content>
       </mat-card>

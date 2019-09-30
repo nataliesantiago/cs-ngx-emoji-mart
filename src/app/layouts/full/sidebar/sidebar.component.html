@@ -5,27 +5,57 @@
                 <li><a
                         href="https://docs.google.com/forms/d/1IzKM1oBhxS8H076a-ZctlRftxDzkW6Yysq0KscWh40E/viewform?edit_requested=true">Buzón
                         de Sugerencias</a></li>
-                <li><a [routerLink]="['/historial-usuario']" (click)="cerrarMenu()">Historial de usuario</a></li>
-                <li><a [routerLink]="['/ad-preguntas']" (click)="cerrarMenu()">Administrador de preguntas</a></li>
-                <li><a [routerLink]="['/flujo-curaduria']" (click)="cerrarMenu()">Flujo de Curaduria</a></li>
-                <li><a (click)="sugerirPreguntas()" (click)="cerrarMenu()">Sugerir Pregunta</a></li>
-                <li><a [routerLink]="['/admin']" (click)="cerrarMenu()">Administración</a></li>
-                <li><a [routerLink]="['/productos']" (click)="cerrarMenu()">Categorias</a></li>
+                <li>
+                    <a [routerLink]="['/historial-usuario']" routerLinkActive="active" (click)="cerrarMenu()">Historial de usuario</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/ad-preguntas']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de preguntas</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/flujo-curaduria']" routerLinkActive="active" (click)="cerrarMenu()">Flujo de Curaduria</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/formulario-preguntas-flujo-curaduria', 'sugerida']" routerLinkActive="active" (click)="cerrarMenu()">Sugerir Pregunta</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/administracion']" routerLinkActive="active" (click)="cerrarMenu()">Administración</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/productos']" routerLinkActive="active" (click)="cerrarMenu()">Categorias</a>
+                </li>
                 <!--li><a [routerLink]="['/administracion-urls']" (click)="cerrarMenu()">Administración de URL's</a></li-->
-                <li><a [routerLink]="['/admin/chat/extensiones']" (click)="cerrarMenu()">Administración de extensiones
-                        chat</a></li>
-                <li><a [routerLink]="['/admin/chat/intenciones']" (click)="cerrarMenu()">Administración de intenciones
-                        chat</a></li>
-                <li><a [routerLink]="['/ad-encuestas']" (click)="cerrarMenu()">Administración de encuestas</a></li>
-                <li><a [routerLink]="['/chat-experto']" (click)="cerrarMenu()" *ngIf="user && user.id_rol==2">Chat
-                        experto</a></li>
-                <li><a [routerLink]="['/encuesta/1']" (click)="cerrarMenu()">Encuenta Cliente</a></li>
-                <li><a [routerLink]="['/encuesta/2']" (click)="cerrarMenu()">Encuenta Experto</a></li>
-                <li><a [routerLink]="['/ad-expertiz']" (click)="cerrarMenu()">Administrador de Experticias</a></li>
-                <li><a [routerLink]="['/ad-categoria-expertiz']" (click)="cerrarMenu()">Administrador de Categorías de Experticia</a></li>
-                <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()"><a href="{{i.url}}" target="_blank"
-                        (click)="cerrarMenu()">{{i.label}}</a></li>
-
+                <li>
+                    <a [routerLink]="['/admin/chat/extensiones']" routerLinkActive="active" (click)="cerrarMenu()">Administración de extensiones chat</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/admin/chat/intenciones']" routerLinkActive="active" (click)="cerrarMenu()">Administración de intenciones chat</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/ad-encuestas']" routerLinkActive="active" (click)="cerrarMenu()">Administración de encuestas</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/chat-experto']" routerLinkActive="active" (click)="cerrarMenu()" *ngIf="user && user.id_rol==2">Chat experto</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/encuesta/1']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta Cliente</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/encuesta/2']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta Experto</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/ad-expertiz']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Experticias</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/ad-categoria-expertiz']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Categorías de Experticia</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/ad-expertos']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Expertos</a>
+                </li>
+                <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()">
+                    <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}}</a>
+                </li>
+                <li><a [routerLink]="['/carga-masiva']" routerLinkActive="active" (click)="cerrarMenu()">Carga Masiva</a></li>
+                
             </ul>
         </div>
         <div class="sidebar_mt">
