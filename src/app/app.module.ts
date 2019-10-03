@@ -93,6 +93,8 @@ import { FilaChatsPipe } from '../pipes/fila-chats.pipe';
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
 import { CargaMasivaComponent, DialogOverviewDetailQuestion } from './carga-masiva/carga-masiva.component';
+import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
+import { FormularioMotivoCierreChatComponent } from './formulario-motivo-cierre-chat/formulario-motivo-cierre-chat.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -156,7 +158,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdExpertosComponent,
     FormularioExpertoComponent,
     CargaMasivaComponent,
-    DialogOverviewDetailQuestion
+    DialogOverviewDetailQuestion,
+    AdMotivoCierreChatComponent,
+    FormularioMotivoCierreChatComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

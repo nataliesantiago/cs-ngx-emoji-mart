@@ -31,6 +31,8 @@ import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-e
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
 import { CargaMasivaComponent } from './carga-masiva/carga-masiva.component';
+import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
+import { FormularioMotivoCierreChatComponent } from './formulario-motivo-cierre-chat/formulario-motivo-cierre-chat.component';
 
 
 export const AppRoutes: Routes = [
@@ -70,4 +72,6 @@ export const AppRoutes: Routes = [
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
   { path: 'carga-masiva', component: CargaMasivaComponent, canActivate: [AuthGuard] },
+  { path: 'motivo-cierre-chat', component: AdMotivoCierreChatComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-motivo-cierre-chat/:id_reason', component: FormularioMotivoCierreChatComponent, canActivate: [AuthGuard] },
 ];
