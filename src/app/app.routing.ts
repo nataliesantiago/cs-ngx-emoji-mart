@@ -31,6 +31,8 @@ import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-e
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
 import { MassLoadComponent } from './mass-load/mass-load.component';
+import { AdministradorShortcutsComponent } from './administrador-shortcuts/administrador-shortcuts.component';
+import { AdministradorGuionesComponent } from './administrador-guiones/administrador-guiones.component';
 
 
 export const AppRoutes: Routes = [
@@ -70,4 +72,6 @@ export const AppRoutes: Routes = [
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
   { path: 'carga-masiva', component: MassLoadComponent, canActivate: [AuthGuard] },
+  { path: 'administrador-shortcuts', component: AdministradorShortcutsComponent, canActivate: [AuthGuard] },
+  { path: 'administrador-guiones', component: AdministradorGuionesComponent, canActivate: [AuthGuard] },
 ];

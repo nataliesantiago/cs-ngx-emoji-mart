@@ -123,7 +123,7 @@ export class ChatService {
    * @description Se obtiene el limite de carateres que se pueden envíar en el chat
    * @returns Promise
    */
-  obtenerLimiteTexto(): Promise<any>{
+  obtenerLimiteTexto(): Promise<any> {
     return new Promise((r, re) => {
       this.ajax.get('administracion/obtener-limite-texto', {}).subscribe(p => {
         if (p.success) {
@@ -435,6 +435,7 @@ export class ChatService {
       })
     });
   }
+
   /**
    * @description trae el snapshot de un documento en firebase
    * @param  {string} url
@@ -479,4 +480,33 @@ export class ChatService {
       })
     });
   }
+  /**
+   * @description Crea un guión para ser usado por el chat del experto
+   * @param  {string} texto
+   * @returns Promise
+   */
+  crearGuionChat(texto: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/guion/crear', { texto: texto, id_usuario: this.user.getId() }).subscribe(d => {
+        if (d.success) {
+          resolve(d.id);
+        }
+      })
+    });
+  }
+
+  /**
+   * @description Obtiene todos los guiones
+   * @returns Promise
+   */
+  getGuiones(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getGuiones', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.guiones);
+        }
+      })
+    });
+  }
+
 }

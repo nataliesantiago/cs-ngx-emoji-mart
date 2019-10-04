@@ -93,6 +93,9 @@ import { FilaChatsPipe } from '../pipes/fila-chats.pipe';
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
 import { MassLoadComponent, DialogOverviewDetailQuestion } from './mass-load/mass-load.component';
+import { AdministradorShortcutsComponent } from './administrador-shortcuts/administrador-shortcuts.component';
+import { ShortcutsService } from './providers/shortcuts.service';
+import { AdministradorGuionesComponent } from './administrador-guiones/administrador-guiones.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -156,7 +159,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdExpertosComponent,
     FormularioExpertoComponent,
     MassLoadComponent,
-    DialogOverviewDetailQuestion
+    DialogOverviewDetailQuestion,
+    AdministradorShortcutsComponent,
+    AdministradorGuionesComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
@@ -216,7 +221,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SearchService,
     ChatService,
     QuillService,
-    UtilsService
+    UtilsService,
+    ShortcutsService
   ],
   bootstrap: [AppComponent]
 })

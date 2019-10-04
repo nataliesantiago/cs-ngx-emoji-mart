@@ -1,0 +1,91 @@
+<mat-card *ngIf="creando_extension">
+  <mat-card-content>
+    <mat-card-title>Datos Extensión</mat-card-title>
+    <div fxLayout="row wrap">
+      <form class="m-t-20" fxFlex="70">
+        <mat-form-field class="example-full-width">
+          <textarea matInput [(ngModel)]="nuevo_guion.texto" name="texto"></textarea>
+        </mat-form-field>
+        <div fxLayout="row wrap">
+          <div fxFlex="25" fxLayoutAlign="space-between center">
+            <button fxFlex="45" class="custom__btn custom__btn--accept"
+              [disabled]="!nuevo_guion.texto || nuevo_guion.texto==''" (click)="crearGuion()">Crear</button> &nbsp;
+            <button fxFlex="45" class="custom__btn custom__btn--cancel"
+              (click)="creando_extension=!creando_extension">Cancelar</button>
+          </div>
+        </div>
+      </form>
+      <div fxFlex="30" class="recomendacion">
+        <p><b>Variables permitidas</b></p>
+        <mat-list role="list">
+          <mat-list-item role="listitem">{{'{'}}nombre_cliente{{'}'}} : El nombre del usuario que el experto está
+            atendiendo</mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}correo_cliente{{'}'}} : El correo del usuario que el experto está
+            atendiendo</mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}categoria{{'}'}} : Categoría por la cual se inició la conversación.
+            Puede estar vacía dependiendo del origen de
+            la conversación</mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}fecha_actual{{'}'}} : Fecha Actual del experto</mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}busqueda{{'}'}} : Texto que utilizó el usuario para realizar una
+            búsqueda antes de iniciar la conversación con
+            el experto</mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}id_conversacion{{'}'}} : El id de la conversación actual</mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-content>
+    <div class="botones m-b-20" *ngIf="!creando_extension">
+      <button class="custom__btn custom__btn--primary" (click)="creando_extension=!creando_extension">
+        <mat-icon>add</mat-icon> Crear Guión
+      </button>
+    </div>
+    <div class="bg-light p-10 p-r-20 p-l-20">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+      </mat-form-field>
+    </div>
+    <div class="responsive-table">
+      <mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <div *ngIf="!row.editando">
+              <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.editando=true"></i>
+              <i class="ti-trash danger-color m-r-10 mouse-over" (click)="eliminarExtension(row)"></i>
+            </div>
+            <div *ngIf="row.editando">
+              <i class="ti-save success-color m-r-10 mouse-over" (click)="editarExtension(row)"></i>
+              <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.editando=false"></i>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="guion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Guión </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.texto}} </mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="activo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span *ngIf="row.activo">Si</span>
+            <span *ngIf="!row.activo">No</span>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

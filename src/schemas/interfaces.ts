@@ -49,3 +49,35 @@ export interface CategoriaExperticia {
     fecha_creacion: Date;
     activo: boolean;
 }
+
+export interface ShortCut {
+    idtbl_shortcut_operador?: number;
+    id_usuario?: number;
+    guion?: string;
+    fecha_creacion?: Date;
+    id_guion?: number;
+    activo: boolean;
+    error?: boolean;
+    comando?: number;
+    ctrl?: boolean;
+    alt?: boolean;
+    shift?: boolean;
+    comandos?:Array<ComandoShortcut>;
+}
+
+export interface ComandoShortcut {
+    id_shortcut?: number;
+    comando?: number;
+    orden?: number;
+    key?: string;
+}
+
+export interface GuionChat {
+    idtbl_guion_chat?: number;
+    texto?: string;
+    id_usuario_creador?: number;
+    activo: boolean;
+    fecha_creacion?: Date;
+    id_usuario_ultima_modificacion?: number;
+    fecha_ultima_modificacion?: Date;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, Inject } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import swal from 'sweetalert2';
@@ -12,7 +12,7 @@ export class MassLoadComponent implements OnInit {
 
   active_download = false;
   file_name = '';
-  csv_file:File;
+  csv_file: File;
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
@@ -21,13 +21,13 @@ export class MassLoadComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   data = [];
   loading = false;
-  
-  constructor(private ajax: AjaxService, private change_detector: ChangeDetectorRef, public dialog: MatDialog) { 
-   
+
+  constructor(private ajax: AjaxService, private change_detector: ChangeDetectorRef, public dialog: MatDialog) {
+
   }
 
   ngOnInit() {
-    
+
   }
 
   /**
@@ -53,7 +53,7 @@ export class MassLoadComponent implements OnInit {
   */
   uploadCsvFile(event) {
     let extension = event.target.files[0].name.split('.').pop().toLowerCase();
-    if(extension == 'csv') {
+    if (extension == 'csv') {
       this.csv_file = event.target.files[0];
       this.file_name = this.csv_file.name;
     } else {
@@ -73,7 +73,7 @@ export class MassLoadComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Aceptar'
     }).then((result) => {
-      if(result.value) {
+      if (result.value) {
         event.srcElement.value = null;
         this.file_name = '';
         this.csv_file = null;
@@ -85,24 +85,24 @@ export class MassLoadComponent implements OnInit {
    * Funcion para enviar el archivo a procesar
   */
   sendCsvFile() {
-    if(this.csv_file != undefined || this.csv_file != null) {
+    if (this.csv_file != undefined || this.csv_file != null) {
       this.loading = true;
       const form_data = new FormData();
       form_data.append('csv_file', this.csv_file);
       this.ajax.postData('preguntas/cargar-archivo', form_data).subscribe(data => {
-        if (data.success == true) {          
+        if (data.success == true) {
           this.data = data.questions;
           this.dataSource = new MatTableDataSource(this.data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          this.change_detector.detectChanges();  
+          this.change_detector.detectChanges();
           this.loading = false;
         } else {
-          
+
         }
-        
+
       });
-    }   
+    }
   }
 
   /**
@@ -113,7 +113,7 @@ export class MassLoadComponent implements OnInit {
     this.dialog.open(DialogOverviewDetailQuestion, {
       width: '600px',
       height: '90vh',
-      data: {...row, action}
+      data: { ...row, action }
     });
   }
 
@@ -125,7 +125,7 @@ export class MassLoadComponent implements OnInit {
     this.dialog.open(DialogOverviewDetailQuestion, {
       width: '600px',
       height: '90vh',
-      data: {...row.errors, action}
+      data: { ...row.errors, action }
     });
   }
 
@@ -140,8 +140,8 @@ export class MassLoadComponent implements OnInit {
    * Funcion para aplicar el filtro de la tabla
   */
   applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); 
-    filterValue = filterValue.toLowerCase(); 
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
