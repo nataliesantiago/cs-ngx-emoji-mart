@@ -1,17 +1,8 @@
 import { Component, OnInit, ViewChild , ChangeDetectorRef} from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
-import { LocalDataSource } from 'ng2-smart-table';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import {
-  BreakpointObserver,
-  Breakpoints,
-  BreakpointState
-} from '@angular/cdk/layout';
-import { RouterModule, Router } from '@angular/router';
-import * as _moment from 'moment-timezone';
-import { default as _rollupMoment } from 'moment-timezone';
-const moment = _rollupMoment || _moment;
+import { Router } from '@angular/router';
 import swal from 'sweetalert2';
 
 @Component({
@@ -27,31 +18,24 @@ export class AdMotivoCierreChatComponent implements OnInit {
   sort: MatSort;
   displayedColumns = ['actions', 'id', 'name',];
   dataSource = new MatTableDataSource([]);
-  usuario;
-  id_usuario;
+  user;
+  user_id;
   data = [];
 
-  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
+  constructor(private ajax: AjaxService, private user_service: UserService, private router: Router, private cg: ChangeDetectorRef) { 
 
-    this.usuario = this.user.getUsuario();
-    if (this.usuario) {
-      this.id_usuario = this.usuario.idtbl_usuario;
+    this.user = this.user_service.getUsuario();
+    if (this.user) {
+      this.user_id = this.user.idtbl_usuario;
     }
-    this.user.observableUsuario.subscribe(u => {
-      this.usuario = u;
-      this.id_usuario = u.idtbl_usuario;
-      if (this.usuario) {
+    this.user_service.observableUsuario.subscribe(u => {
+      this.user = u;
+      this.user_id = u.idtbl_usuario;
+      if (this.user) {
       }
     })
 
-    this.ajax.get('motivos-cierre-chat/obtener', {}).subscribe(response => {
-      if(response.success){
-        this.data = response.reasons;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      }
-    })
+    this.getReasons();
     
   }
 
@@ -59,15 +43,36 @@ export class AdMotivoCierreChatComponent implements OnInit {
     
   }
 
+  /**
+   * Funcion para obtener todos los motivos de cierre
+   */
+  getReasons() {
+    this.ajax.get('motivos-cierre-chat/obtener', {}).subscribe(response => {
+      if(response.success){
+        this.data = response.reasons;
+        this.dataSource = new MatTableDataSource(this.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.cg.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Funcion para redirigir al formulario de edicion de un motivo especifico
+   */
   editReason(e){
     this.router.navigate(['/formulario-motivo-cierre-chat', e.idtbl_motivo_cierre_chat]);
   }
 
+  /**
+   * Funcion para inactivar un motivo especifico
+   */
   deleteReason(e){
 
     swal.fire({
       title: 'Eliminar Motivo',
-      text: "Confirme para pasar el motivo a estado Inactivo",
+      text: "Confirme para elminiar el motivo de cierre del chat",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,
@@ -76,11 +81,20 @@ export class AdMotivoCierreChatComponent implements OnInit {
       cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-     
+      if (result.value) {
+        this.ajax.post('motivos-cierre-chat/eliminar', { reason_id: e.idtbl_motivo_cierre_chat, user_id: this.user_id }).subscribe(p => {
+          if(p.success){
+            this.getReasons();
+          }
+        })
+      }
     })
     
   }
 
+  /**
+   * Funcion para filtrar los resultados de la tabla
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
