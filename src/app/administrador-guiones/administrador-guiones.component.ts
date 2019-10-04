@@ -12,6 +12,7 @@ import swal from 'sweetalert2';
   styleUrls: ['./administrador-guiones.component.scss']
 })
 export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
+
   user: User;
   creando_extension = false;
   displayedColumns = ['acciones', 'guion', 'activo'];
@@ -19,8 +20,8 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   guiones = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  solo_numeros = '^[+]?([1-9]+(?:[\.][0-9]*)?|\.[0-9]+)$';
   nuevo_guion: GuionChat = { activo: true };
+  
   constructor(private chatService: ChatService, private userService: UserService) {
     this.user = this.userService.getUsuario();
 
@@ -42,15 +43,18 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   init(recarga?: boolean) {
     this.chatService.getGuiones().then(guiones => {
       this.guiones = guiones;
+      this.guiones.forEach((e: GuionChat) => {
+        e.texto_tmp = e.texto;
+      })
       this.dataSource = new MatTableDataSource(this.guiones);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
   }
   ngAfterViewInit() {
-    //this.dataSource.paginator = this.paginator;
-    //this.dataSource.sort = this.sort;
+    
   }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -62,21 +66,18 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
       this.nuevo_guion = { activo: true };
       this.creando_extension = false;
       this.init(true);
-    })
+    });
   }
 
-  editarExtension(e: ExtensionArchivoChat) {
-    e.id_usuario_ultima_modificacion = this.user.getId();
-    e.megabytes_maximos = e.megas_tmp;
+  editarGuion(e) {
     e.editando = false;
-    let a = { ...e };
-    delete a.control_megabytes;
-    this.chatService.editarExtension(a).then(() => {
+    e.texto = e.texto_tmp;
+    this.chatService.actualizarGuionChat(e.texto, e.idtbl_guion_chat).then(() => {
 
     });
   }
 
-  eliminarExtension(e: ExtensionArchivoChat) {
+  eliminarExtension(e) {
     swal.fire({
       title: 'Cuidado',
       text: "Desea Borrar el guión",
@@ -89,7 +90,9 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
-        
+        this.chatService.desactivarGuionChat(e.idtbl_guion_chat).then((r) => {
+          this.init();
+        });
       }
     });
   }

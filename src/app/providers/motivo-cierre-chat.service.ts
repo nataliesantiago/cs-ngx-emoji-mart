@@ -21,6 +21,9 @@ export class MotivoCierreChatService {
     })
   }
 
+   /**
+   * Funcion para obtener todos los motivos
+   */
   getAllReasons():Promise<any>{
     return new Promise((resolve, reject) => {
 
@@ -35,6 +38,9 @@ export class MotivoCierreChatService {
     })
   }
 
+   /**
+   * Funcion para guardar un motivo
+   */
   saveReason(reason: any, user_id: number):Promise<any>{
     return new Promise((resolve, reject) => {
       this.ajax.post('motivos-cierre-chat/guardar', { reason: reason, user_id: user_id }).subscribe(d => {
@@ -48,6 +54,9 @@ export class MotivoCierreChatService {
     })
   }
 
+   /**
+   * Funcion para actualizar un motivo
+   */
   updateReason(reason_id, name, user_id) {
     return new Promise((resolve, reject) => {
       this.ajax.post('motivos-cierre-chat/editar', { reason: {reason_id: reason_id, name: name }, user_id: user_id }).subscribe(d => {
@@ -61,6 +70,9 @@ export class MotivoCierreChatService {
     })
   }
 
+   /**
+   * Funcion para desactivar un motivo
+   */
   deleteReason(reason_id: number, user_id: number):Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('motivos-cierre-chat/eliminar', { reason_id: reason_id, user_id: user_id }).subscribe(d => {

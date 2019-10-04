@@ -208,7 +208,7 @@ export class ShortcutsService {
                 if (d.success) {
                     resolve(d.id);
                 } else {
-                    reject();
+                    reject(d.error);
                 }
             })
         });
@@ -224,6 +224,23 @@ export class ShortcutsService {
             this.ajax.get('chat/getShortcutsUsuario', { id_usuario: this.user.getId() }).subscribe(d => {
                 if (d.success) {
                     resolve(d.shortcuts);
+                } else {
+                    reject();
+                }
+            })
+        });
+    }
+
+    /**
+     * @description Crea un shortcut del experto
+     * @param  {ShortCut} shortcut
+     * @returns Promise
+     */
+    desactivarShortcut(id_shortcut: ShortCut): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('chat/shortcuts/eliminar', { id_shortcut: id_shortcut, id_usuario: this.user.getId() }).subscribe(d => {
+                if (d.success) {
+                    resolve(d.id);
                 } else {
                     reject();
                 }
