@@ -2203,6 +2203,16 @@ ul li {
     background-color: #dd3333;
     color: #ffffff;
   }
+  &:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+    &:hover {
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      transform: translateY(0px);
+    }
+  }
 }
 .info-color {
   color: #1e88e5 ;

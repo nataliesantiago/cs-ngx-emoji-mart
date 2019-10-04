@@ -1,0 +1,57 @@
+<div class="contenedor">
+    <div fxLayout="row wrap">
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                
+            <mat-card>
+                <mat-card-content>
+                    <br>
+                    <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-motivo-cierre-chat/nuevo']">
+                        <mat-icon>add</mat-icon>
+                        Ingresar Motivos de Cierre 
+                    </a>
+                    <br>
+                    <br>
+                    <br>
+                    <mat-card-title>Motivos Cierre de Chat</mat-card-title>
+                    <br>
+                    <div class="bg-light p-10 p-r-20 p-l-20">
+                        <mat-form-field>
+                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                        </mat-form-field>
+                    </div>
+                    <div class="responsive-table">
+                        
+                        <mat-table [dataSource]="dataSource" matSort>
+
+                            <ng-container matColumnDef="actions">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Acciones </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:20%;">
+                                    <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editReason(row)"></i>
+                                    <i class="ti-trash danger-color m-r-10 mouse-over" (click)="deleteReason(row)"></i>
+                                </mat-cell>
+                            </ng-container>
+    
+                            <!-- ID Column -->
+                            <ng-container matColumnDef="id">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_motivo_cierre_chat}} </mat-cell>
+                            </ng-container>
+    
+                            <!-- name Column -->
+                            <ng-container matColumnDef="name">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:40%;"> Pregunta </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:40%;"> {{row.nombre}} </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;">
+                            </mat-row>
+                        </mat-table>
+    
+                        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

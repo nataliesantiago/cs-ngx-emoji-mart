@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MassLoadComponent } from './mass-load.component';
+import { CargaMasivaComponent } from './carga-masiva.component';
 
-describe('MassLoadComponent', () => {
-  let component: MassLoadComponent;
-  let fixture: ComponentFixture<MassLoadComponent>;
+describe('CargaMasivaComponent', () => {
+  let component: CargaMasivaComponent;
+  let fixture: ComponentFixture<CargaMasivaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MassLoadComponent ]
+      declarations: [ CargaMasivaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MassLoadComponent);
+    fixture = TestBed.createComponent(CargaMasivaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
