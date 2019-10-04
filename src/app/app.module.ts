@@ -92,10 +92,15 @@ import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-e
 import { FilaChatsPipe } from '../pipes/fila-chats.pipe';
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
-import { MassLoadComponent, DialogOverviewDetailQuestion } from './mass-load/mass-load.component';
 import { AdministradorShortcutsComponent } from './administrador-shortcuts/administrador-shortcuts.component';
 import { ShortcutsService } from './providers/shortcuts.service';
 import { AdministradorGuionesComponent } from './administrador-guiones/administrador-guiones.component';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AdministradorNotificacionesComponent } from './administrador-notificaciones/administrador-notificaciones.component';
+import { FormularioNotificacionesComponent } from './formulario-notificaciones/formulario-notificaciones.component';
+import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
+import { FormularioMotivoCierreChatComponent } from './formulario-motivo-cierre-chat/formulario-motivo-cierre-chat.component';
+import { CargaMasivaComponent, DialogOverviewDetailQuestion } from './carga-masiva/carga-masiva.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -158,10 +163,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormularioCategoriaExperticiaComponent,
     AdExpertosComponent,
     FormularioExpertoComponent,
-    MassLoadComponent,
     DialogOverviewDetailQuestion,
     AdministradorShortcutsComponent,
-    AdministradorGuionesComponent
+    AdministradorGuionesComponent,
+    AdministradorNotificacionesComponent,
+    FormularioNotificacionesComponent,
+    CargaMasivaComponent,
+    AdMotivoCierreChatComponent,
+    FormularioMotivoCierreChatComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
@@ -203,7 +212,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatSelectModule,
     MatDividerModule,
     PickerModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireMessagingModule
   ],
 
   providers: [

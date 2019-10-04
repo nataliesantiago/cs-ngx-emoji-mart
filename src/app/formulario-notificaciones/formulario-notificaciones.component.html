@@ -1,0 +1,68 @@
+<div class="principal">
+  <mat-card>
+    <mat-card-content>
+      <h3>Formulario de Notificaciones</h3>
+      <hr>
+      <div fxLayout="row wrap">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="40" fxFlex="100">
+          <mat-label>Digite el Título*</mat-label>
+          <input matInput [(ngModel)]="notificacion.titulo" name="titulo" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <br>
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="outline" class="texto" floatLabel="never" fxFlex.gt-sm="100" fxFlex="100">
+          <mat-label>Digite el Texto*</mat-label>
+          <textarea matInput class="campo-texto" name="texto" [(ngModel)]="notificacion.texto"></textarea>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row wrap">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Fecha Inicio*</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="notificacion.fecha_inicio">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div fxFlex.gt-sm="10" fxFlex="100"></div>
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Fecha Fin*</mat-label>
+          <input matInput [min]="notificacion.fecha_inicio" [matDatepicker]="picker2"
+            [(ngModel)]="notificacion.fecha_fin">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row wrap">
+        <mat-form-field floatLabel="never" fxFlex.gt-sm="45" fxFlex="100">
+          <mat-label>Envio a</mat-label>
+          <select matNativeControl [(ngModel)]="notificacion.tipo_envio" name="envio" (change)="listarObjetos()">
+            <option>Todos</option>
+            <option>Dirigido</option>
+            <option>Multidependencia</option>
+          </select>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap" *ngIf="notificacion.tipo_envio == 'Dirigido' || notificacion.tipo_envio == 'Multidependencia'">
+        <div fxFlex.gt-sm="40" fxFlex="100">
+          <br>
+          <mat-card-title>Personas</mat-card-title>
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <input type="text" placeholder="Seleccione..." matInput [formControl]="myControl"
+                [matAutocomplete]="auto">
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                (optionSelected)='seleccionarObjeto($event.option.value)'>
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                  {{option.nombre}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+          <br>
+        </div>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>

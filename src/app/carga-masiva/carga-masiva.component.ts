@@ -4,11 +4,11 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, 
 import swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-mass-load',
-  templateUrl: './mass-load.component.html',
-  styleUrls: ['./mass-load.component.scss']
+  selector: 'app-carga-masiva',
+  templateUrl: './carga-masiva.component.html',
+  styleUrls: ['./carga-masiva.component.scss']
 })
-export class MassLoadComponent implements OnInit {
+export class CargaMasivaComponent implements OnInit {
 
   active_download = false;
   file_name = '';
@@ -148,9 +148,9 @@ export class MassLoadComponent implements OnInit {
 }
 
 @Component({
-  selector: 'detail-question-dialog',
-  templateUrl: 'detail-question-dialog.html',
-  styleUrls: ['./mass-load.component.scss']
+  selector: 'detalle-pregunta-dialog',
+  templateUrl: 'detalle-pregunta-dialog.html',
+  styleUrls: ['./carga-masiva.component.scss']
 })
 
 export class DialogOverviewDetailQuestion {

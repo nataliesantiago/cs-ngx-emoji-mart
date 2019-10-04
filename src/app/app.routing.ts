@@ -30,9 +30,13 @@ import { AdCategoriaExperticiaComponent } from './ad-categoria-experticia/ad-cat
 import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-experticia/formulario-categoria-experticia.component';
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
-import { MassLoadComponent } from './mass-load/mass-load.component';
 import { AdministradorShortcutsComponent } from './administrador-shortcuts/administrador-shortcuts.component';
 import { AdministradorGuionesComponent } from './administrador-guiones/administrador-guiones.component';
+import { AdministradorNotificacionesComponent } from './administrador-notificaciones/administrador-notificaciones.component';
+import { FormularioNotificacionesComponent } from './formulario-notificaciones/formulario-notificaciones.component';
+import { CargaMasivaComponent } from './carga-masiva/carga-masiva.component';
+import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
+import { FormularioMotivoCierreChatComponent } from './formulario-motivo-cierre-chat/formulario-motivo-cierre-chat.component';
 
 
 export const AppRoutes: Routes = [
@@ -48,6 +52,8 @@ export const AppRoutes: Routes = [
   { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'ad-expertos', component: AdExpertosComponent, canActivate: [AuthGuard] },
+  { path: 'administrador-notificaciones', component: AdministradorNotificacionesComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-notificaciones/:id_notificacion', component: FormularioNotificacionesComponent, canActivate: [AuthGuard] },
   { path: 'respuestas/:id_pregunta', component: RespuestasComponent, canActivate: [AuthGuard] },
   { path: 'asociar-preguntas', component: AsociarPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'administracion', component: AdministracionComponent, canActivate: [AuthGuard] },
@@ -71,7 +77,9 @@ export const AppRoutes: Routes = [
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
-  { path: 'carga-masiva', component: MassLoadComponent, canActivate: [AuthGuard] },
+  { path: 'carga-masiva', component: CargaMasivaComponent, canActivate: [AuthGuard] },
   { path: 'administrador-shortcuts', component: AdministradorShortcutsComponent, canActivate: [AuthGuard] },
   { path: 'administrador-guiones', component: AdministradorGuionesComponent, canActivate: [AuthGuard] },
+  { path: 'motivo-cierre-chat', component: AdMotivoCierreChatComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-motivo-cierre-chat/:reason_id', component: FormularioMotivoCierreChatComponent, canActivate: [AuthGuard] },
 ];

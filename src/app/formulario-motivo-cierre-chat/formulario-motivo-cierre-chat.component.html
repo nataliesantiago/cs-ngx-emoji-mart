@@ -1,0 +1,26 @@
+<mat-card>  
+    <mat-card-content>
+
+      <h3>Formulario de Motivo Cierre del Chat</h3>
+      <hr>
+      <div fxLayout="row wrap">
+        <div fxFlex="100">
+          <br>
+          <mat-form-field>
+            <mat-label>Digite el motivo del cierre</mat-label>
+            <input matInput [(ngModel)]="reason.name" name="name" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+           
+      <br>
+      <br>
+      <div fxLayout="row wrap">
+        <div fxFlex="25" fxLayoutAlign="space-between center">
+          <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="saveReason()">Guardar</button>
+          <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/motivo-cierre-chat']">Cancelar</a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

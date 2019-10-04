@@ -1,29 +1,30 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { NotificacionService } from '../providers/notificacion.service';
+import { AjaxService } from '../providers/ajax.service';
 import { User } from '../../schemas/user.schema';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 
 @Component({
-  selector: 'app-ad-expertos',
-  templateUrl: './ad-expertos.component.html',
-  styleUrls: ['./ad-expertos.component.scss']
+  selector: 'app-administrador-notificaciones',
+  templateUrl: './administrador-notificaciones.component.html',
+  styleUrls: ['./administrador-notificaciones.component.scss']
 })
-export class AdExpertosComponent implements OnInit {
+export class AdministradorNotificacionesComponent implements OnInit {
 
   user: User;
   id_usuario;
   usuarios = [];
-  displayedColumns = ['acciones', 'id', 'nombre', 'correo'];
+  displayedColumns = ['acciones', 'id', 'titulo', 'activo'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
 
-  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
+  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private notificacionService: NotificacionService){
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
@@ -31,14 +32,9 @@ export class AdExpertosComponent implements OnInit {
       }
     });
 
-    this.ajax.get('user/obtener-rol-usuario', { id_rol: 2}).subscribe(p => {
-      if (p.success) {
-        this.usuarios = p.usuarios;
-        this.dataSource = new MatTableDataSource(this.usuarios);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      }
-    })
+    this.notificacionService.obtenerNotificacionesAdministracion().then( n => {
+      console.log(n);
+    });
     
 
   }
@@ -54,6 +50,6 @@ export class AdExpertosComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }
-
+  }  
+  
 }

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AjaxService } from "./ajax.service";
+import { Configuracion } from "../../schemas/interfaces";
 
 
 @Injectable()
@@ -71,6 +72,18 @@ export class UtilsService {
                     });
                 }
         })
+    }
+
+    
+    /**
+     * @description Esta función se encarga de buscar una configuración según su ID
+     * @param  {number} id
+     * @returns Configuracion
+     */
+    buscarConfiguracion(id: number): Configuracion {
+        return this.configuraciones.find(c => {
+            return c.idtbl_configuracion === id;
+        });
     }
 
 

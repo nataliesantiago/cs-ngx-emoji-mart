@@ -184,7 +184,7 @@
 
                       <ng-container matColumnDef="fecha_modificacion">
                           <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Fecha Modificación </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.fecha_ultima_modificacion | date:'medium' }} </mat-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.fecha_ultima_modificacion | date:'mediumDate' }} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="acciones">

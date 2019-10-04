@@ -50,12 +50,11 @@ export class FlujoCuraduriaComponent implements OnInit {
       }
     })
 
-    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
+    /*this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
-        
         this.cant_curaduria = p.preguntas.length;
         this.data = p.preguntas;
-        this.dataSource = new MatTableDataSource(this.data);
+        //this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;        
         this.cg.detectChanges();
@@ -78,7 +77,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.cant_aprobados = p3.preguntas.length;
         this.cg.detectChanges();
       }
-    })
+    })*/
      // create the source
     
   }
