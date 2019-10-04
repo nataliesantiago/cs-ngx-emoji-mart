@@ -77,5 +77,5 @@ export const AppRoutes: Routes = [
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
   { path: 'carga-masiva', component: CargaMasivaComponent, canActivate: [AuthGuard] },
   { path: 'motivo-cierre-chat', component: AdMotivoCierreChatComponent, canActivate: [AuthGuard] },
-  { path: 'formulario-motivo-cierre-chat/:id_reason', component: FormularioMotivoCierreChatComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-motivo-cierre-chat/:reason_id', component: FormularioMotivoCierreChatComponent, canActivate: [AuthGuard] },
 ];
