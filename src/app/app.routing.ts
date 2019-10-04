@@ -31,6 +31,8 @@ import { FormularioCategoriaExperticiaComponent } from './formulario-categoria-e
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
 import { MassLoadComponent } from './mass-load/mass-load.component';
+import { AdministradorNotificacionesComponent } from './administrador-notificaciones/administrador-notificaciones.component';
+import { FormularioNotificacionesComponent } from './formulario-notificaciones/formulario-notificaciones.component';
 
 
 export const AppRoutes: Routes = [
@@ -46,6 +48,8 @@ export const AppRoutes: Routes = [
   { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'ad-expertos', component: AdExpertosComponent, canActivate: [AuthGuard] },
+  { path: 'administrador-notificaciones', component: AdministradorNotificacionesComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-notificaciones/:id_notificacion', component: FormularioNotificacionesComponent, canActivate: [AuthGuard] },
   { path: 'respuestas/:id_pregunta', component: RespuestasComponent, canActivate: [AuthGuard] },
   { path: 'asociar-preguntas', component: AsociarPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'administracion', component: AdministracionComponent, canActivate: [AuthGuard] },

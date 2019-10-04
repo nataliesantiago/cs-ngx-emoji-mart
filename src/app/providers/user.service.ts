@@ -12,6 +12,8 @@ import { ThrowStmt } from '@angular/compiler';
 import { xhrFilasExperto } from '../../schemas/xhr.schema';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { environment } from '../../environments/environment';
+import { AngularFireMessaging } from '@angular/fire/messaging';
+import { mergeMapTo } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -28,7 +30,7 @@ export class UserService {
     ref;
     este;
 
-    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth) {
+    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging) {
 
         this.ajax.sethost(environment.URL_BACK); // Desarrollo
         //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
@@ -130,18 +132,7 @@ export class UserService {
     initFirebase(): Promise<any> {
         return new Promise((res, rej) => {
             this.firebaseAuth.auth.signInWithEmailAndPassword(this.user.getEmail(), this.user.pass_firebase).then(() => {
-                /* let ruta = 'users/' + btoa(this.user.getEmail());
-                 this.ref = this.dataBase.ref(ruta);
-     
-                 this.ref.set(this.este);
-                 this.ref.on('value', snap => {
-     
-                     if (snap.val() != this.este) {
-                         alert('Su sesión se inició desde otro dispositivo o ventana');
-                         this.ref.off();
-                         this.logOut();
-                     }
-                 });*/
+                this.requestPermission();
                 res();
             }).catch(error => {
                 // Handle Errors here.
@@ -265,11 +256,40 @@ export class UserService {
         })
     }
 
+    requestPermission() {
+        this.afMessaging.requestPermission
+            .pipe(mergeMapTo(this.afMessaging.tokenChanges))
+            .subscribe(
+                (token) => {
+                    this.listen();
+                    this.ajax.post('user/setFirebaseToken', { token: token, user: this.user }).subscribe(d => {
+                        if (d.success) {
 
+                        }
+                    });
 
+                },
+                (error) => { console.error(error); },
+            );
+    }
 
+    listen() {
+        this.afMessaging.messages
+            .subscribe((message) => { console.log(message); });
+    }
 
+    obtenerListaEmpleados(): Promise<any> {
+        return new Promise((resolve, reject) => {
 
+            this.ajax.get('user/obtener-todos', {}).subscribe(d => {
+                if (d.success) {
+                    resolve(d.usuarios);
+                } else {
+                    reject();
+                }
+            });
 
+        })
+    }
 
 }

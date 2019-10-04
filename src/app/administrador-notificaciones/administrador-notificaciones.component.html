@@ -2,6 +2,12 @@
     <mat-card>
         <mat-card-content>
             <mat-card-title>Administrador de Expertos</mat-card-title>
+
+            <br>
+            <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-notificaciones/nuevo']"><mat-icon>add</mat-icon> Crear Notificación </a>
+            <br>
+            <br>
+
             <div class="bg-light p-10 p-r-20 p-l-20">
                 <mat-form-field>
                     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
@@ -15,19 +21,19 @@
                     <!-- ID Column -->
                     <ng-container matColumnDef="id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_usuario}} </mat-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_notificacion}} </mat-cell>
                     </ng-container>
             
                     <!-- Progress Column -->
-                    <ng-container matColumnDef="nombre">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
+                    <ng-container matColumnDef="titulo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Titulo </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.titulo}} </mat-cell>
                     </ng-container>
 
                     <!-- Progress Column -->
-                    <ng-container matColumnDef="correo">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Correo </mat-header-cell>
-                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.correo}} </mat-cell>
+                    <ng-container matColumnDef="activo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Activo </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.activo}} </mat-cell>
                         </ng-container>
             
                     <ng-container matColumnDef="acciones">

@@ -18,7 +18,8 @@
                         "polyfills": "src/polyfills.ts",
                         "assets": [
                             "src/assets",
-                            "src/favicon.ico"
+                            "src/favicon.ico",
+                            "src/firebase-messaging-sw.js"
                         ],
                         "styles": [
                             "src/styles.scss",
@@ -66,6 +67,10 @@
                             "fileReplacements": [{
                                 "replace": "src/environments/environment.ts",
                                 "with": "src/environments/environment.cam.ts"
+                            },
+                            {
+                                "replace": "src/firebase-messaging-sw.js",
+                                "with": "src/firebase-messaging-sw-cam.js"
                             }]
                         },
                         "cam-test": {
@@ -81,6 +86,10 @@
                             "fileReplacements": [{
                                 "replace": "src/environments/environment.ts",
                                 "with": "src/environments/environment.cam-test.ts"
+                            },
+                            {
+                                "replace": "src/firebase-messaging-sw.js",
+                                "with": "src/firebase-messaging-sw-cam.js"
                             }]
                         },
                         "cam-prod": {
@@ -96,6 +105,10 @@
                             "fileReplacements": [{
                                 "replace": "src/environments/environment.ts",
                                 "with": "src/environments/environment.cam-prod.ts"
+                            },
+                            {
+                                "replace": "src/firebase-messaging-sw.js",
+                                "with": "src/firebase-messaging-sw-cam.js"
                             }]
                         }
                     }
@@ -140,7 +153,7 @@
                         ],
                         "assets": [
                             "src/assets",
-
+                            
                             "src/favicon.ico"
                         ]
                     }

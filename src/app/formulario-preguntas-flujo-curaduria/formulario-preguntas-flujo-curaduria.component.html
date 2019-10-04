@@ -118,12 +118,12 @@
                     <mat-panel-title *ngIf="subrespuesta.titulo != null"> {{subrespuesta.titulo}} </mat-panel-title>
                   </mat-expansion-panel-header>
                   <mat-form-field>
-                      <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo">
-                    </mat-form-field>
-                    <br>
+                    <input matInput placeholder="Digite el subtítulo" [(ngModel)]="subrespuesta.categoria" name="categoria-subrespuesta">
+                  </mat-form-field>
+                  <br>
                   <br>
                   <mat-form-field>
-                    <input matInput placeholder="Digite la categoria" [(ngModel)]="subrespuesta.categoria" name="categoria-subrespuesta">
+                    <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo">
                   </mat-form-field>
                   <br>
                   <br>

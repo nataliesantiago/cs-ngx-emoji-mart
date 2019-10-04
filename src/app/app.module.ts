@@ -93,6 +93,9 @@ import { FilaChatsPipe } from '../pipes/fila-chats.pipe';
 import { AdExpertosComponent } from './ad-expertos/ad-expertos.component';
 import { FormularioExpertoComponent } from './formulario-experto/formulario-experto.component';
 import { MassLoadComponent, DialogOverviewDetailQuestion } from './mass-load/mass-load.component';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AdministradorNotificacionesComponent } from './administrador-notificaciones/administrador-notificaciones.component';
+import { FormularioNotificacionesComponent } from './formulario-notificaciones/formulario-notificaciones.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -156,7 +159,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdExpertosComponent,
     FormularioExpertoComponent,
     MassLoadComponent,
-    DialogOverviewDetailQuestion
+    DialogOverviewDetailQuestion,
+    AdministradorNotificacionesComponent,
+    FormularioNotificacionesComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
@@ -198,7 +203,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatSelectModule,
     MatDividerModule,
     PickerModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireMessagingModule
   ],
 
   providers: [

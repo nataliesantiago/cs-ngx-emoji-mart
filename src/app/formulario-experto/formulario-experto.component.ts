@@ -35,6 +35,7 @@ export class FormularioExpertoComponent implements OnInit {
   editar = false;
   crear_experticia = false;
   nombre_experto;
+  correo_experto;
   horarios = [];
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient){
@@ -87,6 +88,7 @@ export class FormularioExpertoComponent implements OnInit {
       this.ajax.get('user/obtener-informacion-experto', {id_experto: this.id_experto}).subscribe(p => {
         if(p.success){
           this.nombre_experto = p.informacion[0];
+          this.correo_experto = this.nombre_experto[0].correo;
           this.nombre_experto = this.nombre_experto[0].nombre;
           this.experticia_asociada = p.informacion[1];
           this.dataSource = new MatTableDataSource(this.experticia_asociada);
@@ -215,7 +217,7 @@ export class FormularioExpertoComponent implements OnInit {
     if(enviarInfo){
       if(this.editar){
     
-        this.ajax.post('user/agregar-expertiz', { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto }).subscribe(d => {
+        this.ajax.post('user/agregar-expertiz', { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto, id_usuario: this.id_usuario }).subscribe(d => {
           if(d.success){
           
             this.router.navigate(['/ad-expertos']);
