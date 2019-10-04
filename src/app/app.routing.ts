@@ -36,8 +36,6 @@ import { AdministradorNotificacionesComponent } from './administrador-notificaci
 import { FormularioNotificacionesComponent } from './formulario-notificaciones/formulario-notificaciones.component';
 import { CargaMasivaComponent } from './carga-masiva/carga-masiva.component';
 import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
-import { FormularioMotivoCierreChatComponent } from './formulario-motivo-cierre-chat/formulario-motivo-cierre-chat.component';
-
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -80,6 +78,5 @@ export const AppRoutes: Routes = [
   { path: 'carga-masiva', component: CargaMasivaComponent, canActivate: [AuthGuard] },
   { path: 'administrador-shortcuts', component: AdministradorShortcutsComponent, canActivate: [AuthGuard] },
   { path: 'administrador-guiones', component: AdministradorGuionesComponent, canActivate: [AuthGuard] },
-  { path: 'motivo-cierre-chat', component: AdMotivoCierreChatComponent, canActivate: [AuthGuard] },
-  { path: 'formulario-motivo-cierre-chat/:reason_id', component: FormularioMotivoCierreChatComponent, canActivate: [AuthGuard] },
+  { path: 'motivo-cierre-chat', component: AdMotivoCierreChatComponent, canActivate: [AuthGuard] }
 ];
