@@ -6,6 +6,7 @@ import { QuillService } from '../providers/quill.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { User } from '../../schemas/user.schema';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-ad-encuestas',
@@ -23,6 +24,13 @@ export class AdEncuestasComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_encuesta', type:'number'},
+    {field: 'nombre', type:'string'},
+    {field: 'id_tipo_encuesta', type:'boolean', values:{"1":"Cliente","2":"Experto"}},
+    {field: 'activo', type:'boolean', values:{"1":"Activo","0":"Inactivo"}}
+  ];
   user: User;
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
     this.usuario = this.userService.getUsuario();
@@ -38,6 +46,7 @@ export class AdEncuestasComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.encuestas);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
 

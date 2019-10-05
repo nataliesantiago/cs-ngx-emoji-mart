@@ -13,6 +13,7 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-ad-preguntas',
@@ -26,6 +27,13 @@ export class AdPreguntasComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   displayedColumns = ['acciones', 'id', 'pregunta', 'id_producto', 'id_estado', 'fecha_modificacion'];
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_pregunta', type:'number'},
+    {field: 'titulo', type:'string'},
+    {field: 'nombre_producto', type:'string'},
+    {field: 'nombre_estado', type:'string'},
+    {field: 'muestra_fecha_actualizacion', type:'boolean', values:{"1":"Si","0":"No"}}];
   dataSource = new MatTableDataSource([]);
   productos = [];
   pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 3, id_estado_flujo: 4 };
@@ -53,6 +61,7 @@ export class AdPreguntasComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
      // create the source

@@ -85,8 +85,9 @@ export class IntencionesChatComponent implements OnInit {
   applyFilter(value: string) {
     if (this.intenciones) {
       if (value && value != '') {
+        value = value.toLowerCase();
         this.intenciones = this.intenciones_all.filter(i => {
-          return i.frase.indexOf(value) != (-1);
+          return i.frase.toLowerCase().indexOf(value) != (-1);
         });
       } else {
         this.intenciones = this.intenciones_all;

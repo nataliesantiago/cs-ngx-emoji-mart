@@ -6,6 +6,7 @@ import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { ExtensionArchivoChat, GuionChat } from '../../schemas/interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 @Component({
   selector: 'app-administrador-guiones',
   templateUrl: './administrador-guiones.component.html',
@@ -17,6 +18,10 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   creando_extension = false;
   displayedColumns = ['acciones', 'guion', 'activo'];
   dataSource: MatTableDataSource<any>;
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field: 'texto', type:'string'},
+    {field: 'activo', type:'boolean', values:{"true":"Si","false":"No"}}];
   guiones = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -50,6 +55,7 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
       this.dataSource = new MatTableDataSource(this.guiones);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
     });
   }
   ngAfterViewInit() {

@@ -6,6 +6,7 @@ import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-ad-categoria-experticia',
@@ -23,6 +24,11 @@ export class AdCategoriaExperticiaComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_categoria_experticia', type:'number'},
+    {field: 'nombre', type:'string'}
+  ];
   
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
     this.user = this.userService.getUsuario();
@@ -38,6 +44,7 @@ export class AdCategoriaExperticiaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.categorias);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
   }

@@ -6,6 +6,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-administrador-notificaciones',
@@ -23,6 +24,12 @@ export class AdministradorNotificacionesComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_notificacion', type:'number'},
+    {field: 'titulo', type:'string'},
+    {field: 'activo', type:'string'}
+  ];
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private notificacionService: NotificacionService){
     this.user = this.userService.getUsuario();

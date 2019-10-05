@@ -6,6 +6,7 @@ import { MotivoCierreChat } from '../../schemas/interfaces';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-ad-motivo-cierre-chat',
@@ -21,6 +22,13 @@ export class AdMotivoCierreChatComponent implements OnInit {
   displayedColumns = ['actions', 'id', 'name',];
   reason: MotivoCierreChat = { idtbl_motivo_cierre_chat: null, name: '', create_user_id: null, create_date: null, update_last_user_id: null, update_date: null, active: true };
   dataSource = new MatTableDataSource([]);
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'fecha_busqueda', type:'string'},
+    {field: 'texto_busqueda', type:'string'},
+    {field: 'id_tipo_busqueda', type:'string'},
+    {field: 'url', type:'string'}
+  ];
   user;
   user_id;
   data = [];
@@ -57,6 +65,7 @@ export class AdMotivoCierreChatComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.cg.detectChanges();
+      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
     });
   }
 

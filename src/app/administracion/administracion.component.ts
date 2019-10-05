@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-administracion',
@@ -15,6 +16,11 @@ export class AdministracionComponent implements OnInit {
 
   items_administracion = [];
   displayedColumns = ['acciones', 'id', 'nombre', 'valor'];
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_configuracion', type:'number'},
+    {field: 'nombre', type:'string'},
+    {field: 'valor', type:'string'}];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
@@ -34,6 +40,7 @@ export class AdministracionComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.items_administracion);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;                              
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
 

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-flujo-curaduria',
@@ -21,6 +22,16 @@ export class FlujoCuraduriaComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   displayedColumns = ['acciones', 'id', 'pregunta', 'id_producto', 'id_estado', 'encargado', 'usuario_creacion', 'usuario_modificacion', 'fecha_modificacion'];
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_pregunta', type:'number'},
+    {field: 'titulo', type:'string'},
+    {field: 'nombre_producto', type:'string'},
+    {field: 'nombre_estado', type:'string'},
+    {field: 'nombre', type:'string'},
+    {field: 'nombre_usuario_creador', type:'string'},
+    {field: 'nombre_usuario_modificacion', type:'string'},
+    {field: 'fecha_ultima_modificacion', type:'date'}];
   dataSource = new MatTableDataSource([]);
   usuario;
   id_usuario;
@@ -169,6 +180,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;        
         this.cg.detectChanges();
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p1 => {

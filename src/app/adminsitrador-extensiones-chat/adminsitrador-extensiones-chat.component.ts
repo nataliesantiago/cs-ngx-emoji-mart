@@ -6,6 +6,7 @@ import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { ExtensionArchivoChat } from '../../schemas/interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 @Component({
   selector: 'app-adminsitrador-extensiones-chat',
   templateUrl: './adminsitrador-extensiones-chat.component.html',
@@ -16,6 +17,10 @@ export class AdminsitradorExtensionesChatComponent implements OnInit, AfterViewI
   creando_extension = false;
   displayedColumns = ['acciones', 'extension', 'size'];
   dataSource: MatTableDataSource<any>;
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'extension', type:'string'},
+    {field: 'megabytes_maximos', type:'string'}];
   extensiones = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -50,6 +55,7 @@ export class AdminsitradorExtensionesChatComponent implements OnInit, AfterViewI
       this.dataSource = new MatTableDataSource(this.extensiones);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
     });
   }
   ngAfterViewInit() {
