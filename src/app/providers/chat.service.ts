@@ -531,6 +531,7 @@ export class ChatService {
   desactivarGuionChat(id_guion: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/guion/eliminar', { id_usuario: this.user.getId(), id_guion: id_guion }).subscribe(d => {
+        
         if (d.success) {
           resolve(d.id);
         }
