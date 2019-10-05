@@ -138,4 +138,10 @@ export class AdministradorShortcutsComponent implements OnInit {
       this.init();
     });
   }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 }
