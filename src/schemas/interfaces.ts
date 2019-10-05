@@ -80,4 +80,15 @@ export interface GuionChat {
     fecha_creacion?: Date;
     id_usuario_ultima_modificacion?: number;
     fecha_ultima_modificacion?: Date;
+    texto_tmp?: string;
+}
+
+export interface MotivoCierreChat {
+    idtbl_motivo_cierre_chat?: number;
+    name?: string;
+    create_user_id?: number;
+    create_date?: Date;
+    update_last_user_id?: number;
+    update_date?: Date;
+    active: boolean;
 }

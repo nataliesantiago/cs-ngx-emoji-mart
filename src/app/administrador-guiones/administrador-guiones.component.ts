@@ -12,6 +12,7 @@ import swal from 'sweetalert2';
   styleUrls: ['./administrador-guiones.component.scss']
 })
 export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
+
   user: User;
   creando_extension = false;
   displayedColumns = ['acciones', 'guion', 'activo'];
@@ -19,8 +20,9 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   guiones = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  solo_numeros = '^[+]?([1-9]+(?:[\.][0-9]*)?|\.[0-9]+)$';
   nuevo_guion: GuionChat = { activo: true };
+  correcto = false;
+  
   constructor(private chatService: ChatService, private userService: UserService) {
     this.user = this.userService.getUsuario();
 
@@ -42,41 +44,77 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   init(recarga?: boolean) {
     this.chatService.getGuiones().then(guiones => {
       this.guiones = guiones;
+      this.guiones.forEach((e: GuionChat) => {
+        e.texto_tmp = e.texto;
+      })
       this.dataSource = new MatTableDataSource(this.guiones);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
   }
   ngAfterViewInit() {
-    //this.dataSource.paginator = this.paginator;
-    //this.dataSource.sort = this.sort;
+    
   }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
-  crearGuion() {
-    this.chatService.crearGuionChat(this.nuevo_guion.texto).then(d => {
-      this.nuevo_guion = { activo: true };
-      this.creando_extension = false;
-      this.init(true);
-    })
-  }
-
-  editarExtension(e: ExtensionArchivoChat) {
-    e.id_usuario_ultima_modificacion = this.user.getId();
-    e.megabytes_maximos = e.megas_tmp;
-    e.editando = false;
-    let a = { ...e };
-    delete a.control_megabytes;
-    this.chatService.editarExtension(a).then(() => {
-
+  validarVariablesPermitidas(texto) {
+    let variables_permitidas = ['{nombre_cliente}', '{correo_cliente}', '{categoria}', '{fecha_actual}', '{busqueda}', '{id_conversacion}'];
+    let variables = texto.match(/{.*?}/g);
+    this.correcto = true;
+    variables.forEach(variable => {
+      if(!(variables_permitidas.indexOf(variable) > -1)) {
+        this.correcto = false;
+      } 
     });
   }
 
-  eliminarExtension(e: ExtensionArchivoChat) {
+  modalErrorVariables() {
+    swal.fire({
+      title: 'Advertencia',
+      text: "Alguna de las variables ingresadas no es correcta, por favor verifiquelas",
+      type: 'warning',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Aceptar'
+    });
+  }
+
+  crearGuion() {
+    this.validarVariablesPermitidas(this.nuevo_guion.texto);
+    
+    if(!this.correcto) {
+      this.modalErrorVariables();
+    } else {
+      this.chatService.crearGuionChat(this.nuevo_guion.texto).then(d => {
+        this.nuevo_guion = { activo: true };
+        this.creando_extension = false;
+        this.init(true);
+      });
+    }
+    
+  }
+
+  editarGuion(e) {
+    e.editando = false;
+    e.texto = e.texto_tmp;
+    this.validarVariablesPermitidas(e.texto);
+    
+    if(!this.correcto) {
+      this.modalErrorVariables();
+    } else {
+      this.chatService.actualizarGuionChat(e.texto, e.idtbl_guion_chat).then(() => {
+
+      });
+    }
+    
+  }
+
+  eliminarExtension(e) {
     swal.fire({
       title: 'Cuidado',
       text: "Desea Borrar el guión",
@@ -89,7 +127,9 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
-        
+        this.chatService.desactivarGuionChat(e.idtbl_guion_chat).then((r) => {
+          this.init();
+        });
       }
     });
   }

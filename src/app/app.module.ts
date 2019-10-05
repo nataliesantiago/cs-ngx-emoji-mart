@@ -99,7 +99,6 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AdministradorNotificacionesComponent } from './administrador-notificaciones/administrador-notificaciones.component';
 import { FormularioNotificacionesComponent } from './formulario-notificaciones/formulario-notificaciones.component';
 import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
-import { FormularioMotivoCierreChatComponent } from './formulario-motivo-cierre-chat/formulario-motivo-cierre-chat.component';
 import { CargaMasivaComponent, DialogOverviewDetailQuestion } from './carga-masiva/carga-masiva.component';
 
 
@@ -169,8 +168,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdministradorNotificacionesComponent,
     FormularioNotificacionesComponent,
     CargaMasivaComponent,
-    AdMotivoCierreChatComponent,
-    FormularioMotivoCierreChatComponent
+    AdMotivoCierreChatComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

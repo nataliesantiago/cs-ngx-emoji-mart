@@ -59,7 +59,7 @@
               <i class="ti-trash danger-color m-r-10 mouse-over" (click)="eliminarExtension(row)"></i>
             </div>
             <div *ngIf="row.editando">
-              <i class="ti-save success-color m-r-10 mouse-over" (click)="editarExtension(row)"></i>
+              <i class="ti-save success-color m-r-10 mouse-over" (click)="editarGuion(row)"></i>
               <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.editando=false"></i>
             </div>
           </mat-cell>
@@ -68,7 +68,12 @@
         <!-- Name Column -->
         <ng-container matColumnDef="guion">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Guión </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.texto}} </mat-cell>
+          <mat-cell *matCellDef="let row"> 
+            <span *ngIf="!row.editando">{{row.texto}}</span>
+            <mat-form-field *ngIf="row.editando">
+              <input matInput type="text" name="texto" [(ngModel)]="row.texto_tmp">
+            </mat-form-field>
+          </mat-cell>
         </ng-container>
 
         <!-- Color Column -->

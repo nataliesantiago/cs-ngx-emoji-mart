@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild , ChangeDetectorRef} from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
+import { MotivoCierreChatService } from '../providers/motivo-cierre-chat.service';
+import { MotivoCierreChat } from '../../schemas/interfaces';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import swal from 'sweetalert2';
@@ -17,12 +19,14 @@ export class AdMotivoCierreChatComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   displayedColumns = ['actions', 'id', 'name',];
+  reason: MotivoCierreChat = { idtbl_motivo_cierre_chat: null, name: '', create_user_id: null, create_date: null, update_last_user_id: null, update_date: null, active: true };
   dataSource = new MatTableDataSource([]);
   user;
   user_id;
   data = [];
+  is_created = false;
 
-  constructor(private ajax: AjaxService, private user_service: UserService, private router: Router, private cg: ChangeDetectorRef) { 
+  constructor(private ajax: AjaxService, private user_service: UserService, private motivo_service: MotivoCierreChatService, private router: Router, private cg: ChangeDetectorRef) { 
 
     this.user = this.user_service.getUsuario();
     if (this.user) {
@@ -47,22 +51,53 @@ export class AdMotivoCierreChatComponent implements OnInit {
    * Funcion para obtener todos los motivos de cierre
    */
   getReasons() {
-    this.ajax.get('motivos-cierre-chat/obtener', {}).subscribe(response => {
-      if(response.success){
-        this.data = response.reasons;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.cg.detectChanges();
-      }
+    this.motivo_service.getAllReasons().then((result) => {
+      this.data = result;
+      this.dataSource = new MatTableDataSource(this.data);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.cg.detectChanges();
     });
   }
 
   /**
-   * Funcion para redirigir al formulario de edicion de un motivo especifico
+   * Funcion para guardar la informacion del motivo de cierre
    */
-  editReason(e){
-    this.router.navigate(['/formulario-motivo-cierre-chat', e.idtbl_motivo_cierre_chat]);
+  saveOneReason() {
+    if(this.reason.name == ""){
+      swal.fire({
+        title: 'El motivo de cierre es obligatorio',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+      });
+    } else if(this.reason.name.length > 450) {
+      swal.fire({
+        title: 'El limite de caracteres permitidos es 450',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+      });
+    } else {
+      this.motivo_service.saveReason(this.reason, this.user_id).then((result) => {
+        this.getReasons();
+        this.is_created = false;
+      });
+    }
+  }
+
+  /**
+   * Funcion para editar un motivo especifico
+   */
+  updateReason(e){
+    e.update = false;
+    this.motivo_service.updateReason(e.idtbl_motivo_cierre_chat, e.nombre, this.user_id).then((result) => {
+      this.getReasons();
+    });
   }
 
   /**
@@ -82,11 +117,9 @@ export class AdMotivoCierreChatComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
-        this.ajax.post('motivos-cierre-chat/eliminar', { reason_id: e.idtbl_motivo_cierre_chat, user_id: this.user_id }).subscribe(p => {
-          if(p.success){
-            this.getReasons();
-          }
-        })
+        this.motivo_service.deleteReason(e.idtbl_motivo_cierre_chat, this.user_id).then((result) => {
+          this.getReasons();
+        });
       }
     })
     

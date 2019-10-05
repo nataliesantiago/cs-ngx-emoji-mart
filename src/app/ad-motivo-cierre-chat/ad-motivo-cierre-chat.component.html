@@ -1,14 +1,40 @@
 <div class="contenedor">
+    <mat-card *ngIf="is_created">  
+        <mat-card-content>
+        
+            <h3>Formulario de Motivo Cierre del Chat</h3>
+            <hr>
+            <div fxLayout="row wrap">
+            <div fxFlex="100">
+                <br>
+                <mat-form-field>
+                <mat-label>Digite el motivo del cierre</mat-label>
+                <input matInput [(ngModel)]="reason.name" name="name" autocomplete="off">
+                </mat-form-field>
+            </div>
+            </div>
+                
+            <br>
+            <br>
+            <div fxLayout="row wrap">
+            <div fxFlex="25" fxLayoutAlign="space-between center">
+                <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="saveOneReason()">Guardar</button>
+                <a fxFlex="45" class="custom__btn custom__btn--cancel" (click)="is_created = !is_created">Cancelar</a>
+            </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
     <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
                 
             <mat-card>
                 <mat-card-content>
                     <br>
-                    <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-motivo-cierre-chat/nuevo']">
+                    <button class="custom__btn custom__btn--primary" (click)="is_created = !is_created">
                         <mat-icon>add</mat-icon>
                         Ingresar Motivos de Cierre 
-                    </a>
+                    </button>
                     <br>
                     <br>
                     <br>
@@ -26,8 +52,14 @@
                             <ng-container matColumnDef="actions">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Acciones </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:20%;">
-                                    <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editReason(row)"></i>
-                                    <i class="ti-trash danger-color m-r-10 mouse-over" (click)="deleteReason(row)"></i>
+                                    <div *ngIf="!row.update">
+                                        <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.update=true"></i>
+                                        <i class="ti-trash danger-color m-r-10 mouse-over" (click)="deleteReason(row)"></i>
+                                    </div>
+                                    <div *ngIf="row.update">
+                                        <i class="ti-save success-color m-r-10 mouse-over" (click)="updateReason(row)"></i>
+                                        <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.update=false"></i>
+                                    </div>
                                 </mat-cell>
                             </ng-container>
     
@@ -39,8 +71,13 @@
     
                             <!-- name Column -->
                             <ng-container matColumnDef="name">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:40%;"> Pregunta </mat-header-cell>
-                                <mat-cell *matCellDef="let row" style="max-width:40%;"> {{row.nombre}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:65%;"> Motivo de cierre </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:65%;"> 
+                                    <span *ngIf="!row.update">{{row.nombre}}</span>
+                                    <mat-form-field *ngIf="row.update">
+                                        <input matInput type="text" name="name" [(ngModel)]="row.nombre" autocomplete="off">
+                                    </mat-form-field>
+                                </mat-cell>
                             </ng-container>
 
                             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

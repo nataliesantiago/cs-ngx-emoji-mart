@@ -7,11 +7,14 @@ import { ChatService } from '../providers/chat.service';
 import { UserService } from '../providers/user.service';
 import { FormControl } from '@angular/forms';
 import { ShortcutsService } from '../providers/shortcuts.service';
+import swal from 'sweetalert2';
+
 @Component({
   selector: 'app-administrador-shortcuts',
   templateUrl: './administrador-shortcuts.component.html',
   styleUrls: ['./administrador-shortcuts.component.scss']
 })
+
 export class AdministradorShortcutsComponent implements OnInit {
   user: User;
   creando_extension = false;
@@ -80,6 +83,7 @@ export class AdministradorShortcutsComponent implements OnInit {
 
   ngOnInit() {
   }
+
   add(event: KeyboardEvent): void {
     // console.log(event);
     event.preventDefault();
@@ -131,11 +135,46 @@ export class AdministradorShortcutsComponent implements OnInit {
   }
 
   crearShortcut() {
-    this.creando_shortcut = true;
     this.nuevo_shortcut.id_usuario = this.user.getId();
     this.shortcutsService.crearShortcut(this.nuevo_shortcut).then(id => {
-      //console.log(id);
       this.init();
+      this.creando_extension = false;
+      this.reset();
+      this.createControl.setValue('');
+    }).catch((err) => {
+      swal.fire({
+        title: 'Advertencia',
+        text: "El Shortcut que intenta ingresar ya existe, por favor ingrese uno diferente",
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar'
+      }).then((result) => {
+        if (result.value) {
+          this.reset();
+          this.createControl.setValue('');
+        }
+      });
+    });
+  }
+
+  eliminarShortcut(e) {
+    swal.fire({
+      title: 'Cuidado',
+      text: "Desea Borrar el guión",
+      type: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.shortcutsService.desactivarShortcut(e.idtbl_shortcut_operador).then((r) => {
+          this.init();
+        });
+      }
     });
   }
 
