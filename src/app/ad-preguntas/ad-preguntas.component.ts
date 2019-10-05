@@ -99,6 +99,7 @@ export class AdPreguntasComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(this.data);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
+                this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
                 this.cg.detectChanges();
               }
             })

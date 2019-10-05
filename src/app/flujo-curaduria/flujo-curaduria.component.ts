@@ -68,6 +68,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         //this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;        
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
         this.cg.detectChanges();
       }
     })
@@ -106,6 +107,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
         this.cg.detectChanges();
       }
     })
@@ -124,6 +126,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
         this.cg.detectChanges();
       }
     })
@@ -142,6 +145,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
         this.cg.detectChanges();
       }
     })
@@ -160,6 +164,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
         this.cg.detectChanges();
       }
     })
@@ -178,9 +183,9 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.data = p.preguntas;
         this.dataSource = new MatTableDataSource(this.data);
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;        
+        this.dataSource.sort = this.sort;     
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);   
         this.cg.detectChanges();
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p1 => {

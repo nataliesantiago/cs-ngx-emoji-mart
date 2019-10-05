@@ -75,6 +75,7 @@ export class AdCategoriaExperticiaComponent implements OnInit {
                 this.dataSource = new MatTableDataSource(this.categorias);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
+                this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
               }
             })
           }

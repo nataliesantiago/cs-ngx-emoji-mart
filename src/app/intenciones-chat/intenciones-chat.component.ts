@@ -59,6 +59,15 @@ export class IntencionesChatComponent implements OnInit {
     })
   }
 
+  verificarCategoriaAsociada(nombre){
+    nombre = nombre.toLowerCase();
+    let intenciones = this.intenciones_all.filter(i => {
+      return i.frase.toLowerCase().indexOf(nombre) != (-1);
+    });
+    if (nombre=="" || intenciones.length<=0)
+      this.intenciones = [];
+  }
+
   seleccionarCategoriaNueva(value) {
     // console.log('Valor', value)
     this.categoria_creando = value;
