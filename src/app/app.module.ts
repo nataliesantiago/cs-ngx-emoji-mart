@@ -100,7 +100,8 @@ import { AdministradorNotificacionesComponent } from './administrador-notificaci
 import { FormularioNotificacionesComponent } from './formulario-notificaciones/formulario-notificaciones.component';
 import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
 import { CargaMasivaComponent, DialogOverviewDetailQuestion } from './carga-masiva/carga-masiva.component';
-
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { SosComponent } from './components/sos/sos.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -168,11 +169,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdministradorNotificacionesComponent,
     FormularioNotificacionesComponent,
     CargaMasivaComponent,
-    AdMotivoCierreChatComponent
+    AdMotivoCierreChatComponent,
+    SosComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
-    DialogOverviewDetailQuestion
+    DialogOverviewDetailQuestion,
+    SosComponent
   ],
   imports: [
     BrowserModule,
@@ -211,7 +214,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatDividerModule,
     PickerModule,
     AngularFireAuthModule,
-    AngularFireMessagingModule
+    AngularFireMessagingModule,
   ],
 
   providers: [

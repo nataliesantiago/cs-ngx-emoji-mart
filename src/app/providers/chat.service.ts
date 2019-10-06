@@ -10,7 +10,7 @@ import { User } from '../../schemas/user.schema';
 import { UserService } from './user.service';
 import { Conversacion } from '../../schemas/conversacion.schema';
 import { reject } from 'q';
-import { xhr, xhrConversaciones } from '../../schemas/xhr.schema';
+import { xhr, xhrConversaciones, Experto } from '../../schemas/xhr.schema';
 import { emojis, EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
@@ -18,6 +18,7 @@ import { Mensaje } from '../../schemas/mensaje.schema';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { resolve } from 'url';
 import { ExtensionArchivoChat, IntencionChat } from '../../schemas/interfaces';
+import { UtilsService } from './utils.service';
 const moment = _rollupMoment || _moment;
 
 
@@ -40,7 +41,7 @@ export class ChatService {
   flac_ok: any;
   flacLength: any;
   flacBuffers: any;
-  constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore, private emojiService: EmojiService) {
+  constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore, private emojiService: EmojiService, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
@@ -531,9 +532,132 @@ export class ChatService {
   desactivarGuionChat(id_guion: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/guion/eliminar', { id_usuario: this.user.getId(), id_guion: id_guion }).subscribe(d => {
-        
+
         if (d.success) {
           resolve(d.id);
+        }
+      })
+    });
+  }
+
+
+  crearSOS(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/obtenerFilas', {}).subscribe(d => {
+        if (d.success) {
+          this.procesaFilas(d.filas, resolve);
+        }
+      });
+    });
+
+  }
+
+  procesaFilas(filas: Array<any>, resolve: CallableFunction) {
+    let expertos = [];
+    let finaliza = true;
+
+    filas.forEach((ce, index) => {
+
+      expertos = expertos.concat(ce.expertos);
+
+    });
+    this.asignarAsesor(expertos, resolve);
+  }
+
+  asignarAsesor(expertos: Array<any>, resolve: CallableFunction) {
+    let final_expertos = [];
+    expertos.forEach(async (e, index) => {
+      let data = await this.getDocumentoFirebase('expertos/' + e.id_usuario);
+      if (!data) {
+        data = { activo: false };
+      }
+      let ex = { idtbl_usuario: e.id_usuario, chats: [], activo: data.activo, ultima_conexion: data.fecha };
+      ex.chats = await this.getCollectionFirebase('expertos/' + e.id_usuario + '/chats');
+      final_expertos.push(ex);
+      if (index == expertos.length - 1) {
+        this.procesaChats(final_expertos, resolve);
+      }
+    });
+
+  }
+
+
+  procesaChats(expertos, resolve: CallableFunction) {
+    expertos = this.utilsService.getUnique(expertos, 'idtbl_usuario');
+    let asignado = 0;
+    let todos_expertos = expertos;
+    expertos = expertos.filter(e => {
+      if (!e.ultima_conexion) {
+        return false;
+      }
+      var duration = moment().unix() - e.ultima_conexion._seconds;
+      return e.activo && duration < 11;
+    });
+    expertos.sort((a, b) => {
+      if (!a.chats && !b.chats) {
+        return 0;
+      } else if (!a.chats) {
+        return 1;
+      } else if (!b.chats) {
+        return -1;
+      } else {
+        return a.chats.length < b.chats.length ? 1 : -1;
+      }
+    });
+    let experto: Experto = expertos.pop();
+    if (experto) {
+      this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId(), id_operador: experto.idtbl_usuario }).subscribe(d => {
+        resolve(d.success);
+      })
+    } else {
+      this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId() }).subscribe(d => {
+        resolve(false);
+      })
+    }
+
+    //resolve(experto);
+    /*if (!experto) {
+      todos_expertos.sort((a, b) => {
+        if (!a.chats && !b.chats) {
+          return 0;
+        } else if (!a.chats) {
+          return 1;
+        } else if (!b.chats) {
+          return -1;
+        } else {
+          return a.chats.length < b.chats.length ? 1 : -1;
+        }
+      });
+      let experto: Experto = todos_expertos.pop();
+      console.log(experto);
+    }*/
+  }
+
+  getEmergenciaUsuario(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/sos/getEmergenciaUsuario', { id_usuario: this.user.getId() }).subscribe(d => {
+        if (d.success) {
+          resolve(d.emergencia);
+        }
+      })
+    });
+  }
+
+  cerrarEmergenciaUsuario(id_emergencia: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/sos/cerrarEmergenciaUsuario', { id_emergencia: id_emergencia }).subscribe(d => {
+        if (d.success) {
+          resolve();
+        }
+      })
+    });
+  }
+
+  cerrarEmergenciaOperador(id_emergencia: number, motivo: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/sos/cerrarEmergenciaOperador', { id_emergencia: id_emergencia, motivo: motivo }).subscribe(d => {
+        if (d.success) {
+          resolve();
         }
       })
     });

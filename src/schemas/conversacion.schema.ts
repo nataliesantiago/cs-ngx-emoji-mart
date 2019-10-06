@@ -23,7 +23,9 @@ export class Conversacion {
     id_tipo_conversacion;
     id_usuario_cierra;
     id_producto;
+    nombre_producto;
     id_busqueda;
+    texto_busqueda;
     fecha_creacion;
     texto_mensaje: string;
     asesor_actual: User;

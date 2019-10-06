@@ -9,12 +9,13 @@ import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
-import { Configuracion } from '../../schemas/interfaces';
+import { Configuracion, ShortCut } from '../../schemas/interfaces';
 import { SonidosService } from '../providers/sonidos.service';
 import swal from 'sweetalert2';
 import { UtilsService } from '../providers/utils.service';
 import { MatDialog } from '@angular/material';
 import { TransferenciaChatComponent } from '../components/transferencia-chat/transferencia-chat.component';
+import { ShortcutsService } from '../providers/shortcuts.service';
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -46,8 +47,8 @@ export class ChatExpertoComponent {
   @ViewChild('contenedor') componentRef?: PerfectScrollbarComponent;
   configuraciones = [];
   limite_texto_chat;
-
-  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
+  shortcuts: Array<ShortCut>;
+  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog, private shortcutsService: ShortcutsService) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -65,6 +66,9 @@ export class ChatExpertoComponent {
     this.chatService.obtenerLimiteTexto().then(valor => {
       this.limite_texto_chat = valor;
     });
+    this.shortcutsService.getShortcutsUsuario().then(shortcuts => {
+      this.shortcuts = shortcuts;
+    })
     let paso_por_chats = false;
     this.chatService.getConfiguracionesChat().then(configs => {
       this.configuraciones = configs.configuraciones;
@@ -739,7 +743,53 @@ export class ChatExpertoComponent {
     if (code != 13 && code != 8) {
       this.chatService.usuarioEscribiendoConversacion(c);
     }
+    // Inicia la validación si es un shortcut
+    this.validarShortcut(event, c);
+    // Fin validación shortcut
   }
+
+  validarShortcut(event: KeyboardEvent, c: Conversacion) {
+    let code = event.which;
+    let shortcut: ShortCut = { activo: true };
+    if ((event.ctrlKey || event.altKey || event.shiftKey) && (this.shortcutsService.iniciadores.indexOf(code) == (-1))) {
+      // console.log('encuentra cosas', event);
+      if (event.ctrlKey) {
+        shortcut.ctrl = true;
+      }
+      if (event.altKey) {
+        shortcut.alt = true;
+      }
+      if (event.shiftKey) {
+        shortcut.shift = true;
+      }
+      shortcut.comando = code;
+      let s = this.shortcuts.find(s => {
+
+        return (s.comando == shortcut.comando && (((s.ctrl && shortcut.ctrl) || (!s.ctrl && !shortcut.ctrl)) && ((s.alt && shortcut.alt) || (!s.alt && !shortcut.alt)) && ((s.shift && shortcut.shift) || (!s.shift && !shortcut.shift))));
+      });
+      // console.log('encuentra cosas', s, shortcut.alt);
+      if (s) {
+        if (!c.texto_mensaje) {
+          c.texto_mensaje = '';
+        }
+        c.texto_mensaje += this.reemplazaVariablesShortcut(s.guion, c);
+        // console.log('encuentra cosas');
+
+      }
+
+    }
+  }
+
+  reemplazaVariablesShortcut(cadena: string, c: Conversacion): string {
+    cadena = cadena.replace('{nombre_cliente}', c.cliente.nombre);
+    cadena = cadena.replace('{correo_cliente}', c.cliente.correo);
+    cadena = cadena.replace('{categoria}', c.nombre_producto);
+    cadena = cadena.replace('{fecha_actual}', moment().format('DD-MM-YYYY hh:mm:ss a'));
+    cadena = cadena.replace('{busqueda}', c.texto_busqueda);
+    cadena = cadena.replace('{id_conversacion}', c.idtbl_conversacion);
+    return cadena;
+  }
+
   toggleNotas(c: Conversacion) {
     this.fireStore.doc('conversaciones/' + c.codigo).set({ notas_voz: c.notas_voz }, { merge: true });
   }

@@ -17,7 +17,7 @@ export class FilaChatsPipe implements PipeTransform {
         /*let setUnico: Set<Conversacion> = new Set(conversaciones);
         conversaciones = Array.from(setUnico);*/
         conversaciones = this.utilsService.getUnique(conversaciones, 'codigo');
-        console.log(conversaciones);
+        //console.log(conversaciones);
         return conversaciones;
     }
 }

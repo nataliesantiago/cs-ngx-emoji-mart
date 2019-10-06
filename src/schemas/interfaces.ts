@@ -62,7 +62,7 @@ export interface ShortCut {
     ctrl?: boolean;
     alt?: boolean;
     shift?: boolean;
-    comandos?:Array<ComandoShortcut>;
+    comandos?: Array<ComandoShortcut>;
 }
 
 export interface ComandoShortcut {
@@ -91,4 +91,14 @@ export interface MotivoCierreChat {
     update_last_user_id?: number;
     update_date?: Date;
     active: boolean;
+}
+
+export interface Emergencia {
+    idtbl_consultas_sos: number;
+    id_usuario_emergencia: number;
+    fecha_emeregncia: Date;
+    id_usuario_operador: number;
+    motivo_emergencia: string;
+    fecha_emergencia_cerrada: Date;
+    fecha_emergencia_cerrada_operador: Date;
 }

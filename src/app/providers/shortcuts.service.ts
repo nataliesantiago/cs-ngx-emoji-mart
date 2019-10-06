@@ -12,6 +12,7 @@ import { ShortCut } from '../../schemas/interfaces';
 })
 export class ShortcutsService {
     user: User;
+    iniciadores = [16, 17, 18];
     keyCodes = {
         0: 'That key has no keycode',
         3: 'break',

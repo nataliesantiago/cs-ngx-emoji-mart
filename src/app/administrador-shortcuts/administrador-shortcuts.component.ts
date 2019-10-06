@@ -24,7 +24,7 @@ export class AdministradorShortcutsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   comandos = [];
-  iniciadores = [16, 17, 18];
+  iniciadores;
   separatorKeysCodes = [ENTER, COMMA];
   nuevo_shortcut: ShortCut = { activo: true };
   removable = false;
@@ -35,7 +35,7 @@ export class AdministradorShortcutsComponent implements OnInit {
   shortcuts: ShortCut[];
   constructor(private chatService: ChatService, private userService: UserService, private shortcutsService: ShortcutsService) {
     this.user = this.userService.getUsuario();
-
+    this.iniciadores = this.shortcutsService.iniciadores;
     if (this.user) {
       this.init();
     }
