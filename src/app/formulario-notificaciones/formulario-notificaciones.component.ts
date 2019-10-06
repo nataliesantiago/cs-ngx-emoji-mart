@@ -57,9 +57,10 @@ export class FormularioNotificacionesComponent implements OnInit {
   }
 
   listarObjetos(){
-    if(this.notificacion.tipo_envio == "Dirigido"){
+    
+    if(this.notificacion.tipo_envio == "2"){
       this.user.obtenerListaEmpleados().then( n => {
-        console.log(n);
+        
         this.lista_objetos = n;
         this.options = this.lista_objetos;
         this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -67,9 +68,9 @@ export class FormularioNotificacionesComponent implements OnInit {
           map(value => this._filter(value))
         );
       });
-    }else if(this.notificacion.tipo_envio == "Multidependencia"){
+    }else if(this.notificacion.tipo_envio == "3"){
       this.notificacionService.obtenerListaDependencias().then( n => {
-        console.log(n);
+        
         this.lista_objetos = n;
         this.options = this.lista_objetos;
         this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -171,7 +172,6 @@ export class FormularioNotificacionesComponent implements OnInit {
         })
       }else{
         this.notificacionService.guardarNotificacion(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
-          console.log(u);
           let id_notificacion = u.usuarios[0];
           let ids_usuarios = [];
           for(let i = 1; i < u.usuarios.length; i++){

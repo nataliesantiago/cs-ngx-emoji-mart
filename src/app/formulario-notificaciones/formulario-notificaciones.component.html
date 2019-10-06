@@ -43,16 +43,15 @@
       <div fxLayout="row wrap">
         <mat-form-field fxFlex.gt-sm="40" fxFlex="100">
           <mat-label>Envio a</mat-label>
-          <mat-select [(ngModel)]="notificacion.tipo_envio" name="envio" (change)="listarObjetos()">
-            <mat-option>Todos</mat-option>
-            <mat-option>Dirigido</mat-option>
-            <mat-option>Multidependencia</mat-option>
+          <mat-select [(ngModel)]="notificacion.tipo_envio" name="envio" (selectionChange)="listarObjetos()">
+            <mat-option value="1">Todos</mat-option>
+            <mat-option value="2">Dirigido</mat-option>
+            <mat-option value="3">Multidependencia</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <div fxLayout="row wrap"
-        *ngIf="notificacion.tipo_envio == 'Dirigido' || notificacion.tipo_envio == 'Multidependencia'">
+      <div fxLayout="row wrap" *ngIf="notificacion.tipo_envio == '2' || notificacion.tipo_envio == '3'">
         <div fxFlex.gt-sm="40" fxFlex="100">
           <br>
           <mat-card-title>Personas</mat-card-title>
