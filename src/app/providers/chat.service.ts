@@ -509,4 +509,34 @@ export class ChatService {
     });
   }
 
+  /**
+   * @description Actualiza un guion especifico
+   * @param  {string} texto
+   * @returns Promise
+   */
+  actualizarGuionChat(texto: string, id_guion: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/guion/editar', { texto: texto, id_usuario: this.user.getId(), id_guion: id_guion }).subscribe(d => {
+        if (d.success) {
+          resolve(d.id);
+        }
+      })
+    });
+  }
+
+  /**
+   * @description Actualiza un guion especifico
+   * @returns Promise
+   */
+  desactivarGuionChat(id_guion: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/guion/eliminar', { id_usuario: this.user.getId(), id_guion: id_guion }).subscribe(d => {
+        
+        if (d.success) {
+          resolve(d.id);
+        }
+      })
+    });
+  }
+
 }

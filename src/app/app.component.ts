@@ -18,7 +18,7 @@ const moment = _rollupMoment || _moment;
 })
 export class AppComponent {
   user: User;
-  version = '0.0.17'
+  version = '0.0.19'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService) {
     this.responseSearch.setActive(true);
     moment.locale('es');

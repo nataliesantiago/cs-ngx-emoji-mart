@@ -76,10 +76,10 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
           <mat-cell *matCellDef="let row">
             <div *ngIf="!row.editando">
-              <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.editando=true"></i>
-              <i class="ti-trash danger-color m-r-10 mouse-over" (click)="eliminarExtension(row)"></i>
+              <i class="ti-trash danger-color m-r-10 mouse-over" (click)="eliminarShortcut(row)"></i>
             </div>
             <div *ngIf="row.editando">
+                <i class="ti-save success-color m-r-10 mouse-over" (click)="editarExtension(row)"></i>
               <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.editando=false"></i>
             </div>
           </mat-cell>

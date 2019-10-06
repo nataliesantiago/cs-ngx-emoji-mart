@@ -4,14 +4,14 @@
       <h3>Formulario de Notificaciones</h3>
       <hr>
       <div fxLayout="row wrap">
-        <mat-form-field floatLabel="never" fxFlex.gt-sm="40" fxFlex="100">
+        <mat-form-field fxFlex.gt-sm="40" fxFlex="100">
           <mat-label>Digite el Título*</mat-label>
           <input matInput [(ngModel)]="notificacion.titulo" name="titulo" autocomplete="off">
         </mat-form-field>
       </div>
       <br>
       <div fxLayout="row wrap">
-        <mat-form-field appearance="outline" class="texto" floatLabel="never" fxFlex.gt-sm="100" fxFlex="100">
+        <mat-form-field appearance="outline" class="texto" fxFlex.gt-sm="100" fxFlex="100">
           <mat-label>Digite el Texto</mat-label>
           <textarea matInput class="campo-texto" name="texto" [(ngModel)]="notificacion.texto"></textarea>
         </mat-form-field>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div fxLayout="row wrap">
-        <mat-form-field floatLabel="never" fxFlex.gt-sm="40" fxFlex="100">
+        <mat-form-field fxFlex.gt-sm="40" fxFlex="100">
           <mat-label>Fecha Inicio*</mat-label>
           <input matInput [matDatepicker]="picker" [(ngModel)]="notificacion.fecha_inicio">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -41,13 +41,13 @@
       <h3>Destinatarios</h3>
       <hr>
       <div fxLayout="row wrap">
-        <mat-form-field floatLabel="never" fxFlex.gt-sm="40" fxFlex="100">
+        <mat-form-field fxFlex.gt-sm="40" fxFlex="100">
           <mat-label>Envio a</mat-label>
-          <select matNativeControl [(ngModel)]="notificacion.tipo_envio" name="envio" (change)="listarObjetos()">
-            <option>Todos</option>
-            <option>Dirigido</option>
-            <option>Multidependencia</option>
-          </select>
+          <mat-select [(ngModel)]="notificacion.tipo_envio" name="envio" (change)="listarObjetos()">
+            <mat-option>Todos</mat-option>
+            <mat-option>Dirigido</mat-option>
+            <mat-option>Multidependencia</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 

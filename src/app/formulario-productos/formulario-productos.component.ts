@@ -162,6 +162,14 @@ export class FormularioProductosComponent implements OnInit {
     
   }
 
+  verificarArbolMostrar(nombreCPadre:string){
+    if (nombreCPadre.length==0 ||(this._filter(nombreCPadre).length<=0 && this.dataSource.data.length>0)){
+      let TREE_DATA: FoodNode[] = [];
+      this.dataSource.data = TREE_DATA;
+      this.cg.detectChanges();
+    }
+  }
+
   seleccionarProducto(e){
     
     this.categoria.id_producto_padre = e.idtbl_producto;
