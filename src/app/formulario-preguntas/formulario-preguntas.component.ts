@@ -412,6 +412,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     })
   }
 
+  verificarPreguntaAsociada(pregunta){
+    
+  }
+
   private _filter(value: any): string[] {
     
     if(value.titulo){

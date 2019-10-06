@@ -201,3 +201,42 @@ article div h1 {
 #snav{
     width: 25vw;
 }
+
+.chat-panel{
+    width: 300px;    
+}
+
+.imagen-notificacion{
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.vision-notificacion{
+    padding: 5px;
+}
+
+.texto-notificacion{
+    font-size: 12px;
+    margin-left: 5%;
+    margin-bottom: 5px;
+    color: #888;
+}
+
+h4{
+    margin-block-start: 1em !important;
+    margin-block-end: 0em !important;
+    margin-left: 5%;
+    font-weight: bold;
+    color: #888;
+}
+
+.imagen-centrada{
+    text-align: center;
+}
+
+.fecha-notificacion{
+    font-size: 10px;
+    color: grey;
+    margin-bottom: 5px;
+    margin-left: 5%;
+}

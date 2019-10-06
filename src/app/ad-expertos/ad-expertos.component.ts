@@ -5,6 +5,7 @@ import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-ad-expertos',
@@ -22,6 +23,12 @@ export class AdExpertosComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_usuario', type:'number'},
+    {field: 'nombre', type:'string'},
+    {field: 'correo', type:'string'}
+  ];
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
     this.user = this.userService.getUsuario();
@@ -37,6 +44,7 @@ export class AdExpertosComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.usuarios);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
     

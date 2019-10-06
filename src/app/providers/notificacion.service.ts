@@ -50,4 +50,46 @@ export class NotificacionService {
     })
   }
 
+
+  obtenerListaDependencias():Promise<any>{
+    return new Promise((resolve, reject) => {
+
+      this.ajax.get('notificacion/obtener-dependencias', {}).subscribe(d => {
+        if(d.success){
+          resolve(d.dependencias);
+        }else{
+          reject();
+        }
+      });
+      
+    })
+  }
+
+
+  guardarNotificacion(notificacion: {}, file: File, lista_asociada: any, id_usuario: number):Promise<any>{
+    return new Promise((resolve, reject) => {
+      if(file){
+        const fd = new FormData();
+        fd.append('archivo', file);
+        this.ajax.postData('notificacion/subir-imagen', fd).subscribe(d => {
+          if(d.success){
+            console.log(d.archivo.url);
+            this.ajax.post('notificacion/guardar', { notificacion: notificacion, url: d.archivo.url, lista_asociada: lista_asociada, id_usuario: id_usuario }).subscribe(d => {
+              if(d.success){
+                resolve(d);
+              }
+            })
+          }
+        })
+      }else{
+        this.ajax.post('notificacion/guardar', { notificacion: notificacion, url: "", lista_asociada: lista_asociada, id_usuario: id_usuario }).subscribe(d => {
+          if(d.success){
+            resolve(d);
+          }
+        })
+      }
+      
+    })
+  }
+
 }

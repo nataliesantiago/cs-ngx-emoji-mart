@@ -59,7 +59,8 @@
         "rxjs": "^6.3.3",
         "rxjs-compat": "^6.2.0",
         "rxjs-tslint": "^0.1.4",
-        "sweetalert2": "^8.18.0",
+        "sweetalert2": "^8.14.0",
+        "uuid": "^3.3.3",
         "zone.js": "^0.8.26"
     },
     "devDependencies": {

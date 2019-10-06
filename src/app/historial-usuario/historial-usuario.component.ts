@@ -3,6 +3,7 @@ import { ResponseSearch } from '../models/response-search';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { HistorialUsuariosService } from '../providers/historial-usuarios.service';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-historial-usuario',
@@ -19,6 +20,11 @@ export class HistorialUsuarioComponent implements OnInit {
   totalPages = 1; // total de paginas obtenidas en el servicio
   color = '#000';
   colorR = '#eee';
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_motivo_cierre_chat', type:'number'},
+    {field: 'nombre', type:'string'}
+  ];
 
   @ViewChild(MatSort) sort: MatSort; // sort para ordenar
   @ViewChild(MatPaginator) paginator: MatPaginator; // paginator
@@ -75,6 +81,7 @@ export class HistorialUsuarioComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
     });
   }
   /**

@@ -8,6 +8,7 @@ import { UserService } from '../providers/user.service';
 import { FormControl } from '@angular/forms';
 import { ShortcutsService } from '../providers/shortcuts.service';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-administrador-shortcuts',
@@ -20,6 +21,9 @@ export class AdministradorShortcutsComponent implements OnInit {
   creando_extension = false;
   displayedColumns = ['acciones', 'comandos', 'guion'];
   dataSource: MatTableDataSource<any>;
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field: 'guion', type:'string'}];
   extensiones = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -73,6 +77,7 @@ export class AdministradorShortcutsComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.shortcuts);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
     })
   }
 

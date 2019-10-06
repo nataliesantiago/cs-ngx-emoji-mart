@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef, Inject } from '@angula
 import { AjaxService } from '../providers/ajax.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import swal from 'sweetalert2';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-carga-masiva',
@@ -19,6 +20,8 @@ export class CargaMasivaComponent implements OnInit {
   sort: MatSort;
   displayedColumns = ['title', 'user_id', 'create_date', 'state_id', 'details', 'create', 'errors'];
   dataSource = new MatTableDataSource([]);
+  matTableFilter:matTableFilter;
+  filterColumns = [];
   data = [];
   loading = false;
 

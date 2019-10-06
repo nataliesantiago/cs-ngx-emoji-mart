@@ -102,6 +102,8 @@ import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-c
 import { CargaMasivaComponent, DialogOverviewDetailQuestion } from './carga-masiva/carga-masiva.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SosComponent } from './components/sos/sos.component';
+import { MomentDate } from '../pipes/momentDate';
+import { OnlyNumberDirective } from '../common/onlyNumberDirective';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -170,7 +172,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormularioNotificacionesComponent,
     CargaMasivaComponent,
     AdMotivoCierreChatComponent,
-    SosComponent
+    SosComponent,
+    MomentDate,
+    OnlyNumberDirective
   ],
   entryComponents: [
     TransferenciaChatComponent,

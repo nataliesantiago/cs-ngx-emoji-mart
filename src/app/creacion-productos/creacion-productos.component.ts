@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { User } from '../../schemas/user.schema';
+import { matTableFilter } from '../../common/matTableFilter';
 
 @Component({
   selector: 'app-creacion-productos',
@@ -22,6 +23,10 @@ export class CreacionProductosComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
+  matTableFilter:matTableFilter;
+  filterColumns = [
+    {field:'idtbl_producto', type:'number'},
+    {field: 'nombre', type:'string'}];
   user: User;
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
     this.usuario = this.userService.getUsuario();
@@ -37,6 +42,7 @@ export class CreacionProductosComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.productos);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
       }
     })
 

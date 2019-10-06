@@ -485,6 +485,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
+  verificarPreguntaAsociada(pregunta){
+    
+  }
+
   private _filter(value: any): string[] {
 
     if (value.titulo) {
