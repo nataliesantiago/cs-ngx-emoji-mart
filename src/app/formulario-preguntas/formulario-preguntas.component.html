@@ -151,7 +151,7 @@
                 <input type="text" placeholder="Seleccione la pregunta" matInput [formControl]="myControl" [matAutocomplete]="auto">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='anadirPreguntaAsociada($event.option.value)'>
                   <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option.titulo}}
+                    ({{option.idtbl_pregunta}}) {{option.titulo}}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>

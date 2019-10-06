@@ -283,7 +283,7 @@ export class UserService {
 
             this.ajax.get('user/obtener-todos', {}).subscribe(d => {
                 if (d.success) {
-                    resolve(d.usuarios);
+                    resolve(d.usuario);
                 } else {
                     reject();
                 }

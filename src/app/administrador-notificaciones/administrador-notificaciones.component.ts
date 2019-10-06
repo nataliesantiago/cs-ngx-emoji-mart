@@ -33,9 +33,11 @@ export class AdministradorNotificacionesComponent implements OnInit {
     });
 
     this.notificacionService.obtenerNotificacionesAdministracion().then( n => {
-      console.log(n);
+      this.dataSource = new MatTableDataSource(n);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.cg.detectChanges();
     });
-    
 
   }
 
