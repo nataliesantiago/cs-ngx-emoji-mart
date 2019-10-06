@@ -110,6 +110,7 @@ export class FormularioEncuestasComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
+        this.orden_preguntas.splice(this.orden_preguntas.length-1,1);
         this.preguntas.splice(pos, 1);
         this.cg.detectChanges();
       }
