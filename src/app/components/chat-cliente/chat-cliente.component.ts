@@ -374,6 +374,8 @@ export class ChatClienteComponent implements OnInit {
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
+      c.llamada_activa = data.llamada_activa;
+      c.url_llamada = data.url_llamada;
       if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2) {
         c.mostrar_encuesta = true;
       } else if (c.asesor_actual) {

@@ -17,7 +17,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { resolve } from 'url';
-import { ExtensionArchivoChat, IntencionChat } from '../../schemas/interfaces';
+import { ExtensionArchivoChat, IntencionChat, Emergencia } from '../../schemas/interfaces';
 import { UtilsService } from './utils.service';
 const moment = _rollupMoment || _moment;
 
@@ -608,6 +608,10 @@ export class ChatService {
     if (experto) {
       this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId(), id_operador: experto.idtbl_usuario }).subscribe(d => {
         resolve(d.success);
+        this.getEmergenciaUsuario().then((e: Emergencia) => {
+          this.fireStore.doc('expertos/' + experto.idtbl_usuario + '/emergencia/1').set({ id_emergencia: e.idtbl_consultas_sos });
+        })
+
       })
     } else {
       this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId() }).subscribe(d => {
@@ -648,6 +652,7 @@ export class ChatService {
       this.ajax.post('chat/sos/cerrarEmergenciaUsuario', { id_emergencia: id_emergencia }).subscribe(d => {
         if (d.success) {
           resolve();
+
         }
       })
     });
@@ -656,6 +661,38 @@ export class ChatService {
   cerrarEmergenciaOperador(id_emergencia: number, motivo: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/sos/cerrarEmergenciaOperador', { id_emergencia: id_emergencia, motivo: motivo }).subscribe(d => {
+        if (d.success) {
+          resolve();
+          this.fireStore.doc('expertos/' + this.user.getId() + '/emergencia/1').delete();
+        }
+      })
+    });
+  }
+
+  getEmergencia(id_emergencia: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/sos/getEmergencia', { id_emergencia: id_emergencia }).subscribe(d => {
+        if (d.success) {
+          resolve(d.emergencia);
+        }
+      })
+    });
+  }
+
+  iniciarVideollamada(c: Conversacion): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/videollamada/crear', { id_conversacion: c.idtbl_conversacion, id_usuario: this.user.getId(), correo_cliente: c.cliente.correo, token: this.user.token_acceso }).subscribe(d => {
+        if (d.success) {
+          c.id_llamada = d.id;
+          resolve(d.url);
+        }
+      })
+    });
+  }
+
+  finalizarVideollamada(c: Conversacion): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/videollamada/finalizar', { id_llamada: c.id_llamada, codigo: c.codigo }).subscribe(d => {
         if (d.success) {
           resolve();
         }

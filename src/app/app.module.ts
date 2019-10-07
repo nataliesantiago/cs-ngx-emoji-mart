@@ -104,6 +104,9 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SosComponent } from './components/sos/sos.component';
 import { MomentDate } from '../pipes/momentDate';
 import { OnlyNumberDirective } from '../common/onlyNumberDirective';
+import { SosOperadorComponent } from './components/sos-operador/sos-operador.component';
+import { LinkifyPipe } from '../pipes/linkify.pipe';
+import { SafePipe } from './pipes/safe.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -174,12 +177,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdMotivoCierreChatComponent,
     SosComponent,
     MomentDate,
-    OnlyNumberDirective
+    OnlyNumberDirective,
+    SosOperadorComponent,
+    LinkifyPipe,
+    SafePipe
   ],
   entryComponents: [
     TransferenciaChatComponent,
     DialogOverviewDetailQuestion,
-    SosComponent
+    SosComponent,
+    SosOperadorComponent
   ],
   imports: [
     BrowserModule,

@@ -77,7 +77,14 @@
                                 <!--<audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>-->
                               </div>
                             </div>
-                            <div *ngIf="!m.es_nota_voz">{{m.texto}}</div>
+                            <div *ngIf="m.es_llamada" class="boton-llamada">
+                              <a [href]="m.url" target="_blank">
+                                <mat-card><img src="../../assets/images/videollamada.png" />
+                                  Unirse! </mat-card>
+                              </a>
+                            </div>
+                            <div *ngIf="!m.es_nota_voz && !m.es_llamada" [innerHTML]="m.texto | linkify | safe:'html'">
+                            </div>
                             <span *ngIf="m.id_usuario==user.idtbl_usuario">
                               <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
                               <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>
@@ -144,6 +151,20 @@
                         </div>
                       </div>
                     </perfect-scrollbar>
+                    <div *ngIf="chat.llamada_activa" class="ventana-conversacion-activa cliente">
+                      <div class="contenedor-llamada">
+                        <div class="contenedor-icono">
+                          <img src="../../assets/images/videollamada.png" />
+                          <div class="contenedor-botones">
+                            <div class="contenedor-boton">
+                              <a class="custom__btn custom__btn--accept" [href]="chat.url_llamada"
+                                target="_blank">Unirse a la
+                                llamada</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div [hidden]="chat.ocultar_nuevos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
                         (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
                   </mat-card-content>
@@ -155,7 +176,7 @@
                       <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                         <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                       </button>
-                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje"  [minHeight]="30"
+                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
                         (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
                         (keyup)="remplazaEmoji(chat)" [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
                         (blur)="setFocus(chat,false)" maxlength="{{limite_texto_chat}}"></textarea>

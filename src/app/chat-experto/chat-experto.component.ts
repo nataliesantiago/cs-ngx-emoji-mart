@@ -235,6 +235,8 @@ export class ChatExpertoComponent {
     this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       c.id_estado_conversacion = data.id_estado_conversacion;
+      c.llamada_activa = data.llamada_activa;
+      c.url_llamada = data.url_llamada;
       if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
         c.mostrar_encuesta = true;
         this.recibirChatAutomatico();
@@ -545,7 +547,7 @@ export class ChatExpertoComponent {
     if (chat.texto_mensaje) {
       chat.texto_mensaje = chat.texto_mensaje.trim();
     }
-    if ((chat.texto_mensaje && chat.texto_mensaje != '') || chat.archivo_adjunto || tipo_mensaje == 3) {
+    if ((chat.texto_mensaje && chat.texto_mensaje != '') || chat.archivo_adjunto || tipo_mensaje == 3 || tipo_mensaje == 4) {
       if (!chat.texto_mensaje) {
         chat.texto_mensaje = '';
       }
@@ -581,6 +583,14 @@ export class ChatExpertoComponent {
           m.audioControls = { reproduciendo: false, segundo: duration, min: 0, max: duration };
           m.duracion = duration;
           this.asignarAudio(m);
+          break;
+
+        case 4:
+          m.es_archivo = false;
+          m.es_nota_voz = false;
+          m.texto = 'Únete a la videollamada: ' + url;
+          m.es_llamada = true;
+          m.url = url;
           break;
       }
 
@@ -807,5 +817,19 @@ export class ChatExpertoComponent {
       delete this.chat;
     }
     this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+  }
+
+  iniciarVideollamada(c: Conversacion) {
+    this.chatService.iniciarVideollamada(c).then(d => {
+      // console.log('creo', d);
+      // this.enviarMensaje(c, 4, d);
+      this.fireStore.doc('conversaciones/' + c.codigo).update({ llamada_activa: true, url_llamada: d });
+    });
+  }
+
+  finalizarLlamada(c: Conversacion) {
+    this.chatService.finalizarVideollamada(c).then(() => {
+
+    });
   }
 }
