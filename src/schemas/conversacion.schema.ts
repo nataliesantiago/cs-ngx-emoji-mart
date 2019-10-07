@@ -65,6 +65,9 @@ export class Conversacion {
     transferido: boolean;
     interval_tiempo_cola: any;
     mostrar_encuesta: boolean;
+    url_llamada: string;
+    llamada_activa: boolean;
+    id_llamada: number;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;

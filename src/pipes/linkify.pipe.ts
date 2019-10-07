@@ -1,9 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
 @Pipe({ name: 'linkify' })
 export class LinkifyPipe implements PipeTransform {
+    constructor(protected sanitizer: DomSanitizer) { }
     transform(link: string): string {
         return this.linkify(link);
     }

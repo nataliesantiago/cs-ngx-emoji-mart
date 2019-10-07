@@ -89,6 +89,10 @@
                 <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
                 </div>
               </div>
+              <button mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1"
+                (click)="iniciarVideollamada(chat)">
+                <mat-icon>phone</mat-icon>
+              </button>
               <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1">
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -150,7 +154,8 @@
                         <!-- <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>-->
                       </div>
                     </div>
-                    <div *ngIf="!m.es_nota_voz">{{m.texto | linkify}}</div>
+
+                    <div *ngIf="!m.es_nota_voz && !m.es_llamada" [innerHTML]="m.texto | linkify | safe:'html'"></div>
                     <span *ngIf="m.id_usuario==user.idtbl_usuario">
                       <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
                       <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>
@@ -215,6 +220,25 @@
                 </div>
               </div>
             </perfect-scrollbar>
+            <div *ngIf="chat.llamada_activa" class="ventana-conversacion-activa">
+              <div class="contenedor-llamada">
+                <div class="contenedor-icono">
+                  <h3 class="boton-centrado">Recuerda grabar la llamada como soporte de la conversación</h3>
+                  <img src="../../assets/images/videollamada.png" />
+                  <div class="contenedor-botones">
+                    <div class="contenedor-boton">
+                      <a class="custom__btn custom__btn--accept" [href]="chat.url_llamada" target="_blank">Unirse a la
+                        llamada</a>
+                    </div>
+                    <div class="contenedor-boton">
+                      <button class="custom__btn custom__btn--cancel" (click)="finalizarLlamada(chat)">Finalizar
+                        llamada</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
             <div [hidden]="chat.ocultar_nuevos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
                 (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
           </mat-card-content>

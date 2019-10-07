@@ -22,6 +22,7 @@ export class Mensaje {
     duracion: number;
     nombre_archivo: string;
     label: string;
+    es_llamada: boolean;
     constructor(id_usuario?, tipo_mensaje?, url?) {
         this.id_usuario = id_usuario;
         this.tipo_mensaje = tipo_mensaje;

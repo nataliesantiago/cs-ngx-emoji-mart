@@ -679,4 +679,25 @@ export class ChatService {
     });
   }
 
+  iniciarVideollamada(c: Conversacion): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/videollamada/crear', { id_conversacion: c.idtbl_conversacion, id_usuario: this.user.getId(), correo_cliente: c.cliente.correo, token: this.user.token_acceso }).subscribe(d => {
+        if (d.success) {
+          c.id_llamada = d.id;
+          resolve(d.url);
+        }
+      })
+    });
+  }
+
+  finalizarVideollamada(c: Conversacion): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/videollamada/finalizar', { id_llamada: c.id_llamada, codigo: c.codigo }).subscribe(d => {
+        if (d.success) {
+          resolve();
+        }
+      })
+    });
+  }
+
 }

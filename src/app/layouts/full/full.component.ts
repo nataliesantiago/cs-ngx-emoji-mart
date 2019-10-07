@@ -95,19 +95,19 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     })
   }
 
-  init(){
-    this.notificacionService.obtenerNotificacionesUsuario(this.id_usuario).then(r =>{
+  init() {
+    this.notificacionService.obtenerNotificacionesUsuario(this.id_usuario).then(r => {
 
       this.notificaciones_usuario = r[0];
       this.notificaicones_sin_leer = r[1].length;
-      console.log(this.notificaciones_usuario);
-      console.log(this.notificaicones_sin_leer);
+      // console.log(this.notificaciones_usuario);
+      // console.log(this.notificaicones_sin_leer);
     })
   }
 
-  leerNotificaciones(){
+  leerNotificaciones() {
 
-    this.notificacionService.leerNotificaciones(this.id_usuario).then(r =>{
+    this.notificacionService.leerNotificaciones(this.id_usuario).then(r => {
 
       this.notificaicones_sin_leer = r.length;
 
@@ -127,7 +127,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
   close(reason: string) {
     this.reason = reason;
-    
+
     this.sidenav.close();
   }
   irHome() {
@@ -320,12 +320,12 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
 
   buscar(metodo) {
-    
+
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = '';
     }
     this.responseSearch.setResultados(this.textopredictivo);
-    
+
     let obj = {
       "idUsuario": 1,
       "textoBusqueda": this.searchText,
@@ -340,7 +340,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     this.nzone.run(() => this.buscar(this.metodo));
   }
 
-  cerrarMenu(){
+  cerrarMenu() {
     this.sidenav.close();
   }
 }

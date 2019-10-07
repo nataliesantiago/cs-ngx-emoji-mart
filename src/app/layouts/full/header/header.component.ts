@@ -75,7 +75,7 @@ export class AppHeaderComponent {
     if (!this.escuchando_emergencia) {
       this.escuchando_emergencia = true;
       this.fireStore.doc('expertos/' + this.user.getId() + '/emergencia/1').valueChanges().subscribe((d: any) => {
-        console.log(d);
+        // console.log(d);
         if (d) {
           this.sonidosService.sonar(3);
           this.mostrarSnack(d);

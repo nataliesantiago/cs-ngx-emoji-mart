@@ -106,6 +106,7 @@ import { MomentDate } from '../pipes/momentDate';
 import { OnlyNumberDirective } from '../common/onlyNumberDirective';
 import { SosOperadorComponent } from './components/sos-operador/sos-operador.component';
 import { LinkifyPipe } from '../pipes/linkify.pipe';
+import { SafePipe } from './pipes/safe.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -178,7 +179,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MomentDate,
     OnlyNumberDirective,
     SosOperadorComponent,
-    LinkifyPipe
+    LinkifyPipe,
+    SafePipe
   ],
   entryComponents: [
     TransferenciaChatComponent,
