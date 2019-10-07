@@ -552,7 +552,7 @@ export class ChatService {
 
   }
 
-  procesaFilas(filas: Array<any>, resolve: CallableFunction) {
+  procesaFilas(filas: Array<any>, resolve: Function) {
     let expertos = [];
     let finaliza = true;
 
@@ -564,7 +564,7 @@ export class ChatService {
     this.asignarAsesor(expertos, resolve);
   }
 
-  asignarAsesor(expertos: Array<any>, resolve: CallableFunction) {
+  asignarAsesor(expertos: Array<any>, resolve: Function) {
     let final_expertos = [];
     expertos.forEach(async (e, index) => {
       let data = await this.getDocumentoFirebase('expertos/' + e.id_usuario);
@@ -582,7 +582,7 @@ export class ChatService {
   }
 
 
-  procesaChats(expertos, resolve: CallableFunction) {
+  procesaChats(expertos, resolve: Function) {
     expertos = this.utilsService.getUnique(expertos, 'idtbl_usuario');
     let asignado = 0;
     let todos_expertos = expertos;

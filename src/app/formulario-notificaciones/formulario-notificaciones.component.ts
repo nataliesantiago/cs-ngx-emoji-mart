@@ -189,7 +189,6 @@ export class FormularioNotificacionesComponent implements OnInit {
         });
       }
     }
-    
   }
 
   onFileChange($event){    
