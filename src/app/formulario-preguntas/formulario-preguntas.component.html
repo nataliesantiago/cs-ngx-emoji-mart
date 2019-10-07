@@ -18,7 +18,7 @@
         <mat-form-field fxFlex.gt-sm="45" fxFlex="100">
           <mat-label>Categoria (Más bajo nivel)*</mat-label>
           <mat-select [(ngModel)]="pregunta.id_producto" name="producto">
-            <mat-option *ngFor="let i of productos" value="{{i.idtbl_producto}}">{{i.nombre}}</mat-option>
+            <mat-option *ngFor="let i of productos" [value]="i.idtbl_producto">{{i.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
         <div fxFlex.gt-sm="10" fxFlex="100">
@@ -26,7 +26,7 @@
         <mat-form-field fxFlex.gt-sm="45" fxFlex="100">
           <mat-label>Estado de la pregunta*</mat-label>
           <mat-select [(ngModel)]="pregunta.id_estado" name="estado">
-            <mat-option *ngFor="let i of estados_pregunta" value="{{i.idtbl_estado_pregunta}}">{{i.nombre}}</mat-option>
+            <mat-option *ngFor="let i of estados_pregunta" [value]="i.idtbl_estado_pregunta">{{i.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -123,8 +123,8 @@
                   <mat-form-field>
                     <mat-label>Seleccione la ubicación</mat-label>
                     <mat-select [(ngModel)]="subrespuesta.posicion" name="posicion">
-                      <mat-option value="1">Previo a los segmentos</mat-option>
-                      <mat-option value="2">Posterior a los segmentos</mat-option>
+                      <mat-option [value]="1">Previo a los segmentos</mat-option>
+                      <mat-option [value]="2">Posterior a los segmentos</mat-option>
                     </mat-select>
                   </mat-form-field>
                   <br>

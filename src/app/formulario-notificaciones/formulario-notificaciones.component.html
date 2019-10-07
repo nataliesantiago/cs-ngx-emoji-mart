@@ -49,9 +49,9 @@
         <mat-form-field fxFlex.gt-sm="40" fxFlex="100">
           <mat-label>Envio a</mat-label>
           <mat-select [(ngModel)]="notificacion.tipo_envio" name="envio" (selectionChange)="listarObjetos()">
-            <mat-option value="1">Todos</mat-option>
-            <mat-option value="2">Dirigido</mat-option>
-            <mat-option value="3">Multidependencia</mat-option>
+            <mat-option [value]="1">Todos</mat-option>
+            <mat-option [value]="2">Dirigido</mat-option>
+            <mat-option [value]="3">Multidependencia</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

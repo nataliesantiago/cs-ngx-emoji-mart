@@ -18,7 +18,7 @@ export class AdministradorNotificacionesComponent implements OnInit {
   user: User;
   id_usuario;
   usuarios = [];
-  displayedColumns = ['acciones', 'id', 'titulo', 'activo'];
+  displayedColumns = ['acciones', 'idtbl_notificacion', 'titulo', 'activo'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)

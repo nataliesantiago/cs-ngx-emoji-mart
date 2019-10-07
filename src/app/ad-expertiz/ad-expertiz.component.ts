@@ -17,7 +17,7 @@ export class AdExpertizComponent implements OnInit {
   user: User;
   id_usuario;
   experticias = [];
-  displayedColumns = ['acciones', 'id', 'nombre'];
+  displayedColumns = ['acciones', 'idtbl_experticia', 'nombre'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
