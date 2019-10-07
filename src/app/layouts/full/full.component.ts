@@ -13,6 +13,8 @@ import { SpeechNotification } from '../../home/web-speech/shared/model/speech-no
 import { SpeechError } from '../../home/web-speech/shared/model/speech-error';
 import { ActionContext } from '../../home/web-speech/shared/model/strategy/action-context';
 import { MatSidenav } from '@angular/material';
+import { UserService } from '../../providers/user.service';
+import { NotificacionService } from '../../providers/notificacion.service';
 
 /** @title Responsive sidenav */
 @Component({
@@ -31,6 +33,10 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   danger: boolean;
   showHide: boolean;
   sidebarOpened;
+  usuario;
+  id_usuario;
+  notificaciones_usuario = [];
+  notificaicones_sin_leer = [];
 
   public config: PerfectScrollbarConfigInterface = {};
   private _mobileQueryListener: () => void;
@@ -68,11 +74,45 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     private changeDetector: ChangeDetectorRef,
     private speechRecognizer: SpeechRecognizerService,
     private nzone: NgZone,
+    private user: UserService,
+    private notificacionService: NotificacionService
   ) {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
     this.searchText = '';
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
+      this.init();
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      if (this.usuario) {
+        this.init();
+      }
+    })
+  }
+
+  init(){
+    this.notificacionService.obtenerNotificacionesUsuario(this.id_usuario).then(r =>{
+
+      this.notificaciones_usuario = r[0];
+      this.notificaicones_sin_leer = r[1].length;
+      console.log(this.notificaciones_usuario);
+      console.log(this.notificaicones_sin_leer);
+    })
+  }
+
+  leerNotificaciones(){
+
+    this.notificacionService.leerNotificaciones(this.id_usuario).then(r =>{
+
+      this.notificaicones_sin_leer = r.length;
+
+    })
+
   }
 
   ngOnDestroy(): void {

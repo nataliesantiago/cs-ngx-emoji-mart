@@ -48,7 +48,7 @@
         <!--button (click)="end.toggle()" mat-icon-button class="ml-xs overflow-visible">
             <mat-icon>settings</mat-icon>
         </button-->
-        
+
     </mat-toolbar>
     <!-- ============================================================== -->
     <!-- End Topbar - style you can find in pages.scss -->
@@ -72,32 +72,28 @@
         <!-- ============================================================== -->
         <mat-sidenav #end position="end" class="chat-panel" mode="'over'" opened="false">
             <div class="vision-notificacion">
-                <h3>Notificaciones</h3>
+                <h3>Notificaciones {{notificaicones_sin_leer}}</h3>
                 <mat-divider></mat-divider>
-                <h4>Titulo Notificación</h4>
-                <div class="fecha-notificacion">
-                    <span>2019-10-06</span>
+                <div *ngFor="let notificacion of notificaciones_usuario">
+                    <h4>{{notificacion.titulo}}</h4>
+                    <div class="fecha-notificacion">
+                        <span>{{notificacion.fecha_inicio | MomentDate:'YYYY-MM-DD'}}</span>
+                    </div>
+                    <div class="texto-notificacion">
+                        <span>
+                            {{notificacion.texto}}
+                        </span>
+                    </div>
+
+                    <div *ngIf="notificacion.url_djunto" class="imagen-centrada">
+                        <img src="{{notificacion.url_djunto}}"
+                            class="imagen-notificacion">
+                    </div>
+                    <mat-divider></mat-divider>
                 </div>
-                <div class="texto-notificacion">
-                    <span>
-                        Texto de la notificación de prueba
-                    </span>
-                </div>
-                
-                <div class="imagen-centrada">
-                    <img src="https://storage.cloud.google.com/adjuntos-notificaciones-cam/1570307238856Meme.jpgarchivo.jpg" class="imagen-notificacion">
-                </div>
-                <mat-divider></mat-divider>
-                <h4>Titulo Notificación</h4>
-                <span class="texto-notificacion">
-                    Texto de la notificación de prueba
-                </span>
-                <div class="imagen-centrada">
-                    <img src="https://storage.cloud.google.com/adjuntos-notificaciones-cam/1570307238856Meme.jpgarchivo.jpg" class="imagen-notificacion">
-                </div>                
-                <mat-divider></mat-divider>
+
             </div>
-            
+
             <!--div class="scroll">
                 <mat-nav-list>
 
