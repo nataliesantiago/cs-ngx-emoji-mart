@@ -18,7 +18,7 @@ export class AdEncuestasComponent implements OnInit {
   usuario;
   id_usuario;
   encuestas = [];
-  displayedColumns = ['acciones', 'id', 'nombre', 'tipo_encuesta', 'estado'];
+  displayedColumns = ['acciones', 'idtbl_encuesta', 'nombre', 'id_tipo_encuesta', 'activo'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)

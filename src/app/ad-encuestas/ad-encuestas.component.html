@@ -17,7 +17,7 @@
                 <mat-table [dataSource]="dataSource" matSort>
             
                     <!-- ID Column -->
-                    <ng-container matColumnDef="id">
+                    <ng-container matColumnDef="idtbl_encuesta">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_encuesta}} </mat-cell>
                     </ng-container>
@@ -28,7 +28,7 @@
                         <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
                     </ng-container>
             
-                    <ng-container matColumnDef="tipo_encuesta">
+                    <ng-container matColumnDef="id_tipo_encuesta">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Tipo de Encuesta </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:35%;">
                             <span *ngIf="row.id_tipo_encuesta == 1">Cliente</span> 
@@ -36,7 +36,7 @@
                         </mat-cell>
                     </ng-container>
             
-                    <ng-container matColumnDef="estado">
+                    <ng-container matColumnDef="activo">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Estado </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:35%;">
                             <span *ngIf="row.activo == 1">Activo</span> 

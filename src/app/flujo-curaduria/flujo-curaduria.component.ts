@@ -21,7 +21,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['acciones', 'id', 'pregunta', 'id_producto', 'id_estado', 'encargado', 'usuario_creacion', 'usuario_modificacion', 'fecha_modificacion'];
+  displayedColumns = ['acciones', 'idtbl_pregunta', 'titulo', 'nombre_producto', 'nombre_estado', 'nombre', 'nombre_usuario_creador', 'nombre_usuario_modificacion', 'fecha_ultima_modificacion'];
   matTableFilter:matTableFilter;
   filterColumns = [
     {field:'idtbl_pregunta', type:'number'},

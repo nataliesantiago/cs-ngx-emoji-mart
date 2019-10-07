@@ -24,30 +24,30 @@
                         <mat-table [dataSource]="dataSource" matSort>
     
                             <!-- ID Column -->
-                            <ng-container matColumnDef="id">
+                            <ng-container matColumnDef="idtbl_pregunta">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:5%;"> ID </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:5%;"> {{row.idtbl_pregunta}} </mat-cell>
                             </ng-container>
     
                             <!-- Progress Column -->
-                            <ng-container matColumnDef="pregunta">
+                            <ng-container matColumnDef="titulo">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:40%;"> Pregunta </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:40%;"> {{row.titulo}} </mat-cell>
                             </ng-container>
     
                             <!-- Name Column -->
-                            <ng-container matColumnDef="id_producto">
+                            <ng-container matColumnDef="nombre_producto">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Categoria </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.nombre_producto}} </mat-cell>
                             </ng-container>
     
                             <!-- Color Column -->
-                            <ng-container matColumnDef="id_estado">
+                            <ng-container matColumnDef="nombre_estado">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.nombre_estado}} </mat-cell>
                             </ng-container>
 
-                            <ng-container matColumnDef="fecha_modificacion">
+                            <ng-container matColumnDef="muestra_fecha_actualizacion">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Fecha Modificación </mat-header-cell>
                                     <mat-cell *matCellDef="let row" style="max-width:15%;">
                                         <span *ngIf="row.muestra_fecha_actualizacion == 1">Si</span>
