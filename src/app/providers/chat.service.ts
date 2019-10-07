@@ -17,7 +17,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { resolve } from 'url';
-import { ExtensionArchivoChat, IntencionChat } from '../../schemas/interfaces';
+import { ExtensionArchivoChat, IntencionChat, Emergencia } from '../../schemas/interfaces';
 import { UtilsService } from './utils.service';
 const moment = _rollupMoment || _moment;
 
@@ -552,7 +552,7 @@ export class ChatService {
 
   }
 
-  procesaFilas(filas: Array<any>, resolve: CallableFunction) {
+  procesaFilas(filas: Array<any>, resolve: Function) {
     let expertos = [];
     let finaliza = true;
 
@@ -564,7 +564,7 @@ export class ChatService {
     this.asignarAsesor(expertos, resolve);
   }
 
-  asignarAsesor(expertos: Array<any>, resolve: CallableFunction) {
+  asignarAsesor(expertos: Array<any>, resolve: Function) {
     let final_expertos = [];
     expertos.forEach(async (e, index) => {
       let data = await this.getDocumentoFirebase('expertos/' + e.id_usuario);
@@ -582,7 +582,7 @@ export class ChatService {
   }
 
 
-  procesaChats(expertos, resolve: CallableFunction) {
+  procesaChats(expertos, resolve: Function) {
     expertos = this.utilsService.getUnique(expertos, 'idtbl_usuario');
     let asignado = 0;
     let todos_expertos = expertos;
@@ -608,6 +608,10 @@ export class ChatService {
     if (experto) {
       this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId(), id_operador: experto.idtbl_usuario }).subscribe(d => {
         resolve(d.success);
+        this.getEmergenciaUsuario().then((e: Emergencia) => {
+          this.fireStore.doc('expertos/' + experto.idtbl_usuario + '/emergencia/1').set({ id_emergencia: e.idtbl_consultas_sos });
+        })
+
       })
     } else {
       this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId() }).subscribe(d => {
@@ -648,6 +652,7 @@ export class ChatService {
       this.ajax.post('chat/sos/cerrarEmergenciaUsuario', { id_emergencia: id_emergencia }).subscribe(d => {
         if (d.success) {
           resolve();
+
         }
       })
     });
@@ -658,6 +663,17 @@ export class ChatService {
       this.ajax.post('chat/sos/cerrarEmergenciaOperador', { id_emergencia: id_emergencia, motivo: motivo }).subscribe(d => {
         if (d.success) {
           resolve();
+          this.fireStore.doc('expertos/' + this.user.getId() + '/emergencia/1').delete();
+        }
+      })
+    });
+  }
+
+  getEmergencia(id_emergencia: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/sos/getEmergencia', { id_emergencia: id_emergencia }).subscribe(d => {
+        if (d.success) {
+          resolve(d.emergencia);
         }
       })
     });

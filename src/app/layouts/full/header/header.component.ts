@@ -4,9 +4,12 @@ import { UserService } from '../../../providers/user.service';
 import { User } from '../../../../schemas/user.schema';
 import { ChatService } from '../../../providers/chat.service';
 import swal from 'sweetalert2';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Experto } from '../../../../schemas/xhr.schema';
 import { SosComponent } from '../../../components/sos/sos.component';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { SosOperadorComponent } from '../../../components/sos-operador/sos-operador.component';
+import { SonidosService } from '../../../providers/sonidos.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,7 +23,8 @@ export class AppHeaderComponent {
   intervalo: any;
   puede_cerrar_sos = false;
   creando_emergencia = false;
-  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog) {
+  escuchando_emergencia = false;
+  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore, private snackBar: MatSnackBar, private sonidosService: SonidosService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
 
@@ -63,6 +67,33 @@ export class AppHeaderComponent {
         this.userService.setActivoExperto(true);
       }, 10000);
     }
+
+    this.listenEmergenciaExperto();
+  }
+
+  listenEmergenciaExperto() {
+    if (!this.escuchando_emergencia) {
+      this.escuchando_emergencia = true;
+      this.fireStore.doc('expertos/' + this.user.getId() + '/emergencia/1').valueChanges().subscribe((d: any) => {
+        console.log(d);
+        if (d) {
+          this.sonidosService.sonar(3);
+          this.mostrarSnack(d);
+        }
+      });
+    }
+  }
+
+  mostrarSnack(d: any) {
+    this.snackBar.open('Emergencia en curso', 'Abrir', { duration: 100000 * 1000000, panelClass: 'snack-emergencia', verticalPosition: 'top' }).onAction().subscribe(() => {
+      this.dialog.open(SosOperadorComponent, { data: { id_emergencia: d.id_emergencia } }).afterClosed().subscribe(result => {
+        if (result && result.cerrar) {
+          this.snackBar.dismiss();
+        } else {
+          this.mostrarSnack(d);
+        }
+      });
+    })
   }
 
   public config: PerfectScrollbarConfigInterface = {};

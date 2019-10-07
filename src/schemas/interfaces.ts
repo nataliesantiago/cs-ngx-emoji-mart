@@ -96,7 +96,7 @@ export interface MotivoCierreChat {
 export interface Emergencia {
     idtbl_consultas_sos: number;
     id_usuario_emergencia: number;
-    fecha_emeregncia: Date;
+    fecha_emergencia: Date;
     id_usuario_operador: number;
     motivo_emergencia: string;
     fecha_emergencia_cerrada: Date;

@@ -14,7 +14,7 @@ export class SonidosComponent implements OnInit {
   constructor(private soundService: SonidosService) {
 
     this.soundService.sonidoObserver.subscribe(t => {
-      let media;
+      let media: HTMLAudioElement;
 
 
       switch (t) {
@@ -29,6 +29,11 @@ export class SonidosComponent implements OnInit {
         case 3:
           if (this.sos)
             media = this.sos;
+          setTimeout(() => {
+            if (media) {
+              media.pause();
+            }
+          }, 2000);
           break;
         case 4:
           if (this.notificacion)

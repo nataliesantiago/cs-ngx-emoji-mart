@@ -2263,3 +2263,14 @@ input:-webkit-autofill:active {
 .boton-centrado {
   text-align: center;
 }
+
+.snack-emergencia {
+  background: red !important;
+  color: white !important;
+
+  button {
+    color: white;
+    font-weight: bold;
+    border: 1px solid #d6d6d6;
+  }
+}

@@ -11,7 +11,7 @@
         </mat-form-field>
         <mat-form-field class="example-full-width">
           <input type="text" placeholder="Selecciona una categoría" aria-label="Number" matInput
-            [formControl]="createControl" [matAutocomplete]="auto" />
+            [formControl]="createControl" [matAutocomplete]="auto" autocomplete="off"/>
           <button mat-button *ngIf="createControl.value" matSuffix mat-icon-button aria-label="Clear"
             (click)="createControl.setValue()">
             <mat-icon>close</mat-icon>
