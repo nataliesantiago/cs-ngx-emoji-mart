@@ -92,4 +92,48 @@ export class NotificacionService {
     })
   }
 
+  guardarUsuariosNotificacion(ids_usuarios: any, id_notificacion: number):Promise<any>{
+    return new Promise((resolve, reject) => {
+
+      this.ajax.post('notificacion/guardar-usuarios-notificacion', { ids_usuarios: ids_usuarios, id_notificacion: id_notificacion }).subscribe(d => {
+        if(d.success){
+          resolve(d);
+        }else{
+          reject();
+        }
+      });
+      
+    })
+  }
+
+
+  obtenerNotificacionesUsuario(id_usuario: number):Promise<any>{
+    return new Promise((resolve, reject) => {
+
+      this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
+        if(d.success){
+          resolve(d.notificaciones);
+        }else{
+          reject();
+        }
+      });
+      
+    })
+  }
+
+
+  leerNotificaciones(id_usuario: number):Promise<any>{
+    return new Promise((resolve, reject) => {
+
+      this.ajax.get('notificacion/leer-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
+        if(d.success){
+          resolve(d.notificaciones);
+        }else{
+          reject();
+        }
+      });
+      
+    })
+  }
+
 }

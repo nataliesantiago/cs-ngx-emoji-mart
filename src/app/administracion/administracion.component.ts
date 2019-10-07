@@ -15,7 +15,7 @@ import { matTableFilter } from '../../common/matTableFilter';
 export class AdministracionComponent implements OnInit {
 
   items_administracion = [];
-  displayedColumns = ['acciones', 'id', 'nombre', 'valor'];
+  displayedColumns = ['acciones', 'idtbl_configuracion', 'nombre', 'valor'];
   matTableFilter:matTableFilter;
   filterColumns = [
     {field:'idtbl_configuracion', type:'number'},

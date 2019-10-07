@@ -17,7 +17,7 @@ export class AdExpertosComponent implements OnInit {
   user: User;
   id_usuario;
   usuarios = [];
-  displayedColumns = ['acciones', 'id', 'nombre', 'correo'];
+  displayedColumns = ['acciones', 'idtbl_usuario', 'nombre', 'correo'];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)

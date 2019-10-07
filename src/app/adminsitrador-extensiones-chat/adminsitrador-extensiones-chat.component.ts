@@ -15,7 +15,7 @@ import { matTableFilter } from '../../common/matTableFilter';
 export class AdminsitradorExtensionesChatComponent implements OnInit, AfterViewInit {
   user: User;
   creando_extension = false;
-  displayedColumns = ['acciones', 'extension', 'size'];
+  displayedColumns = ['acciones', 'extension', 'megabytes_maximos'];
   dataSource: MatTableDataSource<any>;
   matTableFilter:matTableFilter;
   filterColumns = [

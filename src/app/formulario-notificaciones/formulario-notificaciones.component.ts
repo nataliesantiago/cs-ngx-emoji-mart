@@ -21,7 +21,7 @@ export class FormularioNotificacionesComponent implements OnInit {
 
   usuario;
   id_usuario;
-  notificacion= {titulo: '', texto: '', fecha_inicio: '', fecha_fin: '', url_adjunto: '', tipo_envio: ''};
+  notificacion= {titulo: '', texto: '', fecha_inicio: '', fecha_fin: '', url_adjunto: '', tipo_envio: '', hora_envio: ''};
   lista_envio = [];
   myControl = new FormControl();
   options = [];
@@ -148,7 +148,7 @@ export class FormularioNotificacionesComponent implements OnInit {
 
   enviarNotificacion(){
 
-    if(this.notificacion.titulo == "" || this.notificacion.fecha_inicio == "" || this.notificacion.fecha_fin == ""){
+    if(this.notificacion.titulo == "" || this.notificacion.fecha_inicio == "" || this.notificacion.fecha_fin == "" || this.notificacion.hora_envio == ""){
 
       swal.fire({
         title: 'Digite los campos obligatorios',
@@ -161,7 +161,7 @@ export class FormularioNotificacionesComponent implements OnInit {
 
     }else{
 
-      if(this.lista_asociada.length == 0){
+      if(this.lista_asociada.length == 0 && this.notificacion.tipo_envio != "1"){
         swal.fire({
           title: 'Seleccione almenos un destinatario',
           text: '',
@@ -172,7 +172,7 @@ export class FormularioNotificacionesComponent implements OnInit {
         })
       }else{
         this.notificacionService.guardarNotificacion(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
-          let id_notificacion = u.usuarios[0];
+          /*let id_notificacion = u.usuarios[0];
           let ids_usuarios = [];
           for(let i = 1; i < u.usuarios.length; i++){
             let arreglo_actual = u.usuarios[i];
@@ -183,13 +183,18 @@ export class FormularioNotificacionesComponent implements OnInit {
               }
             }
           }
-          for(let i = 0; i < ids_usuarios.length; i++){
+          /*this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
+            if(u.success){
+              this.router.navigate(['/administrador-notificaciones']);
+            }
+          });*/
+          /*for(let i = 0; i < ids_usuarios.length; i++){
             this.notificacionService.enviarNotificacionUsuario(ids_usuarios[i], this.notificacion.titulo, this.notificacion.texto);
-          }
+          }*/
+          this.router.navigate(['/administrador-notificaciones']);
         });
       }
     }
-    
   }
 
   onFileChange($event){    

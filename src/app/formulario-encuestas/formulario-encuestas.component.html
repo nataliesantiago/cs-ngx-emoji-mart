@@ -13,8 +13,8 @@
         </div>
         <mat-form-field fxFlex.gt-sm="45" fxFlex="100">
           <mat-label>Tipo Encuesta</mat-label>
-          <mat-select matNativeControl [(ngModel)]="encuesta.id_tipo_encuesta" name="producto">
-            <mat-option *ngFor="let i of tipo_encuesta" value="{{i.idtbl_tipo_encuesta}}">{{i.nombre}}</mat-option>
+          <mat-select [(ngModel)]="encuesta.id_tipo_encuesta" name="producto">
+            <mat-option *ngFor="let i of tipo_encuesta" [value]="i.idtbl_tipo_encuesta">{{i.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -46,10 +46,10 @@
                     <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
                       <mat-label>Tipo Pregunta</mat-label>
                       <mat-select *ngIf="!pregunta.idtbl_pregunta_encuesta" [(ngModel)]="pregunta.id_tipo" name="tipo" (change)="reiniciarValores(pregunta)">
-                        <mat-option *ngFor="let i of tipo_pregunta" value="{{i.idtbl_tipo_pregunta}}">{{i.nombre}}</mat-option>
+                        <mat-option *ngFor="let i of tipo_pregunta" [value]="i.idtbl_tipo_pregunta">{{i.nombre}}</mat-option>
                       </mat-select>
                       <mat-select *ngIf="pregunta.idtbl_pregunta_encuesta" [(ngModel)]="pregunta.id_tipo" name="tipo" (change)="reiniciarValores(pregunta)" disabled>
-                        <mat-option *ngFor="let i of tipo_pregunta" value="{{i.idtbl_tipo_pregunta}}">{{i.nombre}}</mat-option>
+                        <mat-option *ngFor="let i of tipo_pregunta" [value]="i.idtbl_tipo_pregunta">{{i.nombre}}</mat-option>
                       </mat-select>
                     </mat-form-field>                      
                     <div fxFlex.gt-sm="5" fxFlex="100">
@@ -63,7 +63,7 @@
                     <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
                       <mat-label>Seleccione el número de la pregunta</mat-label>
                       <mat-select [(ngModel)]="pregunta.orden" name="tipo">
-                        <mat-option *ngFor="let i of orden_preguntas" value="{{i.valor}}">{{i.valor}}</mat-option>
+                        <mat-option *ngFor="let i of orden_preguntas" [value]="i.valor">{{i.valor}}</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
