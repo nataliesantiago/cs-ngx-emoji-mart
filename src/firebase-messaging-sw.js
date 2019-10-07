@@ -7,13 +7,20 @@ firebase.initializeApp({
   'messagingSenderId': '537955814682'
 });
 const messaging = firebase.messaging();
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow(event.notification.data)
+  );
+})
 messaging.setBackgroundMessageHandler((payload) => {
   console.log('Message received. ', payload);
   // Customize notification here
   const notificationTitle = payload.data.title;
   const notificationOptions = {
     body: payload.body,
-    icon: '/assets/images/favicon.png'
+    icon: '/assets/images/favicon.png',
+    data: '/'
   };
 
   return self.registration.showNotification(notificationTitle,

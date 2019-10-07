@@ -17,7 +17,8 @@ export class CreacionProductosComponent implements OnInit {
   usuario;
   id_usuario;
   productos = [];
-  displayedColumns = ['acciones', 'idtbl_producto', 'nombre', 'nombre_icono'];
+  displayedColumns = ['acciones', 'idtbl_producto', 'nombre', 'arbol', 'nombre_icono'];
+  arbol = [];
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild(MatSort)
@@ -39,6 +40,10 @@ export class CreacionProductosComponent implements OnInit {
       if (p.success) {
 
         this.productos = p.productos;
+        for(let i = 0; i < this.productos.length; i++){
+          this.productos[i].familia = this.productos[i].nombre;
+          this.obtenerArbol(this.productos[i], i);
+        }
         this.dataSource = new MatTableDataSource(this.productos);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -46,6 +51,23 @@ export class CreacionProductosComponent implements OnInit {
       }
     })
 
+  }
+
+  obtenerArbol(e, pos){
+    let arbol = [];
+    let producto_actual;    
+    if(e.id_producto_padre != null){
+      this.ajax.get('producto/obtener-padre', { idtbl_producto : e.id_producto_padre }).subscribe(p => {
+        if(p.success){
+          producto_actual = p.producto[0];
+          arbol.push(producto_actual);
+          this.productos[pos].familia = producto_actual.nombre + ">" + this.productos[pos].familia;
+          this.obtenerArbol(producto_actual, pos);
+        }
+      })
+    }else{      
+      console.log(this.productos[pos]);
+    }
   }
 
   ngOnInit() {

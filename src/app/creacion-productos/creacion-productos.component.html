@@ -16,21 +16,26 @@
             
                     <!-- ID Column -->
                     <ng-container matColumnDef="idtbl_producto">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_producto}} </mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> ID </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.idtbl_producto}} </mat-cell>
                     </ng-container>
             
                     <!-- Progress Column -->
                     <ng-container matColumnDef="nombre">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Nombre </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:20%;"> {{row.nombre}} </mat-cell>
                     </ng-container>
+
+                    <ng-container matColumnDef="arbol">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:45%;"> Arbol </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:45%;"> {{row.familia}} </mat-cell>
+                        </ng-container>
             
                     <ng-container matColumnDef="nombre_icono">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Icono </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;"><mat-icon class="icon">{{row.nombre_icono}}</mat-icon></mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Icono </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;"><mat-icon class="icon">{{row.nombre_icono}}</mat-icon></mat-cell>
                     </ng-container>
-            
+                    
                     <ng-container matColumnDef="acciones">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:15%;">

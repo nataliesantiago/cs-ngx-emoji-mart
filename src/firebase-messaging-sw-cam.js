@@ -7,6 +7,12 @@ firebase.initializeApp({
   'messagingSenderId': '659384240459'
 });
 const messaging = firebase.messaging();
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow(event.notification.data)
+  );
+})
 messaging.setBackgroundMessageHandler((payload) => {
   console.log('Message received. ', payload);
   // Customize notification here
@@ -14,9 +20,9 @@ messaging.setBackgroundMessageHandler((payload) => {
   const notificationOptions = {
     body: payload.body,
     icon: '/assets/images/favicon.png',
-    link: 'www.google.com'
+    data: '/'
   };
 
   return self.registration.showNotification(notificationTitle,
-    notificationOptions).on;
+    notificationOptions);
 });

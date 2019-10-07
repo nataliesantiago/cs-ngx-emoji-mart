@@ -31,13 +31,16 @@
                 <span class="point"></span>
             </div>
         </button-->
-        <button mat-icon-button class="m-r-10" (click)="end.toggle()">
+        
+        <button mat-icon-button class="m-r-10" (click)="end.toggle();leerNotificaciones()">
             <img src="../../../../assets/images/siren.png" alt="" class="alerta">
             <div class="notify">
-                <span class="heartbit"></span>
-                <span class="point"></span>
+                <span *ngIf="notificaicones_sin_leer > 0" class="heartbit-notificaciones"></span>
+                <span *ngIf="notificaicones_sin_leer > 0" class="point-notificaciones" matBadge="{{notificaicones_sin_leer}}" matBadgeColor="warn" matBadgeOverlap="false"></span>
             </div>
         </button>
+        
+        
         <!-- ============================================================== -->
         <!-- app header component - style you can find in header.scss / header.component.ts-->
         <!-- ============================================================== -->
@@ -72,7 +75,7 @@
         <!-- ============================================================== -->
         <mat-sidenav #end position="end" class="chat-panel" mode="'over'" opened="false">
             <div class="vision-notificacion">
-                <h3>Notificaciones {{notificaicones_sin_leer}}</h3>
+                <h3>Notificaciones</h3>
                 <mat-divider></mat-divider>
                 <div *ngFor="let notificacion of notificaciones_usuario">
                     <h4>{{notificacion.titulo}}</h4>
@@ -85,9 +88,9 @@
                         </span>
                     </div>
 
-                    <div *ngIf="notificacion.url_djunto" class="imagen-centrada">
-                        <img src="{{notificacion.url_djunto}}"
-                            class="imagen-notificacion">
+                    <div class="imagen-centrada">
+                        <img src="{{notificacion.url_adjunto}}"
+                            class="imagen-notificacion" *ngIf="notificacion.url_adjunto">
                     </div>
                     <mat-divider></mat-divider>
                 </div>

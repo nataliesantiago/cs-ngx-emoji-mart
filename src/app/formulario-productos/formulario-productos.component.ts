@@ -49,7 +49,7 @@ export class FormularioProductosComponent implements OnInit {
   nivel_producto;
   id_producto_editar;
   valor_id;
-  mostrar_iconos = false;
+  mostrar_iconos = true;
   icono_padre;
 
   private _transformer = (node: FoodNode, level: number) => {
@@ -135,7 +135,7 @@ export class FormularioProductosComponent implements OnInit {
                     this.producto_padre_seleccionado = p2.producto[0].id_producto_padre;
                     this.crearArbol(p2.producto[0]);
                     this.cg.detectChanges();
-                    console.log("Entra");
+                    
                   }
                 })
               }else{
@@ -181,6 +181,7 @@ export class FormularioProductosComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value))
     );
+    this.mostrar_iconos = false;
     this.cg.detectChanges();
     this.arbol.push(e);
     this.crearArbol(e);    
@@ -194,6 +195,7 @@ export class FormularioProductosComponent implements OnInit {
       this.ajax.get('producto/obtener-padre', { idtbl_producto : e.id_producto_padre }).subscribe(p => {
         if(p.success){
           producto_actual = p.producto[0];
+          
           this.icono_padre = p.producto[0].nombre_icono;
           this.arbol.push(producto_actual);
           this.crearArbol(producto_actual);
@@ -207,7 +209,7 @@ export class FormularioProductosComponent implements OnInit {
           for(let i = this.arbol.length - 1; i >= 0; i--){
             this.arbol_mostrar.push(this.arbol[i]);
           }
-    
+          
           let json_arbol = [];
     
           for(let i = 0; i < this.arbol_mostrar.length; i++){

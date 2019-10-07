@@ -36,7 +36,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   usuario;
   id_usuario;
   notificaciones_usuario = [];
-  notificaicones_sin_leer = [];
+  notificaicones_sin_leer;
 
   public config: PerfectScrollbarConfigInterface = {};
   private _mobileQueryListener: () => void;
@@ -107,10 +107,10 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
   leerNotificaciones(){
 
+    this.notificaicones_sin_leer = 0;
+
     this.notificacionService.leerNotificaciones(this.id_usuario).then(r =>{
-
-      this.notificaicones_sin_leer = r.length;
-
+      
     })
 
   }

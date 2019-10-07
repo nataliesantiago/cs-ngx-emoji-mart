@@ -13,7 +13,7 @@
               <input type="text" placeholder="Seleccione la categoría padre" matInput [formControl]="myControl"
                 [matAutocomplete]="auto" (ngModelChange)="verificarArbolMostrar(myControl.value)">
               <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button
-                aria-label="Clear" (click)="myControl.setValue('')">
+                aria-label="Clear" (click)="myControl.setValue('');mostrarIconos();">
                 <mat-icon>close</mat-icon>
               </button>
               <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
@@ -58,15 +58,6 @@
           </mat-tree>
         </div>
       </div>
-      <br>
-      <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="100" fxFlex="100">
-          <div fxFlex.gt-sm="10" fxFlex="100">
-            <button class="custom__btn custom__btn--primary" (click)="mostrarIconos()">Mostrar Íconos</button>
-          </div>
-        </div>
-      </div>
-
       <br>
       <br>
       <div *ngIf="mostrar_iconos">

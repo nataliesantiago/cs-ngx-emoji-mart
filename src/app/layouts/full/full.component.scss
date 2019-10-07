@@ -230,8 +230,13 @@ h4{
     color: #888;
 }
 
+h3{
+    text-align: center;
+}
+
 .imagen-centrada{
     text-align: center;
+    margin-bottom: 1em;
 }
 
 .fecha-notificacion{
@@ -239,4 +244,52 @@ h4{
     color: grey;
     margin-bottom: 5px;
     margin-left: 5%;
+}
+
+/*.point-notificaciones {
+    
+}*/
+
+/*.heartbit-notificaciones{
+    position: absolute;
+    top: -20px;
+    right: -4px;
+    height: 25px;
+    width: 25px;
+    border: 15px solid #fc4b6c;
+    border-radius: 70px;
+}*/
+
+.notify {
+    position: relative;
+    top: -20px;
+    right:0px;
+    .heartbit-notificaciones {
+        position: absolute;
+        top: -27px;
+        right: -14px;
+        height: 40px;
+        width: 40px;
+        
+        border: 5px solid #fc4b6c;
+        border-radius: 70px;
+        -moz-animation: heartbit 1s ease-out;
+        -moz-animation-iteration-count: infinite;
+        -o-animation: heartbit 1s ease-out;
+        -o-animation-iteration-count: infinite;
+        -webkit-animation: heartbit 1s ease-out;
+        -webkit-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+    }
+    .point-notificaciones {
+        position: absolute;
+        right: 19px;
+        top: -5px;
+    }
+}
+
+.mat-badge-medium .mat-badge-content {
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
 }
