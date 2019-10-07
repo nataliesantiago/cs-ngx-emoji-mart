@@ -13,9 +13,10 @@ messaging.setBackgroundMessageHandler((payload) => {
   const notificationTitle = payload.data.title;
   const notificationOptions = {
     body: payload.body,
-    icon: '/assets/images/favicon.png'
+    icon: '/assets/images/favicon.png',
+    link: 'www.google.com'
   };
 
   return self.registration.showNotification(notificationTitle,
-    notificationOptions);
+    notificationOptions).on;
 });
