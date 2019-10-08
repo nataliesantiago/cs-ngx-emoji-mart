@@ -6,70 +6,93 @@
                         href="https://docs.google.com/forms/d/1IzKM1oBhxS8H076a-ZctlRftxDzkW6Yysq0KscWh40E/viewform?edit_requested=true">Buzón
                         de Sugerencias</a></li>
                 <li>
-                    <a [routerLink]="['/historial-usuario']" routerLinkActive="active" (click)="cerrarMenu()">Historial de Usuario</a>
+                    <a [routerLink]="['/historial-usuario']" routerLinkActive="active" (click)="cerrarMenu()">Historial
+                        de Usuario</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/ad-preguntas']" routerLinkActive="active" (click)="cerrarMenu()">Administración de Preguntas</a>
+                    <a [routerLink]="['/ad-preguntas']" routerLinkActive="active" (click)="cerrarMenu()">Administración
+                        de Preguntas</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/flujo-curaduria']" routerLinkActive="active" (click)="cerrarMenu()">Flujo de Curaduria</a>
+                    <a [routerLink]="['/flujo-curaduria']" routerLinkActive="active" (click)="cerrarMenu()">Flujo de
+                        Curaduria</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/formulario-preguntas-flujo-curaduria', 'sugerida']" routerLinkActive="active" (click)="cerrarMenu()">Sugerir Pregunta</a>
+                    <a [routerLink]="['/formulario-preguntas-flujo-curaduria', 'sugerida']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Sugerir Pregunta</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/administracion']" routerLinkActive="active" (click)="cerrarMenu()">Administración</a>
+                    <a [routerLink]="['/administracion']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administración</a>
                 </li>
                 <li>
                     <a [routerLink]="['/productos']" routerLinkActive="active" (click)="cerrarMenu()">Categorias</a>
                 </li>
                 <!--li><a [routerLink]="['/administracion-urls']" (click)="cerrarMenu()">Administración de URL's</a></li-->
                 <li>
-                    <a [routerLink]="['/admin/chat/extensiones']" routerLinkActive="active" (click)="cerrarMenu()">Administración de Extensiones Chat</a>
+                    <a [routerLink]="['/admin/chat/extensiones']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administración de Extensiones Chat</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/admin/chat/intenciones']" routerLinkActive="active" (click)="cerrarMenu()">Administración de Intenciones Chat</a>
+                    <a [routerLink]="['/admin/chat/intenciones']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administración de Intenciones Chat</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/ad-encuestas']" routerLinkActive="active" (click)="cerrarMenu()">Administración de Encuestas</a>
+                    <a [routerLink]="['/ad-encuestas']" routerLinkActive="active" (click)="cerrarMenu()">Administración
+                        de Encuestas</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/chat-experto']" routerLinkActive="active" (click)="cerrarMenu()" *ngIf="user && user.id_rol==2">Chat Experto</a>
+                    <a [routerLink]="['/chat-experto']" routerLinkActive="active" (click)="cerrarMenu()"
+                        *ngIf="user && user.id_rol==2">Chat Experto</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/encuesta/1']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta Cliente</a>
+                    <a [routerLink]="['/encuesta/1']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta
+                        Cliente</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/encuesta/2']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta Experto</a>
+                    <a [routerLink]="['/encuesta/2']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta
+                        Experto</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/ad-expertiz']" routerLinkActive="active" (click)="cerrarMenu()">Administración de Experticias</a>
+                    <a [routerLink]="['/ad-expertiz']" routerLinkActive="active" (click)="cerrarMenu()">Administración
+                        de Experticias</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/ad-categoria-expertiz']" routerLinkActive="active" (click)="cerrarMenu()">Administración de Categorías de Experticia</a>
+                    <a [routerLink]="['/ad-categoria-expertiz']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administración de Categorías de Experticia</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/ad-expertos']" routerLinkActive="active" (click)="cerrarMenu()">Administración de Expertos</a>
+                    <a [routerLink]="['/ad-expertos']" routerLinkActive="active" (click)="cerrarMenu()">Administración
+                        de Expertos</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/administrador-notificaciones']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Notificaciones</a>
+                    <a [routerLink]="['/administrador-notificaciones']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administrador de Notificaciones</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/administrador-guiones']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Guiones</a>
+                    <a [routerLink]="['/administrador-guiones']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administrador de Guiones</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/administrador-shortcuts']" routerLinkActive="active" (click)="cerrarMenu()">Administrador de Shortcuts</a>
+                    <a [routerLink]="['/administrador-shortcuts']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administrador de Shortcuts</a>
+                </li>
+
+                <li>
+                    <a [routerLink]="['/carga-masiva']" routerLinkActive="active" (click)="cerrarMenu()">Carga
+                        Masiva</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/motivo-cierre-chat']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administración Motivos Cierre de Chat</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/admin/menu/urls']" routerLinkActive="active"
+                        (click)="cerrarMenu()">Administración de Urls</a>
                 </li>
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()">
                     <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}}</a>
                 </li>
-                <li>
-                    <a [routerLink]="['/carga-masiva']" routerLinkActive="active" (click)="cerrarMenu()">Carga Masiva</a>
-                </li>
-                <li>
-                    <a [routerLink]="['/motivo-cierre-chat']" routerLinkActive="active" (click)="cerrarMenu()">Administración Motivos Cierre de Chat</a>
-                </li>
-                
             </ul>
         </div>
         <div class="sidebar_mt">
