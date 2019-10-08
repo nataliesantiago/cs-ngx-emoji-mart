@@ -223,7 +223,7 @@ article div h1 {
 }
 
 h4{
-    margin-block-start: 1em !important;
+    margin-block-start: 0em !important;
     margin-block-end: 0em !important;
     margin-left: 5%;
     font-weight: bold;
@@ -292,4 +292,12 @@ h3{
     width: 18px !important;
     height: 18px !important;
     line-height: 18px !important;
+}
+
+.titulo-notificacion{
+    padding-top: 15px;
+}
+
+.notificacion-nueva{
+    background: #eaeaea;
 }

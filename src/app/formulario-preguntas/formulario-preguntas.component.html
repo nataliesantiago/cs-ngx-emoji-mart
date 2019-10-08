@@ -154,7 +154,7 @@
                 </button>
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='anadirPreguntaAsociada($event.option.value)'>
                   <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    ({{option.idtbl_pregunta}}) {{option.titulo}}
+                    {{option.titulo}}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>

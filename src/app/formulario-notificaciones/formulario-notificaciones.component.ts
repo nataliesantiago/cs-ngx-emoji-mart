@@ -59,6 +59,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   listarObjetos(){
     
     if(this.notificacion.tipo_envio == "2"){
+      this.lista_asociada = [];
       this.user.obtenerListaEmpleados().then( n => {
         
         this.lista_objetos = n;
@@ -69,6 +70,7 @@ export class FormularioNotificacionesComponent implements OnInit {
         );
       });
     }else if(this.notificacion.tipo_envio == "3"){
+      this.lista_asociada = [];
       this.notificacionService.obtenerListaDependencias().then( n => {
         
         this.lista_objetos = n;
@@ -102,7 +104,7 @@ export class FormularioNotificacionesComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     
-    this.myControl = new FormControl(e.nombre);
+    this.myControl = new FormControl("");
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -172,26 +174,37 @@ export class FormularioNotificacionesComponent implements OnInit {
         })
       }else{
         this.notificacionService.guardarNotificacion(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
-          /*let id_notificacion = u.usuarios[0];
+          let id_notificacion = u.usuarios[0];
           let ids_usuarios = [];
           for(let i = 1; i < u.usuarios.length; i++){
             let arreglo_actual = u.usuarios[i];
-            let validador = 0;
             for(let j = 0; j < arreglo_actual.length; j++){
               if(!ids_usuarios.includes(arreglo_actual[j].idtbl_usuario)){
                 ids_usuarios.push(arreglo_actual[j].idtbl_usuario);
               }
             }
           }
-          /*this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
-            if(u.success){
-              this.router.navigate(['/administrador-notificaciones']);
-            }
-          });*/
+          if(this.notificacion.tipo_envio == '2'){
+            this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
+              if(u.success){
+                this.router.navigate(['/administrador-notificaciones']);
+              }
+            });
+          }else if(this.notificacion.tipo_envio == '3'){
+            console.log(this.lista_asociada);
+            this.notificacionService.guardarDependencias(this.lista_asociada, id_notificacion).then(u => {
+              if(u.success){
+                //this.router.navigate(['/administrador-notificaciones']);
+              }
+            });
+          }else{
+            this.router.navigate(['/administrador-notificaciones']);
+          }
+            
           /*for(let i = 0; i < ids_usuarios.length; i++){
             this.notificacionService.enviarNotificacionUsuario(ids_usuarios[i], this.notificacion.titulo, this.notificacion.texto);
           }*/
-          this.router.navigate(['/administrador-notificaciones']);
+          //this.router.navigate(['/administrador-notificaciones']);
         });
       }
     }

@@ -429,18 +429,38 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   anadirPreguntaAsociada(e){
-    this.preguntas_adicion.push(e);
+    let validador = true;
+    for(let i = 0; i < this.preguntas_adicion.length; i++){
+      if(this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta){
+        validador = false;
+      }
+    }
+
+    if(validador){
+      this.preguntas_adicion.push(e);
     
-    this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+      this.dataSource = new MatTableDataSource(this.preguntas_adicion);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      
+      this.myControl = new FormControl(e.titulo);
+      this.filteredOptions = this.myControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+      this.cg.detectChanges();
+    }else{
+      this.myControl = new FormControl(e.titulo);
+      swal.fire({
+        title: 'La pregunta ya fue asociada previamente',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+      })
+    }
     
-    this.myControl = new FormControl(e.titulo);
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
-    this.cg.detectChanges();
   }
 
   borrarElemento(e){
