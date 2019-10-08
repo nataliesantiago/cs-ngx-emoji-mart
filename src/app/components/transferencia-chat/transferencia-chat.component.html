@@ -16,9 +16,10 @@
     <mat-form-field class="example-full-width">
       <input type="text" placeholder="Buscar categoría de experticia" matInput (change)="update(1)"
         [formControl]="categoria_experticia_control" [matAutocomplete]="auto">
-        <button mat-button *ngIf="categoria_experticia_control.value" matSuffix mat-icon-button aria-label="Clear" (click)="update()">
-          <mat-icon>close</mat-icon>
-        </button>
+      <button mat-button *ngIf="categoria_experticia_control.value" matSuffix mat-icon-button aria-label="Clear"
+        (click)="categoria_experticia_control.setValue()">
+        <mat-icon>close</mat-icon>
+      </button>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoriaNueva($event.option.value)'>
         <mat-option *ngFor="let option of filas" [value]="option">
           {{option.nombre}}
@@ -28,11 +29,10 @@
   </div>
   <div *ngIf="tipo==2">
     <mat-form-field class="example-full-width">
-      <input type="text" placeholder="Buscar experto" matInput [formControl]="experto_control" [matAutocomplete]="auto"
-        (change)="update(1)">
-        <button mat-button *ngIf="experto_control.value" matSuffix mat-icon-button aria-label="Clear" (click)="update()">
-          <mat-icon>close</mat-icon>
-        </button>
+      <input type="text" placeholder="Buscar experto" matInput [formControl]="experto_control" [matAutocomplete]="auto">
+      <button mat-button *ngIf="experto_control.value" matSuffix mat-icon-button aria-label="Clear" (click)="update()">
+        <mat-icon>close</mat-icon>
+      </button>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarExperto($event.option.value)'>
         <mat-option *ngFor="let option of expertos | expertosActivos" [value]="option">
           {{option.nombre}}
