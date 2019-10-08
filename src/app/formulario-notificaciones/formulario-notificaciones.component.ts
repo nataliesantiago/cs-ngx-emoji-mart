@@ -103,8 +103,7 @@ export class FormularioNotificacionesComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.lista_asociada);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    
-    this.myControl = new FormControl("");
+
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -191,10 +190,10 @@ export class FormularioNotificacionesComponent implements OnInit {
               }
             });
           }else if(this.notificacion.tipo_envio == '3'){
-            console.log(this.lista_asociada);
+            
             this.notificacionService.guardarDependencias(this.lista_asociada, id_notificacion).then(u => {
               if(u.success){
-                //this.router.navigate(['/administrador-notificaciones']);
+                this.router.navigate(['/administrador-notificaciones']);
               }
             });
           }else{

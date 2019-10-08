@@ -66,7 +66,7 @@ export class CreacionProductosComponent implements OnInit {
         }
       })
     }else{      
-      console.log(this.productos[pos]);
+      
     }
   }
 
