@@ -20,6 +20,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserService } from '../providers/user.service';
 import { environment } from '../../environments/environment';
 import { User } from '../../schemas/user.schema';
+import { LookFeelService } from '../providers/look-feel.service';
 
 
 @Component({
@@ -70,6 +71,8 @@ export class HomeComponent implements OnInit {
   actionContext: ActionContext = new ActionContext();
   ambiente = environment.ambiente;
   user: User;
+
+  url_logo = "";
 
   initRecognition() {
     this.speechRecognizer.setLanguage(this.currentLanguage);
@@ -151,7 +154,9 @@ export class HomeComponent implements OnInit {
   /**web speech end */
 
   constructor(
-    private router: Router, private homeService: HomeService, public responseSearch: ResponseSearch, private changeDetector: ChangeDetectorRef, private speechRecognizer: SpeechRecognizerService, private nzone: NgZone, private autenticationService: AutenticationService, private ajax: AjaxService, private userService: UserService) {
+    private router: Router, private homeService: HomeService, public responseSearch: ResponseSearch, 
+    private changeDetector: ChangeDetectorRef, private speechRecognizer: SpeechRecognizerService, private nzone: NgZone, private autenticationService: AutenticationService, 
+    private ajax: AjaxService, private userService: UserService, private look_service: LookFeelService) {
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
@@ -184,6 +189,11 @@ export class HomeComponent implements OnInit {
         this.nuevos_contenidos = p.preguntas;
 
       }
+    });
+
+    this.look_service.getSpecificSetting('url_logo').then((result) => {
+      this.url_logo = result[0].valor;  
+      this.changeDetector.detectChanges();
     });
   }
 

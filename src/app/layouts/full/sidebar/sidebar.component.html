@@ -88,6 +88,10 @@
                     <a [routerLink]="['/admin/menu/urls']" routerLinkActive="active"
                         (click)="cerrarMenu()">Administración de Urls</a>
                 </li>
+                <li>
+                    <a [routerLink]="['/administrar-look-feel']" routerLinkActive="active" (click)="cerrarMenu()">Administrar Look&Feel</a>
+                </li>
+                
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()">
                     <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}}</a>
                 </li>

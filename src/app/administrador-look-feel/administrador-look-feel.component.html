@@ -1,0 +1,59 @@
+<div class="contenedor">
+  <mat-card>
+    <mat-card-content>
+        <mat-card-title>Administrar Look&Feel</mat-card-title>
+        <hr>
+
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+
+          <div fxLayoutAlign="start center" fxFlex="45">
+            <mat-label class="m-r-20">Activar modo nocturno</mat-label>
+            <label class="switch" for="dark_checkbox">
+              <input type="checkbox" id="dark_checkbox" (change)="darkMode($event)"/>
+              <div class="slider-switch round-switch"></div>
+            </label>
+          </div>
+
+          <div fxLayout="column" fxFlex="45">
+            <mat-label>Cambiar logo</mat-label>
+            <input type="file" (change)="onLogoChange($event)">
+            <!-- <div fxLayout="row" fxLayoutAlign="start center" class=" upload-file-wrapperm-t-20">
+              <span class="m-r-20" *ngIf="file_name == ''; else fileUploadName">Ningún archivo seleccionado</span>
+              <ng-template #fileUploadName>
+                <span class="m-r-20">{{file_name}}</span>
+              </ng-template>
+              <input type="file" #inputFile (change)="onLogoChange($event)">
+              <button class="custom__btn custom__btn--primary" (click)="inputFile.click()">
+                <i class="ti-upload upload-icon m-r-10 mouse-over"></i>
+                Seleccionar archivo
+              </button>
+            </div> -->
+          </div>
+
+          <div fxLayout="column" fxFlex="45">
+            <mat-label>Cambiar favicon</mat-label>
+            <input type="file" (change)="onFaviconChange($event)">
+          </div>
+  
+          <div fxLayout="column" fxFlex="45">
+            <mat-label>Cambiar color barra superior</mat-label>
+            <input type="text">
+          </div>
+          
+          <div fxLayout="column" fxFlex="45">
+            <mat-label>Cambiar titulo buscador</mat-label>
+            <input type="text">
+          </div>
+
+          <div fxLayout="column" fxFlex="45">
+            <mat-label>Cambiar texto placeholder buscador</mat-label>
+            <input type="text">
+          </div>
+          
+        </div>
+        
+        
+        <button (click)="saveConfig()">Guardar</button>
+    </mat-card-content>
+</mat-card>
+</div>
