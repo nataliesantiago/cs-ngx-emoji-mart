@@ -474,6 +474,9 @@ export class ChatService {
    */
   cerrarConversacion(c: Conversacion, id_estado: number): Promise<any> {
     return new Promise((resolve, reject) => {
+      if (c.llamada_activa) {
+        this.finalizarVideollamada(c);
+      }
       this.ajax.post('chat/conversacion/cerrar', { id_conversacion: c.idtbl_conversacion, codigo: c.codigo, id_usuario: this.user.getId(), id_estado: id_estado }).subscribe(d => {
         if (d.success) {
           resolve();

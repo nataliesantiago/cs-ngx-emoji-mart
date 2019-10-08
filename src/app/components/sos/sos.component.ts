@@ -28,6 +28,10 @@ export class SosComponent implements OnInit {
   ngOnInit() {
     if (!this.data.exito) {
       this.puede_cerrar_sos = true;
+      this.chatService.getEmergenciaUsuario().then(emergencia => {
+        // console.log(emergencia);
+        this.emergencia = emergencia;
+      });
     } else {
       this.chatService.getEmergenciaUsuario().then(emergencia => {
         // console.log(emergencia);
@@ -42,8 +46,8 @@ export class SosComponent implements OnInit {
     }
   }
   cerrarEmergencia() {
+    this.dialogRef.close();
     this.chatService.cerrarEmergenciaUsuario(this.emergencia.idtbl_consultas_sos).then(() => {
-      this.dialogRef.close();
     });
   }
 }
