@@ -5,6 +5,8 @@ import { UserService } from '../providers/user.service';
 import { ChatService } from '../providers/chat.service';
 import { FormControl } from '@angular/forms';
 import swal from 'sweetalert2';
+import { map, startWith } from 'rxjs/operators';
+import { UtilsService } from '../providers/utils.service';
 @Component({
   selector: 'app-intenciones-chat',
   templateUrl: './intenciones-chat.component.html',
@@ -23,7 +25,9 @@ export class IntencionesChatComponent implements OnInit {
   creando_intencion_xhr = false;
   intenciones_all: Array<IntencionChat>;
   filtro_intenciones: string;
-  constructor(private userService: UserService, private chatService: ChatService) {
+  filteredOptions;
+  categorias_filtradas;
+  constructor(private userService: UserService, private chatService: ChatService, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
@@ -41,6 +45,14 @@ export class IntencionesChatComponent implements OnInit {
 
     this.chatService.getCategoriasExperticia().then((c: Array<CategoriaExperticia>) => {
       this.categorias = c;
+      this.filteredOptions = this.createControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this.utilsService.filter(this.categorias, value, 'nombre'))
+      );
+      this.categorias_filtradas = this.myControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this.utilsService.filter(this.categorias, value, 'nombre'))
+      );
     });
   }
   ngOnInit() {
@@ -59,12 +71,12 @@ export class IntencionesChatComponent implements OnInit {
     })
   }
 
-  verificarCategoriaAsociada(nombre){
+  verificarCategoriaAsociada(nombre) {
     nombre = nombre.toLowerCase();
     let intenciones = this.intenciones_all.filter(i => {
       return i.frase.toLowerCase().indexOf(nombre) != (-1);
     });
-    if (nombre=="" || intenciones.length<=0)
+    if (nombre == "" || intenciones.length <= 0)
       this.intenciones = [];
   }
 

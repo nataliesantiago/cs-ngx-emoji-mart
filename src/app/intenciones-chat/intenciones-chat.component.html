@@ -17,7 +17,7 @@
             <mat-icon>close</mat-icon>
           </button>
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoriaNueva($event.option.value)'>
-            <mat-option *ngFor="let option of categorias" [value]="option">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
               {{option.nombre}}
             </mat-option>
           </mat-autocomplete>
@@ -51,12 +51,12 @@
       <div>
         <mat-form-field class="example-full-width m-t-20">
           <input type="text" placeholder="Selecciona la categoría de experticia" aria-label="Number" matInput
-            [formControl]="myControl" [matAutocomplete]="auto" (ngModelChange)="verificarCategoriaAsociada(myControl.value)">
+            [formControl]="myControl" [matAutocomplete]="auto" >
           <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
             <mat-icon>close</mat-icon>
           </button>
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoria($event.option.value)'>
-            <mat-option *ngFor="let option of categorias" [value]="option">
+            <mat-option *ngFor="let option of categorias_filtradas | async" [value]="option">
               {{option.nombre}}
             </mat-option>
           </mat-autocomplete>

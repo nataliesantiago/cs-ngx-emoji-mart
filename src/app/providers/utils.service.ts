@@ -74,7 +74,7 @@ export class UtilsService {
         })
     }
 
-    
+
     /**
      * @description Esta función se encarga de buscar una configuración según su ID
      * @param  {number} id
@@ -85,6 +85,21 @@ export class UtilsService {
             return c.idtbl_configuracion === id;
         });
     }
+    /**
+     * @param  {Array<any>} options
+     * @param  {string} value
+     * @param  {string} option
+     * @returns string
+     */
+    filter(options: Array<any>, value: string, option: string): string[] {
+        console.log(options, value);
+        if (value && typeof value == 'string') {
+            const filterValue = value.toLowerCase();
+            return options.filter(fila => fila[option].toLowerCase().indexOf(filterValue) != (-1));
+        } else {
+            return options;
+        }
 
+    }
 
 }

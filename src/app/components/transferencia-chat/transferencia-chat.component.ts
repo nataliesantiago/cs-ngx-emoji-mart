@@ -7,6 +7,8 @@ import { CategoriaExperticia } from '../../../schemas/interfaces';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
 import { Conversacion } from '../../../schemas/conversacion.schema';
+import { startWith, map } from 'rxjs/operators';
+import { UtilsService } from '../../providers/utils.service';
 
 export interface TransferenciaData {
   conversacion: Conversacion;
@@ -21,6 +23,7 @@ export interface TransferenciaData {
 export class TransferenciaChatComponent implements OnInit {
   user: User;
   expertos: Array<any> = [];
+  expertos_filtrados;
   filas: Array<CategoriaExperticia>;
   tipo: number;
   categoria_experticia_control = new FormControl();
@@ -28,7 +31,7 @@ export class TransferenciaChatComponent implements OnInit {
   categoria: CategoriaExperticia;
   experto: User;
   error_transferencia: string;
-  constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore, @Inject(MAT_DIALOG_DATA) private data: TransferenciaData) {
+  constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore, @Inject(MAT_DIALOG_DATA) private data: TransferenciaData, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.chatService.getCategoriasExperticia().then(c => {
       this.filas = c;
@@ -55,7 +58,8 @@ export class TransferenciaChatComponent implements OnInit {
           }
         });
       });
-    })
+    });
+    this.expertos_filtrados = this.experto_control.valueChanges.pipe(startWith(''), map(value => this.utilsService.filter(this.expertos, value, 'nombre')))
   }
 
   ngOnInit() {
