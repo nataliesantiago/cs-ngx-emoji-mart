@@ -97,7 +97,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
   init() {
     this.notificacionService.obtenerNotificacionesUsuario(this.id_usuario).then(r => {
-      console.log(r);
+      
       this.notificaciones_usuario = r[0];
       this.notificaicones_sin_leer = r[1].length;
       // console.log(this.notificaciones_usuario);
