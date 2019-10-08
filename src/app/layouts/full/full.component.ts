@@ -37,6 +37,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   id_usuario;
   notificaciones_usuario = [];
   notificaicones_sin_leer;
+  notificaciones_usuario_nuevas = [];
 
   public config: PerfectScrollbarConfigInterface = {};
   private _mobileQueryListener: () => void;
@@ -96,13 +97,15 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
 
   init() {
-    this.notificacionService.obtenerNotificacionesUsuario(this.id_usuario).then(r => {
+    this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
+      this.notificaciones_usuario = r;
+    });
+    this.user.observableNotificaciones.subscribe(() => {
       
-      this.notificaciones_usuario = r[0];
-      this.notificaicones_sin_leer = r[1].length;
-      // console.log(this.notificaciones_usuario);
-      // console.log(this.notificaicones_sin_leer);
-    })
+      this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
+      this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
+      
+    });
   }
 
   leerNotificaciones() {

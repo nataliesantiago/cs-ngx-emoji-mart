@@ -36,6 +36,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   lista_asociada = [];
   archivo_adjunto;
   file: File;
+  tipo_seleccion;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService){
     this.usuario = this.user.getUsuario();
@@ -59,6 +60,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   listarObjetos(){
     
     if(this.notificacion.tipo_envio == "2"){
+      this.tipo_seleccion = "Personas";
       this.lista_asociada = [];
       this.user.obtenerListaEmpleados().then( n => {
         
@@ -70,6 +72,7 @@ export class FormularioNotificacionesComponent implements OnInit {
         );
       });
     }else if(this.notificacion.tipo_envio == "3"){
+      this.tipo_seleccion = "Dependencias";
       this.lista_asociada = [];
       this.notificacionService.obtenerListaDependencias().then( n => {
         
@@ -103,7 +106,8 @@ export class FormularioNotificacionesComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.lista_asociada);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-
+    
+    this.myControl = new FormControl("");
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -199,11 +203,6 @@ export class FormularioNotificacionesComponent implements OnInit {
           }else{
             this.router.navigate(['/administrador-notificaciones']);
           }
-            
-          /*for(let i = 0; i < ids_usuarios.length; i++){
-            this.notificacionService.enviarNotificacionUsuario(ids_usuarios[i], this.notificacion.titulo, this.notificacion.texto);
-          }*/
-          //this.router.navigate(['/administrador-notificaciones']);
         });
       }
     }

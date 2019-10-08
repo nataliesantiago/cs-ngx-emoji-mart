@@ -157,7 +157,6 @@ export class FormularioEncuestasComponent implements OnInit {
     let suma_total = 0;
     let validar_orden = true;
     let validar_campos = true;
-    console.log(this.permitir_envio);
     if(this.permitir_envio){
 
       if(this.preguntas.length == 0){
@@ -172,7 +171,7 @@ export class FormularioEncuestasComponent implements OnInit {
       }else{
         for(let i = 0; i < this.preguntas.length; i++){
           
-          suma_total = this.preguntas[i].peso + suma_total;
+          suma_total = parseInt(this.preguntas[i].peso) + suma_total;
           
           if(this.preguntas[i].orden == ""){
             validar_orden = false;
@@ -207,6 +206,8 @@ export class FormularioEncuestasComponent implements OnInit {
         if(this.encuesta.nombre == "" || this.encuesta.id_tipo_encuesta == ""){
           validar_campos = false;
         }
+
+        console.log(suma_total);
 
         if(validar_campos){
           if(validar_orden){

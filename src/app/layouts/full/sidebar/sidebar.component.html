@@ -26,7 +26,7 @@
                         (click)="cerrarMenu()">Administración</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/productos']" routerLinkActive="active" (click)="cerrarMenu()">Categorias</a>
+                    <a [routerLink]="['/productos']" routerLinkActive="active" (click)="cerrarMenu()">Categorías</a>
                 </li>
                 <!--li><a [routerLink]="['/administracion-urls']" (click)="cerrarMenu()">Administración de URL's</a></li-->
                 <li>
@@ -46,12 +46,10 @@
                         *ngIf="user && user.id_rol==2">Chat Experto</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/encuesta/1']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta
-                        Cliente</a>
+                    <a [routerLink]="['/encuesta/1']" routerLinkActive="active" (click)="cerrarMenu()">Encuesta Cliente</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/encuesta/2']" routerLinkActive="active" (click)="cerrarMenu()">Encuenta
-                        Experto</a>
+                    <a [routerLink]="['/encuesta/2']" routerLinkActive="active" (click)="cerrarMenu()">Encuesta Experto</a>
                 </li>
                 <li>
                     <a [routerLink]="['/ad-expertiz']" routerLinkActive="active" (click)="cerrarMenu()">Administración

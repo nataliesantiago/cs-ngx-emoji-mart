@@ -59,7 +59,7 @@
       <div fxLayout="row wrap" *ngIf="notificacion.tipo_envio == '2' || notificacion.tipo_envio == '3'">
         <div fxFlex.gt-sm="40" fxFlex="100">
           <br>
-          <mat-card-title>Personas</mat-card-title>
+          <mat-card-title>{{tipo_seleccion}}</mat-card-title>
           <form class="example-form">
             <mat-form-field class="example-full-width">
               <input type="text" placeholder="Seleccione..." matInput [formControl]="myControl"
