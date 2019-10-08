@@ -76,7 +76,26 @@
         <mat-sidenav #end position="end" class="chat-panel" mode="'over'" opened="false">
             <div class="vision-notificacion">
                 <h3>Notificaciones</h3>
-                
+                <div *ngFor="let notificacion of notificaciones_usuario_nuevas" [ngClass]="{ 'notificacion-nueva': notificacion.leida == 0 }">
+                        <mat-divider></mat-divider>                    
+                        <div class="titulo-notificacion">
+                            <h4>{{notificacion.titulo}}</h4>
+                        </div>
+                        <div class="fecha-notificacion">
+                            <span>{{notificacion.fecha_inicio | MomentDate:'YYYY-MM-DD'}}</span>
+                        </div>
+                        <div class="texto-notificacion">
+                            <span>
+                                {{notificacion.texto}}
+                            </span>
+                        </div>
+    
+                        <div class="imagen-centrada">
+                            <img src="{{notificacion.url_adjunto}}"
+                                class="imagen-notificacion" *ngIf="notificacion.url_adjunto">
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
                 <div *ngFor="let notificacion of notificaciones_usuario" [ngClass]="{ 'notificacion-nueva': notificacion.leida == 0 }">
                     <mat-divider></mat-divider>                    
                     <div class="titulo-notificacion">

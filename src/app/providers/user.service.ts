@@ -14,11 +14,17 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { environment } from '../../environments/environment';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { mergeMapTo } from 'rxjs/operators';
+import { SonidosService } from './sonidos.service';
+import { NotificacionService } from './notificacion.service';
 
 @Injectable()
 export class UserService {
 
     user: User;
+    notificaciones_usuario = [];
+    notificaciones_sin_leer: number = 0;
+    subjectNotificaciones = new Subject<any>();
+    observableNotificaciones = this.subjectNotificaciones.asObservable();
     id_calendario: string;
     public socket: io.SocketIOClient.Socket;
     public subjectUsuario = new Subject<any>();
@@ -30,7 +36,7 @@ export class UserService {
     ref;
     este;
 
-    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging) {
+    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, private soundService: SonidosService) {
 
         this.ajax.sethost(environment.URL_BACK); // Desarrollo
         //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
@@ -44,6 +50,8 @@ export class UserService {
                 this.setActivoExperto(false);
             }
         };
+
+        
     }
 
 
@@ -275,8 +283,37 @@ export class UserService {
 
     listen() {
         this.afMessaging.messages
-            .subscribe((message) => { console.log(message); });
+            .subscribe((message) => { 
+                this.actualizarNotificaciones();
+                this.soundService.sonar(4);
+            });
     }
+
+    obtenerNotificacionesUsuario(id_usuario: number):Promise<any>{
+        return new Promise((resolve, reject) => {
+    
+          this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
+            if(d.success){
+                this.notificaciones_usuario = d.notificaciones[0];
+                this.notificaciones_sin_leer = d.notificaciones[1].length;     
+                this.subjectNotificaciones.next(1);
+                resolve(d.notificaciones);
+            }else{
+              reject();
+            }
+          });
+          
+        })
+      }
+    
+    
+      actualizarNotificaciones(){
+            
+        this.obtenerNotificacionesUsuario(this.user.idtbl_usuario).then(r => {
+        
+        })
+      }
+    
 
     obtenerListaEmpleados(): Promise<any> {
         return new Promise((resolve, reject) => {
