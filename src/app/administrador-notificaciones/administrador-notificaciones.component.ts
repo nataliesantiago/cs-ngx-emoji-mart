@@ -7,6 +7,7 @@ import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import { matTableFilter } from '../../common/matTableFilter';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-administrador-notificaciones',
@@ -48,8 +49,30 @@ export class AdministradorNotificacionesComponent implements OnInit {
 
   }
 
-  editarRegistro(e) {
-    this.router.navigate(['/formulario-ad-experto', e.idtbl_usuario]);
+  cancelarNotificacion(e) {
+    swal.fire({
+      title: 'Cancelar Notificación',
+      text: "Confirme para cancelar la notificación",
+      type: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.notificacionService.cancelarNotificacion(e).then(() => {
+          this.notificacionService.obtenerNotificacionesAdministracion().then( n => {
+            this.dataSource = new MatTableDataSource(n);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.cg.detectChanges();
+          });
+        });
+      }
+    })
+    
   }
 
   ngOnInit() {

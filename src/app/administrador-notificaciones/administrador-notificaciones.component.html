@@ -33,13 +33,16 @@
                     <!-- Progress Column -->
                     <ng-container matColumnDef="activo">
                             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Activo </mat-header-cell>
-                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.activo}} </mat-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> 
+                                <span *ngIf="row.activo == 1">Activa</span>
+                                <span *ngIf="row.activo == 0">Inactiva</span>
+                            </mat-cell>
                         </ng-container>
             
                     <ng-container matColumnDef="acciones">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:15%;">
-                            <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                            <i *ngIf="row.activo == 1" class="ti-close danger-color m-r-10 mouse-over" title="Cancelar Notificación" (click)="cancelarNotificacion(row)"></i>
                         </mat-cell>
                     </ng-container>
             

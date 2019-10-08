@@ -122,6 +122,21 @@ export class NotificacionService {
   }
 
 
+  cancelarNotificacion(notificacion: any):Promise<any>{
+    return new Promise((resolve, reject) => {
+
+      this.ajax.post('notificacion/desactivar-notificacion', { notificacion: notificacion }).subscribe(d => {
+        if(d.success){
+          resolve(d);
+        }else{
+          reject();
+        }
+      });
+      
+    })
+  }
+
+
   obtenerNotificacionesUsuario(id_usuario: number):Promise<any>{
     return new Promise((resolve, reject) => {
 
