@@ -21,7 +21,7 @@ export class SosComponent implements OnInit {
   puede_cerrar_sos = false;
   user;
   emergencia: Emergencia;
-  constructor(private dialogRef: MatDialogRef<SosComponent>, private chatService: ChatService, private userService: UserService, @Inject(MAT_DIALOG_DATA) private data: sosData) {
+  constructor(private dialogRef: MatDialogRef<SosComponent>, private chatService: ChatService, private userService: UserService, @Inject(MAT_DIALOG_DATA) public data: sosData) {
     this.user = this.userService.getUsuario();
   }
 
