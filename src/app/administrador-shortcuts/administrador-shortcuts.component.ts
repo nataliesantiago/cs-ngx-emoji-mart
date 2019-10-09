@@ -37,6 +37,7 @@ export class AdministradorShortcutsComponent implements OnInit {
   creando_shortcut = false;
   createControl = new FormControl();
   shortcuts: ShortCut[];
+  
   constructor(private chatService: ChatService, private userService: UserService, private shortcutsService: ShortcutsService) {
     this.user = this.userService.getUsuario();
     this.iniciadores = this.shortcutsService.iniciadores;

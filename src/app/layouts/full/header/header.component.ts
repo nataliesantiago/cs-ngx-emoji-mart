@@ -24,6 +24,7 @@ export class AppHeaderComponent {
   puede_cerrar_sos = false;
   creando_emergencia = false;
   escuchando_emergencia = false;
+  emergencia_actual = false;
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore, private snackBar: MatSnackBar, private sonidosService: SonidosService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
@@ -77,8 +78,13 @@ export class AppHeaderComponent {
       this.fireStore.doc('expertos/' + this.user.getId() + '/emergencia/1').valueChanges().subscribe((d: any) => {
         // console.log(d);
         if (d) {
+          this.emergencia_actual = true;
           this.sonidosService.sonar(3);
           this.mostrarSnack(d);
+          this.user.estado_experto = 2;
+          this.cambiarEstadoExperto({ value: 2 })
+        } else {
+          this.emergencia_actual = false;
         }
       });
     }
