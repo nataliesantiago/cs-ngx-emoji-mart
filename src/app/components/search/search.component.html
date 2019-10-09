@@ -14,7 +14,7 @@
       voz</span></i>
 
   <div class="ng-autocomplete">
-    <ng-autocomplete id="ng-autocomplete-search" placeHolder="Busca en Conecta" [data]="textopredictivo"
+    <ng-autocomplete id="ng-autocomplete-search" placeHolder="{{search_placeholder}}" [data]="textopredictivo"
       [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
       [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'" (inputCleared)="clearOptions()" #autocomplete>
     </ng-autocomplete>

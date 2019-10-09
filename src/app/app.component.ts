@@ -23,20 +23,17 @@ export class AppComponent {
   version = '0.0.20'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService, 
               @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService) {
-    this.initFavicon();
     this.responseSearch.setActive(true);
     moment.locale('es');
     this.ajax.sethost(environment.URL_BACK);
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
-      // this.initFavicon();
     }
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
       if (this.user) {
         this.init();
-        // this.initFavicon();
       }
     });
 
@@ -51,11 +48,23 @@ export class AppComponent {
     this.searchService.queryCloudSearch().then(d => {
       console.log('it worked');
     })
+    this.initFavicon();
+    this.getDarkMode();
   }
 
   initFavicon() {
     this.look_service.getSpecificSetting('url_favicon').then((result) => {
       this._document.getElementById('conecta_favicon').setAttribute('href', result[0].valor);  
+    });
+  }
+
+  getDarkMode() {
+    this.look_service.getSpecificSetting('modo_nocturno').then((result) => {
+      if(result[0].valor == 0) {
+        this._document.body.classList.remove('dark-theme');
+      } else {
+        this._document.body.classList.add('dark-theme');
+      }
     });
   }
  

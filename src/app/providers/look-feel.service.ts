@@ -48,7 +48,7 @@ export class LookFeelService {
           reject();
         }
       });
-    })
+    });
   }
 
   getSpecificSetting(field_name: string):Promise<any>{
@@ -60,7 +60,7 @@ export class LookFeelService {
           reject(response);
         }
       });
-    })
+    });
   }
 
   updateSetting(value, field_name) {
@@ -72,8 +72,31 @@ export class LookFeelService {
           reject(response);
         }
       });
-      
-    })
+    });
+  }
+
+  getHomeText() {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('administracion/obtener-texto-home', {}).subscribe(response => {
+        if(response.success){
+          resolve(response.item);
+        }else{
+          reject(response);
+        }
+      });
+    });
+  }
+
+  updateHomeText(value, home_text_id) {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('administracion/editar', { item: { valor: value, usuario_modificacion: this.user.getId(), idtbl_configuracion: home_text_id } }).subscribe(response => {
+        if(response.success){
+          resolve(response);
+        }else{
+          reject(response);
+        }
+      });
+    });
   }
 
 }

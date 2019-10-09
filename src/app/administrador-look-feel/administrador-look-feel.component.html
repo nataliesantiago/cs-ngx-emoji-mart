@@ -4,56 +4,84 @@
         <mat-card-title>Administrar Look&Feel</mat-card-title>
         <hr>
 
-        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between flex-start">
 
-          <div fxLayoutAlign="start center" fxFlex="45">
-            <mat-label class="m-r-20">Activar modo nocturno</mat-label>
-            <label class="switch" for="dark_checkbox">
-              <input type="checkbox" id="dark_checkbox" (change)="darkMode($event)"/>
-              <div class="slider-switch round-switch"></div>
-            </label>
-          </div>
-
-          <div fxLayout="column" fxFlex="45">
-            <mat-label>Cambiar logo</mat-label>
-            <input type="file" (change)="onLogoChange($event)">
-            <!-- <div fxLayout="row" fxLayoutAlign="start center" class=" upload-file-wrapperm-t-20">
-              <span class="m-r-20" *ngIf="file_name == ''; else fileUploadName">Ningún archivo seleccionado</span>
-              <ng-template #fileUploadName>
-                <span class="m-r-20">{{file_name}}</span>
-              </ng-template>
-              <input type="file" #inputFile (change)="onLogoChange($event)">
-              <button class="custom__btn custom__btn--primary" (click)="inputFile.click()">
-                <i class="ti-upload upload-icon m-r-10 mouse-over"></i>
-                Seleccionar archivo
-              </button>
-            </div> -->
-          </div>
-
-          <div fxLayout="column" fxFlex="45">
+          <div fxLayout="column" fxFlex="45" class="m-t-20">
             <mat-label>Cambiar favicon</mat-label>
-            <input type="file" (change)="onFaviconChange($event)">
+            <div class="setting-favicon m-t-20">
+              <img [src]="url_favicon || ''" alt="">
+            </div>
+            <div fxLayout="column" class="upload-file-wrapper m-t-20">
+              <span class="ti ti-upload"></span>
+              <label class="m-r-20" *ngIf="favicon_name == ''; else fileFaviconName">Seleccione o arrastre un archivo</label>
+              <ng-template #fileFaviconName>
+                <label class="m-r-20">{{favicon_name}}</label>
+              </ng-template>
+              <input type="file" (change)="onFaviconChange($event)">
+            </div>
           </div>
+
+          <div fxLayout="column" fxFlex="45" class="m-t-20">
+            <mat-label>Cambiar logo</mat-label>
+            <div class="setting-image m-t-20">
+              <img [src]="url_logo || ''" alt="">
+            </div>
+            <div fxLayout="column" class="upload-file-wrapper m-t-20">
+              <span class="ti ti-upload"></span>
+              <label class="m-r-20" *ngIf="logo_name == ''; else fileLogoName">Seleccione o arrastre un archivo</label>
+              <ng-template #fileLogoName>
+                <label class="m-r-20">{{logo_name}}</label>
+              </ng-template>
+              <input type="file" (change)="onLogoChange($event)">
+            </div>
+          </div>
+
+          <div fxLayout="column" fxFlex="45" class="m-t-20">
+              <mat-label>Cambiar título buscador</mat-label>
+              <mat-form-field>
+                <input matInput [(ngModel)]="home_text" name="home_text" autocomplete="off" (keyup)="onKeyUp($event)">
+              </mat-form-field>
+            </div>
   
-          <div fxLayout="column" fxFlex="45">
-            <mat-label>Cambiar color barra superior</mat-label>
-            <input type="text">
+            <div fxLayout="column" fxFlex="45" class="m-t-20">
+              <mat-label>Cambiar texto placeholder buscador</mat-label>
+              <mat-form-field>
+                <input matInput [(ngModel)]="search_placeholder" name="search_placeholder" autocomplete="off" (keyup)="onKeyUp($event)">
+              </mat-form-field>
+            </div>
+  
+          <div fxLayoutAlign="start start" fxFlex="45" class="color-wrapper m-t-20">
+            <mat-label class="m-r-20">Cambiar color barra superior</mat-label>
+            <div class="color-wrapper" fxLayout="column">
+                <div class="color-toolbar" [style.backgroundColor]="old_color_toolbar" (click)="is_change_color = !is_change_color"></div>
+                <div class="select-color"*ngIf="is_change_color">
+                    <color-block triangle="hide"  [color]="old_color_toolbar" [colors]="colors" (onChangeComplete)="handleChangeComplete($event)"></color-block>
+                </div>
+            </div>
           </div>
           
-          <div fxLayout="column" fxFlex="45">
-            <mat-label>Cambiar titulo buscador</mat-label>
-            <input type="text">
-          </div>
-
-          <div fxLayout="column" fxFlex="45">
-            <mat-label>Cambiar texto placeholder buscador</mat-label>
-            <input type="text">
+          <div fxLayoutAlign="start center" fxFlex="45" class="m-t-20">
+            <mat-label class="m-r-20">Activar modo nocturno</mat-label>
+            <label class="switch" for="dark_checkbox">
+              <input type="checkbox" id="dark_checkbox" (change)="darkMode($event)" [checked]="is_dark_mode == 1"/>
+              <div class="slider-switch round-switch"></div>
+            </label>
           </div>
           
         </div>
         
-        
-        <button (click)="saveConfig()">Guardar</button>
+        <button class="custom__btn custom__btn--accept m-t-30" (click)="saveConfig()" [disabled]="!is_change">Guardar configuración</button>
     </mat-card-content>
 </mat-card>
+
+</div>
+
+<div class="preloader preloader-settings" *ngIf="loading">
+  <div class="spinner">
+    <div class="double-bounce1">
+    </div>
+    <div class="double-bounce2">
+    </div>
+  </div>
+  <p>Gardando configuración por favor espere</p>
 </div>
