@@ -108,6 +108,7 @@ import { SosOperadorComponent } from './components/sos-operador/sos-operador.com
 import { LinkifyPipe } from '../pipes/linkify.pipe';
 import { SafePipe } from './pipes/safe.pipe';
 import { AdministradorLookFeelComponent } from './administrador-look-feel/administrador-look-feel.component';
+import { CerrarChatExpertoComponent } from './component/cerrar-chat-experto/cerrar-chat-experto.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -182,7 +183,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SosOperadorComponent,
     LinkifyPipe,
     SafePipe,
-    AdministradorLookFeelComponent
+    AdministradorLookFeelComponent,
+    CerrarChatExpertoComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
