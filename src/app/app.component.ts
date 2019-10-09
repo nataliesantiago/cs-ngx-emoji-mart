@@ -1,9 +1,11 @@
-import { Component, ViewChild, Input } from '@angular/core';
+import { Component, ViewChild, Input, Inject } from '@angular/core';
 import { AutenticationService } from './services/autenticacion.service';
 import { ResponseSearch } from './models/response-search';
 import { User } from '../schemas/user.schema';
 import { UserService } from './providers/user.service';
 import { environment } from '../environments/environment';
+import { DOCUMENT } from '@angular/platform-browser';
+import { LookFeelService } from './providers/look-feel.service';
 
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
@@ -19,18 +21,22 @@ const moment = _rollupMoment || _moment;
 export class AppComponent {
   user: User;
   version = '0.0.20'
-  constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService) {
+  constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService, 
+              @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService) {
+    this.initFavicon();
     this.responseSearch.setActive(true);
     moment.locale('es');
     this.ajax.sethost(environment.URL_BACK);
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
+      // this.initFavicon();
     }
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
       if (this.user) {
         this.init();
+        // this.initFavicon();
       }
     });
 
@@ -46,4 +52,11 @@ export class AppComponent {
       console.log('it worked');
     })
   }
+
+  initFavicon() {
+    this.look_service.getSpecificSetting('url_favicon').then((result) => {
+      this._document.getElementById('conecta_favicon').setAttribute('href', result[0].valor);  
+    });
+  }
+ 
 }

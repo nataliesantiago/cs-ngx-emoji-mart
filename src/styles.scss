@@ -6,6 +6,35 @@
 @import '~@swimlane/ngx-datatable/release/assets/icons.css';
 @import './assets/styles/variable.scss';
 
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+// Our dark theme
+.dark-theme {
+  color: $light-primary-text;
+  $dark-primary: mat-palette($mat-yellow);
+  $dark-accent: mat-palette($mat-amber, A400, A100, A700);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+  @include angular-material-theme($dark-theme);
+  
+}
+
+.dark-theme {
+  .container-custom {
+    .swal2-popup {
+      background-color: red !important;
+    }
+    .swal2-title,
+    .swal2-content {
+      color: #ffffff !important;
+    }
+  }
+}
+
+
 /*Variables*/
 
 :root {
@@ -2361,5 +2390,65 @@ input:-webkit-autofill:active {
       }
     }
 
+  }
+}
+
+.switch {
+  display: inline-block;
+  height: 28px;
+  position: relative;
+  width: 55px;
+  input {
+      display:none;
+      &:checked {
+          & + .slider-switch {
+              background-color: #66bb6a;
+              &:before {
+                  transform: translateX(25px);
+              }
+          }
+      }
+  }
+  .slider-switch {
+      background-color: #ccc;
+      bottom: 0;
+      cursor: pointer;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: .4s;
+      &:before {
+          background-color: #fff;
+          bottom: 4px;
+          content: "";
+          height: 20px;
+          left: 4px;
+          position: absolute;
+          transition: .4s;
+          width: 20px;
+      }
+      &.round-switch {
+          border-radius: 34px;
+          &:before {
+              border-radius: 50%;
+          }
+      }
+  }
+}
+
+.upload-file-wrapper{
+  margin-top: 30px;
+  input{
+      display: none;
+  }
+  span{
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 0.8rem;
+      display: block;
+      height: 39px;
+      line-height: 39px;
+      border-bottom: 1px dotted;
+      width: 220px;
   }
 }
