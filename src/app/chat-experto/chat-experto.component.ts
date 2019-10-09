@@ -16,6 +16,7 @@ import { UtilsService } from '../providers/utils.service';
 import { MatDialog } from '@angular/material';
 import { TransferenciaChatComponent } from '../components/transferencia-chat/transferencia-chat.component';
 import { ShortcutsService } from '../providers/shortcuts.service';
+import { CerrarChatExpertoComponent } from '../components/cerrar-chat-experto/cerrar-chat-experto.component';
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -805,11 +806,16 @@ export class ChatExpertoComponent {
   }
 
   cerrarChat(c: Conversacion) {
-    let estado = 3;
-    this.chatService.cerrarConversacion(c, estado).then(() => {
-      c.mostrar_encuesta = true;
-      this.recibirChatAutomatico();
+    this.dialog.open(CerrarChatExpertoComponent).afterClosed().subscribe(d => {
+      if (d && d.motivo) {
+        let estado = 3;
+        this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
+          c.mostrar_encuesta = true;
+          this.recibirChatAutomatico();
+        });
+      }
     });
+
   }
 
   finalizaEncuesta(c: Conversacion) {
