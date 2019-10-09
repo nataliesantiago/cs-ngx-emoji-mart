@@ -9,7 +9,8 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "serve": "ng serve --configuration=cam"
+        "serve": "ng serve --configuration=cam",
+        "compile-cam-dev": "ng build -c cam-test"
     },
     "private": true,
     "dependencies": {
