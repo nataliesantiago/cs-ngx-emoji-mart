@@ -29,6 +29,11 @@
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>        
         <div fxFlex.gt-sm="5" fxFlex="100"></div>
+        <mat-form-field fxFlex.gt-sm="10" fxFlex="100">
+          <mat-label>Seleccione la Hora Inicio*</mat-label>
+          <input matInput [(ngModel)]="notificacion.hora_envio" type="time" name="hora" autocomplete="off">
+        </mat-form-field>
+        <div fxFlex.gt-sm="5" fxFlex="100"></div>
         <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
           <mat-label>Fecha Fin*</mat-label>
           <input matInput [min]="notificacion.fecha_inicio" [matDatepicker]="picker2"
@@ -38,8 +43,8 @@
         </mat-form-field>
         <div fxFlex.gt-sm="5" fxFlex="100"></div>
         <mat-form-field fxFlex.gt-sm="10" fxFlex="100">
-          <mat-label>Seleccione la Hora*</mat-label>
-          <input matInput [(ngModel)]="notificacion.hora_envio" type="time" name="hora" autocomplete="off">
+          <mat-label>Seleccione la Hora Fin*</mat-label>
+          <input matInput [(ngModel)]="notificacion.hora_fin" type="time" name="hora" autocomplete="off">
         </mat-form-field>
       </div>
       <br>

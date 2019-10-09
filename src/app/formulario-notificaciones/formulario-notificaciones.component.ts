@@ -21,7 +21,7 @@ export class FormularioNotificacionesComponent implements OnInit {
 
   usuario;
   id_usuario;
-  notificacion= {titulo: '', texto: '', fecha_inicio: '', fecha_fin: '', url_adjunto: '', tipo_envio: '', hora_envio: ''};
+  notificacion= {titulo: '', texto: '', fecha_inicio: '', fecha_fin: '', url_adjunto: '', tipo_envio: '', hora_envio: '', hora_fin: ''};
   lista_envio = [];
   myControl = new FormControl();
   options = [];
