@@ -239,7 +239,12 @@ export class FlujoCuraduriaComponent implements OnInit {
             'aria-label': 'Nuevo Comentario'
           },
           html: comentarios,
-          showCancelButton: true
+          showCancelButton: true,
+          buttonsStyling: false,
+          confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+          confirmButtonText: 'Aceptar',
+          cancelButtonClass: 'custom__btn custom__btn--cancel',
+          cancelButtonText: 'Cancelar'
         })
         
         if (text) {

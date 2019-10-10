@@ -62,7 +62,7 @@
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Nombre </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:70%;">
                             <span *ngIf="!row.editando">{{row.label}}</span>
-                            <span *ngIf="row.editando"><input [(ngModel)]="row.label"></span>
+                            <mat-form-field *ngIf="row.editando"><input matInput [(ngModel)]="row.label"></mat-form-field>
                         </mat-cell>
                     </ng-container>
             
@@ -70,7 +70,7 @@
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> URL </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:70%;">
                             <span *ngIf="!row.editando">{{row.url}}</span>
-                            <span *ngIf="row.editando"><input [(ngModel)]="row.url"></span>
+                            <mat-form-field *ngIf="row.editando"><input matInput [(ngModel)]="row.url"></mat-form-field>
                         </mat-cell>
                     </ng-container>
             

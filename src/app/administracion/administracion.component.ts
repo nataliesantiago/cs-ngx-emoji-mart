@@ -72,30 +72,11 @@ export class AdministracionComponent implements OnInit {
 
   guardarRegistro(u){
     u.usuario_modificacion = this.id_usuario;
-    swal.fire({
-      title: 'Guardar cambios',
-      text: "Confirme para guardar los cambios",
-      type: 'warning',
-      showCancelButton: true,
-      buttonsStyling: false,
-      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-      confirmButtonText: 'Guardar',
-      cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.value) {
-        this.ajax.post('administracion/editar', { item: u }).subscribe(d => {
-          if(d.success){
-            
-            u.editando = false;
-            swal.fire(  
-              'Se guardó el registro correctamente.',
-            )    
-          }
-        })
-        
+    this.ajax.post('administracion/editar', { item: u }).subscribe(d => {
+      if(d.success){
+        u.editando = false;
       }
-    });
+    })
   }
 
   applyFilter(filterValue: string) {
