@@ -53,7 +53,7 @@ File: scss
 }
 
 // Dark Theme
-.dark {
+.dark-theme {
     @import 'colors/dark';
     @include angular-material-theme($dark-theme);
 }

@@ -38,15 +38,15 @@
 
           <div fxLayout="column" fxFlex="45" class="m-t-20">
               <mat-label>Cambiar título buscador</mat-label>
-              <mat-form-field>
-                <input matInput [(ngModel)]="home_text" name="home_text" autocomplete="off" (keyup)="onKeyUp($event)">
+              <mat-form-field class="m-t-10">
+                <input matInput [(ngModel)]="home_text" name="home_text" autocomplete="off" (keyup)="onKeyUp($event)" placeholder="Digite el título">
               </mat-form-field>
             </div>
   
             <div fxLayout="column" fxFlex="45" class="m-t-20">
               <mat-label>Cambiar texto placeholder buscador</mat-label>
-              <mat-form-field>
-                <input matInput [(ngModel)]="search_placeholder" name="search_placeholder" autocomplete="off" (keyup)="onKeyUp($event)">
+              <mat-form-field class="m-t-10">
+                <input matInput [(ngModel)]="search_placeholder" name="search_placeholder" autocomplete="off" (keyup)="onKeyUp($event)" placeholder="Digite el placeholder">
               </mat-form-field>
             </div>
   
@@ -63,14 +63,14 @@
           <div fxLayoutAlign="start center" fxFlex="45" class="m-t-20">
             <mat-label class="m-r-20">Activar modo nocturno</mat-label>
             <label class="switch" for="dark_checkbox">
-              <input type="checkbox" id="dark_checkbox" (change)="darkMode($event)" [checked]="is_dark_mode == 1"/>
+              <input type="checkbox" id="dark_checkbox" (change)="onDarkModeChange($event)" [checked]="is_dark_mode == 1"/>
               <div class="slider-switch round-switch"></div>
             </label>
           </div>
           
         </div>
         
-        <button class="custom__btn custom__btn--accept m-t-30" (click)="saveConfig()" [disabled]="!is_change">Guardar configuración</button>
+        <button class="custom__btn custom__btn--accept m-t-30" (click)="saveSetting()" [disabled]="!is_change">Guardar configuración</button>
     </mat-card-content>
 </mat-card>
 

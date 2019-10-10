@@ -13,28 +13,38 @@ export class AdministradorLookFeelComponent implements OnInit {
 
   favicon_file: File;
   logo_file: File;
-  file_name = '';
-  old_color_toolbar = '';
-  color_toolbar = '';
+  file_name: string = '';
+  old_color_toolbar: string = '';
+  color_toolbar: string = '';
   colors = [];
-  home_text = '';
-  home_text_id = '';
-  search_placeholder = '';
+  home_text: string = '';
+  home_text_id: string = '';
+  search_placeholder: string = '';
   dark_mode: boolean;
-  is_dark_mode;
+  is_dark_mode: number;
+  dark_mode_id: string;
+  is_update_dark_mode: boolean = false;
   url_logo;
   url_favicon;
-  logo_name = '';
-  favicon_name = '';
-  loading = false;
-  is_change_color = false;
-  is_change = false;
+  logo_name: string = '';
+  favicon_name: string = '';
+  loading: boolean = false;
+  is_change_color: boolean = false;
+  is_change: boolean = false;
 
   constructor(private look_service: LookFeelService, private router: Router) {
     this.colors = ['#ffffff', '#fdcecd', '#fef3bd', '#c1e1c5', '#bedadc', '#c4def6', '#bed3f3', '#d4c4fb'];
     this.getAllSettings();
+    this.getHomeText();
   }
 
+  ngOnInit() {
+    
+  }
+  
+  /**
+   * Funcion para obtener todos los valores de la configuracion de look&feel
+   */
   getAllSettings() {
     this.look_service.getAllSettings().then((result) => {
       result.forEach(setting => {
@@ -42,20 +52,39 @@ export class AdministradorLookFeelComponent implements OnInit {
         setting.nombre === 'url_logo' ? this.url_logo = setting.valor : '';
         setting.nombre === 'placeholder_buscador' ? this.search_placeholder = setting.valor : '';
         setting.nombre === 'color_barra_superior' ? this.old_color_toolbar = setting.valor : '';
-        setting.nombre === 'modo_nocturno' ? this.is_dark_mode = setting.valor : '';
+        setting.nombre === 'modo_nocturno' ? this.dark_mode_id = setting.idtbl_configuracion_look_feel + '' : '';
       });
+    });
+
+    this.getValueDarkMode();
+  }
+
+  /**
+   * Funcion para obtener el valor de la configuracion del modo nocturno del usuario
+   */
+  getValueDarkMode() {
+    this.look_service.getValueSettingUser('modo_nocturno').then((result) => {
+      if(result.length == 0) {
+        this.is_dark_mode = 0;
+        this.is_update_dark_mode = false;
+      } else {
+        this.is_dark_mode = result[0].valor;
+        this.is_update_dark_mode = true;
+      }
     });
   }
 
-  ngOnInit() {
-    
-  }
-
-  darkMode(event) {
+  /**
+   * Funcion para detectar si el usuario activa o desactiva el modo nocturno
+   */
+  onDarkModeChange(event) {
     this.dark_mode = event.target.checked;
     this.is_change = true;
   }
 
+  /**
+   * Funcion para detectar si un usuario adjunto una imagen para cambiar el logo
+   */
   onLogoChange(event) {
     let file = event.target.files[0];
     if(file != undefined) {
@@ -74,6 +103,9 @@ export class AdministradorLookFeelComponent implements OnInit {
     }
   }
 
+  /**
+   * Funcion para detectar si un usuario adjunto una imagen para cambiar el logo
+   */
   onFaviconChange(event){ 
     let file = event.target.files[0];
     if(file != undefined) {
@@ -92,6 +124,9 @@ export class AdministradorLookFeelComponent implements OnInit {
     }
   }
 
+  /**
+   * Funcion para mostrar la modal de error si un usuario adjunta un archivo diferente a una imagen
+   */
   showModal () {
     swal.fire({
       title: 'Formato no permitido',
@@ -103,16 +138,25 @@ export class AdministradorLookFeelComponent implements OnInit {
     });
   }
 
+  /**
+   * Funcion para obtener el valor del color seleccionado por el usuario
+   */
   handleChangeComplete(event: ColorEvent) {
     this.color_toolbar = event.color.hex;
     this.old_color_toolbar = event.color.hex;
     this.is_change = true;
   }
 
+  /**
+   * Funcion para detectar si el usuario escribio en un campo de texto
+   */
   onKeyUp(event) {
     this.is_change = true;
   }
 
+  /**
+   * Funcion para obtener el valor del titulo del home
+   */
   getHomeText() {
     this.look_service.getHomeText().then((result) => {
       this.home_text = result[0].valor;  
@@ -120,20 +164,34 @@ export class AdministradorLookFeelComponent implements OnInit {
     });
   }
 
-  saveConfig() {
-
+  /**
+   * Funcion para guardar la configuracion de modo oscuro
+   */
+  saveDarkMode() {
     let change_dark_mode;
     if(this.dark_mode) {
       change_dark_mode = 1;
     } else {
       change_dark_mode = 0;
     }
-    
-    this.look_service.updateSetting(change_dark_mode, 'modo_nocturno').then(result => {
-      this.loading = true; 
-      window.location.reload(); 
-    });
+        
+    if(this.is_update_dark_mode) {
+      this.look_service.updateSettingByUser(change_dark_mode, this.dark_mode_id).then(result => {
+        this.loading = true; 
+        window.location.reload(); 
+      });
+    } else {
+      this.look_service.addSettingByUser(this.dark_mode_id, change_dark_mode).then(result => {
+        this.loading = true; 
+        window.location.reload(); 
+      });
+    }
+  }
 
+  /**
+   * Funcion para guardar la configuracion del favicon
+   */
+  saveFavicon() {
     if(this.favicon_file != null) {
       const form_data = new FormData();
       form_data.append('favicon_file', this.favicon_file);
@@ -146,7 +204,12 @@ export class AdministradorLookFeelComponent implements OnInit {
         }
       });
     }
+  }
 
+  /**
+   * Funcion para guardar la configuracion del logo
+   */
+  saveLogo() {
     if(this.logo_file != null) {
       const form_data = new FormData();
       form_data.append('logo_file', this.logo_file);
@@ -159,23 +222,50 @@ export class AdministradorLookFeelComponent implements OnInit {
         }
       });
     }
-    
+  }
+
+  /**
+   * Funcion para guardar la configuracion del color
+   */
+  saveColor() {
     if(this.color_toolbar != '') {
       this.look_service.updateSetting(this.color_toolbar, 'color_barra_superior').then(result => {
         this.loading = true; 
         window.location.reload(); 
       });
     }
+  }
 
+  /**
+   * Funcion para guardar la configuracion del titulo del home
+   */
+  saveHomeText() {
     this.look_service.updateHomeText(this.home_text, this.home_text_id).then(result => {
       this.loading = true; 
       window.location.reload(); 
     });
+  }
 
+  /**
+   * Funcion para guardar la configuracion del placeholder del buscador
+   */
+  saveSearchPlaceholder() {
     this.look_service.updateSetting(this.search_placeholder, 'placeholder_buscador').then(result => {
       this.loading = true; 
       window.location.reload(); 
     });
+  }
+
+  /**
+   * Funcion para guardar las configuraciones de look&feel
+   */
+  saveSetting() {
+    this.saveDarkMode();
+    this.saveFavicon();
+    this.saveLogo();
+    this.saveColor();
+    this.saveHomeText();
+    this.saveSearchPlaceholder();
   }
 
 

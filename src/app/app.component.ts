@@ -52,18 +52,26 @@ export class AppComponent {
     this.getDarkMode();
   }
 
+  /**
+   * Funcion para obtener la url del favicon y asignarla a la etiqueta correspondiente
+   */
   initFavicon() {
     this.look_service.getSpecificSetting('url_favicon').then((result) => {
       this._document.getElementById('conecta_favicon').setAttribute('href', result[0].valor);  
     });
   }
 
+  /**
+   * Funcion para obtener si el usuario tiene activo el modo nocturno o no para asignar la clase correspondiente al estilo nocturno
+   */
   getDarkMode() {
-    this.look_service.getSpecificSetting('modo_nocturno').then((result) => {
-      if(result[0].valor == 0) {
-        this._document.body.classList.remove('dark-theme');
-      } else {
-        this._document.body.classList.add('dark-theme');
+    this.look_service.getValueSettingUser('modo_nocturno').then((result) => {
+      if(result.length != 0) {
+        if(result[0].valor == 0) {
+          this._document.body.classList.remove('dark-theme');
+        } else {
+          this._document.body.classList.add('dark-theme');
+        }
       }
     });
   }

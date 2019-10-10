@@ -6,154 +6,6 @@
 @import '~@swimlane/ngx-datatable/release/assets/icons.css';
 @import './assets/styles/variable.scss';
 
-@import '~@angular/material/theming';
-
-@include mat-core();
-
-// Our dark theme
-.dark-theme {
-  color: $light-primary-text;
-  $dark-primary: mat-palette($mat-yellow);
-  $dark-accent: mat-palette($mat-amber, A400, A100, A700);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
-
-  @include angular-material-theme($dark-theme);
-
-  input {
-    background-color: transparent !important;
-    color: #ffffff;
-    &::placeholder { 
-      color: #ffffff; 
-    } 
-    &:-ms-input-placeholder {  
-        color: #ffffff; 
-    } 
-    &::-ms-input-placeholder { 
-        color: #ffffff; 
-    }
-  }
-
-  h1, 
-  h2, 
-  h3, 
-  h4, 
-  p, 
-  a,
-  ol,
-  span {
-    color: #ffffff;
-  }
-
-  .ql-snow {
-    .ql-stroke {
-      stroke: #ffffff;
-    }
-    .ql-picker {
-      color: #ffffff;
-    }
-    .ql-fill {
-      fill: #ffffff;
-    }
-  } 
-
-  .ql-editor{
-    p,
-    ol,
-    ul,
-    pre,
-    blockquote,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      color: #ffffff;
-    }
-    &.ql-blank {
-      &::before { 
-        color: #ffffff; 
-      }
-    }
-  } 
-
-  .comunidad_titulo{
-    color: #6f6868;
-  }
-
-  .fondo {
-    height: 100%;
-    background-color: #424242;
-    #search-bar {
-      color: #ffffff;
-      .autocomplete-container {
-        .input-container {
-          input {
-            color: #ffffff;
-            caret-color: #ffffff;
-          }
-          .x {
-            i {
-              color: #ffffff;
-            }
-          }
-        }
-      }  
-    }
-  }
-
-  .bg-light {
-    background-color: #424242;
-  }
-
-  .componente-pequeno {
-    background: #212121 !important;
-  }
-
-  .container-principal {
-    .container-texto {
-      .fecha-modificacion {
-        color: #ffffff !important;
-      }
-    }
-  }
-
-  .preguntas-asociadas {
-    .panel-respuestas {
-      color: #ffffff !important;
-    }
-  }
-
-  .encuesta {
-    .contenedor-encuesta {
-      .ps {
-        background-color: #424242 !important;
-      }
-    }
-  }
-
-  .container-custom {
-    .swal2-popup {
-      background-color: red !important;
-    }
-    .swal2-title,
-    .swal2-content {
-      color: #ffffff !important;
-    }
-  }
-
-  .upload-file-wrapper {
-    border: 1px dashed rgba(239, 239, 239, 0.6);
-    background-color: transparent;
-    label {
-      color: #ffffff;
-    }
-  }
-
-}
-
-
 /*Variables*/
 
 :root {
@@ -2404,6 +2256,51 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px transparent inset !important;
 }
 
+.contenedor__sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: -40px;
+  ul {
+    li {
+      transition: all ease 0.5s;
+      margin: 10px 0;
+      cursor: pointer;
+      a {
+          font-size: 14px;
+          width: 100%;
+          display: block;
+          padding-left: 20px;
+          position: relative;
+          &:hover {
+              color: #1e88e5;
+          }
+          &.active{
+              text-transform: capitalize;
+              font-size: 16px;
+              padding: 10px 5px;
+              border: 1px solid rgba(30, 136, 229, 0.4);
+              box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.06), 0 7px 10px -5px rgba(30, 136, 229, 0.08);
+              color: #1e88e5;
+              margin: 15px 0;
+              padding-left: 25px;
+              padding-right: 10px;
+              &:after{
+                  content: '';
+                  position: absolute;
+                  right: 0;
+                  top: -1px;
+                  width: 8px;
+                  height: 100%;
+                  background-color: #1e88e5;
+                  border: 1px solid rgba(30, 136, 229, 0.4);
+                  z-index: 9;
+              }
+          }
+      }
+    }
+  }
+}
 
 .recomendacion {
   padding-left: 15px;

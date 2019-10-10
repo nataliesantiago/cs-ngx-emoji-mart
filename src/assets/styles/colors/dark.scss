@@ -5,61 +5,195 @@ Email: niravjoshi87@gmail.com
 File: scss
 */
 @include mat-core();
-$dark-primary: mat-palette($mat-blue);
-$dark-accent:  mat-palette($mat-indigo, A200, A100, A400);
-$dark-warn: mat-palette($mat-pink);
+
+$color: $light-primary-text;
+$dark-primary: mat-palette($mat-yellow);
+$dark-accent: mat-palette($mat-amber, A400, A100, A700);
+$dark-warn: mat-palette($mat-red);
 $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
-$themecolor:#F44336;
-$themecolor-alt: #E53935;
-$white:#fff;
-$sidebar-text: #8999a0;
-$sidebar-icons: #909394;
-$light: #505050;
-$inverse:#424242;
-$border:rgba(0, 0, 0, 0.12);
-html body {
-.dark{ 
-    /* This is for the navigation*/
-     #snav {
-        .mat-list-item {
-            a{
-                color:$sidebar-text;
-                mat-icon{
-                    color:$sidebar-icons;
+$color-ffffff: #ffffff;
+$color-555555: #555555;
+$color-6f6868: #6f6868;
+$color-424242: #424242;
+$color-ffeb3b: #ffeb3b;
+
+input {
+    background-color: transparent !important;
+    color: $color-ffffff;
+    &::placeholder { 
+      color: $color-ffffff; 
+    } 
+    &:-ms-input-placeholder {  
+        color: $color-ffffff; 
+    } 
+    &::-ms-input-placeholder { 
+        color: $color-ffffff; 
+    }
+  }
+
+  h1, 
+  h2, 
+  h3, 
+  h4, 
+  p, 
+  a,
+  ol,
+  ul,
+  span {
+    color: $color-ffffff;
+  }
+
+  .ql-snow {
+    .ql-stroke {
+      stroke: $color-ffffff;
+    }
+    .ql-picker {
+      color: $color-ffffff;
+    }
+    .ql-fill {
+      fill: $color-ffffff;
+    }
+  } 
+
+  .ql-editor{
+    p,
+    ol,
+    ul,
+    pre,
+    blockquote,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: $color-ffffff;
+    }
+    &.ql-blank {
+      &::before { 
+        color: $color-ffffff; 
+      }
+    }
+  } 
+
+  .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+    color: $color-ffeb3b;
+  }
+  .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button:hover .ql-stroke, .ql-snow.ql-toolbar button:focus .ql-stroke, .ql-snow .ql-toolbar button:focus .ql-stroke, .ql-snow.ql-toolbar button.ql-active .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow.ql-toolbar button:hover .ql-stroke-miter, .ql-snow .ql-toolbar button:hover .ql-stroke-miter, .ql-snow.ql-toolbar button:focus .ql-stroke-miter, .ql-snow .ql-toolbar button:focus .ql-stroke-miter, .ql-snow.ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+    stroke: $color-ffeb3b;
+  }
+
+  .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button:hover .ql-fill, .ql-snow.ql-toolbar button:focus .ql-fill, .ql-snow .ql-toolbar button:focus .ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-fill, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-fill, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill, .ql-snow.ql-toolbar button:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar button:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar button:focus .ql-stroke.ql-fill, .ql-snow .ql-toolbar button:focus .ql-stroke.ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
+    fill: $color-ffeb3b;
+  }
+
+  .page-wrapper {
+    background: $color-555555;
+    .page-content {
+      background: $color-555555;
+    }
+  } 
+
+  .comunidad_titulo{
+    color: $color-6f6868;
+  }
+
+  .fondo {
+    #search-bar {
+        color: $color-ffffff;
+        column-rule-color: $color-ffffff;
+        caret-color: $color-ffffff;
+        border: 0px none $color-ffffff;
+        outline: $color-ffffff none 0px;
+        box-shadow: rgba(255, 255, 255, 0.3) 0px 1px 2px 0px, rgba(255, 255, 255, 0.15) 0px 1px 3px 1px;
+        &:focus-within {
+            box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.3), 0 2px 6px 2px rgba(255, 255, 255, 0.15);
+        }
+        .archivo,
+        .microfono {
+            color: $color-ffffff;
+        }
+        .autocomplete-container {
+            .input-container {
+            input {
+                color: $color-ffffff;
+                caret-color: $color-ffffff;
+            }
+            .x {
+                i {
+                color: $color-ffffff;
                 }
             }
-            &.selected .sub-item .mat-list-item-content a.selected{
-                 color:$white;
             }
+        }  
+    }
+  }
+
+  .bg-light {
+    background-color: $color-424242;
+  }
+
+  .componente-pequeno {
+    background: #212121 !important;
+  }
+
+  .container-principal {
+    .container-texto {
+      .fecha-modificacion {
+        color: $color-ffffff !important;
+      }
+    }
+  }
+
+  .preguntas-asociadas {
+    .panel-respuestas {
+      color: $color-ffffff !important;
+    }
+  }
+
+  .encuesta {
+    .contenedor-encuesta {
+      .ps {
+        background-color: $color-424242 !important;
+      }
+    }
+  }
+
+  .container-custom {
+    .swal2-popup {
+      background-color: red !important;
+    }
+    .swal2-title,
+    .swal2-content {
+      color: $color-ffffff !important;
+    }
+  }
+
+  .upload-file-wrapper {
+    border: 1px dashed rgba(239, 239, 239, 0.6);
+    background-color: transparent;
+    label {
+      color: $color-ffffff;
+    }
+  }
+
+  .contenedor__sidebar {
+    ul {
+      li {
+        a {
+          &:hover {
+            color: $color-ffeb3b;
+          }
+          &.active {
+            border: 1px solid rgba(255, 235, 59, 0.4);
+            color: $color-ffeb3b;
+            &:after {
+              background-color: $color-ffeb3b;
+              border: 1px solid rgba(255, 235, 59, 0.4);
+            }
+          }
         }
-    }
-    /*This is for the chartis js*/
-    .ct-label{
-        fill:rgba(255, 255, 255, 0.4);
-        color:rgba(255, 255, 255, 0.4);
-    }
-    .bg-light, .email-sidebar .selected .d-flex, .email-right-panel, .cal-month-view .cal-cell-row .cal-cell:hover, .cal-month-view .cal-cell.cal-has-events.cal-open, .cal-month-view .cal-cell-row:hover, .chat-middle-box, .chat-footer, .mat-card[_ngcontent-c10], .ngx-datatable.material{
-        background-color: $light;
-    }
-    .chat-middle-box{
-        color:black;
-    }
-    .ql-snow .ql-stroke{
-        stroke:$white;
-        
-    }
-    .ql-snow .ql-fill{
-        fill:$white;
-    }
-    .ql-snow .ql-picker{
-        color:$white;
-    }
-    .my-drop-zone{
-        background: $inverse;
-    }
-    .cal-month-view .cal-day-cell:not(:last-child), .cal-month-view .cal-days .cal-cell-row, .cal-header, .cal-month-view .cal-days{
-        border-color:$border;
-    }
-}
-}
+      } 
+    } 
+  } 
