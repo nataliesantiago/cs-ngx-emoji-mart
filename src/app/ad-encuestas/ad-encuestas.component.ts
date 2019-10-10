@@ -74,7 +74,10 @@ export class AdEncuestasComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Activar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         this.ajax.get('encuestas/activar', { encuesta: e}).subscribe(p1 => {

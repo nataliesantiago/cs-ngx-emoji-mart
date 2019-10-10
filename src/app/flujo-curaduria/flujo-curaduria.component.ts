@@ -244,7 +244,10 @@ export class FlujoCuraduriaComponent implements OnInit {
           confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
           confirmButtonText: 'Aceptar',
           cancelButtonClass: 'custom__btn custom__btn--cancel',
-          cancelButtonText: 'Cancelar'
+          cancelButtonText: 'Cancelar',
+          customClass: {
+            container: 'custom-sweet'
+          }
         })
         
         if (text) {

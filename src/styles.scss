@@ -2536,5 +2536,22 @@ input:-webkit-autofill:active {
   }
 }
 
+.mat-card {
+  &.flujo-activo{
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4)!important;
+    &:hover{
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4)!important;
+    }
+  }
+  &.flujo-mouse-over{
+    cursor: pointer;
+    &:hover{
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2)!important;
+    }
+  }
+}
+
+
+
 
 

@@ -155,7 +155,10 @@ export class AdministradorShortcutsComponent implements OnInit {
         type: 'warning',
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-        confirmButtonText: 'Aceptar'
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       }).then((result) => {
         if (result.value) {
           this.reset();
@@ -175,7 +178,10 @@ export class AdministradorShortcutsComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         this.shortcutsService.desactivarShortcut(e.idtbl_shortcut_operador).then((r) => {

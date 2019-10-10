@@ -37,6 +37,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   archivo_adjunto;
   file: File;
   tipo_seleccion;
+  nombre_archivo = '';
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService){
     this.usuario = this.user.getUsuario();
@@ -126,7 +127,10 @@ export class FormularioNotificacionesComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {        
         let pos = 0;
@@ -161,7 +165,10 @@ export class FormularioNotificacionesComponent implements OnInit {
         type: 'warning',
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-        confirmButtonText: 'Aceptar'
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       })
 
     }else{
@@ -173,7 +180,10 @@ export class FormularioNotificacionesComponent implements OnInit {
           type: 'warning',
           buttonsStyling: false,
           confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-          confirmButtonText: 'Aceptar'
+          confirmButtonText: 'Aceptar',
+          customClass: {
+            container: 'custom-sweet'
+          }
         })
       }else{
         this.notificacionService.guardarNotificacion(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
@@ -210,6 +220,7 @@ export class FormularioNotificacionesComponent implements OnInit {
 
   onFileChange($event){    
     this.file = $event.target.files[0];
+    this.nombre_archivo = $event.target.files[0].name;
   }
 
   ngOnInit() {

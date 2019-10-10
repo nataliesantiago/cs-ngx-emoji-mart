@@ -107,7 +107,10 @@ export class FormularioEncuestasComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         this.orden_preguntas.splice(this.orden_preguntas.length-1,1);
@@ -135,6 +138,9 @@ export class FormularioEncuestasComponent implements OnInit {
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept',
         confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       });
       this.permitir_envio = false;
     }else if (e.maximo == e.minimo){
@@ -145,6 +151,9 @@ export class FormularioEncuestasComponent implements OnInit {
           buttonsStyling: false,
           confirmButtonClass: 'custom__btn custom__btn--accept',
           confirmButtonText: 'Aceptar',
+          customClass: {
+            container: 'custom-sweet'
+          }
       })
       this.permitir_envio = false;
     }else{
@@ -167,6 +176,9 @@ export class FormularioEncuestasComponent implements OnInit {
           buttonsStyling: false,
           confirmButtonClass: 'custom__btn custom__btn--accept',
           confirmButtonText: 'Aceptar',
+          customClass: {
+            container: 'custom-sweet'
+          }
       })
       }else{
         for(let i = 0; i < this.preguntas.length; i++){
@@ -236,6 +248,9 @@ export class FormularioEncuestasComponent implements OnInit {
                 buttonsStyling: false,
                 confirmButtonClass: 'custom__btn custom__btn--accept',
                 confirmButtonText: 'Aceptar',
+                customClass: {
+                  container: 'custom-sweet'
+                }
             })  
             }else if (suma_total > 100){
               swal.fire({
@@ -245,6 +260,9 @@ export class FormularioEncuestasComponent implements OnInit {
                 buttonsStyling: false,
                 confirmButtonClass: 'custom__btn custom__btn--accept',
                 confirmButtonText: 'Aceptar',
+                customClass: {
+                  container: 'custom-sweet'
+                }
             })
             }
           }else{
@@ -255,6 +273,9 @@ export class FormularioEncuestasComponent implements OnInit {
               buttonsStyling: false,
               confirmButtonClass: 'custom__btn custom__btn--accept',
               confirmButtonText: 'Aceptar',
+              customClass: {
+                container: 'custom-sweet'
+              }
           })
           }
         }else{
@@ -265,6 +286,9 @@ export class FormularioEncuestasComponent implements OnInit {
             buttonsStyling: false,
             confirmButtonClass: 'custom__btn custom__btn--accept',
             confirmButtonText: 'Aceptar',
+            customClass: {
+              container: 'custom-sweet'
+            }
         })
         }
         
@@ -278,6 +302,9 @@ export class FormularioEncuestasComponent implements OnInit {
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept',
         confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
     })
     }
 

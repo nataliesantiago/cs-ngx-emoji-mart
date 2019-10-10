@@ -127,7 +127,10 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         if(this.editar){
@@ -188,7 +191,10 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
         type: 'warning',
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-        confirmButtonText: 'Aceptar'
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       })
 
     }else{

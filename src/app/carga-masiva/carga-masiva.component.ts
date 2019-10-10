@@ -74,7 +74,10 @@ export class CargaMasivaComponent implements OnInit {
       type: 'warning',
       buttonsStyling: false,
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-      confirmButtonText: 'Aceptar'
+      confirmButtonText: 'Aceptar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         event.srcElement.value = null;

@@ -67,6 +67,9 @@ export class UrlsUsuarioComponent implements OnInit {
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept',
         confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       });
     } else {
       this.nueva_url.id_usuario_creador = this.id_usuario;
@@ -107,7 +110,10 @@ export class UrlsUsuarioComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         this.ajax.post('administracion/eliminar-url', { item: u }).subscribe(d => {
