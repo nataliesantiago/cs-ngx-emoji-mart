@@ -20,6 +20,7 @@ import { SpeechRecognizerService } from './home/web-speech/shared/services/speec
 import { SpeechSynthesizerService } from './home/web-speech//shared/services/speech-synthesizer.service';
 import { QuillModule } from 'ngx-quill';
 import { Ng2SmartTableModule } from 'ngx-smart-table';
+import { ColorBlockModule } from 'ngx-color/block';
 
 import { AdPreguntasComponent } from "./ad-preguntas/ad-preguntas.component";
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -231,6 +232,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PickerModule,
     AngularFireAuthModule,
     AngularFireMessagingModule,
+    ColorBlockModule
   ],
 
   providers: [

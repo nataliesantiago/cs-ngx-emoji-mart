@@ -15,6 +15,7 @@ import { ActionContext } from '../../home/web-speech/shared/model/strategy/actio
 import { MatSidenav } from '@angular/material';
 import { UserService } from '../../providers/user.service';
 import { NotificacionService } from '../../providers/notificacion.service';
+import { LookFeelService } from '../../providers/look-feel.service';
 
 /** @title Responsive sidenav */
 @Component({
@@ -64,6 +65,8 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   textError = 'no hay resultados'; // label del autocomplete
   @ViewChild('snav') sidenav: MatSidenav;
 
+  color_toolbar = '';
+
   reason = '';
   constructor(
     changeDetectorRef: ChangeDetectorRef,
@@ -76,7 +79,8 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     private speechRecognizer: SpeechRecognizerService,
     private nzone: NgZone,
     private user: UserService,
-    private notificacionService: NotificacionService
+    private notificacionService: NotificacionService,
+    private look_service: LookFeelService
   ) {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -97,6 +101,9 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
 
   init() {
+    this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
+      this.color_toolbar = result[0].valor;  
+    });
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
       this.notificaciones_usuario = r;
     });

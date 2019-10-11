@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit {
   ambiente = environment.ambiente;
   user: User;
 
-  url_logo = "https://storage.cloud.google.com/archivos-estaticos-aplicacion-cam/logo.png";
+  url_logo = "";
 
   initRecognition() {
     this.speechRecognizer.setLanguage(this.currentLanguage);
@@ -192,8 +192,11 @@ export class HomeComponent implements OnInit {
     });
 
     this.look_service.getSpecificSetting('url_logo').then((result) => {
-      this.url_logo = result[0].valor;  
-      this.changeDetector.detectChanges();
+      if(result && result[0] && result[0].valor){
+        this.url_logo = result[0].valor;  
+        this.changeDetector.detectChanges();
+      }
+      
     });
   }
 
