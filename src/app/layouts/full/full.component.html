@@ -74,7 +74,7 @@
         <!-- Right Sidebar - style you can find in rightsidebar.component.scss -->
         <!-- ============================================================== -->
         <mat-sidenav #end position="end" class="chat-panel" mode="'over'" opened="false">
-            <div class="vision-notificacion">
+            <perfect-scrollbar class="vision-notificacion">
                 <h3>Notificaciones</h3>
                 <div *ngFor="let notificacion of notificaciones_usuario_nuevas" [ngClass]="{ 'notificacion-nueva': notificacion.leida == 0 }">
                         <mat-divider></mat-divider>                    
@@ -117,7 +117,7 @@
                     <mat-divider></mat-divider>
                 </div>
 
-            </div>
+            </perfect-scrollbar>
 
             <!--div class="scroll">
                 <mat-nav-list>

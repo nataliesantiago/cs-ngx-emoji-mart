@@ -192,8 +192,11 @@ export class HomeComponent implements OnInit {
     });
 
     this.look_service.getSpecificSetting('url_logo').then((result) => {
-      this.url_logo = result[0].valor;  
-      this.changeDetector.detectChanges();
+      if(result && result[0] && result[0].valor){
+        this.url_logo = result[0].valor;  
+        this.changeDetector.detectChanges();
+      }
+      
     });
   }
 

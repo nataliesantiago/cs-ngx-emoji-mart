@@ -55,7 +55,10 @@ export class AppComponent {
 
   initFavicon() {
     this.look_service.getSpecificSetting('url_favicon').then((result) => {
-      this._document.getElementById('conecta_favicon').setAttribute('href', result[0].valor);  
+      if(result && result[0] && result[0].valor){
+        this._document.getElementById('conecta_favicon').setAttribute('href', result[0].valor);
+      }
+      
     });
   }
  
