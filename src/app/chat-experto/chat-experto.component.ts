@@ -826,9 +826,11 @@ export class ChatExpertoComponent {
   }
 
   iniciarVideollamada(c: Conversacion) {
+    c.buscando_llamada = true;
     this.chatService.iniciarVideollamada(c).then(d => {
       // console.log('creo', d);
       // this.enviarMensaje(c, 4, d);
+      c.buscando_llamada = false;
       this.fireStore.doc('conversaciones/' + c.codigo).update({ llamada_activa: true, url_llamada: d });
     });
   }

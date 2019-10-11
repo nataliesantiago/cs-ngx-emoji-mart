@@ -89,7 +89,7 @@
                 <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
                 </div>
               </div>
-              <button mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1"
+              <button mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1" [disabled]="chat.buscando_llamada || chat.llamada_activa" title="Iniciar Videollamada"
                 (click)="iniciarVideollamada(chat)">
                 <mat-icon>phone</mat-icon>
               </button>

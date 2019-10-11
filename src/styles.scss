@@ -736,7 +736,7 @@ a {
 }
 
 .sidebar_mt {
-  margin-top: 260px;
+ 
 }
 
 .side_gear {
@@ -2450,5 +2450,13 @@ input:-webkit-autofill:active {
       line-height: 39px;
       border-bottom: 1px dotted;
       width: 220px;
+  }
+}
+
+.menu-lateral {
+  .mat-drawer {
+      .mat-drawer-inner-container {
+          height: auto !important;
+      }
   }
 }

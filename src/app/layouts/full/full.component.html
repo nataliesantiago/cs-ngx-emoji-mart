@@ -31,16 +31,17 @@
                 <span class="point"></span>
             </div>
         </button-->
-        
+
         <button mat-icon-button class="m-r-10" (click)="end.toggle();leerNotificaciones()">
             <img src="../../../../assets/images/siren.png" alt="" class="alerta">
             <div class="notify">
                 <span *ngIf="notificaicones_sin_leer > 0" class="heartbit-notificaciones"></span>
-                <span *ngIf="notificaicones_sin_leer > 0" class="point-notificaciones" matBadge="{{notificaicones_sin_leer}}" matBadgeColor="warn" matBadgeOverlap="false"></span>
+                <span *ngIf="notificaicones_sin_leer > 0" class="point-notificaciones"
+                    matBadge="{{notificaicones_sin_leer}}" matBadgeColor="warn" matBadgeOverlap="false"></span>
             </div>
         </button>
-        
-        
+
+
         <!-- ============================================================== -->
         <!-- app header component - style you can find in header.scss / header.component.ts-->
         <!-- ============================================================== -->
@@ -56,13 +57,13 @@
     <!-- ============================================================== -->
     <!-- End Topbar - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0"
+    <mat-sidenav-container class="example-sidenav-container " [style.marginTop.px]="mobileQuery.matches ? 0 : 0"
         [ngClass]="{'minisidebar': minisidebar}">
         <!-- ============================================================== -->
         <!-- Sidebar - style you can find in sidebar.scss -->
         <!-- ============================================================== -->
-        <mat-sidenav class="sidenav-menu" #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0" [opened]="false"
-            (open)="sidebarOpened = true" (close)="sidebarOpened = false" [perfectScrollbar]="config">
+        <mat-sidenav class="sidenav-menu menu-lateral " #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0"
+            [opened]="false" (open)="sidebarOpened = true" (close)="sidebarOpened = false" [perfectScrollbar]="config">
 
             <app-sidebar class="app-sidebar" (cerrado)="cerrarMenu()"></app-sidebar>
 
@@ -76,28 +77,9 @@
         <mat-sidenav #end position="end" class="chat-panel" mode="'over'" opened="false">
             <div class="vision-notificacion">
                 <h3>Notificaciones</h3>
-                <div *ngFor="let notificacion of notificaciones_usuario_nuevas" [ngClass]="{ 'notificacion-nueva': notificacion.leida == 0 }">
-                        <mat-divider></mat-divider>                    
-                        <div class="titulo-notificacion">
-                            <h4>{{notificacion.titulo}}</h4>
-                        </div>
-                        <div class="fecha-notificacion">
-                            <span>{{notificacion.fecha_inicio | MomentDate:'YYYY-MM-DD'}}</span>
-                        </div>
-                        <div class="texto-notificacion">
-                            <span>
-                                {{notificacion.texto}}
-                            </span>
-                        </div>
-    
-                        <div class="imagen-centrada">
-                            <img src="{{notificacion.url_adjunto}}"
-                                class="imagen-notificacion" *ngIf="notificacion.url_adjunto">
-                        </div>
-                        <mat-divider></mat-divider>
-                    </div>
-                <div *ngFor="let notificacion of notificaciones_usuario" [ngClass]="{ 'notificacion-nueva': notificacion.leida == 0 }">
-                    <mat-divider></mat-divider>                    
+                <div *ngFor="let notificacion of notificaciones_usuario_nuevas"
+                    [ngClass]="{ 'notificacion-nueva': notificacion.leida == 0 }">
+                    <mat-divider></mat-divider>
                     <div class="titulo-notificacion">
                         <h4>{{notificacion.titulo}}</h4>
                     </div>
@@ -111,8 +93,29 @@
                     </div>
 
                     <div class="imagen-centrada">
-                        <img src="{{notificacion.url_adjunto}}"
-                            class="imagen-notificacion" *ngIf="notificacion.url_adjunto">
+                        <img src="{{notificacion.url_adjunto}}" class="imagen-notificacion"
+                            *ngIf="notificacion.url_adjunto">
+                    </div>
+                    <mat-divider></mat-divider>
+                </div>
+                <div *ngFor="let notificacion of notificaciones_usuario"
+                    [ngClass]="{ 'notificacion-nueva': notificacion.leida == 0 }">
+                    <mat-divider></mat-divider>
+                    <div class="titulo-notificacion">
+                        <h4>{{notificacion.titulo}}</h4>
+                    </div>
+                    <div class="fecha-notificacion">
+                        <span>{{notificacion.fecha_inicio | MomentDate:'YYYY-MM-DD'}}</span>
+                    </div>
+                    <div class="texto-notificacion">
+                        <span>
+                            {{notificacion.texto}}
+                        </span>
+                    </div>
+
+                    <div class="imagen-centrada">
+                        <img src="{{notificacion.url_adjunto}}" class="imagen-notificacion"
+                            *ngIf="notificacion.url_adjunto">
                     </div>
                     <mat-divider></mat-divider>
                 </div>
