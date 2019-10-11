@@ -102,3 +102,12 @@ export interface Emergencia {
     fecha_emergencia_cerrada: Date;
     fecha_emergencia_cerrada_operador: Date;
 }
+
+export interface MotivoCierreChat {
+    idtbl_motivo_cierre_chat?: number;
+    nombre?: string;
+    id_usuario_creador?: number;
+    fecha_creacion?: Date;
+    id_usuario_ultima_modificacion?: number;
+    fecha_ultima_modificacion?: Date;
+}

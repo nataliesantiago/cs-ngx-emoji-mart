@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit {
   ambiente = environment.ambiente;
   user: User;
 
-  url_logo = "https://storage.cloud.google.com/archivos-estaticos-aplicacion-cam/logo.png";
+  url_logo = "";
 
   initRecognition() {
     this.speechRecognizer.setLanguage(this.currentLanguage);

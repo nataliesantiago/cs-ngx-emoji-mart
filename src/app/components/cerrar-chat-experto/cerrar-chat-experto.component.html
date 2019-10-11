@@ -1,0 +1,11 @@
+<h3>Por favor indique la razón para cerrar el chat</h3>
+<mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="id_motivo_cierre">
+  <mat-radio-button class="example-radio-button" *ngFor="let m of motivos" [value]="m.idtbl_motivo_cierre_chat">
+    {{m.nombre}}
+  </mat-radio-button>
+</mat-radio-group>
+<div class="botonera">
+  <button class="custom__btn custom__btn--accept m-r-20" [disabled]="!id_motivo_cierre"
+    (click)="cerrar(true)">Enviar</button>
+  <button class="custom__btn custom__btn--cancel m-r-20" (click)="cerrar(false)">Cancelar</button>
+</div>

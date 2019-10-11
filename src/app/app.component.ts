@@ -23,20 +23,17 @@ export class AppComponent {
   version = '0.0.20'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService, 
               @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService) {
-    this.initFavicon();
     this.responseSearch.setActive(true);
     moment.locale('es');
     this.ajax.sethost(environment.URL_BACK);
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
-      // this.initFavicon();
     }
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
       if (this.user) {
         this.init();
-        // this.initFavicon();
       }
     });
 
@@ -51,14 +48,34 @@ export class AppComponent {
     this.searchService.queryCloudSearch().then(d => {
       console.log('it worked');
     })
+    this.initFavicon();
+    this.getDarkMode();
   }
 
+  /**
+   * Funcion para obtener la url del favicon y asignarla a la etiqueta correspondiente
+   */
   initFavicon() {
     this.look_service.getSpecificSetting('url_favicon').then((result) => {
       if(result && result[0] && result[0].valor){
         this._document.getElementById('conecta_favicon').setAttribute('href', result[0].valor);
       }
       
+    });
+  }
+
+  /**
+   * Funcion para obtener si el usuario tiene activo el modo nocturno o no para asignar la clase correspondiente al estilo nocturno
+   */
+  getDarkMode() {
+    this.look_service.getValueSettingUser('modo_nocturno').then((result) => {
+      if(result.length != 0) {
+        if(result[0].valor == 0) {
+          this._document.body.classList.remove('dark-theme');
+        } else {
+          this._document.body.classList.add('dark-theme');
+        }
+      }
     });
   }
  

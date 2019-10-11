@@ -25,7 +25,7 @@
                     <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Valor </mat-header-cell>
                     <mat-cell *matCellDef="let row" style="max-width:70%;">
                         <span *ngIf="!row.editando">{{row.valor}}</span>
-                        <span *ngIf="row.editando"><input [(ngModel)]="row.valor"></span>
+                        <mat-form-field *ngIf="row.editando"><input matInput [(ngModel)]="row.valor"></mat-form-field>
                     </mat-cell>
                 </ng-container>
         

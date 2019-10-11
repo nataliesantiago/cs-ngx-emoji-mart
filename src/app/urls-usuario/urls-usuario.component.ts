@@ -23,7 +23,8 @@ export class UrlsUsuarioComponent implements OnInit {
   id_usuario;
   usuario;
   editar = true;
-  nuevo = { label: '', url: '', id_usuario_creador: '' };
+  nueva_url = { label: '', url: '', id_usuario_creador: '' };
+  is_created = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
     
@@ -34,61 +35,50 @@ export class UrlsUsuarioComponent implements OnInit {
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
-      this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
-        if (p.success) {
-          
-          this.items_administracion = p.items;
-          
-          this.dataSource = new MatTableDataSource(this.items_administracion);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.cg.detectChanges();
-        }
-      })
       if (this.usuario) {
       }
     })
+
+    this.getUrls();
     
+  }
+
+  getUrls() {
+    this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
+      if (p.success) {
+        this.items_administracion = p.items;
+        this.dataSource = new MatTableDataSource(this.items_administracion);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.cg.detectChanges();
+      }
+    })
   }
 
   ngOnInit() {
   }
 
   async nuevoRegistro() {
-    const { value: formValues } = await Swal.fire({
-      title: 'Complete los campos',
-      html:
-        '<input id="swal-input1" placeholder="Digite el nombre" class="swal2-input">' +
-        '<input type="url" id="swal-input2" placeholder="Digite la url" class="swal2-input">',
-      focusConfirm: false,
-    })
-    if (formValues) {
-      let a: any = document.getElementById('swal-input1');
-      let b: any = document.getElementById('swal-input2');
-      this.nuevo.label = a.value;
-      this.nuevo.url = b.value;
-      this.nuevo.id_usuario_creador = this.id_usuario;
-      if (this.nuevo.label != "" || this.nuevo.url != "") {
-        this.ajax.post('administracion/guardar-url', { item: this.nuevo }).subscribe(d => {
-          if (d.success) {
-            Swal.fire(
-              'Se guardó el registro correctamente.',
-            )
-            this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
-              if (p.success) {
-                
-                this.items_administracion = p.items;
-                
-                this.dataSource = new MatTableDataSource(this.items_administracion);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-                this.cg.detectChanges();
-              }
-            })
-          }
-        })
-      }
-
+    if(this.nueva_url.label == '' || this.nueva_url.url == '') {
+      Swal.fire({
+        title: 'Complete los campos',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
+      });
+    } else {
+      this.nueva_url.id_usuario_creador = this.id_usuario;
+      this.ajax.post('administracion/guardar-url', { item: this.nueva_url }).subscribe(d => {
+        if (d.success) {
+          this.getUrls();
+          this.is_created = false;
+        }
+      })
     }
   }
 
@@ -103,62 +93,34 @@ export class UrlsUsuarioComponent implements OnInit {
 
   guardarRegistro(u) {
     u.usuario_modificacion = this.id_usuario;
-    Swal.fire({
-      title: 'Guardar cambios',
-      text: "Confirme para guardar los cambios",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Guardar'
-    }).then((result) => {
-      if (result.value) {
-        this.ajax.post('administracion/editar-url', { item: u }).subscribe(d => {
-          if (d.success) {
-            
-            u.editando = false;
-            Swal.fire(
-              'Se guardó el registro correctamente.',
-            )
-          }
-        })
-
+    this.ajax.post('administracion/editar-url', { item: u }).subscribe(d => {
+      if (d.success) {
+        this.getUrls();
       }
     })
   }
 
   eliminarRegistro(u) {
     Swal.fire({
-      title: 'Eliminar URL',
-      text: "Confirme para eliminar el registro",
+      title: 'Eliminar Url',
+      text: "Confirme para elminiar la url",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Guardar'
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         this.ajax.post('administracion/eliminar-url', { item: u }).subscribe(d => {
           if (d.success) {
-            
-            u.editando = false;
-            Swal.fire(
-              'Se eliminó el registro correctamente.',
-            )
-            this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
-              if (p.success) {
-                
-                this.items_administracion = p.items;
-                
-                this.dataSource = new MatTableDataSource(this.items_administracion);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-                this.cg.detectChanges();
-              }
-            })
+            this.getUrls();
           }
         })
-
       }
     })
   }

@@ -17,6 +17,7 @@ import { ActionContext } from '../../home/web-speech/shared/model/strategy/actio
 import { AutenticationService } from '../../services/autenticacion.service';
 import { SearchService } from '../../providers/search.service';
 import { AutocompleteComponent } from 'angular-ng-autocomplete';
+import { LookFeelService } from '../../providers/look-feel.service';
 
 @Component({
   selector: 'app-search-component',
@@ -61,6 +62,8 @@ export class AppSearchComponent implements OnInit {
   currentLanguage = this.languages[1];
   actionContext: ActionContext = new ActionContext();
   @ViewChild('autocomplete') autocomplete: AutocompleteComponent;
+  search_placeholder = '';
+
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -69,9 +72,17 @@ export class AppSearchComponent implements OnInit {
     private speechRecognizer: SpeechRecognizerService,
     private nzone: NgZone,
     private autenticationService: AutenticationService,
+    private look_service: LookFeelService
   ) {
     this.searchText = '';
     this.responseSearch.setActiveMostrarBarra(false);
+    this.getPlaceholder();
+  }
+
+  getPlaceholder() {
+    this.look_service.getSpecificSetting('placeholder_buscador').then((result) => {
+      this.search_placeholder = result[0].valor;  
+    });
   }
 
   /**

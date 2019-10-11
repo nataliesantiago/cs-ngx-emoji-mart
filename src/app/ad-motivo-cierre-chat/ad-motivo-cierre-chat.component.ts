@@ -81,6 +81,9 @@ export class AdMotivoCierreChatComponent implements OnInit {
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept',
         confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       });
     } else if(this.reason.name.length > 450) {
       swal.fire({
@@ -90,6 +93,9 @@ export class AdMotivoCierreChatComponent implements OnInit {
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept',
         confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       });
     } else {
       this.motivo_service.saveReason(this.reason, this.user_id).then((result) => {
@@ -123,7 +129,10 @@ export class AdMotivoCierreChatComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         this.motivo_service.deleteReason(e.idtbl_motivo_cierre_chat, this.user_id).then((result) => {

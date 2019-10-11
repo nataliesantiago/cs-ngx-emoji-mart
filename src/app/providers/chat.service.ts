@@ -472,12 +472,12 @@ export class ChatService {
    * @param  {Conversacion} c
    * @returns Promise
    */
-  cerrarConversacion(c: Conversacion, id_estado: number): Promise<any> {
+  cerrarConversacion(c: Conversacion, id_estado: number, motivo?: number): Promise<any> {
     return new Promise((resolve, reject) => {
       if (c.llamada_activa) {
         this.finalizarVideollamada(c);
       }
-      this.ajax.post('chat/conversacion/cerrar', { id_conversacion: c.idtbl_conversacion, codigo: c.codigo, id_usuario: this.user.getId(), id_estado: id_estado }).subscribe(d => {
+      this.ajax.post('chat/conversacion/cerrar', { id_conversacion: c.idtbl_conversacion, codigo: c.codigo, id_usuario: this.user.getId(), id_estado: id_estado, motivo: motivo }).subscribe(d => {
         if (d.success) {
           resolve();
         }
@@ -682,6 +682,11 @@ export class ChatService {
     });
   }
 
+  /**
+   * @description
+   * @param  {Conversacion} c
+   * @returns Promise
+   */
   iniciarVideollamada(c: Conversacion): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/videollamada/crear', { id_conversacion: c.idtbl_conversacion, id_usuario: this.user.getId(), correo_cliente: c.cliente.correo, token: this.user.token_acceso }).subscribe(d => {
@@ -693,11 +698,30 @@ export class ChatService {
     });
   }
 
+  /**
+   * @description Finaliza videollamada
+   * @param  {Conversacion} c
+   * @returns Promise
+   */
   finalizarVideollamada(c: Conversacion): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/videollamada/finalizar', { id_llamada: c.id_llamada, codigo: c.codigo }).subscribe(d => {
         if (d.success) {
           resolve();
+        }
+      })
+    });
+  }
+
+  /**
+   * @description Obtiene los motivos de cirre disponibles para el experto
+   * @returns Promise
+   */
+  buscarMotivosCierreChat(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/obtenerMotivosCierre', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.motivos);
         }
       })
     });
