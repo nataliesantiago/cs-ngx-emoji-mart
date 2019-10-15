@@ -30,6 +30,20 @@
                         <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.titulo}} </mat-cell>
                     </ng-container>
 
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="fecha_publicacion">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Publicación </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.fecha_inicio | MomentDate:'YYYY-MM-DD'}} </mat-cell>
+                    </ng-container>
+
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="fecha_creacion">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Creación </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.fecha_creacion | MomentDate:'YYYY-MM-DD'}} </mat-cell>
+                    </ng-container>
+
                     <!-- Progress Column -->
                     <ng-container matColumnDef="activo">
                             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Activo </mat-header-cell>

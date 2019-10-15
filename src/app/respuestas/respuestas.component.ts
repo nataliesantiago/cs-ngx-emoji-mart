@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert2';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
+import { ChatService } from '../providers/chat.service';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -32,7 +33,7 @@ export class RespuestasComponent implements OnInit {
   activadoSi = false;
   activadoNo = false;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef) {
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private chatService: ChatService) {
 
     this.usuario = this.user.getUsuario();
 
@@ -176,7 +177,8 @@ export class RespuestasComponent implements OnInit {
   }
 
   enviarCalificacion(){
-    this.ajax.post('preguntas/observaciones-respuesta', { comentario: this.observaciones, positivo: this.valor_calificacion, id_usuario: this.id_usuario, id_pregunta: this.id_pregunta_visualizar }).subscribe(d => {
+    
+    this.ajax.post('preguntas/observaciones-respuesta', { comentario: this.observaciones, positivo: this.valor_calificacion, id_usuario: this.usuario.idtbl_usuario, id_pregunta: this.id_pregunta_visualizar }).subscribe(d => {
       if(d.success){
         
         if(this.valor_calificacion == 2){
@@ -191,9 +193,7 @@ export class RespuestasComponent implements OnInit {
             cancelButtonText: 'Cancelar'
           }).then((result) => {
             if (result.value) {
-              swal.fire(  
-                'Se abre el chat',
-              )
+              this.chatService.crearConversacion(this.pregunta.id_producto);
             }
           })  
         }else{

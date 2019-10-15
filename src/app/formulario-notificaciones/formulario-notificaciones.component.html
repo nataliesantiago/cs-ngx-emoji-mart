@@ -13,7 +13,7 @@
       <div fxLayout="row wrap">
         <mat-form-field appearance="outline" class="texto" fxFlex.gt-sm="100" fxFlex="100">
           <mat-label>Digite el Texto</mat-label>
-          <textarea matInput class="campo-texto" name="texto" [(ngModel)]="notificacion.texto"></textarea>
+          <textarea matInput class="campo-texto" name="texto" maxlength="{{limite_caracteres}}" [(ngModel)]="notificacion.texto"></textarea>
         </mat-form-field>
       </div>
       <div fxLayout="row wrap">

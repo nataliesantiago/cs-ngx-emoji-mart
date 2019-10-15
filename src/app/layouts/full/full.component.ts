@@ -102,7 +102,9 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
   init() {
     this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
-      this.color_toolbar = result[0].valor;  
+      if(result && result[0] && result[0].valor){
+        this.color_toolbar = result[0].valor;  
+      }
     });
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
       this.notificaciones_usuario = r;

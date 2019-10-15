@@ -40,6 +40,7 @@ export class CreacionProductosComponent implements OnInit {
       if (p.success) {
 
         this.productos = p.productos;
+        
         /*for(let i = 0; i < this.productos.length; i++){
           this.productos[i].familia = this.productos[i].nombre;
           this.obtenerArbol(this.productos[i], i);

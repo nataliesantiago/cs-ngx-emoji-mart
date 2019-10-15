@@ -38,6 +38,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   file: File;
   tipo_seleccion;
   nombre_archivo = '';
+  limite_caracteres;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService){
     this.usuario = this.user.getUsuario();
@@ -52,6 +53,10 @@ export class FormularioNotificacionesComponent implements OnInit {
         this.init();
       }
     })
+    
+    this.notificacionService.obtenerCantidadCaracteresNotificacion().then( n => {
+      this.limite_caracteres = n;
+    });
   }
 
   init(){
