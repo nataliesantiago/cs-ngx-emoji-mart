@@ -86,7 +86,7 @@
               </mat-expansion-panel>              
           </mat-accordion>
           <div fxFlex.gt-sm="1" fxFlex="100"></div>
-          <button mat-icon-button *ngIf="!pregunta.idtbl_pregunta_encuesta" (click)="eliminarPregunta(pregunta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash danger-color"></i></button>
+          <button mat-icon-button (click)="eliminarPregunta(pregunta, i)" fxFlex.gt-sm="1" fxFlex="100" style="font-size: 20px;"><i class="ti-trash danger-color"></i></button>
           <div *ngIf="pregunta.idtbl_pregunta_encuesta" fxFlex.gt-sm="1" fxFlex="100"></div>
         </div>
         <br>
@@ -96,7 +96,7 @@
       <div fxLayout="row wrap">
         <div fxFlex="25" fxLayoutAlign="space-between center">
           <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarDato()">Guardar</button>
-          <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/ad-encuestas']"><span class="texto-boton">Cancelar</span></a>
+          <a fxFlex="45" class="custom__btn custom__btn--cancel" (click)="cancelarFormulario()"><span class="texto-boton">Cancelar</span></a>
         </div>
       </div>
   </mat-card-content>

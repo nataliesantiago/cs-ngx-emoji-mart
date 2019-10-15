@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -45,17 +45,17 @@ export class FormularioEncuestasComponent implements OnInit {
     })
   }
 
-  init(){
+  init() {
 
     this.ajax.get('encuestas/obtener-tipo', { tipo: 1 }).subscribe(d => {
-      if(d.success){        
+      if (d.success) {
         this.tipo_encuesta = d.tipo;
       }
     })
 
     this.ajax.get('encuestas/obtener-tipo', { tipo: 2 }).subscribe(d => {
-      if(d.success){
-        
+      if (d.success) {
+
         this.tipo_pregunta = d.tipo;
       }
     })
@@ -63,22 +63,22 @@ export class FormularioEncuestasComponent implements OnInit {
     this.route.params
       .filter(params => params.id_encuesta)
       .subscribe(params => {
-        
-        {order: "popular"}
-        this.id_encuesta = params.id_encuesta;
-        
-    });
 
-    if(this.id_encuesta != "nuevo"){
+        { order: "popular" }
+        this.id_encuesta = params.id_encuesta;
+
+      });
+
+    if (this.id_encuesta != "nuevo") {
       this.editar = true;
       this.ajax.get('encuestas/obtener-ind', { idtbl_encuesta: this.id_encuesta }).subscribe(d => {
-        if(d.success){
+        if (d.success) {
           this.encuesta = d.encuesta[0];
           this.ajax.get('encuestas/obtener-preguntas', { id_encuesta: d.encuesta[0].idtbl_encuesta }).subscribe(d2 => {
-            if(d2.success){              
+            if (d2.success) {
               this.preguntas = d2.preguntas;
-              for(let i = 1; i <= d2.preguntas.length; i++){
-                this.orden_preguntas.push({valor: i});
+              for (let i = 1; i <= d2.preguntas.length; i++) {
+                this.orden_preguntas.push({ valor: i });
               }
             }
           })
@@ -91,12 +91,12 @@ export class FormularioEncuestasComponent implements OnInit {
   ngOnInit() {
   }
 
-  anadirPregunta(){
-    this.preguntas.push({ enunciado: '', id_tipo: '', peso: '', minimo: '', maximo: '', orden: ''});
-    this.orden_preguntas.push({ valor: this.preguntas.length});
+  anadirPregunta() {
+    this.preguntas.push({ enunciado: '', id_tipo: '', peso: '', minimo: '', maximo: '', orden: '' });
+    this.orden_preguntas.push({ valor: this.preguntas.length });
   }
 
-  eliminarPregunta(e, pos){
+  eliminarPregunta(e, pos) {
 
     swal.fire({
       title: 'Eliminar Pregunta',
@@ -113,24 +113,35 @@ export class FormularioEncuestasComponent implements OnInit {
       }
     }).then((result) => {
       if (result.value) {
-        this.orden_preguntas.splice(this.orden_preguntas.length-1,1);
-        this.preguntas.splice(pos, 1);
-        this.cg.detectChanges();
+        if (this.editar) {
+          this.ajax.post('encuestas/eliminar-pregunta', { pregunta: e }).subscribe(d => {
+            if (d.success) {
+              this.orden_preguntas.splice(this.orden_preguntas.length - 1, 1);
+              this.preguntas.splice(pos, 1);
+              this.cg.detectChanges();
+            }
+          })
+        } else {
+          this.orden_preguntas.splice(this.orden_preguntas.length - 1, 1);
+          this.preguntas.splice(pos, 1);
+          this.cg.detectChanges();
+        }
+
       }
     })
-    
+
   }
 
-  reiniciarValores(e){
+  reiniciarValores(e) {
     e.minimo = '';
     e.maximo = '';
   }
 
-  validarDato(e){
-    if(e.minimo == ''){
+  validarDato(e) {
+    if (e.minimo == '') {
       e.minimo = 0;
     }
-    if(e.maximo < e.minimo){
+    if (e.maximo < e.minimo) {
       swal.fire({
         title: 'Dato Incorrecto',
         text: 'Debe digitar un valor mayor al minimo',
@@ -143,32 +154,32 @@ export class FormularioEncuestasComponent implements OnInit {
         }
       });
       this.permitir_envio = false;
-    }else if (e.maximo == e.minimo){
+    } else if (e.maximo == e.minimo) {
       swal.fire({
-          title: 'Dato Incorrecto',
-          text: 'Debe digitar un valor diferente al minimo',
-          type: 'warning',
-          buttonsStyling: false,
-          confirmButtonClass: 'custom__btn custom__btn--accept',
-          confirmButtonText: 'Aceptar',
-          customClass: {
-            container: 'custom-sweet'
-          }
+        title: 'Dato Incorrecto',
+        text: 'Debe digitar un valor diferente al minimo',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       })
       this.permitir_envio = false;
-    }else{
+    } else {
       this.permitir_envio = true;
     }
     this.cg.detectChanges();
   }
 
-  enviarDato(){
+  enviarDato() {
     let suma_total = 0;
     let validar_orden = true;
     let validar_campos = true;
-    if(this.permitir_envio){
+    if (this.permitir_envio) {
 
-      if(this.preguntas.length == 0){
+      if (this.preguntas.length == 0) {
         swal.fire({
           title: 'Dato Incorrecto',
           text: 'Debe ingresr al menos una pregunta antes de guardar',
@@ -179,68 +190,68 @@ export class FormularioEncuestasComponent implements OnInit {
           customClass: {
             container: 'custom-sweet'
           }
-      })
-      }else{
-        for(let i = 0; i < this.preguntas.length; i++){
-          
+        })
+      } else {
+        for (let i = 0; i < this.preguntas.length; i++) {
+
           suma_total = parseInt(this.preguntas[i].peso) + suma_total;
-          
-          if(this.preguntas[i].orden == ""){
+
+          if (this.preguntas[i].orden == "") {
             validar_orden = false;
           }
-          if(this.preguntas[i].id_tipo != 1 && this.preguntas[i].id_tipo != 5){
+          if (this.preguntas[i].id_tipo != 1 && this.preguntas[i].id_tipo != 5) {
             this.preguntas[i].minimo = null;
             this.preguntas[i].maximo = null;
           }
-          if(this.preguntas[i].id_tipo == 1){
-            if(this.preguntas[i].minimo == "" || this.preguntas[i].maximo == ""){
+          if (this.preguntas[i].id_tipo == 1) {
+            if (this.preguntas[i].minimo == "" || this.preguntas[i].maximo == "") {
               validar_campos = false;
             }
           }
-          if(this.preguntas[i].id_tipo == 5){
-            if(this.preguntas[i].maximo == ""){
+          if (this.preguntas[i].id_tipo == 5) {
+            if (this.preguntas[i].maximo == "") {
               validar_campos = false;
             }
           }
-          if(this.preguntas[i].enunciado == "" || this.preguntas[i].id_tipo == ""){
+          if (this.preguntas[i].enunciado == "" || this.preguntas[i].id_tipo == "") {
             validar_campos = false;
           }
-          
+
         }
-        for(let i = 0; i < this.preguntas.length; i++){
-          for(let j = i + 1; j < this.preguntas.length; j++){
-            if(this.preguntas[i].orden == this.preguntas[j].orden){
+        for (let i = 0; i < this.preguntas.length; i++) {
+          for (let j = i + 1; j < this.preguntas.length; j++) {
+            if (this.preguntas[i].orden == this.preguntas[j].orden) {
               validar_orden = false;
             }
           }
         }
 
-        if(this.encuesta.nombre == "" || this.encuesta.id_tipo_encuesta == ""){
+        if (this.encuesta.nombre == "" || this.encuesta.id_tipo_encuesta == "") {
           validar_campos = false;
         }
 
         console.log(suma_total);
 
-        if(validar_campos){
-          if(validar_orden){
-            if(suma_total == 100){
-              if(this.editar){
+        if (validar_campos) {
+          if (validar_orden) {
+            if (suma_total == 100) {
+              if (this.editar) {
                 this.ajax.post('encuestas/editar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
-                  if(d.success){
-                    
+                  if (d.success) {
+
                     this.router.navigate(['/ad-encuestas']);
                   }
                 })
-              }else{
+              } else {
                 this.ajax.post('encuestas/guardar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
-                  if(d.success){
-                    
+                  if (d.success) {
+
                     this.router.navigate(['/ad-encuestas']);
                   }
                 })
               }
-              
-            }else if(suma_total < 100){
+
+            } else if (suma_total < 100) {
               swal.fire({
                 title: 'Peso incorrecto',
                 text: 'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar',
@@ -251,8 +262,8 @@ export class FormularioEncuestasComponent implements OnInit {
                 customClass: {
                   container: 'custom-sweet'
                 }
-            })  
-            }else if (suma_total > 100){
+              })
+            } else if (suma_total > 100) {
               swal.fire({
                 title: 'Peso incorrecto',
                 text: 'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar',
@@ -263,9 +274,9 @@ export class FormularioEncuestasComponent implements OnInit {
                 customClass: {
                   container: 'custom-sweet'
                 }
-            })
+              })
             }
-          }else{
+          } else {
             swal.fire({
               title: 'Orden Incorrecto',
               text: 'Seleccione el orden de las preguntas adecuadamente',
@@ -276,9 +287,9 @@ export class FormularioEncuestasComponent implements OnInit {
               customClass: {
                 container: 'custom-sweet'
               }
-          })
+            })
           }
-        }else{
+        } else {
           swal.fire({
             title: 'Datos Incompletos',
             text: 'Digite todos los campos en el formulario',
@@ -289,12 +300,12 @@ export class FormularioEncuestasComponent implements OnInit {
             customClass: {
               container: 'custom-sweet'
             }
-        })
+          })
         }
-        
-        
+
+
       }
-    }else{
+    } else {
       swal.fire({
         title: 'Datos Incorrectos',
         text: 'Verifique que todos los valores sean correctos',
@@ -305,9 +316,146 @@ export class FormularioEncuestasComponent implements OnInit {
         customClass: {
           container: 'custom-sweet'
         }
-    })
+      })
     }
 
+  }
+
+  cancelarFormulario() {
+    let suma_total = 0;
+    let validar_orden = true;
+    let validar_campos = true;
+    if (this.permitir_envio) {
+
+      if (this.preguntas.length == 0) {
+        swal.fire({
+          title: 'Dato Incorrecto',
+          text: 'Debe ingresr al menos una pregunta antes de guardar',
+          type: 'warning',
+          buttonsStyling: false,
+          confirmButtonClass: 'custom__btn custom__btn--accept',
+          confirmButtonText: 'Aceptar',
+          customClass: {
+            container: 'custom-sweet'
+          }
+        })
+      } else {
+        for (let i = 0; i < this.preguntas.length; i++) {
+
+          suma_total = parseInt(this.preguntas[i].peso) + suma_total;
+
+          if (this.preguntas[i].orden == "") {
+            validar_orden = false;
+          }
+          if (this.preguntas[i].id_tipo != 1 && this.preguntas[i].id_tipo != 5) {
+            this.preguntas[i].minimo = null;
+            this.preguntas[i].maximo = null;
+          }
+          if (this.preguntas[i].id_tipo == 1) {
+            if (this.preguntas[i].minimo == "" || this.preguntas[i].maximo == "") {
+              validar_campos = false;
+            }
+          }
+          if (this.preguntas[i].id_tipo == 5) {
+            if (this.preguntas[i].maximo == "") {
+              validar_campos = false;
+            }
+          }
+          if (this.preguntas[i].enunciado == "" || this.preguntas[i].id_tipo == "") {
+            validar_campos = false;
+          }
+
+        }
+        for (let i = 0; i < this.preguntas.length; i++) {
+          for (let j = i + 1; j < this.preguntas.length; j++) {
+            if (this.preguntas[i].orden == this.preguntas[j].orden) {
+              validar_orden = false;
+            }
+          }
+        }
+
+        if (this.encuesta.nombre == "" || this.encuesta.id_tipo_encuesta == "") {
+          validar_campos = false;
+        }
+
+        console.log(suma_total);
+
+        if (validar_campos) {
+          if (validar_orden) {
+            if (suma_total == 100) {
+              if (this.editar) {
+                this.router.navigate(['/ad-encuestas']);
+              } else {
+                this.router.navigate(['/ad-encuestas']);
+              }
+
+            } else if (suma_total < 100) {
+              swal.fire({
+                title: 'Peso incorrecto',
+                text: 'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar',
+                type: 'warning',
+                buttonsStyling: false,
+                confirmButtonClass: 'custom__btn custom__btn--accept',
+                confirmButtonText: 'Aceptar',
+                customClass: {
+                  container: 'custom-sweet'
+                }
+              })
+            } else if (suma_total > 100) {
+              swal.fire({
+                title: 'Peso incorrecto',
+                text: 'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar',
+                type: 'warning',
+                buttonsStyling: false,
+                confirmButtonClass: 'custom__btn custom__btn--accept',
+                confirmButtonText: 'Aceptar',
+                customClass: {
+                  container: 'custom-sweet'
+                }
+              })
+            }
+          } else {
+            swal.fire({
+              title: 'Orden Incorrecto',
+              text: 'Seleccione el orden de las preguntas adecuadamente',
+              type: 'warning',
+              buttonsStyling: false,
+              confirmButtonClass: 'custom__btn custom__btn--accept',
+              confirmButtonText: 'Aceptar',
+              customClass: {
+                container: 'custom-sweet'
+              }
+            })
+          }
+        } else {
+          swal.fire({
+            title: 'Datos Incompletos',
+            text: 'Digite todos los campos en el formulario',
+            type: 'warning',
+            buttonsStyling: false,
+            confirmButtonClass: 'custom__btn custom__btn--accept',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+              container: 'custom-sweet'
+            }
+          })
+        }
+
+
+      }
+    } else {
+      swal.fire({
+        title: 'Datos Incorrectos',
+        text: 'Verifique que todos los valores sean correctos',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
+      })
+    }
   }
 
 }
