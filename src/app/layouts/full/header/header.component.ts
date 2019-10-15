@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserService } from '../../../providers/user.service';
 import { User } from '../../../../schemas/user.schema';
@@ -10,6 +10,8 @@ import { SosComponent } from '../../../components/sos/sos.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { SosOperadorComponent } from '../../../components/sos-operador/sos-operador.component';
 import { SonidosService } from '../../../providers/sonidos.service';
+import { DOCUMENT } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -25,10 +27,13 @@ export class AppHeaderComponent {
   creando_emergencia = false;
   escuchando_emergencia = false;
   emergencia_actual = false;
-  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore, private snackBar: MatSnackBar, private sonidosService: SonidosService) {
+  is_dark_mode;
+  modo_nocturno;
+
+  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore, 
+              private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
-
       if (u) {
         this.user = u;
         this.profileImage = u.url_foto;
@@ -37,11 +42,19 @@ export class AppHeaderComponent {
         }
       }
     });
+
     if (this.userService.getUsuario()) {
       this.profileImage = this.userService.getUsuario().url_foto;
       if (this.user.getIdRol() == 2) {
         this.cambiarEstadoExperto({ value: 1 });
       }
+
+      if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
+        this.is_dark_mode = 0;
+      } else {
+        this.is_dark_mode = this.user.getModoNocturno();
+      }
+      
     }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
@@ -127,7 +140,19 @@ export class AppHeaderComponent {
     });
   }
 
-
+  cambioModoNocturno(event) {
+    if (event.target.checked) {
+      this._document.body.classList.add('dark-theme');
+      this.modo_nocturno = 1;
+    } else {
+      this._document.body.classList.remove('dark-theme');
+      this.modo_nocturno = 0;
+    }
+    this.userService.actualizarModoNocturno(this.modo_nocturno).then(result => {
+      console.log(result);
+      
+    });
+  }
 
 
 }

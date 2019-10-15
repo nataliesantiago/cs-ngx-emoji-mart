@@ -60,14 +60,6 @@
             </div>
           </div>
           
-          <div fxLayoutAlign="start center" fxFlex="45" class="m-t-20">
-            <mat-label class="m-r-20">Activar modo nocturno</mat-label>
-            <label class="switch" for="dark_checkbox">
-              <input type="checkbox" id="dark_checkbox" (change)="onDarkModeChange($event)" [checked]="is_dark_mode == 1"/>
-              <div class="slider-switch round-switch"></div>
-            </label>
-          </div>
-          
         </div>
         
         <button class="custom__btn custom__btn--accept m-t-30" (click)="saveSetting()" [disabled]="!is_change">Guardar configuración</button>

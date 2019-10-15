@@ -104,8 +104,8 @@
 body {
   //font-family:'Roboto, "Helvetica Neue", sans-serif' !important;
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
-
   color: var(--color-font);
+  transition: all 0.5s;
 }
 
 html,
@@ -2579,4 +2579,8 @@ input:-webkit-autofill:active {
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
     }
   }
+}
+
+.texto_gris {
+  color: #5f5d5d;
 }

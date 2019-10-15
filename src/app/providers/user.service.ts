@@ -329,4 +329,22 @@ export class UserService {
         })
     }
 
+    /**
+     * funcion para actualizar el modo nocturno dependiendo el usuario
+     * @param valor 
+     */
+    actualizarModoNocturno(valor) {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/editar-modo-nocturno', { valor: valor, id_usuario: this.user.getId() }).subscribe(d => {
+                console.log(d);
+                
+                if (d.success) {
+                    resolve(d.setting)
+                } else {
+                    reject();
+                }
+            });
+        });
+    }
+
 }

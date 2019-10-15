@@ -18,6 +18,10 @@ $color-6f6868: #6f6868;
 $color-424242: #424242;
 $color-ffeb3b: #ffeb3b;
 
+body {
+    transition: all 0.5s;
+}
+
 input {
     background-color: transparent !important;
     color: $color-ffffff;
@@ -43,6 +47,20 @@ ul,
 span {
     color: $color-ffffff;
 }
+
+.texto_gris {
+    color: $color-ffffff;
+}
+
+.sidebar_mt {
+    ul {
+        li {
+            a {
+                color: $color-ffffff;
+            }
+        } 
+    } 
+} 
 
 .ql-snow {
     .ql-stroke {

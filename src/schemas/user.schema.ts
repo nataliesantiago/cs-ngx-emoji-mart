@@ -24,6 +24,7 @@ export class User {
     pass_firebase: string;
     conversacion_experto: Conversacion;
     activo_chat:boolean;
+    modo_nocturno: number;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;
@@ -112,6 +113,10 @@ export class User {
     public setNombrePerfil(value: string) {
         this.nombre_perfil = value;
     }
-
-
+    public setModoNocturno(value: number) {
+        this.modo_nocturno = value;
+    }
+    public getModoNocturno(): number {
+        return this.modo_nocturno;
+    }
 }

@@ -20,10 +20,6 @@ export class AdministradorLookFeelComponent implements OnInit {
   home_text: string = '';
   home_text_id: string = '';
   search_placeholder: string = '';
-  dark_mode: boolean;
-  is_dark_mode: number;
-  dark_mode_id: string;
-  is_update_dark_mode: boolean = false;
   url_logo;
   url_favicon;
   logo_name: string = '';
@@ -52,34 +48,9 @@ export class AdministradorLookFeelComponent implements OnInit {
         setting.nombre === 'url_logo' ? this.url_logo = setting.valor : '';
         setting.nombre === 'placeholder_buscador' ? this.search_placeholder = setting.valor : '';
         setting.nombre === 'color_barra_superior' ? this.old_color_toolbar = setting.valor : '';
-        setting.nombre === 'modo_nocturno' ? this.dark_mode_id = setting.idtbl_configuracion_look_feel + '' : '';
       });
     });
 
-    this.getValueDarkMode();
-  }
-
-  /**
-   * Funcion para obtener el valor de la configuracion del modo nocturno del usuario
-   */
-  getValueDarkMode() {
-    this.look_service.getValueSettingUser('modo_nocturno').then((result) => {
-      if(result.length == 0) {
-        this.is_dark_mode = 0;
-        this.is_update_dark_mode = false;
-      } else {
-        this.is_dark_mode = result[0].valor;
-        this.is_update_dark_mode = true;
-      }
-    });
-  }
-
-  /**
-   * Funcion para detectar si el usuario activa o desactiva el modo nocturno
-   */
-  onDarkModeChange(event) {
-    this.dark_mode = event.target.checked;
-    this.is_change = true;
   }
 
   /**
@@ -165,30 +136,6 @@ export class AdministradorLookFeelComponent implements OnInit {
   }
 
   /**
-   * Funcion para guardar la configuracion de modo oscuro
-   */
-  saveDarkMode() {
-    let change_dark_mode;
-    if(this.dark_mode) {
-      change_dark_mode = 1;
-    } else {
-      change_dark_mode = 0;
-    }
-        
-    if(this.is_update_dark_mode) {
-      this.look_service.updateSettingByUser(change_dark_mode, this.dark_mode_id).then(result => {
-        this.loading = true; 
-        window.location.reload(); 
-      });
-    } else {
-      this.look_service.addSettingByUser(this.dark_mode_id, change_dark_mode).then(result => {
-        this.loading = true; 
-        window.location.reload(); 
-      });
-    }
-  }
-
-  /**
    * Funcion para guardar la configuracion del favicon
    */
   saveFavicon() {
@@ -260,7 +207,6 @@ export class AdministradorLookFeelComponent implements OnInit {
    * Funcion para guardar las configuraciones de look&feel
    */
   saveSetting() {
-    this.saveDarkMode();
     this.saveFavicon();
     this.saveLogo();
     this.saveColor();

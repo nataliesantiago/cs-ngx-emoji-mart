@@ -45,9 +45,11 @@ export class AppComponent {
     if (this.user.getIdRol() == 2) {
       this.userService.getFilasExperto();
     }
+    
     this.searchService.queryCloudSearch().then(d => {
       console.log('it worked');
     })
+
     this.initFavicon();
     this.getDarkMode();
   }
@@ -68,15 +70,11 @@ export class AppComponent {
    * Funcion para obtener si el usuario tiene activo el modo nocturno o no para asignar la clase correspondiente al estilo nocturno
    */
   getDarkMode() {
-    this.look_service.getValueSettingUser('modo_nocturno').then((result) => {
-      if(result.length != 0) {
-        if(result[0].valor == 0) {
-          this._document.body.classList.remove('dark-theme');
-        } else {
-          this._document.body.classList.add('dark-theme');
-        }
-      }
-    });
+    if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
+      this._document.body.classList.remove('dark-theme');
+    } else {
+      this._document.body.classList.add('dark-theme');
+    }
   }
  
 }

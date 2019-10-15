@@ -47,6 +47,15 @@
             <h4>Chat</h4>
             <button class="custom__btn custom__btn--primary" (click)="abrirChat()">Abrir Chat</button>
         </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="center center" class="m-t-10">
+            <mat-label class="m-r-20">Activar modo nocturno</mat-label>
+            <label class="switch" for="dark_checkbox">
+                <input type="checkbox" id="dark_checkbox" (change)="cambioModoNocturno($event)" [checked]="is_dark_mode == 1"/>
+                <div class="slider-switch round-switch"></div>
+            </label>
+        </div>
+
     </perfect-scrollbar>
 </mat-menu>
 
