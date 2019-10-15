@@ -780,6 +780,8 @@ export class ChatExpertoComponent {
       });
       // console.log('encuentra cosas', s, shortcut.alt);
       if (s) {
+        event.preventDefault();
+        event.stopPropagation();
         if (!c.texto_mensaje) {
           c.texto_mensaje = '';
         }

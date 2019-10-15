@@ -42,11 +42,6 @@ export class UrlsUsuarioComponent implements OnInit {
     this.getUrls();
 
   }
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-  }
   getUrls() {
     this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
       if (p.success) {
