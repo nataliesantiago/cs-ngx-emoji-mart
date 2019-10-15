@@ -27,7 +27,7 @@ export class UrlsUsuarioComponent implements OnInit {
   is_created = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
-    
+
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
@@ -40,9 +40,13 @@ export class UrlsUsuarioComponent implements OnInit {
     })
 
     this.getUrls();
-    
-  }
 
+  }
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
   getUrls() {
     this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
       if (p.success) {
@@ -59,7 +63,7 @@ export class UrlsUsuarioComponent implements OnInit {
   }
 
   async nuevoRegistro() {
-    if(this.nueva_url.label == '' || this.nueva_url.url == '') {
+    if (this.nueva_url.label == '' || this.nueva_url.url == '') {
       Swal.fire({
         title: 'Complete los campos',
         text: '',
