@@ -177,8 +177,8 @@ export class RespuestasComponent implements OnInit {
   }
 
   enviarCalificacion(){
-    console.log("Entra a este");
-    this.ajax.post('preguntas/observaciones-respuesta', { comentario: this.observaciones, positivo: this.valor_calificacion, id_usuario: this.id_usuario, id_pregunta: this.id_pregunta_visualizar }).subscribe(d => {
+    
+    this.ajax.post('preguntas/observaciones-respuesta', { comentario: this.observaciones, positivo: this.valor_calificacion, id_usuario: this.usuario.idtbl_usuario, id_pregunta: this.id_pregunta_visualizar }).subscribe(d => {
       if(d.success){
         
         if(this.valor_calificacion == 2){
