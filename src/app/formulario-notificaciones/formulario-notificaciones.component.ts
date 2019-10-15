@@ -10,6 +10,7 @@ import { map, startWith } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 import { NotificacionService } from '../providers/notificacion.service';
+import { UtilsService } from '../providers/utils.service';
 
 
 @Component({
@@ -40,7 +41,8 @@ export class FormularioNotificacionesComponent implements OnInit {
   nombre_archivo = '';
   limite_caracteres;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService){
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
+              private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService, private utilsService: UtilsService){
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
@@ -74,7 +76,7 @@ export class FormularioNotificacionesComponent implements OnInit {
         this.options = this.lista_objetos;
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this.utilsService.filter(this.lista_objetos, value, 'nombre'))
         );
       });
     }else if(this.notificacion.tipo_envio == "3"){
@@ -86,7 +88,7 @@ export class FormularioNotificacionesComponent implements OnInit {
         this.options = this.lista_objetos;
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this.utilsService.filter(this.lista_objetos, value, 'nombre'))
         );
       });
     }else{
@@ -116,7 +118,7 @@ export class FormularioNotificacionesComponent implements OnInit {
     this.myControl = new FormControl("");
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => this.utilsService.filter(this.lista_asociada, value, 'nombre'))
     );
     this.cg.detectChanges();
   }

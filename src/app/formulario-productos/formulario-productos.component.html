@@ -11,7 +11,7 @@
           <form class="example-form">
             <mat-form-field class="example-full-width">
               <input type="text" placeholder="Seleccione la categoría padre" matInput [formControl]="myControl"
-                [matAutocomplete]="auto" (ngModelChange)="verificarArbolMostrar(myControl.value)">
+                [matAutocomplete]="auto" (ngModelChange)="verificarArbolMostrar(myControl.value)" autocomplete="off">
               <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button
                 aria-label="Clear" (click)="myControl.setValue('');mostrarIconos();">
                 <mat-icon>close</mat-icon>

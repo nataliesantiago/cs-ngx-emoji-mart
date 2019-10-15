@@ -20,13 +20,13 @@
         </mat-form-field>
         <mat-form-field class="example-full-width">
           <input type="text" placeholder="Selecciona un guión" matInput [formControl]="createControl"
-            [matAutocomplete]="auto" />
+            [matAutocomplete]="auto" autocomplete="off" />
           <button mat-button *ngIf="createControl.value" matSuffix mat-icon-button aria-label="Clear"
-            (click)="createControl.setValue()">
+            (click)="createControl.setValue('')">
             <mat-icon>close</mat-icon>
           </button>
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionaGuion($event.option.value)'>
-            <mat-option *ngFor="let option of guiones" [value]="option">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
               {{option.texto}}
             </mat-option>
           </mat-autocomplete>

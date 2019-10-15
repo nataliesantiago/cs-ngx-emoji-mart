@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, startWith } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
+import { UtilsService } from '../providers/utils.service';
 
 @Component({
   selector: 'app-formulario-categoria-experticia',
@@ -35,7 +36,8 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   editar = false;
   crear_experticia = false;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient){
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
+            private qs: QuillService, private http: HttpClient, private utilsService: UtilsService){
     
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
@@ -69,7 +71,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
         this.options = p.experticias;
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this.utilsService.filter(this.experticias, value, 'nombre'))
         );
       }
     });

@@ -148,7 +148,8 @@
           <mat-card-title>Preguntas</mat-card-title>
           <form class="example-form">
               <mat-form-field class="example-full-width">
-                <input type="text" placeholder="Seleccione la pregunta" matInput [formControl]="myControl" [matAutocomplete]="auto" (ngModelChange)="verificarPreguntaAsociada(myControl.value)">
+                <input type="text" placeholder="Seleccione la pregunta" matInput [formControl]="myControl" [matAutocomplete]="auto" 
+                (ngModelChange)="verificarPreguntaAsociada(myControl.value)" autocomplete="off">
                 <button mat-button *ngIf="myControl.value!==null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
                   <mat-icon>close</mat-icon>
                 </button>

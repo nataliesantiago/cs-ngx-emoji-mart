@@ -6,7 +6,7 @@
       <hr>
       <mat-form-field>
           <mat-label>Digite la pregunta*</mat-label>
-          <input matInput [(ngModel)]="pregunta.titulo" name="titulo">
+          <input matInput [(ngModel)]="pregunta.titulo" name="titulo" autocomplete="off">
       </mat-form-field>
       <br>
       <br>
@@ -60,7 +60,7 @@
                       <mat-panel-title *ngIf="segmento.titulo != null"> {{segmento.titulo}} </mat-panel-title>
                     </mat-expansion-panel-header>
                     <mat-form-field>
-                        <input matInput placeholder="Digite el segmento" [(ngModel)]="segmento.titulo" name="titulo" id="titulo{{i}}">
+                        <input matInput placeholder="Digite el segmento" [(ngModel)]="segmento.titulo" name="titulo" id="titulo{{i}}" autocomplete="off">
                       </mat-form-field>      
                       <br>
                       <br>
@@ -118,12 +118,12 @@
                     <mat-panel-title *ngIf="subrespuesta.titulo != null"> {{subrespuesta.titulo}} </mat-panel-title>
                   </mat-expansion-panel-header>
                   <mat-form-field>
-                    <input matInput placeholder="Digite el subtítulo" [(ngModel)]="subrespuesta.categoria" name="categoria-subrespuesta">
+                    <input matInput placeholder="Digite el subtítulo" [(ngModel)]="subrespuesta.categoria" name="categoria-subrespuesta" autocomplete="off">
                   </mat-form-field>
                   <br>
                   <br>
                   <mat-form-field>
-                    <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo">
+                    <input matInput placeholder="Digite la pregunta" [(ngModel)]="subrespuesta.titulo" name="titulo" autocomplete="off">
                   </mat-form-field>
                   <br>
                   <br>
@@ -155,7 +155,8 @@
           <mat-card-title>Preguntas</mat-card-title>
           <form class="example-form">
               <mat-form-field class="example-full-width">
-                <input type="text" placeholder="Seleccione la pregunta" matInput [formControl]="myControl" [matAutocomplete]="auto" (ngModelChange)="verificarPreguntaAsociada(myControl.value)">
+                <input type="text" placeholder="Seleccione la pregunta" matInput [formControl]="myControl" [matAutocomplete]="auto" 
+                (ngModelChange)="verificarPreguntaAsociada(myControl.value)" autocomplete="off">
                 <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
                   <mat-icon>close</mat-icon>
                 </button>

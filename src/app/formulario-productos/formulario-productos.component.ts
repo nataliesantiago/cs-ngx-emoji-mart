@@ -10,6 +10,7 @@ import { map, startWith } from 'rxjs/operators';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import { HttpClient } from '@angular/common/http';
+import { UtilsService } from '../providers/utils.service';
 
 interface FoodNode {
   name: string;
@@ -68,7 +69,8 @@ export class FormularioProductosComponent implements OnInit {
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private http: HttpClient) { 
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
+              private qs: QuillService, private http: HttpClient, private utilsService: UtilsService) { 
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
@@ -108,13 +110,9 @@ export class FormularioProductosComponent implements OnInit {
       if(p.success){
         this.productos = p.productos;
         this.options = p.productos;
-        /*for(let i = 0; i < p.preguntas.length; i++){
-          this.options.push(p.preguntas[i].titulo);
-        }*/
-        
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this.utilsService.filter(this.options, value, 'nombre'))
         );
         
         if(this.id_producto_editar){
@@ -130,12 +128,11 @@ export class FormularioProductosComponent implements OnInit {
                     this.myControl = new FormControl(p2.producto[0].nombre_padre);
                     this.filteredOptions = this.myControl.valueChanges.pipe(
                       startWith(''),
-                      map(value => this._filter(value))
+                      map(value => this.utilsService.filter(this.options, value, 'nombre'))
                     );
                     this.producto_padre_seleccionado = p2.producto[0].id_producto_padre;
                     this.crearArbol(p2.producto[0]);
                     this.cg.detectChanges();
-                    
                   }
                 })
               }else{
@@ -179,7 +176,7 @@ export class FormularioProductosComponent implements OnInit {
     this.myControl = new FormControl(e.nombre);
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => this.utilsService.filter(this.options, value, 'nombre'))
     );
     this.mostrar_iconos = false;
     this.cg.detectChanges();

@@ -12,6 +12,7 @@ import { QuillService } from '../providers/quill.service';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
+import { UtilsService } from '../providers/utils.service';
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -53,7 +54,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   notas_mostrar = [];
   validar_flujo;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
+              private qs: QuillService, private utilsService: UtilsService) {
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {
         this.preguntas_todas = p.preguntas;
@@ -104,15 +106,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {
-
         this.options = p.preguntas;
-        /*for(let i = 0; i < p.preguntas.length; i++){
-          this.options.push(p.preguntas[i].titulo);
-        }*/
-
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this.utilsService.filter(this.options, value, 'titulo'))
         );
       }
     })
@@ -511,7 +508,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     this.myControl = new FormControl(e.titulo);
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => this.utilsService.filter(this.preguntas_adicion, value, 'titulo'))
     );
     this.cg.detectChanges();
   }
