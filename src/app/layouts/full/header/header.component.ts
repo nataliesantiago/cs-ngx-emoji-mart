@@ -149,8 +149,6 @@ export class AppHeaderComponent {
       this.modo_nocturno = 0;
     }
     this.userService.actualizarModoNocturno(this.modo_nocturno).then(result => {
-      console.log(result);
-      
     });
   }
 

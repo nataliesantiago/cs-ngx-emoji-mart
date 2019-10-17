@@ -2584,3 +2584,16 @@ input:-webkit-autofill:active {
 .texto_gris {
   color: #5f5d5d;
 }
+
+.chat-right-panel {
+  background: white !important;
+  border-bottom: 1px solid #bcbcbc !important;
+  color: #b5aeae;
+  font-weight: bold !important;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+
+  .mat-icon {
+      color: #b5aeae;
+  }
+}

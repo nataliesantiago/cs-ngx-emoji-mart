@@ -119,4 +119,18 @@ export class User {
     public getModoNocturno(): number {
         return this.modo_nocturno;
     }
+
+    public getNombre(): string {
+        return this.nombre;
+    }
+    public setNombre(value: string) {
+        this.nombre = value;
+    }
+
+    public getUrlFoto(): string {
+        return this.url_foto;
+    }
+    public setUrlFoto(value: string) {
+        this.url_foto = value;
+    }
 }
