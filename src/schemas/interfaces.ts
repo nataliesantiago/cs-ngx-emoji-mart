@@ -109,5 +109,6 @@ export interface InformacionCorreo {
     correo_experto: string;
     nombre_experto: string;
     url_foto: string;
+    busqueda: string;
     mensajes: Array<any>;
 }

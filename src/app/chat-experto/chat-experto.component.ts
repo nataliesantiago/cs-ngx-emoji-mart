@@ -49,7 +49,7 @@ export class ChatExpertoComponent {
   configuraciones = [];
   limite_texto_chat;
   shortcuts: Array<ShortCut>;
-  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', mensajes: null};
+  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null};
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog, private shortcutsService: ShortcutsService) {
 
@@ -547,6 +547,7 @@ export class ChatExpertoComponent {
   }
 
   enviarMensaje(chat: Conversacion, tipo_mensaje: number, url?: string, event?: Event, comp?: PerfectScrollbarComponent, duration?: number) {
+    
     if (chat.texto_mensaje) {
       chat.texto_mensaje = chat.texto_mensaje.trim();
     }
@@ -816,15 +817,7 @@ export class ChatExpertoComponent {
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
           c.mostrar_encuesta = true;
           this.recibirChatAutomatico();
-          this.info_correo.correo_cliente = c.cliente.correo;
-          this.info_correo.nombre_cliente = c.cliente.nombre;
-          this.info_correo.correo_experto = this.user.getEmail();
-          this.info_correo.nombre_experto = this.user.getNombre();
-          this.info_correo.url_foto = this.user.getUrlFoto();
-          this.info_correo.mensajes = c.mensajes;
-          
-          this.userService.sendEmailChat(this.info_correo).then((response) => {
-          })
+          this.enviarCorreo(c);
         });
       }
     });
@@ -852,5 +845,17 @@ export class ChatExpertoComponent {
     this.chatService.finalizarVideollamada(c).then(() => {
 
     });
+  }
+
+  enviarCorreo(c) {
+    this.info_correo.correo_cliente = c.cliente.correo;
+    this.info_correo.nombre_cliente = c.cliente.nombre;
+    this.info_correo.correo_experto = this.user.getEmail();
+    this.info_correo.nombre_experto = this.user.getNombre();
+    this.info_correo.url_foto = this.user.getUrlFoto();
+    this.info_correo.mensajes = c.mensajes;
+    
+    this.userService.sendEmailChat(this.info_correo).then((response) => {
+    })
   }
 }

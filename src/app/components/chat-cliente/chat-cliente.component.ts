@@ -38,7 +38,7 @@ export class ChatClienteComponent implements OnInit {
   stream: any;
   cantidad_mensajes_sin_leer = 0;
   limite_texto_chat;
-  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', mensajes: null};
+  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null};
 
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
@@ -684,16 +684,7 @@ export class ChatClienteComponent implements OnInit {
     }
     this.chatService.cerrarConversacion(c, estado).then(() => {
       c.mostrar_encuesta = true;
-      
-      this.info_correo.correo_cliente = this.user.getEmail();
-      this.info_correo.nombre_cliente = this.user.getNombre();
-      this.info_correo.correo_experto = c.asesor_actual.correo;
-      this.info_correo.nombre_experto = c.asesor_actual.nombre;
-      this.info_correo.url_foto = this.user.getUrlFoto();
-      this.info_correo.mensajes = c.mensajes;
-      
-      this.userService.sendEmailChat(this.info_correo).then((response) => {
-      });
+      this.enviarCorreo(c);  
     });
   }
 
@@ -704,5 +695,17 @@ export class ChatClienteComponent implements OnInit {
     if (index !== (-1)) {
       this.chats.splice(index, 1);
     }
+  }
+
+  enviarCorreo(c) {
+    this.info_correo.correo_cliente = this.user.getEmail();
+    this.info_correo.nombre_cliente = this.user.getNombre();
+    this.info_correo.correo_experto = c.asesor_actual.correo;
+    this.info_correo.nombre_experto = c.asesor_actual.nombre;
+    this.info_correo.url_foto = this.user.getUrlFoto();
+    this.info_correo.mensajes = c.mensajes;
+    
+    this.userService.sendEmailChat(this.info_correo).then((response) => {
+    });
   }
 }
