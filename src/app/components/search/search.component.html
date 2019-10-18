@@ -3,20 +3,16 @@
       class="img_lupa"></span>
   <div class="image-upload">
     <label for="file-input">
-      <i class="fa fa-camera archivo tooltip-container" aria-hidden="true"> <span class="tooltip">Buscar por
-          imágenes</span></i>
+      <mat-icon class="archivo">photo_camera</mat-icon>
     </label>
     <input id="file-input" (change)="onFileSelected($event)" type="file" />
   </div>
-
-  <i id="microphone-icon" class="fa fa-microphone microfono tooltip-container" aria-hidden="true"
-    (click)="startButton($event)"><span id="voice-search" class="tooltip">Búsqueda por
-      voz</span></i>
-
+  <mat-icon (click)="startButton($event)" class="microfono">mic</mat-icon>
   <div class="ng-autocomplete">
     <ng-autocomplete id="ng-autocomplete-search" placeHolder="{{search_placeholder}}" [data]="textopredictivo"
       [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
-      [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'" (inputCleared)="clearOptions()" #autocomplete>
+      [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'" (inputCleared)="clearOptions()"
+      #autocomplete>
     </ng-autocomplete>
 
 

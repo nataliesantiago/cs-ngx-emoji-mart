@@ -17,6 +17,8 @@ $color-555555: #555555;
 $color-6f6868: #6f6868;
 $color-424242: #424242;
 $color-ffeb3b: #ffeb3b;
+$color-999999: #999999;
+$color-7a7a7a: #7a7a7a;
 
 body {
     transition: all 0.5s;
@@ -233,3 +235,74 @@ span {
         color: $color-ffffff !important;
     }
 }
+
+.chat-experto .mat-drawer-content {
+    background-color: $color-555555;
+}
+
+.chat-right-panel {
+    background: $color-555555 !important;
+    color: $color-ffffff;
+    .mat-icon {
+        color: $color-ffffff;
+    }
+}
+
+.contenedor-grande .informacion-detallada-cliente {
+    background: $color-555555;
+    color: $color-ffffff;
+}
+
+.contenedor-mensajes {
+    background-color: $color-555555;
+    .contenedor {
+        .chat-list {
+            .odd {
+                .chat-block {
+                    background-color: $color-7a7a7a !important;
+                }
+            } 
+        } 
+    } 
+}
+
+.chat-block {
+    background: $color-999999;
+}
+
+.icono-burbuja-mensaje {
+    color: $color-ffffff !important;
+}
+
+.acciones-chat {
+    background-color: $color-424242;
+    .input-mensaje {
+        background-color: transparent;
+        color: $color-ffffff;
+        &::placeholder { 
+            color: $color-ffffff; 
+        } 
+        &:-ms-input-placeholder {  
+            color: $color-ffffff; 
+        } 
+        &::-ms-input-placeholder { 
+            color: $color-ffffff; 
+        }
+    }
+}
+
+.menu-usuario {
+    .info {
+        div {
+            color: $color-ffffff; 
+        }
+    } 
+    .mat-radio-label-content {
+        color: $color-ffffff;
+    }
+    .active-dark {
+        .active-text {
+            color: $color-ffffff;
+        }
+    }
+} 

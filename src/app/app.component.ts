@@ -21,8 +21,8 @@ const moment = _rollupMoment || _moment;
 export class AppComponent {
   user: User;
   version = '0.0.22'
-  constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService, 
-              @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService) {
+  constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService,
+    @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService) {
     this.responseSearch.setActive(true);
     moment.locale('es');
     this.ajax.sethost(environment.URL_BACK);
@@ -45,11 +45,9 @@ export class AppComponent {
     if (this.user.getIdRol() == 2) {
       this.userService.getFilasExperto();
     }
-    
-    this.searchService.queryCloudSearch().then(d => {
+    /*this.searchService.queryCloudSearch().then(d => {
       console.log('it worked');
-    })
-
+    })*/
     this.initFavicon();
     this.getDarkMode();
   }
@@ -59,10 +57,10 @@ export class AppComponent {
    */
   initFavicon() {
     this.look_service.getSpecificSetting('url_favicon').then((result) => {
-      if(result && result[0] && result[0].valor){
+      if (result && result[0] && result[0].valor) {
         this._document.getElementById('conecta_favicon').setAttribute('href', result[0].valor);
       }
-      
+
     });
   }
 
@@ -76,5 +74,5 @@ export class AppComponent {
       this._document.body.classList.add('dark-theme');
     }
   }
- 
+
 }

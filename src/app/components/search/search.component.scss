@@ -91,6 +91,7 @@ hr {
     padding: 0px 0px 0px 7px;
     margin: auto;
     margin-top: 2em;
+    position: relative;
     &:focus-within {
         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 2px 6px 2px rgba(60, 64, 67, .15);
     }
@@ -110,7 +111,7 @@ span>img {
     height: 35px;
     border: none;
     color: #000;
-    font-family:Roboto, "Helvetica Neue", sans-serif !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
     font-size: 15px;
     margin-top: 10px;
     margin-left: 10px;
@@ -148,7 +149,7 @@ ul>li {
     position: relative;
     width: auto;
     list-style: none;
-    font-family:Roboto, "Helvetica Neue", sans-serif !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
     font-size: 14px;
     margin-left: -38px;
     margin-top: -4px;
@@ -234,23 +235,27 @@ li a:hover {
 }
 
 .microfono {
-    z-index: 9999;
+    z-index: 2;
     margin-top: 14px;
-    float: right;
     margin-right: 10px;
     font-size: 22px;
     color: #B5B5B5;
     cursor: pointer;
+    position: absolute;
+    right: 0px;
+    top: 0;
 }
 
 .archivo {
-    z-index: 9999;
+    z-index: 2;
     margin-top: 14px;
-    float: right;
+
     margin-right: 15px;
     font-size: 22px;
     color: #B5B5B5;
     cursor: pointer;
+    position: absolute;
+    right: 18px;
 }
 
 .contenedor__img {
@@ -317,7 +322,7 @@ article div p {
     font-weight: 400;
     font-style: italic;
     margin: 1rem 0 3rem;
-    font-family:Roboto, "Helvetica Neue", sans-serif !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
     position: relative;
     z-index: 5;
 }
@@ -339,7 +344,7 @@ article div p:before {
 
 article div h1 {
     color: hsl(260, 5%, 55%);
-    font-family:Roboto, "Helvetica Neue", sans-serif !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05rem;

@@ -95,8 +95,8 @@
                     <a [routerLink]="['/administrador-usuarios']" routerLinkActive="active" (click)="cerrarMenu()">Administrar Usuarios</a>
                 </li>
                 
-                <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()">
-                    <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}}</a>
+                <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()" class="menu-link">
+                    <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}} <mat-icon>open_in_new</mat-icon></a>
                 </li>
             </ul>
         </div>

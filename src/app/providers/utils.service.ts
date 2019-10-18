@@ -92,7 +92,7 @@ export class UtilsService {
      * @returns string
      */
     filter(options: Array<any>, value: string, option: string): string[] {
-        console.log(options, value);
+        //console.log(options, value);
         if (value && typeof value == 'string') {
             const filterValue = value.toLowerCase();
             return options.filter(fila => fila[option].toLowerCase().indexOf(filterValue) != (-1));

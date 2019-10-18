@@ -9,7 +9,7 @@ import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
-import { Configuracion, ShortCut } from '../../schemas/interfaces';
+import { Configuracion, ShortCut, InformacionCorreo } from '../../schemas/interfaces';
 import { SonidosService } from '../providers/sonidos.service';
 import swal from 'sweetalert2';
 import { UtilsService } from '../providers/utils.service';
@@ -49,6 +49,8 @@ export class ChatExpertoComponent {
   configuraciones = [];
   limite_texto_chat;
   shortcuts: Array<ShortCut>;
+  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null};
+
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog, private shortcutsService: ShortcutsService) {
 
     this.user = this.userService.getUsuario();
@@ -545,6 +547,7 @@ export class ChatExpertoComponent {
   }
 
   enviarMensaje(chat: Conversacion, tipo_mensaje: number, url?: string, event?: Event, comp?: PerfectScrollbarComponent, duration?: number) {
+    
     if (chat.texto_mensaje) {
       chat.texto_mensaje = chat.texto_mensaje.trim();
     }
@@ -556,7 +559,7 @@ export class ChatExpertoComponent {
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
       chat.texto_mensaje = '';
-      m.fecha_mensaje = moment();
+      m.fecha_mensaje = moment().utc();
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
       m.estado = 1;
@@ -814,6 +817,7 @@ export class ChatExpertoComponent {
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
           c.mostrar_encuesta = true;
           this.recibirChatAutomatico();
+          this.enviarCorreo(c);
         });
       }
     });
@@ -841,5 +845,17 @@ export class ChatExpertoComponent {
     this.chatService.finalizarVideollamada(c).then(() => {
 
     });
+  }
+
+  enviarCorreo(c) {
+    this.info_correo.correo_cliente = c.cliente.correo;
+    this.info_correo.nombre_cliente = c.cliente.nombre;
+    this.info_correo.correo_experto = this.user.getEmail();
+    this.info_correo.nombre_experto = this.user.getNombre();
+    this.info_correo.url_foto = this.user.getUrlFoto();
+    this.info_correo.mensajes = c.mensajes;
+    
+    this.userService.sendEmailChat(this.info_correo).then((response) => {
+    })
   }
 }

@@ -51,7 +51,7 @@ export class UserService {
             }
         };
 
-        
+
     }
 
 
@@ -283,37 +283,37 @@ export class UserService {
 
     listen() {
         this.afMessaging.messages
-            .subscribe((message) => { 
+            .subscribe((message) => {
                 this.actualizarNotificaciones();
                 this.soundService.sonar(4);
             });
     }
 
-    obtenerNotificacionesUsuario(id_usuario: number):Promise<any>{
+    obtenerNotificacionesUsuario(id_usuario: number): Promise<any> {
         return new Promise((resolve, reject) => {
-    
-          this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
-            if(d.success){
-                this.notificaciones_usuario = d.notificaciones[0];
-                this.notificaciones_sin_leer = d.notificaciones[1].length;     
-                this.subjectNotificaciones.next(1);
-                resolve(d.notificaciones);
-            }else{
-              reject();
-            }
-          });
-          
+
+            this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
+                if (d.success) {
+                    this.notificaciones_usuario = d.notificaciones[0];
+                    this.notificaciones_sin_leer = d.notificaciones[1].length;
+                    this.subjectNotificaciones.next(1);
+                    resolve(d.notificaciones);
+                } else {
+                    reject();
+                }
+            });
+
         })
-      }
-    
-    
-      actualizarNotificaciones(){
-            
+    }
+
+
+    actualizarNotificaciones() {
+
         this.obtenerNotificacionesUsuario(this.user.idtbl_usuario).then(r => {
-        
+
         })
-      }
-    
+    }
+
 
     obtenerListaEmpleados(): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -336,8 +336,6 @@ export class UserService {
     actualizarModoNocturno(valor) {
         return new Promise((resolve, reject) => {
             this.ajax.post('user/editar-modo-nocturno', { valor: valor, id_usuario: this.user.getId() }).subscribe(d => {
-                console.log(d);
-                
                 if (d.success) {
                     resolve(d.setting)
                 } else {
@@ -348,62 +346,72 @@ export class UserService {
     }
 
 
-    getAllUsers(){
+    getAllUsers() {
         return new Promise((resolve, reject) => {
             this.ajax.get('user/obtener-usuarios').subscribe(p => {
                 if (p.success) {
                     resolve(p.usuarios);
-                }else{
+                } else {
                     reject();
                 }
-              })
+            })
         });
     }
 
 
-    getUsuarioEditar(id_usuario){
+    getUsuarioEditar(id_usuario) {
         return new Promise((resolve, reject) => {
-            this.ajax.get('user/obtener-usuario-editar', {id_usuario: id_usuario}).subscribe(p => {
-                if(p.success){
+            this.ajax.get('user/obtener-usuario-editar', { id_usuario: id_usuario }).subscribe(p => {
+                if (p.success) {
                     resolve(p.usuario);
-                }else{
+                } else {
                     reject();
                 }
             })
         })
     }
 
-    getPerfilesUsuario(){
+    getPerfilesUsuario() {
         return new Promise((resolve, reject) => {
             this.ajax.get('user/obtener-perfiles').subscribe(p => {
-                if(p.success){
+                if (p.success) {
                     resolve(p.perfiles);
-                }else{
+                } else {
                     reject();
                 }
             })
         })
     }
 
-    getRolesUsuario(){
+    getRolesUsuario() {
         return new Promise((resolve, reject) => {
             this.ajax.get('user/obtener-roles').subscribe(p => {
-                if(p.success){
+                if (p.success) {
                     resolve(p.roles);
-                }else{
+                } else {
                     reject();
                 }
             })
         })
     }
 
-    editarUsuario(datos_usuario: any, id_usuario_editar: number): Promise <any>{
+    editarUsuario(datos_usuario: any, id_usuario_editar: number): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.ajax.post('user/editar-usuario', {datos_usuario: datos_usuario, id_usuario_editar: id_usuario_editar}).subscribe(p => {
-                if(p.success){
+            this.ajax.post('user/editar-usuario', { datos_usuario: datos_usuario, id_usuario_editar: id_usuario_editar }).subscribe(p => {
+                if (p.success) {
                     resolve(p.roles);
-                }else{
+                } else {
                     reject();
+                }
+            })
+        });
+    }
+    sendEmailChat(info_correo): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('email/enviar-correo', { info_correo }).subscribe(d => {
+                console.log(d);
+                if (d) {
+                    resolve(d);
                 }
             })
         });

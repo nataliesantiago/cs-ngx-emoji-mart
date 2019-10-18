@@ -403,6 +403,21 @@ export class ChatService {
       })
     });
   }
+
+  /**
+   * @description Obtiene todos los expertos de la herramienta
+   * @returns Promise
+   */
+  getExpertosTransferencia(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getExpertosTransferencia', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.expertos);
+        }
+      })
+    });
+  }
+
   /**
    * @description Obtienes la conversacion segun el usuario actual y otro experto
    * @param  {number} id_experto EL otro experto con el cual se intenta abrior el chat
@@ -722,6 +737,20 @@ export class ChatService {
       this.ajax.get('chat/obtenerMotivosCierre', {}).subscribe(d => {
         if (d.success) {
           resolve(d.motivos);
+        }
+      })
+    });
+  }
+
+  /**
+   * @description Buca un experto disnponible para asignarlo al chat
+   * @returns Promise
+   */
+  getExpertoDisponible(filas: Array<any>): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getExpertoDisponible', { filas: filas }).subscribe(d => {
+        if (d.success) {
+          resolve(d.experto);
         }
       })
     });

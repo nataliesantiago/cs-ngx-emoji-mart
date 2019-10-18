@@ -102,3 +102,13 @@ export interface Emergencia {
     fecha_emergencia_cerrada: Date;
     fecha_emergencia_cerrada_operador: Date;
 }
+
+export interface InformacionCorreo {
+    correo_cliente: string;
+    nombre_cliente: string;
+    correo_experto: string;
+    nombre_experto: string;
+    url_foto: string;
+    busqueda: string;
+    mensajes: Array<any>;
+}

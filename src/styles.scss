@@ -2537,12 +2537,15 @@ input:-webkit-autofill:active {
   }
 }
 
-.menu-lateral {
-  .mat-drawer {
-    .mat-drawer-inner-container {
-      height: auto !important;
-    }
+#menu-lateral-melo {
+  width: 350px;
+  max-width: 85%;
+
+  .mat-drawer-inner-container {
+    height: auto !important;
+    overflow: hidden;
   }
+
 }
 
 .preloader {
@@ -2583,4 +2586,17 @@ input:-webkit-autofill:active {
 
 .texto_gris {
   color: #5f5d5d;
+}
+
+.chat-right-panel {
+  background: white !important;
+  border-bottom: 1px solid #bcbcbc !important;
+  color: #b5aeae;
+  font-weight: bold !important;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+
+  .mat-icon {
+      color: #b5aeae;
+  }
 }
