@@ -347,4 +347,66 @@ export class UserService {
         });
     }
 
+
+    getAllUsers(){
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-usuarios').subscribe(p => {
+                if (p.success) {
+                    resolve(p.usuarios);
+                }else{
+                    reject();
+                }
+              })
+        });
+    }
+
+
+    getUsuarioEditar(id_usuario){
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-usuario-editar', {id_usuario: id_usuario}).subscribe(p => {
+                if(p.success){
+                    resolve(p.usuario);
+                }else{
+                    reject();
+                }
+            })
+        })
+    }
+
+    getPerfilesUsuario(){
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-perfiles').subscribe(p => {
+                if(p.success){
+                    resolve(p.perfiles);
+                }else{
+                    reject();
+                }
+            })
+        })
+    }
+
+    getRolesUsuario(){
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-roles').subscribe(p => {
+                if(p.success){
+                    resolve(p.roles);
+                }else{
+                    reject();
+                }
+            })
+        })
+    }
+
+    editarUsuario(datos_usuario: any, id_usuario_editar: number): Promise <any>{
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/editar-usuario', {datos_usuario: datos_usuario, id_usuario_editar: id_usuario_editar}).subscribe(p => {
+                if(p.success){
+                    resolve(p.roles);
+                }else{
+                    reject();
+                }
+            })
+        });
+    }
+
 }

@@ -25,6 +25,7 @@ export class User {
     conversacion_experto: Conversacion;
     activo_chat:boolean;
     modo_nocturno: number;
+    peso_chat: number;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;
@@ -98,6 +99,13 @@ export class User {
     }
     public setIdRol(value: number) {
         this.id_rol = value;
+    }
+
+    public getPesoChat(): number {
+        return this.peso_chat;
+    }
+    public setPesoChat(value: number) {
+        this.peso_chat = value;
     }
 
     public getNombrePerfil(): string {

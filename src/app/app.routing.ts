@@ -37,6 +37,8 @@ import { FormularioNotificacionesComponent } from './formulario-notificaciones/f
 import { CargaMasivaComponent } from './carga-masiva/carga-masiva.component';
 import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
 import { AdministradorLookFeelComponent } from './administrador-look-feel/administrador-look-feel.component';
+import { AdministradorUsuariosComponent } from './administrador-usuarios/administrador-usuarios.component';
+import { FormularioUsuariosComponent } from './formulario-usuarios/formulario-usuarios.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -51,6 +53,7 @@ export const AppRoutes: Routes = [
   { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'ad-expertos', component: AdExpertosComponent, canActivate: [AuthGuard] },
+  { path: 'administrador-usuarios', component: AdministradorUsuariosComponent, canActivate: [AuthGuard] },
   { path: 'administrador-notificaciones', component: AdministradorNotificacionesComponent, canActivate: [AuthGuard] },
   { path: 'formulario-notificaciones/:id_notificacion', component: FormularioNotificacionesComponent, canActivate: [AuthGuard] },
   { path: 'respuestas/:id_pregunta', component: RespuestasComponent, canActivate: [AuthGuard] },
@@ -66,6 +69,7 @@ export const AppRoutes: Routes = [
   { path: 'ad-categoria-expertiz', component: AdCategoriaExperticiaComponent, canActivate: [AuthGuard] },
   { path: 'formulario-categoria-expertiz/:id_categoria_expertiz', component: FormularioCategoriaExperticiaComponent, canActivate: [AuthGuard] },
   { path: 'formulario-ad-experto/:id_experto', component: FormularioExpertoComponent, canActivate: [AuthGuard] },
+  { path: 'formulario-administracion-usuarios/:id_usuario', component: FormularioUsuariosComponent, canActivate: [AuthGuard] },
   { path: 'formulario-productos', component: FormularioProductosComponent, canActivate: [AuthGuard] },
   { path: 'formulario-encuestas/:id_encuesta', component: FormularioEncuestasComponent, canActivate: [AuthGuard] },
   { path: 'encuesta/:tipo_encuesta', component: VisualizarEncuestaComponent, canActivate: [AuthGuard] },
