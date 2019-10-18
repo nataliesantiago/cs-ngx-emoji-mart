@@ -40,7 +40,7 @@ export class SearchService {
 
   queryCloudSearch(query?: string): Promise<any> {
     if (!query) {
-      query = 'prueba';
+      query = 'pregunta con segmentos';
     }
     return new Promise((resolve, reject) => {
       this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query }).subscribe(d => {

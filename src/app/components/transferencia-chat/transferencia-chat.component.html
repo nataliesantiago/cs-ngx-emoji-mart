@@ -34,7 +34,7 @@
         <mat-icon>close</mat-icon>
       </button>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarExperto($event.option.value)'>
-        <mat-option *ngFor="let option of expertos | expertosActivos" [value]="option">
+        <mat-option *ngFor="let option of expertos_filtrados | async" [value]="option">
           {{option.nombre}}
         </mat-option>
       </mat-autocomplete>

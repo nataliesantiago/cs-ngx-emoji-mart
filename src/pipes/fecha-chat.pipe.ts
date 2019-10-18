@@ -10,13 +10,13 @@ export class FechaChatPipe implements PipeTransform {
         let dias = now.dayOfYear() == end.dayOfYear();
         let annios = now.year() == end.year();
         if (dias && annios) {
-            return moment(value).format('hh:mm a');
+            return moment(value).local().format('hh:mm a');
         } else if (!dias && annios) {
-            return moment(value).format('DD MMM hh:mm a');
+            return moment(value).local().format('DD MMM hh:mm a');
         } else if (!annios) {
-            return moment(value).format('YYYY-MM-DD hh:mm a');
+            return moment(value).local().format('YYYY-MM-DD hh:mm a');
         } else {
-            return moment(value).format('YYYY-MM-DD hh:mm a');
+            return moment(value).local().format('YYYY-MM-DD hh:mm a');
         }
     }
 }

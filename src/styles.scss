@@ -2537,12 +2537,15 @@ input:-webkit-autofill:active {
   }
 }
 
-.menu-lateral {
-  .mat-drawer {
-    .mat-drawer-inner-container {
-      height: auto !important;
-    }
+#menu-lateral-melo {
+  width: 350px;
+  max-width: 85%;
+
+  .mat-drawer-inner-container {
+    height: auto !important;
+    overflow: hidden;
   }
+
 }
 
 .preloader {

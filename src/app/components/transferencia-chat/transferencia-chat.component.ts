@@ -36,27 +36,9 @@ export class TransferenciaChatComponent implements OnInit {
     this.chatService.getCategoriasExperticia().then(c => {
       this.filas = c;
     });
-    this.chatService.getExpertos().then(expertos => {
-      expertos.forEach(e => {
-        let b = this.fireStore.doc('expertos/' + e.idtbl_usuario).snapshotChanges();
-        b.subscribe((datos: any) => {
-
-          if (datos) {
-            let data = datos.payload.data();
-            if (data) {
-              let ex = { idtbl_usuario: e.idtbl_usuario, activo: data.activo, ultima_conexion: data.fecha, nombre: e.nombre };
-              let busqueda = this.expertos.find(experto => {
-                return ex.idtbl_usuario == experto.idtbl_usuario;
-              })
-              if (busqueda) {
-                busqueda.activo = ex.activo;
-                busqueda.ultima_conexion = ex.ultima_conexion;
-              } else {
-                this.expertos.push(ex);
-              }
-            }
-          }
-        });
+    this.chatService.getExpertosTransferencia().then(expertos => {
+      this.expertos = expertos.filter(e => {
+        return e.idtbl_usuario != this.user.getId();
       });
     });
     this.expertos_filtrados = this.experto_control.valueChanges.pipe(startWith(''), map(value => this.utilsService.filter(this.expertos, value, 'nombre')))

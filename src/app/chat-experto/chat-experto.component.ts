@@ -556,7 +556,7 @@ export class ChatExpertoComponent {
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
       chat.texto_mensaje = '';
-      m.fecha_mensaje = moment();
+      m.fecha_mensaje = moment().utc();
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
       m.estado = 1;

@@ -94,7 +94,23 @@ export class ChatClienteComponent implements OnInit {
           if (c.filas && c.id_estado_conversacion == 1) {
             this.chatService.getDocumentoFirebase('conversaciones/' + c.codigo).then(conversa => {
               c.transferido = conversa.transferido;
-              this.procesaFilas(c);
+              //this.procesaFilas(c);
+              this.chatService.getExpertoDisponible(c.filas).then(experto => {
+                if (experto) {
+                  this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+                    c.id_experto_actual = u.idtbl_usuario;
+                    c.nombre_experto_actual = u.nombre;
+                    c.asesor_actual = new User(null, null, null);
+                    c.asesor_actual.url_foto = u.url_foto;
+                    c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+                    c.asesor_actual.nombre = c.nombre_experto_actual;
+                  });
+                } else {
+                  c.filas.forEach((ce, index) => {
+                    this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+                  });
+                }
+              })
             })
           } else {
             c.no_hay_filas = "1";
@@ -428,7 +444,21 @@ export class ChatClienteComponent implements OnInit {
         this.agregaListenerConversacion(c);
         this.agregarListenerMensajes(c);
         c.expertos = [];
-        this.procesaFilas(c);
+        //his.procesaFilas(c);
+        if (d.experto) {
+          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+            c.id_experto_actual = u.idtbl_usuario;
+            c.nombre_experto_actual = u.nombre;
+            c.asesor_actual = new User(null, null, null);
+            c.asesor_actual.url_foto = u.url_foto;
+            c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+            c.asesor_actual.nombre = c.nombre_experto_actual;
+          });
+        } else {
+          c.filas.forEach((ce, index) => {
+            this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+          });
+        }
       }
     });
     this.chats.push(c);
@@ -453,7 +483,7 @@ export class ChatClienteComponent implements OnInit {
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
       chat.texto_mensaje = '';
-      m.fecha_mensaje = moment();
+      m.fecha_mensaje = moment().utc();
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
       m.estado = 1;
