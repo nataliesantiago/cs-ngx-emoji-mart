@@ -50,7 +50,7 @@ export class TransferenciaChatComponent implements OnInit {
       this.expertos = expertos.filter(e => {
         return e.idtbl_usuario != this.user.getId();
       });
-      this.expertos_filtrados = this.experto_control.valueChanges.pipe(startWith(''), map(value => this.utilsService.filter(expertos_activos, value, 'nombre')))
+      this.expertos_filtrados = this.experto_control.valueChanges.pipe(startWith(''), map(value => this.utilsService.filter(this.expertos, value, 'nombre')))
     });
   }
 
