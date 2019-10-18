@@ -9,6 +9,8 @@ import { FormControl } from '@angular/forms';
 import { ShortcutsService } from '../providers/shortcuts.service';
 import swal from 'sweetalert2';
 import { matTableFilter } from '../../common/matTableFilter';
+import { map, startWith } from 'rxjs/operators';
+import { UtilsService } from '../providers/utils.service';
 
 @Component({
   selector: 'app-administrador-shortcuts',
@@ -33,12 +35,13 @@ export class AdministradorShortcutsComponent implements OnInit {
   nuevo_shortcut: ShortCut = { activo: true };
   removable = false;
   habilitado = true;
-  guiones = [];
+  guiones: Array<GuionChat>;
   creando_shortcut = false;
   createControl = new FormControl();
   shortcuts: ShortCut[];
+  filteredOptions;
   
-  constructor(private chatService: ChatService, private userService: UserService, private shortcutsService: ShortcutsService) {
+  constructor(private chatService: ChatService, private userService: UserService, private shortcutsService: ShortcutsService, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.iniciadores = this.shortcutsService.iniciadores;
     if (this.user) {
@@ -55,11 +58,18 @@ export class AdministradorShortcutsComponent implements OnInit {
   }
 
   init() {
-    this.chatService.getGuiones().then(guiones => {
+
+    this.chatService.getGuiones().then((guiones: Array<GuionChat>) => {
       this.guiones = guiones.filter(g => {
         return g.activo;
-      })
+      });
+
+      this.filteredOptions = this.createControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this.utilsService.filter(this.guiones, value, 'texto'))
+      );
     });
+
     this.shortcutsService.getShortcutsUsuario().then((s: Array<ShortCut>) => {
       s.forEach(shortcut => {
         shortcut.comandos = [];

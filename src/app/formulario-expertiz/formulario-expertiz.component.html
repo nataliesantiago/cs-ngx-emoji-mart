@@ -7,7 +7,7 @@
       <div fxLayout="row wrap">
         <mat-form-field>
           <mat-label>Digite el nombre de la experticia*</mat-label>
-          <input matInput [(ngModel)]="expertiz.nombre" name="titulo">
+          <input matInput [(ngModel)]="expertiz.nombre" name="titulo" autocomplete="off">
         </mat-form-field>
       </div>
       <h3>Categorías</h3>
@@ -16,7 +16,7 @@
         <div fxFlex.gt-sm="40" fxFlex="100">
           <form class="example-form">
             <mat-form-field class="example-full-width">
-              <input type="text" placeholder="Seleccione la categoria a agregar" matInput [formControl]="myControl" [matAutocomplete]="auto">
+              <input type="text" placeholder="Seleccione la categoria a agregar" matInput [formControl]="myControl" [matAutocomplete]="auto" autocomplete="off">
               <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
                 <mat-icon>close</mat-icon>
               </button>

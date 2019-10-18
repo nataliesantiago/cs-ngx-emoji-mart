@@ -75,7 +75,10 @@
           <form class="example-form">
             <mat-form-field class="example-full-width">
               <input type="text" placeholder="Seleccione..." matInput [formControl]="myControl"
-                [matAutocomplete]="auto">
+                [matAutocomplete]="auto" autocomplete="off">
+              <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
+                <mat-icon>close</mat-icon>
+              </button>
               <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                 (optionSelected)='seleccionarObjeto($event.option.value)'>
                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option">

@@ -9,6 +9,9 @@ import { FormControl } from '@angular/forms';
 import { Conversacion } from '../../../schemas/conversacion.schema';
 import { startWith, map } from 'rxjs/operators';
 import { UtilsService } from '../../providers/utils.service';
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+const moment = _rollupMoment || _moment;
 
 export interface TransferenciaData {
   conversacion: Conversacion;
@@ -31,17 +34,24 @@ export class TransferenciaChatComponent implements OnInit {
   categoria: CategoriaExperticia;
   experto: User;
   error_transferencia: string;
+  filteredOptions;
+  expertOptions;
+
   constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore, @Inject(MAT_DIALOG_DATA) private data: TransferenciaData, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
-    this.chatService.getCategoriasExperticia().then(c => {
+    this.chatService.getCategoriasExperticia().then((c: Array<CategoriaExperticia>) => {
       this.filas = c;
+      this.filteredOptions = this.categoria_experticia_control.valueChanges.pipe(
+        startWith(''),
+        map(value => this.utilsService.filter(this.filas, value, 'nombre'))
+      );
     });
     this.chatService.getExpertosTransferencia().then(expertos => {
       this.expertos = expertos.filter(e => {
         return e.idtbl_usuario != this.user.getId();
       });
+      this.expertos_filtrados = this.experto_control.valueChanges.pipe(startWith(''), map(value => this.utilsService.filter(expertos_activos, value, 'nombre')))
     });
-    this.expertos_filtrados = this.experto_control.valueChanges.pipe(startWith(''), map(value => this.utilsService.filter(this.expertos, value, 'nombre')))
   }
 
   ngOnInit() {
@@ -54,8 +64,8 @@ export class TransferenciaChatComponent implements OnInit {
     delete this.categoria;
     delete this.experto;
     if (!tempos) {
-      this.categoria_experticia_control.setValue(null);
-      this.experto_control.setValue(null);
+      this.categoria_experticia_control.setValue('');
+      this.experto_control.setValue('');
     }
   }
   seleccionarExperto(c: User) {

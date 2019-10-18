@@ -10,6 +10,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 import { QuillEditorComponent } from 'ngx-quill';
 import { QuillService } from '../providers/quill.service';
+import { UtilsService } from '../providers/utils.service';
 
 @Component({
   selector: 'app-formulario-preguntas',
@@ -50,7 +51,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(QuillEditorComponent) editores?:QueryList<QuillEditorComponent>;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) { 
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
+              private qs: QuillService, private utilsService: UtilsService) { 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if(p.success){
         this.preguntas_todas = p.preguntas;
@@ -112,13 +114,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       if(p.success){
         
         this.options = p.preguntas;
-        /*for(let i = 0; i < p.preguntas.length; i++){
-          this.options.push(p.preguntas[i].titulo);
-        }*/
-        
         this.filteredOptions = this.myControl.valueChanges.pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this.utilsService.filter(this.options, value, 'titulo'))
         );
       }
     })
@@ -446,7 +444,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       this.myControl = new FormControl(e.titulo);
       this.filteredOptions = this.myControl.valueChanges.pipe(
         startWith(''),
-        map(value => this._filter(value))
+        map(value => this.utilsService.filter(this.preguntas_adicion, value, 'titulo'))
       );
       this.cg.detectChanges();
     }else{
