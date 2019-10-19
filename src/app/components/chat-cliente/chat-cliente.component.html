@@ -83,8 +83,8 @@
                                   Unirse! </mat-card>
                               </a>
                             </div>
-                            <div *ngIf="!m.es_nota_voz && !m.es_llamada" [innerHTML]="m.texto | linkify | safe:'html'">
-                            </div>
+                            <div *ngIf="!m.es_nota_voz && !m.es_llamada"
+                              [innerHTML]="m.texto | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
                             <span *ngIf="m.id_usuario==user.idtbl_usuario">
                               <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
                               <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>

@@ -110,6 +110,9 @@ import { LinkifyPipe } from '../pipes/linkify.pipe';
 import { SafePipe } from './pipes/safe.pipe';
 import { AdministradorLookFeelComponent } from './administrador-look-feel/administrador-look-feel.component';
 import { CerrarChatExpertoComponent } from './components/cerrar-chat-experto/cerrar-chat-experto.component';
+import { ReplaceEmojisMensajePipe } from '../pipes/emoji.mensaje.pipe';
+import { OrdenarExpertosPipe } from '../pipes/ordenar-expertos.pipe';
+import { TransitionGroupItemDirective, TransitionGroupComponent } from '../directives/sort.animation.directives';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -185,7 +188,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LinkifyPipe,
     SafePipe,
     AdministradorLookFeelComponent,
-    CerrarChatExpertoComponent
+    CerrarChatExpertoComponent,
+    ReplaceEmojisMensajePipe,
+    OrdenarExpertosPipe,
+    TransitionGroupItemDirective,
+    TransitionGroupComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

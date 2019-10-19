@@ -30,18 +30,21 @@ export class AppHeaderComponent {
   is_dark_mode;
   modo_nocturno;
 
-  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore, 
-              private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument) {
+  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
+    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {
+        console.log(u)
         this.user = u;
         this.profileImage = u.url_foto;
         if (this.user.getIdRol() == 2) {
-          this.cambiarEstadoExperto({ value: 1 });
+          this.user.estado_experto = (u.experto_activo) ? 1 : 2;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto });
         }
       }
     });
+
 
     if (this.userService.getUsuario()) {
       this.profileImage = this.userService.getUsuario().url_foto;
@@ -54,7 +57,7 @@ export class AppHeaderComponent {
       } else {
         this.is_dark_mode = this.user.getModoNocturno();
       }
-      
+
     }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
@@ -71,18 +74,24 @@ export class AppHeaderComponent {
   }
 
   cambiarEstadoExperto(e) {
+    //debugger;
     if (this.intervalo) {
-      window.clearInterval(this.intervalo);
-    }
-    let activo = (e.value == 1) ? true : false;
-    this.userService.setActivoExperto(activo);
-    if (activo) {
+      //window.clearInterval(this.intervalo);
+      let activo = (e.value == 1) ? true : false;
+      this.userService.setActivoExperto(activo);
+    } else {
+      let activo = (e.value == 1) ? true : false;
+      this.userService.setActivoExperto(activo);
       this.intervalo = setInterval(() => {
-        this.userService.setActivoExperto(true);
-      }, 10000);
-    }
+        let activo = (this.user.estado_experto == 1) ? true : false;
+        this.userService.setActivoExperto(activo);
 
-    this.listenEmergenciaExperto();
+      }, 10000);
+
+
+      this.listenEmergenciaExperto();
+    }
+    this.userService.setActivoExpertoGlobal(e.value);
   }
 
   listenEmergenciaExperto() {

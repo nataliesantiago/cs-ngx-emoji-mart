@@ -29,6 +29,8 @@ export class UserService {
     public socket: io.SocketIOClient.Socket;
     public subjectUsuario = new Subject<any>();
     public observableUsuario = this.subjectUsuario.asObservable();
+    subjectEstadoExperto = new Subject<any>();
+    public observableEstadoExperto = this.subjectEstadoExperto.asObservable();
     planeaciones_creadas = [];
     SCOKET_IP;
     conectado_socket = false;
@@ -51,7 +53,7 @@ export class UserService {
             }
         };
 
-        
+
     }
 
 
@@ -251,7 +253,16 @@ export class UserService {
     }
 
     setActivoExperto(activo) {
+        this.user.experto_activo = activo;
+        //console.log(activo)
         this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
+    }
+
+    setActivoExpertoGlobal(estado: number) {
+        this.user.estado_experto = estado;
+        this.subjectEstadoExperto.next(estado);
+        //console.log(activo)
+        //this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
     }
 
     getInfoUsuario(id): Promise<User> {
@@ -283,37 +294,37 @@ export class UserService {
 
     listen() {
         this.afMessaging.messages
-            .subscribe((message) => { 
+            .subscribe((message) => {
                 this.actualizarNotificaciones();
                 this.soundService.sonar(4);
             });
     }
 
-    obtenerNotificacionesUsuario(id_usuario: number):Promise<any>{
+    obtenerNotificacionesUsuario(id_usuario: number): Promise<any> {
         return new Promise((resolve, reject) => {
-    
-          this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
-            if(d.success){
-                this.notificaciones_usuario = d.notificaciones[0];
-                this.notificaciones_sin_leer = d.notificaciones[1].length;     
-                this.subjectNotificaciones.next(1);
-                resolve(d.notificaciones);
-            }else{
-              reject();
-            }
-          });
-          
+
+            this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
+                if (d.success) {
+                    this.notificaciones_usuario = d.notificaciones[0];
+                    this.notificaciones_sin_leer = d.notificaciones[1].length;
+                    this.subjectNotificaciones.next(1);
+                    resolve(d.notificaciones);
+                } else {
+                    reject();
+                }
+            });
+
         })
-      }
-    
-    
-      actualizarNotificaciones(){
-            
+    }
+
+
+    actualizarNotificaciones() {
+
         this.obtenerNotificacionesUsuario(this.user.idtbl_usuario).then(r => {
-        
+
         })
-      }
-    
+    }
+
 
     obtenerListaEmpleados(): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -347,13 +358,13 @@ export class UserService {
 
     sendEmailChat(info_correo): Promise<any> {
         return new Promise((resolve, reject) => {
-          this.ajax.post('email/enviar-correo', {info_correo}).subscribe(d => {
-            console.log(d);
-            if (d) {
-              resolve(d);
-            }
-          })
+            this.ajax.post('email/enviar-correo', { info_correo }).subscribe(d => {
+                //console.log(d);
+                if (d) {
+                    resolve(d);
+                }
+            })
         });
-      }
+    }
 
 }

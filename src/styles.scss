@@ -2597,6 +2597,11 @@ input:-webkit-autofill:active {
   border-top-left-radius: 15px;
 
   .mat-icon {
-      color: #b5aeae;
+    color: #b5aeae;
   }
+}
+
+.emoji-pipe-image {
+  position: relative;
+  top: 4px;
 }

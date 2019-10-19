@@ -15,6 +15,7 @@ export class User {
     estado = { id: 0, nombre: '' };
     id_perfil: number;
     estado_experto: number = 1;
+    experto_activo: boolean = true;
     nombre_perfil: string;
     nombre_rol: string;
     filas: Array<any>;
@@ -23,7 +24,7 @@ export class User {
     codigo_firebase: string;
     pass_firebase: string;
     conversacion_experto: Conversacion;
-    activo_chat:boolean;
+    activo_chat: boolean;
     modo_nocturno: number;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
