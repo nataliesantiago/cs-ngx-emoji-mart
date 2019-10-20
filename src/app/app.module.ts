@@ -114,6 +114,7 @@ import { ReplaceEmojisMensajePipe } from '../pipes/emoji.mensaje.pipe';
 import { OrdenarExpertosPipe } from '../pipes/ordenar-expertos.pipe';
 import { TransitionGroupItemDirective, TransitionGroupComponent } from '../directives/sort.animation.directives';
 import { ConsolaSupervisorComponent } from './consola-supervisor/consola-supervisor.component';
+import { AdMensajesAutomaticosComponent } from './ad-mensajes-automaticos/ad-mensajes-automaticos.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -194,7 +195,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     OrdenarExpertosPipe,
     TransitionGroupItemDirective,
     TransitionGroupComponent,
-    ConsolaSupervisorComponent
+    ConsolaSupervisorComponent,
+    AdMensajesAutomaticosComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

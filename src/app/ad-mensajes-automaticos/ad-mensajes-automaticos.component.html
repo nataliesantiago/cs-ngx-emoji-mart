@@ -1,0 +1,129 @@
+<mat-card *ngIf="create_message">
+  <mat-card-content>
+    <mat-card-title>Crear Shortcut</mat-card-title>
+    <div fxLayaout="100">
+      <form class="m-t-20" fxFlex="70">
+        <mat-form-field>
+          <mat-label>Digite el mensaje automatico</mat-label>
+          <input matInput [(ngModel)]="message.texto" name="texto_mensaje" autocomplete="off"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tipo de mensaje automatico</mat-label>
+          <mat-select name="type" (selectionChange)="onChangeType($event)">
+            <mat-option *ngFor="let message_type of message_types" [value]="message_type.idtbl_tipo_mensaje_automatico">{{message_type.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="is_timeout">
+          <mat-label>Tiempo en minutos</mat-label>
+          <input matInput [(ngModel)]="message.timeout" name="timeout_mensaje" />
+        </mat-form-field>
+
+        <div fxLayout="row wrap">
+          <div fxFlex="25" fxLayoutAlign="space-between center">
+            <button fxFlex="45" class="custom__btn custom__btn--accept"
+              (click)="createMessage()">Crear</button> 
+            <button fxFlex="45" class="custom__btn custom__btn--cancel"
+              (click)="create_message=!create_message">Cancelar</button>
+          </div>
+        </div>
+      </form>
+      <div fxFlex="30" class="recomendacion">
+        <p><b>Variables permitidas</b></p>
+        <mat-list role="list">
+          <mat-list-item role="listitem">{{'{'}}nombre{{'}'}} </mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}correo{{'}'}} </mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}categoria{{'}'}} </mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}fecha_actual{{'}'}} </mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}busqueda{{'}'}} </mat-list-item>
+          <mat-list-item role="listitem">{{'{'}}id_conversacion{{'}'}} </mat-list-item>
+        </mat-list>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-content>
+    <div class="botones m-b-20" *ngIf="!create_message">
+      <button class="custom__btn custom__btn--primary" (click)="create_message=!create_message">
+        <mat-icon>add</mat-icon> Crear Mensaje Automatico
+      </button>
+    </div>
+    <div class="bg-light p-10 p-r-20 p-l-20">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+      </mat-form-field>
+    </div>
+    <div class="responsive-table">
+      <mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <div *ngIf="!row.update">
+              <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.update=true"></i>
+              <i class="ti-trash danger-color m-r-10 mouse-over" (click)="inactiveMessage(row)"></i>
+              <i class="ti-check success-color m-r-10 mouse-over" (click)="activeMessage(row)" *ngIf="row.id_tipo_mensaje!=3"></i>
+            </div>
+            <div *ngIf="row.update">
+              <i class="ti-save success-color m-r-10 mouse-over" (click)="updateMessage(row)"></i>
+              <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.update=false;row.is_edit_timeout=false;"></i>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="mensaje">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Mensaje Automatico </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span *ngIf="!row.update">{{row.texto}}</span>
+            <mat-form-field *ngIf="row.update">
+                <input matInput type="text" name="texto" [(ngModel)]="row.texto" autocomplete="off">
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tiempo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo de espera </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span *ngIf="!row.is_edit_timeout">{{row.timeout}}</span>
+            <mat-form-field *ngIf="row.is_edit_timeout">
+                <input matInput type="text" name="texto" [(ngModel)]="row.timeout" autocomplete="off">
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="tipo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Mensaje Automatico </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span *ngIf="!row.update">{{row.tipo}}</span>
+            <mat-form-field *ngIf="row.update">
+              <mat-label>Tipo de mensaje automatico</mat-label>
+              <mat-select name="type" (selectionChange)="onChangeTypeTable($event, row)">
+                <mat-option *ngFor="let message_type of message_types" [value]="message_type.idtbl_tipo_mensaje_automatico">{{message_type.nombre}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="activo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+              <span *ngIf="row.activo == 1">Activo</span>
+              <span *ngIf="row.activo == 0">Inactivo</span>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
