@@ -11,6 +11,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { SosOperadorComponent } from '../../../components/sos-operador/sos-operador.component';
 import { SonidosService } from '../../../providers/sonidos.service';
 import { DOCUMENT } from '@angular/platform-browser';
+import { EstadoExpertoService } from '../../../providers/estado-experto.service';
 
 @Component({
   selector: 'app-header',
@@ -31,7 +32,7 @@ export class AppHeaderComponent {
   modo_nocturno;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
-    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument) {
+    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument, private estadoExpertoService: EstadoExpertoService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {

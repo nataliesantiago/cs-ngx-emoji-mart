@@ -90,7 +90,8 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   }
 
   createMessage() {
-    if(this.message.texto == '' && this.message.id_tipo_mensaje == null) {
+    
+    if(this.message.texto == '' || this.message.id_tipo_mensaje == null) {
       swal.fire({
         title: 'Complete todos los campos',
         text: '',
@@ -103,18 +104,17 @@ export class AdMensajesAutomaticosComponent implements OnInit {
         }
       });
     } else {
-      this.message.id_usuario_modificacion = this.user.getId();
-      this.mensajeAutomatico.createMessage(this.message).then(id => {
-        this.init();
-        this.create_message = false;
-      })
-    }
-    // this.validarVariablesPermitidas(this.message.texto);
-    // if(!this.is_correct) {
-    //   this.modalErrorVariables();
-    // } else {
-      
-    // }
+      this.validarVariablesPermitidas(this.message.texto);
+      if(!this.is_correct) {
+        this.modalErrorVariables();
+      } else {
+        this.message.id_usuario_modificacion = this.user.getId();
+        this.mensajeAutomatico.createMessage(this.message).then(id => {
+          this.init();
+          this.create_message = false;
+        })
+      }
+    } 
   }
 
   updateMessage(e){
@@ -176,11 +176,13 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     let variables_permitidas = ['{nombre}', '{correo}', '{categoria}', '{fecha_actual}', '{busqueda}', '{id_conversacion}'];
     let variables = texto.match(/{.*?}/g);
     this.is_correct = true;
-    variables.forEach(variable => {
-      if(!(variables_permitidas.indexOf(variable) > -1)) {
-        this.is_correct = false;
-      } 
-    });
+    if(variables != null) {
+      variables.forEach(variable => {
+        if(!(variables_permitidas.indexOf(variable) > -1)) {
+          this.is_correct = false;
+        } 
+      });
+    }
   }
 
   modalErrorVariables() {

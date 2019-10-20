@@ -121,3 +121,8 @@ export interface MensajeAutomatico {
     fecha_ultima_modificacion: Date;
     id_usuario_modificacion: number;
 }
+
+export interface EstadoExperto {
+    nombre: string;
+    es_modificable: string;
+}
