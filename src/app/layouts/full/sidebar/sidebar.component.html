@@ -46,6 +46,10 @@
                         *ngIf="user && user.id_rol==2">Chat Experto</a>
                 </li>
                 <li>
+                    <a [routerLink]="['/consola-supervisor']" routerLinkActive="active" (click)="cerrarMenu()"
+                        *ngIf="user && user.id_rol==3">Consola Supervisor</a>
+                </li>
+                <li>
                     <a [routerLink]="['/encuesta/1']" routerLinkActive="active" (click)="cerrarMenu()">Encuesta Cliente</a>
                 </li>
                 <li>

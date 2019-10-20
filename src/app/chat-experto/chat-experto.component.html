@@ -89,7 +89,7 @@
               <span class="top-avatar m-r-10">
               </span>
               <div fxFlex (click)="toggleDatosCliente(chat)" class="pointer">
-                <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
+                <div class="font-14 nombre-cliente-experto" *ngIf="chat.cliente">{{chat.cliente.nombre}}
                 </div>
               </div>
               <button mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1"
@@ -285,7 +285,7 @@
               <span class="top-avatar m-r-10">
               </span>
               <div fxFlex>
-                <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
+                <div class="font-14 nombre-cliente-experto" *ngIf="chat.cliente">{{chat.cliente.nombre}}
                 </div>
               </div>
             </div>

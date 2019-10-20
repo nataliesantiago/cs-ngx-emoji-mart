@@ -113,6 +113,7 @@ import { CerrarChatExpertoComponent } from './components/cerrar-chat-experto/cer
 import { ReplaceEmojisMensajePipe } from '../pipes/emoji.mensaje.pipe';
 import { OrdenarExpertosPipe } from '../pipes/ordenar-expertos.pipe';
 import { TransitionGroupItemDirective, TransitionGroupComponent } from '../directives/sort.animation.directives';
+import { ConsolaSupervisorComponent } from './consola-supervisor/consola-supervisor.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -192,7 +193,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReplaceEmojisMensajePipe,
     OrdenarExpertosPipe,
     TransitionGroupItemDirective,
-    TransitionGroupComponent
+    TransitionGroupComponent,
+    ConsolaSupervisorComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

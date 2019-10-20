@@ -37,6 +37,7 @@ import { FormularioNotificacionesComponent } from './formulario-notificaciones/f
 import { CargaMasivaComponent } from './carga-masiva/carga-masiva.component';
 import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-cierre-chat.component';
 import { AdministradorLookFeelComponent } from './administrador-look-feel/administrador-look-feel.component';
+import { ConsolaSupervisorComponent } from './consola-supervisor/consola-supervisor.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -74,6 +75,7 @@ export const AppRoutes: Routes = [
   { path: 'admin/preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'formulario_pregunta/:id_pregunta', component: FormularioPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
+  { path: 'consola-supervisor', component: ConsolaSupervisorComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
   { path: 'carga-masiva', component: CargaMasivaComponent, canActivate: [AuthGuard] },
