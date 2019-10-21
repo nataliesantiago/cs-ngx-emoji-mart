@@ -42,14 +42,22 @@ export class AppHeaderComponent {
           this.user.estado_experto = (u.experto_activo) ? 1 : 2;
           this.cambiarEstadoExperto({ value: this.user.estado_experto });
         }
+        if (this.user.getIdRol() == 3) {
+          this.user.estado_experto = 1;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto });
+        }
       }
     });
 
 
-    if (this.userService.getUsuario()) {
+    if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
       if (this.user.getIdRol() == 2) {
         this.cambiarEstadoExperto({ value: 1 });
+      }
+      if (this.user.getIdRol() == 3) {
+        this.user.estado_experto = 1;
+        this.cambiarEstadoExperto({ value: this.user.estado_experto });
       }
 
       if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
@@ -88,8 +96,9 @@ export class AppHeaderComponent {
 
       }, 10000);
 
-
-      this.listenEmergenciaExperto();
+      if (this.user.getIdRol() == 2) {
+        this.listenEmergenciaExperto();
+      }
     }
     this.userService.setActivoExpertoGlobal(e.value);
   }

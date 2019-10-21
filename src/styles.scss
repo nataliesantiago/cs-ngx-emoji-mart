@@ -882,6 +882,9 @@ ul li {
 
 
 .ventana-chat {
+  /*border-top-right-radius: 15px;
+  border-top-left-radius: 15px;*/
+
   .mat-drawer-content {
     overflow: hidden;
   }
@@ -2362,7 +2365,7 @@ input:-webkit-autofill:active {
   text-align: center;
   height: 188px;
   display: flex;
-  z-index: 5;
+  z-index: 101;
   top: 60px;
   left: 0;
   right: 0;
@@ -2588,6 +2591,19 @@ input:-webkit-autofill:active {
   color: #5f5d5d;
 }
 
+.chat-right-panel-cliente {
+  background: white !important;
+  border-bottom: 1px solid #bcbcbc !important;
+  color: #b5aeae;
+  font-weight: bold !important;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+
+  .mat-icon {
+    color: #b5aeae;
+  }
+}
+
 .chat-right-panel {
   background: white !important;
   border-bottom: 1px solid #bcbcbc !important;
@@ -2609,4 +2625,36 @@ input:-webkit-autofill:active {
 .nombre-cliente-experto {
   font-weight: bold;
   color: #888;
+}
+
+.consola-supervisor {
+  .conversacion-lista {
+    .mat-card-subtitle {
+      div {
+        margin: 5px 0;
+        word-wrap: break-all;
+      }
+    }
+
+    .mat-card-header-text {
+      width: calc(100% - 70px);
+    }
+
+    .nombre-chat {
+      flex: 1;
+      display: inline-block;
+      width: 100%;
+      height: 24px;
+      display: flex;
+      flex-direction: row;
+      white-space: nowrap;
+
+      span {
+        text-overflow: ellipsis;
+        display: inline-block;
+        overflow: hidden;
+        flex: 1;
+      }
+    }
+  }
 }

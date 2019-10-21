@@ -77,6 +77,7 @@ export const AppRoutes: Routes = [
   { path: 'formulario_pregunta/:id_pregunta', component: FormularioPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
   { path: 'consola-supervisor', component: ConsolaSupervisorComponent, canActivate: [AuthGuard] },
+  { path: 'consola-supervisor/:id_conversacion', component: ConsolaSupervisorComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
   { path: 'carga-masiva', component: CargaMasivaComponent, canActivate: [AuthGuard] },
