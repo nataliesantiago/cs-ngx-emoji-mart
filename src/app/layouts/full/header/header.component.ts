@@ -168,7 +168,9 @@ export class AppHeaderComponent {
       this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
         if(result && result[0] && result[0].valor){
           this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
-          this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          if(this._document.getElementById('color_toolbar')) {
+            this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          }
         }
       });
     } else {
@@ -177,7 +179,9 @@ export class AppHeaderComponent {
       this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
         if(result && result[0] && result[0].valor){
           this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
-          this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          if(this._document.getElementById('color_toolbar')) {
+            this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          }
         }
       });
     }

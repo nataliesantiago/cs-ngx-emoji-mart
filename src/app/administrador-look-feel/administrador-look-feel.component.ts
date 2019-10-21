@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LookFeelService } from '../providers/look-feel.service';
 import { ColorEvent } from 'ngx-color';
 import swal from 'sweetalert2';
 import { UserService } from '../providers/user.service';
 import { User } from '../../schemas/user.schema';
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-administrador-look-feel',
@@ -31,7 +32,8 @@ export class AdministradorLookFeelComponent implements OnInit {
   is_change: boolean = false;
   user: User;
 
-  constructor(private look_service: LookFeelService, private router: Router, private user_service: UserService) {
+  constructor(private look_service: LookFeelService, private router: Router, private user_service: UserService, 
+          @Inject(DOCUMENT) private _document: HTMLDocument) {
     this.colors = ['#ffffff', '#fdcecd', '#fef3bd', '#c1e1c5', '#bedadc', '#c4def6', '#bed3f3', '#d4c4fb', '#272727', '#444141', '#616161','#383838'];
     this.user = this.user_service.getUsuario();
     if (this.user) {
@@ -130,6 +132,22 @@ export class AdministradorLookFeelComponent implements OnInit {
     });
   }
 
+  changeColor() {
+    if(!this._document.body.classList.contains('dark-theme')) {
+      this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this.old_color_toolbar = result[0].valor;
+        }
+      });
+    } else {
+      this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this.old_color_toolbar = result[0].valor;
+        }
+      });
+    }
+  }
+
   /**
    * Funcion para obtener el valor del color seleccionado por el usuario
    */
@@ -197,7 +215,7 @@ export class AdministradorLookFeelComponent implements OnInit {
    */
   saveColor() {
     if(this.color_toolbar != '') {
-      if(this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
+      if(!this._document.body.classList.contains('dark-theme')) {
         this.look_service.updateSetting(this.color_toolbar, 'color_barra_superior').then(result => {
           this.loading = true; 
           window.location.reload(); 
@@ -208,7 +226,6 @@ export class AdministradorLookFeelComponent implements OnInit {
           window.location.reload(); 
         });
       }
-      
     }
   }
 
