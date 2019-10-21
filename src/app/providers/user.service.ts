@@ -29,6 +29,8 @@ export class UserService {
     public socket: io.SocketIOClient.Socket;
     public subjectUsuario = new Subject<any>();
     public observableUsuario = this.subjectUsuario.asObservable();
+    subjectEstadoExperto = new Subject<any>();
+    public observableEstadoExperto = this.subjectEstadoExperto.asObservable();
     planeaciones_creadas = [];
     SCOKET_IP;
     conectado_socket = false;
@@ -251,7 +253,16 @@ export class UserService {
     }
 
     setActivoExperto(activo) {
+        this.user.experto_activo = activo;
+        //console.log(activo)
         this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
+    }
+
+    setActivoExpertoGlobal(estado: number) {
+        this.user.estado_experto = estado;
+        this.subjectEstadoExperto.next(estado);
+        //console.log(activo)
+        //this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
     }
 
     getInfoUsuario(id): Promise<User> {
@@ -410,7 +421,8 @@ export class UserService {
     sendEmailChat(info_correo): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('email/enviar-correo', { info_correo }).subscribe(d => {
-                console.log(d);
+                //console.log(d);
+                //console.log(d);
                 if (d) {
                     resolve(d);
                 }

@@ -46,6 +46,10 @@
                         *ngIf="user && user.id_rol==2">Chat Experto</a>
                 </li>
                 <li>
+                    <a [routerLink]="['/consola-supervisor']" routerLinkActive="active" (click)="cerrarMenu()"
+                        *ngIf="user && user.id_rol==3">Consola Supervisor</a>
+                </li>
+                <li>
                     <a [routerLink]="['/encuesta/1']" routerLinkActive="active" (click)="cerrarMenu()">Encuesta Cliente</a>
                 </li>
                 <li>
@@ -93,6 +97,13 @@
                 </li>
                 <li>
                     <a [routerLink]="['/administrador-usuarios']" routerLinkActive="active" (click)="cerrarMenu()">Administrar Usuarios</a>
+
+                <li>
+                    <a [routerLink]="['/ad-mensajes-automaticos']" routerLinkActive="active" (click)="cerrarMenu()">Administrar Mensajes Automaticos Chat</a>
+                </li>
+
+                <li>
+                    <a [routerLink]="['/ad-estado-experto']" routerLinkActive="active" (click)="cerrarMenu()">Administrar Estados de Inactividad Experto</a>
                 </li>
                 
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()" class="menu-link">

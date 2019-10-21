@@ -54,22 +54,25 @@
             </div>
             <perfect-scrollbar class="contenido">
               <mat-nav-list>
-                <mat-list-item (click)="abrirConversacionExperto(experto)" *ngFor="let experto of expertos_filtro"
-                  [ngClass]="{'mensajes-nuevos':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}">
-                  <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
-                  <div class="punt-estado-chat" [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat}">
-                  </div>
-                  <h3 matLine> {{experto.nombre}} </h3>
-                  <p matLine class="text-muted preview-mensaje"
-                    [ngClass]="{'bold':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}"
-                    *ngIf="experto.conversacion_experto && experto.conversacion_experto.mensajes && experto.conversacion_experto.ultimo_mensaje">
-                    <span *ngIf="experto.conversacion_experto.ultimo_mensaje.id_usuario==user.idtbl_usuario">
-                      <mat-icon *ngIf="experto.conversacion_experto.ultimo_mensaje.estado==1">access_time</mat-icon>
-                      <mat-icon *ngIf="experto.conversacion_experto.ultimo_mensaje.estado==2">done</mat-icon>
-                      <mat-icon *ngIf="experto.conversacion_experto.ultimo_mensaje.estado==3">done_all</mat-icon>
-                    </span>
-                    {{experto.conversacion_experto.ultimo_mensaje.label}} </p>
-                </mat-list-item>
+                <div [transition-group]="'flip-list'">
+                  <mat-list-item (click)="abrirConversacionExperto(experto)" class="item-experto-chat"
+                    *ngFor="let experto of expertos_filtro | ordenarExpertos" transition-group-item
+                    [ngClass]="{'mensajes-nuevos':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}">
+                    <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
+                    <div class="punt-estado-chat" [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat}">
+                    </div>
+                    <h3 matLine> {{experto.nombre}} </h3>
+                    <p matLine class="text-muted preview-mensaje"
+                      [ngClass]="{'bold':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}"
+                      *ngIf="experto.conversacion_experto && experto.conversacion_experto.mensajes && experto.conversacion_experto.ultimo_mensaje">
+                      <span *ngIf="experto.conversacion_experto.ultimo_mensaje.id_usuario==user.idtbl_usuario">
+                        <mat-icon *ngIf="experto.conversacion_experto.ultimo_mensaje.estado==1">access_time</mat-icon>
+                        <mat-icon *ngIf="experto.conversacion_experto.ultimo_mensaje.estado==2">done</mat-icon>
+                        <mat-icon *ngIf="experto.conversacion_experto.ultimo_mensaje.estado==3">done_all</mat-icon>
+                      </span>
+                      {{experto.conversacion_experto.ultimo_mensaje.label}} </p>
+                  </mat-list-item>
+                </div>
               </mat-nav-list>
             </perfect-scrollbar>
 
@@ -86,10 +89,11 @@
               <span class="top-avatar m-r-10">
               </span>
               <div fxFlex (click)="toggleDatosCliente(chat)" class="pointer">
-                <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
+                <div class="font-14 nombre-cliente-experto" *ngIf="chat.cliente">{{chat.cliente.nombre}}
                 </div>
               </div>
-              <button mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1" [disabled]="chat.buscando_llamada || chat.llamada_activa" title="Iniciar Videollamada"
+              <button mat-icon-button class="ml-1" *ngIf="chat.id_tipo_conversacion==1"
+                [disabled]="chat.buscando_llamada || chat.llamada_activa" title="Iniciar Videollamada"
                 (click)="iniciarVideollamada(chat)">
                 <mat-icon>phone</mat-icon>
               </button>
@@ -155,7 +159,8 @@
                       </div>
                     </div>
 
-                    <div *ngIf="!m.es_nota_voz && !m.es_llamada" [innerHTML]="m.texto | linkify | safe:'html'"></div>
+                    <div *ngIf="!m.es_nota_voz && !m.es_llamada"
+                      [innerHTML]="m.texto | linkify | replaceEmojisMensaje:'google' | safe:'html'"></div>
                     <span *ngIf="m.id_usuario==user.idtbl_usuario">
                       <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
                       <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>
@@ -280,7 +285,7 @@
               <span class="top-avatar m-r-10">
               </span>
               <div fxFlex>
-                <div class="font-14" *ngIf="chat.cliente">{{chat.cliente.nombre}}
+                <div class="font-14 nombre-cliente-experto" *ngIf="chat.cliente">{{chat.cliente.nombre}}
                 </div>
               </div>
             </div>

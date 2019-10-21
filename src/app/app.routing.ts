@@ -39,6 +39,9 @@ import { AdMotivoCierreChatComponent } from './ad-motivo-cierre-chat/ad-motivo-c
 import { AdministradorLookFeelComponent } from './administrador-look-feel/administrador-look-feel.component';
 import { AdministradorUsuariosComponent } from './administrador-usuarios/administrador-usuarios.component';
 import { FormularioUsuariosComponent } from './formulario-usuarios/formulario-usuarios.component';
+import { ConsolaSupervisorComponent } from './consola-supervisor/consola-supervisor.component';
+import { AdMensajesAutomaticosComponent } from './ad-mensajes-automaticos/ad-mensajes-automaticos.component';
+import { AdEstadoExpertoComponent } from './ad-estado-experto/ad-estado-experto.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -78,11 +81,15 @@ export const AppRoutes: Routes = [
   { path: 'admin/preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'formulario_pregunta/:id_pregunta', component: FormularioPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'chat-experto', component: ChatExpertoComponent, canActivate: [AuthGuard] },
+  { path: 'consola-supervisor', component: ConsolaSupervisorComponent, canActivate: [AuthGuard] },
+  { path: 'consola-supervisor/:id_conversacion', component: ConsolaSupervisorComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/extensiones', component: AdminsitradorExtensionesChatComponent, canActivate: [AuthGuard] },
   { path: 'admin/chat/intenciones', component: IntencionesChatComponent, canActivate: [AuthGuard] },
   { path: 'carga-masiva', component: CargaMasivaComponent, canActivate: [AuthGuard] },
   { path: 'administrador-shortcuts', component: AdministradorShortcutsComponent, canActivate: [AuthGuard] },
   { path: 'administrador-guiones', component: AdministradorGuionesComponent, canActivate: [AuthGuard] },
   { path: 'motivo-cierre-chat', component: AdMotivoCierreChatComponent, canActivate: [AuthGuard] },
-  { path: 'administrar-look-feel', component: AdministradorLookFeelComponent, canActivate: [AuthGuard] }
+  { path: 'administrar-look-feel', component: AdministradorLookFeelComponent, canActivate: [AuthGuard] },
+  { path: 'ad-mensajes-automaticos', component: AdMensajesAutomaticosComponent, canActivate: [AuthGuard] },
+  { path: 'ad-estado-experto', component: AdEstadoExpertoComponent, canActivate: [AuthGuard] }
 ];

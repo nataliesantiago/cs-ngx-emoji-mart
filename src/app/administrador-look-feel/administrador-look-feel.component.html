@@ -53,7 +53,7 @@
           <div fxLayoutAlign="start start" fxFlex="45" class="color-wrapper m-t-20">
             <mat-label class="m-r-20">Cambiar color barra superior</mat-label>
             <div class="color-wrapper" fxLayout="column">
-                <div class="color-toolbar" [style.backgroundColor]="old_color_toolbar" (click)="is_change_color = !is_change_color"></div>
+                <div class="color-toolbar" id="color_toolbar" [style.backgroundColor]="old_color_toolbar" (click)="is_change_color = !is_change_color;changeColor();"></div>
                 <div class="select-color"*ngIf="is_change_color">
                     <color-block triangle="hide"  [color]="old_color_toolbar" [colors]="colors" (onChangeComplete)="handleChangeComplete($event)"></color-block>
                 </div>

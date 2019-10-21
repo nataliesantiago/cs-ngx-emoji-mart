@@ -16,6 +16,7 @@ export interface Experto {
     activo: boolean;
     chats: Array<any>;
     ultima_conexion: any;
+    conversacion_experto?: Conversacion;
 }
 
 

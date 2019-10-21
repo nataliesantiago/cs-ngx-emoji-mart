@@ -112,3 +112,18 @@ export interface InformacionCorreo {
     busqueda: string;
     mensajes: Array<any>;
 }
+
+export interface MensajeAutomatico {
+    texto: string;
+    timeout: number;
+    id_tipo_mensaje: number;
+    fecha_creacion: Date;
+    fecha_ultima_modificacion: Date;
+    id_usuario_modificacion: number;
+}
+
+export interface EstadoExperto {
+    nombre: string;
+    es_modificable: string;
+    id_usuario_modificador: number;
+}

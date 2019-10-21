@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LookFeelService } from '../providers/look-feel.service';
 import { ColorEvent } from 'ngx-color';
 import swal from 'sweetalert2';
+import { UserService } from '../providers/user.service';
+import { User } from '../../schemas/user.schema';
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-administrador-look-feel',
@@ -27,15 +30,30 @@ export class AdministradorLookFeelComponent implements OnInit {
   loading: boolean = false;
   is_change_color: boolean = false;
   is_change: boolean = false;
+  user: User;
 
-  constructor(private look_service: LookFeelService, private router: Router) {
-    this.colors = ['#ffffff', '#fdcecd', '#fef3bd', '#c1e1c5', '#bedadc', '#c4def6', '#bed3f3', '#d4c4fb'];
-    this.getAllSettings();
-    this.getHomeText();
+  constructor(private look_service: LookFeelService, private router: Router, private user_service: UserService, 
+          @Inject(DOCUMENT) private _document: HTMLDocument) {
+    this.colors = ['#ffffff', '#fdcecd', '#fef3bd', '#c1e1c5', '#bedadc', '#c4def6', '#bed3f3', '#d4c4fb', '#272727', '#444141', '#616161','#383838'];
+    this.user = this.user_service.getUsuario();
+    if (this.user) {
+      this.init();
+    }
+    this.user_service.observableUsuario.subscribe(u => {
+      this.user = u;
+      if (this.user) {
+        this.init();
+      }
+    })
   }
 
   ngOnInit() {
     
+  }
+
+  init() {
+    this.getAllSettings();
+    this.getHomeText();
   }
   
   /**
@@ -47,7 +65,12 @@ export class AdministradorLookFeelComponent implements OnInit {
         setting.nombre === 'url_favicon' ? this.url_favicon = setting.valor : '';
         setting.nombre === 'url_logo' ? this.url_logo = setting.valor : '';
         setting.nombre === 'placeholder_buscador' ? this.search_placeholder = setting.valor : '';
-        setting.nombre === 'color_barra_superior' ? this.old_color_toolbar = setting.valor : '';
+        if(this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
+          setting.nombre === 'color_barra_superior' ? this.old_color_toolbar = setting.valor : '';
+        } else {
+          setting.nombre === 'color_barra_oscuro' ? this.old_color_toolbar = setting.valor : '';
+        }
+        
       });
     });
 
@@ -107,6 +130,22 @@ export class AdministradorLookFeelComponent implements OnInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Aceptar'
     });
+  }
+
+  changeColor() {
+    if(!this._document.body.classList.contains('dark-theme')) {
+      this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this.old_color_toolbar = result[0].valor;
+        }
+      });
+    } else {
+      this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this.old_color_toolbar = result[0].valor;
+        }
+      });
+    }
   }
 
   /**
@@ -176,10 +215,17 @@ export class AdministradorLookFeelComponent implements OnInit {
    */
   saveColor() {
     if(this.color_toolbar != '') {
-      this.look_service.updateSetting(this.color_toolbar, 'color_barra_superior').then(result => {
-        this.loading = true; 
-        window.location.reload(); 
-      });
+      if(!this._document.body.classList.contains('dark-theme')) {
+        this.look_service.updateSetting(this.color_toolbar, 'color_barra_superior').then(result => {
+          this.loading = true; 
+          window.location.reload(); 
+        });
+      } else {
+        this.look_service.updateSetting(this.color_toolbar, 'color_barra_oscuro').then(result => {
+          this.loading = true; 
+          window.location.reload(); 
+        });
+      }
     }
   }
 

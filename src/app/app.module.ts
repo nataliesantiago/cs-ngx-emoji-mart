@@ -113,6 +113,12 @@ import { CerrarChatExpertoComponent } from './components/cerrar-chat-experto/cer
 import { AdministradorUsuariosComponent } from './administrador-usuarios/administrador-usuarios.component';
 import { FormularioUsuariosComponent } from './formulario-usuarios/formulario-usuarios.component';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { ReplaceEmojisMensajePipe } from '../pipes/emoji.mensaje.pipe';
+import { OrdenarExpertosPipe } from '../pipes/ordenar-expertos.pipe';
+import { TransitionGroupItemDirective, TransitionGroupComponent } from '../directives/sort.animation.directives';
+import { ConsolaSupervisorComponent } from './consola-supervisor/consola-supervisor.component';
+import { AdMensajesAutomaticosComponent } from './ad-mensajes-automaticos/ad-mensajes-automaticos.component';
+import { AdEstadoExpertoComponent } from './ad-estado-experto/ad-estado-experto.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -190,7 +196,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdministradorLookFeelComponent,
     CerrarChatExpertoComponent,
     AdministradorUsuariosComponent,
-    FormularioUsuariosComponent
+    FormularioUsuariosComponent,
+    ReplaceEmojisMensajePipe,
+    OrdenarExpertosPipe,
+    TransitionGroupItemDirective,
+    TransitionGroupComponent,
+    ConsolaSupervisorComponent,
+    AdMensajesAutomaticosComponent,
+    AdEstadoExpertoComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

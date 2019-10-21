@@ -201,6 +201,7 @@
 
     &.red {
         background-color: red;
+
         &::after {
             content: "";
             position: absolute;
@@ -242,4 +243,8 @@
     .contenedor-mensajes {
         height: calc(100% - 106px);
     }
+}
+
+.item-experto-chat {
+    transition: all .7s;
 }

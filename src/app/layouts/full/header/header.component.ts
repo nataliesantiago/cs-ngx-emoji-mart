@@ -11,6 +11,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { SosOperadorComponent } from '../../../components/sos-operador/sos-operador.component';
 import { SonidosService } from '../../../providers/sonidos.service';
 import { DOCUMENT } from '@angular/platform-browser';
+import { EstadoExpertoService } from '../../../providers/estado-experto.service';
+import { LookFeelService } from '../../../providers/look-feel.service';
 
 @Component({
   selector: 'app-header',
@@ -30,23 +32,35 @@ export class AppHeaderComponent {
   is_dark_mode;
   modo_nocturno;
 
-  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore, 
-              private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument) {
+  constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
+    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument, 
+    private estadoExpertoService: EstadoExpertoService, private look_service: LookFeelService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {
+        console.log(u)
         this.user = u;
         this.profileImage = u.url_foto;
         if (this.user.getIdRol() == 2) {
-          this.cambiarEstadoExperto({ value: 1 });
+          this.user.estado_experto = (u.experto_activo) ? 1 : 2;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto });
+        }
+        if (this.user.getIdRol() == 3) {
+          this.user.estado_experto = 1;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto });
         }
       }
     });
 
-    if (this.userService.getUsuario()) {
+
+    if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
       if (this.user.getIdRol() == 2) {
         this.cambiarEstadoExperto({ value: 1 });
+      }
+      if (this.user.getIdRol() == 3) {
+        this.user.estado_experto = 1;
+        this.cambiarEstadoExperto({ value: this.user.estado_experto });
       }
 
       if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
@@ -54,7 +68,7 @@ export class AppHeaderComponent {
       } else {
         this.is_dark_mode = this.user.getModoNocturno();
       }
-      
+
     }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
@@ -71,18 +85,25 @@ export class AppHeaderComponent {
   }
 
   cambiarEstadoExperto(e) {
+    //debugger;
     if (this.intervalo) {
-      window.clearInterval(this.intervalo);
-    }
-    let activo = (e.value == 1) ? true : false;
-    this.userService.setActivoExperto(activo);
-    if (activo) {
+      //window.clearInterval(this.intervalo);
+      let activo = (e.value == 1) ? true : false;
+      this.userService.setActivoExperto(activo);
+    } else {
+      let activo = (e.value == 1) ? true : false;
+      this.userService.setActivoExperto(activo);
       this.intervalo = setInterval(() => {
-        this.userService.setActivoExperto(true);
-      }, 10000);
-    }
+        let activo = (this.user.estado_experto == 1) ? true : false;
+        this.userService.setActivoExperto(activo);
 
-    this.listenEmergenciaExperto();
+      }, 10000);
+
+      if (this.user.getIdRol() == 2) {
+        this.listenEmergenciaExperto();
+      }
+    }
+    this.userService.setActivoExpertoGlobal(e.value);
   }
 
   listenEmergenciaExperto() {
@@ -144,9 +165,25 @@ export class AppHeaderComponent {
     if (event.target.checked) {
       this._document.body.classList.add('dark-theme');
       this.modo_nocturno = 1;
+      this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
+          if(this._document.getElementById('color_toolbar')) {
+            this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          }
+        }
+      });
     } else {
       this._document.body.classList.remove('dark-theme');
       this.modo_nocturno = 0;
+      this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
+          if(this._document.getElementById('color_toolbar')) {
+            this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          }
+        }
+      });
     }
     this.userService.actualizarModoNocturno(this.modo_nocturno).then(result => {
     });
