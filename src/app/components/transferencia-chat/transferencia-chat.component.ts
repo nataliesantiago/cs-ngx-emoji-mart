@@ -15,6 +15,7 @@ const moment = _rollupMoment || _moment;
 
 export interface TransferenciaData {
   conversacion: Conversacion;
+  asignar: number;
 }
 
 
@@ -36,9 +37,14 @@ export class TransferenciaChatComponent implements OnInit {
   error_transferencia: string;
   filteredOptions;
   expertOptions;
-
+  asginado = false;
   constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore, @Inject(MAT_DIALOG_DATA) private data: TransferenciaData, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
+    console.log(this.data);
+    if (this.data.asignar) {
+      this.asginado = true;
+      this.tipo = 2;
+    }
     this.chatService.getCategoriasExperticia().then((c: Array<CategoriaExperticia>) => {
       this.filas = c;
       this.filteredOptions = this.categoria_experticia_control.valueChanges.pipe(
@@ -48,7 +54,7 @@ export class TransferenciaChatComponent implements OnInit {
     });
     this.chatService.getExpertosTransferencia().then(expertos => {
       this.expertos = expertos.filter(e => {
-        return e.idtbl_usuario != this.user.getId();
+        return e.idtbl_usuario != this.user.getId() && e.idtbl_usuario != this.data.conversacion.id_experto_actual;
       });
       this.expertos_filtrados = this.experto_control.valueChanges.pipe(startWith(''), map(value => this.utilsService.filter(this.expertos, value, 'nombre')))
     });
@@ -79,6 +85,12 @@ export class TransferenciaChatComponent implements OnInit {
       id = this.categoria.idtbl_categoria_experticia;
     } else {
       id = this.experto.idtbl_usuario;
+    }
+    if (this.asginado) {
+      this.data.conversacion.filas.forEach(f => {
+        console.log(f);
+        this.fireStore.doc('categorias_experticia/' + f.id + '/chats/' + this.data.conversacion.codigo).delete();
+      });
     }
     this.chatService.transferirChat(this.data.conversacion, id, this.tipo).then(() => {
       this.dialogRef.close({ success: true });

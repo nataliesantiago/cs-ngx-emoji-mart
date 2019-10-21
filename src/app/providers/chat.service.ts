@@ -408,6 +408,20 @@ export class ChatService {
    * @description Obtiene todos los expertos de la herramienta
    * @returns Promise
    */
+  getColegasChat(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getColegas', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.colegas);
+        }
+      })
+    });
+  }
+
+  /**
+   * @description Obtiene todos los expertos de la herramienta
+   * @returns Promise
+   */
   getExpertosTransferencia(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.get('chat/getExpertosTransferencia', {}).subscribe(d => {
@@ -751,6 +765,22 @@ export class ChatService {
       this.ajax.get('chat/getExpertoDisponible', { filas: filas }).subscribe(d => {
         if (d.success) {
           resolve(d.experto);
+        }
+      })
+    });
+  }
+
+  /**
+  * @description Obtiene las filas de una conversacion
+  * @param {Conversacion} c
+  * @returns Promise
+  */
+  getFilasConversacion(c: Conversacion): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/conversacion/getFilas', { id_conversacion: c.idtbl_conversacion }).subscribe(d => {
+        if (d.success) {
+          c.filas = d.filas;
+          resolve();
         }
       })
     });

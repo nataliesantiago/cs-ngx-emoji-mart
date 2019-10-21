@@ -188,7 +188,7 @@ export class ChatExpertoComponent {
         });
       });
     });
-    this.chatService.getExpertos().then(e => {
+    this.chatService.getColegasChat().then(e => {
       this.expertos = this.expertos_filtro = e.filter(experto => {
         return experto.idtbl_usuario != this.user.getId();
       });
@@ -199,7 +199,7 @@ export class ChatExpertoComponent {
             e.activo_chat = false;
           } else {
             var duration = moment().unix() - experto.fecha.seconds;
-            if (experto.activo && duration < 11) {
+            if (experto.activo && duration < 30) {
               e.activo_chat = true;
             } else {
               e.activo_chat = false;

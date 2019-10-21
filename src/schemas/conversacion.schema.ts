@@ -69,6 +69,9 @@ export class Conversacion {
     llamada_activa: boolean;
     id_llamada: number;
     buscando_llamada: boolean;
+    viendo_supervisor: boolean = false;
+    alarma_nlp: boolean;
+    transfiriendo: boolean;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;
