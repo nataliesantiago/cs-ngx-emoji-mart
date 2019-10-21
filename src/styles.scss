@@ -2600,3 +2600,13 @@ input:-webkit-autofill:active {
       color: #b5aeae;
   }
 }
+
+.caras-encuesta{
+  ngx-emoji{
+      button{
+          span{
+              margin-top: 10px !important;        
+          }
+      }
+  }
+}

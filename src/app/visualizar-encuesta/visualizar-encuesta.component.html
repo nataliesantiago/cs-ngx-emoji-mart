@@ -64,26 +64,26 @@
 
               <div *ngIf="pregunta.id_tipo == 4">
                 <br>
-                <div class="row wrap">
+                <div class="row wrap caras-encuesta">
                   <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 1) }"
                     (click)="agregarRespuesta(i, 1)">
-                    ️☹️
+                    <ngx-emoji emoji="white_frowning_face" set="google" size="20"></ngx-emoji>
                   </a>
                   <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 2) }"
                     (click)="agregarRespuesta(i, 2)">
-                    🙁
+                    <ngx-emoji emoji="slightly_frowning_face" set="google" size="20"></ngx-emoji>
                   </a>
                   <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 3) }"
                     (click)="agregarRespuesta(i, 3)">
-                    😐
+                    <ngx-emoji emoji="neutral_face" set="google" size="20"></ngx-emoji>
                   </a>
                   <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 4) }"
                     (click)="agregarRespuesta(i, 4)">
-                    🙂
+                    <ngx-emoji emoji="slightly_smiling_face" set="google" size="20"></ngx-emoji>
                   </a>
                   <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 5) }"
                     (click)="agregarRespuesta(i, 5)">
-                    😀
+                    <ngx-emoji emoji="smiley" set="google" size="20"></ngx-emoji>
                   </a>
                 </div>
                 <br>

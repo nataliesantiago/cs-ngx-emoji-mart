@@ -27,6 +27,8 @@ export class AdministradorUsuariosComponent implements OnInit {
   matTableFilter: matTableFilter;
   id_usuario_editar;
   modificarUsuario = false;
+  perfiles;
+  roles;
   filterColumns = [
     { field: 'idtbl_usuario', type: 'number' },
     { field: 'nombre', type: 'string' },
@@ -49,8 +51,13 @@ export class AdministradorUsuariosComponent implements OnInit {
       this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
     });
 
-    
+    this.userService.getPerfilesUsuario().then( p => {
+      this.perfiles = p;
+    })
 
+    this.userService.getRolesUsuario().then( p => {
+      this.roles = p;
+    })
 
   }
 

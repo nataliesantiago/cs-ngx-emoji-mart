@@ -2,7 +2,7 @@
     <app-formulario-usuarios *ngIf="modificarUsuario" [usuario_editar]="id_usuario_editar" (onfinish)="actualizarDatos()"></app-formulario-usuarios> 
   <mat-card>
       <mat-card-content>
-          <mat-card-title>Administrador de Expertos</mat-card-title>
+          <mat-card-title>Administrador de Usuarios</mat-card-title>
           <div class="bg-light p-10 p-r-20 p-l-20">
               <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">

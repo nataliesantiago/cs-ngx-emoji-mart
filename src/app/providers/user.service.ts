@@ -406,6 +406,7 @@ export class UserService {
             })
         });
     }
+    
     sendEmailChat(info_correo): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('email/enviar-correo', { info_correo }).subscribe(d => {

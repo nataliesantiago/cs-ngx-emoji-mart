@@ -112,6 +112,7 @@ import { AdministradorLookFeelComponent } from './administrador-look-feel/admini
 import { CerrarChatExpertoComponent } from './components/cerrar-chat-experto/cerrar-chat-experto.component';
 import { AdministradorUsuariosComponent } from './administrador-usuarios/administrador-usuarios.component';
 import { FormularioUsuariosComponent } from './formulario-usuarios/formulario-usuarios.component';
+import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -236,7 +237,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PickerModule,
     AngularFireAuthModule,
     AngularFireMessagingModule,
-    ColorBlockModule
+    ColorBlockModule,
+    EmojiModule
   ],
 
   providers: [

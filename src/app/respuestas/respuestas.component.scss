@@ -14,7 +14,7 @@ mat-expansion-panel {
 }
 
 .container-texto {
-    margin-top: 10%;
+    margin-top: 5%;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 5%;
@@ -66,4 +66,14 @@ mat-expansion-panel {
 
 .noActivado {
     background-color: green;
+}
+
+.icono-dias{
+    padding-top: 9px;
+    padding-right: 9px;
+    text-align: end;
+}
+
+.icono{
+    color: #c19d17 !important;
 }
