@@ -16,7 +16,7 @@ export class AdEstadoExpertoComponent implements OnInit {
 
   user: User;
   create_state = false;
-  states: EstadoExperto = {nombre: '', es_modificable: '', id_usuario_modificador: null};
+  states: EstadoExperto = {nombre: '', es_modificable: '', id_usuario_modificador: null, idtbl_estado_experto: null};
   displayedColumns = ['acciones', 'nombre', 'es_modificable'];
   dataSource: MatTableDataSource<any>;
   matTableFilter: matTableFilter;
@@ -85,11 +85,11 @@ export class AdEstadoExpertoComponent implements OnInit {
   }
 
   updateState(e){
-    // e.update = false;
-    // e.id_usuario_modificacion = this.user.getId();
-    // this.mensajeAutomatico.updateMessage(e).then((result) => {
-    //   this.getAllStates();
-    // });
+    e.update = false;
+    e.id_usuario_modificador = this.user.getId();
+    this.estado_experto_service.updateState(e).then((result) => {
+      this.getAllStates();
+    });
   }
 
   inactiveState(e){
@@ -107,11 +107,11 @@ export class AdEstadoExpertoComponent implements OnInit {
         container: 'custom-sweet'
       }
     }).then((result) => {
-      // if (result.value) {
-      //   this.mensajeAutomatico.inactiveMessage(e.idtbl_mensaje_automatico_chat).then((result) => {
-      //     this.getAllStates();
-      //   });
-      // }
+      if (result.value) {
+        this.estado_experto_service.deleteState(this.user.getId(), e.idtbl_estado_experto).then((result) => {
+          this.getAllStates();
+        });
+      }
     });
   }
 
