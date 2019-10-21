@@ -20,8 +20,6 @@ export class EstadoExpertoService {
     getAllStates(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.get('estado-experto/obtener-estados', {}).subscribe(response => {
-                console.log(response);
-                
                 if (response.success) {
                     resolve(response.states);
                 } else {
@@ -31,11 +29,11 @@ export class EstadoExpertoService {
         });
     }
 
-    createMessage(message: MensajeAutomatico): Promise<any> {
+    createState(state): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.ajax.post('mensaje-automatico/guardar-mensaje', {message: message}).subscribe(response => {
+            this.ajax.post('estado-experto/crear-estado', {state: state}).subscribe(response => {
                 if (response.success) {
-                    resolve(response.message);
+                    resolve(response.state);
                 } else {
                     reject(response.error);
                 }

@@ -12,6 +12,7 @@ import { SosOperadorComponent } from '../../../components/sos-operador/sos-opera
 import { SonidosService } from '../../../providers/sonidos.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { EstadoExpertoService } from '../../../providers/estado-experto.service';
+import { LookFeelService } from '../../../providers/look-feel.service';
 
 @Component({
   selector: 'app-header',
@@ -32,7 +33,8 @@ export class AppHeaderComponent {
   modo_nocturno;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
-    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument, private estadoExpertoService: EstadoExpertoService) {
+    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument, 
+    private estadoExpertoService: EstadoExpertoService, private look_service: LookFeelService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {
@@ -163,9 +165,21 @@ export class AppHeaderComponent {
     if (event.target.checked) {
       this._document.body.classList.add('dark-theme');
       this.modo_nocturno = 1;
+      this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
+          this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+        }
+      });
     } else {
       this._document.body.classList.remove('dark-theme');
       this.modo_nocturno = 0;
+      this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
+          this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+        }
+      });
     }
     this.userService.actualizarModoNocturno(this.modo_nocturno).then(result => {
     });

@@ -16,7 +16,7 @@ export class AdEstadoExpertoComponent implements OnInit {
 
   user: User;
   create_state = false;
-  states: EstadoExperto = {nombre: '', es_modificable: ''};
+  states: EstadoExperto = {nombre: '', es_modificable: '', id_usuario_modificador: null};
   displayedColumns = ['acciones', 'nombre', 'es_modificable'];
   dataSource: MatTableDataSource<any>;
   matTableFilter: matTableFilter;
@@ -76,11 +76,11 @@ export class AdEstadoExpertoComponent implements OnInit {
         }
       });
     } else {
-      // this.message.id_usuario_modificacion = this.user.getId();
-      // this.mensajeAutomatico.createMessage(this.message).then(id => {
-      //   this.init();
-      //   this.create_state = false;
-      // })
+      this.states.id_usuario_modificador = this.user.getId();
+      this.estado_experto_service.createState(this.states).then(id => {
+        this.init();
+        this.create_state = false;
+      });
     } 
   }
 

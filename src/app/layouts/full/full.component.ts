@@ -16,6 +16,7 @@ import { MatSidenav } from '@angular/material';
 import { UserService } from '../../providers/user.service';
 import { NotificacionService } from '../../providers/notificacion.service';
 import { LookFeelService } from '../../providers/look-feel.service';
+import { User } from '../../../schemas/user.schema';
 
 /** @title Responsive sidenav */
 @Component({
@@ -34,7 +35,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   danger: boolean;
   showHide: boolean;
   sidebarOpened;
-  usuario;
+  usuario: User;
   id_usuario;
   notificaciones_usuario = [];
   notificaicones_sin_leer;
@@ -101,11 +102,20 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
 
   init() {
-    this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
-      if(result && result[0] && result[0].valor){
-        this.color_toolbar = result[0].valor;  
-      }
-    });
+    if (this.usuario.getModoNocturno() == 0 || this.usuario.getModoNocturno() == null) {
+      this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this.color_toolbar = result[0].valor;  
+        }
+      });
+    } else {
+      this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this.color_toolbar = result[0].valor;  
+        }
+      });
+    }
+    
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
       this.notificaciones_usuario = r;
     });

@@ -125,4 +125,5 @@ export interface MensajeAutomatico {
 export interface EstadoExperto {
     nombre: string;
     es_modificable: string;
+    id_usuario_modificador: number;
 }
