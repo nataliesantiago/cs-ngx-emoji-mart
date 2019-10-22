@@ -120,6 +120,8 @@ export interface MensajeAutomatico {
     fecha_creacion: Date;
     fecha_ultima_modificacion: Date;
     id_usuario_modificacion: number;
+    timeout_tmp: number;
+    texto_tmp: string;
 }
 
 export interface EstadoExperto {

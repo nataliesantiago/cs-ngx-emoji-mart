@@ -17,6 +17,10 @@ export class MensajeAutomaticoService {
         });
     }
 
+    /**
+     * crea un nuevo mensaje
+     * @param message 
+     */
     createMessage(message: MensajeAutomatico): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('mensaje-automatico/guardar-mensaje', {message: message}).subscribe(response => {
@@ -29,6 +33,9 @@ export class MensajeAutomaticoService {
         });
     }
 
+    /**
+     * obtiene todos los mensajes automaticos por tipo
+     */
     getAllMessagesWithType(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.get('mensaje-automatico/obtener-mensajes-tipo', {}).subscribe(response => {
@@ -41,6 +48,9 @@ export class MensajeAutomaticoService {
         });
     }
 
+    /**
+     * obtiene los tipos de mensajes automaticos
+     */
     getMessageType(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.get('mensaje-automatico/obtener-tipo', { }).subscribe(response => {
@@ -53,6 +63,10 @@ export class MensajeAutomaticoService {
         });
     }
 
+    /**
+     * actualiza un mensaje automatico
+     * @param message 
+     */
     updateMessage(message: MensajeAutomatico): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('mensaje-automatico/editar-mensaje', {message: message}).subscribe(response => {
@@ -65,6 +79,10 @@ export class MensajeAutomaticoService {
         });
     }
 
+    /**
+     * inactiva un mensaje automatico
+     * @param message_id 
+     */
     inactiveMessage(message_id): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('mensaje-automatico/eliminar-mensaje', { user_id: this.user.getId(), message_id: message_id }).subscribe(d => {
@@ -77,9 +95,29 @@ export class MensajeAutomaticoService {
         });
     }
 
+    /**
+     * activa un mensaje y desactiva los demas del mismo tipo activos
+     * @param message 
+     */
     activeMessage(message): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('mensaje-automatico/activar-mensaje', { message: message }).subscribe(d => {
+                if (d.success) {
+                    resolve(d.id);
+                } else {
+                    reject();
+                }
+            })
+        });
+    }
+
+    /**
+     * activa los mensajes de tipo timeout
+     * @param message 
+     */
+    activeMessageTimeout(message): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('mensaje-automatico/activar-mensaje-timeout', { message: message }).subscribe(d => {
                 if (d.success) {
                     resolve(d.id);
                 } else {
