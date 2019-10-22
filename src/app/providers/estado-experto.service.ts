@@ -65,4 +65,16 @@ export class EstadoExpertoService {
         });
     }
 
+    createLogState(state): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('estado-experto/crear-log-estado', {state: state}).subscribe(response => {
+                if (response.success) {
+                    resolve(response.state);
+                } else {
+                    reject(response.error);
+                }
+            })
+        });
+    }
+
 }

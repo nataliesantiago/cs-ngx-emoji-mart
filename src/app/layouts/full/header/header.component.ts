@@ -22,7 +22,7 @@ import { LookFeelService } from '../../../providers/look-feel.service';
 export class AppHeaderComponent {
 
   profileImage = '../../../../assets/images/users/profle.svg';
-  estados_operador = [{ id: 1, nombre: 'Activo' }, { id: 2, nombre: 'Inactivo' }];
+  estados_operador;
   user: User;
   intervalo: any;
   puede_cerrar_sos = false;
@@ -68,7 +68,7 @@ export class AppHeaderComponent {
       } else {
         this.is_dark_mode = this.user.getModoNocturno();
       }
-
+      
     }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
@@ -82,10 +82,15 @@ export class AppHeaderComponent {
         });
       }
     });
+    
+    this.getAllStates();
   }
 
   cambiarEstadoExperto(e) {
-    //debugger;
+    //debugger;    
+    let actual = this.user.estado_actual;
+    
+    this.user.estado_actual = e.value;
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
       let activo = (e.value == 1) ? true : false;
@@ -96,7 +101,6 @@ export class AppHeaderComponent {
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_experto == 1) ? true : false;
         this.userService.setActivoExperto(activo);
-
       }, 10000);
 
       if (this.user.getIdRol() == 2) {
@@ -104,6 +108,10 @@ export class AppHeaderComponent {
       }
     }
     this.userService.setActivoExpertoGlobal(e.value);
+    if(actual != null) {
+      this.createLogState(actual, e.value);
+    }
+    
   }
 
   listenEmergenciaExperto() {
@@ -189,5 +197,17 @@ export class AppHeaderComponent {
     });
   }
 
+  getAllStates() {
+    this.estadoExpertoService.getAllStates().then(result => {
+      this.estados_operador = result;
+    });
+  }
+
+  createLogState(id_estado_actual, id_estado_nuevo) {
+    let state = {id_usuario_experto: this.user.getId(), id_estado_actual: id_estado_actual, id_estado_nuevo: id_estado_nuevo}
+    this.estadoExpertoService.createLogState(state).then(result => {
+      
+    });
+  }
 
 }
