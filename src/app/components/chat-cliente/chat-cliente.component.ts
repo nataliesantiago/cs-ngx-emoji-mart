@@ -699,9 +699,6 @@ export class ChatClienteComponent implements OnInit {
   }
 
   cerrarChat(c: Conversacion) {
-    this.userService.getInfoUsuario(c.id_experto_actual).then(result => {
-      c.asesor_actual.correo = result.correo;
-    });
     let estado;
     if (c.id_estado_conversacion == 1) {
       if (c.transferido) {
@@ -713,8 +710,7 @@ export class ChatClienteComponent implements OnInit {
       estado = 3;
     }
     this.chatService.cerrarConversacion(c, estado).then(() => {
-      c.mostrar_encuesta = true;
-      this.enviarCorreo(c);  
+      c.mostrar_encuesta = true; 
     });
   }
 
