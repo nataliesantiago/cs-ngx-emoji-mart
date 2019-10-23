@@ -36,7 +36,8 @@ export class AppComponent {
         this.init();
       }
     });
-
+    /// borrar este bloque despues
+    //this.searchService.callTest();
   }
 
   init() {

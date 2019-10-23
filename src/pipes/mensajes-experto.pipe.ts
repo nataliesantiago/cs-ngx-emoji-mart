@@ -19,6 +19,7 @@ export class MensajesExpertoPipe implements PipeTransform {
   transform(mensajes: Array<Mensaje>, args?: Array<any>): any {
 
     this.expertos = args[1];
+    if(mensajes)
     this.passByMensajes(args[0], mensajes, 0);
     //console.log(mensajes);
     return mensajes;

@@ -38,27 +38,14 @@ export class AppHeaderComponent {
         console.log(u)
         this.user = u;
         this.profileImage = u.url_foto;
-        if (this.user.getIdRol() == 2) {
-          this.user.estado_experto = (u.experto_activo) ? 1 : 2;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto });
-        }
-        if (this.user.getIdRol() == 3) {
-          this.user.estado_experto = 1;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto });
-        }
+        this.init();
       }
     });
 
 
     if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
-      if (this.user.getIdRol() == 2) {
-        this.cambiarEstadoExperto({ value: 1 });
-      }
-      if (this.user.getIdRol() == 3) {
-        this.user.estado_experto = 1;
-        this.cambiarEstadoExperto({ value: this.user.estado_experto });
-      }
+      this.init();
 
       if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
         this.is_dark_mode = 0;
@@ -77,6 +64,19 @@ export class AppHeaderComponent {
 
           }
         });
+      }
+    });
+  }
+
+  init() {
+    this.chatService.getEstadosExperto().then(estados => {
+      this.estados_operador = estados;
+      if (this.user.getIdRol() == 2) {
+        this.cambiarEstadoExperto({ value: 1 });
+      }
+      if (this.user.getIdRol() == 3) {
+        this.user.estado_experto = 1;
+        this.cambiarEstadoExperto({ value: this.user.estado_experto });
       }
     });
   }
@@ -112,8 +112,8 @@ export class AppHeaderComponent {
           this.emergencia_actual = true;
           this.sonidosService.sonar(3);
           this.mostrarSnack(d);
-          this.user.estado_experto = 2;
-          this.cambiarEstadoExperto({ value: 2 })
+          this.user.estado_experto = 7;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto })
         } else {
           this.emergencia_actual = false;
         }

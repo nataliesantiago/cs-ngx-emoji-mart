@@ -38,7 +38,7 @@ export class ChatClienteComponent implements OnInit {
   stream: any;
   cantidad_mensajes_sin_leer = 0;
   limite_texto_chat;
-  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null};
+  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null };
 
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
@@ -199,14 +199,37 @@ export class ChatClienteComponent implements OnInit {
     c.mensajes = [];
     let primera_vez = true;
 
-    c.messages.subscribe(d => {
-      this.procesarMensajes(d, c, primera_vez, 0);
+    c.messages.subscribe(async d => {
+      //console.log(d.length, c.mensajes, primera_vez);
+      if (!primera_vez && c.mensajes && d.length > c.mensajes.length) {
+        c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
+      }
+
+      c.mensajes = await this.procesarMensajes(d, c, primera_vez, 0, []);
 
       primera_vez = false;
+      if (this.intervalo) {
+        window.clearInterval(this.intervalo);
+      }
+
+      this.intervalo = setInterval(() => {
+        if (document.title == this.nombre_pestana && !primera_vez) {
+          this.cantidad_mensajes_sin_leer = 0;
+          this.chats.forEach(chat => {
+            // console.log(this.chats);
+            this.cantidad_mensajes_sin_leer += chat.cantidad_mensajes_nuevos;
+          });
+          if (this.cantidad_mensajes_sin_leer > 0) {
+            document.title = 'Mensajes(' + this.cantidad_mensajes_sin_leer + ') nuevos en el chat';
+          }
+        } else {
+          document.title = this.nombre_pestana;
+        }
+      }, 1400);
     });
   }
 
-  async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number) {
+  async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number, tmp) {
     let m = d.shift();
     if (m) {
       let experto = this.expertos.find((e: User) => {
@@ -220,32 +243,20 @@ export class ChatClienteComponent implements OnInit {
         m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
         this.asignarAudio(m);
       }
-      if (!c.mensajes[i]) {
-        c.mensajes[i] = m;
-        if (!primera_vez && !c.focuseado) {
-          this.soundService.sonar(1);
-          c.cantidad_mensajes_nuevos++;
-          c.mensajes_nuevos = true;
-          if (this.intervalo) {
-            window.clearInterval(this.intervalo);
-          }
-          this.intervalo = setInterval(() => {
-            if (document.title == this.nombre_pestana) {
-              this.cantidad_mensajes_sin_leer = 0;
-              this.chats.forEach(chat => {
-                this.cantidad_mensajes_sin_leer += chat.cantidad_mensajes_nuevos;
-              });
-              document.title = 'Mensajes(' + this.cantidad_mensajes_sin_leer + ') nuevo en el chat';
-            } else {
-              document.title = this.nombre_pestana;
-            }
-          }, 1400);
-        }
-      } else {
-        c.mensajes[i].estado = m.estado;
+
+      //  c.mensajes[i] = m;
+      tmp.push(m);
+      if (!primera_vez && !c.focuseado) {
+        this.soundService.sonar(1);
+        //c.cantidad_mensajes_nuevos++;
+        c.mensajes_nuevos = true;
+
       }
+
       i++;
-      this.procesarMensajes(d, c, primera_vez, i);
+      return await this.procesarMensajes(d, c, primera_vez, i, tmp);
+    } else {
+      return tmp;
     }
   }
 
@@ -714,7 +725,7 @@ export class ChatClienteComponent implements OnInit {
     }
     this.chatService.cerrarConversacion(c, estado).then(() => {
       c.mostrar_encuesta = true;
-      this.enviarCorreo(c);  
+      this.enviarCorreo(c);
     });
   }
 
@@ -734,7 +745,7 @@ export class ChatClienteComponent implements OnInit {
     this.info_correo.nombre_experto = c.asesor_actual.nombre;
     this.info_correo.url_foto = this.user.getUrlFoto();
     this.info_correo.mensajes = c.mensajes;
-    
+
     this.userService.sendEmailChat(this.info_correo).then((response) => {
     });
   }

@@ -12,7 +12,11 @@ export class SearchService {
   constructor(private ajax: AjaxService, private userService: UserService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
-      this.user = u;
+      if (u) {
+        this.user = u
+        // this.callTest();
+        // this.callTestEsquema();
+      }
     });
   }
 
@@ -43,11 +47,25 @@ export class SearchService {
       query = 'pregunta con segmentos';
     }
     return new Promise((resolve, reject) => {
-      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query }).subscribe(d => {
+      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(d => {
         if (d.success) {
-          resolve();
+          resolve(d.resultados);
         }
       })
     });
   }
+
+  callTest() {
+    this.ajax.get('connector_drive/drive/listFiles', { token: this.user.token_acceso }).subscribe(d => {
+
+    });
+  }
+  callTestEsquema() {
+    this.ajax.post('preguntas/cloud-search/crearEsquemaDrive', {}).subscribe(d => {
+
+    });
+  }
+
+
+
 }

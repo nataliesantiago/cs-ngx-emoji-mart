@@ -10,7 +10,7 @@
   <mat-icon (click)="startButton($event)" class="microfono">mic</mat-icon>
   <div class="ng-autocomplete">
     <ng-autocomplete id="ng-autocomplete-search" placeHolder="{{search_placeholder}}" [data]="textopredictivo"
-      [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+      [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' (keydown.enter)="buscar(1)"
       [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'" (inputCleared)="clearOptions()"
       #autocomplete>
     </ng-autocomplete>

@@ -10,8 +10,11 @@ import { Conversacion } from '../../schemas/conversacion.schema';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { Mensaje } from '../../schemas/mensaje.schema';
 import { TransferenciaChatComponent } from '../components/transferencia-chat/transferencia-chat.component';
-import { CategoriaExperticia } from '../../schemas/interfaces';
-
+import { CategoriaExperticia, Configuracion } from '../../schemas/interfaces';
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+import { Experto } from '../../schemas/xhr.schema';
+const moment = _rollupMoment || _moment;
 @Component({
   selector: 'app-consola-supervisor',
   templateUrl: './consola-supervisor.component.html',
@@ -27,6 +30,9 @@ export class ConsolaSupervisorComponent implements OnInit {
   usuarios: Array<User> = [];
   filtro_activos: string;
   filtro_cola: string;
+  expertos: Array<Experto>;
+  expertos_filtro: Experto[];
+  mensajes_nuevos = 0;
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -42,6 +48,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   init() {
+
     this.fireStore.collection('conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes);
@@ -89,6 +96,19 @@ export class ConsolaSupervisorComponent implements OnInit {
         if (c.idtbl_conversacion) {
           await this.chatService.getFilasConversacion(c);
         }
+        this.utilService.getConfiguraciones().then(configs => {
+          let tiempo_cola = configs.find((c: Configuracion) => {
+            return c.idtbl_configuracion == 6;
+          });
+          c.interval_tiempo_cola = setInterval(() => {
+            let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
+            if (duration > (tiempo_cola.valor * 60)) {
+              c.tiempo_cola = true;
+              window.clearInterval(c.interval_tiempo_cola);
+              delete c.interval_tiempo_cola;
+            }
+          }, 1000);
+        });
       }
       this.chats_en_fila.forEach((item, index, object) => {
         let t = chats.find(c => {
@@ -102,9 +122,14 @@ export class ConsolaSupervisorComponent implements OnInit {
         }
       });
       this.chats_en_fila = chats;
+
       this.applyFilterCola();
     });
   }
+
+
+
+
   ngOnInit() {
   }
 

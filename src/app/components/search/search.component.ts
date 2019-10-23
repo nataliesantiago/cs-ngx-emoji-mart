@@ -81,7 +81,7 @@ export class AppSearchComponent implements OnInit {
 
   getPlaceholder() {
     this.look_service.getSpecificSetting('placeholder_buscador').then((result) => {
-      this.search_placeholder = result[0].valor;  
+      this.search_placeholder = result[0].valor;
     });
   }
 
@@ -271,7 +271,7 @@ export class AppSearchComponent implements OnInit {
     * metodo de change del autocomplete
   */
   onChangeSearch(val: string) {
-    
+    return;/*
     this.searchText = val;
     if (!val || val == '') {
       delete this.textopredictivo;
@@ -279,7 +279,7 @@ export class AppSearchComponent implements OnInit {
       this.searchService.autocompleteText(val).subscribe((data) =>
         this.textopredictivo = data.data
       );
-    }
+    }*/
 
   }
   ngOnInit(): void {
@@ -292,12 +292,12 @@ export class AppSearchComponent implements OnInit {
   }
 
   buscar(metodo) {
-    
+
     if (this.searchText === null && this.searchText === undefined) {
       this.searchText = '';
     }
-    this.responseSearch.setResultados(this.textopredictivo);
-    
+    //this.responseSearch.setResultados(this.textopredictivo);
+
     var date = new Date();
     var fecha = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
     let obj = {
@@ -307,7 +307,7 @@ export class AppSearchComponent implements OnInit {
       'fechaBusqueda': fecha,
       'url': this.url
     };
-    this.router.navigate(['/search/' + this.searchText]);
+    this.router.navigate(['/search/' + this.def.value]);
     //this.homeService.guardarBusqueda(obj).subscribe(data => );
     //this.nzone.run(() => this.stopRecognizer());
     //this.stopRecognizer();

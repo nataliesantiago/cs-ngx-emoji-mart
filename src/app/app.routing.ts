@@ -49,8 +49,6 @@ export const AppRoutes: Routes = [
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'historial-usuario', component: HistorialUsuarioComponent, canActivate: [AuthGuard] },
-  { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
-  { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'ad-expertos', component: AdExpertosComponent, canActivate: [AuthGuard] },
   { path: 'administrador-notificaciones', component: AdministradorNotificacionesComponent, canActivate: [AuthGuard] },
