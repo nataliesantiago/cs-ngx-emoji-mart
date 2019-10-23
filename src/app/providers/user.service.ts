@@ -37,6 +37,7 @@ export class UserService {
     dataBase;
     ref;
     este;
+    mensajes_nlp = []; 
 
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, private soundService: SonidosService) {
 
@@ -279,7 +280,7 @@ export class UserService {
         this.afMessaging.requestPermission
             .pipe(mergeMapTo(this.afMessaging.tokenChanges))
             .subscribe(
-                (token) => {
+                (token) => {                    
                     this.listen();
                     this.ajax.post('user/setFirebaseToken', { token: token, user: this.user }).subscribe(d => {
                         if (d.success) {
@@ -288,16 +289,31 @@ export class UserService {
                     });
 
                 },
-                (error) => { console.error(error); },
+                (error) => { console.error("error", error); },
             );
     }
 
     listen() {
+        console.log(this.user.getIdRol());
         this.afMessaging.messages
             .subscribe((message) => {
                 this.actualizarNotificaciones();
+                if(this.user.getIdRol() == 3){
+                    console.log("Entra");
+                    this.actualizarMensajesNLP();
+                }
                 this.soundService.sonar(4);
             });
+    }
+
+
+    actualizarMensajesNLP(): Promise<any>{
+        return new Promise((resolve, reject) =>{
+            this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {
+                this.mensajes_nlp = d.conversaciones;  
+                resolve(d.conversaciones);
+            });
+        });
     }
 
     obtenerNotificacionesUsuario(id_usuario: number): Promise<any> {

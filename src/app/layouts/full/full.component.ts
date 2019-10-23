@@ -40,6 +40,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   notificaciones_usuario = [];
   notificaicones_sin_leer;
   notificaciones_usuario_nuevas = [];
+  conversaciones_nlp = [];
 
   public config: PerfectScrollbarConfigInterface = {};
   private _mobileQueryListener: () => void;
@@ -117,12 +118,18 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     }
     
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
-      this.notificaciones_usuario = r;
+      this.notificaciones_usuario = r;      
     });
+
+    this.user.actualizarMensajesNLP().then( r => {
+      this.conversaciones_nlp = r;
+      console.log(r);
+    })
     this.user.observableNotificaciones.subscribe(() => {
       
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
       this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
+      this.conversaciones_nlp = this.user.mensajes_nlp;
       
     });
   }
@@ -363,4 +370,5 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   cerrarMenu() {
     this.sidenav.close();
   }
+
 }
