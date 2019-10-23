@@ -115,6 +115,7 @@ import { OrdenarExpertosPipe } from '../pipes/ordenar-expertos.pipe';
 import { TransitionGroupItemDirective, TransitionGroupComponent } from '../directives/sort.animation.directives';
 import { ConsolaSupervisorComponent } from './consola-supervisor/consola-supervisor.component';
 import { AdMensajesAutomaticosComponent } from './ad-mensajes-automaticos/ad-mensajes-automaticos.component';
+import { AdEstadoExpertoComponent } from './ad-estado-experto/ad-estado-experto.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -196,7 +197,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TransitionGroupItemDirective,
     TransitionGroupComponent,
     ConsolaSupervisorComponent,
-    AdMensajesAutomaticosComponent
+    AdMensajesAutomaticosComponent,
+    AdEstadoExpertoComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

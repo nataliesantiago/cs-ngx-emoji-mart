@@ -11,6 +11,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { SosOperadorComponent } from '../../../components/sos-operador/sos-operador.component';
 import { SonidosService } from '../../../providers/sonidos.service';
 import { DOCUMENT } from '@angular/platform-browser';
+import { EstadoExpertoService } from '../../../providers/estado-experto.service';
+import { LookFeelService } from '../../../providers/look-feel.service';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +22,7 @@ import { DOCUMENT } from '@angular/platform-browser';
 export class AppHeaderComponent {
 
   profileImage = '../../../../assets/images/users/profle.svg';
-  estados_operador = [{ id: 1, nombre: 'Activo' }, { id: 2, nombre: 'Inactivo' }];
+  estados_operador;
   user: User;
   intervalo: any;
   puede_cerrar_sos = false;
@@ -31,7 +33,8 @@ export class AppHeaderComponent {
   modo_nocturno;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
-    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument) {
+    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument, 
+    private estadoExpertoService: EstadoExpertoService, private look_service: LookFeelService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {
@@ -52,7 +55,7 @@ export class AppHeaderComponent {
       } else {
         this.is_dark_mode = this.user.getModoNocturno();
       }
-
+      
     }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
@@ -66,6 +69,8 @@ export class AppHeaderComponent {
         });
       }
     });
+    
+    this.getAllStates();
   }
 
   init() {
@@ -82,7 +87,10 @@ export class AppHeaderComponent {
   }
 
   cambiarEstadoExperto(e) {
-    //debugger;
+    //debugger;    
+    let actual = this.user.estado_actual;
+    
+    this.user.estado_actual = e.value;
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
       let activo = (e.value == 1) ? true : false;
@@ -93,7 +101,6 @@ export class AppHeaderComponent {
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_experto == 1) ? true : false;
         this.userService.setActivoExperto(activo);
-
       }, 10000);
 
       if (this.user.getIdRol() == 2) {
@@ -101,6 +108,10 @@ export class AppHeaderComponent {
       }
     }
     this.userService.setActivoExpertoGlobal(e.value);
+    if(actual != null) {
+      this.createLogState(actual, e.value);
+    }
+    
   }
 
   listenEmergenciaExperto() {
@@ -162,13 +173,41 @@ export class AppHeaderComponent {
     if (event.target.checked) {
       this._document.body.classList.add('dark-theme');
       this.modo_nocturno = 1;
+      this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
+          if(this._document.getElementById('color_toolbar')) {
+            this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          }
+        }
+      });
     } else {
       this._document.body.classList.remove('dark-theme');
       this.modo_nocturno = 0;
+      this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
+        if(result && result[0] && result[0].valor){
+          this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
+          if(this._document.getElementById('color_toolbar')) {
+            this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
+          }
+        }
+      });
     }
     this.userService.actualizarModoNocturno(this.modo_nocturno).then(result => {
     });
   }
 
+  getAllStates() {
+    this.estadoExpertoService.getAllStates().then(result => {
+      this.estados_operador = result;
+    });
+  }
+
+  createLogState(id_estado_actual, id_estado_nuevo) {
+    let state = {id_usuario_experto: this.user.getId(), id_estado_actual: id_estado_actual, id_estado_nuevo: id_estado_nuevo}
+    this.estadoExpertoService.createLogState(state).then(result => {
+      
+    });
+  }
 
 }

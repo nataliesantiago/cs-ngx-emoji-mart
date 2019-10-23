@@ -1,6 +1,6 @@
 <mat-card *ngIf="create_message">
   <mat-card-content>
-    <mat-card-title>Crear Shortcut</mat-card-title>
+    <mat-card-title>Crear Mensaje Automatico</mat-card-title>
     <div fxLayaout="100">
       <form class="m-t-20" fxFlex="70">
         <mat-form-field>
@@ -17,7 +17,7 @@
 
         <mat-form-field *ngIf="is_timeout">
           <mat-label>Tiempo en minutos</mat-label>
-          <input matInput [(ngModel)]="message.timeout" name="timeout_mensaje" />
+          <input matInput [(ngModel)]="message.timeout" name="timeout_mensaje" type="number" min="0"/>
         </mat-form-field>
 
         <div fxLayout="row wrap">
@@ -66,7 +66,7 @@
             <div *ngIf="!row.update">
               <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.update=true"></i>
               <i class="ti-trash danger-color m-r-10 mouse-over" (click)="inactiveMessage(row)"></i>
-              <i class="ti-check success-color m-r-10 mouse-over" (click)="activeMessage(row)" *ngIf="row.id_tipo_mensaje!=3"></i>
+              <i class="ti-check success-color m-r-10 mouse-over" (click)="activeMessage(row)"></i>
             </div>
             <div *ngIf="row.update">
               <i class="ti-save success-color m-r-10 mouse-over" (click)="updateMessage(row)"></i>
@@ -81,17 +81,17 @@
           <mat-cell *matCellDef="let row">
             <span *ngIf="!row.update">{{row.texto}}</span>
             <mat-form-field *ngIf="row.update">
-                <input matInput type="text" name="texto" [(ngModel)]="row.texto" autocomplete="off">
+                <input matInput type="text" name="texto" [(ngModel)]="row.texto_tmp" autocomplete="off">
             </mat-form-field>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="tiempo">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo de espera </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo de espera (minutos)</mat-header-cell>
           <mat-cell *matCellDef="let row">
             <span *ngIf="!row.is_edit_timeout">{{row.timeout}}</span>
             <mat-form-field *ngIf="row.is_edit_timeout">
-                <input matInput type="text" name="texto" [(ngModel)]="row.timeout" autocomplete="off">
+                <input matInput type="text" name="texto" [(ngModel)]="row.timeout_tmp" autocomplete="off">
             </mat-form-field>
           </mat-cell>
         </ng-container>

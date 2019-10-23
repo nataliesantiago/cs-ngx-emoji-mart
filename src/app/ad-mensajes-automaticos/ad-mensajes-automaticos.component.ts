@@ -18,8 +18,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
 
   user: User;
   create_message = false;
-  message: MensajeAutomatico = {texto: '', timeout: null, id_tipo_mensaje: null, fecha_creacion: null, 
-  fecha_ultima_modificacion: null, id_usuario_modificacion: null};
+  message: MensajeAutomatico;
   message_types;
   is_timeout = false;
   displayedColumns = ['acciones', 'mensaje', 'tiempo', 'tipo', 'activo'];
@@ -55,14 +54,24 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     this.getAllMessages();
   }
 
+  /**
+   * obtiene todos tipos de mensajes automaticos
+   */
   getMessageType() {
     this.mensajeAutomatico.getMessageType().then((result) => {
       this.message_types = result;
     });
   }
 
+  /**
+   * obtiene todos los mensajes automaticos
+   */
   getAllMessages() {
     this.mensajeAutomatico.getAllMessagesWithType().then((result) => {
+      result.forEach((message) => {
+        message.texto_tmp = message.texto;
+        message.timeout = message.timeout;
+      });
       this.dataSource = new MatTableDataSource(result);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -71,6 +80,10 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     });
   }
 
+  /**
+   * verifica el tipo de mensaje que se va a crear para habilitar el campo de ingresar el tiempo
+   * @param event 
+   */
   onChangeType(event) {
     this.message.id_tipo_mensaje = event.value;
     if(event.value == 3) {
@@ -80,6 +93,11 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     }
   }
 
+  /**
+   * al editar un campo verifica el tipo de mensaje que se va a crear para habilitar el campo de ingresar el tiempo
+   * @param event 
+   * @param row 
+   */
   onChangeTypeTable(event, row) {
     row.id_tipo_mensaje = event.value;
     if(event.value == 3) {
@@ -89,8 +107,12 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     }
   }
 
+  /**
+   * crea el mensaje automatico
+   */
   createMessage() {
-    if(this.message.texto == '' && this.message.id_tipo_mensaje == null) {
+    
+    if(this.message.texto == '' || this.message.id_tipo_mensaje == null) {
       swal.fire({
         title: 'Complete todos los campos',
         text: '',
@@ -103,28 +125,37 @@ export class AdMensajesAutomaticosComponent implements OnInit {
         }
       });
     } else {
-      this.message.id_usuario_modificacion = this.user.getId();
-      this.mensajeAutomatico.createMessage(this.message).then(id => {
-        this.init();
-        this.create_message = false;
-      })
-    }
-    // this.validarVariablesPermitidas(this.message.texto);
-    // if(!this.is_correct) {
-    //   this.modalErrorVariables();
-    // } else {
-      
-    // }
+      this.validarVariablesPermitidas(this.message.texto);
+      if(!this.is_correct) {
+        this.modalErrorVariables();
+      } else {
+        this.message.id_usuario_modificacion = this.user.getId();
+        this.mensajeAutomatico.createMessage(this.message).then(id => {
+          this.init();
+          this.create_message = false;
+        })
+      }
+    } 
   }
 
+  /**
+   * actualiza un mensaje automatico especifico
+   * @param e 
+   */
   updateMessage(e){
     e.update = false;
+    e.texto = e.texto_tmp;
+    e.timeout = e.timeout_tmp;
     e.id_usuario_modificacion = this.user.getId();
     this.mensajeAutomatico.updateMessage(e).then((result) => {
       this.getAllMessages();
     });
   }
 
+  /**
+   * desactiva un mensaje automatico
+   * @param e 
+   */
   inactiveMessage(e){
     swal.fire({
       title: 'Cuidado',
@@ -148,7 +179,24 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     });
   }
 
+  /**
+   * verifica el tipo de mensaje a activar
+   * @param e 
+   */
   activeMessage(e){
+    if(e.id_tipo_mensaje != 3) {
+      this.activeOtherType(e);
+    } else {
+      this.activeMessageTimeout(e);
+    }
+    
+  }
+
+  /**
+   * activa un mensaje y desactiva los mensajes del mismo tipo que esten activos
+   * @param e 
+   */
+  activeOtherType(e) {
     swal.fire({
       title: 'Confirme para activar el mensaje',
       text: "Al momento de activaralo, se desactivará el mensaje de este tipo que este activo",
@@ -172,17 +220,53 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     })
   }
 
+  /**
+   * activa los mensajes de tipo timeout
+   * @param e 
+   */
+  activeMessageTimeout(e) {
+    swal.fire({
+      title: '',
+      text: "Confirme para activar el mensaje",
+      type: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Activar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
+    }).then((result) => {
+      if (result.value) {
+        let message = {user_id: this.user.getId(), message_id: e.idtbl_mensaje_automatico_chat}
+        this.mensajeAutomatico.activeMessageTimeout(message).then((result) => {
+          this.getAllMessages();
+        });
+      }
+    })
+  }
+
+  /**
+   * valida que las variables ingresadas correspondan con las permitidas
+   */
   validarVariablesPermitidas(texto) {
     let variables_permitidas = ['{nombre}', '{correo}', '{categoria}', '{fecha_actual}', '{busqueda}', '{id_conversacion}'];
     let variables = texto.match(/{.*?}/g);
     this.is_correct = true;
-    variables.forEach(variable => {
-      if(!(variables_permitidas.indexOf(variable) > -1)) {
-        this.is_correct = false;
-      } 
-    });
+    if(variables != null) {
+      variables.forEach(variable => {
+        if(!(variables_permitidas.indexOf(variable) > -1)) {
+          this.is_correct = false;
+        } 
+      });
+    }
   }
 
+  /**
+   * muestar la modal de error en las variables
+   */
   modalErrorVariables() {
     swal.fire({
       title: 'Advertencia',

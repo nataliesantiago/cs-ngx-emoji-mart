@@ -855,7 +855,6 @@ export class ChatExpertoComponent {
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
           }
-          this.enviarCorreo(c);
         });
       }
     });
