@@ -93,6 +93,38 @@
   }
 }
 
+@keyframes alarma-nlp {
+  0% {
+
+    background-color: rgba(255, 0, 0, 0.9);
+    color: white;
+  }
+
+  25% {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: black;
+
+  }
+
+  50% {
+    background-color: rgba(255, 0, 0, 0.9);
+    color: white;
+
+  }
+
+  75% {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: black;
+
+  }
+
+  100% {
+    background-color: rgba(255, 0, 0, 0.9);
+    color: white;
+
+  }
+}
+
 
 
 
@@ -2740,4 +2772,12 @@ input:-webkit-autofill:active {
     }
   }
 
+.contenedor-sidenav-chat-experto {
+  margin-left: 240px !important;
+}
+
+@media only screen and (max-width: 960px) {
+  .contenedor-sidenav-chat-experto {
+    margin-left: 00px !important;
+  }
 }

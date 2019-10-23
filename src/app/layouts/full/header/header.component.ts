@@ -22,7 +22,7 @@ import { LookFeelService } from '../../../providers/look-feel.service';
 export class AppHeaderComponent {
 
   profileImage = '../../../../assets/images/users/profle.svg';
-  estados_operador = [{ id: 1, nombre: 'Activo' }, { id: 2, nombre: 'Inactivo' }];
+  estados_operador;
   user: User;
   intervalo: any;
   puede_cerrar_sos = false;
@@ -41,34 +41,21 @@ export class AppHeaderComponent {
         console.log(u)
         this.user = u;
         this.profileImage = u.url_foto;
-        if (this.user.getIdRol() == 2) {
-          this.user.estado_experto = (u.experto_activo) ? 1 : 2;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto });
-        }
-        if (this.user.getIdRol() == 3) {
-          this.user.estado_experto = 1;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto });
-        }
+        this.init();
       }
     });
 
 
     if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
-      if (this.user.getIdRol() == 2) {
-        this.cambiarEstadoExperto({ value: 1 });
-      }
-      if (this.user.getIdRol() == 3) {
-        this.user.estado_experto = 1;
-        this.cambiarEstadoExperto({ value: this.user.estado_experto });
-      }
+      this.init();
 
       if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
         this.is_dark_mode = 0;
       } else {
         this.is_dark_mode = this.user.getModoNocturno();
       }
-
+      
     }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
@@ -82,10 +69,28 @@ export class AppHeaderComponent {
         });
       }
     });
+    
+    this.getAllStates();
+  }
+
+  init() {
+    this.chatService.getEstadosExperto().then(estados => {
+      this.estados_operador = estados;
+      if (this.user.getIdRol() == 2) {
+        this.cambiarEstadoExperto({ value: 1 });
+      }
+      if (this.user.getIdRol() == 3) {
+        this.user.estado_experto = 1;
+        this.cambiarEstadoExperto({ value: this.user.estado_experto });
+      }
+    });
   }
 
   cambiarEstadoExperto(e) {
-    //debugger;
+    //debugger;    
+    let actual = this.user.estado_actual;
+    
+    this.user.estado_actual = e.value;
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
       let activo = (e.value == 1) ? true : false;
@@ -96,7 +101,6 @@ export class AppHeaderComponent {
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_experto == 1) ? true : false;
         this.userService.setActivoExperto(activo);
-
       }, 10000);
 
       if (this.user.getIdRol() == 2) {
@@ -104,6 +108,10 @@ export class AppHeaderComponent {
       }
     }
     this.userService.setActivoExpertoGlobal(e.value);
+    if(actual != null) {
+      this.createLogState(actual, e.value);
+    }
+    
   }
 
   listenEmergenciaExperto() {
@@ -115,8 +123,8 @@ export class AppHeaderComponent {
           this.emergencia_actual = true;
           this.sonidosService.sonar(3);
           this.mostrarSnack(d);
-          this.user.estado_experto = 2;
-          this.cambiarEstadoExperto({ value: 2 })
+          this.user.estado_experto = 7;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto })
         } else {
           this.emergencia_actual = false;
         }
@@ -189,5 +197,17 @@ export class AppHeaderComponent {
     });
   }
 
+  getAllStates() {
+    this.estadoExpertoService.getAllStates().then(result => {
+      this.estados_operador = result;
+    });
+  }
+
+  createLogState(id_estado_actual, id_estado_nuevo) {
+    let state = {id_usuario_experto: this.user.getId(), id_estado_actual: id_estado_actual, id_estado_nuevo: id_estado_nuevo}
+    this.estadoExpertoService.createLogState(state).then(result => {
+      
+    });
+  }
 
 }

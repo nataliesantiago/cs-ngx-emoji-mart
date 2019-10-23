@@ -27,6 +27,7 @@ export class User {
     activo_chat: boolean;
     modo_nocturno: number;
     peso_chat: number;
+    estado_actual: number;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;

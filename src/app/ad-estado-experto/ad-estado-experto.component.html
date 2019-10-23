@@ -33,7 +33,7 @@
   <mat-card-content>
     <div class="botones m-b-20" *ngIf="!create_state">
       <button class="custom__btn custom__btn--primary" (click)="create_state=!create_state">
-        <mat-icon>add</mat-icon> Crear Mensaje Automatico
+        <mat-icon>add</mat-icon> Crear Estado Inactividad
       </button>
     </div>
     <div class="bg-light p-10 p-r-20 p-l-20">
@@ -73,9 +73,13 @@
         <ng-container matColumnDef="es_modificable">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Es modificable </mat-header-cell>
           <mat-cell *matCellDef="let row">
-            <span *ngIf="!row.is_edit_timeout">{{row.es_modificable}}</span>
-            <mat-form-field *ngIf="row.is_edit_timeout">
-                <input matInput type="text" name="texto" [(ngModel)]="row.timeout" autocomplete="off">
+            <span *ngIf="!row.update">{{row.es_modificable}}</span>
+            <mat-form-field *ngIf="row.update">
+              <mat-label>Se puede modificar</mat-label>
+              <mat-select name="modificar" (selectionChange)="onChangeState($event)">
+                <mat-option value="Si">Si</mat-option>
+                <mat-option value="No">No</mat-option>
+              </mat-select>
             </mat-form-field>
           </mat-cell>
         </ng-container>

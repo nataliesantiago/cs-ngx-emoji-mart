@@ -18,7 +18,7 @@
               <div mat-card-avatar class="header-image"
                 [style.backgroundImage]="'url('+chat.cliente.url_imagen_gsuite+')'" title="{{chat.cliente.nombre}}">
               </div>
-              <div class="punt-estado-chat red" *ngIf="chat.alarma_nlp">
+              <div class="chat-alarma-nlp" *ngIf="chat.alarma_nlp">
               </div>
               <mat-card-title class="nombre-chat"><span>{{chat.cliente.nombre}}</span> <img *ngIf="chat.llamada_activa"
                   src="../../assets/images/videollamada.png" title="Llamada en curso" class="icono-llamda" />
@@ -40,7 +40,7 @@
                   <div class="chat-message"
                     [ngClass]="{'odd': m.id_usuario!==user.idtbl_usuario,'even': m.id_usuario===user.idtbl_usuario}"
                     *ngFor="let m of chat.mensajes | mensajesExperto: [1,usuarios]">
-                    <div class="chat-block">
+                    <div class="chat-block" [ngClass]="{'alamra-nlp':m.alarma_nlp}">
                       <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
                         <div *ngIf="m.es_archivo">
                           <a [href]="m.url" target="_blank">
@@ -166,7 +166,8 @@
               <div mat-card-avatar class="header-image"
                 [style.backgroundImage]="'url('+chat.cliente.url_imagen_gsuite+')'" title="{{chat.cliente.nombre}}">
               </div>
-              <div class="punt-estado-chat red" *ngIf="chat.alarma_nlp">
+              <div class="punt-estado-chat"
+                [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola)}">
               </div>
               <mat-card-title class="nombre-chat"><span>{{chat.cliente.nombre}}</span> <img *ngIf="chat.llamada_activa"
                   src="../../assets/images/videollamada.png" title="Llamada en curso" class="icono-llamda" />
@@ -190,9 +191,9 @@
         </mat-card>
       </div>
     </mat-tab>
-    <mat-tab label="Conversaciones Expertos">
-      <div class="">
-        Large content
+    <mat-tab label="Conversaciones Expertos ({{mensajes_nuevos}})">
+      <div class="panel-consola-chat">
+        <app-chat [esSupervisor]="true" (mensajes_nuevos)="mensajes_nuevos=$event"></app-chat>
       </div>
     </mat-tab>
   </mat-tab-group>

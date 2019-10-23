@@ -786,4 +786,20 @@ export class ChatService {
     });
   }
 
+
+  /**
+  * @description Obtiene los estados del experto
+  * @returns Promise
+  */
+  getEstadosExperto(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/getEstadosExperto', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.estados);
+        } else {
+          reject();
+        }
+      })
+    });
+  }
 }

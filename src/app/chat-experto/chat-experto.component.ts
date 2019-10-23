@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild, ModuleWithComponentFactories, NgZone } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, ModuleWithComponentFactories, NgZone, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from '../providers/user.service';
 import { ChatService } from '../providers/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material';
 import { TransferenciaChatComponent } from '../components/transferencia-chat/transferencia-chat.component';
 import { ShortcutsService } from '../providers/shortcuts.service';
 import { CerrarChatExpertoComponent } from '../components/cerrar-chat-experto/cerrar-chat-experto.component';
+
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -50,6 +51,9 @@ export class ChatExpertoComponent {
   limite_texto_chat;
   shortcuts: Array<ShortCut>;
   info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null };
+  @Input() esSupervisor: boolean;
+  cantidad_mensajes_sin_leer = 0;
+  @Output() mensajes_nuevos: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog, private shortcutsService: ShortcutsService) {
 
@@ -212,27 +216,30 @@ export class ChatExpertoComponent {
 
   recibirChatAutomatico() {
     let config = this.buscarConfiguracion(2);
+    // console.log(config)
     this.chatService.getConversacionesExperto().then((conversaciones: Array<Conversacion>) => {
-      if (parseInt(config.valor) > conversaciones.length) {
-        let chats = [];
-        this.chats_cola.forEach(f => {
-          chats = chats.concat(f.chats);
-        });
+      if (config) {
+        if (parseInt(config.valor) > conversaciones.length) {
+          let chats = [];
+          this.chats_cola.forEach(f => {
+            chats = chats.concat(f.chats);
+          });
 
-        chats.sort((a, b) => {
-          if (a.peso_chat > b.peso_chat) {
-            return 1;
-          } else if (a.peso_chat < b.peso_chat) {
-            return -1;
-          } else {
+          chats.sort((a, b) => {
+            if (a.peso_chat > b.peso_chat) {
+              return 1;
+            } else if (a.peso_chat < b.peso_chat) {
+              return -1;
+            } else {
 
-            return (new Date(a.fecha_creacion) < new Date(b.fecha_creacion)) ? 1 : -1;
+              return (new Date(a.fecha_creacion) < new Date(b.fecha_creacion)) ? 1 : -1;
+            }
+          });
+          let c = chats.pop();
+
+          if (c) {
+            this.onSelectCola(c);
           }
-        });
-        let c = chats.pop();
-
-        if (c) {
-          this.onSelectCola(c);
         }
       }
     });
@@ -324,12 +331,18 @@ export class ChatExpertoComponent {
     c.messages = this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
-    c.listener_mensajes = c.messages.subscribe(d => {
-      this.procesarMensajes(d, c, primera_vez, 0);
-
+    c.listener_mensajes = c.messages.subscribe(async d => {
+      if (!primera_vez && c.mensajes) {
+        c.cantidad_mensajes_nuevos = d.length - c.mensajes.length;
+      }
+      c.mensajes = await this.procesarMensajes(d, c, primera_vez, 0, []);
       primera_vez = false;
 
-
+      this.expertos.forEach(e => {
+        this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
+      });
+      //console.log(this.cantidad_mensajes_sin_leer);
+      this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     });
     this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes/').snapshotChanges().subscribe((changes: any) => {
       changes.forEach(a => {
@@ -371,7 +384,7 @@ export class ChatExpertoComponent {
     });
   }
 
-  async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number) {
+  async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number, tmp: Array<Mensaje>) {
     let m = d.shift();
     if (m) {
       let experto = this.usuarios.find((e: User) => {
@@ -385,17 +398,19 @@ export class ChatExpertoComponent {
         m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
         this.asignarAudio(m);
       }
-      if (!c.mensajes[i]) {
-        c.mensajes[i] = m;
-        if (!primera_vez && !c.focuseado) {
-          this.soundService.sonar(1);
-          c.mensajes_nuevos = true;
-        } else {
 
-        }
+      //c.mensajes[i] = m;
+      tmp.push(m);
+      if (!primera_vez && !c.focuseado && m.id_usuario != this.user.getId()) {
+        this.soundService.sonar(1);
+        c.mensajes_nuevos = true;
+        // c.cantidad_mensajes_nuevos++;
       } else {
-        c.mensajes[i].estado = m.estado;
+
       }
+
+      //console.log('mensaje sin leer', this.cantidad_mensajes_sin_leer);
+
       if (d.length < 1) {
         c.ultimo_mensaje = m;
         if (m.es_nota_voz) {
@@ -407,7 +422,10 @@ export class ChatExpertoComponent {
         }
       }
       i++;
-      this.procesarMensajes(d, c, primera_vez, i);
+      return await this.procesarMensajes(d, c, primera_vez, i, tmp);
+    } else {
+      //console.log(' mensajes', m)
+      return tmp;
     }
   }
 
@@ -524,7 +542,13 @@ export class ChatExpertoComponent {
   }
 
   setFocus(c: Conversacion, estado: boolean) {
+    console.log(c);
     c.focuseado = estado;
+    console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
+    debugger;
+    this.cantidad_mensajes_sin_leer -= c.cantidad_mensajes_nuevos;
+    this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
+    c.cantidad_mensajes_nuevos = 0;
     if (estado) {
       c.mensajes_nuevos = false;
       c.mostrar_emojis = false;
@@ -831,7 +855,6 @@ export class ChatExpertoComponent {
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
           }
-          this.enviarCorreo(c);
         });
       }
     });

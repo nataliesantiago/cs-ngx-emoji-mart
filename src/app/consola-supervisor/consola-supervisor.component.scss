@@ -97,6 +97,11 @@ $border-separador: 1px solid #e4e4e4;
                         padding: 3px 8px;
                         font-size: 13px;
                         margin: 1px 0;
+
+                        &.alamra-nlp {
+                            color: white;
+                            animation: alarma-nlp 10s infinite;
+                        }
                     }
 
                     .chat-message {
@@ -201,5 +206,19 @@ $border-separador: 1px solid #e4e4e4;
         &.gris {
             background-color: #e4e4e4;
         }
+    }
+
+    .chat-alarma-nlp {
+        width: 33px;
+        height: 2px;
+        position: absolute;
+        left: 16px;
+        top: 56px;
+        background-color: red;
+    }
+
+    .panel-consola-chat {
+        width: 100%;
+        height: calc(100vh - 144px);
     }
 }
