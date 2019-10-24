@@ -85,7 +85,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
    */
   onChangeType(event) {
     this.message.id_tipo_mensaje = event.value;
-    if(event.value == 3) {
+    if(event.value == 3 || event.value == 5) {
       this.is_timeout = true;
     } else {
       this.is_timeout = false;
@@ -99,7 +99,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
    */
   onChangeTypeTable(event, row) {
     row.id_tipo_mensaje = event.value;
-    if(event.value == 3) {
+    if(event.value == 3 || event.value == 5) {
       row.is_edit_timeout = true;
     } else {
       row.is_edit_timeout = false;

@@ -197,7 +197,7 @@
                 <div class="panel-buscando-experto" *ngIf="!chat.id_experto_actual && !chat.mostrar_encuesta">
                   <mat-toolbar class="no-shadow bg-green font-family-comunidades barra-buscando" color="green"
                     *ngIf="!chat.no_hay_filas">
-                    <div class="titulo-buscando">Buscando un Experto...</div>
+                    <div class="titulo-buscando">{{mensaje_buscando_experto}}</div>
 
                   </mat-toolbar>
                   <div class="loading-gif" *ngIf="!chat.no_hay_filas">

@@ -38,7 +38,7 @@ export class ChatClienteComponent implements OnInit {
   stream: any;
   cantidad_mensajes_sin_leer = 0;
   limite_texto_chat;
-  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null };
+  mensaje_buscando_experto = '';
 
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
@@ -72,6 +72,7 @@ export class ChatClienteComponent implements OnInit {
   };
 
   init() {
+    
     this.chatService.obtenerLimiteTexto().then(valor => {
       this.limite_texto_chat = valor;
     });
@@ -94,6 +95,7 @@ export class ChatClienteComponent implements OnInit {
             c.asesor_actual.url_foto = c.url_foto;
           }
           if (c.filas && c.id_estado_conversacion == 1) {
+            
             this.chatService.getDocumentoFirebase('conversaciones/' + c.codigo).then(conversa => {
               c.transferido = conversa.transferido;
               //this.procesaFilas(c);
@@ -119,7 +121,9 @@ export class ChatClienteComponent implements OnInit {
           }
         });
       });
-    })
+    });
+
+    this.mensajeBuscandoExperto();
   }
 
   buscarConfiguracion(id: number): Configuracion {
@@ -734,15 +738,12 @@ export class ChatClienteComponent implements OnInit {
     }
   }
 
-  enviarCorreo(c) {
-    this.info_correo.correo_cliente = this.user.getEmail();
-    this.info_correo.nombre_cliente = this.user.getNombre();
-    this.info_correo.correo_experto = c.asesor_actual.correo;
-    this.info_correo.nombre_experto = c.asesor_actual.nombre;
-    this.info_correo.url_foto = this.user.getUrlFoto();
-    this.info_correo.mensajes = c.mensajes;
 
-    this.userService.sendEmailChat(this.info_correo).then((response) => {
+  mensajeBuscandoExperto(){
+    this.chatService.getMensajeBuscandoExperto(this.user.getId()).then(result => {
+      this.mensaje_buscando_experto = result;
+    }).catch(error => {
+
     });
   }
 }
