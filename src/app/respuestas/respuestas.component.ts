@@ -32,6 +32,8 @@ export class RespuestasComponent implements OnInit {
   boton = "Enviar";
   activadoSi = false;
   activadoNo = false;
+  pregunta_nueva = false;
+  dias_pregunta_nueva = 30;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private chatService: ChatService) {
 
@@ -52,6 +54,12 @@ export class RespuestasComponent implements OnInit {
       }
     });
 
+    this.ajax.get('administracion/obtener-cantidad-dias-pregunta-nueva').subscribe(r => {
+      if(r.success){
+        this.dias_pregunta_nueva = r.item[0].valor;
+      }
+    })
+
    }
 
   init(){
@@ -64,6 +72,8 @@ export class RespuestasComponent implements OnInit {
         this.id_pregunta_visualizar = params.id_pregunta;
         
     });
+
+    let fecha_actual = moment(new Date());
     
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if(p.success){
@@ -71,6 +81,14 @@ export class RespuestasComponent implements OnInit {
         p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
 
         this.pregunta = p.pregunta[0];
+
+        let fecha_creacion = moment(p.pregunta[0].fecha_creacion).tz('America/Bogota');
+        
+        let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
+
+        if(diferencia_dias <= this.dias_pregunta_nueva){
+          this.pregunta_nueva = true;
+        }
 
         this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
           if(sr.success){

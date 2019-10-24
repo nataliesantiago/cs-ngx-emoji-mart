@@ -1,111 +1,119 @@
 <mat-card>
   <mat-card-content>
-      <div fxLayout="row wrap">
-          <div fxFlex.gt-sm="5" fxFlex="100"></div>
-          <div fxFlex.gt-sm="70" fxFlex="100" class="container-principal">
-            <div class="container-texto" *ngIf="pregunta">
-              <div class="fecha-modificacion" *ngIf="pregunta.muestra_fecha_actualizacion == 1">
-                <strong>Última modificación: {{pregunta.fecha_ultima_modificacion}}</strong>
-                <br>
-              </div>
-              <h3><strong>{{pregunta.titulo}}</strong></h3>
-              <div [innerHTML]="pregunta.respuesta  | safeHtml"></div>
-              <div *ngIf="categorias_subrespuestas_superior.length > 0">
-                <div *ngFor="let categoria_superior of categorias_subrespuestas_superior">
-                  <h4><strong>{{categoria_superior.categoria}}</strong></h4>
+    <div fxLayout="row wrap">
+      <div fxFlex.gt-sm="5" fxFlex="100"></div>
+      <div fxFlex.gt-sm="70" fxFlex="100" class="container-principal">        
+        <div class="container-texto" *ngIf="pregunta">
+          <div class="icono-dias" *ngIf="pregunta_nueva">
+            <mat-icon class="icono">star</mat-icon>
+          </div>
+          <div class="fecha-modificacion" *ngIf="pregunta.muestra_fecha_actualizacion == 1">
+            <strong>Última modificación: {{pregunta.fecha_ultima_modificacion}}</strong>
+            <br>
+          </div>
+          <h3><strong>{{pregunta.titulo}}</strong></h3>
+          <div [innerHTML]="pregunta.respuesta  | safeHtml"></div>
+          <div *ngIf="categorias_subrespuestas_superior.length > 0">
+            <div *ngFor="let categoria_superior of categorias_subrespuestas_superior">
+              <h4><strong>{{categoria_superior.categoria}}</strong></h4>
+              <hr>
+              <div *ngFor="let subrespuesta of subrespuestas;">
+                <mat-accordion
+                  *ngIf="subrespuesta.categoria == categoria_superior.categoria && subrespuesta.posicion == 1">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <strong>{{subrespuesta.titulo}}</strong>
+                    </mat-expansion-panel-header>
+                    <div [innerHTML]="subrespuesta.texto  | safeHtml"></div>
+                  </mat-expansion-panel>
                   <hr>
-                  <div *ngFor="let subrespuesta of subrespuestas;">
-                    <mat-accordion *ngIf="subrespuesta.categoria == categoria_superior.categoria && subrespuesta.posicion == 1">
-                      <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                          <strong>{{subrespuesta.titulo}}</strong>
-                        </mat-expansion-panel-header>
-                        <div [innerHTML]="subrespuesta.texto  | safeHtml"></div>
-                      </mat-expansion-panel>
-                      <hr>
-                    </mat-accordion>
-                  </div>
-                </div>
+                </mat-accordion>
               </div>
-              <mat-tab-group *ngIf="segmentos.length > 0">
-                <br>
-                <mat-tab *ngFor="let segmento of segmentos; let i = index;" label="{{segmento.titulo}}">
+            </div>
+          </div>
+          <mat-tab-group *ngIf="segmentos.length > 0">
+            <br>
+            <mat-tab *ngFor="let segmento of segmentos; let i = index;" label="{{segmento.titulo}}">
+              <br>
+              <div [innerHTML]="segmento.texto | safeHtml"></div>
+              <div *ngIf="array_mostrar.length > 0">
+                <div *ngFor="let arr of array_mostrar; let cont = index;">
+                  <mat-accordion *ngIf="arr.pos_segmento == i">
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <strong>{{arr.titulo}}</strong>
+                      </mat-expansion-panel-header>
+                      <div [innerHTML]="arr.texto  | safeHtml"></div>
+                    </mat-expansion-panel>
+                    <hr>
+                  </mat-accordion>
                   <br>
-                  <div [innerHTML]="segmento.texto | safeHtml"></div>
-                  <div *ngIf="array_mostrar.length > 0">
-                    <div *ngFor="let arr of array_mostrar; let cont = index;">
-                      <mat-accordion *ngIf="arr.pos_segmento == i">
-                        <mat-expansion-panel>
-                          <mat-expansion-panel-header>
-                            <strong>{{arr.titulo}}</strong>
-                          </mat-expansion-panel-header>
-                          <div [innerHTML]="arr.texto  | safeHtml"></div>
-                        </mat-expansion-panel>
-                        <hr>
-                      </mat-accordion>
-                      <br>
-                    </div>
-                  </div>
-                </mat-tab>
-              </mat-tab-group>
-              <div *ngIf="categorias_subrespuestas_inferior.length > 0">
-                <div *ngFor="let categoria_inferior of categorias_subrespuestas_inferior">
-                  <h4><strong>{{categoria_inferior.categoria}}</strong></h4>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+          <div *ngIf="categorias_subrespuestas_inferior.length > 0">
+            <div *ngFor="let categoria_inferior of categorias_subrespuestas_inferior">
+              <h4><strong>{{categoria_inferior.categoria}}</strong></h4>
+              <hr>
+              <div *ngFor="let subrespuesta of subrespuestas;">
+                <mat-accordion
+                  *ngIf="subrespuesta.categoria == categoria_inferior.categoria && subrespuesta.posicion == 2">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <strong>{{subrespuesta.titulo}}</strong>
+                    </mat-expansion-panel-header>
+                    <div [innerHTML]="subrespuesta.texto  | safeHtml"></div>
+                  </mat-expansion-panel>
                   <hr>
-                  <div *ngFor="let subrespuesta of subrespuestas;">
-                    <mat-accordion *ngIf="subrespuesta.categoria == categoria_inferior.categoria && subrespuesta.posicion == 2">
-                      <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                          <strong>{{subrespuesta.titulo}}</strong>
-                        </mat-expansion-panel-header>
-                        <div [innerHTML]="subrespuesta.texto  | safeHtml"></div>
-                      </mat-expansion-panel>
-                      <hr>
-                    </mat-accordion>
-                  </div>
-                </div>
+                </mat-accordion>
               </div>
-              <h3><strong>¿Fue útil esta información?</strong></h3>
-              <div fxLayout="row wrap">
-                <div fxFlex.gt-sm="100" fxFlex="100">
-                  <div fxFlex.gt-sm="10" fxFlex="100">
-                    <a [ngClass]="{ 'si': activadoSi }" class="boton-calificacion" mat-raised-button (click)="calificacion(1)">
-                      <mat-icon class="icono-inicial">thumb_up</mat-icon>
-                    </a>
-                  </div>
-                  <div fxFlex.gt-sm="5" fxFlex="100"></div>
-                  <div fxFlex.gt-sm="10" fxFlex="100">
-                    <a [ngClass]="{ 'no': activadoNo }" class="boton-calificacion" mat-raised-button (click)="calificacion(2)">
-                      <mat-icon class="icono-inicial">thumb_down</mat-icon>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div *ngIf="nueva_observacion">
-                <br>
-                <mat-form-field>
-                  <textarea matInput placeholder="Dejanos tus comentarios" name="notas" [(ngModel)]="observaciones"
-                    matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
-                </mat-form-field>
-                <a mat-raised-button class="no" (click)="enviarCalificacion()"><span class="texto-boton">{{boton}}</span></a>
-              </div>
-        
-        
-            </div>
-        
-        
-        
-          </div>
-        
-          <div class="preguntas-asociadas" fxFlex.gt-sm="25" fxFlex="100">
-            <div class="panel-respuestas">
-              <div class="respuestas"></div>
-              <strong>Preguntas Asociadas</strong>
-              <p class="mouse-over" *ngFor="let pregunta_asociada of preguntas_adicion"
-                (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">{{pregunta_asociada.titulo}}</p>
             </div>
           </div>
-        
+          <h3><strong>¿Fue útil esta información?</strong></h3>
+          <div fxLayout="row wrap">
+            <div fxFlex.gt-sm="100" fxFlex="100">
+              <div fxFlex.gt-sm="10" fxFlex="100">
+                <a [ngClass]="{ 'si': activadoSi }" class="boton-calificacion" mat-raised-button
+                  (click)="calificacion(1)">
+                  <mat-icon class="icono-inicial">thumb_up</mat-icon>
+                </a>
+              </div>
+              <div fxFlex.gt-sm="5" fxFlex="100"></div>
+              <div fxFlex.gt-sm="10" fxFlex="100">
+                <a [ngClass]="{ 'no': activadoNo }" class="boton-calificacion" mat-raised-button
+                  (click)="calificacion(2)">
+                  <mat-icon class="icono-inicial">thumb_down</mat-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="nueva_observacion">
+            <br>
+            <mat-form-field>
+              <textarea matInput placeholder="Dejanos tus comentarios" name="notas" [(ngModel)]="observaciones"
+                matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
+            </mat-form-field>
+            <a mat-raised-button class="no" (click)="enviarCalificacion()"><span
+                class="texto-boton">{{boton}}</span></a>
+          </div>
+
+
         </div>
+
+
+
+      </div>
+
+      <div class="preguntas-asociadas" fxFlex.gt-sm="25" fxFlex="100">
+        <div class="panel-respuestas">
+          <div class="respuestas"></div>
+          <strong>Preguntas Asociadas</strong>
+          <p class="mouse-over" *ngFor="let pregunta_asociada of preguntas_adicion"
+            (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">{{pregunta_asociada.titulo}}</p>
+        </div>
+      </div>
+
+    </div>
   </mat-card-content>
 </mat-card>

@@ -4,6 +4,7 @@ import { UserService } from '../providers/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import { Conversacion } from '../../schemas/conversacion.schema';
+import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
   selector: 'app-visualizar-encuesta',

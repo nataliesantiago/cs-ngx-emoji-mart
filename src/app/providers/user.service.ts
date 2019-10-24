@@ -37,6 +37,8 @@ export class UserService {
     dataBase;
     ref;
     este;
+    mensajes_nlp = [];
+    cantidad_mensajes_sin_leer_nlp = 0;
 
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, private soundService: SonidosService) {
 
@@ -279,7 +281,7 @@ export class UserService {
         this.afMessaging.requestPermission
             .pipe(mergeMapTo(this.afMessaging.tokenChanges))
             .subscribe(
-                (token) => {
+                (token) => {                    
                     this.listen();
                     this.ajax.post('user/setFirebaseToken', { token: token, user: this.user }).subscribe(d => {
                         if (d.success) {
@@ -288,16 +290,33 @@ export class UserService {
                     });
 
                 },
-                (error) => { console.error(error); },
+                (error) => { console.error("error", error); },
             );
     }
 
     listen() {
+        console.log(this.user.getIdRol());
         this.afMessaging.messages
             .subscribe((message) => {
                 this.actualizarNotificaciones();
+                if(this.user.getIdRol() == 3){
+                    console.log("Entra");
+                    this.actualizarMensajesNLP();
+                }
                 this.soundService.sonar(4);
             });
+    }
+
+
+    actualizarMensajesNLP(): Promise<any>{
+        return new Promise((resolve, reject) =>{
+            this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {
+                console.log(d.conversaciones[1].length);
+                this.mensajes_nlp = d.conversaciones[0];
+                this.cantidad_mensajes_sin_leer_nlp = d.conversaciones[1].length;
+                resolve(d.conversaciones);
+            });
+        });
     }
 
     obtenerNotificacionesUsuario(id_usuario: number): Promise<any> {
@@ -356,15 +375,87 @@ export class UserService {
         });
     }
 
+
+    getAllUsers() {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-usuarios').subscribe(p => {
+                if (p.success) {
+                    resolve(p.usuarios);
+                } else {
+                    reject();
+                }
+            })
+        });
+    }
+
+
+    getUsuarioEditar(id_usuario) {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-usuario-editar', { id_usuario: id_usuario }).subscribe(p => {
+                if (p.success) {
+                    resolve(p.usuario);
+                } else {
+                    reject();
+                }
+            })
+        })
+    }
+
+    getPerfilesUsuario() {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-perfiles').subscribe(p => {
+                if (p.success) {
+                    resolve(p.perfiles);
+                } else {
+                    reject();
+                }
+            })
+        })
+    }
+
+    getRolesUsuario() {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-roles').subscribe(p => {
+                if (p.success) {
+                    resolve(p.roles);
+                } else {
+                    reject();
+                }
+            })
+        })
+    }
+
+    editarUsuario(datos_usuario: any, id_usuario_editar: number): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/editar-usuario', { datos_usuario: datos_usuario, id_usuario_editar: id_usuario_editar }).subscribe(p => {
+                if (p.success) {
+                    resolve(p.roles);
+                } else {
+                    reject();
+                }
+            })
+        });
+    }
+    
     sendEmailChat(info_correo): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('email/enviar-correo', { info_correo }).subscribe(d => {
+                //console.log(d);
                 //console.log(d);
                 if (d) {
                     resolve(d);
                 }
             })
         });
+    }
+
+    leerMensajeNLP(id_mensaje): Promise<any>{
+        return new Promise((resolve, reject) => {
+            this.ajax.post('chat/leerMensajeNLP', {id_mensaje: id_mensaje}).subscribe(d => {
+                this.mensajes_nlp = d.conversaciones;  
+                resolve(d.conversaciones);
+            });
+        })
     }
 
 }

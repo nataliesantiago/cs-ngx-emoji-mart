@@ -110,6 +110,9 @@ import { LinkifyPipe } from '../pipes/linkify.pipe';
 import { SafePipe } from './pipes/safe.pipe';
 import { AdministradorLookFeelComponent } from './administrador-look-feel/administrador-look-feel.component';
 import { CerrarChatExpertoComponent } from './components/cerrar-chat-experto/cerrar-chat-experto.component';
+import { AdministradorUsuariosComponent } from './administrador-usuarios/administrador-usuarios.component';
+import { FormularioUsuariosComponent } from './formulario-usuarios/formulario-usuarios.component';
+import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ReplaceEmojisMensajePipe } from '../pipes/emoji.mensaje.pipe';
 import { OrdenarExpertosPipe } from '../pipes/ordenar-expertos.pipe';
 import { TransitionGroupItemDirective, TransitionGroupComponent } from '../directives/sort.animation.directives';
@@ -192,6 +195,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SafePipe,
     AdministradorLookFeelComponent,
     CerrarChatExpertoComponent,
+    AdministradorUsuariosComponent,
+    FormularioUsuariosComponent,
     ReplaceEmojisMensajePipe,
     OrdenarExpertosPipe,
     TransitionGroupItemDirective,
@@ -245,7 +250,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PickerModule,
     AngularFireAuthModule,
     AngularFireMessagingModule,
-    ColorBlockModule
+    ColorBlockModule,
+    EmojiModule
   ],
 
   providers: [

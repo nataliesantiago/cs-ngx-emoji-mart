@@ -208,12 +208,19 @@
                     solicitud</h3>
                 </div>
 
-                <div class="contenedor-encuesta">
-
+                <perfect-scrollbar class="contenedor-encuesta">
+                  <div *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="goodbye-message">
+                    <div class="chat-message ng-star-inserted" *ngIf="m.es_despedida">
+                      <div class="chat-block">
+                        <div class="ng-star-inserted">{{m.texto}}</div>
+                      </div>
+                      <div class="chat-date ng-star-inserted">{{m.fecha_mensaje | datechat}}</div>
+                    </div>
+                  </div>
                   <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
                   </app-visualizar-encuesta>
 
-                </div>
+                </perfect-scrollbar>
 
               </mat-sidenav-container>
               <div class="componente-pequeno" [hidden]="!chat.minimizado"

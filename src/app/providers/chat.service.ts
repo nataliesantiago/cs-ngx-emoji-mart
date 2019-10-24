@@ -110,7 +110,7 @@ export class ChatService {
   enviarMensaje(mensaje: Mensaje): Promise<any> {
     return new Promise((r, re) => {
       this.ajax.post('chat/conversacion/enviarMensaje', mensaje).subscribe(d => {
-        if (d.success) {
+        if (d.success) {          
           r(true);
         } else {
           reject();
