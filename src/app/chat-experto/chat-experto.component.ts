@@ -545,7 +545,7 @@ export class ChatExpertoComponent {
     console.log(c);
     c.focuseado = estado;
     console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
-    debugger;
+    //debugger;
     this.cantidad_mensajes_sin_leer -= c.cantidad_mensajes_nuevos;
     this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     c.cantidad_mensajes_nuevos = 0;

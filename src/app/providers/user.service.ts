@@ -37,7 +37,8 @@ export class UserService {
     dataBase;
     ref;
     este;
-    mensajes_nlp = []; 
+    mensajes_nlp = [];
+    cantidad_mensajes_sin_leer_nlp = 0;
 
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, private soundService: SonidosService) {
 
@@ -310,7 +311,9 @@ export class UserService {
     actualizarMensajesNLP(): Promise<any>{
         return new Promise((resolve, reject) =>{
             this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {
-                this.mensajes_nlp = d.conversaciones;  
+                console.log(d.conversaciones[1].length);
+                this.mensajes_nlp = d.conversaciones[0];
+                this.cantidad_mensajes_sin_leer_nlp = d.conversaciones[1].length;
                 resolve(d.conversaciones);
             });
         });
@@ -444,6 +447,15 @@ export class UserService {
                 }
             })
         });
+    }
+
+    leerMensajeNLP(id_mensaje): Promise<any>{
+        return new Promise((resolve, reject) => {
+            this.ajax.post('chat/leerMensajeNLP', {id_mensaje: id_mensaje}).subscribe(d => {
+                this.mensajes_nlp = d.conversaciones;  
+                resolve(d.conversaciones);
+            });
+        })
     }
 
 }
