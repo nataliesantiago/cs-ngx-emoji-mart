@@ -114,6 +114,7 @@ export interface InformacionCorreo {
 }
 
 export interface MensajeAutomatico {
+    idtbl_mensaje_automatico_chat: number;
     texto: string;
     timeout: number;
     id_tipo_mensaje: number;

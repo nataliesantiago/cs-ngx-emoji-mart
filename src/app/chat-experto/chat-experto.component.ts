@@ -332,12 +332,14 @@ export class ChatExpertoComponent {
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
     c.listener_mensajes = c.messages.subscribe(async d => {
-      if (!primera_vez && c.mensajes) {
-        c.cantidad_mensajes_nuevos = d.length - c.mensajes.length;
+      
+      if (!primera_vez && c.mensajes && c.mensajes.length < d.length) {
+        c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
+      //console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
       c.mensajes = await this.procesarMensajes(d, c, primera_vez, 0, []);
       primera_vez = false;
-
+      this.cantidad_mensajes_sin_leer = 0;
       this.expertos.forEach(e => {
         this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
       });
@@ -542,10 +544,9 @@ export class ChatExpertoComponent {
   }
 
   setFocus(c: Conversacion, estado: boolean) {
-    console.log(c);
+    // console.log(c);
     c.focuseado = estado;
-    console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
-    //debugger;
+    // console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
     this.cantidad_mensajes_sin_leer -= c.cantidad_mensajes_nuevos;
     this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     c.cantidad_mensajes_nuevos = 0;

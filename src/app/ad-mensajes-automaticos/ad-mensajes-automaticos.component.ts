@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatChipInputEvent } from '@angular/material';
 import { User } from '../../schemas/user.schema';
-import { MensajeAutomatico, ShortCut, GuionChat } from '../../schemas/interfaces';
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
+import { MensajeAutomatico } from '../../schemas/interfaces';
 import swal from 'sweetalert2';
 import { matTableFilter } from '../../common/matTableFilter';
 import { MensajeAutomaticoService } from '../providers/mensajes-automaticos.service';
@@ -18,7 +16,8 @@ export class AdMensajesAutomaticosComponent implements OnInit {
 
   user: User;
   create_message = false;
-  message: MensajeAutomatico;
+  message: MensajeAutomatico = {idtbl_mensaje_automatico_chat:null,texto:'',timeout:null, id_tipo_mensaje:null,fecha_creacion:null,
+                                fecha_ultima_modificacion:null,id_usuario_modificacion:null,timeout_tmp:null,texto_tmp:''};
   message_types;
   is_timeout = false;
   displayedColumns = ['acciones', 'mensaje', 'tiempo', 'tipo', 'activo'];

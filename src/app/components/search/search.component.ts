@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit, NgZone, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, NgZone, ViewChild, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/startWith';
@@ -63,7 +63,8 @@ export class AppSearchComponent implements OnInit {
   actionContext: ActionContext = new ActionContext();
   @ViewChild('autocomplete') autocomplete: AutocompleteComponent;
   search_placeholder = '';
-
+  @Input() modo: number;
+  @Input() texto_buscar: string;
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -288,6 +289,7 @@ export class AppSearchComponent implements OnInit {
     this.speechRecognizer.initialize(this.currentLanguage);
     this.initRecognition();
     this.notification = null;
+    this.def.setValue(this.texto_buscar);
     /**speech recognizion */
   }
 

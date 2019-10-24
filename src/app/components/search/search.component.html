@@ -1,4 +1,4 @@
-<div id="search-bar" class="up">
+<div id="search-bar" class="up" [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2}">
   <span><img src="../../assets/images/Lupa.svg" (click)="buscar(1)" alt="icone de recherche" width="35px"
       class="img_lupa"></span>
   <div class="image-upload">
@@ -10,9 +10,9 @@
   <mat-icon (click)="startButton($event)" class="microfono">mic</mat-icon>
   <div class="ng-autocomplete">
     <ng-autocomplete id="ng-autocomplete-search" placeHolder="{{search_placeholder}}" [data]="textopredictivo"
-      [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' (keydown.enter)="buscar(1)"
-      [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'" (inputCleared)="clearOptions()"
-      #autocomplete>
+      [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+      (keydown.enter)="buscar(1)" [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'"
+      (inputCleared)="clearOptions()" #autocomplete>
     </ng-autocomplete>
 
 
