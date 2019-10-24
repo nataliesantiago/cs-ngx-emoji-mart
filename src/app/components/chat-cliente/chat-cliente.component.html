@@ -208,6 +208,13 @@
                     solicitud</h3>
                 </div>
 
+                <div class="panel-buscando-experto" *ngIf="no_encontro_experto">
+                    <mat-toolbar class="no-shadow font-family-comunidades barra-no-encontro" color="green"
+                      *ngIf="!chat.no_hay_filas">
+                      <div class="titulo-buscando">{{mensaje_no_encontro_experto}}</div>
+                    </mat-toolbar>
+                  </div>
+
                 <perfect-scrollbar class="contenedor-encuesta">
                   <div *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="goodbye-message">
                     <div class="chat-message ng-star-inserted" *ngIf="m.es_despedida">

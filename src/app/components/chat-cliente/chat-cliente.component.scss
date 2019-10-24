@@ -301,7 +301,14 @@
 
                 .barra-buscando {
                     height: 56px;
+                }
 
+                .barra-no-encontro {
+                    height: 100%;
+                }
+
+                .barra-buscando,
+                .barra-no-encontro {
                     .titulo-buscando {
                         text-align: center;
                         font-size: 16px;
