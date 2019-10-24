@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { MenuItems } from '../../shared/menu-items/menu-items';
@@ -67,7 +67,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   @ViewChild('snav') sidenav: MatSidenav;
 
   color_toolbar = '';
-
+  muestra_barra: boolean = false;
   reason = '';
   constructor(
     changeDetectorRef: ChangeDetectorRef,
@@ -98,32 +98,42 @@ export class FullComponent implements OnDestroy, AfterViewInit {
       if (this.usuario) {
         this.init();
       }
-    })
+    });
+   /* this.router.events.subscribe(val => {
+      if (val instanceof NavigationEnd) {
+        if (val.url.indexOf('/search/') == 0) {
+          // console.log('estoy en donde quiero');
+          this.muestra_barra = true;
+        } else {
+          this.muestra_barra == false;
+        }
+      }
+    });*/
   }
 
   init() {
     if (this.usuario.getModoNocturno() == 0 || this.usuario.getModoNocturno() == null) {
       this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
-        if(result && result[0] && result[0].valor){
-          this.color_toolbar = result[0].valor;  
+        if (result && result[0] && result[0].valor) {
+          this.color_toolbar = result[0].valor;
         }
       });
     } else {
       this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
-        if(result && result[0] && result[0].valor){
-          this.color_toolbar = result[0].valor;  
+        if (result && result[0] && result[0].valor) {
+          this.color_toolbar = result[0].valor;
         }
       });
     }
-    
+
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
       this.notificaciones_usuario = r;
     });
     this.user.observableNotificaciones.subscribe(() => {
-      
+
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
       this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
-      
+
     });
   }
 
@@ -131,7 +141,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
     this.notificaicones_sin_leer = 0;
 
-    this.notificacionService.leerNotificaciones(this.id_usuario).then(() =>{})
+    this.notificacionService.leerNotificaciones(this.id_usuario).then(() => { })
 
   }
 

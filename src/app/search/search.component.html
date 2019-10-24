@@ -1,4 +1,5 @@
 <div class="sin_fondo centrado">
+    <app-search-component [modo]="2" [texto_buscar]="busqueda"></app-search-component>
     <div *ngIf="resultado">
         <h2>Resultados de la búsqueda de <b>{{busqueda}}</b></h2>
         <h2 *ngIf="ortografia">Quizas quisiste decir: <b>{{busquedaCorregida}}</b></h2>

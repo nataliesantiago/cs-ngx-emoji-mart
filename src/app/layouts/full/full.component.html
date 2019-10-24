@@ -22,7 +22,11 @@
         <!-- Search - style you can find in header.scss -->
         <!-- ============================================================== -->
         <span class="comunidad_titulo" (click)="irHome()">Conecta</span>
-        <span fxFlex></span>
+        <span fxFlex>
+            <div class="buscador-barra-superior" *ngIf="muestra_barra">
+                <app-search-component [modo]="1"></app-search-component>
+            </div>
+        </span>
 
         <!--button mat-icon-button class="m-r-10">
             <img src="../../../../assets/images/sos.png" alt="" class="sos">
@@ -57,13 +61,14 @@
     <!-- ============================================================== -->
     <!-- End Topbar - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <mat-sidenav-container class="example-sidenav-container full-componente-melo" [style.marginTop.px]="mobileQuery.matches ? 0 : 0"
-        [ngClass]="{'minisidebar': minisidebar}">
+    <mat-sidenav-container class="example-sidenav-container full-componente-melo"
+        [style.marginTop.px]="mobileQuery.matches ? 0 : 0" [ngClass]="{'minisidebar': minisidebar}">
         <!-- ============================================================== -->
         <!-- Sidebar - style you can find in sidebar.scss -->
         <!-- ============================================================== -->
-        <mat-sidenav class="sidenav-menu" #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0" id="menu-lateral-melo"
-            [opened]="false" (open)="sidebarOpened = true" (close)="sidebarOpened = false" [perfectScrollbar]="config">
+        <mat-sidenav class="sidenav-menu" #snav id="snav" class="pl-xs" [mode]="'over'" fixedTopGap="0"
+            id="menu-lateral-melo" [opened]="false" (open)="sidebarOpened = true" (close)="sidebarOpened = false"
+            [perfectScrollbar]="config">
 
             <app-sidebar class="app-sidebar" (cerrado)="cerrarMenu()"></app-sidebar>
 
