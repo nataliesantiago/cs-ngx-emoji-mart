@@ -297,21 +297,18 @@ export class UserService {
     listen() {
         console.log(this.user.getIdRol());
         this.afMessaging.messages
-            .subscribe((message) => {
-                this.actualizarNotificaciones();
-                if(this.user.getIdRol() == 3){
-                    console.log("Entra");
-                    this.actualizarMensajesNLP();
-                }
-                this.soundService.sonar(4);
+            .subscribe((message) => {                
+                this.actualizarMensajesNLP().then(() => {
+                    this.actualizarNotificaciones();
+                    this.soundService.sonar(4);
+                });
             });
     }
 
 
     actualizarMensajesNLP(): Promise<any>{
         return new Promise((resolve, reject) =>{
-            this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {
-                console.log(d.conversaciones[1].length);
+            this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {                
                 this.mensajes_nlp = d.conversaciones[0];
                 this.cantidad_mensajes_sin_leer_nlp = d.conversaciones[1].length;
                 resolve(d.conversaciones);
