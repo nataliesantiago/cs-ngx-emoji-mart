@@ -2778,6 +2778,30 @@ input:-webkit-autofill:active {
   margin-left: 240px !important;
 }
 
+.goodbye-message {
+  .chat-message {
+      padding: 0 3px;
+      margin-top: 5px;
+      margin-bottom: 0;
+      padding-right: 11px;
+      display: block;
+      text-align: center;
+      .chat-block {
+          text-align: left !important;
+          display: inline-block;
+          padding: 4px 8px;
+          position: relative;
+          max-width: 80%;
+          font-size: 13px;
+          margin: 1px 0;
+      }
+      .chat-date {
+          width: 100%;
+          font-size: 11px;
+      }
+  }
+}
+
 @media only screen and (max-width: 960px) {
   .contenedor-sidenav-chat-experto {
     margin-left: 00px !important;
