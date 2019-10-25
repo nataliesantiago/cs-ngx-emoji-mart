@@ -39,8 +39,8 @@ export class ChatClienteComponent implements OnInit {
   cantidad_mensajes_sin_leer = 0;
   limite_texto_chat;
   mensaje_buscando_experto;
-  no_encontro_experto = false;
   mensaje_no_encontro_experto;
+  no_encontro_experto = false;
 
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
@@ -411,8 +411,10 @@ export class ChatClienteComponent implements OnInit {
       let data = datos.payload.data() as Conversacion;
       c.llamada_activa = data.llamada_activa;
       c.url_llamada = data.url_llamada;
-      if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2) {
+      
+      if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2 && data.id_estado_conversacion != 10) {
         c.mostrar_encuesta = true;
+        this.no_encontro_experto = false;
       } else if (c.asesor_actual) {
         if (c.asesor_actual.idtbl_usuario != data.id_experto_actual && data.id_experto_actual) {
           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
@@ -453,6 +455,7 @@ export class ChatClienteComponent implements OnInit {
           this.mensaje_no_encontro_experto = result;
         });
       }
+      
     });
   }
 
@@ -735,6 +738,7 @@ export class ChatClienteComponent implements OnInit {
     }
     this.chatService.cerrarConversacion(c, estado).then(() => {
       c.mostrar_encuesta = true; 
+      this.no_encontro_experto = false;
     });
   }
 
@@ -754,5 +758,4 @@ export class ChatClienteComponent implements OnInit {
       this.mensaje_buscando_experto = 'Buscando un Experto...';
     });
   }
-
 }
