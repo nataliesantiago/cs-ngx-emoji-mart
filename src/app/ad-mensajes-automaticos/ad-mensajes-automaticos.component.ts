@@ -69,7 +69,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     this.mensajeAutomatico.getAllMessagesWithType().then((result) => {
       result.forEach((message) => {
         message.texto_tmp = message.texto;
-        message.timeout = message.timeout;
+        message.timeout_tmp = message.timeout;
       });
       this.dataSource = new MatTableDataSource(result);
       this.dataSource.paginator = this.paginator;
