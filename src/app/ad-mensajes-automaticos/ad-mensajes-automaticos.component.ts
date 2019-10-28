@@ -24,7 +24,8 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   matTableFilter: matTableFilter;
   filterColumns = [
-    { field: 'mensaje', type: 'string' }];
+    { field: 'mensaje', type: 'string' },
+    { field: 'tipo', type: 'string' }];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   is_edit_timeout = false;
