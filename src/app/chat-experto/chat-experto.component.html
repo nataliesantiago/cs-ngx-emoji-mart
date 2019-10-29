@@ -114,6 +114,7 @@
             </mat-toolbar>
 
             <mat-card-content class="chat-middle-box contenedor-mensajes">
+
               <perfect-scrollbar class="contenedor" [attr.id]="chat.codigo" scrollDirective [componentRef]="este" #este
                 [chat]="chat">
                 <div class="informacion-detallada-cliente animated"
@@ -130,7 +131,11 @@
                   <div class="chat-message"
                     [ngClass]="{'odd': m.id_usuario!==user.idtbl_usuario,'even': m.id_usuario===user.idtbl_usuario}"
                     *ngFor="let m of chat.mensajes | mensajesExperto: [1,usuarios]">
-                    <div class="chat-block">
+                    <div class="chat-block" [ngClass]="{'sugerencia-activa':chat.muestra_interfaz_recomendacion}">
+                      <div class="panel-checkbox-sugerencia" *ngIf="chat.muestra_interfaz_recomendacion">
+                        <mat-checkbox [(ngModel)]="m.mensaje_sugerido" (change)="actualizaMensajeSugerido(m)">
+                        </mat-checkbox>
+                      </div>
                       <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
                         <div *ngIf="m.es_archivo">
                           <a [href]="m.url" target="_blank">
@@ -245,11 +250,25 @@
                   </div>
                 </div>
               </div>
+              <div *ngIf="chat.muestra_boton_recomendacion" class="ventana-conversacion-activa">
+                <div class="contenedor-llamada">
+                  <div class="contenedor-icono">
+                    <div class="titulo-recomendacion">
+                      <div class="texto">Sugerir conversación como pregunta de la base de conocimiento?</div>
+                      <button mat-button class="" (click)="sugerirPregunta(chat)">Si</button>
+                      <button mat-button class="rechazar" (click)="rechazarSugerencia(chat)">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div [hidden]="chat.ocultar_nuevos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
                   (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
+              <div *ngIf="chat.muestra_interfaz_recomendacion" class="botonera-finalizar-recomendacion"><button
+                  mat-raised-button (click)="irSugerencia(chat)" color="basic">Finalizar</button></div>
             </mat-card-content>
 
-            <mat-card-actions class="chat-footer acciones-chat" *ngIf="!chat.mostrar_encuesta">
+            <mat-card-actions class="chat-footer acciones-chat"
+              *ngIf="!chat.mostrar_encuesta && !chat.muestra_interfaz_recomendacion">
               <mat-progress-bar mode="indeterminate" *ngIf="chat.cargando_archivo"></mat-progress-bar>
               <div fxLayout="row" layout-align="start center">
                 <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
@@ -291,6 +310,20 @@
                 </div>
               </div>
             </mat-toolbar>
+
+            <div *ngFor="let m of chat.mensajes | mensajesExperto: [1,usuarios]" class="goodbye-message">
+              <div class="chat-message even ng-star-inserted" *ngIf="m.es_despedida">
+                <div class="chat-block">
+                  <div class="ng-star-inserted">{{m.texto}}</div>
+                  <span *ngIf="m.id_usuario==user.idtbl_usuario">
+                    <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
+                    <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==2">done</mat-icon>
+                    <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==3">done_all</mat-icon>
+                  </span>
+                </div>
+                <div class="chat-date ng-star-inserted">{{m.fecha_mensaje | datechat}}</div>
+              </div>
+            </div>
 
             <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
             </app-visualizar-encuesta>

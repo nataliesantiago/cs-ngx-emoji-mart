@@ -299,6 +299,7 @@ export class UserService {
     }
 
     listen() {
+        // console.log(this.user.getIdRol());
 
         this.actualizarTodo();
 
@@ -310,21 +311,21 @@ export class UserService {
         }
 
         this.afMessaging.messages
-            .subscribe((message) => {                
+            .subscribe((message) => {
                 this.actualizarTodo();
             });
-        document.addEventListener('visibilitychange', (() => {            
+        document.addEventListener('visibilitychange', (() => {
             this.actualizarTodo();
         }))
     }
 
 
-    actualizarTodo() {        
+    actualizarTodo() {
         this.actualizarMensajesNLP().then(() => {
-            this.actualizarNotificaciones().then(r => {                
+            this.actualizarNotificaciones().then(r => {
                 if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
-                    if(!this.primera_vez_notificacion){
-                        this.soundService.sonar(4);                        
+                    if (!this.primera_vez_notificacion) {
+                        this.soundService.sonar(4);
                     }
                 }
                 this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
@@ -339,7 +340,7 @@ export class UserService {
     actualizarMensajesNLP(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {
-                this.respuesta_nlp = d.conversaciones;                
+                this.respuesta_nlp = d.conversaciones;
                 resolve(d.conversaciones);
             });
         });

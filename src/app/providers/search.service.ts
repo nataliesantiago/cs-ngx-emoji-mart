@@ -3,6 +3,7 @@ import { AjaxService } from './ajax.service';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 import { User } from '../../schemas/user.schema';
+import { OrigenDrive } from '../../schemas/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class SearchService {
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
         this.user = u
-        this.callTest();
-        //this.callTestEsquema();
+        // this.callTest();
+        // this.callTestEsquema();
       }
     });
   }
@@ -63,6 +64,36 @@ export class SearchService {
   callTestEsquema() {
     this.ajax.post('preguntas/cloud-search/crearEsquemaDrive', {}).subscribe(d => {
 
+    });
+  }
+
+  buscarOrigenesDrive(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('connector_drive/getDrives', {}).subscribe(d => {
+        if (d.success) {
+          resolve(d.origenes);
+        }
+      });
+    });
+  }
+
+  crearOrigenDrive(origen: OrigenDrive): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('connector_drive/drive/crear', origen).subscribe(d => {
+        if (d.success) {
+          resolve();
+        }
+      });
+    });
+  }
+
+  editarOrigenDrive(origen: OrigenDrive): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('connector_drive/drive/editar', origen).subscribe(d => {
+        if (d.success) {
+          resolve();
+        }
+      });
     });
   }
 

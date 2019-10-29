@@ -74,7 +74,7 @@ export class ChatClienteComponent implements OnInit {
   };
 
   init() {
-    
+
     this.chatService.obtenerLimiteTexto().then(valor => {
       this.limite_texto_chat = valor;
     });
@@ -97,7 +97,7 @@ export class ChatClienteComponent implements OnInit {
             c.asesor_actual.url_foto = c.url_foto;
           }
           if (c.filas && c.id_estado_conversacion == 1) {
-            
+
             this.chatService.getDocumentoFirebase('conversaciones/' + c.codigo).then(conversa => {
               c.transferido = conversa.transferido;
               //this.procesaFilas(c);
@@ -252,7 +252,7 @@ export class ChatClienteComponent implements OnInit {
 
       //  c.mensajes[i] = m;
       tmp.push(m);
-      if (!primera_vez && !c.focuseado) {
+      if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
         this.soundService.sonar(1);
         //c.cantidad_mensajes_nuevos++;
         c.mensajes_nuevos = true;
@@ -411,7 +411,7 @@ export class ChatClienteComponent implements OnInit {
       let data = datos.payload.data() as Conversacion;
       c.llamada_activa = data.llamada_activa;
       c.url_llamada = data.url_llamada;
-      
+
       if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2 && data.id_estado_conversacion != 10) {
         c.mostrar_encuesta = true;
         this.no_encontro_experto = false;
@@ -455,7 +455,7 @@ export class ChatClienteComponent implements OnInit {
           this.mensaje_no_encontro_experto = result;
         });
       }
-      
+
     });
   }
 
@@ -509,6 +509,8 @@ export class ChatClienteComponent implements OnInit {
         chat.texto_mensaje = '';
       }
       let m = new Mensaje();
+      m.tipo_conversacion = 1;
+      m.es_cliente = true;
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
       chat.texto_mensaje = '';
@@ -737,10 +739,13 @@ export class ChatClienteComponent implements OnInit {
       estado = 3;
     }
     this.chatService.cerrarConversacion(c, estado).then(() => {
-      c.mostrar_encuesta = true; 
+      c.mostrar_encuesta = true;
       this.no_encontro_experto = false;
     });
   }
+
+
+
 
   finalizaEncuesta(c: Conversacion) {
     let index = this.chats.findIndex(chat => {
@@ -751,7 +756,7 @@ export class ChatClienteComponent implements OnInit {
     }
   }
 
-  mensajeBuscandoExperto(){
+  mensajeBuscandoExperto() {
     this.chatService.getMensajeBuscandoExperto(6).then(result => {
       this.mensaje_buscando_experto = result;
     }).catch(() => {

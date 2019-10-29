@@ -17,6 +17,8 @@ import { MatDialog } from '@angular/material';
 import { TransferenciaChatComponent } from '../components/transferencia-chat/transferencia-chat.component';
 import { ShortcutsService } from '../providers/shortcuts.service';
 import { CerrarChatExpertoComponent } from '../components/cerrar-chat-experto/cerrar-chat-experto.component';
+import { text } from '@angular/core/src/render3';
+import { Router } from '@angular/router';
 
 const moment = _rollupMoment || _moment;
 
@@ -55,7 +57,10 @@ export class ChatExpertoComponent {
   cantidad_mensajes_sin_leer = 0;
   @Output() mensajes_nuevos: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog, private shortcutsService: ShortcutsService) {
+  constructor(private userService: UserService, private chatService: ChatService,
+    private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
+    private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService,
+    private dialog: MatDialog, private shortcutsService: ShortcutsService, private router: Router) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -252,8 +257,11 @@ export class ChatExpertoComponent {
       c.id_estado_conversacion = data.id_estado_conversacion;
       c.llamada_activa = data.llamada_activa;
       c.url_llamada = data.url_llamada;
+      c.conversacion_recomendada = data.conversacion_recomendada;
       if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
-        c.mostrar_encuesta = true;
+        if (!this.validaRecomendacionConversacion(c)) {
+          c.mostrar_encuesta = true;
+        }
         if (this.user.experto_activo) {
           this.recibirChatAutomatico();
         }
@@ -332,7 +340,7 @@ export class ChatExpertoComponent {
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
     c.listener_mensajes = c.messages.subscribe(async d => {
-      
+
       if (!primera_vez && c.mensajes && c.mensajes.length < d.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
@@ -341,8 +349,9 @@ export class ChatExpertoComponent {
       primera_vez = false;
       this.cantidad_mensajes_sin_leer = 0;
       this.expertos.forEach(e => {
-        console.log(e);
-        this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
+        if (e.conversacion_experto) {
+          this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
+        }
       });
       //console.log(this.cantidad_mensajes_sin_leer);
       this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
@@ -404,7 +413,7 @@ export class ChatExpertoComponent {
 
       //c.mensajes[i] = m;
       tmp.push(m);
-      if (!primera_vez && !c.focuseado && m.id_usuario != this.user.getId()) {
+      if (!primera_vez && !c.focuseado && m.id_usuario != this.user.getId() && c.id_estado_conversacion == 2) {
         this.soundService.sonar(1);
         c.mensajes_nuevos = true;
         // c.cantidad_mensajes_nuevos++;
@@ -594,6 +603,7 @@ export class ChatExpertoComponent {
         chat.texto_mensaje = '';
       }
       let m = new Mensaje();
+      m.tipo_conversacion = chat.id_tipo_conversacion;
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
       chat.texto_mensaje = '';
@@ -853,7 +863,9 @@ export class ChatExpertoComponent {
       if (d && d.motivo) {
         let estado = 3;
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
-          c.mostrar_encuesta = true;
+          if (!this.validaRecomendacionConversacion(c)) {
+            c.mostrar_encuesta = true;
+          }
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
           }
@@ -863,11 +875,28 @@ export class ChatExpertoComponent {
 
   }
 
-  finalizaEncuesta(c: Conversacion) {
-    if (this.chat.codigo == c.codigo) {
-      delete this.chat;
+  validaRecomendacionConversacion(c: Conversacion) {
+    // console.log(c);
+    if (c.conversacion_recomendada) {
+      if (!c.muestra_interfaz_recomendacion) {
+        c.muestra_boton_recomendacion = true;
+        this.fireStore.doc('conversaciones/' + c.codigo).update({ muestra_boton_recomendacion: c.muestra_boton_recomendacion, mostrar_encuesta: c.mostrar_encuesta });
+      }
+
+      return true;
+    } else {
+      return false;
     }
-    this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+  }
+
+  finalizaEncuesta(c: Conversacion) {
+    c.mostrar_encuesta = false;
+    if (!this.validaRecomendacionConversacion(c)) {
+      if (this.chat.codigo == c.codigo) {
+        delete this.chat;
+      }
+      this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+    }
   }
 
   iniciarVideollamada(c: Conversacion) {
@@ -896,5 +925,40 @@ export class ChatExpertoComponent {
 
     this.userService.sendEmailChat(this.info_correo).then((response) => {
     })
+  }
+
+  sugerirPregunta(c: Conversacion) {
+    c.muestra_interfaz_recomendacion = true;
+    c.muestra_boton_recomendacion = false;
+    this.fireStore.doc('conversaciones/' + c.codigo).update({ muestra_interfaz_recomendacion: true, muestra_boton_recomendacion: false });
+    this.chatService.aceptarSugerenciaNlp(c);
+  }
+
+  actualizaMensajeSugerido(m: Mensaje) {
+    this.fireStore.doc('conversaciones/' + m.codigo + '/mensajes/' + m.id).set(m);
+    //this.fireStore.collection('conversaciones/' + m.codigo + '/mensajes').doc(m.id).set(m);
+  }
+
+  rechazarSugerencia(c: Conversacion) {
+    if (this.chat.codigo == c.codigo) {
+      delete this.chat;
+    }
+    this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+  }
+
+  irSugerencia(c: Conversacion) {
+    let texto = '';
+    c.mensajes.forEach((m: Mensaje) => {
+      if (m.mensaje_sugerido) {
+        texto += `\n` + m.texto;
+      }
+    });
+    this.chatService.sugerencia_activa = true;
+    this.chatService.texto_mensajes_sugeridos = texto;
+    this.rechazarSugerencia(c);
+    setTimeout(() => {
+      this.router.navigate(['/formulario-preguntas-flujo-curaduria/sugerida']);
+    }, 1);
+
   }
 }
