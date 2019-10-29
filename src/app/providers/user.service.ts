@@ -455,4 +455,13 @@ export class UserService {
         })
     }
 
+
+    enviarPesos(usuarios, peso_todos): Promise<any>{
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/editar-pesos', {usuarios: usuarios, peso_todos: peso_todos}).subscribe(d => {                
+                resolve(d);
+            });
+        });
+    }
+
 }

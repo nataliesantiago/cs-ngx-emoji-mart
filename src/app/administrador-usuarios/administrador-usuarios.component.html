@@ -1,50 +1,114 @@
 <div class="contenedor">
-    <app-formulario-usuarios *ngIf="modificarUsuario" [usuario_editar]="id_usuario_editar" (onfinish)="actualizarDatos()"></app-formulario-usuarios> 
-  <mat-card>
-      <mat-card-content>
-          <mat-card-title>Administrador de Usuarios</mat-card-title>
-          <div class="bg-light p-10 p-r-20 p-l-20">
-              <mat-form-field>
-                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-              </mat-form-field>
-          </div>
+    <app-formulario-usuarios *ngIf="modificarUsuario" [usuario_editar]="id_usuario_editar"
+        (onfinish)="actualizarDatos()"></app-formulario-usuarios>
+    <mat-card>
+        <mat-card-content>
+            <mat-card-title>Administrador de Usuarios</mat-card-title>
+            <br>
+            <div fxLayout="row wrap">
+                <div fxFlex.gt-sm="20" fxFlex="100">
+                    <button fxFlex="70" class="custom__btn custom__btn--accept" (click)="editarVarios()">{{texto_boton}}</button>
+                </div>
+            </div>
+            <br>
+            <div class="bg-light p-10 p-r-20 p-l-20">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                </mat-form-field>
+            </div>
 
-          <div class="responsive-table">
+            <div class="elementos-seleccionados" *ngIf="total_seleccionado > 0">
+                <br>
+                <mat-chip-list class="elementos">
+                    <mat-chip class="chip" selected="true">Elementos Seleccionados {{total_seleccionado}}</mat-chip>
+                    <a mat-icon-button (click)="closeAll()">
+                        <mat-icon class="icon-close">close</mat-icon>
+                    </a>
+                </mat-chip-list>
 
-              <mat-table [dataSource]="dataSource" matSort>
-          
-                  <!-- ID Column -->
-                  <ng-container matColumnDef="idtbl_usuario">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                      <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_usuario}} </mat-cell>
-                  </ng-container>
-          
-                  <!-- Progress Column -->
-                  <ng-container matColumnDef="nombre">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
-                      <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
-                  </ng-container>
+                <div fxLayout="row wrap">
+                    <div fxFlex.gt-sm="30" fxFlex="100"></div>
+                    <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
+                        <mat-label>Peso del chat*</mat-label>
+                        <input type="number" min="1" onlyNumber matInput [(ngModel)]="peso_todos" name="peso_chat"
+                            autocomplete="off">
+                    </mat-form-field>
+                    <div fxFlex.gt-sm="2" fxFlex="100"></div>
+                    <div fxFlex.gt-sm="20" fxFlex="100">
+                        <button fxFlex="45" class="custom__btn custom__btn--accept"
+                            (click)="enviarDato()">Guardar</button>
+                    </div>
+                </div>
+            </div>
 
-                  <!-- Progress Column -->
-                  <ng-container matColumnDef="correo">
-                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Correo </mat-header-cell>
-                          <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.correo}} </mat-cell>
-                      </ng-container>
-          
-                  <ng-container matColumnDef="acciones">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
-                      <mat-cell *matCellDef="let row" style="max-width:15%;">
-                          <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
-                      </mat-cell>
-                  </ng-container>
-          
-                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedColumns;">
-                  </mat-row>
-              </mat-table>
-          
-              <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-          </div>
-      </mat-card-content>
-  </mat-card>
+            <div class="responsive-table">
+
+                <mat-table [dataSource]="dataSource" matSort>
+
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="idtbl_usuario">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> ID </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.idtbl_usuario}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="nombre">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Nombre
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.nombre}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="correo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Correo
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.correo}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="rol">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Rol
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_rol}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="perfil">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Perfil
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_perfil}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="peso_chat">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Peso Chat
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.peso_chat}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:5;"> Acciones
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:5%;">
+                            <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="check">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:5%;">
+                            <mat-checkbox (change)="selectAll(checkAll)" [(ngModel)]="checkAll" class="checkbox">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:5%;">
+                            <mat-checkbox class="checkbox" (change)="countSelected(row.check)" [(ngModel)]="row.check">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </mat-row>
+                </mat-table>
+
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </div>

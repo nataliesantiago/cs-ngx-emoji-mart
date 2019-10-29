@@ -341,6 +341,7 @@ export class ChatExpertoComponent {
       primera_vez = false;
       this.cantidad_mensajes_sin_leer = 0;
       this.expertos.forEach(e => {
+        console.log(e);
         this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
       });
       //console.log(this.cantidad_mensajes_sin_leer);

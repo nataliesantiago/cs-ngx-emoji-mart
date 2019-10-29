@@ -18,6 +18,7 @@ mat-expansion-panel {
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 5%;
+    position: relative;
 }
 
 .preguntas-asociadas {
@@ -48,7 +49,8 @@ mat-expansion-panel {
 
 .fecha-modificacion {
     color: gray !important;
-    text-align: end;
+    position: absolute;
+    right: 30px;
 }
 
 .no {
@@ -68,12 +70,9 @@ mat-expansion-panel {
     background-color: green;
 }
 
-.icono-dias{
-    padding-top: 9px;
-    padding-right: 9px;
-    text-align: end;
-}
-
 .icono{
     color: #c19d17 !important;
+    margin-left: 5px;
+    position: absolute;
+    right: 0;
 }

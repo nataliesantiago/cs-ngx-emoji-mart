@@ -69,7 +69,7 @@
     </mat-toolbar>    
     <mat-menu #message="matMenu" class="alertas-nlp">
         <mat-nav-list appAccordion class="contenedor__campana">
-            <h3>Insidencias</h3>            
+            <h3>Incidencias</h3>            
             <div *ngFor="let mensajes of conversaciones_nlp" class="pointer" (click)="consolaSupervisor(mensajes)"
             [ngClass]="{ 'notificacion-nueva': mensajes.leido == 0 }">
                 <mat-divider></mat-divider>
