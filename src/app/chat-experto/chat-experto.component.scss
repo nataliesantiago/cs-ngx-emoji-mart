@@ -64,6 +64,22 @@
     width: 100%;
     flex: 0 1 auto;
 
+    .botonera-finalizar-recomendacion {
+        position: absolute;
+        z-index: 100;
+        bottom: 1px;
+        text-align: center;
+        width: 100%;
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+        padding: 8px 0;
+
+        button {
+            color: black;
+            border-radius: 20px;
+        }
+    }
+
     .contenedor {
         height: 100%;
 
@@ -80,6 +96,11 @@
                 padding: 3px 8px;
                 font-size: 13px;
                 margin: 1px 0;
+
+                .panel-checkbox-sugerencia {
+                    position: absolute;
+                    left: -24px;
+                }
             }
 
             .chat-message {
@@ -104,6 +125,10 @@
                     text-align: left !important;
                     max-width: 80%;
                     position: relative;
+
+                    &.sugerencia-activa {
+                        margin-left: 30px;
+                    }
                 }
             }
 
@@ -228,6 +253,11 @@
     &.gris {
         background-color: #e4e4e4;
     }
+}
+
+.barra-recomendacion {
+    height: 56px;
+
 }
 
 @media only screen and (max-width: 960px) {

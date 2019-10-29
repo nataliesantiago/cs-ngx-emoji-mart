@@ -73,6 +73,9 @@ export class Conversacion {
     alarma_nlp: boolean;
     transfiriendo: boolean;
     es_despedida: boolean;
+    conversacion_recomendada: boolean;
+    muestra_boton_recomendacion: boolean;
+    muestra_interfaz_recomendacion: boolean;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;

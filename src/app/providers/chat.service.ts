@@ -41,6 +41,8 @@ export class ChatService {
   flac_ok: any;
   flacLength: any;
   flacBuffers: any;
+  sugerencia_activa = false;
+  texto_mensajes_sugeridos: string;
   constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore, private emojiService: EmojiService, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
@@ -110,7 +112,7 @@ export class ChatService {
   enviarMensaje(mensaje: Mensaje): Promise<any> {
     return new Promise((r, re) => {
       this.ajax.post('chat/conversacion/enviarMensaje', mensaje).subscribe(d => {
-        if (d.success) {          
+        if (d.success) {
           r(true);
         } else {
           reject();
@@ -796,6 +798,24 @@ export class ChatService {
       this.ajax.get('chat/getEstadosExperto', {}).subscribe(d => {
         if (d.success) {
           resolve(d.estados);
+        } else {
+          reject();
+        }
+      })
+    });
+  }
+
+  ///sugerencia-nlp/aceptar
+
+  /**
+ * @description Acepta la sugerencia del sistema para crear una pregunta a partir de los mensajes de un chat segun los sentimientos de cada mensaje
+ * @returns Promise
+ */
+  aceptarSugerenciaNlp(c: Conversacion): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/sugerencia-nlp/aceptar', { id_conversacion: c.idtbl_conversacion }).subscribe(d => {
+        if (d.success) {
+          resolve();
         } else {
           reject();
         }

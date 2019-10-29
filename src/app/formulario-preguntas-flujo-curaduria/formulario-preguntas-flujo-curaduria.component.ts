@@ -13,6 +13,7 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
 import { UtilsService } from '../providers/utils.service';
+import { ChatService } from '../providers/chat.service';
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -54,14 +55,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   notas_mostrar = [];
   validar_flujo;
 
-  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
-              private qs: QuillService, private utilsService: UtilsService) {
+  constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
+    private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService) {
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {
         this.preguntas_todas = p.preguntas;
       }
     })
-    
+
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
@@ -81,6 +82,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         this.todos_usuarios = d.usuario;
       }
     });
+    if (this.chatService.sugerencia_activa) {
+      this.pregunta.respuesta = this.chatService.texto_mensajes_sugeridos;
+    }
   }
 
   quillModulesFc(ql: any) {
@@ -99,10 +103,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
-  init(){
+  init() {
 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {
@@ -144,7 +148,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                     for (let i = 0; i < this.subrespuestas.length; i++) {
                       this.subrespuestas[i].respuesta = this.subrespuestas[i].texto;
                     }
-                    
+
                     this.ajax.get('preguntas/obtener-segmentos', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sg => {
                       if (sg.success) {
 
@@ -176,7 +180,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                                 this.dataSource.sort = this.sort;
                                 this.ajax.get('preguntas/obtener-comentarios-pregunta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(com => {
                                   if (com.success) {
-                                    for(let i = 0; i < com.comentarios.length; i++){
+                                    for (let i = 0; i < com.comentarios.length; i++) {
                                       com.comentarios[i].fecha = moment(com.comentarios[i].fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm');
                                     }
                                     this.notas_mostrar = com.comentarios;
@@ -210,7 +214,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   guardarPregunta() {
 
-    if(this.pregunta.titulo == "" || this.pregunta.id_producto == ""){
+    if (this.pregunta.titulo == "" || this.pregunta.id_producto == "") {
 
       swal.fire({
         title: 'Complete los campos obligatorios',
@@ -221,7 +225,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         confirmButtonText: 'Aceptar',
       })
 
-    }else{
+    } else {
 
       if (this.editar) {
 
@@ -239,28 +243,27 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         } else if (this.pregunta.id_estado_flujo == 4) {
           this.pregunta.id_estado_flujo = 3;
         }
-  
+
         if (!this.validar_flujo && this.id_pregunta_editar != "sugerida") {
           this.pregunta.id_estado_flujo = 2;
-          if(this.pregunta.id_usuario_revision){
+          if (this.pregunta.id_usuario_revision) {
             this.pregunta.id_estado_flujo = 1;
           }
         }
 
         this.notas.id_usuario_comentario = this.id_usuario;
-  
+
         //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
         this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
           if (d.success) {
-  
             this.router.navigate(['/flujo-curaduria']);
           }
         })
       } else {
-  
+
         if (this.pregunta.muestra_fecha_actualizacion) {
           this.pregunta.muestra_fecha_actualizacion = 1;
         } else {
@@ -275,13 +278,13 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.pregunta.id_estado_flujo = 2;
           this.pregunta.id_estado = 1;
           this.pregunta.id_usuario_revision = null;
-        }else{
+        } else {
           this.pregunta.id_usuario_revision = this.id_usuario;
         }
-  
+
         this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
           if (d.success) {
-  
+            this.chatService.sugerencia_activa = false;
             this.router.navigate(['/flujo-curaduria']);
           }
         })
@@ -304,7 +307,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       cancelButtonClass: 'custom__btn custom__btn--cancel',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
-      if(result.value){
+      if (result.value) {
         if (this.pregunta.muestra_fecha_actualizacion) {
           this.pregunta.muestra_fecha_actualizacion = 1;
         } else {
@@ -317,14 +320,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         } else if (this.pregunta.id_estado_flujo == 4) {
           this.pregunta.id_estado_flujo = 3;
         }
-    
+
         this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
         this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
           if (d.success) {
-    
+
             this.router.navigate(['/flujo-curaduria']);
           }
         })
@@ -482,8 +485,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
-  verificarPreguntaAsociada(pregunta){
-    
+  verificarPreguntaAsociada(pregunta) {
+
   }
 
   private _filter(value: any): string[] {

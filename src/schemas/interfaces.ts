@@ -131,3 +131,18 @@ export interface EstadoExperto {
     es_modificable: string;
     id_usuario_modificador: number;
 }
+
+export interface OrigenDrive {
+    idtbl_drives_busqueda?: number;
+    nombre?: string;
+    id_carpeta?: string;
+    token_usuario?: string;
+    id_usuario_creador?: number;
+    fecha_creacion?: Date;
+    id_usuario_modificacion?: number;
+    fecha_ultima_modificacion?: Date;
+    activo?: boolean;
+    url?: string;
+    nombre_temporal?: string;
+
+}

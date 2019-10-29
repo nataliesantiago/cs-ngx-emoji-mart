@@ -246,7 +246,7 @@ export class ChatClienteComponent implements OnInit {
 
       //  c.mensajes[i] = m;
       tmp.push(m);
-      if (!primera_vez && !c.focuseado) {
+      if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
         this.soundService.sonar(1);
         //c.cantidad_mensajes_nuevos++;
         c.mensajes_nuevos = true;
@@ -493,6 +493,8 @@ export class ChatClienteComponent implements OnInit {
         chat.texto_mensaje = '';
       }
       let m = new Mensaje();
+      m.tipo_conversacion = 1;
+      m.es_cliente = true;
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
       chat.texto_mensaje = '';
@@ -721,9 +723,12 @@ export class ChatClienteComponent implements OnInit {
       estado = 3;
     }
     this.chatService.cerrarConversacion(c, estado).then(() => {
-      c.mostrar_encuesta = true; 
+      c.mostrar_encuesta = true;
     });
   }
+
+
+
 
   finalizaEncuesta(c: Conversacion) {
     let index = this.chats.findIndex(chat => {

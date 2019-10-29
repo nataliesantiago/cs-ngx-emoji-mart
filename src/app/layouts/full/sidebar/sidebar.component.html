@@ -105,6 +105,10 @@
                 <li>
                     <a [routerLink]="['/ad-estado-experto']" routerLinkActive="active" (click)="cerrarMenu()">Administrar Estados de Inactividad Experto</a>
                 </li>
+
+                <li>
+                    <a [routerLink]="['/administrar-origenes-drive']" routerLinkActive="active" (click)="cerrarMenu()">Administrar Orígenes de Drive</a>
+                </li>
                 
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()" class="menu-link">
                     <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}} <mat-icon>open_in_new</mat-icon></a>
