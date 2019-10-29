@@ -10,7 +10,7 @@
             
             <br>
           </div>
-          <h3><strong>{{pregunta.titulo}}</strong></h3>
+          <h3 class="titulo-pregunta"><strong>{{pregunta.titulo}}</strong></h3>
           <div [innerHTML]="pregunta.respuesta  | safeHtml"></div>
           <div *ngIf="categorias_subrespuestas_superior.length > 0">
             <div *ngFor="let categoria_superior of categorias_subrespuestas_superior">
