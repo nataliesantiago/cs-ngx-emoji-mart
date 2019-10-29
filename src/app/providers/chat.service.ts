@@ -816,10 +816,21 @@ export class ChatService {
       this.ajax.post('chat/sugerencia-nlp/aceptar', { id_conversacion: c.idtbl_conversacion }).subscribe(d => {
         if (d.success) {
           resolve();
+        }
+      })
+    })
+  }
+
+  getMensajeBuscandoExperto(id_tipo_mensaje_automatico): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/obtener-mensaje-buscando', { id_usuario: this.user.getId(), id_tipo_mensaje_automatico: id_tipo_mensaje_automatico }).subscribe(result => {
+        if (result.success) {
+          resolve(result.mensaje);
         } else {
           reject();
         }
       })
     });
   }
+
 }

@@ -221,4 +221,9 @@ export class RespuestasComponent implements OnInit {
     })
   }
 
+  validarPadding(muestra_fecha, pregunta_nueva){
+    console.log(muestra_fecha);
+    console.log(pregunta_nueva);
+  }
+
 }

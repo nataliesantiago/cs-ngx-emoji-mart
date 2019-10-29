@@ -2834,7 +2834,17 @@ input:-webkit-autofill:active {
       width: 100%;
       font-size: 11px;
     }
+
+    h2 {
+      padding: 0 15px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
   }
+
+
 }
 
 @media only screen and (max-width: 960px) {

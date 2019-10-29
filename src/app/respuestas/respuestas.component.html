@@ -3,15 +3,15 @@
     <div fxLayout="row wrap">
       <div fxFlex.gt-sm="5" fxFlex="100"></div>
       <div fxFlex.gt-sm="70" fxFlex="100" class="container-principal">        
-        <div class="container-texto" *ngIf="pregunta">
-          <div class="icono-dias" *ngIf="pregunta_nueva">
-            <mat-icon class="icono">star</mat-icon>
-          </div>
+        <div class="container-texto" *ngIf="pregunta">          
+            <mat-icon class="icono" *ngIf="pregunta_nueva">star</mat-icon>
           <div class="fecha-modificacion" *ngIf="pregunta.muestra_fecha_actualizacion == 1">
             <strong>Última modificación: {{pregunta.fecha_ultima_modificacion}}</strong>
             <br>
           </div>
-          <h3><strong>{{pregunta.titulo}}</strong></h3>
+          <h3 [ngClass] = "{ 'titulo-pregunta': (pregunta.muestra_fecha_actualizacion == 1 || pregunta_nueva)}">
+            <strong>{{pregunta.titulo}}</strong>
+          </h3>
           <div [innerHTML]="pregunta.respuesta  | safeHtml"></div>
           <div *ngIf="categorias_subrespuestas_superior.length > 0">
             <div *ngFor="let categoria_superior of categorias_subrespuestas_superior">

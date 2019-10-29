@@ -196,30 +196,29 @@
                 </div>
                 <div class="panel-buscando-experto" *ngIf="!chat.id_experto_actual && !chat.mostrar_encuesta">
                   <mat-toolbar class="no-shadow bg-green font-family-comunidades barra-buscando" color="green"
-                    *ngIf="!chat.no_hay_filas">
-                    <div class="titulo-buscando">Buscando un Experto...</div>
-
+                    *ngIf="!chat.no_hay_filas && !no_encontro_experto">
+                    <div class="titulo-buscando">{{mensaje_buscando_experto}}</div>
                   </mat-toolbar>
-                  <div class="loading-gif" *ngIf="!chat.no_hay_filas">
-                    <img src="assets/images/loading.gif" />
 
+                  <div class="loading-gif" *ngIf="!chat.no_hay_filas && !no_encontro_experto">
+                      <img src="assets/images/loading.gif" />
+                    </div>
+
+                  <div class="panel-buscando-experto" *ngIf="no_encontro_experto">
+                    <mat-toolbar class="no-shadow font-family-comunidades barra-no-encontro" color="green"
+                      *ngIf="!chat.no_hay_filas">
+                      <div class="titulo-buscando">{{mensaje_no_encontro_experto}}</div>
+                    </mat-toolbar>
                   </div>
-                  <h3 *ngIf="chat.no_hay_filas" class="no-filas">En el momento no hay asesores que puedan atender tu
-                    solicitud</h3>
+                  
                 </div>
 
                 <perfect-scrollbar class="contenedor-encuesta">
                   <div *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="goodbye-message">
-                    <div class="chat-message ng-star-inserted" *ngIf="m.es_despedida">
-                      <div class="chat-block">
-                        <div class="ng-star-inserted">{{m.texto}}</div>
-                      </div>
-                      <div class="chat-date ng-star-inserted">{{m.fecha_mensaje | datechat}}</div>
-                    </div>
+                    <h2 *ngIf="m.es_despedida">{{m.texto}}</h2>
                   </div>
                   <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
                   </app-visualizar-encuesta>
-
                 </perfect-scrollbar>
 
               </mat-sidenav-container>

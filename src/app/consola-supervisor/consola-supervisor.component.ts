@@ -151,7 +151,8 @@ export class ConsolaSupervisorComponent implements OnInit {
     for (let c of changes) {
       let data = c.payload.doc.data() as Conversacion;
       data.codigo = c.payload.doc.id;
-      let usuario = this.usuarios.find((e: User) => {
+      let usuario = this.usuarios.find((e: User) => { 
+        console.log(e);
         return e.idtbl_usuario == data.id_usuario_creador;
       });
       let experto = this.usuarios.find((e: User) => {
