@@ -24,7 +24,8 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   matTableFilter: matTableFilter;
   filterColumns = [
-    { field: 'mensaje', type: 'string' }];
+    { field: 'mensaje', type: 'string' },
+    { field: 'tipo', type: 'string' }];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   is_edit_timeout = false;
@@ -69,7 +70,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     this.mensajeAutomatico.getAllMessagesWithType().then((result) => {
       result.forEach((message) => {
         message.texto_tmp = message.texto;
-        message.timeout = message.timeout;
+        message.timeout_tmp = message.timeout;
       });
       this.dataSource = new MatTableDataSource(result);
       this.dataSource.paginator = this.paginator;
@@ -85,7 +86,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
    */
   onChangeType(event) {
     this.message.id_tipo_mensaje = event.value;
-    if(event.value == 3) {
+    if(event.value == 3 || event.value == 5) {
       this.is_timeout = true;
     } else {
       this.is_timeout = false;
@@ -99,7 +100,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
    */
   onChangeTypeTable(event, row) {
     row.id_tipo_mensaje = event.value;
-    if(event.value == 3) {
+    if(event.value == 3 || event.value == 5) {
       row.is_edit_timeout = true;
     } else {
       row.is_edit_timeout = false;
