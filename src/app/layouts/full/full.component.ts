@@ -133,16 +133,15 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     });
 
     this.user.actualizarMensajesNLP().then( r => {
-      this.conversaciones_nlp = r[0];
-      this.mensajes_sin_leer_nlp = r[1].length;
+      this.conversaciones_nlp = r;      
     });
 
     this.user.observableNotificaciones.subscribe(() => {
 
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
-      this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
-      this.conversaciones_nlp = this.user.mensajes_nlp;
-      this.mensajes_sin_leer_nlp = this.user.cantidad_mensajes_sin_leer_nlp;
+      this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;      
+      this.conversaciones_nlp = this.user.respuesta_nlp;
+      //this.mensajes_sin_leer_nlp = this.user.cantidad_mensajes_sin_leer_nlp;
     });
   }
 
@@ -387,8 +386,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     console.log(e.idtbl_notificacion_mensaje_nlp);
     this.user.leerMensajeNLP(e.idtbl_notificacion_mensaje_nlp).then( r => {
       this.user.actualizarMensajesNLP().then( r => {
-        this.conversaciones_nlp = r[0];
-        this.mensajes_sin_leer_nlp = r[1].length;
+        this.conversaciones_nlp = r;        
         this.router.navigate(['/consola-supervisor']);
       });
     });    

@@ -38,10 +38,10 @@
 
         <button [matMenuTriggerFor]="message" mat-icon-button class="m-r-10 icono-nlp">
             <mat-icon>message</mat-icon>
-            <div class="notify">
-                <span *ngIf="mensajes_sin_leer_nlp > 0" class="heartbit-notificaciones"></span>
-                <span *ngIf="mensajes_sin_leer_nlp > 0" class="point-notificaciones"
-                        matBadge="{{mensajes_sin_leer_nlp}}" matBadgeColor="warn" matBadgeOverlap="false"></span>
+            <div class="notify" *ngIf="conversaciones_nlp && conversaciones_nlp[1]">
+                <span *ngIf="conversaciones_nlp[1].length > 0" class="heartbit-notificaciones"></span>
+                <span *ngIf="conversaciones_nlp[1].length > 0" class="point-notificaciones"
+                        matBadge="{{conversaciones_nlp[1].length}}" matBadgeColor="warn" matBadgeOverlap="false"></span>
             </div>
         </button>
 
@@ -68,9 +68,9 @@
 
     </mat-toolbar>    
     <mat-menu #message="matMenu" class="alertas-nlp">
-        <mat-nav-list appAccordion class="contenedor__campana">
+        <mat-nav-list appAccordion class="contenedor__campana" *ngIf="conversaciones_nlp && conversaciones_nlp[0]">
             <h3>Incidencias</h3>            
-            <div *ngFor="let mensajes of conversaciones_nlp" class="pointer" (click)="consolaSupervisor(mensajes)"
+            <div *ngFor="let mensajes of conversaciones_nlp[0]" class="pointer" (click)="consolaSupervisor(mensajes)"
             [ngClass]="{ 'notificacion-nueva': mensajes.leido == 0 }">
                 <mat-divider></mat-divider>
                 <div class="fecha-notificacion-nlp">

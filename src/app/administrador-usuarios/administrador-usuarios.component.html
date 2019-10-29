@@ -5,11 +5,8 @@
         <mat-card-content>
             <mat-card-title>Administrador de Usuarios</mat-card-title>
             <br>
-            <div fxLayout="row wrap">
-                <div fxFlex.gt-sm="20" fxFlex="100">
-                    <button fxFlex="70" class="custom__btn custom__btn--accept" (click)="editarVarios()">{{texto_boton}}</button>
-                </div>
-            </div>
+            <mat-slide-toggle (change)="editarVarios()">Seleccionar Varios</mat-slide-toggle>
+            <br>
             <br>
             <div class="bg-light p-10 p-r-20 p-l-20">
                 <mat-form-field>
@@ -39,6 +36,11 @@
                             (click)="enviarDato()">Guardar</button>
                     </div>
                 </div>
+            </div>
+
+            <div class="opcion-seleccionar-todos" *ngIf="mostrar_acciones">
+                <mat-checkbox (change)="selectAll(checkAll)" [(ngModel)]="checkAll" class="checkbox">
+                </mat-checkbox>Seleccionar Todos
             </div>
 
             <div class="responsive-table">
@@ -84,17 +86,16 @@
                     </ng-container>
 
                     <ng-container matColumnDef="acciones">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:5;"> Acciones
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones
                         </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:5%;">
+                        <mat-cell *matCellDef="let row" style="max-width:10%;">
                             <i class="ti-pencil text-info m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="check">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:5%;">
-                            <mat-checkbox (change)="selectAll(checkAll)" [(ngModel)]="checkAll" class="checkbox">
-                            </mat-checkbox>
+
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row" style="max-width:5%;">
                             <mat-checkbox class="checkbox" (change)="countSelected(row.check)" [(ngModel)]="row.check">

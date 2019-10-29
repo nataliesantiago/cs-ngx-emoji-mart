@@ -31,7 +31,8 @@
       <div fxLayout="row wrap">
         <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
           <mat-label>Fecha Inicio*</mat-label>
-          <input matInput [matDatepicker]="picker" [(ngModel)]="notificacion.fecha_inicio">
+          <input matInput [min]="fecha_actual" [matDatepicker]="picker"
+           [(ngModel)]="notificacion.fecha_inicio">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>        

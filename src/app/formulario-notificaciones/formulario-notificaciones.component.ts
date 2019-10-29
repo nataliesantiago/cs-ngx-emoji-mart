@@ -11,6 +11,9 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 import { NotificacionService } from '../providers/notificacion.service';
 import { UtilsService } from '../providers/utils.service';
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+const moment = _rollupMoment || _moment;
 
 
 @Component({
@@ -40,6 +43,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   tipo_seleccion;
   nombre_archivo = '';
   limite_caracteres;
+  fecha_actual;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
               private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService, private utilsService: UtilsService){
@@ -55,11 +59,14 @@ export class FormularioNotificacionesComponent implements OnInit {
         this.init();
       }
     })
-    
+
+    this.fecha_actual = moment().toDate();
+
     this.notificacionService.obtenerCantidadCaracteresNotificacion().then( n => {
       this.limite_caracteres = n;
     });
   }
+
 
   init(){
 
@@ -115,10 +122,10 @@ export class FormularioNotificacionesComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     
-    this.myControl = new FormControl("");
+    this.myControl = new FormControl();
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(value => this.utilsService.filter(this.lista_asociada, value, 'nombre'))
+      map(value => this._filter(value))
     );
     this.cg.detectChanges();
   }
@@ -165,7 +172,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   enviarNotificacion(){
 
     if(this.notificacion.titulo == "" || this.notificacion.fecha_inicio == "" || this.notificacion.fecha_fin == "" || this.notificacion.hora_envio == ""){
-
+      
       swal.fire({
         title: 'Digite los campos obligatorios',
         text: '',

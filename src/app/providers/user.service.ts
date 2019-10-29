@@ -39,6 +39,10 @@ export class UserService {
     este;
     mensajes_nlp = [];
     cantidad_mensajes_sin_leer_nlp = 0;
+    respuesta_nlp;
+    cant_mensajes_actuales = 0;
+    cant_notificaciones_sin_leer = 0;
+    primera_vez_notificacion = true;
 
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, private soundService: SonidosService) {
 
@@ -281,7 +285,7 @@ export class UserService {
         this.afMessaging.requestPermission
             .pipe(mergeMapTo(this.afMessaging.tokenChanges))
             .subscribe(
-                (token) => {                    
+                (token) => {
                     this.listen();
                     this.ajax.post('user/setFirebaseToken', { token: token, user: this.user }).subscribe(d => {
                         if (d.success) {
@@ -295,22 +299,47 @@ export class UserService {
     }
 
     listen() {
-        console.log(this.user.getIdRol());
+
+        this.actualizarTodo();
+
+        if (this.respuesta_nlp && this.respuesta_nlp[1]) {
+            this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
+        }
+        if (this.notificaciones_sin_leer) {
+            this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
+        }
+
         this.afMessaging.messages
             .subscribe((message) => {                
-                this.actualizarMensajesNLP().then(() => {
-                    this.actualizarNotificaciones();
-                    this.soundService.sonar(4);
-                });
+                this.actualizarTodo();
             });
+        document.addEventListener('visibilitychange', (() => {            
+            this.actualizarTodo();
+        }))
     }
 
 
-    actualizarMensajesNLP(): Promise<any>{
-        return new Promise((resolve, reject) =>{
-            this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {                
-                this.mensajes_nlp = d.conversaciones[0];
-                this.cantidad_mensajes_sin_leer_nlp = d.conversaciones[1].length;
+    actualizarTodo() {        
+        this.actualizarMensajesNLP().then(() => {
+            this.actualizarNotificaciones().then(r => {                
+                if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
+                    if(!this.primera_vez_notificacion){
+                        this.soundService.sonar(4);                        
+                    }
+                }
+                this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
+                this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
+                this.primera_vez_notificacion = false;
+                this.subjectNotificaciones.next();
+            });
+        });
+    }
+
+
+    actualizarMensajesNLP(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('chat/obtenerConversacionesNLP').subscribe(d => {
+                this.respuesta_nlp = d.conversaciones;                
                 resolve(d.conversaciones);
             });
         });
@@ -334,10 +363,11 @@ export class UserService {
     }
 
 
-    actualizarNotificaciones() {
-
-        this.obtenerNotificacionesUsuario(this.user.idtbl_usuario).then(r => {
-
+    actualizarNotificaciones(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.obtenerNotificacionesUsuario(this.user.idtbl_usuario).then(r => {
+                resolve(r);
+            })
         })
     }
 
@@ -433,7 +463,7 @@ export class UserService {
             })
         });
     }
-    
+
     sendEmailChat(info_correo): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('email/enviar-correo', { info_correo }).subscribe(d => {
@@ -446,19 +476,19 @@ export class UserService {
         });
     }
 
-    leerMensajeNLP(id_mensaje): Promise<any>{
+    leerMensajeNLP(id_mensaje): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.ajax.post('chat/leerMensajeNLP', {id_mensaje: id_mensaje}).subscribe(d => {
-                this.mensajes_nlp = d.conversaciones;  
+            this.ajax.post('chat/leerMensajeNLP', { id_mensaje: id_mensaje }).subscribe(d => {
+                this.mensajes_nlp = d.conversaciones;
                 resolve(d.conversaciones);
             });
         })
     }
 
 
-    enviarPesos(usuarios, peso_todos): Promise<any>{
+    enviarPesos(usuarios, peso_todos): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.ajax.post('user/editar-pesos', {usuarios: usuarios, peso_todos: peso_todos}).subscribe(d => {                
+            this.ajax.post('user/editar-pesos', { usuarios: usuarios, peso_todos: peso_todos }).subscribe(d => {
                 resolve(d);
             });
         });
