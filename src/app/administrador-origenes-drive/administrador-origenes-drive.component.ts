@@ -59,6 +59,11 @@ export class AdministradorOrigenesDriveComponent implements OnInit {
       this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
     })
   }
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 
   crearOrigen() {
     this.nuevo_origen.id_usuario_creador = this.user.getId();
