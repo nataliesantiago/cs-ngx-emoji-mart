@@ -43,6 +43,7 @@ import { ConsolaSupervisorComponent } from './consola-supervisor/consola-supervi
 import { AdMensajesAutomaticosComponent } from './ad-mensajes-automaticos/ad-mensajes-automaticos.component';
 import { AdEstadoExpertoComponent } from './ad-estado-experto/ad-estado-experto.component';
 import { AdministradorOrigenesDriveComponent } from './administrador-origenes-drive/administrador-origenes-drive.component';
+import { HistorialChatComponent } from './historial-chat/historial-chat.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -92,4 +93,5 @@ export const AppRoutes: Routes = [
   { path: 'ad-mensajes-automaticos', component: AdMensajesAutomaticosComponent, canActivate: [AuthGuard] },
   { path: 'ad-estado-experto', component: AdEstadoExpertoComponent, canActivate: [AuthGuard] },
   { path: 'administrar-origenes-drive', component: AdministradorOrigenesDriveComponent, canActivate: [AuthGuard] },
+  { path: 'historial-chats', component: HistorialChatComponent, canActivate: [AuthGuard] },
 ];
