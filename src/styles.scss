@@ -2812,39 +2812,13 @@ input:-webkit-autofill:active {
 }
 
 .goodbye-message {
-  .chat-message {
-    padding: 0 3px;
-    margin-top: 5px;
-    margin-bottom: 0;
-    padding-right: 11px;
-    display: block;
+  h2 {
+    padding: 0 15px;
     text-align: center;
-
-    .chat-block {
-      text-align: left !important;
-      display: inline-block;
-      padding: 4px 8px;
-      position: relative;
-      max-width: 80%;
-      font-size: 13px;
-      margin: 1px 0;
-    }
-
-    .chat-date {
-      width: 100%;
-      font-size: 11px;
-    }
-
-    h2 {
-      padding: 0 15px;
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.2;
-      font-weight: 600;
-    }
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 600;
   }
-
-
 }
 
 /*
@@ -2869,5 +2843,25 @@ input:-webkit-autofill:active {
 @media only screen and (max-width: 960px) {
   .contenedor-sidenav-chat-experto {
     margin-left: 00px !important;
+  }
+}
+
+.history-chat {
+  height: calc(100% - 0px);
+  &__wrapper {
+    height: 100%;
+    .chat-list {
+      height: 100%;
+      display: flex;
+      flex-flow: column;
+      margin: 0;
+      border: 1px solid #dadada;
+      border-top-right-radius: 15px;
+      border-top-left-radius: 15px;
+      margin-right: 10px;
+    }
+  }
+  .history-mat-card {
+    height: calc(100% - 30px);
   }
 }
