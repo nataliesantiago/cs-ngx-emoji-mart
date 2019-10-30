@@ -16,6 +16,7 @@ export const environment = {
     messagingSenderId: "537955814682",
     appId: "1:537955814682:web:b726049a21de1c69"
   },
-  ambiente: 'col'
+  ambiente: 'col',
+  id_origen_conecta:'datasources/2721fbfe980dfcd21c1c5aece9cacef5'
 };
 
