@@ -260,8 +260,9 @@ export class ChatExpertoComponent {
       c.conversacion_recomendada = data.conversacion_recomendada;
       if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
 
-        c.mostrar_encuesta = true;
-
+        if (!c.encuesta_realizada) {
+          c.mostrar_encuesta = true;
+        }
         if (this.user.experto_activo) {
           this.recibirChatAutomatico();
         }
@@ -878,7 +879,7 @@ export class ChatExpertoComponent {
     if (c.conversacion_recomendada) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
-        this.fireStore.doc('conversaciones/' + c.codigo).update({ muestra_boton_recomendacion: c.muestra_boton_recomendacion, mostrar_encuesta: c.mostrar_encuesta });
+        this.fireStore.doc('conversaciones/' + c.codigo).update({ muestra_boton_recomendacion: c.muestra_boton_recomendacion, mostrar_encuesta: c.mostrar_encuesta, encuesta_realizada: c.encuesta_realizada });
       }
 
       return true;
@@ -889,6 +890,7 @@ export class ChatExpertoComponent {
 
   finalizaEncuesta(c: Conversacion) {
     c.mostrar_encuesta = false;
+    c.encuesta_realizada = true;
     if (!this.validaRecomendacionConversacion(c)) {
       if (this.chat.codigo == c.codigo) {
         delete this.chat;

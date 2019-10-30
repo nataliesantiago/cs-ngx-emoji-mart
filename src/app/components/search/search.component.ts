@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit, NgZone, ViewChild, Input } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, NgZone, ViewChild, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/startWith';
@@ -24,7 +24,7 @@ import { LookFeelService } from '../../providers/look-feel.service';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class AppSearchComponent implements OnInit {
+export class AppSearchComponent implements OnChanges, OnInit {
   url: String = '';
   metodo = 1;
   public def = new FormControl(''); // Model del autocomplete
@@ -292,7 +292,12 @@ export class AppSearchComponent implements OnInit {
     this.def.setValue(this.texto_buscar);
     /**speech recognizion */
   }
-
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('entro aca mono');
+    const name: SimpleChange = changes.texto_buscar;
+    this.texto_buscar = name.currentValue;
+    this.def.setValue(this.texto_buscar);
+  }
   buscar(metodo) {
 
     if (this.searchText === null && this.searchText === undefined) {

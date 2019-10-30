@@ -96,7 +96,15 @@ export class SearchService {
       });
     });
   }
-
+  obtenerPregunta(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: id }).subscribe(d => {
+        if (d.success) {
+          resolve(d.pregunta);
+        }
+      });
+    });
+  }
 
 
 }
