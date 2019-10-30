@@ -259,9 +259,9 @@ export class ChatExpertoComponent {
       c.url_llamada = data.url_llamada;
       c.conversacion_recomendada = data.conversacion_recomendada;
       if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
-        if (!this.validaRecomendacionConversacion(c)) {
-          c.mostrar_encuesta = true;
-        }
+
+        c.mostrar_encuesta = true;
+
         if (this.user.experto_activo) {
           this.recibirChatAutomatico();
         }
@@ -863,9 +863,7 @@ export class ChatExpertoComponent {
       if (d && d.motivo) {
         let estado = 3;
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
-          if (!this.validaRecomendacionConversacion(c)) {
-            c.mostrar_encuesta = true;
-          }
+          c.mostrar_encuesta = true;
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
           }
