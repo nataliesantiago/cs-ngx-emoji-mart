@@ -18,6 +18,12 @@ import { AutenticationService } from '../../services/autenticacion.service';
 import { SearchService } from '../../providers/search.service';
 import { AutocompleteComponent } from 'angular-ng-autocomplete';
 import { LookFeelService } from '../../providers/look-feel.service';
+import { debounceTime, switchMap } from 'rxjs/operators';
+
+interface IWindow extends Window {
+  webkitSpeechRecognition: any;
+  SpeechRecognition: any;
+}
 
 @Component({
   selector: 'app-search-component',
@@ -35,23 +41,10 @@ export class AppSearchComponent implements OnChanges, OnInit {
   keyword = 'title'; // reconoce el atributo del json para el autocomplete
   filteredOptions: Observable<any[]>; // guardar el resultado de las busquedas
   dataImage = [];
+  sugerencias = [];
   textopredictivo: any = [
   ]; // guardar el texto predictivo de la api
-  preguntasArray = [
-    { id: 1, consulta: 'Como crear mi cuenta corriente' },
-    { id: 2, consulta: 'Credito para mi casa nueva' },
-    { id: 3, consulta: 'Beneficios del banco' },
-    { id: 4, consulta: 'Davivienda desde tu celular' },
-    { id: 5, consulta: 'Cuenta de ahorro para pensionados' },
-    { id: 6, consulta: 'Puntos de atención' }
-  ];
-  busquedasArray = [
-    { id: 1, busqueda: '¿Cuánto es el monto que puedo transferir desde mi cuenta Davivienda a Daviplata?' },
-    { id: 2, busqueda: '¿Si soy cliente Davivienda, cuál es mi clave virtual o dónde la asigno?' },
-    { id: 3, busqueda: '¿Cómo puedo presentar una queja o reclamo en Davivienda?' },
-    { id: 4, busqueda: '¿como pedir un credito?' },
-    { id: 5, busqueda: 'Adelanto de dinero desde mi app' }
-  ];
+
   textError = 'no hay resultados'; // label del autocomplete
 
   /**web speech start */
@@ -65,6 +58,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   search_placeholder = '';
   @Input() modo: number;
   @Input() texto_buscar: string;
+  recognition;
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -75,9 +69,13 @@ export class AppSearchComponent implements OnChanges, OnInit {
     private autenticationService: AutenticationService,
     private look_service: LookFeelService
   ) {
+    const { webkitSpeechRecognition }: IWindow = <any>window;
+    this.recognition = new webkitSpeechRecognition();
+    this.recognition.lang = this.languages[1];
     this.searchText = '';
     this.responseSearch.setActiveMostrarBarra(false);
     this.getPlaceholder();
+
   }
 
   getPlaceholder() {
@@ -86,108 +84,49 @@ export class AppSearchComponent implements OnChanges, OnInit {
     });
   }
 
-  /**
-   * Inicia el stream de sonido para reconocimento de voz
-   * @param event current window
-   */
-  startButton(event) {
-    if (this.recognizing) {
-      this.speechRecognizer.stop();
-      return;
-    }
 
-    this.speechRecognizer.start(event.timeStamp);
+  iniciarReconocimientoVoz(e: Event) {
+    this.recognition.start();
   }
 
-  /**
-   * Actualiza el lenguaje actual para el reconocimiento de voz
-   * @param language lenguaje de reconocimiento (['en-US', 'es-CO'])
-   */
-  onSelectLanguage(language: string) {
-    this.currentLanguage = language;
-    this.speechRecognizer.setLanguage(this.currentLanguage);
-  }
+
+
 
   /**
    * Function de configuracion de eventos, se ejecuta al iniciar el reconomiento de voz para asignar los trigers
    * de cada evento del api
    */
   private initRecognition() {
-    this.speechRecognizer.setLanguage(this.currentLanguage);
+    this.recognition.onaudiostart = () => {
+      this.recognizing = true;
+      this.changeDetector.detectChanges();
+    }
 
-    /** 
-    * Promise : se ejecuta al iniciar el reconocimiento de voz
-    */
-    this.speechRecognizer.onStart()
-      .subscribe(data => {
-        let element = document.getElementById('microphone-icon')
-        element.className = 'animated infinite heartBeat delay-1s fa fa-microphone microfono tooltip-container'
-        this.recognizing = true;
-        document.getElementById('voice-search').innerHTML = "Estoy Escuchando ..."
-        //this.detectChanges();
-      });
+    this.recognition.onspeechend = () => {
+      this.recognizing = false;
+      this.changeDetector.detectChanges();
+    }
 
-    /** 
-    * Promise : se ejecuta al terminar el reconocmiento de voz
-    */
-    this.speechRecognizer.onEnd()
-      .subscribe(data => {
-        this.recognizing = false;
-        let element = document.getElementById('microphone-icon').className = 'fa fa-microphone microfono tooltip-container'
-        this.updateiconVoiceSearch("voice-search", "Búsqueda por voz");
-        //this.detectChanges();
-        this.notification = null;
-
-      });
-
-    /**
-     * Promise : se ejecuta cuando el api detecta un resultado desde el servicio del
-     * reconocimiento
-     */
-    this.speechRecognizer.onResult()
-      .subscribe((data: SpeechNotification) => {
-        const message = data.content.trim();
-        if (data.info === 'final_transcript' && message.length > 0) {
-          this.searchText = `${message}`;
-          this.def = new FormControl(this.searchText);
-          this.nzone.run(() => this.stopRecognizer());
-          this.finalTranscript = `${this.finalTranscript}\n${message}`;
-          this.actionContext.processMessage(message, this.currentLanguage);
-          this.actionContext.runAction(message, this.currentLanguage);
-          setTimeout(() => {
-            // this.nzone.runTask(() => {
-            this.buscar(3);
-            //});
-          }, 500);
-
+    this.recognition.onresult = event => {
+      let interimTranscript = '';
+      for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+        let transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          interimTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
         }
-      });
+      }
+      this.def.setValue(interimTranscript);
+      setTimeout(() => {
+        this.nzone.run(() => {
+          this.buscar(2);
+        });
+      }, 1000);
+      this.changeDetector.detectChanges();
+    }
 
-    /**
-     * Promise : se ejecuta para actualizar la bandeja de errores generados por el servicio 
-     * de reconocimiento
-     */
-    this.speechRecognizer.onError()
-      .subscribe(data => {
-        switch (data.error) {
-          case SpeechError.BLOCKED:
-          case SpeechError.NOT_ALLOWED:
-            this.notification = `Your browser is not authorized to access your microphone. Verify that your browser has access to your microphone and try again.
-            `;
-            break;
-          case SpeechError.NO_SPEECH:
-            this.notification = `No speech has been detected. Please try again.`;
-            break;
-          case SpeechError.NO_MICROPHONE:
-            this.notification = `Microphone is not available. Plese verify the connection of your microphone and try again.`;
-            break;
-          default:
-            this.notification = null;
-            break;
-        }
-        this.recognizing = false;
-        //this.detectChanges();
-      });
+
   }
 
   /**
@@ -253,7 +192,9 @@ export class AppSearchComponent implements OnChanges, OnInit {
   */
   selectEvent(item) {
     this.metodo = 1;
-    this.searchText = item.title;
+    //this.searchText = item.title;
+    this.def.setValue(item.title);
+    this.buscar(1);
   }
 
   /**
@@ -285,15 +226,25 @@ export class AppSearchComponent implements OnChanges, OnInit {
   }
   ngOnInit(): void {
     /**speech recognizion */
-    this.currentLanguage = this.languages[0];
-    this.speechRecognizer.initialize(this.currentLanguage);
+    // this.currentLanguage = this.languages[0];
+    // this.speechRecognizer.initialize(this.currentLanguage);
     this.initRecognition();
     this.notification = null;
     this.def.setValue(this.texto_buscar);
+    this.def.valueChanges
+      .pipe(
+        debounceTime(200),
+        switchMap(value => this.searchService.queryCloudSearch(value, this.sugerencias).then(d => {
+          // console.log(d);
+          this.sugerencias = d.results;
+        }))
+      ).subscribe(d => {
+        // console.log(d);
+      });
     /**speech recognizion */
   }
   ngOnChanges(changes: SimpleChanges) {
-    console.log('entro aca mono');
+    // console.log('entro aca mono');
     const name: SimpleChange = changes.texto_buscar;
     this.texto_buscar = name.currentValue;
     this.def.setValue(this.texto_buscar);

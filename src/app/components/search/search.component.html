@@ -1,19 +1,35 @@
 <div id="search-bar" class="up" [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2}">
-  <span><img src="../../assets/images/Lupa.svg" (click)="buscar(1)" alt="icone de recherche" width="35px"
-      class="img_lupa"></span>
+  <span>
+    <mat-icon class="buscar-lupa">search</mat-icon>
+  </span>
   <div class="image-upload">
     <label for="file-input">
       <mat-icon class="archivo">photo_camera</mat-icon>
     </label>
     <input id="file-input" (change)="onFileSelected($event)" type="file" />
   </div>
-  <mat-icon (click)="startButton($event)" class="microfono">mic</mat-icon>
+  <mat-icon (click)="iniciarReconocimientoVoz($event)" id="microphone-icon" class="microfono"
+    [ngClass]="{'escuchando':recognizing}">
+    mic</mat-icon>
   <div class="ng-autocomplete">
-    <ng-autocomplete id="ng-autocomplete-search" placeHolder="{{search_placeholder}}" [data]="textopredictivo"
-      [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
-      (keydown.enter)="buscar(1)" [itemTemplate]="itemTemplate" [formControl]="def" [notFoundTemplate]="'notFound'"
+    <!--<ng-autocomplete id="ng-autocomplete-search" placeHolder="{{search_placeholder}}" [data]="sugerencias"
+      (selected)='selectEvent($event)' (keydown.enter)="buscar(1)" [formControl]="def" [notFoundTemplate]="'No hay resultados'"
       (inputCleared)="clearOptions()" #autocomplete>
     </ng-autocomplete>
+  -->
+    <mat-form-field class="caja-buscador">
+      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def"
+        [matAutocomplete]="auto" autocomplete="off">
+      <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear" (click)="def.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectEvent($event.option.value)'>
+        <mat-option *ngFor="let option of sugerencias" [value]="option">
+          {{option.title}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
 
 
     <ng-template #itemTemplate let-item id="value-text">

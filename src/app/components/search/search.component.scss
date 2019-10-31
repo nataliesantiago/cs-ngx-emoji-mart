@@ -93,14 +93,17 @@ hr {
     margin-top: 2em;
     position: relative;
     max-width: 520px;
+
     &:focus-within {
         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 2px 6px 2px rgba(60, 64, 67, .15);
     }
-    &.barra-superior{
+
+    &.barra-superior {
         margin: 0 auto;
         margin-left: 15px;
     }
-    &.barra-izquierda{
+
+    &.barra-izquierda {
         margin: 15px auto;
         // margin-left: 0;
     }
@@ -253,6 +256,10 @@ li a:hover {
     position: absolute;
     right: 0px;
     top: 0;
+
+    &.escuchando {
+        animation: heartbeat 1.2s infinite alternate;
+    }
 }
 
 .archivo {
@@ -265,6 +272,14 @@ li a:hover {
     cursor: pointer;
     position: absolute;
     right: 18px;
+}
+
+.buscar-lupa {
+    color: #B5B5B5;
+    cursor: pointer;
+    position: absolute;
+    top: 14px;
+
 }
 
 .contenedor__img {

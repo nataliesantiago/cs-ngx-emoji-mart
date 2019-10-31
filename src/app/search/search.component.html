@@ -1,10 +1,14 @@
 <div class="sin_fondo centrado">
   <app-search-component [modo]="2" [texto_buscar]="busqueda"></app-search-component>
   <div *ngIf="resultado">
-    <div *ngIf="ortografia" class="quisistes-decir"><span>Quizas quisiste decir: </span> <a [routerLink]="['/search/'+busquedaUrl]" routerLinkActive="active"><b>{{busquedaCorregida}}</b></a></div>
-    <div *ngFor="let r of resultados" class="contenedor__texto center">
-      <app-resultado-search [respuesta]="r"></app-resultado-search>
+    <div *ngIf="ortografia" class="quisistes-decir"><span>Quizas quisiste decir: </span> <a
+        [routerLink]="['/search/'+busquedaUrl]" routerLinkActive="active"><b>{{busquedaCorregida}}</b></a></div>
+    <div *ngFor="let r of resultados; let i = index" class="contenedor__texto center">
+      <app-resultado-search [respuesta]="r" [pos]="i"></app-resultado-search>
     </div>
+    <mat-progress-spinner class="spinner-cargando-respuestas" [mode]="'indeterminate'" [diameter]="68"
+      *ngIf="cargando_respuestas">
+    </mat-progress-spinner>
   </div>
   <div *ngIf="resultado == false">
     <div>

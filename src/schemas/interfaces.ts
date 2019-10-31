@@ -155,5 +155,6 @@ export interface ResultadoCloudSearch {
     metadata: { source: { name: string } };
     contenido?: string;
     tipo?: string;
+    url_icono: string;
     //"url":"8_19_19","snippet":{"snippet":"titulo_respuesta: Pregunta 4.","matchRanges":[{"start":18,"end":28}]},"metadata":{"source":{"name":"datasources/2721fbfe980dfcd21c1c5aece9cacef5"}}}
 }

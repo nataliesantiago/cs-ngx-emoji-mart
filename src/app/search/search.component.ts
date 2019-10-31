@@ -20,7 +20,7 @@ export class SearchComponent implements OnInit {
   busquedaCorregida: string;
   resultados: Array<ResultadoCloudSearch>;
   respuesta: any;
-
+  cargando_respuestas = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -35,13 +35,31 @@ export class SearchComponent implements OnInit {
 
   }
   init() {
+
     this.activatedRoute.params.subscribe(params => {
-      console.log(' paso por aca');
+      // Se reinicializa el componente
+      this.resultados = [];
       this.busqueda = params.id;
+      this.resultado = true;
+      this.ortografia = false;
+      delete this.busquedaUrl;
+      delete this.valorBusqueda;
+      delete this.busquedaCorregida;
+      delete this.respuesta;
+      ////////////////////////////////
+
       this.busquedaUrl = encodeURI(this.busqueda);
+      this.cargando_respuestas = true;
       this.searchService.queryCloudSearch(this.busqueda).then(d => {
-        console.log(d);
+        //console.log(d);
+        /*d.results.forEach((r: ResultadoCloudSearch) => {
+          let id = r.url.split('_')[0];
+          this.searchService.obtenerPregunta(parseInt(id)).then(pregunta => {
+            r.contenido = pregunta.respuesta;
+          });
+        });*/
         this.resultados = d.results;
+        this.cargando_respuestas = false;
         if (d.resultCountExact < 1) {
           this.resultado = false;
         }
@@ -50,6 +68,7 @@ export class SearchComponent implements OnInit {
           this.busquedaCorregida = d.spellResults[0].suggestedQuery;
           this.busquedaUrl = (this.busquedaCorregida);
         }
+
       });
     });
   }
