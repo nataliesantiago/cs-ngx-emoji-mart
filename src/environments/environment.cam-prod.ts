@@ -5,6 +5,7 @@
 
 export const environment = {
     production: true,
-    ambiente: 'col'
+    ambiente: 'col',
+    id_origen_conecta:''
   };
   

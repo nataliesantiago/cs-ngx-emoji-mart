@@ -961,4 +961,8 @@ export class ChatExpertoComponent {
     }, 1);
 
   }
+
+  chatPendiente(c: Conversacion){
+
+  }
 }

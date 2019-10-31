@@ -122,6 +122,7 @@ import { AdEstadoExpertoComponent } from './ad-estado-experto/ad-estado-experto.
 import { AdministradorOrigenesDriveComponent } from './administrador-origenes-drive/administrador-origenes-drive.component';
 import { ResultadoSearchComponent } from './components/resultado-search/resultado-search.component';
 import { HistorialChatComponent } from './historial-chat/historial-chat.component';
+import { ChatPendienteComponent } from './components/chat-pendiente/chat-pendiente.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -209,7 +210,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdEstadoExpertoComponent,
     AdministradorOrigenesDriveComponent,
     ResultadoSearchComponent,
-    HistorialChatComponent
+    HistorialChatComponent,
+    ChatPendienteComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
