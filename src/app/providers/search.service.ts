@@ -3,7 +3,7 @@ import { AjaxService } from './ajax.service';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 import { User } from '../../schemas/user.schema';
-import { OrigenDrive } from '../../schemas/interfaces';
+import { OrigenDrive, ResultadoCloudSearch } from '../../schemas/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -43,14 +43,42 @@ export class SearchService {
     return this.ajax.post(url_api, json);
   }
 
-  queryCloudSearch(query?: string): Promise<any> {
+  queryCloudSearch(query?: string, sugerencias?: Array<any>): Promise<any> {
+    sugerencias = [];
     if (!query) {
       query = 'pregunta con segmentos';
     }
     return new Promise((resolve, reject) => {
-      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(d => {
+      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(async d => {
         if (d.success) {
-          resolve(d.resultados);
+          for (let index = 0; index < d.resultados.results.length; index++) {
+            const r = d.resultados.results[index];
+            r.idtbl_pregunta = parseInt(r.url);
+            this.obtenerPregunta(r.idtbl_pregunta).then(pregunta => {
+              //console.log('paso por aca', pregunta);
+              r.contenido = pregunta.respuesta.replace(/<[^>]*>/g, '');
+              if (r.metadata.source.name == environment.id_origen_conecta) {
+                r.url_icono = pregunta.icono_padre;
+              }
+              //console.log(this.respuesta, pregunta);
+              //this.mostrando = true;
+              if (index == d.resultados.results.length - 1) {
+                resolve(d.resultados);
+              }
+            });
+          }
+
+        }
+      })
+    });
+  }
+
+  suggestCloudSearch(query?: string, sugerencias?: Array<any>): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('preguntas/cloud-search/suggest', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(d => {
+        if (d.success) {
+          sugerencias = d.sugerencias;
+          resolve(d.sugerencias);
         }
       })
     });
@@ -96,11 +124,11 @@ export class SearchService {
       });
     });
   }
-  obtenerPregunta(id: number): Promise<any> {
+  async obtenerPregunta(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: id }).subscribe(d => {
         if (d.success) {
-          resolve(d.pregunta);
+          resolve(d.pregunta[0]);
         }
       });
     });
