@@ -2846,22 +2846,62 @@ input:-webkit-autofill:active {
   }
 }
 
-.history-chat {
-  height: calc(100% - 0px);
-  &__wrapper {
+.dialog-chat {
+  .container-chat {
     height: 100%;
-    .chat-list {
-      height: 100%;
-      display: flex;
-      flex-flow: column;
-      margin: 0;
-      border: 1px solid #dadada;
-      border-top-right-radius: 15px;
-      border-top-left-radius: 15px;
-      margin-right: 10px;
+    h3 {
+      margin: 0 0 15px 0;
     }
-  }
-  .history-mat-card {
-    height: calc(100% - 30px);
+    .contenedor {
+      height: calc(100% - 90px);
+      border: 1px solid #dcdcdc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      padding: 10px;
+      & > .ps {
+        height: 100%;
+      }
+      .list-messages {
+        padding-top: 15px;
+        .message {
+          width: 100%;
+          position: relative;
+          margin-bottom: 15px;
+          .chat-block {
+            display: inline-block;
+            padding: 5px 8px;
+            font-size: 13px;
+          }
+          &.odd {
+            .chat-block {
+              background-color: #dcdcdc;
+              text-align: left;
+              max-width: 80%;
+              position: relative;
+            }
+          }
+          &.even {
+            text-align: right;
+            .chat-block {
+              text-align: right;
+              background-color: #f2f4f8;
+            }
+          }
+          .foto-mensaje {
+            position: absolute;
+            bottom: 15px;
+            img {
+              width: 30px;
+              margin-left: 3px;
+              border-radius: 100%;
+            }
+          }
+        }
+        .no-message {
+          text-align: center;
+          font-weight: 600;
+        }
+      }
+    }
   }
 }
