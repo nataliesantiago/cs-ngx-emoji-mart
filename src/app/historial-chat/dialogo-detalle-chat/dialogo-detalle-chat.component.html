@@ -1,0 +1,21 @@
+<div class="container-chat">
+  <h3>{{info_chat.nombre}} </h3>
+  
+  <perfect-scrollbar class="contenedor">
+    <div class="list-messages">
+      <div class="message" *ngFor="let message of messages" [ngClass]="{'odd': message.id_usuario_envia!==info_chat.user_id,'even': message.id_usuario_envia===info_chat.user_id}">
+        <div class="chat-block">
+          <div>{{decodeText(message.texto)}}</div>
+        </div>
+        <span class="foto-mensaje">
+          <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40" title="{{message.nombre}}" *ngIf="message.id_usuario_envia!==info_chat.user_id">
+        </span>
+        <div class="chat-date">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
+      </div>
+      <p class="no-message" *ngIf="is_empty_messages">No se han encontrado mensajes en este chat.</p>
+    </div>
+  </perfect-scrollbar>
+
+  <a class="custom__btn custom__btn--accept" (click)="closeDialog()">Aceptar</a>
+</div>
+
