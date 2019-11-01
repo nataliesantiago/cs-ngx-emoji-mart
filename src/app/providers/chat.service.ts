@@ -833,4 +833,16 @@ export class ChatService {
     });
   }
 
+  getConversacionActivaUsuario(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/obtener-conversaciones-activas-usuario', { id_usuario: this.user.getId() }).subscribe(result => {
+        if (result.success) {
+          resolve(result);
+        } else {
+          reject();
+        }
+      })
+    });
+  }
+
 }
