@@ -463,35 +463,60 @@ export class ChatClienteComponent implements OnInit {
 
   }
   openChat(data?: any) {
-    let c = new Conversacion();
-    this.ajax.post('chat/conversacion/crear', { id_usuario: this.user.getId(), id_tipo: 1, ...data }).subscribe(d => {
-      if (d.success) {
-        c.idtbl_conversacion = d.id_conversacion;
-        c.codigo = d.codigo_conversacion;
-        c.filas = d.filas;
-        c.id_estado_conversacion = 1;
-        this.agregaListenerConversacion(c);
-        this.agregarListenerMensajes(c);
-        c.expertos = [];
-        //his.procesaFilas(c);
-        if (d.experto) {
-          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
-            c.id_experto_actual = u.idtbl_usuario;
-            c.nombre_experto_actual = u.nombre;
-            c.asesor_actual = new User(null, null, null);
-            c.asesor_actual.url_foto = u.url_foto;
-            c.asesor_actual.idtbl_usuario = c.id_experto_actual;
-            c.asesor_actual.nombre = c.nombre_experto_actual;
-          });
+    if (this.user.getIdRol() != 2) {
+      this.chatService.getConversacionActivaUsuario().then(result => {
+        if (result.conversacion.length < result.cantidad_chat_cliente) {
+          this.crearNuevaConversacion(data);
         } else {
-          c.filas.forEach((ce, index) => {
-            this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+          swal.fire({
+            title: 'Lo sentimos',
+            text: 'Ha llegado al limite de conversaciones permitidas, si desea abrir una nueva conversación por favor cierre una de las que estan abiertas.',
+            type: 'warning',
+            buttonsStyling: false,
+            confirmButtonClass: 'custom__btn custom__btn--accept',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+              container: 'custom-sweet'
+            }
           });
         }
+      });
+    } else {
+      this.crearNuevaConversacion(data);
+    }
+  }
+
+  crearNuevaConversacion(data) {
+    let c = new Conversacion();
+    this.ajax.post('chat/conversacion/crear', { id_usuario: this.user.getId(), id_tipo: 1, ...data }).subscribe(d => {
+    if (d.success) {
+      c.idtbl_conversacion = d.id_conversacion;
+      c.codigo = d.codigo_conversacion;
+      c.filas = d.filas;
+      c.id_estado_conversacion = 1;
+      this.agregaListenerConversacion(c);
+      this.agregarListenerMensajes(c);
+      c.expertos = [];
+      //his.procesaFilas(c);
+      if (d.experto) {
+        this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+          c.id_experto_actual = u.idtbl_usuario;
+          c.nombre_experto_actual = u.nombre;
+          c.asesor_actual = new User(null, null, null);
+          c.asesor_actual.url_foto = u.url_foto;
+          c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+          c.asesor_actual.nombre = c.nombre_experto_actual;
+        });
+      } else {
+        c.filas.forEach((ce, index) => {
+          this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+        });
       }
+    }
     });
     this.chats.push(c);
   }
+
   isOver(): boolean {
     return window.matchMedia(`(max-width: 960px)`).matches;
   }

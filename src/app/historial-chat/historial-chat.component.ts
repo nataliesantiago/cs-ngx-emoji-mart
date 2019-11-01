@@ -19,7 +19,7 @@ export class HistorialChatComponent implements OnInit {
   matTableFilter: matTableFilter;
   filterColumns = [
     { field: 'nombre', type: 'string' },
-    { field: 'fecha_creacion', type: 'string' },
+    { field: 'fecha_creacion', type: 'date' },
     { field: 'estado', type: 'string' },
     { field: 'producto', type: 'string' },
     { field: 'busqueda', type: 'string' }];
