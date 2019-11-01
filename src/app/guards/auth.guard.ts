@@ -47,12 +47,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
 
         } else if (this.userService.getUsuario()) {
 
-            this.responseSearch.setActive(false);
-            return new Promise<boolean>(resolve => {
-                setTimeout(() => {
-                    resolve(true);
-                }, 1);
-            })
+            //this.responseSearch.setActive(false);
+            return true;
 
         } else {
             console.log('loading...');

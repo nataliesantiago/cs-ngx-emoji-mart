@@ -2691,6 +2691,8 @@ input:-webkit-autofill:active {
 
 .consola-supervisor {
   .conversacion-lista {
+    border: $borde-tarjeta;
+
     .mat-card-subtitle {
       div {
         margin: 5px 0;
@@ -2824,9 +2826,17 @@ input:-webkit-autofill:active {
 /*
 
 */
+.caja-resultados {
+  margin-top: 36px;
+}
 
 .quisistes-decir {
+
   font-size: 18px;
+  width: auto;
+  margin: 36px auto;
+  text-align: left;
+  margin-bottom: 0;
 
   span {
     color: rgb(34, 34, 34);
@@ -2849,29 +2859,36 @@ input:-webkit-autofill:active {
 .dialog-chat {
   .container-chat {
     height: 100%;
+
     h3 {
       margin: 0 0 15px 0;
     }
+
     .contenedor {
       height: calc(100% - 90px);
       border: 1px solid #dcdcdc;
       border-radius: 6px;
       margin-bottom: 10px;
       padding: 10px;
-      & > .ps {
+
+      &>.ps {
         height: 100%;
       }
+
       .list-messages {
         padding-top: 15px;
+
         .message {
           width: 100%;
           position: relative;
           margin-bottom: 15px;
+
           .chat-block {
             display: inline-block;
             padding: 5px 8px;
             font-size: 13px;
           }
+
           &.odd {
             .chat-block {
               background-color: #dcdcdc;
@@ -2880,16 +2897,20 @@ input:-webkit-autofill:active {
               position: relative;
             }
           }
+
           &.even {
             text-align: right;
+
             .chat-block {
               text-align: right;
               background-color: #f2f4f8;
             }
           }
+
           .foto-mensaje {
             position: absolute;
             bottom: 15px;
+
             img {
               width: 30px;
               margin-left: 3px;
@@ -2897,6 +2918,7 @@ input:-webkit-autofill:active {
             }
           }
         }
+
         .no-message {
           text-align: center;
           font-weight: 600;

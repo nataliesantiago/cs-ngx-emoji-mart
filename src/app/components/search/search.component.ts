@@ -214,6 +214,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     * metodo de change del autocomplete
   */
   onChangeSearch(val: string) {
+    
     return;/*
     this.searchText = val;
     if (!val || val == '') {
@@ -226,9 +227,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
 
   }
   ngOnInit(): void {
-    /**speech recognizion */
-    // this.currentLanguage = this.languages[0];
-    // this.speechRecognizer.initialize(this.currentLanguage);
+    // console.log('estuvo por aqui')
     this.initRecognition();
     this.notification = null;
     this.def.setValue(this.texto_buscar);
@@ -239,18 +238,20 @@ export class AppSearchComponent implements OnChanges, OnInit {
       ).subscribe(d => {
         // console.log(d);
       });
-    /**speech recognizion */
+
   }
   procesaValorCaja(value: string) {
-    delete this.texto_sugerido;
+
     this.searchService.suggestCloudSearch(value, this.sugerencias).then(d => {
       // console.log(d);
+      delete this.texto_sugerido;
       this.sugerencias = d.suggestResults;
-      if (this.sugerencias && this.sugerencias.length > 1) {
-        this.texto_sugerido = this.sugerencias[0].suggestedQuery;
+      if (this.sugerencias && this.sugerencias.length > 0) {
+        let t = this.sugerencias[0].suggestedQuery;
+        this.texto_sugerido = t.replace(t.substring(0, this.def.value.length), this.def.value);
       }
     });
-    return '';
+    return [];
   }
 
   completarTexto(event: KeyboardEvent) {
@@ -262,6 +263,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   }
   ngOnChanges(changes: SimpleChanges) {
     // console.log('entro aca mono');
+    console.log('paso por aca');
     const name: SimpleChange = changes.texto_buscar;
     this.texto_buscar = name.currentValue;
     this.def.setValue(this.texto_buscar);

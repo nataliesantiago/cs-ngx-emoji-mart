@@ -43,19 +43,21 @@ export class SearchService {
     return this.ajax.post(url_api, json);
   }
 
-  queryCloudSearch(query?: string, sugerencias?: Array<any>): Promise<any> {
-    sugerencias = [];
-    if (!query) {
-      query = 'pregunta con segmentos';
+  queryCloudSearch(query?: string, page?: number): Promise<any> {
+    let start;
+    if (!page) {
+      start = 0;
+    } else {
+      start = 10 * page;
     }
     return new Promise((resolve, reject) => {
-      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(async d => {
+      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo(), start: start }).subscribe(async d => {
         if (d.success) {
           d.resultados.results = (d.resultados.results) ? d.resultados.results : [];
           for (let index = 0; index < d.resultados.results.length; index++) {
             const r = d.resultados.results[index];
             let tmp = r.url.split('/');
-            console.log(tmp)
+            // console.log(tmp)
             r.idtbl_pregunta = parseInt(tmp[tmp.length - 1]);
             this.obtenerPregunta(r.idtbl_pregunta).then(pregunta => {
               //console.log('paso por aca', pregunta);
@@ -72,7 +74,8 @@ export class SearchService {
 
           }
           if (!d.resultados.results || d.resultados.results.length < 1) {
-            resolve([]);
+            d.resultados.results = [];
+            resolve(d.resultados);
           }
 
         }
