@@ -42,6 +42,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   filteredOptions: Observable<any[]>; // guardar el resultado de las busquedas
   dataImage = [];
   sugerencias = [];
+  texto_sugerido: string;
   textopredictivo: any = [
   ]; // guardar el texto predictivo de la api
 
@@ -193,7 +194,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   selectEvent(item) {
     this.metodo = 1;
     //this.searchText = item.title;
-    this.def.setValue(item.title);
+    this.def.setValue(item.suggestedQuery);
     this.buscar(1);
   }
 
@@ -234,14 +235,30 @@ export class AppSearchComponent implements OnChanges, OnInit {
     this.def.valueChanges
       .pipe(
         debounceTime(200),
-        switchMap(value => this.searchService.queryCloudSearch(value, this.sugerencias).then(d => {
-          // console.log(d);
-          this.sugerencias = d.results;
-        }))
+        switchMap(value => this.procesaValorCaja(value))
       ).subscribe(d => {
         // console.log(d);
       });
     /**speech recognizion */
+  }
+  procesaValorCaja(value: string) {
+    delete this.texto_sugerido;
+    this.searchService.suggestCloudSearch(value, this.sugerencias).then(d => {
+      // console.log(d);
+      this.sugerencias = d.suggestResults;
+      if (this.sugerencias && this.sugerencias.length > 1) {
+        this.texto_sugerido = this.sugerencias[0].suggestedQuery;
+      }
+    });
+    return '';
+  }
+
+  completarTexto(event: KeyboardEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.texto_sugerido) {
+      this.def.setValue(this.texto_sugerido);
+    }
   }
   ngOnChanges(changes: SimpleChanges) {
     // console.log('entro aca mono');

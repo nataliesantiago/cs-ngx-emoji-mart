@@ -2947,6 +2947,52 @@ input:-webkit-autofill:active {
   top: -5px;
   width: 100% !important;
 
+  .mat-form-field-infix {
+    min-height: 50px !important;
+  }
+
+  .mat-form-field-suffix {
+    top: 18px;
+    right: 3px;
+    position: absolute;
+  }
+
+  input {
+    color: #333;
+    background-color: transparent;
+    position: absolute;
+    top: 8px;
+
+    &:focus {
+      outline: none;
+      border-color: #aaa;
+    }
+  }
+
+  .contenido {
+    line-height: 18px;
+    font-size: 16px;
+    color: #999;
+    position: absolute;
+    left: 0;
+
+    &:focus {
+      outline: none;
+      border-color: #aaa;
+    }
+  }
+
+  &.mat-focused,
+  &.mat-form-field-can-float {
+    label.mat-form-field-label {
+      background: white !important;
+      display: inline-block !important;
+      width: auto !important;
+      position: relative !important;
+      top: 6px;
+    }
+  }
+
   .mat-button {
     color: #b5b5b5;
   }

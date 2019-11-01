@@ -51,12 +51,15 @@ export class SearchService {
     return new Promise((resolve, reject) => {
       this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(async d => {
         if (d.success) {
+          d.resultados.results = (d.resultados.results) ? d.resultados.results : [];
           for (let index = 0; index < d.resultados.results.length; index++) {
             const r = d.resultados.results[index];
-            r.idtbl_pregunta = parseInt(r.url);
+            let tmp = r.url.split('/');
+            console.log(tmp)
+            r.idtbl_pregunta = parseInt(tmp[tmp.length - 1]);
             this.obtenerPregunta(r.idtbl_pregunta).then(pregunta => {
               //console.log('paso por aca', pregunta);
-              r.contenido = pregunta.respuesta.replace(/<[^>]*>/g, '');
+              //r.contenido = pregunta.respuesta.replace(/<[^>]*>/g, '');
               if (r.metadata.source.name == environment.id_origen_conecta) {
                 r.url_icono = pregunta.icono_padre;
               }
@@ -66,6 +69,10 @@ export class SearchService {
                 resolve(d.resultados);
               }
             });
+
+          }
+          if (!d.resultados.results || d.resultados.results.length < 1) {
+            resolve([]);
           }
 
         }
@@ -126,7 +133,7 @@ export class SearchService {
   }
   async obtenerPregunta(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: id }).subscribe(d => {
+      this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: id, search: true }).subscribe(d => {
         if (d.success) {
           resolve(d.pregunta[0]);
         }

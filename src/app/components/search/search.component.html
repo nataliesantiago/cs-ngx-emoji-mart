@@ -18,14 +18,15 @@
     </ng-autocomplete>
   -->
     <mat-form-field class="caja-buscador">
-      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def"
+      <div class="contenido" *ngIf="texto_sugerido">{{texto_sugerido}}</div>
+      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def" (keydown.Tab)="completarTexto($event)"
         [matAutocomplete]="auto" autocomplete="off">
       <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear" (click)="def.setValue('')">
         <mat-icon>close</mat-icon>
       </button>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectEvent($event.option.value)'>
         <mat-option *ngFor="let option of sugerencias" [value]="option">
-          {{option.title}}
+          {{option.suggestedQuery}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

@@ -1,7 +1,7 @@
 <mat-card class="tarjeta-respuesta" [ngClass]="{'primero':pos==0}">
   <mat-card-content>
     <mat-card-title *ngIf="respuesta.tipo=='Conecta'"><a target="_blank"
-        [routerLink]="['/respuestas/'+respuesta.idtbl_pregunta]"><strong>{{respuesta.title}}</strong></a>
+        [href]="[respuesta.url]"><strong>{{respuesta.title}}</strong></a>
     </mat-card-title>
     <mat-card-title *ngIf="respuesta.tipo=='Google Drive'"><a target="_blank"
         [href]="respuesta.url">{{respuesta.title}}</a></mat-card-title>
@@ -13,7 +13,7 @@
       <div class="contenido-respuesta">
         <mat-card-subtitle> {{respuesta.tipo}}</mat-card-subtitle>
         <div class="contenedor-texto">
-          <span *ngIf="mostrando">{{respuesta.contenido}}</span>
+          <span *ngIf="mostrando" [innerHTML]="respuesta.contenido | safe:'html'"></span>
         </div>
         <mat-progress-bar *ngIf="!mostrando" class="barra-cargando" [mode]="'indeterminate'"
           [bufferValue]="bufferValue">

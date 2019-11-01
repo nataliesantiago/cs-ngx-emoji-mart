@@ -20,7 +20,7 @@ const moment = _rollupMoment || _moment;
 })
 export class AppComponent {
   user: User;
-  version = '0.0.25'
+  version = '0.1.0'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService,
     @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService) {
     this.responseSearch.setActive(true);
