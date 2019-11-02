@@ -202,13 +202,17 @@ export class RespuestasComponent implements OnInit {
         if(this.valor_calificacion == 2){
           swal.fire({
             title: '¿Deseas buscar un experto?',
-            text: "",
+            text: '',
             type: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3f51b5',
-            cancelButtonColor: '#d33',
+            buttonsStyling: false,
+            confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
             confirmButtonText: 'Si',
-            cancelButtonText: 'Cancelar'
+            cancelButtonClass: 'custom__btn custom__btn--cancel',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+              container: 'custom-sweet'
+            }
           }).then((result) => {
             if (result.value) {
               this.chatService.crearConversacion(this.pregunta.id_producto);

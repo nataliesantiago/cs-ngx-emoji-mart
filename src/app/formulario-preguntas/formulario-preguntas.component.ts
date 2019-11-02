@@ -213,6 +213,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept',
         confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       })
 
     }else{
@@ -279,7 +282,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         if(this.editar){
@@ -331,7 +337,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         if(this.editar){
@@ -386,7 +395,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         if(this.editar){
@@ -456,6 +468,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept',
         confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       })
     }
     
@@ -472,7 +487,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
       confirmButtonText: 'Eliminar',
       cancelButtonClass: 'custom__btn custom__btn--cancel',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
     }).then((result) => {
       if (result.value) {
         if(this.editar){
