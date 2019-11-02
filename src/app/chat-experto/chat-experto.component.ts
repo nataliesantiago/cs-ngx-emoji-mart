@@ -255,19 +255,23 @@ export class ChatExpertoComponent {
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
-      c.id_estado_conversacion = data.id_estado_conversacion;
-      c.llamada_activa = data.llamada_activa;
-      c.url_llamada = data.url_llamada;
-      c.conversacion_recomendada = data.conversacion_recomendada;
-      if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
+      if (data.id_experto_actual != this.user.getId()) {
+        this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
+      } else {
+        c.id_estado_conversacion = data.id_estado_conversacion;
+        c.llamada_activa = data.llamada_activa;
+        c.url_llamada = data.url_llamada;
+        c.conversacion_recomendada = data.conversacion_recomendada;
+        if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
 
-        if (!c.encuesta_realizada) {
-          c.mostrar_encuesta = true;
-        }
-        if (this.user.experto_activo) {
-          this.recibirChatAutomatico();
-        }
+          if (!c.encuesta_realizada) {
+            c.mostrar_encuesta = true;
+          }
+          if (this.user.experto_activo) {
+            this.recibirChatAutomatico();
+          }
 
+        }
       }
     });
   }

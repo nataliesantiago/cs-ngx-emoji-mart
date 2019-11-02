@@ -42,6 +42,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   filteredOptions: Observable<any[]>; // guardar el resultado de las busquedas
   dataImage = [];
   sugerencias = [];
+  texto_sugerido: string;
   textopredictivo: any = [
   ]; // guardar el texto predictivo de la api
 
@@ -193,7 +194,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   selectEvent(item) {
     this.metodo = 1;
     //this.searchText = item.title;
-    this.def.setValue(item.title);
+    this.def.setValue(item.suggestedQuery);
     this.buscar(1);
   }
 
@@ -213,6 +214,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     * metodo de change del autocomplete
   */
   onChangeSearch(val: string) {
+    
     return;/*
     this.searchText = val;
     if (!val || val == '') {
@@ -225,26 +227,43 @@ export class AppSearchComponent implements OnChanges, OnInit {
 
   }
   ngOnInit(): void {
-    /**speech recognizion */
-    // this.currentLanguage = this.languages[0];
-    // this.speechRecognizer.initialize(this.currentLanguage);
+    // console.log('estuvo por aqui')
     this.initRecognition();
     this.notification = null;
     this.def.setValue(this.texto_buscar);
     this.def.valueChanges
       .pipe(
         debounceTime(200),
-        switchMap(value => this.searchService.queryCloudSearch(value, this.sugerencias).then(d => {
-          // console.log(d);
-          this.sugerencias = d.results;
-        }))
+        switchMap(value => this.procesaValorCaja(value))
       ).subscribe(d => {
         // console.log(d);
       });
-    /**speech recognizion */
+
+  }
+  procesaValorCaja(value: string) {
+
+    this.searchService.suggestCloudSearch(value, this.sugerencias).then(d => {
+      // console.log(d);
+      delete this.texto_sugerido;
+      this.sugerencias = d.suggestResults;
+      if (this.sugerencias && this.sugerencias.length > 0) {
+        let t = this.sugerencias[0].suggestedQuery;
+        this.texto_sugerido = t.replace(t.substring(0, this.def.value.length), this.def.value);
+      }
+    });
+    return [];
+  }
+
+  completarTexto(event: KeyboardEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.texto_sugerido) {
+      this.def.setValue(this.texto_sugerido);
+    }
   }
   ngOnChanges(changes: SimpleChanges) {
     // console.log('entro aca mono');
+    console.log('paso por aca');
     const name: SimpleChange = changes.texto_buscar;
     this.texto_buscar = name.currentValue;
     this.def.setValue(this.texto_buscar);

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResponseSearch } from '../models/response-search';
 import { HomeService } from '../services/home.service';
 import { SearchService } from '../providers/search.service';
 import { ResultadoCloudSearch } from '../../schemas/interfaces';
+import { MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-search',
@@ -21,6 +22,10 @@ export class SearchComponent implements OnInit {
   resultados: Array<ResultadoCloudSearch>;
   respuesta: any;
   cargando_respuestas = false;
+  length: number;
+  pageEvent: number;
+  page: number;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -34,24 +39,34 @@ export class SearchComponent implements OnInit {
     this.init();
 
   }
+
+  paginar(pagina: any) {
+    //console.log(pagina);
+
+    this.router.navigate(['/search/' + this.busqueda + '/' + pagina.pageIndex]);
+  }
+
+
   init() {
 
     this.activatedRoute.params.subscribe(params => {
       // Se reinicializa el componente
-      this.resultados = [];
-      this.busqueda = params.id;
-      this.resultado = true;
-      this.ortografia = false;
-      delete this.busquedaUrl;
-      delete this.valorBusqueda;
-      delete this.busquedaCorregida;
-      delete this.respuesta;
-      ////////////////////////////////
-
-      this.busquedaUrl = encodeURI(this.busqueda);
+      this.page = params.page;
       this.cargando_respuestas = true;
-      this.searchService.queryCloudSearch(this.busqueda).then(d => {
-        //console.log(d);
+      this.resultados = [];
+      if (this.busqueda != params.id) {
+        this.busqueda = params.id;
+        this.ortografia = false;
+        delete this.busquedaUrl;
+        delete this.valorBusqueda;
+        delete this.busquedaCorregida;
+        delete this.respuesta;
+        this.busquedaUrl = encodeURI(this.busqueda);
+      } else {
+        this.resultado = true;
+      }
+      this.searchService.queryCloudSearch(this.busqueda, this.page).then(d => {
+        // console.log(d);
         /*d.results.forEach((r: ResultadoCloudSearch) => {
           let id = r.url.split('_')[0];
           this.searchService.obtenerPregunta(parseInt(id)).then(pregunta => {
@@ -60,16 +75,24 @@ export class SearchComponent implements OnInit {
         });*/
         this.resultados = d.results;
         this.cargando_respuestas = false;
-        if (d.resultCountExact < 1) {
+        if (parseInt(d.resultCountExact) < 1) {
           this.resultado = false;
+        } else {
+          this.length = parseInt(d.resultCountExact);
         }
         if (d.spellResults) {
           this.ortografia = true;
           this.busquedaCorregida = d.spellResults[0].suggestedQuery;
           this.busquedaUrl = (this.busquedaCorregida);
         }
-
+        setTimeout(() => {
+          this.paginator._intl.firstPageLabel = 'Primera página';
+          this.paginator._intl.lastPageLabel = 'Última página';
+          this.paginator._intl.nextPageLabel = 'Página siguiente ';
+          this.paginator._intl.previousPageLabel = 'Página anterior';
+        }, 1);
       });
+
     });
   }
   buscar() {

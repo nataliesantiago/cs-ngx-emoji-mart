@@ -12,7 +12,7 @@
           <h3 [ngClass] = "{ 'titulo-pregunta': (pregunta.muestra_fecha_actualizacion == 1 || pregunta_nueva)}">
             <strong>{{pregunta.titulo}}</strong>
           </h3>
-          <div [innerHTML]="pregunta.respuesta  | safeHtml"></div>
+          <div [innerHTML]="pregunta.respuesta  | safe:'html'"></div>
           <div *ngIf="categorias_subrespuestas_superior.length > 0">
             <div *ngFor="let categoria_superior of categorias_subrespuestas_superior">
               <h4><strong>{{categoria_superior.categoria}}</strong></h4>
@@ -24,7 +24,7 @@
                     <mat-expansion-panel-header>
                       <strong>{{subrespuesta.titulo}}</strong>
                     </mat-expansion-panel-header>
-                    <div [innerHTML]="subrespuesta.texto  | safeHtml"></div>
+                    <div [innerHTML]="subrespuesta.texto | safe:'html'"></div>
                   </mat-expansion-panel>
                   <hr>
                 </mat-accordion>
@@ -35,7 +35,7 @@
             <br>
             <mat-tab *ngFor="let segmento of segmentos; let i = index;" label="{{segmento.titulo}}">
               <br>
-              <div [innerHTML]="segmento.texto | safeHtml"></div>
+              <div [innerHTML]="segmento.texto | safe:'html'"></div>
               <div *ngIf="array_mostrar.length > 0">
                 <div *ngFor="let arr of array_mostrar; let cont = index;">
                   <mat-accordion *ngIf="arr.pos_segmento == i">
@@ -43,7 +43,7 @@
                       <mat-expansion-panel-header>
                         <strong>{{arr.titulo}}</strong>
                       </mat-expansion-panel-header>
-                      <div [innerHTML]="arr.texto  | safeHtml"></div>
+                      <div [innerHTML]="arr.texto  | safe:'html'"></div>
                     </mat-expansion-panel>
                     <hr>
                   </mat-accordion>
@@ -63,7 +63,7 @@
                     <mat-expansion-panel-header>
                       <strong>{{subrespuesta.titulo}}</strong>
                     </mat-expansion-panel-header>
-                    <div [innerHTML]="subrespuesta.texto  | safeHtml"></div>
+                    <div [innerHTML]="subrespuesta.texto  | safe:'html'"></div>
                   </mat-expansion-panel>
                   <hr>
                 </mat-accordion>

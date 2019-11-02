@@ -102,4 +102,28 @@ export class UtilsService {
 
     }
 
+    /**
+     * @description Codifica caracteres html en codigos raros
+     * @param {string} str Input text
+     * @return {string} Filtered text
+     */
+    htmlencode(str): string {
+
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
+    /**
+     * @description Decodifica caracteres en codigo html
+     * @param  {string} str
+     * @returns string
+     */
+    htmldecode(str): string {
+
+        var txt = document.createElement('textarea');
+        txt.innerHTML = str;
+        return txt.value;
+    }
+
 }

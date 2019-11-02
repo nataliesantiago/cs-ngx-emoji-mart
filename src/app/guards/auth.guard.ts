@@ -47,12 +47,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
 
         } else if (this.userService.getUsuario()) {
 
-            this.responseSearch.setActive(false);
-            return new Promise<boolean>(resolve => {
-                setTimeout(() => {
-                    resolve(true);
-                }, 1);
-            })
+            //this.responseSearch.setActive(false);
+            return true;
 
         } else {
             console.log('loading...');
@@ -66,7 +62,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         window.location.href = d.url;
                         reject(false);
                     } else if (d.profile) {
-                        let user = new User(d.profile.email, localStorage.getItem('token'), d.profile.nombre);
+                        let user = new User(d.profile.email, d.profile.token, d.profile.nombre);
                         user.setId(d.profile.idtbl_usuario);
                         user.setIdPerfil(d.profile.id_perfil);
                         user.setIdRol(d.profile.id_rol);

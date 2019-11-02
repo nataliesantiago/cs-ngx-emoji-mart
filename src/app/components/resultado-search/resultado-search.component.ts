@@ -31,10 +31,29 @@ export class ResultadoSearchComponent implements OnInit {
        });*/
       if (this.respuesta.metadata.source.name == environment.id_origen_conecta) {
         this.respuesta.tipo = 'Conecta';
-
       }
+      // this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('&nbsp;', '');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_respuesta:', ' ');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_subrespuesta:', ' ');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('contenido:', ' ');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_subs:', ' ');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('contenido_subs:', ' ');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_segs:', ' ');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('texto_segs:', ' ');
+      var parser = new DOMParser();
+      this.respuesta.contenido = this.respuesta.snippet.snippet;
+      this.respuesta.contenido = this.htmldecode(this.respuesta.contenido);
+      this.respuesta.contenido = this.respuesta.contenido.replace(/<[^>]*>/g, '');
+      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('&nbsp;', ' ');
 
     }
+  }
+
+  htmldecode(str) {
+
+    var txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    return txt.value;
   }
   ngOnInit() {
     this.init();

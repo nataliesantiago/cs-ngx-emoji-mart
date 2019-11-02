@@ -217,6 +217,10 @@
                   <div *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="goodbye-message">
                     <h2 *ngIf="m.es_despedida">{{m.texto}}</h2>
                   </div>
+                  <div class="download-chat" *ngIf="chat.mostrar_descarga_chat">
+                    <p>Guardar chat en el equipo</p>
+                    <button class="custom__btn custom__btn--primary">Descargar Chat</button>
+                  </div>
                   <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
                   </app-visualizar-encuesta>
                 </perfect-scrollbar>

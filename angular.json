@@ -151,9 +151,7 @@
                             "src/assets/styles/style.scss"
                         ],
                         "assets": [
-                            "src/assets",
-                            
-                            "src/favicon.ico"
+                            "src/assets"
                         ]
                     }
                 },

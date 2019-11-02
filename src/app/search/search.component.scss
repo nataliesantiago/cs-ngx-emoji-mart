@@ -5,9 +5,14 @@ div {
 .centrado {
     display: flex;
     justify-content: center;
-    margin: 1.5em 10em;
-    //justify-content: flex-start;
+    padding: 1.5em 0;
     flex-direction: column;
+
+    .contenido-centrado {
+        margin: 0 auto;
+        max-width: 840px;
+        width: 100%;
+    }
 }
 
 .center {
@@ -53,33 +58,29 @@ h4 {
     cursor: pointer;
 }
 
-.spinner-cargando-respuestas{
+.spinner-cargando-respuestas {
     margin: auto;
     margin-top: 40px;
 }
 
 /*MediaQuery*/
 
-@media only screen and (max-width: 768px) {
-    .centrado {
-        margin: 2em 5em
-    }
-}
+
 
 @media only screen and (max-width: 414px) {
     .centrado {
-        margin: 1em 0em;
+        margin: 1em 15px;
     }
 }
 
 @media only screen and (max-width: 360px) {
     .centrado {
-        margin: 1em 0em;
+        margin: 1em 15px;
     }
 }
 
 @media only screen and (max-width: 320px) {
     .centrado {
-        margin: 1em 0em;
+        margin: 1em 15px;
     }
 }

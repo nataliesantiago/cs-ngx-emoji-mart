@@ -153,7 +153,7 @@ export interface ResultadoCloudSearch {
     url: string;
     snippet: { snippet: string, matchRanges: [{ start: number, end: number }] };
     metadata: { source: { name: string } };
-    contenido?: string;
+    contenido?: string | Document;
     tipo?: string;
     url_icono: string;
     //"url":"8_19_19","snippet":{"snippet":"titulo_respuesta: Pregunta 4.","matchRanges":[{"start":18,"end":28}]},"metadata":{"source":{"name":"datasources/2721fbfe980dfcd21c1c5aece9cacef5"}}}

@@ -1,4 +1,4 @@
-<div id="search-bar" class="up" [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2}">
+<div id="search-bar" [ngClass]="{'up':!modo}" [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2}">
   <span>
     <mat-icon class="buscar-lupa">search</mat-icon>
   </span>
@@ -18,14 +18,15 @@
     </ng-autocomplete>
   -->
     <mat-form-field class="caja-buscador">
+      <div class="contenido" *ngIf="texto_sugerido">{{texto_sugerido}}</div>
       <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def"
-        [matAutocomplete]="auto" autocomplete="off">
+        (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto" autocomplete="off">
       <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear" (click)="def.setValue('')">
         <mat-icon>close</mat-icon>
       </button>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectEvent($event.option.value)'>
         <mat-option *ngFor="let option of sugerencias" [value]="option">
-          {{option.title}}
+          {{option.suggestedQuery}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

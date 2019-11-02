@@ -312,8 +312,15 @@
               </div>
             </mat-toolbar>
 
-            <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
-            </app-visualizar-encuesta>
+            <div>
+              <div class="download-chat">
+                <p>Guardar chat en el equipo</p>
+                <button class="custom__btn custom__btn--primary">Descargar Chat</button>
+              </div>
+              <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
+              </app-visualizar-encuesta>
+            </div>
+            
           </div>
           <div *ngIf="(!chat && isOver()) || (!chat && !sidePanelOpened)" class="panel-toggle-conversas">
             <button class="custom__btn custom__btn--accept" (click)="chatnav.toggle()">Mostrar Conversaciones</button>

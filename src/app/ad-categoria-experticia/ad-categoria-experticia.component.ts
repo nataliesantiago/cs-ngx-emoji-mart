@@ -19,18 +19,17 @@ export class AdCategoriaExperticiaComponent implements OnInit {
   id_usuario;
   categorias = [];
   displayedColumns = ['acciones', 'idtbl_categoria_experticia', 'nombre'];
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource = new MatTableDataSource([]);
-  matTableFilter:matTableFilter;
+  matTableFilter: matTableFilter;
   filterColumns = [
-    {field:'idtbl_categoria_experticia', type:'number'},
-    {field: 'nombre', type:'string'}
+    { field: 'idtbl_categoria_experticia', type: 'number' },
+    { field: 'nombre', type: 'string' }
   ];
-  
-  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService){
+
+  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
@@ -44,7 +43,7 @@ export class AdCategoriaExperticiaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.categorias);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+        this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
       }
     })
   }
@@ -53,7 +52,7 @@ export class AdCategoriaExperticiaComponent implements OnInit {
     this.router.navigate(['/formulario-categoria-expertiz', e.idtbl_categoria_experticia]);
   }
 
-  borrarElemento(e){
+  borrarElemento(e) {
 
     swal.fire({
       title: 'Eliminar Categoría de Experticia',
@@ -71,21 +70,21 @@ export class AdCategoriaExperticiaComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.ajax.post('experticia/eliminar-categoria', { categoria_experticia: e }).subscribe(p1 => {
-          if(p1.success){
+          if (p1.success) {
             this.ajax.get('experticia/obtener-categorias', {}).subscribe(p => {
               if (p.success) {
                 this.categorias = p.categorias;
                 this.dataSource = new MatTableDataSource(this.categorias);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
-                this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+                this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
               }
             })
           }
         })
       }
     })
-    
+
   }
 
   applyFilter(filterValue: string) {

@@ -41,6 +41,7 @@ export class ChatClienteComponent implements OnInit {
   mensaje_buscando_experto;
   mensaje_no_encontro_experto;
   no_encontro_experto = false;
+  // mostrar_descarga_chat = false;
 
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
@@ -415,6 +416,7 @@ export class ChatClienteComponent implements OnInit {
       if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2 && data.id_estado_conversacion != 10) {
         c.mostrar_encuesta = true;
         this.no_encontro_experto = false;
+        c.mostrar_descarga_chat = true;
       } else if (c.asesor_actual) {
         if (c.asesor_actual.idtbl_usuario != data.id_experto_actual && data.id_experto_actual) {
           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
@@ -451,6 +453,7 @@ export class ChatClienteComponent implements OnInit {
 
       if (data.id_estado_conversacion == 10) {
         this.no_encontro_experto = true;
+        c.mostrar_descarga_chat = false;
         this.chatService.getMensajeBuscandoExperto(5).then(result => {
           this.mensaje_no_encontro_experto = result;
         });
@@ -463,35 +466,60 @@ export class ChatClienteComponent implements OnInit {
 
   }
   openChat(data?: any) {
-    let c = new Conversacion();
-    this.ajax.post('chat/conversacion/crear', { id_usuario: this.user.getId(), id_tipo: 1, ...data }).subscribe(d => {
-      if (d.success) {
-        c.idtbl_conversacion = d.id_conversacion;
-        c.codigo = d.codigo_conversacion;
-        c.filas = d.filas;
-        c.id_estado_conversacion = 1;
-        this.agregaListenerConversacion(c);
-        this.agregarListenerMensajes(c);
-        c.expertos = [];
-        //his.procesaFilas(c);
-        if (d.experto) {
-          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
-            c.id_experto_actual = u.idtbl_usuario;
-            c.nombre_experto_actual = u.nombre;
-            c.asesor_actual = new User(null, null, null);
-            c.asesor_actual.url_foto = u.url_foto;
-            c.asesor_actual.idtbl_usuario = c.id_experto_actual;
-            c.asesor_actual.nombre = c.nombre_experto_actual;
-          });
+    if (this.user.getIdRol() != 2) {
+      this.chatService.getConversacionActivaUsuario().then(result => {
+        if (result.conversacion.length < result.cantidad_chat_cliente) {
+          this.crearNuevaConversacion(data);
         } else {
-          c.filas.forEach((ce, index) => {
-            this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+          swal.fire({
+            title: 'Lo sentimos',
+            text: 'Ha llegado al limite de conversaciones permitidas, si desea abrir una nueva conversación por favor cierre una de las que estan abiertas.',
+            type: 'warning',
+            buttonsStyling: false,
+            confirmButtonClass: 'custom__btn custom__btn--accept',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+              container: 'custom-sweet'
+            }
           });
         }
+      });
+    } else {
+      this.crearNuevaConversacion(data);
+    }
+  }
+
+  crearNuevaConversacion(data) {
+    let c = new Conversacion();
+    this.ajax.post('chat/conversacion/crear', { id_usuario: this.user.getId(), id_tipo: 1, ...data }).subscribe(d => {
+    if (d.success) {
+      c.idtbl_conversacion = d.id_conversacion;
+      c.codigo = d.codigo_conversacion;
+      c.filas = d.filas;
+      c.id_estado_conversacion = 1;
+      this.agregaListenerConversacion(c);
+      this.agregarListenerMensajes(c);
+      c.expertos = [];
+      //his.procesaFilas(c);
+      if (d.experto) {
+        this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+          c.id_experto_actual = u.idtbl_usuario;
+          c.nombre_experto_actual = u.nombre;
+          c.asesor_actual = new User(null, null, null);
+          c.asesor_actual.url_foto = u.url_foto;
+          c.asesor_actual.idtbl_usuario = c.id_experto_actual;
+          c.asesor_actual.nombre = c.nombre_experto_actual;
+        });
+      } else {
+        c.filas.forEach((ce, index) => {
+          this.fireStore.collection('categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+        });
       }
+    }
     });
     this.chats.push(c);
   }
+
   isOver(): boolean {
     return window.matchMedia(`(max-width: 960px)`).matches;
   }
@@ -735,17 +763,20 @@ export class ChatClienteComponent implements OnInit {
       } else {
         estado = 9;
       }
+    } else if (c.id_estado_conversacion == 10) { 
+      c.mostrar_descarga_chat = false;
+      c.mostrar_encuesta = true;
+      estado = 10;
     } else {
       estado = 3;
+      c.mostrar_descarga_chat = true;
     }
+    
     this.chatService.cerrarConversacion(c, estado).then(() => {
       c.mostrar_encuesta = true;
       this.no_encontro_experto = false;
     });
   }
-
-
-
 
   finalizaEncuesta(c: Conversacion) {
     let index = this.chats.findIndex(chat => {
