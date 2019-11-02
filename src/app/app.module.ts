@@ -221,7 +221,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DialogoDetalleChatComponent,
     SosComponent,
     SosOperadorComponent,
-    CerrarChatExpertoComponent
+    CerrarChatExpertoComponent,
+    ChatPendienteComponent
   ],
   imports: [
     BrowserModule,

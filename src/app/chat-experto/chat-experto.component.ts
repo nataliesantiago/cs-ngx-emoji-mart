@@ -19,6 +19,7 @@ import { ShortcutsService } from '../providers/shortcuts.service';
 import { CerrarChatExpertoComponent } from '../components/cerrar-chat-experto/cerrar-chat-experto.component';
 import { text } from '@angular/core/src/render3';
 import { Router } from '@angular/router';
+import { ChatPendienteComponent } from '../components/chat-pendiente/chat-pendiente.component';
 
 const moment = _rollupMoment || _moment;
 
@@ -962,7 +963,17 @@ export class ChatExpertoComponent {
 
   }
 
-  chatPendiente(c: Conversacion){
+  chatPendiente(c: Conversacion) {
+    this.dialog.open(ChatPendienteComponent).afterClosed().subscribe(d => {
 
+      let estado = 7;
+      this.chatService.conversacionPendiente(c, estado, d.hora_recordatorio).then(() => {
+        //c.mostrar_encuesta = true;
+        if (this.user.experto_activo) {
+          this.recibirChatAutomatico();
+        }
+      });
+
+    });
   }
 }
