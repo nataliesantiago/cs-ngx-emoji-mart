@@ -205,7 +205,39 @@ body {
   justify-content: center !important;
 }
 
+.odd {
+  .chat-block {
+    &.encontrado {
+      background-color: #858585 !important;
+    }
+  }
+}
+
+.even {
+  .chat-block {
+    &.encontrado {
+      background-color: #bbbbbb !important;
+    }
+  }
+}
+
 .chat-block {
+
+  &.odd {
+    &.encontrado {
+      background-color: #858585 !important;
+    }
+  }
+
+  &.even {
+    &.encontrado {
+      background-color: #bbbbbb !important;
+    }
+  }
+
+
+
+
   word-break: break-word;
 
   a {
@@ -972,11 +1004,15 @@ ul li {
   overflow: hidden;
 }
 
+.search-bar {
+  border: $borde-tarjeta;
+}
+
 
 /*MediaQuery*/
 
 @media only screen and (max-width: 768px) {
-  #search-bar {
+  .search-bar {
     width: 500px;
   }
 
@@ -999,7 +1035,7 @@ ul li {
     width: 100%;
   }
 
-  #search-bar {
+  .search-bar {
     width: 95% !important;
   }
 
@@ -2827,7 +2863,7 @@ input:-webkit-autofill:active {
 
 */
 .caja-resultados {
-  margin-top: 36px;
+  //margin-top: 36px;
 }
 
 .quisistes-decir {
@@ -2887,6 +2923,18 @@ input:-webkit-autofill:active {
             display: inline-block;
             padding: 5px 8px;
             font-size: 13px;
+
+            &.odd {
+              &.encontrado {
+                background-color: #858585;
+              }
+            }
+
+            &.even {
+              &.encontrado {
+                background-color: #bbbbbb;
+              }
+            }
           }
 
           &.odd {
@@ -2895,6 +2943,10 @@ input:-webkit-autofill:active {
               text-align: left;
               max-width: 80%;
               position: relative;
+
+              &.encontrado {
+                background-color: #858585;
+              }
             }
           }
 
@@ -2904,6 +2956,10 @@ input:-webkit-autofill:active {
             .chat-block {
               text-align: right;
               background-color: #f2f4f8;
+
+              &.encontrado {
+                background-color: #bbbbbb;
+              }
             }
           }
 
@@ -2996,7 +3052,7 @@ input:-webkit-autofill:active {
 
 .tarjeta-respuesta,
 .tarjeta-respuesta.mat-card {
-  margin: 2px auto !important;
+  margin: 0px auto !important;
   border-bottom: $borde-tarjeta;
   box-shadow: none !important;
   max-width: 840px;
@@ -3007,7 +3063,8 @@ input:-webkit-autofill:active {
   }
 
   &.primero {
-    border-top: $borde-tarjeta;
+    // border-top: $borde-tarjeta;
+    padding-top: 16px !important;
   }
 
   .mat-card-title {
@@ -3119,8 +3176,57 @@ input:-webkit-autofill:active {
 
 }
 
+.panel-buscador-texto {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  background: white;
+  z-index: 10;
+  padding: 18px 32px;
+  border: 1px solid #dadce0;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  border-top: none;
+  padding-left: 18px;
+
+  .contenido-buscador {
+    display: flex;
+
+    .cant-matches {
+      display: inline-block;
+      line-height: 22px;
+      font-size: 16px;
+      height: 20px;
+      margin: auto 15px;
+      color: #aaa;
+    }
+
+    input {
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      box-sizing: border-box;
+      color: #3c4043;
+      padding: 3px 8px;
+      width: 140px;
+    }
+
+    button {
+      margin-left: 15px;
+
+      .mat-icon {
+        color: #b5aeae;
+      }
+    }
+  }
+}
+
+
+
+
+
 .download-chat {
   text-align: center;
+
   p {
     margin: 5px;
     font-size: 14px;

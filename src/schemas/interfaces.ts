@@ -158,3 +158,13 @@ export interface ResultadoCloudSearch {
     url_icono: string;
     //"url":"8_19_19","snippet":{"snippet":"titulo_respuesta: Pregunta 4.","matchRanges":[{"start":18,"end":28}]},"metadata":{"source":{"name":"datasources/2721fbfe980dfcd21c1c5aece9cacef5"}}}
 }
+
+export interface Busqueda {
+    idtbl_busqueda_usuario?: number;
+    id_usuario?: number;
+    texto_busqueda?: string;
+    id_tipo_busqueda?: number;
+    fecha_busqueda?: Date;
+    url?: string;
+    id_categoria_experticia?: number;
+}

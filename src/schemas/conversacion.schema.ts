@@ -3,6 +3,7 @@ import { User } from "./user.schema";
 import { Experto } from "./xhr.schema";
 import { AudioControls } from "./interfaces";
 import { Mensaje } from "./mensaje.schema";
+import { FormControl } from "@angular/forms";
 
 
 
@@ -78,6 +79,9 @@ export class Conversacion {
     muestra_interfaz_recomendacion: boolean;
     encuesta_realizada: boolean;
     mostrar_descarga_chat: boolean;
+    buscando_texto: boolean = false;
+    texto_busqueda_mensajes: FormControl;
+    cant_coincidencias: number;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;

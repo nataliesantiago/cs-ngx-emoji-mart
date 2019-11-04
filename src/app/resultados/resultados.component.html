@@ -1,14 +1,19 @@
 <div class="sin_fondo centrado">
   <div class="contenido-centrado">
     <app-search-component [modo]="2" [texto_buscar]="busqueda"></app-search-component>
+    <mat-tab-group (selectedTabChange)="cambiaTab($event)">
+      <mat-tab label="Preguntas y respuestas"></mat-tab>
+      <mat-tab label="Conecta autogestión"></mat-tab>
+      <mat-tab label="Mis Chats"></mat-tab>
+    </mat-tab-group>
     <div *ngIf="resultado" class="caja-resultados">
       <div *ngIf="ortografia" class="quisistes-decir"><span>Quizas quisiste decir: </span> <a
           [routerLink]="['/search/'+busquedaUrl]" routerLinkActive="active"><b>{{busquedaCorregida}}</b></a></div>
       <div *ngFor="let r of resultados; let i = index" class="contenedor__texto center">
-        <app-resultado-search [respuesta]="r" [pos]="i"></app-resultado-search>
+        <app-resultado-search [respuesta]="r" [pos]="i" [busqueda]="busqueda"></app-resultado-search>
       </div>
       <mat-paginator [length]="length" [hidePageSize]="true" (page)="paginar($event)" [pageIndex]="page"
-        [showFirstLastButtons]="true" *ngIf="!cargando_respuestas" [pageSize]="10">
+        [showFirstLastButtons]="true" *ngIf="!cargando_respuestas && length>10" [pageSize]="10">
       </mat-paginator>
       <mat-progress-spinner class="spinner-cargando-respuestas" [mode]="'indeterminate'" [diameter]="68"
         *ngIf="cargando_respuestas">

@@ -19,6 +19,7 @@ import { ShortcutsService } from '../providers/shortcuts.service';
 import { CerrarChatExpertoComponent } from '../components/cerrar-chat-experto/cerrar-chat-experto.component';
 import { text } from '@angular/core/src/render3';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 const moment = _rollupMoment || _moment;
 
@@ -218,6 +219,42 @@ export class ChatExpertoComponent {
       });
     })
   }
+
+  buscarTexto(c: Conversacion, e: KeyboardEvent, input: HTMLInputElement) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!c.buscando_texto) {
+      c.texto_busqueda_mensajes = new FormControl();
+      c.buscando_texto = true;
+      setTimeout(() => {
+        // input.focus();
+      }, 50);
+
+      c.texto_busqueda_mensajes.valueChanges.subscribe(value => {
+        if (value && value != '') {
+          c.cant_coincidencias = 0;
+          c.mensajes.forEach((m: Mensaje) => {
+            if (m.texto.toLowerCase().indexOf(value.toLowerCase()) != -1) {
+              console.log('Encontro mensaje', m.texto.toLowerCase());
+              m.encontrado = true;
+              c.cant_coincidencias++;
+            } else {
+              m.encontrado = false;
+            }
+          });
+        } else {
+          c.mensajes.forEach((m: Mensaje) => {
+            m.encontrado = false;
+          });
+        }
+      });
+    } else {
+      c.buscando_texto = false;
+    }
+  }
+
+
 
   recibirChatAutomatico() {
     let config = this.buscarConfiguracion(2);

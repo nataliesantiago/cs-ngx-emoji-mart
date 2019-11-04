@@ -126,12 +126,23 @@
                     <mat-grid-tile><b>Rol:</b> {{chat.cliente.nombre_rol}}</mat-grid-tile>
                   </mat-grid-list>
                 </div>
+                <div class="panel-buscador-texto" *ngIf="chat.buscando_texto">
+                  <div class="contenido-buscador">
+                    <input type="text" placeholder="Buscar en la conversación" autofocus
+                      [formControl]="chat.texto_busqueda_mensajes" />
+                      <div class="cant-matches">{{chat.cant_coincidencias}}</div>
+                    <button mat-icon-button title="Cerrar" (click)="chat.buscando_texto=false">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </div>
 
                 <div class="chat-list">
                   <div class="chat-message"
                     [ngClass]="{'odd': m.id_usuario!==user.idtbl_usuario,'even': m.id_usuario===user.idtbl_usuario}"
                     *ngFor="let m of chat.mensajes | mensajesExperto: [1,usuarios]">
-                    <div class="chat-block" [ngClass]="{'sugerencia-activa':chat.muestra_interfaz_recomendacion}">
+                    <div class="chat-block"
+                      [ngClass]="{'sugerencia-activa':chat.muestra_interfaz_recomendacion,'encontrado':m.encontrado && chat.buscando_texto}">
                       <div class="panel-checkbox-sugerencia" *ngIf="chat.muestra_interfaz_recomendacion">
                         <mat-checkbox [(ngModel)]="m.mensaje_sugerido" (change)="actualizaMensajeSugerido(m)">
                         </mat-checkbox>
@@ -276,7 +287,8 @@
                 </button>
                 <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
                   (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
-                  (keyup)="remplazaEmoji(chat)" [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
+                  (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
+                  [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
                   (blur)="setFocus(chat,false)"></textarea>
                 <button mat-icon-button color="primary" (click)="adjuntos.click()"
                   [disabled]="chat.cargando_archivo || chat.grabando_nota">
@@ -319,7 +331,7 @@
               <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
               </app-visualizar-encuesta>
             </div>
-            
+
           </div>
           <div *ngIf="(!chat && isOver()) || (!chat && !sidePanelOpened)" class="panel-toggle-conversas">
             <button class="custom__btn custom__btn--accept" (click)="chatnav.toggle()">Mostrar Conversaciones</button>

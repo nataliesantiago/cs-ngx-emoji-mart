@@ -1,4 +1,4 @@
-<div id="search-bar" [ngClass]="{'up':!modo}" [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2}">
+<div class="search-bar" [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2,'up':!modo}">
   <span>
     <mat-icon class="buscar-lupa">search</mat-icon>
   </span>
@@ -8,7 +8,7 @@
     </label>
     <input id="file-input" (change)="onFileSelected($event)" type="file" />
   </div>
-  <mat-icon (click)="iniciarReconocimientoVoz($event)" id="microphone-icon" class="microfono"
+  <mat-icon (click)="iniciarReconocimientoVoz($event)" id="microphone-icon" class="microfono" *ngIf="recognition"
     [ngClass]="{'escuchando':recognizing}">
     mic</mat-icon>
   <div class="ng-autocomplete">
