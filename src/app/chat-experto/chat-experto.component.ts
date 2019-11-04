@@ -20,6 +20,7 @@ import { CerrarChatExpertoComponent } from '../components/cerrar-chat-experto/ce
 import { text } from '@angular/core/src/render3';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { ChatPendienteComponent } from '../components/chat-pendiente/chat-pendiente.component';
 
 const moment = _rollupMoment || _moment;
 
@@ -1001,5 +1002,19 @@ export class ChatExpertoComponent {
       this.router.navigate(['/formulario-preguntas-flujo-curaduria/sugerida']);
     }, 1);
 
+  }
+
+  chatPendiente(c: Conversacion) {
+    this.dialog.open(ChatPendienteComponent).afterClosed().subscribe(d => {
+
+      let estado = 7;
+      this.chatService.conversacionPendiente(c, estado, d.hora_recordatorio).then(() => {
+        //c.mostrar_encuesta = true;
+        if (this.user.experto_activo) {
+          this.recibirChatAutomatico();
+        }
+      });
+
+    });
   }
 }

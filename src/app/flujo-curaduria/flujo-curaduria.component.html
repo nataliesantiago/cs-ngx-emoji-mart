@@ -183,7 +183,7 @@
             
                                   <ng-container matColumnDef="fecha_ultima_modificacion">
                                       <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Fecha Modificación </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.fecha_ultima_modificacion | MomentDate:'MMM DD, YYYY' }} </mat-cell>
+                                      <mat-cell *matCellDef="let row" style="max-width:10%;"><span *ngIf="row.fecha_ultima_modificacion">{{row.fecha_ultima_modificacion | MomentDate:'MMM DD, YYYY' }}</span></mat-cell>
                                   </ng-container>
             
                                   <ng-container matColumnDef="acciones">
