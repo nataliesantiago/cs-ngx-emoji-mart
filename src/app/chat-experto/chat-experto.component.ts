@@ -972,7 +972,7 @@ export class ChatExpertoComponent {
 
       let estado = 7;
       this.chatService.conversacionPendiente(c, estado, d.hora_recordatorio).then(() => {
-        //c.mostrar_encuesta = true;
+        c.mostrar_encuesta = true;
         if (this.user.experto_activo) {
           this.recibirChatAutomatico();
         }
