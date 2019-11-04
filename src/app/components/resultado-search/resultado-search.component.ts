@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 export class ResultadoSearchComponent implements OnInit {
   @Input() respuesta: ResultadoCloudSearch;
   @Input() pos: number;
+  @Input() busqueda: string;
   mostrando = true;
 
   constructor(private searchService: SearchService) {

@@ -294,7 +294,7 @@ export class UserService {
                     });
 
                 },
-                (error) => { console.error("error", error); },
+                (error) => { console.error("Error de firebase mesagging", error); },
             );
     }
 

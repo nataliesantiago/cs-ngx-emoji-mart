@@ -13,7 +13,7 @@ import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './demo-material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SearchComponent } from './search/search.component';
+import { ResultadosComponent } from './resultados/resultados.component';
 import { BuzonSugerenciasComponent } from './buzon-sugerencias/buzon-sugerencias.component';
 import { HomeComponent } from './home/home.component';
 import { SpeechRecognizerService } from './home/web-speech/shared/services/speech-recognizer.service';
@@ -124,6 +124,7 @@ import { ResultadoSearchComponent } from './components/resultado-search/resultad
 import { HistorialChatComponent } from './historial-chat/historial-chat.component';
 import { ChatPendienteComponent } from './components/chat-pendiente/chat-pendiente.component';
 import { DialogoDetalleChatComponent } from './historial-chat/dialogo-detalle-chat/dialogo-detalle-chat.component';
+import { BuscadorHightlighter } from '../pipes/buscador-highligther.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -138,7 +139,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
-    SearchComponent,
+    ResultadosComponent,
     HomeComponent,
     HistorialUsuarioComponent,
     PaginaBlancoComponent,
@@ -198,6 +199,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SosOperadorComponent,
     LinkifyPipe,
     SafePipe,
+    BuscadorHightlighter,
     AdministradorLookFeelComponent,
     CerrarChatExpertoComponent,
     AdministradorUsuariosComponent,

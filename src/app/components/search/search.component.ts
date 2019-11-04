@@ -70,13 +70,19 @@ export class AppSearchComponent implements OnChanges, OnInit {
     private autenticationService: AutenticationService,
     private look_service: LookFeelService
   ) {
-    const { webkitSpeechRecognition }: IWindow = <any>window;
-    this.recognition = new webkitSpeechRecognition();
-    this.recognition.lang = this.languages[1];
+
+
     this.searchText = '';
+
+    try {
+      const { webkitSpeechRecognition }: IWindow = <any>window;
+      this.recognition = new webkitSpeechRecognition();
+      this.recognition.lang = this.languages[1];
+    } catch (e) {
+      console.log('Navegador incompatible con reconocimiento de voz');
+    }
     this.responseSearch.setActiveMostrarBarra(false);
     this.getPlaceholder();
-
   }
 
   getPlaceholder() {
@@ -98,35 +104,37 @@ export class AppSearchComponent implements OnChanges, OnInit {
    * de cada evento del api
    */
   private initRecognition() {
-    this.recognition.onaudiostart = () => {
-      this.recognizing = true;
-      this.changeDetector.detectChanges();
-    }
-
-    this.recognition.onspeechend = () => {
-      this.recognizing = false;
-      this.changeDetector.detectChanges();
-    }
-
-    this.recognition.onresult = event => {
-      let interimTranscript = '';
-      for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
-        let transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          interimTranscript += transcript;
-        } else {
-          interimTranscript += transcript;
-        }
+    if (this.recognition) {
+      this.recognition.onaudiostart = () => {
+        this.recognizing = true;
+        this.changeDetector.detectChanges();
       }
-      this.def.setValue(interimTranscript);
-      setTimeout(() => {
-        this.nzone.run(() => {
-          this.buscar(2);
-        });
-      }, 1000);
-      this.changeDetector.detectChanges();
-    }
 
+      this.recognition.onspeechend = () => {
+        this.recognizing = false;
+        this.changeDetector.detectChanges();
+      }
+
+      this.recognition.onresult = event => {
+        let interimTranscript = '';
+        for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+          let transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            interimTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+        delete this.texto_sugerido;
+        this.def.setValue(interimTranscript);
+        setTimeout(() => {
+          this.nzone.run(() => {
+            this.buscar(2);
+          });
+        }, 1000);
+        this.changeDetector.detectChanges();
+      }
+    }
 
   }
 
@@ -214,7 +222,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     * metodo de change del autocomplete
   */
   onChangeSearch(val: string) {
-    
+
     return;/*
     this.searchText = val;
     if (!val || val == '') {
@@ -263,7 +271,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   }
   ngOnChanges(changes: SimpleChanges) {
     // console.log('entro aca mono');
-    console.log('paso por aca');
+    //console.log('paso por aca');
     const name: SimpleChange = changes.texto_buscar;
     this.texto_buscar = name.currentValue;
     this.def.setValue(this.texto_buscar);
@@ -284,7 +292,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       'fechaBusqueda': fecha,
       'url': this.url
     };
-    this.router.navigate(['/search/' + this.def.value]);
+    this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value));
     //this.homeService.guardarBusqueda(obj).subscribe(data => );
     //this.nzone.run(() => this.stopRecognizer());
     //this.stopRecognizer();

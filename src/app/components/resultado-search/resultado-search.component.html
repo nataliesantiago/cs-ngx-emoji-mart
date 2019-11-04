@@ -13,7 +13,7 @@
       <div class="contenido-respuesta">
         <mat-card-subtitle> {{respuesta.tipo}}</mat-card-subtitle>
         <div class="contenedor-texto">
-          <span *ngIf="mostrando" [innerHTML]="respuesta.contenido | safe:'html'"></span>
+          <span *ngIf="mostrando" [innerHTML]="respuesta.contenido | buscadorhightlight:busqueda |safe:'html'"></span>
         </div>
         <mat-progress-bar *ngIf="!mostrando" class="barra-cargando" [mode]="'indeterminate'"
           [bufferValue]="bufferValue">

@@ -3,7 +3,7 @@ import { AjaxService } from './ajax.service';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 import { User } from '../../schemas/user.schema';
-import { OrigenDrive, ResultadoCloudSearch } from '../../schemas/interfaces';
+import { OrigenDrive, ResultadoCloudSearch, Busqueda } from '../../schemas/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,8 @@ export class SearchService {
       }
     });
   }
+
+  busqueda_actual: Busqueda;
 
 
   autocompleteText(query: any) {
@@ -43,7 +45,7 @@ export class SearchService {
     return this.ajax.post(url_api, json);
   }
 
-  queryCloudSearch(query?: string, page?: number): Promise<any> {
+  queryCloudSearch(query: string, tipo: number, origen: string, page?: number, url?: string): Promise<any> {
     let start;
     if (!page) {
       start = 0;
@@ -51,7 +53,7 @@ export class SearchService {
       start = 10 * page;
     }
     return new Promise((resolve, reject) => {
-      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo(), start: start }).subscribe(async d => {
+      this.ajax.get('preguntas/cloud-search/query', { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen }).subscribe(async d => {
         if (d.success) {
           d.resultados.results = (d.resultados.results) ? d.resultados.results : [];
           for (let index = 0; index < d.resultados.results.length; index++) {
@@ -100,7 +102,7 @@ export class SearchService {
     });
   }
   callTestEsquema() {
-    this.ajax.post('preguntas/cloud-search/crearEsquemaDrive', {}).subscribe(d => {
+    this.ajax.post('connector_drive/cloud-search/crearEsquemaDrive', {}).subscribe(d => {
 
     });
   }

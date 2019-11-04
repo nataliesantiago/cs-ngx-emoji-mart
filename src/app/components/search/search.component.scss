@@ -64,7 +64,7 @@ hr {
     color: #5f5d5d;
 }
 
-#search-bar {
+.search-bar {
     /* width: 35em;
     height: 50px;
     background-color: #fff;
@@ -72,7 +72,7 @@ hr {
     margin: auto;
     margin-top: 2em;
     box-shadow: 2px 4px 3px 2px rgba(0, 0, 0, 0.3);*/
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    box-shadow: none;
     color: rgb(32, 33, 36);
     display: block;
     height: 48px;
@@ -84,8 +84,8 @@ hr {
     perspective-origin: 260px 24px;
     transform-origin: 260px 24px;
     caret-color: rgb(32, 33, 36);
-    border: 0px none rgb(32, 33, 36);
-    border-radius: 8px 8px 8px 8px;
+    // border: 0px none rgb(32, 33, 36);
+    border-radius: 25px;
     font: normal normal 400 normal 16px / 20pxRoboto, "Helvetica Neue", sans-serif, "Helvetica Neue", Helvetica, sans-serif;
     outline: rgb(32, 33, 36) none 0px;
     padding: 0px 0px 0px 7px;
@@ -95,6 +95,7 @@ hr {
     max-width: 520px;
 
     &:focus-within {
+        border: none;
         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 2px 6px 2px rgba(60, 64, 67, .15);
     }
 
@@ -278,7 +279,8 @@ li a:hover {
     color: #B5B5B5;
     cursor: pointer;
     position: absolute;
-    top: 14px;
+    top: 12px;
+    left: 10px;
 
 }
 
@@ -460,7 +462,7 @@ a:hover .tooltip {
 
 
 @media only screen and (max-width: 820px) {
-    #search-bar {
+    .search-bar {
         width: 100%;
     }
 }

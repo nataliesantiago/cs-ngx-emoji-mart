@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { SearchComponent } from './search/search.component';
+import { ResultadosComponent } from './resultados/resultados.component';
 import { HomeComponent } from './home/home.component';
 import { HistorialUsuarioComponent } from './historial-usuario/historial-usuario.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -49,10 +49,8 @@ export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
   { path: 'valida/:data', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'home-pro', component: HomeProComponent, canActivate: [AuthGuard] },
   { path: 'home/:data', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'search/:id', component: SearchComponent, canActivate: [AuthGuard] },
-  { path: 'search/:id/:page', component: SearchComponent, canActivate: [AuthGuard] },
+  { path: 'search', component: ResultadosComponent, canActivate: [AuthGuard] },
   { path: 'historial-usuario', component: HistorialUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'ad-expertos', component: AdExpertosComponent, canActivate: [AuthGuard] },

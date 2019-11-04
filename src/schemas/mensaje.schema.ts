@@ -26,6 +26,7 @@ export class Mensaje {
     tipo_conversacion: number;
     mensaje_sugerido: boolean;
     es_cliente: boolean;
+    encontrado: boolean;
     constructor(id_usuario?, tipo_mensaje?, url?) {
         this.id_usuario = id_usuario;
         this.tipo_mensaje = tipo_mensaje;
