@@ -1,49 +1,48 @@
-<div fxLayout="row wrap">
-    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+<div class="contenedor">
         <mat-card>
             <mat-card-content>
-                <mat-card-title>Historial de busqueda</mat-card-title>
-                <br>
+                <mat-card-title>Historial de Busquedas</mat-card-title>
                 <div class="bg-light p-10 p-r-20 p-l-20">
                     <mat-form-field>
                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
                     </mat-form-field>
                 </div>
+    
                 <div class="responsive-table">
-                    <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
-
-                        <!-- Position Column -->
-                        <ng-container matColumnDef="fecha">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha/Hora </mat-header-cell>
-                            <mat-cell *matCellDef="let data"> {{data.fecha_busqueda}} </mat-cell>
+    
+                    <mat-table [dataSource]="dataSource" matSort>
+                
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="texto_busqueda">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Texto Busqueda</mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.texto_busqueda}} </mat-cell>
                         </ng-container>
-
-                        <!-- Name Column -->
-                        <ng-container matColumnDef="busqueda">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Busqueda </mat-header-cell>
-                            <mat-cell *matCellDef="let data"> {{data.texto_busqueda }} </mat-cell>
+                
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="tipo_busqueda">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Tipo de Busqueda </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.tipo_busqueda}} </mat-cell>
                         </ng-container>
-
-                        <!-- Weight Column -->
-                        <ng-container matColumnDef="tipoBusqueda">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo busqueda </mat-header-cell>
-                            <mat-cell *matCellDef="let data"> {{data.id_tipo_busqueda}} </mat-cell>
-                        </ng-container>
-
-                        <!-- Symbol Column -->
+    
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="fecha_busqueda">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Fecha de Busqueda </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:20%;"> {{row.fecha_busqueda | MomentDate:'MMM DD, YYYY HH:MM a'}} </mat-cell>
+                            </ng-container>
+                
                         <ng-container matColumnDef="url">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> URL </mat-header-cell>
-                            <mat-cell *matCellDef="let data"> {{data.url}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:30%;"> URL </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:30%;"> {{row.url}} </mat-cell>
                         </ng-container>
-
+                
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;">
+                        </mat-row>
                     </mat-table>
-                    <!-- ------------------------------------------------- -->
+                
                     <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-                    <!-- ------------------------------------------------- -->
                 </div>
             </mat-card-content>
         </mat-card>
     </div>
-</div>
+    
