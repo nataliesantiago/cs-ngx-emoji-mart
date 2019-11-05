@@ -1,21 +1,184 @@
 <div class="container-chat">
-  <h3>{{info_chat.nombre}} </h3>
+  <div *ngIf="!chat.expert_chat" class="container">
+      <h3>{{chat.nombre}} </h3>
   
-  <perfect-scrollbar class="contenedor">
-    <div class="list-messages">
-      <div class="message" *ngFor="let message of messages" [ngClass]="{'odd': message.id_usuario_envia!==info_chat.user_id,'even': message.id_usuario_envia===info_chat.user_id}">
-        <div class="chat-block">
-          <div>{{decodeText(message.texto)}}</div>
+      <perfect-scrollbar class="contenedor">
+        <div class="list-messages">
+          <div class="message" *ngFor="let message of chat.mensajes" [ngClass]="{'odd': message.id_usuario_envia!==chat.idtbl_usuario,'even': message.id_usuario_envia===chat.idtbl_usuario}">
+            <div class="chat-block">
+              <div *ngIf="message.es_archivo != 1 || message.es_nota_voz != 1">{{decodeText(message.texto)}}</div>
+              <a *ngIf="message.es_archivo == 1 || message.es_nota_voz == 1" [href]="message.url" target="_blank">{{message.url}}</a>
+            </div>
+            <span class="foto-mensaje">
+              <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40" title="{{message.nombre}}" *ngIf="message.id_usuario_envia!==chat.idtbl_usuario">
+            </span>
+            <div class="chat-date">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
+          </div>
+          <p class="no-message" *ngIf="is_empty_messages">No se han encontrado mensajes en este chat.</p>
         </div>
-        <span class="foto-mensaje">
-          <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40" title="{{message.nombre}}" *ngIf="message.id_usuario_envia!==info_chat.user_id">
-        </span>
-        <div class="chat-date">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
-      </div>
-      <p class="no-message" *ngIf="is_empty_messages">No se han encontrado mensajes en este chat.</p>
-    </div>
-  </perfect-scrollbar>
+      </perfect-scrollbar>
 
-  <a class="custom__btn custom__btn--accept" (click)="closeDialog()">Aceptar</a>
+      <a class="custom__btn custom__btn--accept" (click)="closeDialog()">Aceptar</a>
+  </div>
+  
+  <div *ngIf="chat.expert_chat && !chat.mostrar_encuesta" class="container container-new-chat">
+    <div fxLayout="row" layout-align="none center">
+      <h3>{{chat.nombre}} </h3>
+      <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1 options-chat">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #them="matMenu" x-position="before">
+        <button mat-menu-item (click)="cerrarChat(chat)">Cerrar Chat</button>
+      </mat-menu>
+    </div>
+    
+    <perfect-scrollbar class="contenedor" [attr.data-conversacion-id]="chat.codigo">
+      <div  class="list-messages">
+        <div class="panel-buscador-texto" *ngIf="chat.buscando_texto">
+          <div class="contenido-buscador">
+            <input type="text" placeholder="Buscar en la conversación" autofocus
+              [formControl]="chat.texto_busqueda_mensajes" />
+            <div class="cant-matches">{{chat.cant_coincidencias}}</div>
+            <button mat-icon-button title="Cerrar" (click)="chat.buscando_texto=false">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="message" *ngFor="let message of chat.mensajes" 
+                              [ngClass]="{'odd': message.id_usuario_envia!==chat.idtbl_usuario,'even': message.id_usuario_envia===chat.idtbl_usuario || message.id_usuario===chat.idtbl_usuario}">
+          
+          <div class="chat-block" [ngClass]="{'encontrado':message.encontrado && chat.buscando_texto}">
+            <div class="contendor-archivo" *ngIf="message.es_archivo || message.es_nota_voz">
+              <div *ngIf="message.es_archivo">
+                <a [href]="message.url" target="_blank">
+                  <img [src]="message.url" *ngIf="message.tipo_archivo==1" />
+                </a>
+                <video [src]="message.url" controls *ngIf="message.tipo_archivo==2"></video>
+                <div *ngIf="message.tipo_archivo==3" class="archivo-defecto"><a [href]="message.url"
+                    target="_blank">
+                    <mat-icon>attach_file</mat-icon>
+                    {{message.nombre_archivo}}
+                    <span *ngIf="!message.nombre_archivo">Descargar Adjuntos</span>
+                  </a></div>
+              </div>
+              <div *ngIf="message.es_nota_voz">
+                <div class="reproductor-audio" *ngIf="message.audio && message.audioControls">
+                  <button mat-icon-button (click)="toggleAudio(chat,message)">
+                    <mat-icon *ngIf="!message.audioControls.reproduciendo">play_arrow</mat-icon>
+                    <mat-icon *ngIf="message.audioControls.reproduciendo">pause</mat-icon>
+                  </button>
+                  <mat-slider [max]="message.audioControls.max" [min]="message.audioControls.min" [step]="1"
+                    [(ngModel)]="message.audioControls.segundo" (change)="cambiarSegundoAudio(m)">
+                  </mat-slider>
+                  <div class="tiempo-audio"><span>{{message.audioControls.segundo | minuteSeconds}}</span>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!message.es_archivo || !message.es_nota_voz"
+              [innerHTML]="decodeText(message.texto) | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
+
+            <div *ngIf="(message.mensaje_antiguo && message.es_archivo) || (message.mensaje_antiguo && message.es_nota_voz)"
+              [innerHTML]="message.url | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
+              
+            <span *ngIf="message.id_usuario==chat.idtbl_usuario">
+              <mat-icon class="icono-burbuja-mensaje" *ngIf="message.estado==2">done</mat-icon>
+            </span>
+          </div>
+          <span class="foto-mensaje" *ngIf="message.id_usuario_envia!==chat.idtbl_usuario">
+            <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40"
+              title="{{message.nombre}}">
+          </span>
+          <div class="chat-date" *ngIf="message.mensaje_antiguo">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
+          <div class="chat-date" *ngIf="!message.mensaje_antiguo">{{message.fecha_mensaje | datechat }}</div>
+        </div>
+      </div>
+      <div *ngIf="chat.archivo_adjunto" class="archivo-adjunto">
+        <div class="contenedor-adjunto">
+          <div class="boton-cerrar">
+            <button mat-icon-button color="basic" class=""
+              (click)="quitarArchivoAdjunto(chat,adjuntos)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <img [src]="chat.archivo_adjunto.url" *ngIf="chat.archivo_adjunto.tipo_archivo==1" />
+          <video [src]="chat.archivo_adjunto.url" *ngIf="chat.archivo_adjunto.tipo_archivo==2"></video>
+          <div *ngIf="chat.archivo_adjunto.tipo_archivo==3" class="archivo-defecto"><a
+              [href]="chat.archivo_adjunto.url" target="_blank">
+              <mat-icon>attach_file</mat-icon>
+              {{chat.archivo_adjunto.name}}
+            </a></div>
+          <button mat-icon-button color="basic" class="boton-enviar"
+            (click)="enviarMensaje(chat,2,null,null,este)">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="chat.grabando_nota" class="ventana-grabacion-nota">
+        <div class="contenedor-adjunto">
+          <div class="boton-cerrar">
+            <button mat-icon-button color="basic" class="" (click)="quitarNotaVoz(chat)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <button mat-icon-button color="basic" class="boton-mic">
+            <mat-icon>mic</mat-icon>
+          </button>
+          <div class="cuenta-regresiva">
+            <div>{{chat.cuenta_regresiva}}</div>
+            <div>
+              <button mat-icon-button color="basic" class="boton-enviar"
+                (click)="enviarNota(chat,este)">
+                <mat-icon>send</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+
+    <mat-card-actions class="chat-footer acciones-chat">
+
+        <mat-progress-bar mode="indeterminate" *ngIf="chat.cargando_archivo"></mat-progress-bar>
+        <div fxLayout="row" layout-align="start center">
+          <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
+            <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
+          </button>
+          <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
+          (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
+          (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
+          [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
+          (blur)="setFocus(chat,false)"></textarea>
+          <button mat-icon-button color="primary" (click)="adjuntos.click()"
+            [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
+            <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat,este)"
+            [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto">
+            <mat-icon aria-label="Example icon-button with a heart icon">mic</mat-icon>
+          </button>
+        </div>
+      </mat-card-actions>
+      <form [hidden]="true" #formulario method="POST" enctype="multipart/form-data" [action]="urlAdjuntos">
+        <input type="file" (change)="adjuntarArchivo(chat,$event,formulario,adjuntos)" #adjuntos />
+      </form>
+
+      <emoji-mart set="google" sheetSize="64" class="emojis-panel" perLine="6" *ngIf="chat.mostrar_emojis"
+        showPreview="false" (emojiSelect)="seleccionarEmoji($event,chat)"
+        [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
+      </emoji-mart>
+  </div>
+
+  <div *ngIf="chat.expert_chat && chat.mostrar_encuesta">
+    <div class="download-chat" *ngIf="chat.mostrar_descarga_chat">
+      <p>Guardar chat en el equipo</p>
+      <button class="custom__btn custom__btn--primary">Descargar Chat</button>
+    </div>
+    <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
+    </app-visualizar-encuesta>
+  </div>
+
 </div>
 

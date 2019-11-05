@@ -26,6 +26,7 @@ export class HistorialChatComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   column_user;
+  is_expert;
 
   constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog) {
     this.user = this.user_service.getUsuario();
@@ -49,9 +50,11 @@ export class HistorialChatComponent implements OnInit {
   init() {
     if (this.user.getIdRol() == 2) {
       this.column_user = 'Nombre Cliente';
+      this.is_expert = true;
       this.getExpertChat();
     } else {
       this.column_user = 'Nombre Experto';
+      this.is_expert = false;
       this.getClientChat();
     }
   }
@@ -67,24 +70,30 @@ export class HistorialChatComponent implements OnInit {
   getExpertChat() {
     this.historial_service.getExpertChats(this.user.getId()).then(result => {
       this.createTable(result);
+      this.change_detector.detectChanges();
     });
   }
 
   getClientChat() {
     this.historial_service.getClientChats(this.user.getId()).then(result => {
       this.createTable(result);
+      this.change_detector.detectChanges();
     });
   }
 
   showMoreChat(row) {
-    let user_id = this.user.getId();
+    let idtbl_usuario = this.user.getId();
+    let expert_chat;
+    if (this.is_expert && row.estado == 'Pendiente') {
+      expert_chat = true;
+    }
     this.dialog.open(DialogoDetalleChatComponent, {
       panelClass: 'dialog-chat',
       width: '550px',
       height: '90vh',
-      data: { ...row, user_id }
+      data: { ...row, idtbl_usuario, expert_chat }
     });
-    
+    this.change_detector.detectChanges();
   }
 
   applyFilter(filterValue: string) {
