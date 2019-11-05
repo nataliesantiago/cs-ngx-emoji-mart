@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterModule, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, debounce, switchMap, debounceTime } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -56,7 +56,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   paginator2: MatPaginator;
   sort2: MatSort;
   dataSource2 = new MatTableDataSource([]);
-
+  titulo_control = new FormControl();
+  texto_buscador: string;
 
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
 
@@ -119,6 +120,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   init() {
+
+    this.titulo_control.valueChanges.pipe(debounceTime(200), switchMap(value => this.texto_buscador = value));
+
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {
 

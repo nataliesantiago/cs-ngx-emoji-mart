@@ -2,10 +2,15 @@
   <mat-card-content>
     <mat-card-title>Formulario de Registro de Preguntas y Respuestas</mat-card-title>
     <hr>
-    <mat-form-field>
-      <mat-label>Digite la pregunta*</mat-label>
-      <input matInput [(ngModel)]="pregunta.titulo" name="titulo">
-    </mat-form-field>
+    <div fxLayout="row wrap">
+      <mat-form-field fxFlex.gt-sm="70" fxFlex="100">
+        <mat-label>Digite la pregunta*</mat-label>
+        <input matInput [(ngModel)]="pregunta.titulo" name="titulo" [formControl]="titulo_control">
+      </mat-form-field>
+      <div class="contendor-busqueda" fxFlex.gt-sm="30" fxFlex="100">
+          <app-search-component [modo]="3" [texto_buscar]="texto_buscador"></app-search-component>
+      </div>
+    </div>
     <br>
     <br>
     <mat-card-title>Por favor digite la respuesta</mat-card-title>
