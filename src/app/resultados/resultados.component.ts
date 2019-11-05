@@ -107,6 +107,7 @@ export class ResultadosComponent implements OnInit {
     this.page = params.page || 0;
     this.cargando_respuestas = true;
     this.resultados = [];
+    this.resultado = true;
     if (this.busqueda != params.busqueda) {
       this.busqueda = params.busqueda;
       this.ortografia = false;
@@ -131,6 +132,7 @@ export class ResultadosComponent implements OnInit {
       if (parseInt(d.resultCountExact) < 1) {
         this.resultado = false;
       } else {
+        
         this.length = parseInt(d.resultCountExact);
       }
       if (d.spellResults) {

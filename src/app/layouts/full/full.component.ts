@@ -338,16 +338,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     this.metodo = 1;
     this.searchText = item.title;
   }
-  /**
-    * @param  {} val valor del item seleccionado
-    * metodo de change del autocomplete
-  */
-  onChangeSearch(val: string) {
-    this.searchText = val;
-    this.homeService.autocompleteText(val).subscribe((data) =>
-      this.textopredictivo = data.data
-    );
-  }
+ 
   ngOnInit(): void {
     /**speech recognizion */
     this.currentLanguage = this.languages[0];

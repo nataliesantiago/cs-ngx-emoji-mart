@@ -80,7 +80,8 @@
           </div>
         </mat-sidenav>
         <mat-sidenav-content class="contenedor-sidenav-chat-experto">
-          <div *ngIf="chat && !chat.mostrar_encuesta" class="contenedor-grande">
+          <div *ngIf="chat && !chat.mostrar_encuesta" class="contenedor-grande"
+            [ngClass]="{'conversacion-experto':chat.id_tipo_conversacion==2}">
             <mat-toolbar class="no-shadow chat-right-panel" color="basic">
               <div fxLayout="row" fxFlex="100" fxLayoutAlign="center center">
                 <button (click)="chatnav.toggle()" class="mr-1" mat-icon-button *ngIf="isOver() || !sidePanelOpened">
@@ -131,7 +132,7 @@
                   <div class="contenido-buscador">
                     <input type="text" placeholder="Buscar en la conversación" autofocus
                       [formControl]="chat.texto_busqueda_mensajes" />
-                      <div class="cant-matches">{{chat.cant_coincidencias}}</div>
+                    <div class="cant-matches">{{chat.cant_coincidencias}}</div>
                     <button mat-icon-button title="Cerrar" (click)="chat.buscando_texto=false">
                       <mat-icon>close</mat-icon>
                     </button>
@@ -336,6 +337,32 @@
           </div>
           <div *ngIf="(!chat && isOver()) || (!chat && !sidePanelOpened)" class="panel-toggle-conversas">
             <button class="custom__btn custom__btn--accept" (click)="chatnav.toggle()">Mostrar Conversaciones</button>
+          </div>
+          <div class="contenedor-historial-buscador" *ngIf="chat && chat.id_tipo_conversacion==1">
+            <div class="panel-chats primero" *ngIf="!esSupervisor">
+              <div class="contenedor-titulo">
+                  <h3 class="titulo-historial">Historial</h3>
+              </div>
+              
+              <perfect-scrollbar class="contenido">
+                <mat-nav-list>
+                  <mat-list-item *ngFor="let c of chat.historial">
+                    <div matLine><b>ID: </b>{{c.idtbl_conversacion}} - <span [title]="c.estado">{{c.estado}}</span>
+                    </div>
+                    <div matLine><b>Fecha:</b> {{c.fecha_creacion | MomentDate:'YYYY-MM-DD hh:mm:ss a'}}</div>
+                    <div matLine><b>Motivo Cierre:</b> <span [title]="c.motivo_cierre">{{c.motivo_cierre}}</span></div>
+                    <div matLine *ngIf="c.texto_busqueda && c.texto_busqueda!=''"><b>Consulta:</b> {{c.texto_busqueda}}
+                    </div>
+                    <div matLine *ngIf="c.producto && c.producto!=''"><b>Categoría:</b> {{c.producto}}</div>
+                  </mat-list-item>
+                </mat-nav-list>
+              </perfect-scrollbar>
+            </div>
+            <div class="panel-chats segundo" [ngClass]="{'panel-chats-supervisor':esSupervisor}">
+              <app-search-component [modo]="3" [texto_buscar]="chat.busqueda_interna"></app-search-component>
+
+            </div>
+
           </div>
         </mat-sidenav-content>
       </mat-sidenav-container>

@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
 import { AjaxService } from "./ajax.service";
 import { Configuracion } from "../../schemas/interfaces";
+import { text } from "@angular/core/src/render3";
 
 
 @Injectable()
 export class UtilsService {
     configuraciones: Array<any>;
+    palabras_clave_pregunta = ['quien', 'quien', 'que', 'donde', 'cuando', 'como', 'cual', 'cuanto', 'cuantas'];
+
     constructor(private ajax: AjaxService) {
         this.getConfiguraciones();
     }
@@ -124,6 +127,36 @@ export class UtilsService {
         var txt = document.createElement('textarea');
         txt.innerHTML = str;
         return txt.value;
+    }
+    /**
+     * @description Determina si un texto es una pregunta
+     * @param  {string} texto
+     * @returns Promise
+     */
+    async identificarPreguntaTexto(texto: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (!texto) {
+                reject('Texto no válido');
+            } else {
+                if (texto.indexOf('?') != -1) {
+                    resolve(true);
+                } else {
+                    let tmp = texto.split(' ');
+                    for (let index = 0; index < tmp.length; index++) {
+                        const palabra = tmp[index];
+                        tmp[index] = this.normalizeText(palabra);
+                    }
+                    texto = tmp.join(' ');
+                    for (let p of this.palabras_clave_pregunta) {
+                        if (texto.indexOf(p) != -1) {
+                            resolve(true);
+                            return;
+                        }
+                    }
+                    resolve(false);
+                }
+            }
+        });
     }
 
 }
