@@ -495,4 +495,12 @@ export class UserService {
         });
     }
 
+    obtenerHistorialBusquedas(id_usuario: number): Promise<any>{
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-historial-busquedas', { id_usuario: id_usuario }).subscribe(d => {
+                resolve(d.busquedas);
+            })
+        })
+    }
+
 }
