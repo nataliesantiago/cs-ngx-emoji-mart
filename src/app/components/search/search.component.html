@@ -1,16 +1,12 @@
-<div class="search-bar" [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2,'up':!modo}">
-  <span>
+<div class="search-bar"
+  [ngClass]="{'barra-superior':modo==1,'barra-izquierda':modo==2,'up':!modo,'panel-lateral':modo==3}">
+  <button mat-icon-button (click)="buscar(1)">
     <mat-icon class="buscar-lupa">search</mat-icon>
-  </span>
-  <div class="image-upload">
-    <label for="file-input">
-      <mat-icon class="archivo">photo_camera</mat-icon>
-    </label>
-    <input id="file-input" (change)="onFileSelected($event)" type="file" />
-  </div>
-  <mat-icon (click)="iniciarReconocimientoVoz($event)" id="microphone-icon" class="microfono" *ngIf="recognition"
-    [ngClass]="{'escuchando':recognizing}">
-    mic</mat-icon>
+  </button>
+
+  <input id="file-input" (change)="onFileSelected($event)" type="file" />
+
+
   <div class="ng-autocomplete">
     <!--<ng-autocomplete id="ng-autocomplete-search" placeHolder="{{search_placeholder}}" [data]="sugerencias"
       (selected)='selectEvent($event)' (keydown.enter)="buscar(1)" [formControl]="def" [notFoundTemplate]="'No hay resultados'"
@@ -18,10 +14,12 @@
     </ng-autocomplete>
   -->
     <mat-form-field class="caja-buscador">
-      <div class="contenido" *ngIf="texto_sugerido">{{texto_sugerido}}</div>
+      <span #segundo class="contenido"  [innerHTML]="texto_sugerido"></span>
       <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def"
-        (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto" autocomplete="off">
-      <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear" (click)="def.setValue('')">
+        #primero (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto" autocomplete="off"
+        (keydown)="limpiarSugerencia()">
+      <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear"
+        (click)="def.setValue('');texto_sugerido=null;">
         <mat-icon>close</mat-icon>
       </button>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectEvent($event.option.value)'>
@@ -31,19 +29,32 @@
       </mat-autocomplete>
     </mat-form-field>
 
-
-
-    <ng-template #itemTemplate let-item id="value-text">
-      <a [innerHTML]="item.title"></a>
-    </ng-template>
-
     <!-- <ng-template #notFoundTemplate let-notFound>
             <div [innerHTML]="textError"></div>
         </ng-template> -->
   </div>
-  <div>
-    <div *ngFor="let data of dataImage ; let i = index" style="display: inline-block">
-      <div (click)="selectLabel(data,i)" class="labelImage">{{ data }}</div>
-    </div>
+  <button mat-icon-button class="archivo" *ngIf="modo!=3">
+    <mat-icon>photo_camera</mat-icon>
+  </button>
+  <button mat-icon-button (click)="iniciarReconocimientoVoz($event)" class="microfono"
+    [ngClass]="{'escuchando':recognizing}">
+    <mat-icon id="microphone-icon" *ngIf="recognition">
+      mic</mat-icon>
+  </button>
+</div>
+<div *ngIf="modo==3" class="panel-respuestas">
+  <div class="contenedor-respuestas" *ngIf="!cargando_respuestas">
+    <perfect-scrollbar>
+      <div *ngFor="let r of resultados; let i = index" class="contenedor__texto center">
+        <app-resultado-search [respuesta]="r" [pos]="i+1" [busqueda]="busqueda" [modo]="modo"></app-resultado-search>
+      </div>
+      <h3 *ngIf="resultados && resultados.length<1" class="sin-resultados">No hay resultados</h3>
+    </perfect-scrollbar>
   </div>
+  <mat-paginator [length]="length" [hidePageSize]="true" (page)="paginar($event)" [pageIndex]="page"
+    [showFirstLastButtons]="true" *ngIf="!cargando_respuestas && length>10" [pageSize]="10">
+  </mat-paginator>
+  <mat-progress-spinner class="spinner-cargando-respuestas" [mode]="'indeterminate'" [diameter]="68"
+    *ngIf="cargando_respuestas">
+  </mat-progress-spinner>
 </div>

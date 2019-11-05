@@ -14,6 +14,7 @@
     &.segundo {
         margin-top: 20px;
         border: 1px solid #dadada;
+        position: relative;
     }
 
     &.panel-chats-supervisor {
@@ -278,7 +279,7 @@
     }
 
     .acciones-chat {
-        position: fixed;
+        // position: fixed;
         bottom: 0;
         left: 0;
         right: 0;

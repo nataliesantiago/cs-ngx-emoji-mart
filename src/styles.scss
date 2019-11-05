@@ -171,8 +171,13 @@ body {
   text-align: center;
   width: 100%;
   background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2); */
   padding: 8px 0;
+  border: 1px solid #dadada;
+  border-left: none;
+  border-right: none;
+  left: 0;
+  bottom: 74px;
 
   button {
     color: black;
@@ -934,10 +939,13 @@ ul li {
 
 .ng-autocomplete {
   width: 100% !important;
-
+  min-width: 40px;
 }
 
-
+.spinner-cargando-respuestas {
+  margin: auto;
+  margin-top: 40px;
+}
 
 .ng2-smart-action-add-add {
   cursor: pointer;
@@ -2847,6 +2855,36 @@ input:-webkit-autofill:active {
 
 .contenedor-sidenav-chat-experto {
   margin-left: 240px !important;
+  display: flex !important;
+  position: relative;
+
+  .contenedor-grande {
+    min-width: 60%;
+    flex: 1;
+    position: relative;
+
+    &.conversacion-experto {
+      width: 100%;
+    }
+  }
+
+  .contenedor-historial-buscador {
+    width: 320px;
+    padding: 0 1vw;
+
+    .contenedor-titulo {
+      display: flex;
+      height: 76px;
+      width: 100%;
+      border-bottom: 1px solid #dadada;
+
+      .titulo-historial {
+        text-align: center;
+        margin: auto 0;
+        width: 100%;
+      }
+    }
+  }
 }
 
 .goodbye-message {
@@ -2985,19 +3023,26 @@ input:-webkit-autofill:active {
 }
 
 .caja-buscador {
-  padding-left: 34px;
-  padding-right: 54px;
+  //padding-left: 34px;
+  //padding-right: 80px;
   top: -5px;
   width: 100% !important;
+
+  .mat-form-field-flex {
+    height: 48px;
+  }
 
   .mat-form-field-infix {
     min-height: 50px !important;
   }
 
   .mat-form-field-suffix {
-    top: 18px;
-    right: 3px;
-    position: absolute;
+    position: relative;
+    top: -16px;
+
+    button.mat-icon-button {
+      margin: 0 !important;
+    }
   }
 
   input {
@@ -3005,11 +3050,14 @@ input:-webkit-autofill:active {
     background-color: transparent;
     position: absolute;
     top: 8px;
+    z-index: 2;
 
     &:focus {
       outline: none;
       border-color: #aaa;
     }
+
+
   }
 
   .contenido {
@@ -3018,12 +3066,11 @@ input:-webkit-autofill:active {
     color: #999;
     position: absolute;
     left: 0;
-
-    &:focus {
-      outline: none;
-      border-color: #aaa;
-    }
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
   }
+
 
   &.mat-focused,
   &.mat-form-field-can-float {

@@ -74,7 +74,7 @@ hr {
     box-shadow: 2px 4px 3px 2px rgba(0, 0, 0, 0.3);*/
     box-shadow: none;
     color: rgb(32, 33, 36);
-    display: block;
+    display: flex;
     height: 48px;
     text-decoration: none solid rgb(32, 33, 36);
     text-size-adjust: 100%;
@@ -107,6 +107,29 @@ hr {
     &.barra-izquierda {
         margin: 15px auto;
         // margin-left: 0;
+    }
+
+    &.panel-lateral {
+        margin: 15px auto;
+        width: calc(100% - 15px) !important;
+    }
+
+    .ng-autocomplete {
+        flex: 1;
+    }
+
+    .mat-icon-button {
+        margin: auto 0px;
+        width: 22px;
+        margin-right: 5px;
+    }
+
+    .mat-icon {
+        display: inline-block;
+    }
+
+    #file-input {
+        display: none;
     }
 }
 
@@ -249,38 +272,33 @@ li a:hover {
 
 .microfono {
     z-index: 2;
-    margin-top: 14px;
-    margin-right: 10px;
     font-size: 22px;
     color: #B5B5B5;
-    cursor: pointer;
-    position: absolute;
-    right: 0px;
-    top: 0;
+    margin-right: 10px !important;
+
 
     &.escuchando {
-        animation: heartbeat 1.2s infinite alternate;
+        .mat-icon {
+            animation: heartbeat 1.2s infinite alternate;
+        }
     }
 }
-
+.sin-resultados{
+    color:rgb(124, 124, 124);
+    text-align: center;
+}
 .archivo {
     z-index: 2;
-    margin-top: 14px;
-
-    margin-right: 15px;
     font-size: 22px;
     color: #B5B5B5;
-    cursor: pointer;
-    position: absolute;
-    right: 18px;
+    margin-right: 5px !important;
+    //position: absolute;
+    //right: 18px;
 }
 
 .buscar-lupa {
     color: #B5B5B5;
     cursor: pointer;
-    position: absolute;
-    top: 12px;
-    left: 10px;
 
 }
 
@@ -457,6 +475,16 @@ a:hover .tooltip {
     border-radius: 7px;
     text-align: center;
     cursor: pointer;
+}
+
+.panel-respuestas {
+    width: 100%;
+    height: calc(100% - 134px);
+    position: absolute;
+
+    .contenedor-respuestas {
+        height: 100%;
+    }
 }
 
 

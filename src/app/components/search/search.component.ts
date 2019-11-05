@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit, NgZone, ViewChild, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, NgZone, ViewChild, Input, OnChanges, SimpleChanges, SimpleChange, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/startWith';
@@ -19,6 +19,7 @@ import { SearchService } from '../../providers/search.service';
 import { AutocompleteComponent } from 'angular-ng-autocomplete';
 import { LookFeelService } from '../../providers/look-feel.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
+import { MatPaginator, MatTabGroup } from '@angular/material';
 
 interface IWindow extends Window {
   webkitSpeechRecognition: any;
@@ -60,6 +61,19 @@ export class AppSearchComponent implements OnChanges, OnInit {
   @Input() modo: number;
   @Input() texto_buscar: string;
   recognition;
+  busqueda: string;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatTabGroup) tabs: MatTabGroup;
+  page: number;
+  resultados: any;
+  cargando_respuestas: boolean;
+  resultado: boolean;
+  length: number;
+  ortografia: boolean;
+  busquedaCorregida: any;
+  busquedaUrl: any;
+  @ViewChild('primero') primero: ElementRef;
+  @ViewChild('segundo') segundo: ElementRef;
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -82,13 +96,17 @@ export class AppSearchComponent implements OnChanges, OnInit {
       console.log('Navegador incompatible con reconocimiento de voz');
     }
     this.responseSearch.setActiveMostrarBarra(false);
-    this.getPlaceholder();
+
   }
 
   getPlaceholder() {
-    this.look_service.getSpecificSetting('placeholder_buscador').then((result) => {
-      this.search_placeholder = result[0].valor;
-    });
+    if (this.modo != 3) {
+      this.look_service.getSpecificSetting('placeholder_buscador').then((result) => {
+        this.search_placeholder = result[0].valor;
+      });
+    } else {
+      this.search_placeholder = 'Autogestión';
+    }
   }
 
 
@@ -217,23 +235,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     }, 1);
   }
 
-  /**
-    * @param  {} val valor del item seleccionado
-    * metodo de change del autocomplete
-  */
-  onChangeSearch(val: string) {
 
-    return;/*
-    this.searchText = val;
-    if (!val || val == '') {
-      delete this.textopredictivo;
-    } else {
-      this.searchService.autocompleteText(val).subscribe((data) =>
-        this.textopredictivo = data.data
-      );
-    }*/
-
-  }
   ngOnInit(): void {
     // console.log('estuvo por aqui')
     this.initRecognition();
@@ -246,7 +248,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       ).subscribe(d => {
         // console.log(d);
       });
-
+    this.getPlaceholder();
   }
   procesaValorCaja(value: string) {
 
@@ -257,9 +259,20 @@ export class AppSearchComponent implements OnChanges, OnInit {
       if (this.sugerencias && this.sugerencias.length > 0) {
         let t = this.sugerencias[0].suggestedQuery;
         this.texto_sugerido = t.replace(t.substring(0, this.def.value.length), this.def.value);
+        setTimeout(() => {
+          this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
+          //console.log(this.segundo, this.primero);
+        }, 0);
+
       }
     });
     return [];
+  }
+
+  paginar(pagina: any) {
+    //console.log(pagina);
+    this.page = pagina.pageIndex;
+    this.buscar(this.metodo);
   }
 
   completarTexto(event: KeyboardEvent) {
@@ -267,32 +280,95 @@ export class AppSearchComponent implements OnChanges, OnInit {
     event.stopPropagation();
     if (this.texto_sugerido) {
       this.def.setValue(this.texto_sugerido);
+      setTimeout(() => {
+        let element = this.primero.nativeElement;
+        this.primero.nativeElement.scrollLeft = element.scrollWidth - element.clientWidth;
+        this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
+        //console.log(this.segundo, this.primero);
+      }, 0);
     }
   }
   ngOnChanges(changes: SimpleChanges) {
-    // console.log('entro aca mono');
+    // console.log('entro aca mono', this.modo);
     //console.log('paso por aca');
     const name: SimpleChange = changes.texto_buscar;
     this.texto_buscar = name.currentValue;
     this.def.setValue(this.texto_buscar);
-  }
-  buscar(metodo) {
-
-    if (this.searchText === null && this.searchText === undefined) {
-      this.searchText = '';
+    if (this.modo == 3) {
+      this.buscar(1);
     }
-    //this.responseSearch.setResultados(this.textopredictivo);
+  }
 
-    var date = new Date();
-    var fecha = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
-    let obj = {
-      'idUsuario': 1,
-      'textoBusqueda': this.searchText,
-      'idTipoBusqueda': metodo,
-      'fechaBusqueda': fecha,
-      'url': this.url
-    };
-    this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value));
+  limpiarSugerencia() {
+    delete this.texto_sugerido;
+  }
+
+  updateScroll(primero: HTMLElement, segundo: HTMLElement) {
+    console.log('paso por aca')
+    setTimeout(() => {
+      segundo.scrollLeft = primero.scrollLeft;
+      console.log(segundo, primero);
+    }, 1);
+
+  }
+
+  buscar(metodo) {
+    if (!this.def.value || this.def.value == '') {
+      return;
+    }
+    this.metodo = metodo;
+    if (this.modo == 3) {
+      this.busqueda = this.def.value;
+      this.cargando_respuestas = true;
+      this.searchService.queryCloudSearch(this.busqueda, metodo, 'conecta', this.page).then(d => {
+        // console.log(d);
+        /*d.results.forEach((r: ResultadoCloudSearch) => {
+          let id = r.url.split('_')[0];
+          this.searchService.obtenerPregunta(parseInt(id)).then(pregunta => {
+            r.contenido = pregunta.respuesta;
+          });
+        });*/
+        this.resultados = d.results;
+        this.cargando_respuestas = false;
+        if (parseInt(d.resultCountExact) < 1) {
+          this.resultado = false;
+        } else {
+          this.length = parseInt(d.resultCountExact);
+        }
+        if (d.spellResults) {
+          this.ortografia = true;
+          this.busquedaCorregida = d.spellResults[0].suggestedQuery;
+          this.busquedaUrl = (this.busquedaCorregida);
+        }
+        setTimeout(() => {
+          if (this.paginator) {
+            this.paginator._intl.firstPageLabel = 'Primera página';
+            this.paginator._intl.lastPageLabel = 'Última página';
+            this.paginator._intl.nextPageLabel = 'Página siguiente ';
+            this.paginator._intl.previousPageLabel = 'Página anterior';
+          }
+        }, 1);
+      });
+    } else {
+
+
+
+      if (this.searchText === null && this.searchText === undefined) {
+        this.searchText = '';
+      }
+      //this.responseSearch.setResultados(this.textopredictivo);
+
+      var date = new Date();
+      var fecha = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+      let obj = {
+        'idUsuario': 1,
+        'textoBusqueda': this.searchText,
+        'idTipoBusqueda': metodo,
+        'fechaBusqueda': fecha,
+        'url': this.url
+      };
+      this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value));
+    }
     //this.homeService.guardarBusqueda(obj).subscribe(data => );
     //this.nzone.run(() => this.stopRecognizer());
     //this.stopRecognizer();

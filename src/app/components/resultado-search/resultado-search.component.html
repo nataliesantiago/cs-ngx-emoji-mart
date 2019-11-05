@@ -1,10 +1,9 @@
 <mat-card class="tarjeta-respuesta" [ngClass]="{'primero':pos==0}">
   <mat-card-content>
-    <mat-card-title *ngIf="respuesta.tipo=='Conecta'"><a target="_blank"
-        [href]="[respuesta.url]"><strong>{{respuesta.title}}</strong></a>
+    <mat-card-title><a [href]="respuesta.url" [title]="respuesta.title"
+        [attr.target]="modo==3?'_blank':'_self'"><strong>{{respuesta.title}}</strong></a>
     </mat-card-title>
-    <mat-card-title *ngIf="respuesta.tipo=='Google Drive'"><a target="_blank"
-        [href]="respuesta.url">{{respuesta.title}}</a></mat-card-title>
+
     <div class="panel-contenido">
       <div class="icono-respuesta">
         <mat-icon *ngIf="respuesta.tipo=='Conecta'">{{respuesta.url_icono}}</mat-icon>

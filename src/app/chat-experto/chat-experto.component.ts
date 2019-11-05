@@ -193,6 +193,9 @@ export class ChatExpertoComponent {
                   this.changeRef.detectChanges();
                 }
               });
+              this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
+                c.historial = historial;
+              })
             });
           });
 
@@ -389,6 +392,19 @@ export class ChatExpertoComponent {
       }
       //console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
       c.mensajes = await this.procesarMensajes(d, c, primera_vez, 0, []);
+      if (!c.primera_consulta) {
+        c.mensajes.filter(m => {
+          return m.id_usuario == c.id_usuario_creador && (!m.es_nota_voz && !m.es_archivo);
+        }).forEach(m => {
+          this.utilService.identificarPreguntaTexto(m.texto).then(rta => {
+            if (rta && !c.primera_consulta) {
+              c.primera_consulta = m.texto;
+              c.busqueda_interna = m.texto;
+              this.fireStore.doc('conversaciones/' + c.codigo).update({ primera_consulta: c.primera_consulta });
+            }
+          });
+        })
+      }
       primera_vez = false;
       this.cantidad_mensajes_sin_leer = 0;
       this.expertos.forEach(e => {

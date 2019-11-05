@@ -833,7 +833,7 @@ export class ChatService {
     });
   }
 
-  conversacionPendiente(c: Conversacion, estado: number, hora_recordatorio?: string): Promise<any>{
+  conversacionPendiente(c: Conversacion, estado: number, hora_recordatorio?: string): Promise<any> {
     return new Promise((resolve, reject) => {
       console.log(c);
       this.ajax.post('chat/recordatorio/crear', { id_conversacion: c.idtbl_conversacion, id_usuario: this.user.getId(), correo_cliente: c.cliente.correo, nombre_cliente: c.cliente.nombre, token: this.user.token_acceso, hora_recordatorio: hora_recordatorio }).subscribe(d => {
@@ -844,6 +844,20 @@ export class ChatService {
       })
     })
   }
+
+  buscarHistorialClienteUsuario(id_cliente: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('chat/obtenerHistorialClienteExperto', { id_cliente: id_cliente, id_experto: this.user.getId() }).subscribe(result => {
+        if (result.success) {
+          resolve(result.conversaciones);
+        } else {
+          reject();
+        }
+      })
+    });
+  }
+
+
 
   getConversacionActivaUsuario(): Promise<any> {
     return new Promise((resolve, reject) => {
