@@ -42,7 +42,8 @@ export class ChatClienteComponent implements OnInit {
   mensaje_buscando_experto;
   mensaje_no_encontro_experto;
   no_encontro_experto = false;
-  // mostrar_descarga_chat = false;
+  file_url;
+  loading = false;
 
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
@@ -827,6 +828,30 @@ export class ChatClienteComponent implements OnInit {
       this.mensaje_buscando_experto = result;
     }).catch(() => {
       this.mensaje_buscando_experto = 'Buscando un Experto...';
+    });
+  }
+
+  descargarChat(c) {
+    this.loading = true
+    this.chatService.generarPdf(c.idtbl_conversacion).then((d) => {
+      if (d.success) {
+        let file = d.file;
+        const byteCharacters = atob(file);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        this.file_url = URL.createObjectURL(blob);
+  
+        let link = document.createElement("a");
+        link.href = this.file_url;
+        link.download = "Soporte-chat-conecta.pdf";
+        window.document.body.appendChild(link);
+        link.click();
+        this.loading = false;
+      }
     });
   }
 }

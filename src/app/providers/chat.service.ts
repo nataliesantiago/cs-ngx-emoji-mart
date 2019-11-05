@@ -821,6 +821,10 @@ export class ChatService {
     })
   }
 
+  /**
+   * obtiene los mensajes automaticos de busqueda de expertos
+   * @param id_tipo_mensaje_automatico 
+   */
   getMensajeBuscandoExperto(id_tipo_mensaje_automatico): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/obtener-mensaje-buscando', { id_usuario: this.user.getId(), id_tipo_mensaje_automatico: id_tipo_mensaje_automatico }).subscribe(result => {
@@ -857,8 +861,9 @@ export class ChatService {
     });
   }
 
-
-
+  /**
+   * obtiene las conversaciones activas de un usuario
+   */
   getConversacionActivaUsuario(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/obtener-conversaciones-activas-usuario', { id_usuario: this.user.getId() }).subscribe(result => {
@@ -871,12 +876,31 @@ export class ChatService {
     });
   }
 
+  /**
+   * elimina el evento del calendario de una conversacion pendiente
+   * @param idtbl_conversacion 
+   */
   eliminarRecordatorioPendiente(idtbl_conversacion): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/recordatorio/eliminar', { id_conversacion: idtbl_conversacion }).subscribe(d => {
         if (d.success) {
           console.log(d);
           resolve();
+        }
+      });
+    });
+  }
+
+  /**
+   * genera el archivo pdf con los mensajes de una conversacion
+   * @param idtbl_conversacion 
+   */
+  generarPdf(idtbl_conversacion): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/descargar-pdf', { id_conversacion: idtbl_conversacion }).subscribe(d => {
+        if (d.success) {
+          console.log(d);
+          resolve(d);
         }
       });
     });

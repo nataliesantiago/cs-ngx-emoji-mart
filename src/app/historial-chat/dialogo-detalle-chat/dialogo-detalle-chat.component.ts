@@ -33,6 +33,8 @@ export class DialogoDetalleChatComponent implements OnInit {
   configuraciones;
   stream: any;
   extensiones_archivos = [];
+  loading = false;
+  file_url;
 
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
               private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef) {
@@ -440,6 +442,30 @@ export class DialogoDetalleChatComponent implements OnInit {
       this.chats.splice(index, 1);
     }
     this.dialogRef.close();
+  }
+
+  descargarChat(c) {
+    this.loading = true
+    this.chatService.generarPdf(c.idtbl_conversacion).then((d) => {
+      if (d.success) {
+        let file = d.file;
+        const byteCharacters = atob(file);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        this.file_url = URL.createObjectURL(blob);
+  
+        let link = document.createElement("a");
+        link.href = this.file_url;
+        link.download = "Soporte-chat-conecta.pdf";
+        window.document.body.appendChild(link);
+        link.click();
+        this.loading = false;
+      }
+    });
   }
 
 }
