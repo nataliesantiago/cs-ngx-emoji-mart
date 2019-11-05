@@ -54,6 +54,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   todos_usuarios = [];
   notas_mostrar = [];
   validar_flujo;
+  myControl2 = new FormControl();
+  options2;
+  filteredOptions2: Observable<string[]>;
+  cargos_asociados = [];
+  displayedColumns2 = ['id', 'cargo', 'acciones'];
+  paginator2: MatPaginator;
+  sort2: MatSort;
+  dataSource2 = new MatTableDataSource([]);
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
     private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService) {
@@ -116,6 +124,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           map(value => this.utilsService.filter(this.options, value, 'titulo'))
         );
       }
+    })
+
+    this.user.getPerfilesUsuario().then(p => {
+      this.options2 = p;
+      this.filteredOptions2 = this.myControl2.valueChanges.pipe(
+        startWith(''),
+        map(value2 => this.utilsService.filter(this.options2, value2, 'nombre'))
+      );
     })
 
     this.route.params
@@ -184,7 +200,15 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
                                       com.comentarios[i].fecha = moment(com.comentarios[i].fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm');
                                     }
                                     this.notas_mostrar = com.comentarios;
-                                    this.cg.detectChanges();
+                                    this.ajax.get('preguntas/obtener-cargos-asociados', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(carg => {
+                                      if (carg.success) {                                  
+                                        this.cargos_asociados = carg.cargos_asociados;
+                                        this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
+                                        this.dataSource2.paginator = this.paginator2;
+                                        this.dataSource2.sort = this.sort2;
+                                        this.cg.detectChanges();
+                                      }
+                                    })
                                   }
                                 })
                               }
@@ -257,7 +281,21 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
-        this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
+
+        if (!this.pregunta.id_usuario_revision || this.pregunta.id_usuario_revision == 'undefined' || this.pregunta.id_usuario_revision == null) {
+
+          swal.fire({
+            title: 'Debe seleccionar un curador',
+            text: '',
+            type: 'warning',
+            buttonsStyling: false,
+            confirmButtonClass: 'custom__btn custom__btn--accept',
+            confirmButtonText: 'Aceptar',
+          })
+    
+        }
+
+        this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.router.navigate(['/flujo-curaduria']);
           }
@@ -282,7 +320,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.pregunta.id_usuario_revision = this.id_usuario;
         }
 
-        this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas }).subscribe(d => {
+        this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.chatService.sugerencia_activa = false;
             this.router.navigate(['/flujo-curaduria']);
@@ -491,12 +529,12 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   private _filter(value: any): string[] {
 
-    if (value.titulo) {
-      const filterValue = value.titulo.toLowerCase();
-      return this.options.filter(option => option.titulo.toLowerCase().indexOf(filterValue) === 0);
+    if (value.nombre) {
+      const filterValue = value.nombre.toLowerCase();
+      return this.options2.filter(option => option.nombre.toLowerCase().indexOf(filterValue) === 0);
     } else {
       const filterValue = value.toLowerCase();
-      return this.options.filter(option => option.titulo.toLowerCase().indexOf(filterValue) === 0);
+      return this.options2.filter(option => option.nombre.toLowerCase().indexOf(filterValue) === 0);
     }
 
   }
@@ -576,4 +614,108 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       }
     })
   }
+
+  anadirCargoAsociado(e) {
+    let validador = true;
+    for (let i = 0; i < this.cargos_asociados.length; i++) {
+      if (this.cargos_asociados[i].idtbl_perfil == e.idtbl_perfil) {
+        validador = false;
+      }
+    }
+
+    if (validador) {
+      this.cargos_asociados.push(e);
+
+      this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
+      this.dataSource2.paginator = this.paginator2;
+      this.dataSource2.sort = this.sort2;
+
+      this.myControl2 = new FormControl('');
+      this.filteredOptions2 = this.myControl2.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+      this.cg.detectChanges();
+    } else {
+      this.myControl2 = new FormControl(e.nombre);
+      swal.fire({
+        title: 'El cargo ya fue asociado previamente',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
+      })
+    }
+
+  }
+
+  borrarCargo(e) {
+
+    swal.fire({
+      title: 'Desasociar cargo',
+      text: "Confirme para eliminar el cargo",
+      type: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Eliminar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
+    }).then((result) => {
+      if (result.value) {
+        if (this.editar) {
+
+          if (e.idtbl_pregunta_has_tbl_perfil != undefined) {
+            this.ajax.post('preguntas/eliminar-asociacion-cargo', { cargo_asociado: e }).subscribe(d => {
+              if (d.success) {
+                let pos = 0;
+                for (let i = 0; i < this.cargos_asociados.length; i++) {
+                  if (this.cargos_asociados[i].idtbl_perfil == e.idtbl_perfil) {
+                    pos = i;
+                  }
+                }
+                this.cargos_asociados.splice(pos, 1);
+                this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
+                this.dataSource2.paginator = this.paginator2;
+                this.dataSource2.sort = this.sort2;
+                this.cg.detectChanges();
+              }
+            })
+          } else {
+            let pos = 0;
+            for (let i = 0; i < this.cargos_asociados.length; i++) {
+              if (this.cargos_asociados[i].idtbl_perfil == e.idtbl_perfil) {
+                pos = i;
+              }
+            }
+            this.cargos_asociados.splice(pos, 1);
+            this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
+            this.dataSource2.paginator = this.paginator2;
+            this.dataSource2.sort = this.sort2;
+            this.cg.detectChanges();
+          }
+        } else {
+          let pos = 0;
+          for (let i = 0; i < this.cargos_asociados.length; i++) {
+            if (this.cargos_asociados[i].idtbl_perfil == e.idtbl_perfil) {
+              pos = i;
+            }
+          }
+          this.cargos_asociados.splice(pos, 1);
+          this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
+          this.dataSource2.paginator = this.paginator2;
+          this.dataSource2.sort = this.sort2;
+          this.cg.detectChanges();
+        }
+      }
+    })
+  }
+
 }
