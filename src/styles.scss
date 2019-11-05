@@ -3222,6 +3222,9 @@ input:-webkit-autofill:active {
   }
 
 }
+app-search-component{
+  height: 100%;
+}
 
 .panel-buscador-texto {
   position: absolute;
@@ -3229,12 +3232,12 @@ input:-webkit-autofill:active {
   right: 0;
   background: white;
   z-index: 10;
-  padding: 18px 32px;
+  padding: 6px 14px;
   border: 1px solid #dadce0;
   border-bottom-left-radius: 14px;
   border-bottom-right-radius: 14px;
   border-top: none;
-  padding-left: 18px;
+  padding-left: 6px;
 
   .contenido-buscador {
     display: flex;

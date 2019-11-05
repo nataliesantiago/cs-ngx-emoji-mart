@@ -40,13 +40,22 @@
                     <perfect-scrollbar class="contenedor" [config]="config" scroll-down="true"
                       refresh-on-change="chat.mensajes" [attr.data-conversacion-id]="chat.codigo" scrollDirective
                       [componentRef]="este" #este [chat]="chat">
-
+                      <div class="panel-buscador-texto" *ngIf="chat.buscando_texto">
+                        <div class="contenido-buscador">
+                          <input type="text" placeholder="Buscar en la conversación" autofocus
+                            [formControl]="chat.texto_busqueda_mensajes" />
+                          <div class="cant-matches">{{chat.cant_coincidencias}}</div>
+                          <button mat-icon-button title="Cerrar" (click)="chat.buscando_texto=false">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                        </div>
+                      </div>
 
                       <div
                         [ngClass]="{'odd': m.id_usuario!=user.idtbl_usuario,'even': m.id_usuario==user.idtbl_usuario}"
                         *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="chat-list">
                         <div class="chat-message">
-                          <div class="chat-block">
+                          <div class="chat-block"  [ngClass]="{'encontrado':m.encontrado && chat.buscando_texto}">
                             <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
                               <div *ngIf="m.es_archivo">
                                 <a [href]="m.url" target="_blank">
@@ -178,7 +187,8 @@
                       </button>
                       <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
                         (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
-                        (keyup)="remplazaEmoji(chat)" [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
+                        (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
+                        [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
                         (blur)="setFocus(chat,false)"></textarea>
                       <button mat-icon-button color="primary" (click)="adjuntos.click()"
                         [disabled]="chat.cargando_archivo || chat.grabando_nota || chat.archivo_adjunto">
@@ -201,8 +211,8 @@
                   </mat-toolbar>
 
                   <div class="loading-gif" *ngIf="!chat.no_hay_filas && !no_encontro_experto">
-                      <img src="assets/images/loading.gif" />
-                    </div>
+                    <img src="assets/images/loading.gif" />
+                  </div>
 
                   <div class="panel-buscando-experto" *ngIf="no_encontro_experto">
                     <mat-toolbar class="no-shadow font-family-comunidades barra-no-encontro" color="green"
@@ -210,7 +220,7 @@
                       <div class="titulo-buscando">{{mensaje_no_encontro_experto}}</div>
                     </mat-toolbar>
                   </div>
-                  
+
                 </div>
 
                 <perfect-scrollbar class="contenedor-encuesta">

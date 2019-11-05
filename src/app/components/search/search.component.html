@@ -42,6 +42,7 @@
       mic</mat-icon>
   </button>
 </div>
+<div class="contendor-general-respuestas">
 <div *ngIf="modo==3" class="panel-respuestas">
   <div class="contenedor-respuestas" *ngIf="!cargando_respuestas">
     <perfect-scrollbar>
@@ -57,4 +58,5 @@
   <mat-progress-spinner class="spinner-cargando-respuestas" [mode]="'indeterminate'" [diameter]="68"
     *ngIf="cargando_respuestas">
   </mat-progress-spinner>
+</div>
 </div>

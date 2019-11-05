@@ -283,10 +283,12 @@ li a:hover {
         }
     }
 }
-.sin-resultados{
-    color:rgb(124, 124, 124);
+
+.sin-resultados {
+    color: rgb(124, 124, 124);
     text-align: center;
 }
+
 .archivo {
     z-index: 2;
     font-size: 22px;
@@ -475,6 +477,12 @@ a:hover .tooltip {
     border-radius: 7px;
     text-align: center;
     cursor: pointer;
+}
+
+
+.contendor-general-respuestas {
+    position: relative;
+    height: 100%;
 }
 
 .panel-respuestas {
