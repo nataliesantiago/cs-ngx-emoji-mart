@@ -26,7 +26,7 @@
                   <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
                 </mat-list-item>
                 <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos"
-                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}">
+                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos&&chat.id_estado_conversacion==2}">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
                     [ngClass]="{'green':(chat.id_estado_conversacion==2),'gris':(chat.id_estado_conversacion!=2)}">
@@ -341,9 +341,9 @@
           <div class="contenedor-historial-buscador" *ngIf="chat && chat.id_tipo_conversacion==1">
             <div class="panel-chats primero" *ngIf="!esSupervisor">
               <div class="contenedor-titulo">
-                  <h3 class="titulo-historial">Historial</h3>
+                <h3 class="titulo-historial">Historial</h3>
               </div>
-              
+
               <perfect-scrollbar class="contenido">
                 <mat-nav-list>
                   <mat-list-item *ngFor="let c of chat.historial">
