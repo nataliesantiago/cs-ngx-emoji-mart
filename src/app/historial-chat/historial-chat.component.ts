@@ -5,6 +5,7 @@ import { HistorialChatService } from '../providers/historial-chat.service';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { matTableFilter } from '../../common/matTableFilter';
 import { DialogoDetalleChatComponent } from './dialogo-detalle-chat/dialogo-detalle-chat.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-historial-chat',
@@ -28,7 +29,8 @@ export class HistorialChatComponent implements OnInit {
   column_user;
   is_expert;
 
-  constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog) {
+  constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog, 
+    private route: ActivatedRoute) {
     this.user = this.user_service.getUsuario();
     if (this.user) {
       this.init();
@@ -41,10 +43,27 @@ export class HistorialChatComponent implements OnInit {
         delete this.user;
       }
     });
+
   }
 
   ngOnInit() {
-    
+    this.route.params
+    .filter(params => params.id_conversacion)
+    .subscribe(params => {
+      let id_conversacion = params.id_conversacion;
+      if (id_conversacion != 'general') {
+        this.getOneConversation(id_conversacion);
+      }
+    });
+  }
+
+  getOneConversation(conversation_id) {
+    this.historial_service.getOneConversation(conversation_id).then(result => {
+      if (result[0].id_estado_conversacion == 7) {
+        result[0].estado = 'Pendiente';
+      }
+      this.showMoreChat(result[0]);
+    });
   }
 
   init() {
@@ -84,7 +103,7 @@ export class HistorialChatComponent implements OnInit {
   showMoreChat(row) {
     let idtbl_usuario = this.user.getId();
     let expert_chat;
-    if (this.is_expert && row.estado == 'Pendiente') {
+    if (this.is_expert && row.estado == 'Pendiente' || row.id_estado_conversacion == 7) {
       expert_chat = true;
     }
     this.dialog.open(DialogoDetalleChatComponent, {

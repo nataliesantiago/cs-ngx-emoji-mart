@@ -379,7 +379,6 @@ export class DialogoDetalleChatComponent implements OnInit {
     c.mensajes.filter(m => {
       return m.es_nota_voz && m.audio;
     }).forEach(me => {
-      console.log(me);
       me.audio.pause();
     });
 

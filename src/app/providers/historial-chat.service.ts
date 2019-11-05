@@ -47,4 +47,16 @@ export class HistorialChatService {
     });
   }
 
+  getOneConversation(conversation_id): Promise<any> {
+    return new Promise((resolve, reject) => {
+        this.ajax.post('historial-chats/obtener-una-conversacion', { conversation_id: conversation_id }).subscribe((c) => {
+          if (c.success) {
+            resolve(c.conversation);
+          } else {
+            reject();
+          }
+        });
+    });
+  }
+
 }
