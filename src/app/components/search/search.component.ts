@@ -144,12 +144,13 @@ export class AppSearchComponent implements OnChanges, OnInit {
           }
         }
         delete this.texto_sugerido;
-        this.def.setValue(interimTranscript);
-        setTimeout(() => {
-          this.nzone.run(() => {
+        this.nzone.run(() => {
+          this.def.setValue(interimTranscript);
+          setTimeout(() => {
             this.buscar(2);
-          });
-        }, 1000);
+          }, 100);
+        });
+
         this.changeDetector.detectChanges();
       }
     }
