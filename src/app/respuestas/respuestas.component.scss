@@ -82,7 +82,7 @@ mat-expansion-panel {
 }
 
 
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1200px) {
     .preguntas-asociadas {
 
         position: relative;
@@ -106,11 +106,12 @@ mat-expansion-panel {
         height: 100%;
     
         .panel-respuestas {
-            top: 112px;
-            right: 50px;
-            width: 200px;
+            top: 0px;
+            right: 0px;
+            width: 90%;
             padding-top: 25px;
             position: static;
+            margin: auto;
         }
     }
 }

@@ -305,7 +305,7 @@ export class ChatExpertoComponent {
         c.llamada_activa = data.llamada_activa;
         c.url_llamada = data.url_llamada;
         c.conversacion_recomendada = data.conversacion_recomendada;
-        if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2) {
+        if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
 
           if (!c.encuesta_realizada) {
             c.mostrar_encuesta = true;
@@ -1028,7 +1028,10 @@ export class ChatExpertoComponent {
 
       let estado = 7;
       this.chatService.conversacionPendiente(c, estado, d.hora_recordatorio).then(() => {
-        c.mostrar_encuesta = true;
+        //c.mostrar_encuesta = true;
+        if (this.chat.codigo == c.codigo) {
+          delete this.chat;
+        }
         if (this.user.experto_activo) {
           this.recibirChatAutomatico();
         }
