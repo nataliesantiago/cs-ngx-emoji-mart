@@ -21,6 +21,7 @@ import { text } from '@angular/core/src/render3';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { ChatPendienteComponent } from '../components/chat-pendiente/chat-pendiente.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 const moment = _rollupMoment || _moment;
 
@@ -58,11 +59,13 @@ export class ChatExpertoComponent {
   @Input() esSupervisor: boolean;
   cantidad_mensajes_sin_leer = 0;
   @Output() mensajes_nuevos: EventEmitter<number> = new EventEmitter<number>();
+  file_url;
+  loading = false;
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
     private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService,
-    private dialog: MatDialog, private shortcutsService: ShortcutsService, private router: Router) {
+    private dialog: MatDialog, private shortcutsService: ShortcutsService, private router: Router, private sanitizer: DomSanitizer) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -1031,6 +1034,30 @@ export class ChatExpertoComponent {
         }
       });
 
+    });
+  }
+
+  descargarChat(c) {
+    this.loading = true
+    this.chatService.generarPdf(c.idtbl_conversacion).then((d) => {
+      if (d.success) {
+        let file = d.file;
+        const byteCharacters = atob(file);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        this.file_url = URL.createObjectURL(blob);
+  
+        let link = document.createElement("a");
+        link.href = this.file_url;
+        link.download = "Soporte-chat-conecta.pdf";
+        window.document.body.appendChild(link);
+        link.click();
+        this.loading = false;
+      }
     });
   }
 }

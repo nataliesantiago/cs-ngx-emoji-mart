@@ -91,5 +91,5 @@ export const AppRoutes: Routes = [
   { path: 'ad-mensajes-automaticos', component: AdMensajesAutomaticosComponent, canActivate: [AuthGuard] },
   { path: 'ad-estado-experto', component: AdEstadoExpertoComponent, canActivate: [AuthGuard] },
   { path: 'administrar-origenes-drive', component: AdministradorOrigenesDriveComponent, canActivate: [AuthGuard] },
-  { path: 'historial-chats', component: HistorialChatComponent, canActivate: [AuthGuard] },
+  { path: 'historial-chats/:id_conversacion', component: HistorialChatComponent, canActivate: [AuthGuard] },
 ];
