@@ -67,6 +67,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   actionContext: ActionContext = new ActionContext();
   textError = 'no hay resultados'; // label del autocomplete
   @ViewChild('snav') sidenav: MatSidenav;
+  @ViewChild('end') end: MatSidenav;
 
   color_toolbar = '';
   muestra_barra: boolean = false;
@@ -101,6 +102,15 @@ export class FullComponent implements OnDestroy, AfterViewInit {
         this.init();
       }
     });
+    this.user.observablePanelNotificaciones.subscribe(abrir => {
+      if(abrir){
+        this.end.open();
+        this.leerNotificaciones();
+        this.actualizarNotificaciones();
+      }else{
+        this.end.close();
+      }
+    })
    /* this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
         if (val.url.indexOf('/search/') == 0) {
@@ -111,6 +121,20 @@ export class FullComponent implements OnDestroy, AfterViewInit {
         }
       }
     });*/
+  }
+
+  actualizarNotificaciones(){
+    this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
+      this.notificaciones_usuario = r;      
+    });
+
+    this.user.observableNotificaciones.subscribe(() => {
+
+      this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
+      this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
+      console.log("Entra a actualizar notificaciones");
+    });
+
   }
 
   init() {
@@ -373,12 +397,11 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     this.sidenav.close();
   }
 
-  consolaSupervisor(e){
-    console.log(e.idtbl_notificacion_mensaje_nlp);
+  consolaSupervisor(e){    
     this.user.leerMensajeNLP(e.idtbl_notificacion_mensaje_nlp).then( r => {
       this.user.actualizarMensajesNLP().then( r => {
         this.conversaciones_nlp = r;        
-        this.router.navigate(['/consola-supervisor']);
+        this.router.navigate(['/consola-supervisor/' + e.idtbl_conversacion]);
       });
     });    
   }

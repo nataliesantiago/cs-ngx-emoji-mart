@@ -43,6 +43,8 @@ export class UserService {
     cant_mensajes_actuales = 0;
     cant_notificaciones_sin_leer = 0;
     primera_vez_notificacion = true;
+    public panelNotificacionesSubject = new Subject<any>();
+    public observablePanelNotificaciones = this.panelNotificacionesSubject.asObservable();
 
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, private soundService: SonidosService) {
 

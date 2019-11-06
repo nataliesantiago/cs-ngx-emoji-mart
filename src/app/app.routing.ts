@@ -49,7 +49,7 @@ export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
   { path: 'valida/:data', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'home/:data', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'home/:abrir', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'search', component: ResultadosComponent, canActivate: [AuthGuard] },
   { path: 'historial-usuario', component: HistorialUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'ad-preguntas', component: AdPreguntasComponent, canActivate: [AuthGuard] },
@@ -91,5 +91,6 @@ export const AppRoutes: Routes = [
   { path: 'ad-mensajes-automaticos', component: AdMensajesAutomaticosComponent, canActivate: [AuthGuard] },
   { path: 'ad-estado-experto', component: AdEstadoExpertoComponent, canActivate: [AuthGuard] },
   { path: 'administrar-origenes-drive', component: AdministradorOrigenesDriveComponent, canActivate: [AuthGuard] },
+  { path: 'historial-chats', component: HistorialChatComponent, canActivate: [AuthGuard] },
   { path: 'historial-chats/:id_conversacion', component: HistorialChatComponent, canActivate: [AuthGuard] },
 ];

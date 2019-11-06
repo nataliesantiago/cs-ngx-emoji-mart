@@ -51,7 +51,7 @@ export class HistorialChatComponent implements OnInit {
     .filter(params => params.id_conversacion)
     .subscribe(params => {
       let id_conversacion = params.id_conversacion;
-      if (id_conversacion != 'general') {
+      if (id_conversacion) {
         this.getOneConversation(id_conversacion);
       }
     });
