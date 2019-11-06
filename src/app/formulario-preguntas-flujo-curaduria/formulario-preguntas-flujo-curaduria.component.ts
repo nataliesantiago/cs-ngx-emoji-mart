@@ -62,6 +62,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   paginator2: MatPaginator;
   sort2: MatSort;
   dataSource2 = new MatTableDataSource([]);
+  titulo_control = new FormControl();
+  texto_buscador: string;
+  buscador = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
     private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService) {
@@ -112,6 +115,13 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  cambiarBusqueda(value){
+    console.log(value);
+    this.texto_buscador = value
+    this.buscador = true;
+    return this.texto_buscador;
   }
 
   init() {

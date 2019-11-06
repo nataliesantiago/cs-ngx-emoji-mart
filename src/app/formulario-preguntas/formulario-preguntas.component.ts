@@ -58,6 +58,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   dataSource2 = new MatTableDataSource([]);
   titulo_control = new FormControl();
   texto_buscador: string;
+  buscador = false;
 
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
 
@@ -119,9 +120,17 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   }
 
+  cambiarBusqueda(value){
+    console.log(value);
+    this.texto_buscador = value
+    this.buscador = true;
+    return this.texto_buscador;
+  }
+
+
   init() {
 
-    this.titulo_control.valueChanges.pipe(debounceTime(200), switchMap(value => this.texto_buscador = value));
+    //this.titulo_control.valueChanges.pipe(debounceTime(200), switchMap(value => this.cambiarBusqueda(value)));
 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {

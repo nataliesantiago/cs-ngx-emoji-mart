@@ -3270,9 +3270,16 @@ app-search-component{
   }
 }
 
-
-
-
+.container-sidenav-preguntas{
+  height: calc(100vh - 64px);
+  width: 100vw;
+  .mat-drawer-inner-container{
+      overflow: hidden !important;
+  }
+  .container-sidenav-preguntas{
+      height: 100%;        
+  }
+}
 
 .download-chat {
   text-align: center;
