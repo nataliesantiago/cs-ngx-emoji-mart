@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { HistorialChatService } from '../../providers/historial-chat.service';
 import { Conversacion } from '../../../schemas/conversacion.schema';
 import { Mensaje } from '../../../schemas/mensaje.schema';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarComponent, PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { ChatService } from '../../providers/chat.service';
 import { UserService } from '../../providers/user.service';
 import { User } from '../../../schemas/user.schema';
@@ -35,6 +35,8 @@ export class DialogoDetalleChatComponent implements OnInit {
   extensiones_archivos = [];
   loading = false;
   file_url;
+  @ViewChild('scroll') componentRef?: PerfectScrollbarComponent;
+  ocultar_ultimos_mensajes = true;
 
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
               private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef) {
@@ -53,7 +55,6 @@ export class DialogoDetalleChatComponent implements OnInit {
       }
     });
 
-    data.messages = [];
     this.chat = data;
     this.getMessages();
   }
@@ -69,7 +70,7 @@ export class DialogoDetalleChatComponent implements OnInit {
         this.extensiones_archivos.push(e.extension);
       });
     });
-
+    
   }
 
   getMessages() {
@@ -93,10 +94,13 @@ export class DialogoDetalleChatComponent implements OnInit {
   ngOnInit() {
   }
 
-  verNuevosMensajes(com: PerfectScrollbarComponent, c: Conversacion) {
-    c.ocultar_nuevos_mensajes = true;
-    com.directiveRef.scrollToBottom();
-    this.setFocus(c, true);
+  verNuevosMensajes() {
+    if (this.componentRef && this.componentRef.directiveRef) {
+      setTimeout(() => {
+        this.componentRef.directiveRef.scrollToBottom();
+        this.ocultar_ultimos_mensajes = false;
+      }, 1);
+    }
   }
 
   setFocus(c: Conversacion, estado: boolean) {
@@ -180,10 +184,9 @@ export class DialogoDetalleChatComponent implements OnInit {
       });*/
       this.chatService.usuarioDejaEscribir(chat, this.user.getId());
 
-      if (comp) {
+      if (this.componentRef && this.componentRef.directiveRef) {
         setTimeout(() => {
-          comp.directiveRef.scrollToBottom();
-          chat.ocultar_nuevos_mensajes = true;
+          this.componentRef.directiveRef.scrollToBottom();
         }, 1);
       }
       //this.fireStore.collection('conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));

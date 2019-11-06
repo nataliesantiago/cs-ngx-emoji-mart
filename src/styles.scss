@@ -2940,6 +2940,7 @@ input:-webkit-autofill:active {
     height: calc(100% - 30px);
     .container {
       height: 100%;
+      position: relative;
     }
     .container-new-chat {
       h3 {
@@ -2954,7 +2955,7 @@ input:-webkit-autofill:active {
         }
       }
       .contenedor {
-        height: calc(100% - 135px);
+        height: calc(100% - 70px);
         margin-bottom: 0;
         border-color: #dcdcdc;
         border-style: solid;
@@ -2970,6 +2971,9 @@ input:-webkit-autofill:active {
             }
           } 
         }
+      }
+      .boton-nuevos-mensajes {
+        bottom: 25px;
       }
       .chat-footer {
         padding: 0 10px !important;
@@ -3004,7 +3008,7 @@ input:-webkit-autofill:active {
     }
 
     .contenedor {
-      height: calc(100% - 90px);
+      height: calc(100% - 70px);
       border: 1px solid #dcdcdc;
       border-radius: 6px;
       margin-bottom: 10px;
