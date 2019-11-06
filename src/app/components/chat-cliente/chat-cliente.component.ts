@@ -40,8 +40,10 @@ export class ChatClienteComponent implements OnInit {
   cantidad_mensajes_sin_leer = 0;
   limite_texto_chat;
   mensaje_buscando_experto;
-  mensaje_no_encontro_experto;
   no_encontro_experto = false;
+  mensaje_no_encontro_experto;
+  es_despedida = false;
+  mensaje_despedida;
   file_url;
   loading = false;
 
@@ -129,6 +131,7 @@ export class ChatClienteComponent implements OnInit {
     });
 
     this.mensajeBuscandoExperto();
+    this.mensajeDespedida();
   }
 
   buscarConfiguracion(id: number): Configuracion {
@@ -417,6 +420,7 @@ export class ChatClienteComponent implements OnInit {
 
       if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2 && data.id_estado_conversacion != 10) {
         c.mostrar_encuesta = true;
+        this.es_despedida = true;
         this.no_encontro_experto = false;
         c.mostrar_descarga_chat = true;
       } else if (c.asesor_actual) {
@@ -768,6 +772,7 @@ export class ChatClienteComponent implements OnInit {
     } else if (c.id_estado_conversacion == 10) { 
       c.mostrar_descarga_chat = false;
       c.mostrar_encuesta = true;
+      this.es_despedida = false;
       estado = 10;
     } else {
       estado = 3;
@@ -776,6 +781,7 @@ export class ChatClienteComponent implements OnInit {
     
     this.chatService.cerrarConversacion(c, estado).then(() => {
       c.mostrar_encuesta = true;
+      this.es_despedida = true;
       this.no_encontro_experto = false;
     });
   }
@@ -828,6 +834,12 @@ export class ChatClienteComponent implements OnInit {
       this.mensaje_buscando_experto = result;
     }).catch(() => {
       this.mensaje_buscando_experto = 'Buscando un Experto...';
+    });
+  }
+
+  mensajeDespedida() {
+    this.chatService.getMensajeBuscandoExperto(2).then(result => {
+      this.mensaje_despedida = result;
     });
   }
 

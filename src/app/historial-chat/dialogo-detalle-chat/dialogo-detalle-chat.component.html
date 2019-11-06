@@ -32,7 +32,7 @@
       </mat-menu>
     </div>
     
-    <perfect-scrollbar class="contenedor" [attr.data-conversacion-id]="chat.codigo">
+    <perfect-scrollbar class="contenedor" [attr.data-conversacion-id]="chat.codigo" [config]="config" #scroll>
       <div  class="list-messages">
         <div class="panel-buscador-texto" *ngIf="chat.buscando_texto">
           <div class="contenido-buscador">
@@ -111,7 +111,7 @@
               {{chat.archivo_adjunto.name}}
             </a></div>
           <button mat-icon-button color="basic" class="boton-enviar"
-            (click)="enviarMensaje(chat,2,null,null,este)">
+            (click)="enviarMensaje(chat,2,null,null,scroll)">
             <mat-icon>send</mat-icon>
           </button>
         </div>
@@ -138,6 +138,9 @@
         </div>
       </div>
     </perfect-scrollbar>
+
+    <div *ngIf="ocultar_ultimos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
+      (click)="verNuevosMensajes()" color="basic">Ir al último mensaje</button></div>
 
     <mat-card-actions class="chat-footer acciones-chat">
 
