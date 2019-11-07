@@ -830,10 +830,8 @@ export class ChatClienteComponent implements OnInit {
   }
 
   mensajeBuscandoExperto() {
-    this.chatService.getMensajeBuscandoExperto(6).then(result => {
+    this.chatService.obtenerTextoBuscandoExperto().then(result => {
       this.mensaje_buscando_experto = result;
-    }).catch(() => {
-      this.mensaje_buscando_experto = 'Buscando un Experto...';
     });
   }
 
