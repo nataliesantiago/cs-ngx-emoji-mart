@@ -899,11 +899,26 @@ export class ChatService {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/descargar-pdf', { id_conversacion: idtbl_conversacion }).subscribe(d => {
         if (d.success) {
-          console.log(d);
           resolve(d);
         }
       });
     });
+  }
+
+  /**
+   * @description Se obtiene el limite de carateres que se pueden envíar en el chat
+   * @returns Promise
+   */
+  obtenerTextoBuscandoExperto(): Promise<any> {
+    return new Promise((r, re) => {
+      this.ajax.get('administracion/obtener-texto-buscando-experto', {}).subscribe(p => {
+        if (p.success) {
+          r(p.item[0].valor);
+        } else {
+          reject();
+        }
+      });
+    })
   }
   
 }
