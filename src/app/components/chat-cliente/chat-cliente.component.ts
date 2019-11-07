@@ -854,10 +854,13 @@ export class ChatClienteComponent implements OnInit {
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'application/pdf' });
         this.file_url = URL.createObjectURL(blob);
-  
+        
+        let date = moment(c.fecha_creacion).format('YYYY-MM-DD');
+        let hour = moment(c.fecha_creacion).format('HH:mm');
+
         let link = document.createElement("a");
         link.href = this.file_url;
-        link.download = "Soporte-chat-conecta.pdf";
+        link.download = `soporte-chat-conecta-${date}-${hour}.pdf`;
         window.document.body.appendChild(link);
         link.click();
         this.loading = false;

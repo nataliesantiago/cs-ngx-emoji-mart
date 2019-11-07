@@ -26,17 +26,19 @@ export class DialogoDetalleChatComponent implements OnInit {
   chat: Conversacion;
   messages;
   is_empty_messages;
-  chats = [];
   user: User;
   urlAdjuntos: string;
   limite_texto_chat;
   configuraciones;
   stream: any;
+  chats = [];
   extensiones_archivos = [];
   loading = false;
   file_url;
   @ViewChild('scroll') componentRef?: PerfectScrollbarComponent;
   ocultar_ultimos_mensajes = true;
+  recording_url = [];
+  is_recording = false;
 
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
               private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef) {
@@ -51,12 +53,14 @@ export class DialogoDetalleChatComponent implements OnInit {
         this.init();
       } else {
         delete this.user;
-        this.chats = [];
       }
     });
 
     this.chat = data;
+    this.chats.push(this.chat);
+    
     this.getMessages();
+    this.getRecordingUrl();
   }
   
   init() {
@@ -73,12 +77,24 @@ export class DialogoDetalleChatComponent implements OnInit {
     
   }
 
+  getRecordingUrl() {
+    this.historial_service.getRecordingUrl(this.chat.idtbl_conversacion).then(result => {
+      if (result != undefined && result.url_grabacion != '') {
+        let urls = result.url_grabacion.split(',');
+        this.is_recording = true;
+        this.recording_url = urls;
+      } else {
+        this.is_recording = false;
+      }
+    });
+  }
+
   getMessages() {
     this.historial_service.getConversationMessages(this.chat.idtbl_conversacion).then(result => {
       result.forEach(element => {
         element.mensaje_antiguo = true;
       });
-      this.chat.mensajes = result;
+      this.chat.mensajes  = result;
       (result.length == 0) ? this.is_empty_messages = true : this.is_empty_messages = false;
     });
   }
@@ -461,9 +477,12 @@ export class DialogoDetalleChatComponent implements OnInit {
         const blob = new Blob([byteArray], { type: 'application/pdf' });
         this.file_url = URL.createObjectURL(blob);
   
+        let date = moment(c.fecha_creacion).format('YYYY-MM-DD');
+        let hour = moment(c.fecha_creacion).format('HH:mm');
+
         let link = document.createElement("a");
         link.href = this.file_url;
-        link.download = "Soporte-chat-conecta.pdf";
+        link.download = `soporte-chat-conecta-${date}-${hour}.pdf`;
         window.document.body.appendChild(link);
         link.click();
         this.loading = false;
