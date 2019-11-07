@@ -12,6 +12,9 @@ export class BuscadorHightlighter implements PipeTransform {
     }
 
     private linkify(plainText: string, busqueda: string): string {
+        if (!plainText) {
+            return '';
+        }
         let tmp = busqueda.split(' ');
         // plainText = plainText.replace(palabra, '<b>' + palabra + '</b>');
         let snippet = plainText.split(' ');

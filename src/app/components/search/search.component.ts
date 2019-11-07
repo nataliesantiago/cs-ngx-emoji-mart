@@ -219,6 +219,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     * asignar a la variable title a searchText
   */
   selectEvent(item) {
+    console.log(item);
     this.metodo = 1;
     //this.searchText = item.title;
     this.def.setValue(item.suggestedQuery);
@@ -368,7 +369,10 @@ export class AppSearchComponent implements OnChanges, OnInit {
         'fechaBusqueda': fecha,
         'url': this.url
       };
-      this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value));
+      setTimeout(() => {
+        this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value));
+      }, 0);
+
     }
     //this.homeService.guardarBusqueda(obj).subscribe(data => );
     //this.nzone.run(() => this.stopRecognizer());

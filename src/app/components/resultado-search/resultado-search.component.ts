@@ -33,21 +33,37 @@ export class ResultadoSearchComponent implements OnInit {
        });*/
       if (this.respuesta.metadata.source.name == environment.id_origen_conecta) {
         this.respuesta.tipo = 'Conecta';
+      } else if (this.respuesta.metadata.source.name == environment.id_origen_drive) {
+        this.respuesta.tipo = 'Google Drive';
+        this.respuesta.url_icono = this.respuesta.metadata.fields.find(field => {
+          return field.name === 'iconLink';
+        }).textValues.values[0];
+        this.respuesta.owner_drive = 'Propietario  • ' + this.respuesta.metadata.fields.find(field => {
+          return field.name === 'fileOwner';
+        }).textValues.values[0];
+      } else if (this.respuesta.metadata.source.name == environment.id_origen_chat) {
+        this.respuesta.tipo = 'Mis Chats';
       }
-      // this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('&nbsp;', '');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_respuesta:', ' ');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_subrespuesta:', ' ');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('contenido:', ' ');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_subs:', ' ');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('contenido_subs:', ' ');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_segs:', ' ');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('texto_segs:', ' ');
-      var parser = new DOMParser();
-      this.respuesta.contenido = this.respuesta.snippet.snippet;
-      this.respuesta.contenido = this.htmldecode(this.respuesta.contenido);
-      this.respuesta.contenido = this.respuesta.contenido.replace(/<[^>]*>/g, '');
-      this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('&nbsp;', ' ');
 
+
+
+
+
+      // this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('&nbsp;', '');
+      if (this.respuesta.snippet && this.respuesta.snippet.snippet) {
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_respuesta:', ' ');
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_subrespuesta:', ' ');
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('contenido:', ' ');
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_subs:', ' ');
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('contenido_subs:', ' ');
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('titulo_segs:', ' ');
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('texto_segs:', ' ');
+        var parser = new DOMParser();
+        this.respuesta.contenido = this.respuesta.snippet.snippet;
+        this.respuesta.contenido = this.htmldecode(this.respuesta.contenido);
+        this.respuesta.contenido = this.respuesta.contenido.replace(/<[^>]*>/g, '');
+        this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('&nbsp;', ' ');
+      }
     }
   }
 

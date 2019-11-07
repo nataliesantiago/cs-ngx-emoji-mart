@@ -83,9 +83,9 @@ export class UtilsService {
      * @param  {number} id
      * @returns Configuracion
      */
-    buscarConfiguracion(id: number): Configuracion {
-        return this.configuraciones.find(c => {
-            return c.idtbl_configuracion === id;
+    buscarConfiguracion(id: number | string): Configuracion {
+        return this.configuraciones.find((c: Configuracion) => {
+            return c.idtbl_configuracion === id || c.nombre === id;
         });
     }
     /**

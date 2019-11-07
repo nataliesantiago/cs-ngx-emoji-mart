@@ -12,7 +12,7 @@
                 class="ventana-chat">
 
                 <mat-toolbar class="no-shadow chat-right-panel-cliente barra-superior"
-                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}" color="basic">
+                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos && chat.id_estado_conversacion==2}" color="basic">
 
 
                   <div class="font-14 nombre-asesor" (click)="chat.minimizado=!chat.minimizado">

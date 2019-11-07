@@ -8,7 +8,7 @@
     </mat-tab-group>
     <div *ngIf="resultado" class="caja-resultados">
       <div *ngIf="ortografia" class="quisistes-decir"><span>Quizas quisiste decir: </span> <a
-          [routerLink]="['/search/'+busquedaUrl]" routerLinkActive="active"><b>{{busquedaCorregida}}</b></a></div>
+         (click)="abrirRuta(busquedaUrl)"><b>{{busquedaCorregida}}</b></a></div>
       <div *ngFor="let r of resultados; let i = index" class="contenedor__texto center">
         <app-resultado-search [respuesta]="r" [pos]="i" [busqueda]="busqueda"></app-resultado-search>
       </div>

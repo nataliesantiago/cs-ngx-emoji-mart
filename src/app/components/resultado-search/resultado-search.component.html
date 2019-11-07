@@ -7,6 +7,7 @@
     <div class="panel-contenido">
       <div class="icono-respuesta">
         <mat-icon *ngIf="respuesta.tipo=='Conecta'">{{respuesta.url_icono}}</mat-icon>
+        <mat-icon *ngIf="respuesta.tipo=='Mis Chats'">chat</mat-icon>
         <img [src]="respuesta.url_icono" *ngIf="respuesta.tipo=='Google Drive'" />
       </div>
       <div class="contenido-respuesta">
@@ -14,6 +15,7 @@
         <div class="contenedor-texto">
           <span *ngIf="mostrando" [innerHTML]="respuesta.contenido | buscadorhightlight:busqueda |safe:'html'"></span>
         </div>
+        <span class="owner-drive">{{respuesta.owner_drive}}</span>
         <mat-progress-bar *ngIf="!mostrando" class="barra-cargando" [mode]="'indeterminate'"
           [bufferValue]="bufferValue">
         </mat-progress-bar>

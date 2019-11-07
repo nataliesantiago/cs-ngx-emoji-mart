@@ -60,7 +60,9 @@ export class ResultadosComponent implements OnInit {
       if (this.tipo_busqueda == 2) {
         this.url_imagen_busqueda = params['url'];
       }
-      this.origen = params['origen'];
+      if (params['origen']) {
+        this.origen = params['origen'];
+      }
       if (this.origen) {
         switch (this.origen) {
           case 'conecta':
@@ -101,7 +103,10 @@ export class ResultadosComponent implements OnInit {
     }
     this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
   }
-
+  abrirRuta(ruta) {
+    console.log(ruta);
+    this.router.navigateByUrl(ruta);
+  }
   cambioParametros(params) {
     // Se reinicializa el componente
     this.page = params.page || 0;
@@ -115,11 +120,11 @@ export class ResultadosComponent implements OnInit {
       delete this.valorBusqueda;
       delete this.busquedaCorregida;
       delete this.respuesta;
-      this.busquedaUrl = encodeURI(this.busqueda);
+      this.busquedaUrl = '/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen;
     } else {
       this.resultado = true;
     }
-    this.searchService.queryCloudSearch(this.busqueda, this.tipo_busqueda, this.origen, this.page).then(d => {
+    this.searchService.queryCloudSearch(this.busqueda, this.tipo_busqueda, this.origen, this.page, true, params.url).then(d => {
       // console.log(d);
       /*d.results.forEach((r: ResultadoCloudSearch) => {
         let id = r.url.split('_')[0];
@@ -132,13 +137,13 @@ export class ResultadosComponent implements OnInit {
       if (parseInt(d.resultCountExact) < 1) {
         this.resultado = false;
       } else {
-        
+
         this.length = parseInt(d.resultCountExact);
       }
       if (d.spellResults) {
         this.ortografia = true;
         this.busquedaCorregida = d.spellResults[0].suggestedQuery;
-        this.busquedaUrl = (this.busquedaCorregida);
+        this.busquedaUrl = '/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busquedaCorregida) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen;
       }
       setTimeout(() => {
         if (this.paginator) {

@@ -95,7 +95,7 @@ export class TransferenciaChatComponent implements OnInit {
     this.chatService.transferirChat(this.data.conversacion, id, this.tipo).then(() => {
       this.dialogRef.close({ success: true });
     }, () => {
-      this.error_transferencia = 'Error realizando la transferencia, por intente más tarde';
+      this.error_transferencia = 'Error realizando la transferencia, por favor intente más tarde';
     })
 
   }

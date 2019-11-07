@@ -2874,7 +2874,7 @@ input:-webkit-autofill:active {
 
     .contenedor-titulo {
       display: flex;
-      height: 76px;
+      height: 69px;
       width: 100%;
       border-bottom: 1px solid #dadada;
 
@@ -2921,6 +2921,7 @@ input:-webkit-autofill:active {
     font: normal normal 400 normal 18px / normal arial, sans-serif;
     font-style: italic;
     color: #1a0dab;
+    cursor: pointer;
   }
 }
 
@@ -2936,23 +2937,29 @@ input:-webkit-autofill:active {
       background-color: transparent;
     }
   }
+
   .container-chat {
     height: calc(100% - 30px);
+
     .container {
       height: 100%;
     }
+
     .container-new-chat {
       h3 {
         margin: 7px 0 7px 0;
       }
+
       .options-chat {
         margin-left: auto;
+
         .mat-button-ripple-round {
           .mat-ripple-element {
             background-color: transparent;
           }
         }
       }
+
       .contenedor {
         height: calc(100% - 135px);
         margin-bottom: 0;
@@ -2960,17 +2967,20 @@ input:-webkit-autofill:active {
         border-style: solid;
         border-top-left-radius: 6px !important;
         border-top-right-radius: 6px !important;
+
         .archivo-adjunto {
           left: 0;
         }
+
         .panel-buscador-texto {
           .contenido-buscador {
             input {
               width: 190px;
             }
-          } 
+          }
         }
       }
+
       .chat-footer {
         padding: 0 10px !important;
         margin: 0;
@@ -2978,6 +2988,7 @@ input:-webkit-autofill:active {
         border-style: solid !important;
         border-bottom-right-radius: 6px;
         border-bottom-left-radius: 6px;
+
         .input-mensaje {
           resize: none;
           padding: 0;
@@ -2989,9 +3000,11 @@ input:-webkit-autofill:active {
           height: 30px;
           flex: 1;
         }
+
         button {
           outline: none;
         }
+
         .emojis-panel {
           position: absolute;
           left: 275px;
@@ -2999,6 +3012,7 @@ input:-webkit-autofill:active {
         }
       }
     }
+
     h3 {
       margin: 0 0 15px 0;
     }
@@ -3218,17 +3232,63 @@ input:-webkit-autofill:active {
       width: 40px;
       display: flex;
 
-      .mat-icon {
+      .mat-icon,
+      img {
         margin: 0 auto;
         margin-left: 0;
         color: rgb(89, 70, 141);
         position: relative;
         top: -26px;
         font-size: 20px;
-        height: 20px;
-        width: 20px;
+
 
       }
+
+      .mat-icon {
+        height: 20px;
+        width: 20px;
+      }
+
+      img {
+        height: 16px;
+        width: 16px;
+      }
+    }
+
+    .owner-drive {
+      color: rgb(118, 118, 118);
+      text-decoration: none solid rgb(118, 118, 118);
+      text-size-adjust: 100%;
+      column-rule-color: rgb(118, 118, 118);
+      perspective-origin: 0px 0px;
+      transform-origin: 0px 0px;
+      caret-color: rgb(118, 118, 118);
+      border: 0px none rgb(118, 118, 118);
+      font: normal normal 400 normal 12px / normal Roboto, arial, sans-serif;
+      outline: rgb(118, 118, 118) none 0px;
+
+      &:after {
+        color: rgb(118, 118, 118);
+        text-decoration: none solid rgb(118, 118, 118);
+        text-size-adjust: 100%;
+        column-rule-color: rgb(118, 118, 118);
+        caret-color: rgb(118, 118, 118);
+        border: 0px none rgb(118, 118, 118);
+        font: normal normal 400 normal 12px / normal Roboto, arial, sans-serif;
+        outline: rgb(118, 118, 118) none 0px;
+      }
+
+      &:before {
+        color: rgb(118, 118, 118);
+        text-decoration: none solid rgb(118, 118, 118);
+        text-size-adjust: 100%;
+        column-rule-color: rgb(118, 118, 118);
+        caret-color: rgb(118, 118, 118);
+        border: 0px none rgb(118, 118, 118);
+        font: normal normal 400 normal 12px / normal Roboto, arial, sans-serif;
+        outline: rgb(118, 118, 118) none 0px;
+      }
+
     }
 
     .contenido-respuesta {
@@ -3287,7 +3347,8 @@ input:-webkit-autofill:active {
   }
 
 }
-app-search-component{
+
+app-search-component {
   height: 100%;
 }
 
@@ -3346,6 +3407,7 @@ app-search-component{
     margin: 5px;
     font-size: 14px;
   }
+
   .loading-doc-button {
     left: 45%;
   }
