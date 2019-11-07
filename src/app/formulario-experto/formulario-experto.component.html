@@ -47,7 +47,7 @@
                 <ng-container matColumnDef="id_horario">
                   <mat-header-cell *matHeaderCellDef mat-sort-header> ID Horario </mat-header-cell>
                   <mat-cell *matCellDef="let row"> 
-                    <mat-select *ngIf="row.nuevo" style="width: 70%;" [(ngModel)]="row.idtbl_horario_chat" name="estado" (change)="agregarHorario(row)">
+                    <mat-select *ngIf="row.nuevo" style="width: 70%;" [(ngModel)]="row.idtbl_horario_chat" name="estado" (ngModelChange)="agregarHorario(row)">
                       <mat-option *ngFor="let i of horarios" value="{{i.idtbl_horario_chat}}">{{i.idtbl_horario_chat}}</mat-option>
                     </mat-select>
                     <span *ngIf="!row.nuevo"> {{row.idtbl_horario_chat}} </span>

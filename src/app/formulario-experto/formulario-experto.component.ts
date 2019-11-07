@@ -79,7 +79,7 @@ export class FormularioExpertoComponent implements OnInit {
       }
     });
 
-    this.ajax.get('user/obtener-horarios', {}).subscribe(p => {
+    this.ajax.get('user/obtener-horarios-activos', {}).subscribe(p => {
       if(p.success){
         this.horarios = p.horarios;
       }
@@ -129,7 +129,7 @@ export class FormularioExpertoComponent implements OnInit {
     this.cg.detectChanges();
   }
 
-  agregarHorario(e){
+  agregarHorario(e){    
     this.ajax.get('user/horario-id', { id_horario_chat: e.idtbl_horario_chat}).subscribe(p => {
       if(p.success){
         e.hora_inicio = p.horario[0].hora_inicio;

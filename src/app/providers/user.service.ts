@@ -537,4 +537,26 @@ export class UserService {
         })
     }
 
+
+    activarHorario(horario): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/activar-horarios', {horario: horario}).subscribe(p => {
+                if (p.success) {
+                    resolve(p)
+                }
+            });
+        })
+    }
+
+
+    desactivarHorario(horario): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/desactivar-horarios', {horario: horario}).subscribe(p => {
+                if (p.success) {
+                    resolve(p)
+                }
+            });
+        })
+    }
+
 }
