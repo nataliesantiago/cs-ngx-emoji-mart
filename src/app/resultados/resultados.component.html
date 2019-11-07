@@ -7,7 +7,7 @@
       <mat-tab label="Conecta autogestión"></mat-tab>
       <mat-tab label="Mis Chats"></mat-tab>
     </mat-tab-group>
-    <div class="imagen-busqueda">
+    <div class="imagen-busqueda" *ngIf="url_imagen_busqueda">
       <a [href]="url_imagen_busqueda" target="_blank">
         <img [src]="url_imagen_busqueda" />
       </a>
