@@ -2943,6 +2943,7 @@ input:-webkit-autofill:active {
 
     .container {
       height: 100%;
+      position: relative;
     }
 
     .container-new-chat {
@@ -2961,7 +2962,7 @@ input:-webkit-autofill:active {
       }
 
       .contenedor {
-        height: calc(100% - 135px);
+        height: calc(100% - 70px);
         margin-bottom: 0;
         border-color: #dcdcdc;
         border-style: solid;
@@ -2979,6 +2980,10 @@ input:-webkit-autofill:active {
             }
           }
         }
+      }
+
+      .boton-nuevos-mensajes {
+        bottom: 25px;
       }
 
       .chat-footer {
@@ -3018,7 +3023,7 @@ input:-webkit-autofill:active {
     }
 
     .contenedor {
-      height: calc(100% - 90px);
+      height: calc(100% - 70px);
       border: 1px solid #dcdcdc;
       border-radius: 6px;
       margin-bottom: 10px;
@@ -3396,9 +3401,18 @@ app-search-component {
   }
 }
 
+.container-sidenav-preguntas {
+  height: calc(100vh - 64px);
+  width: 100vw;
 
+  .mat-drawer-inner-container {
+    overflow: hidden !important;
+  }
 
-
+  .container-sidenav-preguntas {
+    height: 100%;
+  }
+}
 
 .download-chat {
   text-align: center;

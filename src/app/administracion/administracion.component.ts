@@ -67,7 +67,19 @@ export class AdministracionComponent implements OnInit {
   }
 
   cancelarEdicion(u){
-    u.editando = false;
+    this.ajax.get('administracion/obtener', {}).subscribe(p => {
+      if(p.success){
+        
+        this.items_administracion = p.items;
+        
+        this.dataSource = new MatTableDataSource(this.items_administracion);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;                              
+        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+        this.cg.detectChanges();
+        u.editando = false;
+      }
+    })
   }
 
   guardarRegistro(u){

@@ -80,3 +80,38 @@ mat-expansion-panel {
 .titulo-pregunta{
     padding-top: 25px;
 }
+
+
+@media only screen and (max-width: 1200px) {
+    .preguntas-asociadas {
+
+        position: relative;
+        height: 100%;
+    
+        .panel-respuestas {
+            position: fixed;
+            position: fixed;
+            top: 112px;
+            right: 50px;
+            width: 200px;
+    
+        }
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .preguntas-asociadas {
+
+        position: relative;
+        height: 100%;
+    
+        .panel-respuestas {
+            top: 0px;
+            right: 0px;
+            width: 90%;
+            padding-top: 25px;
+            position: static;
+            margin: auto;
+        }
+    }
+}

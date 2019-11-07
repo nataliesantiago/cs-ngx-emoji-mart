@@ -224,8 +224,8 @@
                 </div>
 
                 <perfect-scrollbar class="contenedor-encuesta">
-                  <div *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="goodbye-message">
-                    <h2 *ngIf="m.es_despedida">{{m.texto}}</h2>
+                  <div *ngIf="es_despedida" class="goodbye-message">
+                    <h2>{{mensaje_despedida}}</h2>
                   </div>
                   <div class="download-chat" *ngIf="chat.mostrar_descarga_chat">
                     <p>Guardar chat en el equipo</p>

@@ -15,12 +15,16 @@ self.addEventListener('notificationclick', function (event) {
 })
 messaging.setBackgroundMessageHandler((payload) => {
   console.log('Message received. ', payload);
+  let ruta = '/';
+  if(payload.data.origen == 'recordatorio'){
+    ruta = '/' + payload.data.route;
+  }
   // Customize notification here
   const notificationTitle = payload.data.title;
   const notificationOptions = {
     body: payload.body,
     icon: '/assets/images/favicon.png',
-    data: '/'
+    data: ruta
   };
 
   return self.registration.showNotification(notificationTitle,

@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HomeService } from '../services/home.service';
 import { ResponseSearch } from '../models/response-search';
@@ -156,7 +156,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private router: Router, private homeService: HomeService, public responseSearch: ResponseSearch, 
     private changeDetector: ChangeDetectorRef, private speechRecognizer: SpeechRecognizerService, private nzone: NgZone, private autenticationService: AutenticationService, 
-    private ajax: AjaxService, private userService: UserService, private look_service: LookFeelService) {
+    private ajax: AjaxService, private userService: UserService, private look_service: LookFeelService, private route: ActivatedRoute) {
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
@@ -173,6 +173,9 @@ export class HomeComponent implements OnInit {
 
   }
   init() {
+
+    
+
     this.ajax.get('administracion/obtener-texto-home', {}).subscribe(p => {
       if (p.success) {
 
@@ -268,6 +271,18 @@ export class HomeComponent implements OnInit {
     this.speechRecognizer.initialize(this.currentLanguage);
     this.initRecognition();
     this.notification = null;
+
+    this.route.params
+    .filter(params => params.abrir)
+    .subscribe(params => {
+      let data = params.abrir;
+      
+      if (data) {
+        this.userService.panelNotificacionesSubject.next(true);
+      }else{
+        this.userService.panelNotificacionesSubject.next(false);
+      }
+    });
 
     /**speech recognizion */
   }
