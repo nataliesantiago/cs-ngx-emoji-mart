@@ -43,7 +43,7 @@ export class HistorialUsuarioComponent implements OnInit {
 
 
   ngOnInit() {
-    
+
     this.userService.obtenerHistorialBusquedas(this.user.idtbl_usuario).then(p => {
       this.busquedas = p;
       this.dataSource = new MatTableDataSource(this.busquedas);
@@ -54,5 +54,10 @@ export class HistorialUsuarioComponent implements OnInit {
 
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 
 }

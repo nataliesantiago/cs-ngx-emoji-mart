@@ -85,6 +85,7 @@ export class Conversacion {
     historial: Array<any>;
     primera_consulta: string;
     busqueda_interna: string;
+    expert_chat: any;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;
