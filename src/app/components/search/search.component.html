@@ -4,7 +4,7 @@
     <mat-icon class="buscar-lupa">search</mat-icon>
   </button>
 
-  <input id="file-input" (change)="onFileSelected($event)" type="file" />
+  <input id="file-input" (change)="onFileSelected($event)" type="file" #adjunto />
 
 
   <div class="ng-autocomplete">
@@ -33,7 +33,7 @@
             <div [innerHTML]="textError"></div>
         </ng-template> -->
   </div>
-  <button mat-icon-button class="archivo" *ngIf="modo!=3">
+  <button mat-icon-button class="archivo" *ngIf="modo!=3" (click)="adjunto.click()">
     <mat-icon>photo_camera</mat-icon>
   </button>
   <button mat-icon-button (click)="iniciarReconocimientoVoz($event)" class="microfono"

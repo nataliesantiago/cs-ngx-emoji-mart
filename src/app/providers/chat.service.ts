@@ -244,7 +244,9 @@ export class ChatService {
    * @param  {number} id_busqueda?
    */
   crearConversacion(categoria?: number, id_busqueda?: number) {
-    this.subjectConversacion.next({ id_producto: categoria, id_busqueda: id_busqueda });
+    if (this.user.id_rol != 2 && this.user.id_rol != 3) {
+      this.subjectConversacion.next({ id_producto: categoria, id_busqueda: id_busqueda });
+    }
   }
   /**
    * @description Envia la notificación de escribiendo en una conversación
@@ -920,5 +922,5 @@ export class ChatService {
       });
     })
   }
-  
+
 }

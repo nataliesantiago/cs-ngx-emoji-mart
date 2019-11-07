@@ -70,7 +70,8 @@ export class SearchService {
     return this.ajax.post(url_api, json);
   }
 
-  validaOpenChat() {
+  async validaOpenChat() {
+    let a = await this.utilsService.getConfiguraciones();
     let tiempo_minimo = parseInt(this.utilsService.buscarConfiguracion('cantidad_minutos_minimo_chat').valor);
     let consultas_minimas = parseInt(this.utilsService.buscarConfiguracion('cantidad_consultas_minima_chat').valor);
     if (this.busqueda_actual) {
