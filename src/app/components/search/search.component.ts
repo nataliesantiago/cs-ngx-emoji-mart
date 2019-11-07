@@ -74,6 +74,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   busquedaUrl: any;
   @ViewChild('primero') primero: ElementRef;
   @ViewChild('segundo') segundo: ElementRef;
+  @ViewChild('adjunto') adjunto: ElementRef;
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -163,15 +164,22 @@ export class AppSearchComponent implements OnChanges, OnInit {
      * al input de busqueda para realizar el metodo de buscar()
   */
   onFileSelected(event) {
+    console.log('paso por aca')
     this.metodo = 2;
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', this.file);
       this.searchService.searchFile(formData).subscribe((data) => {
-        debugger;
+        //debugger;
         this.dataImage = data.data.parrafos;
         this.url = data.data.url;
+        if (this.dataImage) {
+          this.def.setValue(this.dataImage.join(' '));
+          this.adjunto.nativeElement.value = '';
+          this.buscar(2);
+
+        }
       }
       );
     }
@@ -358,19 +366,9 @@ export class AppSearchComponent implements OnChanges, OnInit {
       if (this.searchText === null && this.searchText === undefined) {
         this.searchText = '';
       }
-      //this.responseSearch.setResultados(this.textopredictivo);
 
-      var date = new Date();
-      var fecha = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
-      let obj = {
-        'idUsuario': 1,
-        'textoBusqueda': this.searchText,
-        'idTipoBusqueda': metodo,
-        'fechaBusqueda': fecha,
-        'url': this.url
-      };
       setTimeout(() => {
-        this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value));
+        this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value) + '&&url=' + this.url);
       }, 0);
 
     }

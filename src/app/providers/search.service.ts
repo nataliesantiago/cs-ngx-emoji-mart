@@ -62,7 +62,7 @@ export class SearchService {
       id: 1,
       file: file
     }
-    return this.ajax.post(url_api, file);
+    return this.ajax.postData(url_api, file);
   }
 
   guardarBusqueda(json: any) {
