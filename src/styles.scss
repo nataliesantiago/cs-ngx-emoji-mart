@@ -2944,13 +2944,17 @@ input:-webkit-autofill:active {
     .container {
       height: 100%;
       position: relative;
+      &.is-recording {
+        .contenedor {
+          height: calc(100% - 175px);
+        }
+      }
     }
 
     .container-new-chat {
       h3 {
         margin: 7px 0 7px 0;
       }
-
       .options-chat {
         margin-left: auto;
 
@@ -2960,7 +2964,6 @@ input:-webkit-autofill:active {
           }
         }
       }
-
       .contenedor {
         height: calc(100% - 70px);
         margin-bottom: 0;
@@ -2968,11 +2971,9 @@ input:-webkit-autofill:active {
         border-style: solid;
         border-top-left-radius: 6px !important;
         border-top-right-radius: 6px !important;
-
         .archivo-adjunto {
           left: 0;
         }
-
         .panel-buscador-texto {
           .contenido-buscador {
             input {
@@ -2981,11 +2982,9 @@ input:-webkit-autofill:active {
           }
         }
       }
-
       .boton-nuevos-mensajes {
         bottom: 25px;
       }
-
       .chat-footer {
         padding: 0 10px !important;
         margin: 0;
@@ -2993,7 +2992,6 @@ input:-webkit-autofill:active {
         border-style: solid !important;
         border-bottom-right-radius: 6px;
         border-bottom-left-radius: 6px;
-
         .input-mensaje {
           resize: none;
           padding: 0;
@@ -3005,7 +3003,6 @@ input:-webkit-autofill:active {
           height: 30px;
           flex: 1;
         }
-
         button {
           outline: none;
         }
@@ -3014,6 +3011,14 @@ input:-webkit-autofill:active {
           position: absolute;
           left: 275px;
           bottom: 180px;
+        }
+      }
+      &.is-recording {
+        .contenedor {
+          height: calc(100% - 175px);
+        }
+        .boton-nuevos-mensajes {
+          bottom: 130px;
         }
       }
     }
@@ -3031,6 +3036,9 @@ input:-webkit-autofill:active {
       overflow-x: hidden;
       &>.ps {
         height: 100%;
+        .ps__rail-x {
+          display: none;
+        }
       }
 
       .list-messages {
