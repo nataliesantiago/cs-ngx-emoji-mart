@@ -189,7 +189,11 @@ export class RespuestasComponent implements OnInit {
       this.activadoSi = true;
       this.activadoNo = false;
     } else {
-      this.boton = "Buscar Experto";
+      if(this.usuario.id_rol == 2 || this.usuario.id_rol == 3){
+        this.boton = "Enviar";  
+      }else{
+        this.boton = "Buscar Experto";
+      }
       this.activadoNo = true;
       this.activadoSi = false;
     }
@@ -200,7 +204,7 @@ export class RespuestasComponent implements OnInit {
     this.ajax.post('preguntas/observaciones-respuesta', { comentario: this.observaciones, positivo: this.valor_calificacion, id_usuario: this.usuario.idtbl_usuario, id_pregunta: this.id_pregunta_visualizar }).subscribe(d => {
       if (d.success) {
 
-        if (this.valor_calificacion == 2) {
+        if (this.valor_calificacion == 2 && this.usuario.id_rol != 2 && this.usuario.id_rol != 3) {
           swal.fire({
             title: '¿Deseas buscar un experto?',
             text: '',
