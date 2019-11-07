@@ -1,5 +1,5 @@
 <div class="container-chat">
-  <div *ngIf="!chat.expert_chat" class="container">
+  <div *ngIf="!chat.expert_chat" class="container" [ngClass]="{'is-recording': is_recording}">
       <h3>{{chat.nombre}} </h3>
   
       <perfect-scrollbar class="contenedor">
@@ -26,7 +26,7 @@
       <a class="custom__btn custom__btn--accept m-b-10" (click)="closeDialog()">Aceptar</a>
   </div>
   
-  <div *ngIf="chat.expert_chat && !chat.mostrar_encuesta" class="container container-new-chat">
+  <div *ngIf="chat.expert_chat && !chat.mostrar_encuesta" class="container container-new-chat" [ngClass]="{'is-recording': is_recording}">
     <div fxLayout="row" layout-align="none center">
       <h3>{{chat.nombre}} </h3>
       <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1 options-chat">
