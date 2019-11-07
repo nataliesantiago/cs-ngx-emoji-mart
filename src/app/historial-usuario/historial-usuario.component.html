@@ -32,7 +32,9 @@
                 
                         <ng-container matColumnDef="url">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:30%;"> URL </mat-header-cell>
-                                <mat-cell *matCellDef="let row" style="max-width:30%;"> {{row.url}} </mat-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:30%;"> 
+                                    <a *ngIf="row.url && row.url != 'undefined'" href="{{row.url}}" target="_blank">{{row.url}}</a>
+                                </mat-cell>
                         </ng-container>
                 
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
