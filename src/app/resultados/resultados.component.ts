@@ -5,6 +5,7 @@ import { HomeService } from '../services/home.service';
 import { SearchService } from '../providers/search.service';
 import { ResultadoCloudSearch } from '../../schemas/interfaces';
 import { MatPaginator, MatTabGroup, MatTabChangeEvent } from '@angular/material';
+import { ChatService } from '../providers/chat.service';
 
 @Component({
   selector: 'app-resultados',
@@ -36,7 +37,8 @@ export class ResultadosComponent implements OnInit {
     private router: Router,
     public responseSearch: ResponseSearch,
     private homeService: HomeService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private chatService: ChatService
   ) {
   }
 
@@ -85,6 +87,12 @@ export class ResultadosComponent implements OnInit {
       this.cambioParametros(this.params);
     });
 
+  }
+
+  abrirChat() {
+    let id_busqueda = this.searchService.busqueda_actual.idtbl_busqueda_usuario;
+    //console.log(id_busqueda);
+    this.chatService.crearConversacion(null, id_busqueda);
   }
 
   cambiaTab(e: MatTabChangeEvent) {

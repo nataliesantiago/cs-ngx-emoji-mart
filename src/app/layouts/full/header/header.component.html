@@ -4,7 +4,8 @@
 
 
 
-<button mat-icon-button class="m-r-10" (click)="emergenciaSOS()" title="No es un botón de pánico" [disabled]="creando_emergencia">
+<button mat-icon-button class="m-r-10" (click)="emergenciaSOS()" title="No es un botón de pánico"
+    [disabled]="creando_emergencia">
     <img src="../../../../assets/images/sos.png" alt="" class="sos">
     <div class="notify">
         <span class="heartbit"></span>
@@ -36,22 +37,25 @@
             <mat-divider></mat-divider>
             <h4>Estados Experto</h4>
             <mat-radio-group aria-labelledby="example-radio-group-label" class="opciones-experto"
-                [(ngModel)]="user.estado_experto" (change)="cambiarEstadoExperto($event)" [disabled]="emergencia_actual">
-                <mat-radio-button class="example-radio-button" *ngFor="let e of estados_operador" [value]="e.idtbl_estado_experto">
+                [(ngModel)]="user.estado_experto" (change)="cambiarEstadoExperto($event)"
+                [disabled]="emergencia_actual">
+                <mat-radio-button class="example-radio-button" *ngFor="let e of estados_operador"
+                    [value]="e.idtbl_estado_experto">
                     {{e.nombre}}
                 </mat-radio-button>
             </mat-radio-group>
         </div>
-        <div *ngIf="user && user.id_rol!=2">
+        <!--<div *ngIf="user && user.id_rol!=2">
             <mat-divider></mat-divider>
             <h4>Chat</h4>
             <button class="custom__btn custom__btn--primary" (click)="abrirChat()">Abrir Chat</button>
-        </div>
+        </div>-->
 
         <div fxLayout="row wrap" fxLayoutAlign="center center" class="active-dark m-t-10">
             <mat-label class="active-text m-r-20">Modo nocturno</mat-label>
             <label class="switch" for="dark_checkbox">
-                <input type="checkbox" id="dark_checkbox" (change)="cambioModoNocturno($event)" [checked]="is_dark_mode == 1"/>
+                <input type="checkbox" id="dark_checkbox" (change)="cambioModoNocturno($event)"
+                    [checked]="is_dark_mode == 1" />
                 <div class="slider-switch round-switch"></div>
             </label>
         </div>
