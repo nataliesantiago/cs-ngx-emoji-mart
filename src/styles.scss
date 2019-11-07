@@ -3028,7 +3028,7 @@ input:-webkit-autofill:active {
       border-radius: 6px;
       margin-bottom: 10px;
       padding: 10px;
-
+      overflow-x: hidden;
       &>.ps {
         height: 100%;
       }
@@ -3100,6 +3100,23 @@ input:-webkit-autofill:active {
         .no-message {
           text-align: center;
           font-weight: 600;
+        }
+      }
+    }
+    .recording-url {
+      margin-bottom: 15px;
+      h4 {
+        margin-bottom: 10px;
+      }
+      .text-url {
+        font-size: 13px;
+        margin-bottom: 10px;
+        display: inline;
+        a {
+          color: #0e9daf;
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }
@@ -3416,13 +3433,14 @@ app-search-component {
 
 .download-chat {
   text-align: center;
-
+  margin-top: 5px;
   p {
     margin: 5px;
     font-size: 14px;
   }
 
   .loading-doc-button {
+    margin-top: 5px;
     left: 45%;
   }
 }

@@ -7,7 +7,7 @@
           <div class="message" *ngFor="let message of chat.mensajes" [ngClass]="{'odd': message.id_usuario_envia!==chat.idtbl_usuario,'even': message.id_usuario_envia===chat.idtbl_usuario}">
             <div class="chat-block">
               <div *ngIf="message.es_archivo != 1 || message.es_nota_voz != 1">{{decodeText(message.texto)}}</div>
-              <a *ngIf="message.es_archivo == 1 || message.es_nota_voz == 1" [href]="message.url" target="_blank">{{message.url}}</a>
+              <a *ngIf="message.es_archivo == 1 || message.es_nota_voz == 1" [href]="message.url" target="_blank">{{message.url | linkify}}</a>
             </div>
             <span class="foto-mensaje">
               <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40" title="{{message.nombre}}" *ngIf="message.id_usuario_envia!==chat.idtbl_usuario">
@@ -18,7 +18,12 @@
         </div>
       </perfect-scrollbar>
 
-      <a class="custom__btn custom__btn--accept" (click)="closeDialog()">Aceptar</a>
+      <div class="recording-url" *ngIf="is_recording">
+        <h4>Url Grabación</h4>
+          <div class="text-url" *ngFor="let url of recording_url" [innerHTML]="url | linkify | replaceEmojisMensaje:'google' | safe:'html'"></div>
+      </div>
+
+      <a class="custom__btn custom__btn--accept m-b-10" (click)="closeDialog()">Aceptar</a>
   </div>
   
   <div *ngIf="chat.expert_chat && !chat.mostrar_encuesta" class="container container-new-chat">
@@ -172,7 +177,13 @@
         showPreview="false" (emojiSelect)="seleccionarEmoji($event,chat)"
         [i18n]="{ search: 'Buscar', categories: { search: 'resultados de la búsqueda', recent: 'Recientes' } }">
       </emoji-mart>
+
+      <div class="recording-url" *ngIf="is_recording">
+        <h4>Url Grabación</h4>
+          <div class="text-url" *ngFor="let url of recording_url" [innerHTML]="url | linkify | replaceEmojisMensaje:'google' | safe:'html'"></div>
+      </div>
   </div>
+  
 
   <div *ngIf="chat.expert_chat && chat.mostrar_encuesta">
     <div class="download-chat" *ngIf="chat.mostrar_descarga_chat">

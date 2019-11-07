@@ -59,4 +59,16 @@ export class HistorialChatService {
     });
   }
 
+  getRecordingUrl(conversation_id): Promise<any> {
+    return new Promise((resolve, reject) => {
+        this.ajax.post('historial-chats/obtener-url-grabacion', { conversation_id: conversation_id }).subscribe((c) => {
+          if (c.success) {
+            resolve(c.url);
+          } else {
+            reject();
+          }
+        });
+    });
+  }
+
 }
