@@ -17,7 +17,7 @@ export class AdministradorHorariosComponent implements OnInit {
 
 
   horarios: any;
-  displayedColumns = ['acciones', 'idtbl_horario_chat', 'hora_inicio', 'hora_fin', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+  displayedColumns = ['acciones', 'idtbl_horario_chat', 'hora_inicio', 'hora_fin', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo', 'activo'];
   matTableFilter: matTableFilter;
   filterColumns = [
     { field: 'idtbl_horario_chat', type: 'number' },
@@ -112,5 +112,73 @@ export class AdministradorHorariosComponent implements OnInit {
       })
     })
   }
+
+  activarHorario(u) {
+    swal.fire({
+      title: 'Activar Horario',
+      text: "Confirme para activar el horario",
+      type: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Activar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
+    }).then((result) => {
+      if (result.value) {
+        u.usuario_modificacion = this.id_usuario;
+        this.user.activarHorario(u).then(d => {
+          this.user.obtenerHorarios().then(d => {
+            this.horarios = d;
+            this.dataSource = new MatTableDataSource(this.horarios);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+            this.creando_horario = false;
+            u.editando = false;
+            this.cg.detectChanges();
+          })
+        })
+      }
+    })
+  }
+
+
+  desactivarHorario(u) {
+    swal.fire({
+      title: 'Desactivar Horario',
+      text: "Confirme para desactivar el horario",
+      type: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Desactivar',
+      cancelButtonClass: 'custom__btn custom__btn--cancel',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'custom-sweet'
+      }
+    }).then((result) => {
+      if (result.value) {
+        u.usuario_modificacion = this.id_usuario;
+        this.user.desactivarHorario(u).then(d => {
+          this.user.obtenerHorarios().then(d => {
+            this.horarios = d;
+            this.dataSource = new MatTableDataSource(this.horarios);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+            this.creando_horario = false;
+            u.editando = false;
+            this.cg.detectChanges();
+          })
+        })
+      }
+    })
+  }
+
 
 }

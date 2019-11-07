@@ -144,9 +144,21 @@
           </mat-cell>
         </ng-container>
 
+
+        <ng-container matColumnDef="activo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <span *ngIf="row.activo == 1">Activo</span>
+              <span *ngIf="row.activo == 0">Inactivo</span>              
+            </mat-cell>
+          </ng-container>
+
+
         <ng-container matColumnDef="acciones">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
           <mat-cell *matCellDef="let row" style="max-width:15%;">
+            <i *ngIf="row.activo == 0 && !row.editando" class="ti-check success-color m-r-10 mouse-over" title="Habilitar Horario" (click)="activarHorario(row)"></i>
+            <i *ngIf="row.activo == 1 && !row.editando" class="ti-close danger-color m-r-10 mouse-over" title="Desactivar Horario" (click)="desactivarHorario(row)"></i>
             <i *ngIf="!row.editando" class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
             <i *ngIf="row.editando" class="ti-save success-color m-r-10 mouse-over" (click)="guardarRegistro(row)"></i>
             <i *ngIf="row.editando" class="ti-close danger-color m-r-10 mouse-over" (click)="cancelarEdicion(row)"></i>

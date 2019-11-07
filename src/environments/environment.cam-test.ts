@@ -17,5 +17,7 @@ export const environment = {
         appId: "1:659384240459:web:5c39de166992d5aa"
     },
     ambiente: 'cam',
-    id_origen_conecta:''
+    id_origen_conecta: '',
+    id_origen_drive: '',
+    id_origen_chat: ''
   };
