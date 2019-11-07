@@ -497,11 +497,43 @@ export class UserService {
         });
     }
 
-    obtenerHistorialBusquedas(id_usuario: number): Promise<any>{
+    obtenerHistorialBusquedas(id_usuario: number): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.get('user/obtener-historial-busquedas', { id_usuario: id_usuario }).subscribe(d => {
                 resolve(d.busquedas);
             })
+        })
+    }
+
+    obtenerHorarios(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-horarios', {}).subscribe(p => {
+                if (p.success) {
+                    resolve(p.horarios)
+                }
+            });
+        })
+    }
+
+
+    editarHorario(horario): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/editar-horarios', {horario: horario}).subscribe(p => {
+                if (p.success) {
+                    resolve(p)
+                }
+            });
+        })
+    }
+
+
+    crearHorario(horario, id_usuario: number): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/crear-horarios', {horario: horario, id_usuario: id_usuario}).subscribe(p => {
+                if (p.success) {
+                    resolve(p)
+                }
+            });
         })
     }
 

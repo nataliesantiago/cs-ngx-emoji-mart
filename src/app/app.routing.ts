@@ -44,6 +44,7 @@ import { AdMensajesAutomaticosComponent } from './ad-mensajes-automaticos/ad-men
 import { AdEstadoExpertoComponent } from './ad-estado-experto/ad-estado-experto.component';
 import { AdministradorOrigenesDriveComponent } from './administrador-origenes-drive/administrador-origenes-drive.component';
 import { HistorialChatComponent } from './historial-chat/historial-chat.component';
+import { AdministradorHorariosComponent } from './administrador-horarios/administrador-horarios.component';
 
 export const AppRoutes: Routes = [
   { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
@@ -60,6 +61,7 @@ export const AppRoutes: Routes = [
   { path: 'respuestas/:id_pregunta', component: RespuestasComponent, canActivate: [AuthGuard] },
   { path: 'asociar-preguntas', component: AsociarPreguntasComponent, canActivate: [AuthGuard] },
   { path: 'administracion', component: AdministracionComponent, canActivate: [AuthGuard] },
+  { path: 'administracion-horarios', component: AdministradorHorariosComponent, canActivate: [AuthGuard] },
   { path: 'flujo-curaduria', component: FlujoCuraduriaComponent, canActivate: [AuthGuard] },
   { path: 'admin/menu/urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
   { path: 'administracion-urls', component: UrlsUsuarioComponent, canActivate: [AuthGuard] },
