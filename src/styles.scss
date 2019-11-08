@@ -2929,6 +2929,9 @@ input:-webkit-autofill:active {
   .contenedor-sidenav-chat-experto {
     margin-left: 00px !important;
   }
+  .responsive-btn {
+    max-width: 50% !important;
+  }
 }
 
 .dialog-chat {
@@ -3454,4 +3457,88 @@ app-search-component {
     margin-top: 5px;
     left: 45%;
   }
+}
+
+.cerrar-buscador {
+  display: none;
+}
+
+@media only screen and (max-width: 767px) {
+  .contenedor {
+    .mat-card {
+      margin: 0;
+      .mat-card-content {
+        padding: 0;
+      }
+    }
+  }
+  .responsive-table {
+    .container-table {
+      overflow-x: auto;
+      margin-top: 10px;
+      .mat-table {
+        min-width: 500px;
+      }
+    }
+    .mat-paginator-range-label {
+      margin: 0 20px 0 24px;
+    }
+  }
+  .container-sidenav-preguntas {
+    .panel-lateral-buscador {
+      width: 100%;
+      padding: 15px;
+      left: -15px;
+      .cerrar-buscador {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+    }
+  }
+  .page-content {
+    .mat-card {
+      margin: 0;
+      .mat-card-content {
+        padding: 0;
+      }
+    }
+  }
+  .ad-preguntas-table {
+    .max-width-10 {
+      max-width: 20%;
+    }
+  }
+  .contenedor-responsive {
+    padding: 15px;
+  }
+  .flujo-curaduria {
+    h3 {
+      font-size: 18px;
+    }
+  }
+  .mat-card.flujo-activo {
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+@media only screen and (min-width: 767px) and (max-width: 1023px) {
+
+}
+
+
+.max-width-5 {
+  max-width: 5%;
+}
+.max-width-40 {
+  max-width: 40%;
+}
+.max-width-15 {
+  max-width: 15%;
+}
+.max-width-10 {
+  max-width: 10%;
+}
+.max-width-25 {
+  max-width: 25%;
 }

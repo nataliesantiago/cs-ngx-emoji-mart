@@ -1,8 +1,9 @@
-<mat-card>
-    <mat-card-content>
+<div class="contenedor-responsive">
+    <mat-card>
+        <mat-card-content>
             <div class="flujo-curaduria" fxLayout="row wrap" style="text-align: center;">
                     <!-- column -->
-                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                         <mat-card *ngIf="activo_curaduria" class="flujo-activo flujo-mouse-over" (click)="cargarCuraduria()">
                             <mat-card-content>  
                                 <!-- Row -->
@@ -30,7 +31,7 @@
                     </div>
                     <!-- column -->
                     <!-- column -->
-                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                         <mat-card *ngIf="activo_revision" [ngClass]="{'class': true}" class="flujo-activo flujo-mouse-over" (click)="cargarRevision()">
                             <mat-card-content>
                                 <!-- Row -->
@@ -60,7 +61,7 @@
                     </div>
                     <!-- column -->
                     <!-- column -->
-                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                         <mat-card *ngIf="activo_aprobacion" class="flujo-activo flujo-mouse-over" (click)="cargarAprobacion()">
                             <mat-card-content>
                                 <!-- Row -->
@@ -90,7 +91,7 @@
                     </div>
                     <!-- column -->
                     <!-- column -->
-                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="100" fxFlex="100">
+                    <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                         <mat-card *ngIf="activo_aprobados" class="flujo-activo flujo-mouse-over" (click)="cargarAprobados()">
                             <mat-card-content>
                                 <!-- Row -->
@@ -120,91 +121,93 @@
                     </div>
                     <!-- column -->
                 </div>
+                
+                <br>
+                <br>
+                
+                <div fxLayout="row wrap">
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                            
+                        <mat-card>
+                            <mat-card-content>
+                                <br>
+                                <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-preguntas-flujo-curaduria/nuevo']"><mat-icon>add</mat-icon> Ingresar Pregunta</a>
+                                <br>
+                                <br>
+                                <div class="bg-light p-10 p-r-20 p-l-20">
+                                    <mat-form-field>
+                                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                                    </mat-form-field>
+                                </div>
+                                <div class="responsive-table">
+                                    <div class="container-table">
+                                        <mat-table [dataSource]="dataSource" matSort>
             
-            <br>
-            <br>
-            
-            <div fxLayout="row wrap">
-              <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
-                      
-                  <mat-card>
-                      <mat-card-content>
-                          <br>
-                          <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-preguntas-flujo-curaduria/nuevo']"><mat-icon>add</mat-icon> Ingresar Pregunta</a>
-                          <br>
-                          <br>
-                          <div class="bg-light p-10 p-r-20 p-l-20">
-                              <mat-form-field>
-                                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-                              </mat-form-field>
-                          </div>
-                          <div class="responsive-table">
-                              
-                              <mat-table [dataSource]="dataSource" matSort>
-            
-                                  <!-- ID Column -->
-                                  <ng-container matColumnDef="idtbl_pregunta">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:5%;"> ID </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:5%;"> {{row.idtbl_pregunta}} </mat-cell>
-                                  </ng-container>
-            
-                                  <!-- Progress Column -->
-                                  <ng-container matColumnDef="titulo">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Pregunta </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.titulo}} </mat-cell>
-                                  </ng-container>
-            
-                                  <!-- Name Column -->
-                                  <ng-container matColumnDef="nombre_producto">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Categoria </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_producto}} </mat-cell>
-                                  </ng-container>
-            
-                                  <!-- Color Column -->
-                                  <ng-container matColumnDef="nombre_estado">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Estado </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_estado}} </mat-cell>
-                                  </ng-container>
-            
-                                  <ng-container matColumnDef="nombre">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Encargado </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
-                                  </ng-container>
-            
-                                  <ng-container matColumnDef="nombre_usuario_creador">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Creación </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_creador}} </mat-cell>
-                                  </ng-container>
-            
-                                  <ng-container matColumnDef="nombre_usuario_modificacion">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Modificación </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_modificacion}} </mat-cell>
-                                  </ng-container>
-            
-                                  <ng-container matColumnDef="fecha_ultima_modificacion">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Fecha Modificación </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;"><span *ngIf="row.fecha_ultima_modificacion">{{row.fecha_ultima_modificacion | MomentDate:'MMM DD, YYYY' }}</span></mat-cell>
-                                  </ng-container>
-            
-                                  <ng-container matColumnDef="acciones">
-                                      <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>
-                                      <mat-cell *matCellDef="let row" style="max-width:10%;">
-                                          <i class="ti-pencil info-color m-r-10 mouse-over" (click)="cambiarEstado(row)"></i>
-                                          <i class="ti-comment-alt info-color m-r-10 mouse-over" (click)="comentarios(row)"></i>
-                                          <i class="ti-eye info-color m-r-10 mouse-over" (click)="previsualizar(row)"></i>
-                                      </mat-cell>
-                                  </ng-container>
-            
-                                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                  <mat-row *matRowDef="let row; columns: displayedColumns;">
-                                  </mat-row>
-                              </mat-table>
-            
-                              <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-                          </div>
-                      </mat-card-content>
-                  </mat-card>
-              </div>
-            </div>
-    </mat-card-content>
-</mat-card>
+                                            <!-- ID Column -->
+                                            <ng-container matColumnDef="idtbl_pregunta">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-5"> ID </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-5"> {{row.idtbl_pregunta}} </mat-cell>
+                                            </ng-container>
+                    
+                                            <!-- Progress Column -->
+                                            <ng-container matColumnDef="titulo">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Pregunta </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.titulo}} </mat-cell>
+                                            </ng-container>
+                    
+                                            <!-- Name Column -->
+                                            <ng-container matColumnDef="nombre_producto">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Categoria </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_producto}} </mat-cell>
+                                            </ng-container>
+                    
+                                            <!-- Color Column -->
+                                            <ng-container matColumnDef="nombre_estado">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Estado </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_estado}} </mat-cell>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="nombre">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Encargado </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="nombre_usuario_creador">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Creación </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_creador}} </mat-cell>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="nombre_usuario_modificacion">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Modificación </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_modificacion}} </mat-cell>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="fecha_ultima_modificacion">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Fecha Modificación </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:10%;"><span *ngIf="row.fecha_ultima_modificacion">{{row.fecha_ultima_modificacion | MomentDate:'MMM DD, YYYY' }}</span></mat-cell>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="acciones">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="max-width:10%;">
+                                                    <i class="ti-pencil info-color m-r-10 mouse-over" (click)="cambiarEstado(row)"></i>
+                                                    <i class="ti-comment-alt info-color m-r-10 mouse-over" (click)="comentarios(row)"></i>
+                                                    <i class="ti-eye info-color m-r-10 mouse-over" (click)="previsualizar(row)"></i>
+                                                </mat-cell>
+                                            </ng-container>
+                    
+                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;">
+                                            </mat-row>
+                                        </mat-table>
+                                    </div>
+                                    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
