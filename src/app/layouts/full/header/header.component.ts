@@ -13,6 +13,7 @@ import { SonidosService } from '../../../providers/sonidos.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { EstadoExpertoService } from '../../../providers/estado-experto.service';
 import { LookFeelService } from '../../../providers/look-feel.service';
+import { LogEstadoExperto } from '../../../../schemas/interfaces';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +32,7 @@ export class AppHeaderComponent {
   emergencia_actual = false;
   is_dark_mode;
   modo_nocturno;
+  state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
     private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument, 
@@ -97,6 +99,9 @@ export class AppHeaderComponent {
       this.userService.setActivoExperto(activo);
     } else {
       let activo = (e.value == 1) ? true : false;
+      if (activo) {
+        this.createLogState(1, 1, 1);
+      }
       this.userService.setActivoExperto(activo);
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_experto == 1) ? true : false;
@@ -109,9 +114,9 @@ export class AppHeaderComponent {
     }
     this.userService.setActivoExpertoGlobal(e.value);
     if(actual != null) {
-      this.createLogState(actual, e.value);
+      this.createLogState(actual, e.value, null);
     }
-    
+    this.user.setEstadoExpertoActual(e.value);
   }
 
   listenEmergenciaExperto() {
@@ -203,10 +208,12 @@ export class AppHeaderComponent {
     });
   }
 
-  createLogState(id_estado_actual, id_estado_nuevo) {
-    let state = {id_usuario_experto: this.user.getId(), id_estado_actual: id_estado_actual, id_estado_nuevo: id_estado_nuevo}
-    this.estadoExpertoService.createLogState(state).then(result => {
-      
+  createLogState(id_estado_actual: number, id_estado_nuevo: number, estado_ingreso?: number) {
+    this.state.id_usuario_experto = this.user.getId();
+    this.state.id_estado_experto_actual = id_estado_actual;
+    this.state.id_estado_experto_nuevo = id_estado_nuevo;
+    this.state.estado_ingreso = estado_ingreso
+    this.estadoExpertoService.createLogState(this.state).then(result => {
     });
   }
 

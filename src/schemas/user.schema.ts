@@ -143,4 +143,10 @@ export class User {
     public setUrlFoto(value: string) {
         this.url_foto = value;
     }
+    public getEstadoExpertoActual(): number {
+        return this.estado_actual;
+    }
+    public setEstadoExpertoActual(value: number) {
+        this.estado_actual = value;
+    }
 }

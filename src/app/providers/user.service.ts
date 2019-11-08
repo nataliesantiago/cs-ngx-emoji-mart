@@ -16,6 +16,7 @@ import { AngularFireMessaging } from '@angular/fire/messaging';
 import { mergeMapTo } from 'rxjs/operators';
 import { SonidosService } from './sonidos.service';
 import { NotificacionService } from './notificacion.service';
+import { LogEstadoExperto } from '../../schemas/interfaces';
 
 @Injectable()
 export class UserService {
@@ -45,22 +46,31 @@ export class UserService {
     primera_vez_notificacion = true;
     public panelNotificacionesSubject = new Subject<any>();
     public observablePanelNotificaciones = this.panelNotificacionesSubject.asObservable();
+    state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
 
-    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, private soundService: SonidosService) {
+    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, 
+        private soundService: SonidosService) {
 
         this.ajax.sethost(environment.URL_BACK); // Desarrollo
         //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
         window.onbeforeunload = () => {
             if (this.user && this.user.getIdRol() == 2) {
                 this.setActivoExperto(false);
-            }
-        };
-        window.onunload = () => {
-            if (this.user && this.user.getIdRol() == 2) {
-                this.setActivoExperto(false);
+                
             }
         };
 
+        window.onunload = () => {
+            if (this.user && this.user.getIdRol() == 2) {
+                this.setActivoExperto(false);
+                this.state.id_usuario_experto = this.user.getId();
+                this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
+                this.state.estado_ingreso = 0;
+                this.ajax.post('estado-experto/crear-log-estado', {state: this.state}).subscribe(response => {
+                });
+            }
+        };
+        
 
     }
 
@@ -262,7 +272,7 @@ export class UserService {
 
     setActivoExperto(activo) {
         this.user.experto_activo = activo;
-        //console.log(activo)
+        // console.log(activo)
         this.fireStore.collection('expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
     }
 

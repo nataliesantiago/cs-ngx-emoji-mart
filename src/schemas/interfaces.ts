@@ -169,3 +169,11 @@ export interface Busqueda {
     url?: string;
     id_categoria_experticia?: number;
 }
+
+export interface LogEstadoExperto {
+    idtbl_logs_estado_experto?: number;
+    id_usuario_experto: number;
+    id_estado_experto_actual: number;
+    id_estado_experto_nuevo?: number;
+    estado_ingreso?: number;
+}
