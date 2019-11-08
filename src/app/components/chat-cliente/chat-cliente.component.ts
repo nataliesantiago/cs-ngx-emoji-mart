@@ -472,27 +472,23 @@ export class ChatClienteComponent implements OnInit {
 
   }
   openChat(data?: any) {
-    if (this.user.getIdRol() != 2) {
-      this.chatService.getConversacionActivaUsuario().then(result => {
-        if (result.conversacion.length < result.cantidad_chat_cliente) {
-          this.crearNuevaConversacion(data);
-        } else {
-          swal.fire({
-            title: 'Lo sentimos',
-            text: 'Ha llegado al limite de conversaciones permitidas, si desea abrir una nueva conversación por favor cierre una de las que estan abiertas.',
-            type: 'warning',
-            buttonsStyling: false,
-            confirmButtonClass: 'custom__btn custom__btn--accept',
-            confirmButtonText: 'Aceptar',
-            customClass: {
-              container: 'custom-sweet'
-            }
-          });
-        }
-      });
-    } else {
-      this.crearNuevaConversacion(data);
-    }
+    this.chatService.getConversacionActivaUsuario().then(result => {
+      if (result.conversacion.length < result.cantidad_chat_cliente) {
+        this.crearNuevaConversacion(data);
+      } else {
+        swal.fire({
+          title: 'Lo sentimos',
+          text: 'Ha llegado al limite de conversaciones permitidas, si desea abrir una nueva conversación por favor cierre una de las que estan abiertas.',
+          type: 'warning',
+          buttonsStyling: false,
+          confirmButtonClass: 'custom__btn custom__btn--accept',
+          confirmButtonText: 'Aceptar',
+          customClass: {
+            container: 'custom-sweet'
+          }
+        });
+      }
+    });
   }
 
   crearNuevaConversacion(data) {
@@ -854,7 +850,7 @@ export class ChatClienteComponent implements OnInit {
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'application/pdf' });
         this.file_url = URL.createObjectURL(blob);
-        
+
         let date = moment(c.fecha_creacion).format('YYYY-MM-DD');
         let hour = moment(c.fecha_creacion).format('HH:mm');
 
