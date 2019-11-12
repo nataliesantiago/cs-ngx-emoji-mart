@@ -426,7 +426,6 @@ export class ChatClienteComponent implements OnInit {
         c.mostrar_encuesta = true;
         this.es_despedida = true;
         this.no_encontro_experto = false;
-        c.mostrar_descarga_chat = true;
       } else if (c.asesor_actual) {
         if (c.asesor_actual.idtbl_usuario != data.id_experto_actual && data.id_experto_actual) {
           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
@@ -463,7 +462,6 @@ export class ChatClienteComponent implements OnInit {
 
       if (data.id_estado_conversacion == 10) {
         this.no_encontro_experto = true;
-        c.mostrar_descarga_chat = false;
         this.chatService.getMensajeBuscandoExperto(5).then(result => {
           this.mensaje_no_encontro_experto = result;
         });
@@ -770,13 +768,11 @@ export class ChatClienteComponent implements OnInit {
         estado = 9;
       }
     } else if (c.id_estado_conversacion == 10) {
-      c.mostrar_descarga_chat = false;
       c.mostrar_encuesta = true;
       this.es_despedida = false;
       estado = 10;
     } else {
       estado = 3;
-      c.mostrar_descarga_chat = true;
     }
 
     this.chatService.cerrarConversacion(c, estado).then(() => {
@@ -841,30 +837,4 @@ export class ChatClienteComponent implements OnInit {
     });
   }
 
-  descargarChat(c) {
-    this.loading = true
-    this.chatService.generarPdf(c.idtbl_conversacion).then((d) => {
-      if (d.success) {
-        let file = d.file;
-        const byteCharacters = atob(file);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        this.file_url = URL.createObjectURL(blob);
-
-        let date = moment(c.fecha_creacion).format('YYYY-MM-DD');
-        let hour = moment(c.fecha_creacion).format('HH:mm');
-
-        let link = document.createElement("a");
-        link.href = this.file_url;
-        link.download = `soporte-chat-conecta-${date}-${hour}.pdf`;
-        window.document.body.appendChild(link);
-        link.click();
-        this.loading = false;
-      }
-    });
-  }
 }

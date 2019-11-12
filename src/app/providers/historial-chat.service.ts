@@ -47,9 +47,9 @@ export class HistorialChatService {
     });
   }
 
-  getOneConversation(conversation_id): Promise<any> {
+  getOneConversation(conversation_id, user_id): Promise<any> {
     return new Promise((resolve, reject) => {
-        this.ajax.post('historial-chats/obtener-una-conversacion', { conversation_id: conversation_id }).subscribe((c) => {
+        this.ajax.post('historial-chats/obtener-una-conversacion', { conversation_id: conversation_id, user_id: user_id }).subscribe((c) => {
           if (c.success) {
             resolve(c.conversation);
           } else {

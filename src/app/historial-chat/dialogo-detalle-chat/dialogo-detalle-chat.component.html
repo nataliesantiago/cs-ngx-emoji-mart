@@ -1,7 +1,14 @@
 <div class="container-chat">
   <div *ngIf="!chat.expert_chat" class="container" [ngClass]="{'is-recording': is_recording}">
-      <h3>{{chat.nombre}} </h3>
-  
+      <div fxLayout="row" layout-align="none center">
+        <h3>{{chat.nombre}} </h3>
+        <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1 options-chat">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #them="matMenu" x-position="before">
+          <button mat-menu-item (click)="descargarChat(chat)">Descargar Chat</button>
+        </mat-menu>
+      </div>
       <perfect-scrollbar class="contenedor">
         <div class="list-messages">
           <div class="message" *ngFor="let message of chat.mensajes" [ngClass]="{'odd': message.id_usuario_envia!==chat.idtbl_usuario,'even': message.id_usuario_envia===chat.idtbl_usuario}">
@@ -51,6 +58,7 @@
       </div>
 
       <a class="custom__btn custom__btn--accept m-b-10" (click)="closeDialog()">Aceptar</a>
+      <mat-progress-spinner *ngIf="loading" class="loading-chat-button" color="basic" [mode]="'indeterminate'" [diameter]="36"></mat-progress-spinner>
   </div>
   
   <div *ngIf="chat.expert_chat && !chat.mostrar_encuesta" class="container container-new-chat" [ngClass]="{'is-recording': is_recording}">
@@ -210,11 +218,6 @@
   
 
   <div *ngIf="chat.expert_chat && chat.mostrar_encuesta">
-    <div class="download-chat" *ngIf="chat.mostrar_descarga_chat">
-      <p>Guardar chat en el equipo</p>
-      <button class="custom__btn custom__btn--primary" (click)="descargarChat(chat)" [disabled]="loading">Descargar Chat</button>
-      <mat-progress-spinner *ngIf="loading" class="loading-doc-button" color="basic" [mode]="'indeterminate'" [diameter]="36"></mat-progress-spinner>
-    </div>
     <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
     </app-visualizar-encuesta>
   </div>

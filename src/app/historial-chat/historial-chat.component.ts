@@ -58,11 +58,11 @@ export class HistorialChatComponent implements OnInit {
   }
 
   getOneConversation(conversation_id) {
-    this.historial_service.getOneConversation(conversation_id).then(result => {
-      if (result[0].id_estado_conversacion == 7) {
+    this.historial_service.getOneConversation(conversation_id, this.user.getId()).then(result => {
+      if(result.length != 0) {
         result[0].estado = 'Pendiente';
+        this.showMoreChat(result[0]);
       }
-      this.showMoreChat(result[0]);
     });
   }
 

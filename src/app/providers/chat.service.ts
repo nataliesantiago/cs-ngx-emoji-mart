@@ -884,8 +884,7 @@ export class ChatService {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/recordatorio/eliminar', { id_conversacion: idtbl_conversacion }).subscribe(d => {
         if (d.success) {
-          console.log(d);
-          resolve();
+          resolve(d);
         }
       });
     });

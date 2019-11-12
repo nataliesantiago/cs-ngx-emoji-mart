@@ -227,11 +227,6 @@
                   <div *ngIf="es_despedida" class="goodbye-message">
                     <h2>{{mensaje_despedida}}</h2>
                   </div>
-                  <div class="download-chat" *ngIf="chat.mostrar_descarga_chat">
-                    <p>Guardar chat en el equipo</p>
-                    <button class="custom__btn custom__btn--primary" (click)="descargarChat(chat)" [disabled]="loading">Descargar Chat</button>
-                    <mat-progress-spinner *ngIf="loading" class="loading-doc-button" color="basic" [mode]="'indeterminate'" [diameter]="36"></mat-progress-spinner>
-                  </div>
                   <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
                   </app-visualizar-encuesta>
                 </perfect-scrollbar>
