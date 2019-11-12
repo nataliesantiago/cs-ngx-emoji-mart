@@ -205,7 +205,7 @@ export class DialogoDetalleChatComponent implements OnInit {
           this.componentRef.directiveRef.scrollToBottom();
         }, 1);
       }
-      //this.fireStore.collection('conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
+      //this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
       this.chatService.enviarMensaje(m);
       delete chat.texto_mensaje;
       delete chat.archivo_adjunto;

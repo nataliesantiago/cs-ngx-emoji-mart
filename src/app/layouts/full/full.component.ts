@@ -103,29 +103,29 @@ export class FullComponent implements OnDestroy, AfterViewInit {
       }
     });
     this.user.observablePanelNotificaciones.subscribe(abrir => {
-      if(abrir){
+      if (abrir) {
         this.end.open();
         this.leerNotificaciones();
         this.actualizarNotificaciones();
-      }else{
+      } else {
         this.end.close();
       }
     })
-   /* this.router.events.subscribe(val => {
-      if (val instanceof NavigationEnd) {
-        if (val.url.indexOf('/search/') == 0) {
-          // console.log('estoy en donde quiero');
-          this.muestra_barra = true;
-        } else {
-          this.muestra_barra == false;
-        }
-      }
-    });*/
+    /* this.router.events.subscribe(val => {
+       if (val instanceof NavigationEnd) {
+         if (val.url.indexOf('/search/') == 0) {
+           // console.log('estoy en donde quiero');
+           this.muestra_barra = true;
+         } else {
+           this.muestra_barra == false;
+         }
+       }
+     });*/
   }
 
-  actualizarNotificaciones(){
+  actualizarNotificaciones() {
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
-      this.notificaciones_usuario = r;      
+      this.notificaciones_usuario = r;
     });
 
     this.user.observableNotificaciones.subscribe(() => {
@@ -138,6 +138,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
 
   init() {
+    
     if (this.usuario.getModoNocturno() == 0 || this.usuario.getModoNocturno() == null) {
       this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
         if (result && result[0] && result[0].valor) {
@@ -153,17 +154,17 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     }
 
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
-      this.notificaciones_usuario = r;      
+      this.notificaciones_usuario = r;
     });
 
-    this.user.actualizarMensajesNLP().then( r => {
-      this.conversaciones_nlp = r;      
+    this.user.actualizarMensajesNLP().then(r => {
+      this.conversaciones_nlp = r;
     });
 
     this.user.observableNotificaciones.subscribe(() => {
 
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
-      this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;      
+      this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
       this.conversaciones_nlp = this.user.respuesta_nlp;
       //this.mensajes_sin_leer_nlp = this.user.cantidad_mensajes_sin_leer_nlp;
     });
@@ -196,154 +197,9 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     this.router.navigate(['home']);
   }
 
-  /**
- * Inicia el stream de sonido para reconocimento de voz
- * @param event current window
- */
-  startButton(event) {
-    if (this.recognizing) {
-      this.speechRecognizer.stop();
-      return;
-    }
 
-    this.speechRecognizer.start(event.timeStamp);
-  }
 
-  /**
-   * Actualiza el lenguaje actual para el reconocimiento de voz
-   * @param language lenguaje de reconocimiento (['en-US', 'es-CO'])
-   */
-  onSelectLanguage(language: string) {
-    this.currentLanguage = language;
-    this.speechRecognizer.setLanguage(this.currentLanguage);
-  }
 
-  /**
-   * Function de configuracion de eventos, se ejecuta al iniciar el reconomiento de voz para asignar los trigers
-   * de cada evento del api
-   */
-  private initRecognition() {
-    this.speechRecognizer.setLanguage(this.currentLanguage);
-
-    /** 
-    * Promise : se ejecuta al iniciar el reconocimiento de voz
-    */
-    this.speechRecognizer.onStart()
-      .subscribe(data => {
-        let element = document.getElementById('microphone-icon')
-        element.className = 'animated infinite heartBeat delay-1s fa fa-microphone microfono tooltip-container'
-        this.recognizing = true;
-        document.getElementById('voice-search').innerHTML = "Estoy Escuchando ..."
-        //this.detectChanges();
-      });
-
-    /** 
-    * Promise : se ejecuta al terminar el reconocmiento de voz
-    */
-    this.speechRecognizer.onEnd()
-      .subscribe(data => {
-        this.recognizing = false;
-        let element = document.getElementById('microphone-icon').className = 'fa fa-microphone microfono tooltip-container'
-        this.updateiconVoiceSearch("voice-search", "Búsqueda por voz");
-        //this.detectChanges();
-        this.notification = null;
-      });
-
-    /**
-     * Promise : se ejecuta cuando el api detecta un resultado desde el servicio del
-     * reconocimiento
-     */
-    this.speechRecognizer.onResult()
-      .subscribe((data: SpeechNotification) => {
-        const message = data.content.trim();
-        if (data.info === 'final_transcript' && message.length > 0) {
-          this.searchText = `${message}`;
-          this.def = new FormControl(this.searchText);
-          this.nzone.run(() => this.stopRecognizer());
-          this.finalTranscript = `${this.finalTranscript}\n${message}`;
-          this.actionContext.processMessage(message, this.currentLanguage);
-          this.actionContext.runAction(message, this.currentLanguage);
-        }
-      });
-
-    /**
-     * Promise : se ejecuta para actualizar la bandeja de errores generados por el servicio 
-     * de reconocimiento
-     */
-    this.speechRecognizer.onError()
-      .subscribe(data => {
-        switch (data.error) {
-          case SpeechError.BLOCKED:
-          case SpeechError.NOT_ALLOWED:
-            this.notification = `Your browser is not authorized to access your microphone. Verify that your browser has access to your microphone and try again.
-            `;
-            break;
-          case SpeechError.NO_SPEECH:
-            this.notification = `No speech has been detected. Please try again.`;
-            break;
-          case SpeechError.NO_MICROPHONE:
-            this.notification = `Microphone is not available. Plese verify the connection of your microphone and try again.`;
-            break;
-          default:
-            this.notification = null;
-            break;
-        }
-        this.recognizing = false;
-        //this.detectChanges();
-      });
-  }
-
-  /**
-     * @param  {} event captura el evento del input file
-     *  Captura el file en un formdata para enviarlo al servicio y asigna el valor retornado de  la api
-     * al input de busqueda para realizar el metodo de buscar()
-  */
-  onFileSelected(event) {
-    this.metodo = 2;
-    if (event.target.files.length > 0) {
-      this.file = event.target.files[0];
-      const formData = new FormData();
-      formData.append('file', this.file);
-      this.homeService.searchFile(formData).subscribe((data) => {
-        debugger;
-        this.dataImage = data.data.parrafos;
-        this.url = data.data.url;
-      }
-      );
-    }
-  }
-  selectLabel(val: string, pos: number) {
-    this.searchText = this.searchText + ' ' + val;
-    this.dataImage.splice(pos, 1);
-    this.def = new FormControl(' ' + this.searchText);
-  }
-  /**
-   * Promise : ejecuta una espera por cierta cantidad de tiempo especificada en milisegundos
-   * @param ms tiempo de espera en milisegundos
-   */
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  /**
-   * Detiene el reconocimiento de voz y el stream de audio actual y envia el resultado a la busqueda 
-   */
-  stopRecognizer() {
-    this.speechRecognizer.stop();
-    (async () => {
-      await this.delay(1500);
-      this.buscar(3);
-    })();
-  }
-
-  /**
-   * Actualiza el mensaje de ayuda para el icono de reconocimiento de voz por medio del id del elemento 
-   * @param id id del elemento
-   * @param val valor para el elemento seleccionado
-   */
-  updateiconVoiceSearch(id, val) {
-    document.getElementById(id).innerHTML = val;
-  }
 
   /**
    * detecta cambios en el reconocimiento de voz como la seleccion de lenguaje
@@ -352,58 +208,26 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     this.changeDetector.detectChanges();
   }
 
-  /**web speech end */
 
-  /**
-    * @param  {} item item del json del autocomplete
-    * asignar a la variable title a searchText
-  */
-  selectEvent(item) {
-    this.metodo = 1;
-    this.searchText = item.title;
-  }
- 
   ngOnInit(): void {
     /**speech recognizion */
-    this.currentLanguage = this.languages[0];
-    this.speechRecognizer.initialize(this.currentLanguage);
-    this.initRecognition();
-    this.notification = null;
+
     /**speech recognizion */
   }
 
-  buscar(metodo) {
 
-    if (this.searchText === null && this.searchText === undefined) {
-      this.searchText = '';
-    }
-    this.responseSearch.setResultados(this.textopredictivo);
-
-    let obj = {
-      "idUsuario": 1,
-      "textoBusqueda": this.searchText,
-      "idTipoBusqueda": metodo,
-      "fechaBusqueda": "2012-11-04",
-      "url": this.url
-    };
-    this.homeService.guardarBusqueda(obj).subscribe(data => { });
-    this.router.navigate(['/search/' + this.searchText]);
-  }
-  buscar2() {
-    this.nzone.run(() => this.buscar(this.metodo));
-  }
 
   cerrarMenu() {
     this.sidenav.close();
   }
 
-  consolaSupervisor(e){    
-    this.user.leerMensajeNLP(e.idtbl_notificacion_mensaje_nlp).then( r => {
-      this.user.actualizarMensajesNLP().then( r => {
-        this.conversaciones_nlp = r;        
+  consolaSupervisor(e) {
+    this.user.leerMensajeNLP(e.idtbl_notificacion_mensaje_nlp).then(r => {
+      this.user.actualizarMensajesNLP().then(r => {
+        this.conversaciones_nlp = r;
         this.router.navigate(['/consola-supervisor/' + e.idtbl_conversacion]);
       });
-    });    
+    });
   }
 
 }

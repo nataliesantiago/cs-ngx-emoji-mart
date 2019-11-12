@@ -144,7 +144,7 @@ export class ChatService {
    */
   cambiaEstadoMensajes(mensaje: Mensaje, c: Conversacion) {
     mensaje.estado = 3;
-    this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes').doc(mensaje.id).set(mensaje);
+    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes').doc(mensaje.id).set(mensaje);
   }
   /**
    * @description Esta función se encarga de subir los archivos al servidor que se adjuntan en el chat
@@ -259,9 +259,9 @@ export class ChatService {
     if (c.timeout_escribiendo) {
       window.clearTimeout(c.timeout_escribiendo);
     }
-    this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).set({ escribiendo: true, nombre: this.user.nombre, fecha: new Date(), tipo: tipo });
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).set({ escribiendo: true, nombre: this.user.nombre, fecha: new Date(), tipo: tipo });
     c.timeout_escribiendo = setTimeout(() => {
-      this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).delete();
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/usuarios_escribiendo/' + this.user.getId()).delete();
     }, 4000);
   }
   /**
@@ -271,7 +271,7 @@ export class ChatService {
    */
   usuarioDejaEscribir(c: Conversacion, id: number) {
 
-    this.fireStore.doc('conversaciones/' + c.codigo + '/usuarios_escribiendo/' + id).delete();
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/usuarios_escribiendo/' + id).delete();
 
   }
   /**
@@ -459,7 +459,7 @@ export class ChatService {
    */
   transferirChat(c: Conversacion, id_transferencia: number, id_tipo: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.fireStore.doc('expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
       this.ajax.post('chat/conversacion/transferir', { id_experto: this.user.getId(), id_conversacion: c.idtbl_conversacion, id_cliente: c.cliente.idtbl_usuario, codigo: c.codigo, id_tipo: id_tipo, coidgo_chat: c.codigo_chat, id_transferencia: id_transferencia }).subscribe(d => {
         if (d.success) {
           resolve();
@@ -603,12 +603,12 @@ export class ChatService {
   asignarAsesor(expertos: Array<any>, resolve: Function) {
     let final_expertos = [];
     expertos.forEach(async (e, index) => {
-      let data = await this.getDocumentoFirebase('expertos/' + e.id_usuario);
+      let data = await this.getDocumentoFirebase('paises/' + this.user.pais + '/expertos/' + e.id_usuario);
       if (!data) {
         data = { activo: false };
       }
       let ex = { idtbl_usuario: e.id_usuario, chats: [], activo: data.activo, ultima_conexion: data.fecha };
-      ex.chats = await this.getCollectionFirebase('expertos/' + e.id_usuario + '/chats');
+      ex.chats = await this.getCollectionFirebase('paises/' + this.user.pais + '/expertos/' + e.id_usuario + '/chats');
       final_expertos.push(ex);
       if (index == expertos.length - 1) {
         this.procesaChats(final_expertos, resolve);
@@ -645,7 +645,7 @@ export class ChatService {
       this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId(), id_operador: experto.idtbl_usuario }).subscribe(d => {
         resolve(d.success);
         this.getEmergenciaUsuario().then((e: Emergencia) => {
-          this.fireStore.doc('expertos/' + experto.idtbl_usuario + '/emergencia/1').set({ id_emergencia: e.idtbl_consultas_sos });
+          this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + experto.idtbl_usuario + '/emergencia/1').set({ id_emergencia: e.idtbl_consultas_sos });
         })
 
       })
@@ -699,7 +699,7 @@ export class ChatService {
       this.ajax.post('chat/sos/cerrarEmergenciaOperador', { id_emergencia: id_emergencia, motivo: motivo }).subscribe(d => {
         if (d.success) {
           resolve();
-          this.fireStore.doc('expertos/' + this.user.getId() + '/emergencia/1').delete();
+          this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/emergencia/1').delete();
         }
       })
     });
@@ -832,8 +832,6 @@ export class ChatService {
       this.ajax.post('chat/obtener-mensaje-buscando', { id_usuario: this.user.getId(), id_tipo_mensaje_automatico: id_tipo_mensaje_automatico }).subscribe(result => {
         if (result.success) {
           resolve(result.mensaje);
-        } else {
-          reject();
         }
       })
     });

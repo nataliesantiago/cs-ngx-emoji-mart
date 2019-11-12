@@ -214,7 +214,7 @@ export class RespuestasComponent implements OnInit {
             confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
             confirmButtonText: 'Si',
             cancelButtonClass: 'custom__btn custom__btn--cancel',
-            cancelButtonText: 'Cancelar',
+            cancelButtonText: 'No',
             customClass: {
               container: 'custom-sweet'
             }

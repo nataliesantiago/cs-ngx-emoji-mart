@@ -24,6 +24,7 @@ export class AjaxService {
     private usingEnc = false; // Para configurar si se debe o no encriptar toda la data
     private token: string; // Token del usuario que va en todas las peticiones
     private csrftk: string;
+    public pais: string;
     constructor(private $http: HttpClient) {
         this.$http = $http;
         let t = window.localStorage.getItem('tk');
@@ -103,12 +104,14 @@ export class AjaxService {
         let parametros: HttpParams = new HttpParams();
 
         if (this.modoDebug) {
-            
+
         }
         params.access_token = this.token;
+        params.pais = this.pais;
         parametros = parametros.append('data', (JSON.stringify(params)));
         parametros = parametros.append('encrypt', '0');
         parametros = parametros.append('csrftk', this.csrftk);
+        parametros = parametros.append('pais', this.pais);
         let obs: Observable<any> = this.$http.get(this.host + ruta, { params: parametros });
 
         return obs;
@@ -125,12 +128,14 @@ export class AjaxService {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         if (this.modoDebug) {
-            
+
         }
         let data: any = {};
         data.encrypt = this.usingEnc;
         params.access_token = this.token;
+        params.pais = this.pais;
         data.csrftk = this.csrftk;
+        data.pais = this.pais;
         data.data = params;
         let obs = this.$http.post(this.host + ruta, (data), { headers: headers }).catch((error: any) => Observable.throw(error || 'Error procesando la solicitud'));
 
@@ -148,13 +153,14 @@ export class AjaxService {
         let headers = new HttpHeaders({ 'Content-Type': 'multipart/form-data' });
 
         if (this.modoDebug) {
-            
+
         }
         let data: any = {};
         data.encrypt = this.usingEnc;
         params.append('access_token', this.token);
         data.csrftk = this.csrftk;
         data.data = params;
+        data.pais = this.pais;
         params.append('data', data);
         let obs = this.$http.post(this.host + ruta, params).catch((error: any) => Observable.throw(error || 'Error procesando la solicitud'));
         return obs;

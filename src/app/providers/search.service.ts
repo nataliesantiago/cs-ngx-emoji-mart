@@ -30,6 +30,7 @@ export class SearchService {
         //this.callTestEsquemaChat();
       }
     });
+    
     this.fecha_inicio_busquedas = localStorage.getItem('fib');
     let cant = localStorage.getItem('cmc');
     if (cant) {
@@ -96,7 +97,7 @@ export class SearchService {
             confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
             confirmButtonText: 'Si',
             cancelButtonClass: 'custom__btn custom__btn--cancel',
-            cancelButtonText: 'Cancelar',
+            cancelButtonText: 'No',
             customClass: {
               container: 'custom-sweet'
             }

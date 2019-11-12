@@ -2,6 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SearchService } from '../../providers/search.service';
 import { ResultadoCloudSearch } from '../../../schemas/interfaces';
 import { environment } from '../../../environments/environment';
+import { AjaxService } from '../../providers/ajax.service';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-resultado-search',
   templateUrl: './resultado-search.component.html',
@@ -14,7 +18,7 @@ export class ResultadoSearchComponent implements OnInit {
   @Input() busqueda: string;
   mostrando = true;
 
-  constructor(private searchService: SearchService) {
+  constructor(private searchService: SearchService, private http: HttpClient, private router: Router) {
 
   }
 
@@ -64,6 +68,15 @@ export class ResultadoSearchComponent implements OnInit {
         this.respuesta.contenido = this.respuesta.contenido.replace(/<[^>]*>/g, '');
         this.respuesta.snippet.snippet = this.respuesta.snippet.snippet.replace('&nbsp;', ' ');
       }
+    }
+  }
+
+  abrirRespuesta() {
+    if (this.respuesta.metadata.source.name == environment.id_origen_conecta) {
+      this.http.get(this.respuesta.url).subscribe(d => { });
+      this.router.navigateByUrl('/respuestas/' + this.respuesta.idtbl_pregunta);
+    } else {
+      window.location.href = this.respuesta.url;
     }
   }
 

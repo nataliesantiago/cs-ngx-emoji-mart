@@ -49,7 +49,7 @@ export class ConsolaSupervisorComponent implements OnInit {
 
   init() {
 
-    this.fireStore.collection('conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
+    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes);
 
@@ -90,7 +90,7 @@ export class ConsolaSupervisorComponent implements OnInit {
       }
       this.applyFilterActivos();
     });
-    this.fireStore.collection('conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 1).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
+    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 1).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
       let chats = await this.procesaConversaciones(changes);
       for (let c of chats) {
         if (c.idtbl_conversacion) {
@@ -152,7 +152,7 @@ export class ConsolaSupervisorComponent implements OnInit {
       let data = c.payload.doc.data() as Conversacion;
       data.codigo = c.payload.doc.id;
       let usuario = this.usuarios.find((e: User) => { 
-        console.log(e);
+        // console.log(e);
         return e.idtbl_usuario == data.id_usuario_creador;
       });
       let experto = this.usuarios.find((e: User) => {
@@ -178,10 +178,10 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   agregarListenerMensaes(c: Conversacion) {
-    c.messages = this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes', ref =>
+    c.messages = this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
-    this.fireStore.collection('conversaciones/' + c.codigo + '/mensajes', ref => ref.orderBy('fecha_mensaje')).snapshotChanges().subscribe(async changes => {
+    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo + '/mensajes', ref => ref.orderBy('fecha_mensaje')).snapshotChanges().subscribe(async changes => {
       let tmp = [];
       changes.forEach(mensaje => {
         let data = mensaje.payload.doc.data() as Mensaje;
@@ -280,7 +280,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   toggleConversacion(c: Conversacion) {
     let estado = !c.viendo_supervisor;
     c.viendo_supervisor = !c.viendo_supervisor;
-    this.fireStore.doc('conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
+    this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
   }
   applyFilterActivos() {
     let palabra = this.filtro_activos;

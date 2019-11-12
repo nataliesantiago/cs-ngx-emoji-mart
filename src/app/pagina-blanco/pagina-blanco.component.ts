@@ -1,6 +1,4 @@
 import { Component, OnInit, ViewChild, Output } from '@angular/core';
-import { AppComponent } from '../app.component';
-import { EventEmitter } from '@angular/core';
 import { ResponseSearch } from '../models/response-search';
 import { Router } from '@angular/router';
 

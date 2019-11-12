@@ -34,6 +34,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                 user.codigo_firebase = data.codigo_firebase;
                 user.pass_firebase = data.pass_firebase;
                 user.modo_nocturno = data.modo_nocturno;
+                this.userService.definirPaisUsuario(data.pais);
+                user.pais = data.pais;
                 this.userService.setUsuario(user).then(() => {
                     localStorage.setItem("token", data.token);
                     this.router.navigate(['home']);
@@ -52,7 +54,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
 
         } else {
             console.log('loading...');
-
+            
             return new Promise<boolean>(resolve => {
 
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
@@ -70,6 +72,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.codigo_firebase = d.profile.codigo_firebase;
                         user.pass_firebase = d.profile.pass_firebase;
                         user.modo_nocturno = d.profile.modo_nocturno;
+                        user.pais = d.profile.pais;
+                        this.userService.definirPaisUsuario(d.profile.pais);
                         this.userService.setUsuario(user).then(() => {
                             this.responseSearch.setActive(false);
                             setTimeout(() => {

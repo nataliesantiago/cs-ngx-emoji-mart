@@ -89,7 +89,7 @@ export class TransferenciaChatComponent implements OnInit {
     if (this.asginado) {
       this.data.conversacion.filas.forEach(f => {
         console.log(f);
-        this.fireStore.doc('categorias_experticia/' + f.id + '/chats/' + this.data.conversacion.codigo).delete();
+        this.fireStore.doc('paises/'+this.user.pais+'/'+'categorias_experticia/' + f.id + '/chats/' + this.data.conversacion.codigo).delete();
       });
     }
     this.chatService.transferirChat(this.data.conversacion, id, this.tipo).then(() => {

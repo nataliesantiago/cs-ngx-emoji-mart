@@ -47,7 +47,6 @@ export class AppSidebarComponent implements OnDestroy {
 
   }
   init() {
-
     this.ajax.get('administracion/obtener-url', { id_usuario: this.user.getId() }).subscribe(p => {
       if (p.success) {
         this.nuevas_urls = p.items;

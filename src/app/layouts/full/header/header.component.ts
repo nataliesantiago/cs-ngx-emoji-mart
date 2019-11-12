@@ -33,7 +33,7 @@ export class AppHeaderComponent {
   modo_nocturno;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
-    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument, 
+    private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument,
     private estadoExpertoService: EstadoExpertoService, private look_service: LookFeelService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
@@ -45,7 +45,7 @@ export class AppHeaderComponent {
       }
     });
 
-
+    
     if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
       this.init();
@@ -55,7 +55,7 @@ export class AppHeaderComponent {
       } else {
         this.is_dark_mode = this.user.getModoNocturno();
       }
-      
+
     }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
@@ -69,7 +69,7 @@ export class AppHeaderComponent {
         });
       }
     });
-    
+
     this.getAllStates();
   }
 
@@ -89,7 +89,7 @@ export class AppHeaderComponent {
   cambiarEstadoExperto(e) {
     //debugger;    
     let actual = this.user.estado_actual;
-    
+
     this.user.estado_actual = e.value;
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
@@ -108,16 +108,16 @@ export class AppHeaderComponent {
       }
     }
     this.userService.setActivoExpertoGlobal(e.value);
-    if(actual != null) {
+    if (actual != null) {
       this.createLogState(actual, e.value);
     }
-    
+
   }
 
   listenEmergenciaExperto() {
     if (!this.escuchando_emergencia) {
       this.escuchando_emergencia = true;
-      this.fireStore.doc('expertos/' + this.user.getId() + '/emergencia/1').valueChanges().subscribe((d: any) => {
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/emergencia/1').valueChanges().subscribe((d: any) => {
         // console.log(d);
         if (d) {
           this.emergencia_actual = true;
@@ -174,9 +174,9 @@ export class AppHeaderComponent {
       this._document.body.classList.add('dark-theme');
       this.modo_nocturno = 1;
       this.look_service.getSpecificSetting('color_barra_oscuro').then((result) => {
-        if(result && result[0] && result[0].valor){
+        if (result && result[0] && result[0].valor) {
           this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
-          if(this._document.getElementById('color_toolbar')) {
+          if (this._document.getElementById('color_toolbar')) {
             this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
           }
         }
@@ -185,9 +185,9 @@ export class AppHeaderComponent {
       this._document.body.classList.remove('dark-theme');
       this.modo_nocturno = 0;
       this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
-        if(result && result[0] && result[0].valor){
+        if (result && result[0] && result[0].valor) {
           this._document.getElementById('toolbar_conecta').style.backgroundColor = result[0].valor;
-          if(this._document.getElementById('color_toolbar')) {
+          if (this._document.getElementById('color_toolbar')) {
             this._document.getElementById('color_toolbar').style.backgroundColor = result[0].valor;
           }
         }
@@ -199,14 +199,15 @@ export class AppHeaderComponent {
 
   getAllStates() {
     this.estadoExpertoService.getAllStates().then(result => {
+      
       this.estados_operador = result;
     });
   }
 
   createLogState(id_estado_actual, id_estado_nuevo) {
-    let state = {id_usuario_experto: this.user.getId(), id_estado_actual: id_estado_actual, id_estado_nuevo: id_estado_nuevo}
+    let state = { id_usuario_experto: this.user.getId(), id_estado_actual: id_estado_actual, id_estado_nuevo: id_estado_nuevo }
     this.estadoExpertoService.createLogState(state).then(result => {
-      
+
     });
   }
 
