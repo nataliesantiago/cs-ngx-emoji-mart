@@ -1,4 +1,4 @@
-<div class="contenedor-responsive">
+<div class="contenedor-general">
   <mat-sidenav-container class="container-sidenav-preguntas">
     <mat-sidenav-content class="content-sidenav-preguntas">
       <perfect-scrollbar>
@@ -347,7 +347,7 @@
             <br>
             <br>
             <div fxLayout="row wrap">
-              <div fxFlex="25" fxLayoutAlign="space-between center">
+              <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
                 <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="guardarPregunta()">Aprobar</button>
                 <a fxFlex="45" class="custom__btn custom__btn--cancel" (click)="rechazarPregunta()">Rechazar</a>
               </div>

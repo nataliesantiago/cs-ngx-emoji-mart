@@ -1,4 +1,4 @@
-<div class="contenedor">
+<div class="contenedor contenedor-general">
     <mat-card>
         <mat-card-content>
             
@@ -29,8 +29,8 @@
                     </ng-container>
             
                     <ng-container matColumnDef="acciones">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Acciones </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:20%;">
                             <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
                             <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
                         </mat-cell>

@@ -1,4 +1,4 @@
-<div class="contenedor">
+<div class="contenedor contenedor-general">
     <mat-card>
         <mat-card-content>
             <mat-card-title>Administrador de Notificaciones</mat-card-title>
@@ -15,56 +15,56 @@
             </div>
 
             <div class="responsive-table">
-
-                <mat-table [dataSource]="dataSource" matSort>
+                <div class="container-table">
+                    <mat-table [dataSource]="dataSource" matSort>
             
-                    <!-- ID Column -->
-                    <ng-container matColumnDef="idtbl_notificacion">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_notificacion}} </mat-cell>
-                    </ng-container>
-            
-                    <!-- Progress Column -->
-                    <ng-container matColumnDef="titulo">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Titulo </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.titulo}} </mat-cell>
-                    </ng-container>
-
-
-                    <!-- Progress Column -->
-                    <ng-container matColumnDef="fecha_publicacion">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Publicación </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.fecha_inicio | MomentDate:'YYYY-MM-DD'}} </mat-cell>
-                    </ng-container>
-
-
-                    <!-- Progress Column -->
-                    <ng-container matColumnDef="fecha_creacion">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Creación </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.fecha_creacion | MomentDate:'YYYY-MM-DD'}} </mat-cell>
-                    </ng-container>
-
-                    <!-- Progress Column -->
-                    <ng-container matColumnDef="activo">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Activo </mat-header-cell>
-                            <mat-cell *matCellDef="let row" style="max-width:35%;"> 
-                                <span *ngIf="row.activo == 1">Activa</span>
-                                <span *ngIf="row.activo == 0">Inactiva</span>
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="idtbl_notificacion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_notificacion}} </mat-cell>
+                        </ng-container>
+                
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="titulo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Titulo </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.titulo}} </mat-cell>
+                        </ng-container>
+    
+    
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="fecha_publicacion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Publicación </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.fecha_inicio | MomentDate:'YYYY-MM-DD'}} </mat-cell>
+                        </ng-container>
+    
+    
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="fecha_creacion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Creación </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.fecha_creacion | MomentDate:'YYYY-MM-DD'}} </mat-cell>
+                        </ng-container>
+    
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="activo">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Activo </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:35%;"> 
+                                    <span *ngIf="row.activo == 1">Activa</span>
+                                    <span *ngIf="row.activo == 0">Inactiva</span>
+                                </mat-cell>
+                            </ng-container>
+                
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:15%;">
+                                <i *ngIf="row.activo == 1" class="ti-close danger-color m-r-10 mouse-over" title="Cancelar Notificación" (click)="cancelarNotificacion(row)"></i>
                             </mat-cell>
                         </ng-container>
-            
-                    <ng-container matColumnDef="acciones">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;">
-                            <i *ngIf="row.activo == 1" class="ti-close danger-color m-r-10 mouse-over" title="Cancelar Notificación" (click)="cancelarNotificacion(row)"></i>
-                        </mat-cell>
-                    </ng-container>
-            
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;">
-                    </mat-row>
-                </mat-table>
-            
+                
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;">
+                        </mat-row>
+                    </mat-table>
+                </div>
                 <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
             </div>
         </mat-card-content>

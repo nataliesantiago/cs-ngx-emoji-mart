@@ -1,12 +1,12 @@
-<div class="contenedor">
+<div class="contenedor contenedor-general">
   <mat-card>
     <mat-card-content>
         <mat-card-title>Administrar Look&Feel</mat-card-title>
         <hr>
 
-        <div fxLayout="row wrap" fxLayoutAlign="space-between flex-start">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between flex-start" class="contenedor-look-feel">
 
-          <div fxLayout="column" fxFlex="45" class="m-t-20">
+          <div fxLayout="column" fxFlex="45" class="m-t-20 look-feel-option">
             <mat-label>Cambiar favicon</mat-label>
             <div class="setting-favicon m-t-20">
               <img [src]="url_favicon || ''" alt="">
@@ -21,7 +21,7 @@
             </div>
           </div>
 
-          <div fxLayout="column" fxFlex="45" class="m-t-20">
+          <div fxLayout="column" fxFlex="45" class="m-t-20 look-feel-option">
             <mat-label>Cambiar logo</mat-label>
             <div class="setting-image m-t-20">
               <img [src]="url_logo || ''" alt="">
@@ -36,21 +36,21 @@
             </div>
           </div>
 
-          <div fxLayout="column" fxFlex="45" class="m-t-20">
+          <div fxLayout="column" fxFlex="45" class="m-t-20 look-feel-option">
               <mat-label>Cambiar título buscador</mat-label>
               <mat-form-field class="m-t-10">
                 <input matInput [(ngModel)]="home_text" name="home_text" autocomplete="off" (keyup)="onKeyUp($event)" placeholder="Digite el título">
               </mat-form-field>
             </div>
   
-            <div fxLayout="column" fxFlex="45" class="m-t-20">
+            <div fxLayout="column" fxFlex="45" class="m-t-20 look-feel-option">
               <mat-label>Cambiar texto placeholder buscador</mat-label>
               <mat-form-field class="m-t-10">
                 <input matInput [(ngModel)]="search_placeholder" name="search_placeholder" autocomplete="off" (keyup)="onKeyUp($event)" placeholder="Digite el placeholder">
               </mat-form-field>
             </div>
   
-          <div fxLayoutAlign="start start" fxFlex="45" class="color-wrapper m-t-20">
+          <div fxLayoutAlign="start start" fxFlex="45" class="color-wrapper m-t-20 look-feel-option">
             <mat-label class="m-r-20">Cambiar color barra superior</mat-label>
             <div class="color-wrapper" fxLayout="column">
                 <div class="color-toolbar" id="color_toolbar" [style.backgroundColor]="old_color_toolbar" (click)="is_change_color = !is_change_color;changeColor();"></div>

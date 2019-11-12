@@ -1,4 +1,4 @@
-<div class="principal">
+<div class="principal contenedor-general">
   <mat-card>
     <mat-card-content>
       <h3>Formulario de Notificaciones</h3>
@@ -126,7 +126,7 @@
       <br>
       <br>
       <div fxLayout="row wrap">
-        <div fxFlex="25" fxLayoutAlign="space-between center">
+        <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
           <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarNotificacion()">Enviar</button>
           <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/administrador-notificaciones']"><span class="texto-boton">Cancelar</span></a>
         </div>

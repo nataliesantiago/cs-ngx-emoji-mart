@@ -1,176 +1,178 @@
-<mat-card *ngIf="creando_horario">
-  <mat-card-content>
-    <mat-card-title>Nuevo Horario</mat-card-title>
-
-    <form class="m-t-20">
-
-      <mat-form-field class="example-full-width">
-        <mat-label>Seleccione la Hora Inicio*</mat-label>
-        <input matInput [(ngModel)]="horario_nuevo.hora_inicio" type="time" name="hora" autocomplete="off">
-      </mat-form-field>
-
-      <mat-form-field class="example-full-width">
-        <mat-label>Seleccione la Hora Fin*</mat-label>
-        <input matInput [(ngModel)]="horario_nuevo.hora_fin" type="time" name="hora" autocomplete="off">
-      </mat-form-field>
-
-      <br>
-
-      <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.lunes" name="lunes">Lunes</mat-checkbox>
-      <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.martes" name="martes">Martes</mat-checkbox>
-      <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.miercoles" name="miercoles">Miercoles</mat-checkbox>
-      <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.jueves" name="jueves">Jueves</mat-checkbox>
-      <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.viernes" name="viernes">Viernes</mat-checkbox>
-      <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.sabado" name="sabado">Sabado</mat-checkbox>
-      <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.domingo" name="domingo">Domingo</mat-checkbox>
-
-
-      <div fxLayout="row wrap" class="botonera-creacion">
-        <div fxFlex="25" fxLayoutAlign="space-between center">
-          <button fxFlex="45" class="custom__btn custom__btn--accept"
-            [disabled]="horario_nuevo.fecha_inicio == '' && horario_nuevo.fecha_fin == ''"
-            (click)="crearHorario()">Crear</button> &nbsp;
-          <button fxFlex="45" class="custom__btn custom__btn--cancel"
-            (click)="creando_horario=!creando_horario">Cancelar</button>
+<div class="contenedor-general">
+  <mat-card *ngIf="creando_horario">
+    <mat-card-content>
+      <mat-card-title>Nuevo Horario</mat-card-title>
+  
+      <form class="m-t-20">
+  
+        <mat-form-field class="example-full-width">
+          <mat-label>Seleccione la Hora Inicio*</mat-label>
+          <input matInput [(ngModel)]="horario_nuevo.hora_inicio" type="time" name="hora" autocomplete="off">
+        </mat-form-field>
+  
+        <mat-form-field class="example-full-width">
+          <mat-label>Seleccione la Hora Fin*</mat-label>
+          <input matInput [(ngModel)]="horario_nuevo.hora_fin" type="time" name="hora" autocomplete="off">
+        </mat-form-field>
+  
+        <br>
+  
+        <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.lunes" name="lunes">Lunes</mat-checkbox>
+        <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.martes" name="martes">Martes</mat-checkbox>
+        <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.miercoles" name="miercoles">Miercoles</mat-checkbox>
+        <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.jueves" name="jueves">Jueves</mat-checkbox>
+        <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.viernes" name="viernes">Viernes</mat-checkbox>
+        <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.sabado" name="sabado">Sabado</mat-checkbox>
+        <mat-checkbox color="primary" class="opcion-dia" [(ngModel)]="horario_nuevo.domingo" name="domingo">Domingo</mat-checkbox>
+  
+  
+        <div fxLayout="row wrap" class="botonera-creacion">
+          <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
+            <button fxFlex="45" class="custom__btn custom__btn--accept"
+              [disabled]="horario_nuevo.fecha_inicio == '' && horario_nuevo.fecha_fin == ''"
+              (click)="crearHorario()">Crear</button> &nbsp;
+            <button fxFlex="45" class="custom__btn custom__btn--cancel"
+              (click)="creando_horario=!creando_horario">Cancelar</button>
+          </div>
         </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div class="botones m-b-20" *ngIf="!creando_horario">
+        <button class="custom__btn custom__btn--primary" (click)="creando_horario=!creando_horario">
+          <mat-icon>add</mat-icon> Crear Horario
+        </button>
       </div>
-    </form>
-  </mat-card-content>
-</mat-card>
-<mat-card>
-  <mat-card-content>
-    <div class="botones m-b-20" *ngIf="!creando_horario">
-      <button class="custom__btn custom__btn--primary" (click)="creando_horario=!creando_horario">
-        <mat-icon>add</mat-icon> Crear Horario
-      </button>
-    </div>
-    <div class="bg-light p-10 p-r-20 p-l-20">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-      </mat-form-field>
-    </div>
-    <div class="responsive-table">
+      <div class="bg-light p-10 p-r-20 p-l-20">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+        </mat-form-field>
+      </div>
+      <div class="responsive-table">
+        <div class="container-table">
+          <mat-table [dataSource]="dataSource" matSort>
 
-      <mat-table [dataSource]="dataSource" matSort>
-
-        <!-- ID Column -->
-        <ng-container matColumnDef="idtbl_horario_chat">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_horario_chat}} </mat-cell>
-        </ng-container>
-
-        <!-- Progress Column -->
-        <ng-container matColumnDef="hora_inicio">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Hora Inicio </mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:70%;">
-            <span *ngIf="!row.editando">{{row.hora_inicio}}</span>
-            <mat-form-field *ngIf="row.editando" class="campo-hora">
-              <input matInput [(ngModel)]="row.hora_inicio" type="time" name="hora" autocomplete="off">
-            </mat-form-field>
-          </mat-cell>
-
-        </ng-container>
-
-        <ng-container matColumnDef="hora_fin">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Hora Fin </mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:70%;">
-            <span *ngIf="!row.editando">{{row.hora_fin}} </span>
-            <mat-form-field *ngIf="row.editando" class="campo-hora">
-              <input matInput [(ngModel)]="row.hora_fin" type="time" name="hora" autocomplete="off">
-            </mat-form-field>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="lunes">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> L </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.lunes == 1 && !row.editando">Si</span>
-            <span *ngIf="row.lunes != 1 && !row.editando">No</span>
-            <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.lunes"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="martes">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.martes == 1 && !row.editando">Si</span>
-            <span *ngIf="row.martes != 1 && !row.editando">No</span>
-            <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.martes"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="miercoles">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.miercoles == 1 && !row.editando">Si</span>
-            <span *ngIf="row.miercoles != 1 && !row.editando">No</span>
-            <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.miercoles"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="jueves">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> J </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.jueves == 1 && !row.editando">Si</span>
-            <span *ngIf="row.jueves != 1 && !row.editando">No</span>
-            <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.jueves"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="viernes">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> V </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.viernes == 1 && !row.editando">Si</span>
-            <span *ngIf="row.viernes != 1 && !row.editando">No</span>
-            <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.viernes"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="sabado">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> S </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.sabado == 1 && !row.editando">Si</span>
-            <span *ngIf="row.sabado != 1 && !row.editando">No</span>
-            <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.sabado"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="domingo">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> D </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.domingo == 1 && !row.editando">Si</span>
-            <span *ngIf="row.domingo != 1 && !row.editando">No</span>
-            <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.domingo"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-
-        <ng-container matColumnDef="activo">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              <span *ngIf="row.activo == 1">Activo</span>
-              <span *ngIf="row.activo == 0">Inactivo</span>              
-            </mat-cell>
-          </ng-container>
-
-
-        <ng-container matColumnDef="acciones">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:15%;">
-            <i *ngIf="row.activo == 0 && !row.editando" class="ti-check success-color m-r-10 mouse-over" title="Habilitar Horario" (click)="activarHorario(row)"></i>
-            <i *ngIf="row.activo == 1 && !row.editando" class="ti-close danger-color m-r-10 mouse-over" title="Desactivar Horario" (click)="desactivarHorario(row)"></i>
-            <i *ngIf="!row.editando" class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
-            <i *ngIf="row.editando" class="ti-save success-color m-r-10 mouse-over" (click)="guardarRegistro(row)"></i>
-            <i *ngIf="row.editando" class="ti-close danger-color m-r-10 mouse-over" (click)="cancelarEdicion(row)"></i>
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;">
-        </mat-row>
-      </mat-table>
-
-      <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-    </div>
-  </mat-card-content>
-</mat-card>
+            <!-- ID Column -->
+            <ng-container matColumnDef="idtbl_horario_chat">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_horario_chat}} </mat-cell>
+            </ng-container>
+    
+            <!-- Progress Column -->
+            <ng-container matColumnDef="hora_inicio">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Hora Inicio </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:70%;">
+                <span *ngIf="!row.editando">{{row.hora_inicio}}</span>
+                <mat-form-field *ngIf="row.editando" class="campo-hora">
+                  <input matInput [(ngModel)]="row.hora_inicio" type="time" name="hora" autocomplete="off">
+                </mat-form-field>
+              </mat-cell>
+    
+            </ng-container>
+    
+            <ng-container matColumnDef="hora_fin">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Hora Fin </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:70%;">
+                <span *ngIf="!row.editando">{{row.hora_fin}} </span>
+                <mat-form-field *ngIf="row.editando" class="campo-hora">
+                  <input matInput [(ngModel)]="row.hora_fin" type="time" name="hora" autocomplete="off">
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="lunes">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> L </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="row.lunes == 1 && !row.editando">Si</span>
+                <span *ngIf="row.lunes != 1 && !row.editando">No</span>
+                <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.lunes"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="martes">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="row.martes == 1 && !row.editando">Si</span>
+                <span *ngIf="row.martes != 1 && !row.editando">No</span>
+                <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.martes"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="miercoles">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="row.miercoles == 1 && !row.editando">Si</span>
+                <span *ngIf="row.miercoles != 1 && !row.editando">No</span>
+                <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.miercoles"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="jueves">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> J </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="row.jueves == 1 && !row.editando">Si</span>
+                <span *ngIf="row.jueves != 1 && !row.editando">No</span>
+                <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.jueves"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="viernes">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> V </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="row.viernes == 1 && !row.editando">Si</span>
+                <span *ngIf="row.viernes != 1 && !row.editando">No</span>
+                <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.viernes"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="sabado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> S </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="row.sabado == 1 && !row.editando">Si</span>
+                <span *ngIf="row.sabado != 1 && !row.editando">No</span>
+                <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.sabado"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="domingo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> D </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="row.domingo == 1 && !row.editando">Si</span>
+                <span *ngIf="row.domingo != 1 && !row.editando">No</span>
+                <mat-checkbox *ngIf="row.editando" color="primary" [(ngModel)]="row.domingo"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+    
+    
+            <ng-container matColumnDef="activo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <span *ngIf="row.activo == 1">Activo</span>
+                  <span *ngIf="row.activo == 0">Inactivo</span>              
+                </mat-cell>
+              </ng-container>
+    
+    
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:15%;">
+                <i *ngIf="row.activo == 0 && !row.editando" class="ti-check success-color m-r-10 mouse-over" title="Habilitar Horario" (click)="activarHorario(row)"></i>
+                <i *ngIf="row.activo == 1 && !row.editando" class="ti-close danger-color m-r-10 mouse-over" title="Desactivar Horario" (click)="desactivarHorario(row)"></i>
+                <i *ngIf="!row.editando" class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                <i *ngIf="row.editando" class="ti-save success-color m-r-10 mouse-over" (click)="guardarRegistro(row)"></i>
+                <i *ngIf="row.editando" class="ti-close danger-color m-r-10 mouse-over" (click)="cancelarEdicion(row)"></i>
+              </mat-cell>
+            </ng-container>
+    
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
