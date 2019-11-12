@@ -9,7 +9,7 @@ import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Mensaje } from '../../schemas/mensaje.schema';
-import { Configuracion, ShortCut, InformacionCorreo } from '../../schemas/interfaces';
+import { Configuracion, ShortCut, InformacionCorreo, LogEstadoExperto } from '../../schemas/interfaces';
 import { SonidosService } from '../providers/sonidos.service';
 import swal from 'sweetalert2';
 import { UtilsService } from '../providers/utils.service';
@@ -23,6 +23,7 @@ import { FormControl } from '@angular/forms';
 import { ChatPendienteComponent } from '../components/chat-pendiente/chat-pendiente.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TouchSequence } from 'selenium-webdriver';
+import { EstadoExpertoService } from '../providers/estado-experto.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -56,17 +57,17 @@ export class ChatExpertoComponent {
   configuraciones = [];
   limite_texto_chat;
   shortcuts: Array<ShortCut>;
-  info_correo: InformacionCorreo = { correo_cliente: '', nombre_cliente: '', correo_experto: '', nombre_experto: '', url_foto: '', busqueda: '', mensajes: null };
   @Input() esSupervisor: boolean;
   cantidad_mensajes_sin_leer = 0;
   @Output() mensajes_nuevos: EventEmitter<number> = new EventEmitter<number>();
   file_url;
   loading = false;
+  state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
     private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService,
-    private dialog: MatDialog, private shortcutsService: ShortcutsService, private router: Router, private sanitizer: DomSanitizer) {
+    private dialog: MatDialog, private shortcutsService: ShortcutsService, private router: Router, private sanitizer: DomSanitizer, private estadoExpertoService: EstadoExpertoService) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -97,6 +98,7 @@ export class ChatExpertoComponent {
       this.configuraciones = configs.configuraciones;
       this.userService.getFilasExperto().then(() => {
         this.userService.setActivoExpertoGlobal(1);
+        this.insertarLogEstadoExperto();
         this.user.filas.forEach(f => {
           let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
           //this.chats_cola.push(fila)
@@ -262,7 +264,14 @@ export class ChatExpertoComponent {
     }
   }
 
-
+  insertarLogEstadoExperto() {
+    if (this.user.getEstadoExpertoActual() != 1) {
+      this.state.id_usuario_experto = this.user.getId();
+      this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
+      this.state.id_estado_experto_nuevo = 1;
+      this.estadoExpertoService.createLogState(this.state);
+    }
+  }
 
   recibirChatAutomatico() {
     let config = this.buscarConfiguracion(2);
@@ -975,18 +984,6 @@ export class ChatExpertoComponent {
     this.chatService.finalizarVideollamada(c).then(() => {
 
     });
-  }
-
-  enviarCorreo(c) {
-    this.info_correo.correo_cliente = c.cliente.correo;
-    this.info_correo.nombre_cliente = c.cliente.nombre;
-    this.info_correo.correo_experto = this.user.getEmail();
-    this.info_correo.nombre_experto = this.user.getNombre();
-    this.info_correo.url_foto = this.user.getUrlFoto();
-    this.info_correo.mensajes = c.mensajes;
-
-    this.userService.sendEmailChat(this.info_correo).then((response) => {
-    })
   }
 
   sugerirPregunta(c: Conversacion) {

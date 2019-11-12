@@ -2929,6 +2929,9 @@ input:-webkit-autofill:active {
   .contenedor-sidenav-chat-experto {
     margin-left: 00px !important;
   }
+  .responsive-btn {
+    max-width: 50% !important;
+  }
 }
 
 .dialog-chat {
@@ -2944,13 +2947,17 @@ input:-webkit-autofill:active {
     .container {
       height: 100%;
       position: relative;
+      &.is-recording {
+        .contenedor {
+          height: calc(100% - 175px);
+        }
+      }
     }
 
     .container-new-chat {
       h3 {
         margin: 7px 0 7px 0;
       }
-
       .options-chat {
         margin-left: auto;
 
@@ -2960,7 +2967,6 @@ input:-webkit-autofill:active {
           }
         }
       }
-
       .contenedor {
         height: calc(100% - 70px);
         margin-bottom: 0;
@@ -2968,11 +2974,9 @@ input:-webkit-autofill:active {
         border-style: solid;
         border-top-left-radius: 6px !important;
         border-top-right-radius: 6px !important;
-
         .archivo-adjunto {
           left: 0;
         }
-
         .panel-buscador-texto {
           .contenido-buscador {
             input {
@@ -2981,11 +2985,9 @@ input:-webkit-autofill:active {
           }
         }
       }
-
       .boton-nuevos-mensajes {
         bottom: 25px;
       }
-
       .chat-footer {
         padding: 0 10px !important;
         margin: 0;
@@ -2993,7 +2995,6 @@ input:-webkit-autofill:active {
         border-style: solid !important;
         border-bottom-right-radius: 6px;
         border-bottom-left-radius: 6px;
-
         .input-mensaje {
           resize: none;
           padding: 0;
@@ -3005,7 +3006,6 @@ input:-webkit-autofill:active {
           height: 30px;
           flex: 1;
         }
-
         button {
           outline: none;
         }
@@ -3014,6 +3014,14 @@ input:-webkit-autofill:active {
           position: absolute;
           left: 275px;
           bottom: 180px;
+        }
+      }
+      &.is-recording {
+        .contenedor {
+          height: calc(100% - 175px);
+        }
+        .boton-nuevos-mensajes {
+          bottom: 130px;
         }
       }
     }
@@ -3031,6 +3039,9 @@ input:-webkit-autofill:active {
       overflow-x: hidden;
       &>.ps {
         height: 100%;
+        .ps__rail-x {
+          display: none;
+        }
       }
 
       .list-messages {
@@ -3101,6 +3112,9 @@ input:-webkit-autofill:active {
           text-align: center;
           font-weight: 600;
         }
+      }
+      .reproductor-audio {
+        position: relative;
       }
     }
     .recording-url {
@@ -3443,4 +3457,88 @@ app-search-component {
     margin-top: 5px;
     left: 45%;
   }
+}
+
+.cerrar-buscador {
+  display: none;
+}
+
+@media only screen and (max-width: 767px) {
+  .contenedor {
+    .mat-card {
+      margin: 0;
+      .mat-card-content {
+        padding: 0;
+      }
+    }
+  }
+  .responsive-table {
+    .container-table {
+      overflow-x: auto;
+      margin-top: 10px;
+      .mat-table {
+        min-width: 500px;
+      }
+    }
+    .mat-paginator-range-label {
+      margin: 0 20px 0 24px;
+    }
+  }
+  .container-sidenav-preguntas {
+    .panel-lateral-buscador {
+      width: 100%;
+      padding: 15px;
+      left: -15px;
+      .cerrar-buscador {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+    }
+  }
+  .page-content {
+    .mat-card {
+      margin: 0;
+      .mat-card-content {
+        padding: 0;
+      }
+    }
+  }
+  .ad-preguntas-table {
+    .max-width-10 {
+      max-width: 20%;
+    }
+  }
+  .contenedor-responsive {
+    padding: 15px;
+  }
+  .flujo-curaduria {
+    h3 {
+      font-size: 18px;
+    }
+  }
+  .mat-card.flujo-activo {
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+@media only screen and (min-width: 767px) and (max-width: 1023px) {
+
+}
+
+
+.max-width-5 {
+  max-width: 5%;
+}
+.max-width-40 {
+  max-width: 40%;
+}
+.max-width-15 {
+  max-width: 15%;
+}
+.max-width-10 {
+  max-width: 10%;
+}
+.max-width-25 {
+  max-width: 25%;
 }

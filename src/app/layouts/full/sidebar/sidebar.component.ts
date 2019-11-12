@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { AjaxService } from '../../../providers/ajax.service';
 import { UserService } from '../../../providers/user.service';
 import { User } from '../../../../schemas/user.schema';
+import { EstadoExpertoService } from '../../../providers/estado-experto.service';
+import { LogEstadoExperto } from '../../../../schemas/interfaces';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -18,6 +20,7 @@ export class AppSidebarComponent implements OnDestroy {
   nuevas_urls = [];
   user: User;
   id_usuario;
+  state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
 
   private _mobileQueryListener: () => void;
   status: boolean = false;
@@ -29,7 +32,8 @@ export class AppSidebarComponent implements OnDestroy {
   subclickEvent() {
     this.status = true;
   }
-  constructor(private ajax: AjaxService, private userService: UserService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, public menuItems: MenuItems, public autenticationService: AutenticationService, private router: Router) {
+  constructor(private ajax: AjaxService, private userService: UserService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, public menuItems: MenuItems, 
+    public autenticationService: AutenticationService, private router: Router, private estadoExpertoService: EstadoExpertoService) {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -61,6 +65,10 @@ export class AppSidebarComponent implements OnDestroy {
 
   deslogueo() {
     this.autenticationService.logOut();
+    this.state.id_usuario_experto = this.user.getId();
+    this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
+    this.state.estado_ingreso = 0;
+    this.estadoExpertoService.createLogState(this.state);
   }
 
   cerrarMenu() {

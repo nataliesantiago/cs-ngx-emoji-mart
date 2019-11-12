@@ -1,5 +1,5 @@
 <div class="container-chat">
-  <div *ngIf="!chat.expert_chat" class="container">
+  <div *ngIf="!chat.expert_chat" class="container" [ngClass]="{'is-recording': is_recording}">
       <h3>{{chat.nombre}} </h3>
   
       <perfect-scrollbar class="contenedor">
@@ -7,7 +7,34 @@
           <div class="message" *ngFor="let message of chat.mensajes" [ngClass]="{'odd': message.id_usuario_envia!==chat.idtbl_usuario,'even': message.id_usuario_envia===chat.idtbl_usuario}">
             <div class="chat-block">
               <div *ngIf="message.es_archivo != 1 || message.es_nota_voz != 1">{{decodeText(message.texto)}}</div>
-              <a *ngIf="message.es_archivo == 1 || message.es_nota_voz == 1" [href]="message.url" target="_blank">{{message.url | linkify}}</a>
+
+              <div *ngIf="message.es_archivo == 1">
+                <a [href]="message.url" target="_blank">
+                  <img [src]="message.url" *ngIf="message.tipo_archivo==1" />
+                </a>
+                <video [src]="message.url" controls *ngIf="message.tipo_archivo==2"></video>
+                <div *ngIf="message.tipo_archivo==3" class="archivo-defecto"><a [href]="message.url"
+                    target="_blank">
+                    <mat-icon>attach_file</mat-icon>
+                    {{message.nombre_archivo}}
+                    <span *ngIf="!message.nombre_archivo">Descargar Adjuntos</span>
+                  </a></div>
+              </div>
+
+              <div *ngIf="message.es_nota_voz == 1">
+                <div class="reproductor-audio" *ngIf="message.audio && message.audioControls">
+                  <button mat-icon-button (click)="toggleAudio(chat,message)">
+                    <mat-icon *ngIf="!message.audioControls.reproduciendo">play_arrow</mat-icon>
+                    <mat-icon *ngIf="message.audioControls.reproduciendo">pause</mat-icon>
+                  </button>
+                  <mat-slider [max]="message.audioControls.max" [min]="message.audioControls.min" [step]="1"
+                    [(ngModel)]="message.audioControls.segundo" (change)="cambiarSegundoAudio(m)">
+                  </mat-slider>
+                  <div class="tiempo-audio"><span>{{message.audioControls.segundo | minuteSeconds}}</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
             <span class="foto-mensaje">
               <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40" title="{{message.nombre}}" *ngIf="message.id_usuario_envia!==chat.idtbl_usuario">
@@ -26,7 +53,7 @@
       <a class="custom__btn custom__btn--accept m-b-10" (click)="closeDialog()">Aceptar</a>
   </div>
   
-  <div *ngIf="chat.expert_chat && !chat.mostrar_encuesta" class="container container-new-chat">
+  <div *ngIf="chat.expert_chat && !chat.mostrar_encuesta" class="container container-new-chat" [ngClass]="{'is-recording': is_recording}">
     <div fxLayout="row" layout-align="none center">
       <h3>{{chat.nombre}} </h3>
       <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1 options-chat">
@@ -84,9 +111,6 @@
             </div>
             <div *ngIf="!message.es_archivo || !message.es_nota_voz"
               [innerHTML]="decodeText(message.texto) | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
-
-            <div *ngIf="(message.mensaje_antiguo && message.es_archivo) || (message.mensaje_antiguo && message.es_nota_voz)"
-              [innerHTML]="message.url | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
               
             <span *ngIf="message.id_usuario==chat.idtbl_usuario">
               <mat-icon class="icono-burbuja-mensaje" *ngIf="message.estado==2">done</mat-icon>
@@ -97,7 +121,7 @@
               title="{{message.nombre}}">
           </span>
           <div class="chat-date" *ngIf="message.mensaje_antiguo">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
-          <div class="chat-date" *ngIf="!message.mensaje_antiguo">{{message.fecha_mensaje | datechat }}</div>
+          <div class="chat-date" *ngIf="!message.mensaje_antiguo">{{message.fecha_mensaje | MomentDate:'h:mm a' }}</div>
         </div>
       </div>
       <div *ngIf="chat.archivo_adjunto" class="archivo-adjunto">

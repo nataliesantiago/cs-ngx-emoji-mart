@@ -16,8 +16,10 @@ self.addEventListener('notificationclick', function (event) {
 messaging.setBackgroundMessageHandler((payload) => {
   console.log('Message received. ', payload);
   let ruta = '/';
-  if(payload.data.origen == 'recordatorio'){
-    ruta = '/' + payload.data.route;
+  if(payload.data.origen == 'recordatorio' || payload.data.origen == 'nlp'){
+    ruta = '/#/' + payload.data.route;
+  }else if(payload.data.origen == 'notificacion'){
+    ruta = '/#/home/notificaciones';
   }
   // Customize notification here
   const notificationTitle = payload.data.title;

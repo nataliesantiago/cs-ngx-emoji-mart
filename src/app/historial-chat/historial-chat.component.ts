@@ -106,13 +106,19 @@ export class HistorialChatComponent implements OnInit {
     if (this.is_expert && row.estado == 'Pendiente' || row.id_estado_conversacion == 7) {
       expert_chat = true;
     }
-    this.dialog.open(DialogoDetalleChatComponent, {
+    
+    let dialog_ref = this.dialog.open(DialogoDetalleChatComponent, {
       panelClass: 'dialog-chat',
       width: '550px',
       height: '90vh',
       data: { ...row, idtbl_usuario, expert_chat }
     });
-    this.change_detector.detectChanges();
+
+    dialog_ref.afterClosed().subscribe(result => {
+      if (result) {
+        this.getExpertChat();
+      }
+    });
   }
 
   applyFilter(filterValue: string) {

@@ -10,7 +10,7 @@ import { User } from '../../../schemas/user.schema';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import swal from 'sweetalert2';
-import { Configuracion } from '../../../schemas/interfaces';
+import { Configuracion, AudioControls } from '../../../schemas/interfaces';
 import { FormControl } from '@angular/forms';
 
 const moment = _rollupMoment || _moment;
@@ -39,6 +39,7 @@ export class DialogoDetalleChatComponent implements OnInit {
   ocultar_ultimos_mensajes = true;
   recording_url = [];
   is_recording = false;
+  is_closed = false;
 
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
               private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef) {
@@ -61,6 +62,7 @@ export class DialogoDetalleChatComponent implements OnInit {
     
     this.getMessages();
     this.getRecordingUrl();
+    this.closeModalPending();
   }
   
   init() {
@@ -77,6 +79,14 @@ export class DialogoDetalleChatComponent implements OnInit {
     
   }
 
+  closeModalPending() {
+    if (this.chat.id_estado_conversacion == 7) {
+      this.dialogRef.backdropClick().subscribe(() => {
+        this.dialogRef.close({closed: this.is_closed});
+      });
+    } 
+  }
+
   getRecordingUrl() {
     this.historial_service.getRecordingUrl(this.chat.idtbl_conversacion).then(result => {
       if (result != undefined && result.url_grabacion != '') {
@@ -90,12 +100,16 @@ export class DialogoDetalleChatComponent implements OnInit {
   }
 
   getMessages() {
-    this.historial_service.getConversationMessages(this.chat.idtbl_conversacion).then(result => {
-      result.forEach(element => {
-        element.mensaje_antiguo = true;
-      });
-      this.chat.mensajes  = result;
+    this.historial_service.getConversationMessages(this.chat.idtbl_conversacion).then((result: Array<Mensaje>) => {
       (result.length == 0) ? this.is_empty_messages = true : this.is_empty_messages = false;
+      this.chat.mensajes = result;
+      this.chat.mensajes.forEach(element => {
+        element.mensaje_antiguo = true;
+        if (element.es_nota_voz == 1) {
+          element.audioControls = {reproduciendo: false, min: 0};
+          this.asignarAudio(element)
+        }
+      });
     });
   }
 
@@ -166,6 +180,7 @@ export class DialogoDetalleChatComponent implements OnInit {
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
       m.estado = 1;
+
       if (chat.archivo_adjunto) {
         tipo_mensaje = 2;
         m.url = chat.archivo_adjunto.url;
@@ -446,11 +461,11 @@ export class DialogoDetalleChatComponent implements OnInit {
 
   cerrarChat(c: Conversacion) {
     this.chatService.cerrarConversacion(c, 3).then(() => {
+      this.is_closed = true;
       c.mostrar_encuesta = true;
       c.mostrar_descarga_chat = true;
       this.chatService.eliminarRecordatorioPendiente(c.idtbl_conversacion).then(() => {});
     });
-    this.changeRef.detectChanges();
   }
 
   finalizaEncuesta(c: Conversacion) {
@@ -460,7 +475,7 @@ export class DialogoDetalleChatComponent implements OnInit {
     if (index !== (-1)) {
       this.chats.splice(index, 1);
     }
-    this.dialogRef.close();
+    this.dialogRef.close({closed: this.is_closed});
   }
 
   descargarChat(c) {
