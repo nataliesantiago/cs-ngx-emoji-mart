@@ -1,98 +1,101 @@
-<mat-card *ngIf="creando_origen">
-  <mat-card-content>
-    <mat-card-title>Datos Origen</mat-card-title>
-
-    <form class="m-t-20">
-      <mat-form-field class="example-full-width">
-        <input matInput name="nombre" placeholder="Nombre o descripción" value="" maxlength="450" type="text"
-          [(ngModel)]="nuevo_origen.nombre" autocomplete="off">
-      </mat-form-field>
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Url drive ej: https://drive.google.com/drive/u/1/folders/1234abcd" type="text"
-           class="form-control"  name="url" [(ngModel)]="nuevo_origen.url"  [formControl]="urlControl" />
-        <mat-error *ngIf="urlControl.errors?.urlInvalida">Url no válida o ya utilizada
-        </mat-error>
-
-      </mat-form-field>
-      
-      <div fxLayout="row wrap" class="botonera-creacion">
-        <div fxFlex="25" fxLayoutAlign="space-between center">
-          <button fxFlex="45" class="custom__btn custom__btn--accept"
-            [disabled]="!validaUrlDrive() || !nuevo_origen.nombre || nuevo_origen.nombre==''"
-            (click)="crearOrigen()">Crear</button> &nbsp;
-          <button fxFlex="45" class="custom__btn custom__btn--cancel"
-            (click)="creando_origen=!creando_origen">Cancelar</button>
+<div class="contenedor-general">
+  <mat-card *ngIf="creando_origen">
+    <mat-card-content>
+      <mat-card-title>Datos Origen</mat-card-title>
+  
+      <form class="m-t-20">
+        <mat-form-field class="example-full-width">
+          <input matInput name="nombre" placeholder="Nombre o descripción" value="" maxlength="450" type="text"
+            [(ngModel)]="nuevo_origen.nombre" autocomplete="off">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Url drive ej: https://drive.google.com/drive/u/1/folders/1234abcd" type="text"
+              class="form-control"  name="url" [(ngModel)]="nuevo_origen.url"  [formControl]="urlControl" />
+          <mat-error *ngIf="urlControl.errors?.urlInvalida">Url no válida o ya utilizada
+          </mat-error>
+  
+        </mat-form-field>
+        
+        <div fxLayout="row wrap" class="botonera-creacion">
+          <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
+            <button fxFlex="45" class="custom__btn custom__btn--accept"
+              [disabled]="!validaUrlDrive() || !nuevo_origen.nombre || nuevo_origen.nombre==''"
+              (click)="crearOrigen()">Crear</button> &nbsp;
+            <button fxFlex="45" class="custom__btn custom__btn--cancel"
+              (click)="creando_origen=!creando_origen">Cancelar</button>
+          </div>
         </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div class="botones m-b-20" *ngIf="!creando_origen">
+        <button class="custom__btn custom__btn--primary" (click)="creando_origen=!creando_origen">
+          <mat-icon>add</mat-icon> Crear Origen de Drive
+        </button>
       </div>
-    </form>
-  </mat-card-content>
-</mat-card>
-<mat-card>
-  <mat-card-content>
-    <div class="botones m-b-20" *ngIf="!creando_origen">
-      <button class="custom__btn custom__btn--primary" (click)="creando_origen=!creando_origen">
-        <mat-icon>add</mat-icon> Crear Origen de Drive
-      </button>
-    </div>
-    <div class="bg-light p-10 p-r-20 p-l-20">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-      </mat-form-field>
-    </div>
-    <div class="responsive-table">
-      <mat-table [dataSource]="dataSource" matSort>
+      <div class="bg-light p-10 p-r-20 p-l-20">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+        </mat-form-field>
+      </div>
+      <div class="responsive-table">
+        <div class="container-table">
+          <mat-table [dataSource]="dataSource" matSort>
 
-        <!-- Progress Column -->
-        <ng-container matColumnDef="acciones">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <div *ngIf="!row.editando">
-              <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.editando=true"></i>
-              <i class="ti-trash danger-color m-r-10 mouse-over" (click)="eliminarOrigen(row)" *ngIf="row.activo"></i>
-              <i class="ti-check success-color m-r-10 mouse-over" (click)="activarOrigen(row)" *ngIf="!row.activo"></i>
-            </div>
-            <div *ngIf="row.editando">
-              <i class="ti-save success-color m-r-10 mouse-over" (click)="editarOrigen(row)"></i>
-              <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.editando=false"></i>
-            </div>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="nombre">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="!row.editando"> {{row.nombre}}</span>
-            <mat-form-field class="example-full-width" *ngIf="row.editando">
-              <input matInput name="nombre" placeholder="Nombre o descripción" value="" maxlength="450" type="text"
-                [(ngModel)]="row.nombre_temporal" autocomplete="off">
-            </mat-form-field>
-
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="id_carpeta">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> ID Carpeta </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            {{row.id_carpeta}}
-          </mat-cell>
-        </ng-container>
-
-        <!-- Color Column -->
-        <ng-container matColumnDef="estado">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="!row.activo">No</span>
-            <span *ngIf="row.activo">Si</span>
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;">
-        </mat-row>
-      </mat-table>
-
-      <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-    </div>
-  </mat-card-content>
-</mat-card>
+            <!-- Progress Column -->
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div *ngIf="!row.editando">
+                  <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.editando=true"></i>
+                  <i class="ti-trash danger-color m-r-10 mouse-over" (click)="eliminarOrigen(row)" *ngIf="row.activo"></i>
+                  <i class="ti-check success-color m-r-10 mouse-over" (click)="activarOrigen(row)" *ngIf="!row.activo"></i>
+                </div>
+                <div *ngIf="row.editando">
+                  <i class="ti-save success-color m-r-10 mouse-over" (click)="editarOrigen(row)"></i>
+                  <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.editando=false"></i>
+                </div>
+              </mat-cell>
+            </ng-container>
+    
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="!row.editando"> {{row.nombre}}</span>
+                <mat-form-field class="example-full-width" *ngIf="row.editando">
+                  <input matInput name="nombre" placeholder="Nombre o descripción" value="" maxlength="450" type="text"
+                    [(ngModel)]="row.nombre_temporal" autocomplete="off">
+                </mat-form-field>
+    
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="id_carpeta">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> ID Carpeta </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                {{row.id_carpeta}}
+              </mat-cell>
+            </ng-container>
+    
+            <!-- Color Column -->
+            <ng-container matColumnDef="estado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Activo </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <span *ngIf="!row.activo">No</span>
+                <span *ngIf="row.activo">Si</span>
+              </mat-cell>
+            </ng-container>
+    
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,147 +1,149 @@
-
-
-<mat-card>  
-  <mat-card-content>
-      <h3>Administración de {{nombre_experto}} ({{correo_experto}})</h3>
-      <br>
-      <h3>Experticias</h3>
-      <hr>
-      <br>
-      <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="40" fxFlex="100">
-          <form class="example-form">
-            <mat-form-field class="example-full-width">
-              <input type="text" placeholder="Seleccione la experticia a agregar" matInput [formControl]="myControl" [matAutocomplete]="auto" autocomplete="off">
-              <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
-                <mat-icon>close</mat-icon>
-              </button>
-              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='anadirHorarioExperto($event.option.value)'>
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                  {{option.nombre}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </form>
-          <br>
+<div class="contenedor-general">
+  <mat-card>  
+    <mat-card-content>
+        <h3>Administración de {{nombre_experto}} ({{correo_experto}})</h3>
+        <br>
+        <h3>Experticias</h3>
+        <hr>
+        <br>
+        <div fxLayout="row wrap">
+          <div fxFlex.gt-sm="40" fxFlex="100">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <input type="text" placeholder="Seleccione la experticia a agregar" matInput [formControl]="myControl" [matAutocomplete]="auto" autocomplete="off">
+                <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='anadirHorarioExperto($event.option.value)'>
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.nombre}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+            <br>
+          </div>
+          <div fxFlex.gt-sm="20" fxFlex="100"></div>
         </div>
-        <div fxFlex.gt-sm="20" fxFlex="100"></div>
-      </div>
-
-      <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="100" fxFlex="100" *ngIf = "experticia_asociada.length > 0">
-          <div class="bg-light p-10 p-r-20 p-l-20">
-            <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-            </mat-form-field>
+  
+        <div fxLayout="row wrap">
+          <div fxFlex.gt-sm="100" fxFlex="100" *ngIf = "experticia_asociada.length > 0">
+            <div class="bg-light p-10 p-r-20 p-l-20">
+              <mat-form-field>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+              </mat-form-field>
+          </div>
+          <div class="responsive-table">
+              <div class="container-table">
+                <mat-table [dataSource]="dataSource" matSort>
+  
+                  <!-- Progress Column -->
+                  <ng-container matColumnDef="experticia">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width: 25%;"> Experticia </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="max-width: 25%;"> {{row.nombre}} </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="id_horario">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> ID Horario </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                      <mat-select *ngIf="row.nuevo" style="width: 70%;" [(ngModel)]="row.idtbl_horario_chat" name="estado" (ngModelChange)="agregarHorario(row)">
+                        <mat-option *ngFor="let i of horarios" value="{{i.idtbl_horario_chat}}">{{i.idtbl_horario_chat}}</mat-option>
+                      </mat-select>
+                      <span *ngIf="!row.nuevo"> {{row.idtbl_horario_chat}} </span>
+                    </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="horario">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Horario </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.hora_inicio}} -  {{row.hora_fin}}</mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="lunes">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> L </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                      <span *ngIf="row.lunes == 1">Si</span>
+                      <span *ngIf="row.lunes != 1">No</span>
+                    </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="martes">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                        <span *ngIf="row.martes == 1">Si</span>
+                        <span *ngIf="row.martes != 1">No</span>
+                      </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="miercoles">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                        <span *ngIf="row.miercoles == 1">Si</span>
+                        <span *ngIf="row.miercoles != 1">No</span>
+                      </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="jueves">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> J </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                        <span *ngIf="row.jueves == 1">Si</span>
+                        <span *ngIf="row.jueves != 1">No</span>
+                      </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="viernes">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> V </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                        <span *ngIf="row.viernes == 1">Si</span>
+                        <span *ngIf="row.viernes != 1">No</span>
+                      </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="sabado">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> S </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                        <span *ngIf="row.sabado == 1">Si</span>
+                        <span *ngIf="row.sabado != 1">No</span>
+                      </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="domingo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> D </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> 
+                        <span *ngIf="row.domingo == 1">Si</span>
+                        <span *ngIf="row.domingo != 1">No</span>
+                      </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="acciones">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Accion </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                          <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
+                      </mat-cell>
+                  </ng-container>
+  
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;">
+                  </mat-row>
+              </mat-table>
+              </div>
+              <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+          </div>
+          </div>
         </div>
-        <div class="responsive-table">
-            
-            <mat-table [dataSource]="dataSource" matSort>
-
-                <!-- Progress Column -->
-                <ng-container matColumnDef="experticia">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Experticia </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="id_horario">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> ID Horario </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                    <mat-select *ngIf="row.nuevo" style="width: 70%;" [(ngModel)]="row.idtbl_horario_chat" name="estado" (ngModelChange)="agregarHorario(row)">
-                      <mat-option *ngFor="let i of horarios" value="{{i.idtbl_horario_chat}}">{{i.idtbl_horario_chat}}</mat-option>
-                    </mat-select>
-                    <span *ngIf="!row.nuevo"> {{row.idtbl_horario_chat}} </span>
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="horario">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Horario </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.hora_inicio}} -  {{row.hora_fin}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="lunes">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> L </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                    <span *ngIf="row.lunes == 1">Si</span>
-                    <span *ngIf="row.lunes != 1">No</span>
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="martes">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                      <span *ngIf="row.martes == 1">Si</span>
-                      <span *ngIf="row.martes != 1">No</span>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="miercoles">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> M </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                      <span *ngIf="row.miercoles == 1">Si</span>
-                      <span *ngIf="row.miercoles != 1">No</span>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="jueves">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> J </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                      <span *ngIf="row.jueves == 1">Si</span>
-                      <span *ngIf="row.jueves != 1">No</span>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="viernes">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> V </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                      <span *ngIf="row.viernes == 1">Si</span>
-                      <span *ngIf="row.viernes != 1">No</span>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="sabado">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> S </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                      <span *ngIf="row.sabado == 1">Si</span>
-                      <span *ngIf="row.sabado != 1">No</span>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="domingo">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> D </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> 
-                      <span *ngIf="row.domingo == 1">Si</span>
-                      <span *ngIf="row.domingo != 1">No</span>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="acciones">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Accion </mat-header-cell>
-                    <mat-cell *matCellDef="let row">
-                        <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
-                    </mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;">
-                </mat-row>
-            </mat-table>
-
-            <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  
+        <br>
+        <br>
+        <div fxLayout="row wrap">
+          <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
+              <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarDato()">Guardar</button>
+              <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/ad-expertos']"><span class="texto-boton">Cancelar</span></a>
+          </div>
         </div>
-        </div>
-      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
 
-      <br>
-      <br>
-      <div fxLayout="row wrap">
-        <div fxFlex="25" fxLayoutAlign="space-between center">
-            <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarDato()">Guardar</button>
-            <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/ad-expertos']"><span class="texto-boton">Cancelar</span></a>
-        </div>
-      </div>
-  </mat-card-content>
-</mat-card>
+
 
 
 

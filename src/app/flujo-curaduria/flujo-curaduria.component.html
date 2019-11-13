@@ -1,4 +1,4 @@
-<div class="contenedor-responsive">
+<div class="contenedor-general">
     <mat-card>
         <mat-card-content>
             <div class="flujo-curaduria" fxLayout="row wrap" style="text-align: center;">
@@ -139,7 +139,7 @@
                                         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
                                     </mat-form-field>
                                 </div>
-                                <div class="responsive-table">
+                                <div class="responsive-table flujo-curaduria-table">
                                     <div class="container-table">
                                         <mat-table [dataSource]="dataSource" matSort>
             
@@ -151,45 +151,45 @@
                     
                                             <!-- Progress Column -->
                                             <ng-container matColumnDef="titulo">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Pregunta </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.titulo}} </mat-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-25"> Pregunta </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-25"> {{row.titulo}} </mat-cell>
                                             </ng-container>
                     
                                             <!-- Name Column -->
                                             <ng-container matColumnDef="nombre_producto">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Categoria </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_producto}} </mat-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Categoria </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-10"> {{row.nombre_producto}} </mat-cell>
                                             </ng-container>
                     
                                             <!-- Color Column -->
                                             <ng-container matColumnDef="nombre_estado">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Estado </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_estado}} </mat-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Estado </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-10"> {{row.nombre_estado}} </mat-cell>
                                             </ng-container>
                     
                                             <ng-container matColumnDef="nombre">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Encargado </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre}} </mat-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Encargado </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-10"> {{row.nombre}} </mat-cell>
                                             </ng-container>
                     
                                             <ng-container matColumnDef="nombre_usuario_creador">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Creación </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_creador}} </mat-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Usuario Creación </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-10"> {{row.nombre_usuario_creador}} </mat-cell>
                                             </ng-container>
                     
                                             <ng-container matColumnDef="nombre_usuario_modificacion">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Usuario Modificación </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.nombre_usuario_modificacion}} </mat-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Usuario Modificación </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-10"> {{row.nombre_usuario_modificacion}} </mat-cell>
                                             </ng-container>
                     
                                             <ng-container matColumnDef="fecha_ultima_modificacion">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Fecha Modificación </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:10%;"><span *ngIf="row.fecha_ultima_modificacion">{{row.fecha_ultima_modificacion | MomentDate:'MMM DD, YYYY' }}</span></mat-cell>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Fecha Modificación </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-10"><span *ngIf="row.fecha_ultima_modificacion">{{row.fecha_ultima_modificacion | MomentDate:'MMM DD, YYYY' }}</span></mat-cell>
                                             </ng-container>
                     
                                             <ng-container matColumnDef="acciones">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Acciones </mat-header-cell>
-                                                <mat-cell *matCellDef="let row" style="max-width:10%;">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Acciones </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" class="max-width-10">
                                                     <i class="ti-pencil info-color m-r-10 mouse-over" (click)="cambiarEstado(row)"></i>
                                                     <i class="ti-comment-alt info-color m-r-10 mouse-over" (click)="comentarios(row)"></i>
                                                     <i class="ti-eye info-color m-r-10 mouse-over" (click)="previsualizar(row)"></i>

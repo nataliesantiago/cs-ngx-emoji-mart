@@ -1,49 +1,51 @@
-<mat-card>
-    <mat-card-content>
-        <div class="bg-light p-10 p-r-20 p-l-20">
-            <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-            </mat-form-field>
-        </div>
-        <div class="responsive-table">
-        
-            <mat-table [dataSource]="dataSource" matSort>
-        
-                <!-- ID Column -->
-                <ng-container matColumnDef="idtbl_configuracion">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                    <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_configuracion}} </mat-cell>
-                </ng-container>
-        
-                <!-- Progress Column -->
-                <ng-container matColumnDef="nombre">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Nombre </mat-header-cell>
-                    <mat-cell *matCellDef="let row" style="max-width:70%;"> {{row.nombre}} </mat-cell>
-                </ng-container>
-        
-                <ng-container matColumnDef="valor">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:70%;"> Valor </mat-header-cell>
-                    <mat-cell *matCellDef="let row" style="max-width:70%;">
-                        <span *ngIf="!row.editando">{{row.valor}}</span>
-                        <mat-form-field *ngIf="row.editando"><input matInput [(ngModel)]="row.valor"></mat-form-field>
-                    </mat-cell>
-                </ng-container>
-        
-                <ng-container matColumnDef="acciones">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Estado </mat-header-cell>
-                    <mat-cell *matCellDef="let row" style="max-width:15%;">
-                        <i *ngIf="!row.editando" class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
-                        <i *ngIf="row.editando" class="ti-save success-color m-r-10 mouse-over" (click)="guardarRegistro(row)"></i>
-                        <i *ngIf="row.editando" class="ti-close danger-color m-r-10 mouse-over" (click)="cancelarEdicion(row)"></i>                
-                    </mat-cell>
-                </ng-container>
-        
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;">
-                </mat-row>
-            </mat-table>
-        
-            <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-        </div>
-    </mat-card-content>
-</mat-card>
+<div class="contenedor-general">
+    <mat-card>
+        <mat-card-content>
+            <div class="bg-light p-10 p-r-20 p-l-20">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                </mat-form-field>
+            </div>
+            <div class="responsive-table">
+                <div class="container-table">
+                    <mat-table [dataSource]="dataSource" matSort>
+            
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="idtbl_configuracion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> ID </mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="max-width-10"> {{row.idtbl_configuracion}} </mat-cell>
+                        </ng-container>
+                
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-70"> Nombre </mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="max-width-70"> {{row.nombre}} </mat-cell>
+                        </ng-container>
+                
+                        <ng-container matColumnDef="valor">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-35"> Valor </mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="max-width-35">
+                                <span *ngIf="!row.editando">{{row.valor}}</span>
+                                <mat-form-field *ngIf="row.editando"><input matInput [(ngModel)]="row.valor"></mat-form-field>
+                            </mat-cell>
+                        </ng-container>
+                
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Estado </mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="max-width-15">
+                                <i *ngIf="!row.editando" class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                                <i *ngIf="row.editando" class="ti-save success-color m-r-10 mouse-over" (click)="guardarRegistro(row)"></i>
+                                <i *ngIf="row.editando" class="ti-close danger-color m-r-10 mouse-over" (click)="cancelarEdicion(row)"></i>                
+                            </mat-cell>
+                        </ng-container>
+                
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;">
+                        </mat-row>
+                    </mat-table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

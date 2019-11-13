@@ -1,63 +1,66 @@
-<mat-card>
-  <mat-card-content>
-    <mat-card-title>Historial de Chats</mat-card-title>
+<div class="contenedor-general">
+  <mat-card>
+    <mat-card-content>
+      <mat-card-title>Historial de Chats</mat-card-title>
+      
+      <div class="bg-light p-10 p-r-20 p-l-20 m-t-20">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+        </mat-form-field>
+      </div>
+      <div class="responsive-table">
+        <div class="container-table">
+          <mat-table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:8%;"> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:8%;">
+                <i class="ti-eye success-color m-r-10 mouse-over" (click)="showMoreChat(row)"></i>
+              </mat-cell>
+            </ng-container>
     
-    <div class="bg-light p-10 p-r-20 p-l-20 m-t-20">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-      </mat-form-field>
-    </div>
-    <div class="responsive-table">
-      <mat-table [dataSource]="dataSource" matSort>
-
-        <ng-container matColumnDef="acciones">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:8%;"> Acciones </mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:8%;">
-            <i class="ti-eye success-color m-r-10 mouse-over" (click)="showMoreChat(row)"></i>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="nombre">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>{{column_user}}</mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:22%;">
-            <span>{{row.nombre}}</span>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="fecha_creacion">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;">Fecha de Creación</mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:15%;">
-            <span>{{row.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</span>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="estado">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:18%;">Estado Conversación</mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:18%;">
-            <span>{{row.estado}}</span>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="producto">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;">Producto</mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:20%;">
-              <span>{{row.producto}}</span>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="busqueda">
-          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;">Busqueda</mat-header-cell>
-          <mat-cell *matCellDef="let row" style="max-width:20%;">
-              <span>{{row.texto_busqueda}}</span>
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;">
-        </mat-row>
-      </mat-table>
-
-      <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-    </div>
-  </mat-card-content>
-</mat-card>
+            <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{column_user}}</mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:22%;">
+                <span>{{row.nombre}}</span>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="fecha_creacion">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;">Fecha de Creación</mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:15%;">
+                <span>{{row.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</span>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="estado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:18%;">Estado Conversación</mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:18%;">
+                <span>{{row.estado}}</span>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="producto">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;">Producto</mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:20%;">
+                  <span>{{row.producto}}</span>
+              </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="busqueda">
+              <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;">Busqueda</mat-header-cell>
+              <mat-cell *matCellDef="let row" style="max-width:20%;">
+                  <span>{{row.texto_busqueda}}</span>
+              </mat-cell>
+            </ng-container>
+    
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

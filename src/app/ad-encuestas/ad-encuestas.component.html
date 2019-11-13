@@ -1,4 +1,4 @@
-<div class="contenedor">
+<div class="contenedor contenedor-general">
 
     <mat-card>
         <mat-card-content>
@@ -18,14 +18,14 @@
             
                     <!-- ID Column -->
                     <ng-container matColumnDef="idtbl_encuesta">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> ID </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;"> {{row.idtbl_encuesta}} </mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> ID </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.idtbl_encuesta}} </mat-cell>
                     </ng-container>
             
                     <!-- Progress Column -->
                     <ng-container matColumnDef="nombre">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Nombre </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre}} </mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:40%;"> Nombre </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:40%;"> {{row.nombre}} </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="id_tipo_encuesta">
@@ -37,16 +37,16 @@
                     </ng-container>
             
                     <ng-container matColumnDef="activo">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Estado </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:35%;">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:30%;"> Estado </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:30%;">
                             <span *ngIf="row.activo == 1">Activo</span> 
                             <span *ngIf="row.activo != 1">Inactivo</span>
                         </mat-cell>
                     </ng-container>
             
                     <ng-container matColumnDef="acciones">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="max-width:15%;">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Acciones </mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="max-width:20%;">
                             <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
                             <i class="ti-check success-color m-r-10 mouse-over" (click)="activarEncuesta(row)"></i>
                         </mat-cell>

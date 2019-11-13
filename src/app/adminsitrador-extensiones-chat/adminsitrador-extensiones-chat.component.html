@@ -1,3 +1,4 @@
+<div class="contenedor-general">
   <mat-card *ngIf="creando_extension">
     <mat-card-content>
       <mat-card-title>Datos Extensión</mat-card-title>
@@ -18,7 +19,7 @@
           </mat-error>
         </mat-form-field>
         <div fxLayout="row wrap">
-          <div fxFlex="25" fxLayoutAlign="space-between center">
+          <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
             <button fxFlex="45" class="custom__btn custom__btn--accept" [disabled]="extension.invalid || size.invalid"
               (click)="crearExtension()">Crear</button> &nbsp;
             <button fxFlex="45" class="custom__btn custom__btn--cancel" (click)="creando_extension=!creando_extension">Cancelar</button>
@@ -86,3 +87,5 @@
       </div>
     </mat-card-content>
   </mat-card>
+</div>
+  

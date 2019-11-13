@@ -1037,31 +1037,4 @@ export class ChatExpertoComponent {
 
     });
   }
-
-  descargarChat(c) {
-    this.loading = true
-    this.chatService.generarPdf(c.idtbl_conversacion).then((d) => {
-      if (d.success) {
-        let file = d.file;
-        const byteCharacters = atob(file);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        this.file_url = URL.createObjectURL(blob);
-  
-        let date = moment(c.fecha_creacion).format('YYYY-MM-DD');
-        let hour = moment(c.fecha_creacion).format('HH:mm');
-
-        let link = document.createElement("a");
-        link.href = this.file_url;
-        link.download = `soporte-chat-conecta-${date}-${hour}.pdf`;
-        window.document.body.appendChild(link);
-        link.click();
-        this.loading = false;
-      }
-    });
-  }
 }
