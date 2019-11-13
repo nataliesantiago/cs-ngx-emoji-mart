@@ -107,7 +107,7 @@ export class AjaxService {
 
         }
         params.access_token = this.token;
-        params.pais = this.pais;
+        //params.pais = this.pais;
         parametros = parametros.append('data', (JSON.stringify(params)));
         parametros = parametros.append('encrypt', '0');
         parametros = parametros.append('csrftk', this.csrftk);
@@ -133,7 +133,7 @@ export class AjaxService {
         let data: any = {};
         data.encrypt = this.usingEnc;
         params.access_token = this.token;
-        params.pais = this.pais;
+        //params.pais = this.pais;
         data.csrftk = this.csrftk;
         data.pais = this.pais;
         data.data = params;
@@ -158,9 +158,10 @@ export class AjaxService {
         let data: any = {};
         data.encrypt = this.usingEnc;
         params.append('access_token', this.token);
+        params.append('pais', this.pais);
         data.csrftk = this.csrftk;
         data.data = params;
-        data.pais = this.pais;
+        //data.pais = this.pais;
         params.append('data', data);
         let obs = this.$http.post(this.host + ruta, params).catch((error: any) => Observable.throw(error || 'Error procesando la solicitud'));
         return obs;

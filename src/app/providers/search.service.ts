@@ -28,9 +28,10 @@ export class SearchService {
         this.user = u
         //this.callTest();
         //this.callTestEsquemaChat();
+        //this.callTestEsquemaConecta();
       }
     });
-    
+
     this.fecha_inicio_busquedas = localStorage.getItem('fib');
     let cant = localStorage.getItem('cmc');
     if (cant) {
@@ -207,6 +208,11 @@ export class SearchService {
 
   callTestEsquemaChat() {
     this.ajax.post('connector_drive/cloud-search/crearEsquemaChat', {}).subscribe(d => {
+
+    });
+  }
+  callTestEsquemaConecta() {
+    this.ajax.post('connector_drive/cloud-search/crearEsquemaConecta', {}).subscribe(d => {
 
     });
   }
