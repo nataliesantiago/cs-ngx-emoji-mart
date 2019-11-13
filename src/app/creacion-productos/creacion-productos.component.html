@@ -41,7 +41,8 @@
                             <ng-container matColumnDef="acciones">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:15%;"> Acciones </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:15%;">
-                                    <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>             
+                                    <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarRegistro(row)"></i>
+                                    <i class="ti-trash danger-color m-r-10 mouse-over" title="Eliminar Producto" (click)="eliminarProducto(row)"></i>
                                 </mat-cell>
                             </ng-container>
                     
