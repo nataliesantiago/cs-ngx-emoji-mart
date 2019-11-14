@@ -133,6 +133,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   wheelPropagation: true
 };
 
+let item = document.getElementById('analytics');
+let script = document.createElement('div')
+script.innerHTML = (environment.analytics);
+script.childNodes.forEach(c => {
+  document.getElementsByTagName('head')[0].insertBefore(c, item);
+})
+
+
 @NgModule({
   declarations: [
     AppComponent,
