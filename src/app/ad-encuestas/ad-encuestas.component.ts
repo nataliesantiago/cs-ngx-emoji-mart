@@ -7,6 +7,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { User } from '../../schemas/user.schema';
 import swal from 'sweetalert2';
 import { matTableFilter } from '../../common/matTableFilter';
+import { FiltrosService } from '../providers/filtros.service';
 
 @Component({
   selector: 'app-ad-encuestas',
@@ -32,7 +33,11 @@ export class AdEncuestasComponent implements OnInit {
     {field: 'activo', type:'boolean', values:{"1":"Activo","0":"Inactivo"}}
   ];
   user: User;
-  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
+  tipos_encuesta;
+  filters = {};
+
+  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, 
+              private cg: ChangeDetectorRef, private qs: QuillService, private filtros_service: FiltrosService) {
     this.usuario = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
@@ -43,17 +48,25 @@ export class AdEncuestasComponent implements OnInit {
     this.ajax.get('encuestas/obtener', {}).subscribe(p => {
       if (p.success) {
         this.encuestas = p.encuestas;
-        this.dataSource = new MatTableDataSource(this.encuestas);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+        this.createTable(this.encuestas);
       }
     })
+
+    this.filtros_service.getSurveyType().then(result => {
+      this.tipos_encuesta = result;
+    });
 
   }
 
   init() {
 
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
   }
 
   ngOnInit() {
@@ -85,10 +98,7 @@ export class AdEncuestasComponent implements OnInit {
             this.ajax.get('encuestas/obtener', {}).subscribe(p => {
               if (p.success) {
                 this.encuestas = p.encuestas;
-                this.dataSource = new MatTableDataSource(this.encuestas);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-                this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+                this.createTable(this.encuestas);
               }
             })
           }
@@ -101,6 +111,21 @@ export class AdEncuestasComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.encuestas);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.encuestas;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }

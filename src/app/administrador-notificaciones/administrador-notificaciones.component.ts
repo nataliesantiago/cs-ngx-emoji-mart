@@ -31,6 +31,8 @@ export class AdministradorNotificacionesComponent implements OnInit {
     {field: 'titulo', type:'string'},
     {field: 'activo', type:'string'}
   ];
+  notificaciones;
+  filters = {};
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private notificacionService: NotificacionService){
     this.user = this.userService.getUsuario();
@@ -41,10 +43,8 @@ export class AdministradorNotificacionesComponent implements OnInit {
     });
 
     this.notificacionService.obtenerNotificacionesAdministracion().then( n => {
-      this.dataSource = new MatTableDataSource(n);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.cg.detectChanges();
+      this.notificaciones = n;
+      this.createTable(n);
     });
 
   }
@@ -67,15 +67,20 @@ export class AdministradorNotificacionesComponent implements OnInit {
       if (result.value) {
         this.notificacionService.cancelarNotificacion(e).then(() => {
           this.notificacionService.obtenerNotificacionesAdministracion().then( n => {
-            this.dataSource = new MatTableDataSource(n);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.cg.detectChanges();
+            this.notificaciones = n;
+            this.createTable(n);
           });
         });
       }
     })
     
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.cg.detectChanges();
   }
 
   ngOnInit() {
@@ -86,5 +91,20 @@ export class AdministradorNotificacionesComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }  
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.notificaciones);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.notificaciones;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
+  }
   
 }

@@ -26,6 +26,8 @@ export class AdministradorOrigenesDriveComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   urlControl = new FormControl(null, [Validators.required, this.validaUrlDriveControl()]);
+  filters = {};
+
   constructor(private userService: UserService, private searchService: SearchService) {
     this.user = this.userService.getUsuario();
 
@@ -53,12 +55,17 @@ export class AdministradorOrigenesDriveComponent implements OnInit {
       this.origenes.forEach(o => {
         o.nombre_temporal = o.nombre;
       });
-      this.dataSource = new MatTableDataSource(this.origenes);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+      this.createTable(this.origenes);
     })
   }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+  }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -171,6 +178,21 @@ export class AdministradorOrigenesDriveComponent implements OnInit {
     this.searchService.editarOrigenDrive(e).then(() => {
       this.init();
     });
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.origenes);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.origenes;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }

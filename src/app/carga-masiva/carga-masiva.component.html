@@ -32,10 +32,22 @@
               <mat-card-title>Carga Masiva Preguntas y Respuestas</mat-card-title>
               <br>
 
-              <div class="bg-light p-10 p-r-20 p-l-20">
-                <mat-form-field>
-                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-                </mat-form-field>
+              <div class="container-filter">
+                  <div class="element-filter element-filter-2">
+                      <mat-form-field>
+                          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                          <mat-icon class="search-icon">search</mat-icon>
+                      </mat-form-field>
+                  </div>
+                  <div class="element-filter element-filter-2">
+                      <mat-form-field>
+                          <mat-label>Estado</mat-label>
+                          <mat-select name="estado" (selectionChange)="filterData($event)">
+                              <mat-option value="todos">Todos</mat-option>
+                              <mat-option *ngFor="let i of estados_pregunta" [value]="i.nombre">{{i.nombre}}</mat-option>
+                          </mat-select>
+                      </mat-form-field>
+                  </div>
               </div>
 
               <div class="responsive-table">

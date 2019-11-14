@@ -33,6 +33,7 @@ export class AdministradorHorariosComponent implements OnInit {
   editar = true;
   horario_nuevo = { hora_inicio: '', hora_fin: '', lunes: 0, martes: 0, miercoles: 0, jueves: 0, viernes: 0, sabado: 0, domingo: 0 };
   creando_horario = false;
+  filters = {};
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
     this.usuario = this.user.getUsuario();
@@ -48,11 +49,16 @@ export class AdministradorHorariosComponent implements OnInit {
 
     this.user.obtenerHorarios().then(d => {
       this.horarios = d;
-      this.dataSource = new MatTableDataSource(this.horarios);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+      this.createTable(this.horarios);
     })
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+    this.cg.detectChanges();
   }
 
   ngOnInit() {
@@ -66,11 +72,7 @@ export class AdministradorHorariosComponent implements OnInit {
   cancelarEdicion(u) {
     this.user.obtenerHorarios().then(d => {
       this.horarios = d;
-      this.dataSource = new MatTableDataSource(this.horarios);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
-      this.cg.detectChanges();
+      this.createTable(this.horarios);
       u.editando = false;
     })
   }
@@ -81,13 +83,9 @@ export class AdministradorHorariosComponent implements OnInit {
     this.user.editarHorario(u).then(d => {
       this.user.obtenerHorarios().then(d => {
         this.horarios = d;
-        this.dataSource = new MatTableDataSource(this.horarios);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+        this.createTable(this.horarios);
         this.creando_horario = false;
         u.editando = false;
-        this.cg.detectChanges();
       })
     })
   }
@@ -102,13 +100,9 @@ export class AdministradorHorariosComponent implements OnInit {
     this.user.crearHorario(this.horario_nuevo, this.id_usuario).then(d => {
       this.user.obtenerHorarios().then(d => {
         this.horarios = d;
-        this.dataSource = new MatTableDataSource(this.horarios);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+        this.createTable(this.horarios);
         this.creando_horario = false;
         this.horario_nuevo = { hora_inicio: '', hora_fin: '', lunes: 0, martes: 0, miercoles: 0, jueves: 0, viernes: 0, sabado: 0, domingo: 0 };
-        this.cg.detectChanges();
       })
     })
   }
@@ -133,13 +127,9 @@ export class AdministradorHorariosComponent implements OnInit {
         this.user.activarHorario(u).then(d => {
           this.user.obtenerHorarios().then(d => {
             this.horarios = d;
-            this.dataSource = new MatTableDataSource(this.horarios);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+            this.createTable(this.horarios);
             this.creando_horario = false;
             u.editando = false;
-            this.cg.detectChanges();
           })
         })
       }
@@ -167,18 +157,28 @@ export class AdministradorHorariosComponent implements OnInit {
         this.user.desactivarHorario(u).then(d => {
           this.user.obtenerHorarios().then(d => {
             this.horarios = d;
-            this.dataSource = new MatTableDataSource(this.horarios);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+            this.createTable(this.horarios);
             this.creando_horario = false;
             u.editando = false;
-            this.cg.detectChanges();
           })
         })
       }
     })
   }
 
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.horarios);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.horarios;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
+  }
 
 }
