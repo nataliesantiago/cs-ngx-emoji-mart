@@ -65,10 +65,12 @@ export class AppSidebarComponent implements OnDestroy {
 
   deslogueo() {
     this.autenticationService.logOut();
-    this.state.id_usuario_experto = this.user.getId();
-    this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
-    this.state.estado_ingreso = 0;
-    this.estadoExpertoService.createLogState(this.state);
+    if(this.user && this.user.getIdRol() == 2) {
+      this.state.id_usuario_experto = this.user.getId();
+      this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
+      this.state.estado_ingreso = 0;
+      this.estadoExpertoService.createLogState(this.state);
+    }
   }
 
   cerrarMenu() {
