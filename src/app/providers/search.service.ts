@@ -159,7 +159,7 @@ export class SearchService {
               this.obtenerPregunta(r.idtbl_pregunta).then(pregunta => {
                 //console.log('paso por aca', pregunta);
                 //r.contenido = pregunta.respuesta.replace(/<[^>]*>/g, '');
-                if (r.metadata.source.name == environment.id_origen_conecta) {
+                if (r.metadata.source.name == environment.pais[this.user.pais].id_origen_conecta) {
                   r.url_icono = pregunta.icono_padre;
                 }
                 //console.log(this.respuesta, pregunta);

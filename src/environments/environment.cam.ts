@@ -4,20 +4,25 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-    production: false,
-    URL_BACK: 'http://localhost:8080/api/',
-    CLIENT_ID: '659384240459-jfjf9poq9fra3focm0hajoalvnbcu525.apps.googleusercontent.com', //id de cliente de google para la aplicacion
-    firebaseConfig: {
-        apiKey: "AIzaSyAx-GuSyaatybFcHxajdLBo9pcU7UYwP98",
-        authDomain: "comusoportecam-desarrollo.firebaseapp.com",
-        databaseURL: "https://comusoportecam-desarrollo.firebaseio.com",
-        projectId: "comusoportecam-desarrollo",
-        storageBucket: "",
-        messagingSenderId: "659384240459",
-        appId: "1:659384240459:web:5c39de166992d5aa"
-    },
-    ambiente: 'cam',
-    id_origen_conecta: '',
-    id_origen_drive: '',
-    id_origen_chat: ''
-  };
+  production: false,
+  URL_BACK: 'http://localhost:8080/api/',
+  CLIENT_ID: '659384240459-jfjf9poq9fra3focm0hajoalvnbcu525.apps.googleusercontent.com', //id de cliente de google para la aplicacion
+  firebaseConfig: {
+    apiKey: "AIzaSyAx-GuSyaatybFcHxajdLBo9pcU7UYwP98",
+    authDomain: "comusoportecam-desarrollo.firebaseapp.com",
+    databaseURL: "https://comusoportecam-desarrollo.firebaseio.com",
+    projectId: "comusoportecam-desarrollo",
+    storageBucket: "",
+    messagingSenderId: "659384240459",
+    appId: "1:659384240459:web:5c39de166992d5aa"
+  },
+  ambiente: 'cam',
+  pais: {
+    pan: {
+      id_origen_conecta: 'datasources/c039757a44e91d2bb4b98465235e9c9d',
+      id_origen_drive: 'datasources/c039757a44e91d2bf60199c0684f8268',
+      id_origen_chat: 'datasources/c039757a44e91d2b31313e7e4a465851'
+    }
+  }
+
+};

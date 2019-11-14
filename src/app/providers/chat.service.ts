@@ -912,9 +912,11 @@ export class ChatService {
     return new Promise((r, re) => {
       this.ajax.get('administracion/obtener-texto-buscando-experto', {}).subscribe(p => {
         if (p.success) {
-          r(p.item[0].valor);
-        } else {
-          reject();
+          let valor = '';
+          if (p.item.length > 0) {
+            valor = p.item[0].valor;
+          }
+          r(valor);
         }
       });
     })

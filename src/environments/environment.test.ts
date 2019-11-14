@@ -17,8 +17,12 @@ export const environment = {
     appId: "1:537955814682:web:b726049a21de1c69"
   },
   ambiente: 'col',
-  id_origen_conecta: 'datasources/2721fbfe980dfcd21c1c5aece9cacef5',
-  id_origen_drive: 'datasources/2721fbfe980dfcd20dfd92cb9961df38',
-  id_origen_chat: 'datasources/2721fbfe980dfcd221c70095e8d11769'
+  pais: {
+    col: {
+      id_origen_conecta: 'datasources/2721fbfe980dfcd21c1c5aece9cacef5',
+      id_origen_drive: 'datasources/2721fbfe980dfcd20dfd92cb9961df38',
+      id_origen_chat: 'datasources/2721fbfe980dfcd221c70095e8d11769'
+    }
+  }
 };
 

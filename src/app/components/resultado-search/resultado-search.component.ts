@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { AjaxService } from '../../providers/ajax.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { UserService } from '../../providers/user.service';
 
 @Component({
   selector: 'app-resultado-search',
@@ -18,7 +19,7 @@ export class ResultadoSearchComponent implements OnInit {
   @Input() busqueda: string;
   mostrando = true;
 
-  constructor(private searchService: SearchService, private http: HttpClient, private router: Router) {
+  constructor(private searchService: SearchService, private http: HttpClient, private router: Router, private ajax: AjaxService) {
 
   }
 
@@ -35,9 +36,9 @@ export class ResultadoSearchComponent implements OnInit {
          //console.log(this.respuesta, pregunta);
          this.mostrando = true;
        });*/
-      if (this.respuesta.metadata.source.name == environment.id_origen_conecta) {
+      if (this.respuesta.metadata.source.name == environment.pais[this.ajax.pais].id_origen_conecta) {
         this.respuesta.tipo = 'Conecta';
-      } else if (this.respuesta.metadata.source.name == environment.id_origen_drive) {
+      } else if (this.respuesta.metadata.source.name == environment.pais[this.ajax.pais].id_origen_drive) {
         this.respuesta.tipo = 'Google Drive';
         this.respuesta.url_icono = this.respuesta.metadata.fields.find(field => {
           return field.name === 'iconLink';
@@ -45,7 +46,7 @@ export class ResultadoSearchComponent implements OnInit {
         this.respuesta.owner_drive = 'Propietario  • ' + this.respuesta.metadata.fields.find(field => {
           return field.name === 'fileOwner';
         }).textValues.values[0];
-      } else if (this.respuesta.metadata.source.name == environment.id_origen_chat) {
+      } else if (this.respuesta.metadata.source.name == environment.pais[this.ajax.pais].id_origen_chat) {
         this.respuesta.tipo = 'Mis Chats';
       }
 
@@ -72,7 +73,7 @@ export class ResultadoSearchComponent implements OnInit {
   }
 
   abrirRespuesta() {
-    if (this.respuesta.metadata.source.name == environment.id_origen_conecta) {
+    if (this.respuesta.metadata.source.name == environment.pais[this.ajax.pais].id_origen_conecta) {
       this.http.get(this.respuesta.url).subscribe(d => { });
       this.router.navigateByUrl('/respuestas/' + this.respuesta.idtbl_pregunta);
     } else {
