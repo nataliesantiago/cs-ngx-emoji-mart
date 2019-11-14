@@ -23,6 +23,14 @@ export const environment = {
       id_origen_drive: 'datasources/c039757a44e91d2bf60199c0684f8268',
       id_origen_chat: 'datasources/c039757a44e91d2b31313e7e4a465851'
     }
-  }
+  },
+  analytics: `<script async src="https://www.googletagmanager.com/gtag/js?id=BVSYD26YKY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'BVSYD26YKY');
+  </script>`
 
 };
