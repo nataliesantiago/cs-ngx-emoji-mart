@@ -126,6 +126,7 @@ import { ChatPendienteComponent } from './components/chat-pendiente/chat-pendien
 import { DialogoDetalleChatComponent } from './historial-chat/dialogo-detalle-chat/dialogo-detalle-chat.component';
 import { BuscadorHightlighter } from '../pipes/buscador-highligther.pipe';
 import { AdministradorHorariosComponent } from './administrador-horarios/administrador-horarios.component';
+import { HistorialCuraduriaComponent } from './components/historial-curaduria/historial-curaduria.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -217,7 +218,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HistorialChatComponent,
     ChatPendienteComponent,
     DialogoDetalleChatComponent,
-    AdministradorHorariosComponent
+    AdministradorHorariosComponent,
+    HistorialCuraduriaComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
@@ -226,7 +228,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SosComponent,
     SosOperadorComponent,
     CerrarChatExpertoComponent,
-    ChatPendienteComponent
+    ChatPendienteComponent,
+    HistorialCuraduriaComponent
   ],
   imports: [
     BrowserModule,
