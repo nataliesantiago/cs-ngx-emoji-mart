@@ -42,7 +42,7 @@
                   <div class="element-filter element-filter-2">
                       <mat-form-field>
                           <mat-label>Estado</mat-label>
-                          <mat-select name="estado" (selectionChange)="filterData($event)">
+                          <mat-select name="estado" (selectionChange)="filterData('Estado', $event)">
                               <mat-option value="todos">Todos</mat-option>
                               <mat-option *ngFor="let i of estados_pregunta" [value]="i.nombre">{{i.nombre}}</mat-option>
                           </mat-select>

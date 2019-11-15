@@ -18,7 +18,7 @@
                 <div class="element-filter element-filter-2">
                     <mat-form-field>
                         <mat-label>Activo</mat-label>
-                        <mat-select name="estado" (selectionChange)="filterDataState($event)">
+                        <mat-select name="estado" (selectionChange)="filterData('activo', $event)">
                             <mat-option value="todos">Todos</mat-option>
                             <mat-option value="1">Activa</mat-option>
                             <mat-option value="0">Inactiva</mat-option>
