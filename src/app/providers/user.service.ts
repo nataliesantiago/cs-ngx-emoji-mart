@@ -46,9 +46,9 @@ export class UserService {
     primera_vez_notificacion = true;
     public panelNotificacionesSubject = new Subject<any>();
     public observablePanelNotificaciones = this.panelNotificacionesSubject.asObservable();
-    state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
+    state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
 
-    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging, 
+    constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging,
         private soundService: SonidosService) {
 
         this.ajax.sethost(environment.URL_BACK); // Desarrollo
@@ -56,7 +56,7 @@ export class UserService {
         window.onbeforeunload = () => {
             if (this.user && this.user.getIdRol() == 2) {
                 this.setActivoExperto(false);
-                
+
             }
         };
 
@@ -66,16 +66,17 @@ export class UserService {
                 this.state.id_usuario_experto = this.user.getId();
                 this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
                 this.state.estado_ingreso = 0;
-                this.ajax.post('estado-experto/crear-log-estado', {state: this.state}).subscribe(response => {
+                this.ajax.post('estado-experto/crear-log-estado', { state: this.state }).subscribe(response => {
                 });
             }
         };
-        
+
 
     }
 
     definirPaisUsuario(p: string) {
         this.ajax.pais = p;
+        localStorage.setItem('pais', p);
         // console.log(this.ajax.pais);
     }
 
@@ -151,6 +152,7 @@ export class UserService {
         delete this.user;
         this.subjectUsuario.next(null);
         window.localStorage.removeItem('tk');
+        window.localStorage.removeItem('pais');
 
     }
 
@@ -189,8 +191,8 @@ export class UserService {
                 if (d.success) {
                     this.user.filas = d.filas;
                     this.user.filas.forEach(f => {
-                        let r = this.fireStore.collection('paises/'+this.user.pais+'/'+'expertos').doc('' + this.user.getId()).ref;
-                        this.fireStore.collection('paises/'+this.user.pais+'/'+'categorias_experticia/' + f.id_categoria_experticia + '/expertos').doc('' + this.user.getId()).set({ experto: r });
+                        let r = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).ref;
+                        this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/expertos').doc('' + this.user.getId()).set({ experto: r });
                     });
                     resolve();
                 } else {
@@ -203,7 +205,7 @@ export class UserService {
     setActivoExperto(activo) {
         this.user.experto_activo = activo;
         //console.log(activo)
-        this.fireStore.collection('paises/'+this.user.pais+'/'+'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
+        this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
     }
 
     setActivoExpertoGlobal(estado: number) {

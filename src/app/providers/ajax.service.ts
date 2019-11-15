@@ -28,6 +28,10 @@ export class AjaxService {
     constructor(private $http: HttpClient) {
         this.$http = $http;
         let t = window.localStorage.getItem('tk');
+        let p = localStorage.getItem('pais');
+        if (p) {
+            this.pais = p;
+        }
         if (t) {
             this.token = window.localStorage.getItem('tk');
         }

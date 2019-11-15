@@ -174,10 +174,12 @@ export class AppSearchComponent implements OnChanges, OnInit {
         //debugger;
         this.dataImage = data.data.parrafos;
         this.url = data.data.url;
-        if (this.dataImage) {
+        if (this.dataImage && this.dataImage.length > 0) {
           this.def.setValue(this.dataImage.join(' '));
           this.adjunto.nativeElement.value = '';
           this.buscar(2);
+
+        } else {
 
         }
       }
