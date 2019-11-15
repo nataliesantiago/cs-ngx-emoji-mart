@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="center start " class="chat-experto">
   <div fxFlex.gt-md="100" fxFlex.gt-sm="100" fxFlex="100">
-    <mat-card class="mat-card-top">
+    <mat-card class="mat-card-top mat-card-root">
       <mat-sidenav-container
         [ngClass]="{ 'side-panel-opened': sidePanelOpened, 'side-panel-closed': !sidePanelOpened }">
         <mat-sidenav #chatnav [mode]="isOver() ? 'over' : 'side'" [opened]="true" (open)="sidePanelOpened = true"

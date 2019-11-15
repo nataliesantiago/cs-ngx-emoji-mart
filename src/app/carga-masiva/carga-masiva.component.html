@@ -1,8 +1,8 @@
-<div fxLayout="row wrap" class="contenedor-general">
+<div fxLayout="row wrap" class="general-container">
   <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
           
-      <mat-card>
-          <mat-card-content>
+      <mat-card class="mat-card-root">
+          <mat-card-content class="mat-card-content-root">
               <br>
                 <button class="custom__btn custom__btn--primary" (click)="downloadCsvFile()">Descargar formato</button>
               <br>
@@ -42,7 +42,7 @@
                   <div class="element-filter element-filter-2">
                       <mat-form-field>
                           <mat-label>Estado</mat-label>
-                          <mat-select name="estado" (selectionChange)="filterData($event)">
+                          <mat-select name="estado" (selectionChange)="filterData('Estado', $event)">
                               <mat-option value="todos">Todos</mat-option>
                               <mat-option *ngFor="let i of estados_pregunta" [value]="i.nombre">{{i.nombre}}</mat-option>
                           </mat-select>

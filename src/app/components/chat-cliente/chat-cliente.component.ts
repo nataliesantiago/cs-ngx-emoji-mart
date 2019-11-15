@@ -131,11 +131,6 @@ export class ChatClienteComponent implements OnInit {
       });
     });
 
-    this.mensajeBuscandoExperto();
-
-    this.mensajeDespedida();
-
-
   }
 
   buscarConfiguracion(id: number): Configuracion {
@@ -471,7 +466,8 @@ export class ChatClienteComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.mensajeBuscandoExperto();
+    this.mensajeDespedida();
   }
   openChat(data?: any) {
     this.chatService.getConversacionActivaUsuario().then(result => {

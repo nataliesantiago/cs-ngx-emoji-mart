@@ -32,13 +32,13 @@ File: scss
 }
 
 html .page-wrapper {
-    height: calc(100vh - 64px);
+    height: calc(100vh - 128px);
 
     .page-content {
         padding: 0px;
         background: #ffffff;
-        height: calc(100vh - 64px); // NO MODIFICAR ESTE ESTILO POR QUE SE TORTEA EL SCROLL DE LA PAGINA ;)
-        /*height: 100%;*/
+        //height: calc(100vh - 64px); // NO MODIFICAR ESTE ESTILO POR QUE SE TORTEA EL SCROLL DE LA PAGINA ;)
+        height: 100%;
     }
 }
 

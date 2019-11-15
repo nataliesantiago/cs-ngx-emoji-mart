@@ -1,8 +1,8 @@
-<div class="contenedor contenedor-general">
+<div class="general-container">
     <app-formulario-usuarios *ngIf="modificarUsuario" [usuario_editar]="id_usuario_editar"
         (onfinish)="actualizarDatos()"></app-formulario-usuarios>
-    <mat-card>
-        <mat-card-content>
+    <mat-card class="mat-card-root">
+        <mat-card-content class="mat-card-content-root">
             <mat-card-title class="m-t-20">Administrador de Usuarios</mat-card-title>
             <br>
             <mat-slide-toggle (change)="editarVarios()">Seleccionar Varios</mat-slide-toggle>

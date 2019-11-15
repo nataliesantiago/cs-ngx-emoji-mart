@@ -1,9 +1,10 @@
-<div class="contenedor">
+<div class="general-container">
     <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
                 
-            <mat-card>
-                <mat-card-content>
+            <mat-card class="mat-card-root">
+                <mat-card-content class="mat-card-content-root">
+
                     <br>
                     <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario_pregunta/nuevo']">
                         <mat-icon>add</mat-icon>
@@ -11,9 +12,8 @@
                     </a>
                     <br>
                     <br>
-                    <br>
+                    
                     <mat-card-title>Preguntas y Respuestas</mat-card-title>
-                    <br>
 
                     <div class="container-filter">
                         <div class="element-filter element-filter-2">
