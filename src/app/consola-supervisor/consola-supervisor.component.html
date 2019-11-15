@@ -2,15 +2,19 @@
   <mat-tab-group dynamicHeight>
     <mat-tab label="Chats activos ({{chats_activos.length}})">
       <div class="">
-        <div class="bg-light p-10 p-r-20 p-l-20">
-          <mat-form-field>
-            <input matInput (keyup)="applyFilterActivos()" [(ngModel)]="filtro_activos" placeholder="Filtrar chats">
-            <button mat-button *ngIf="filtro_activos && filtro_activos!=''" matSuffix mat-icon-button aria-label="Clear"
-              (click)="filtro_activos=null;applyFilterActivos();">
-              <mat-icon>close</mat-icon>
-            </button>
-          </mat-form-field>
+        <div class="container-filter">
+          <div class="element-filter element-filter-1">
+              <mat-form-field>
+                  <input matInput (keyup)="applyFilterActivos()" [(ngModel)]="filtro_activos" placeholder="Filtrar chats">
+                  <mat-icon *ngIf="!filtro_activos" class="search-icon">search</mat-icon>
+                  <button mat-button *ngIf="filtro_activos && filtro_activos!=''" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="filtro_activos=null;applyFilterActivos();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+              </mat-form-field>
+          </div>
         </div>
+
         <mat-card class="conversacion-lista" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
           *ngFor="let chat of chats_activos_filtrados">
           <div *ngIf="chat.cliente">
@@ -151,15 +155,19 @@
     </mat-tab>
     <mat-tab label="Chats en fila ({{chats_en_fila.length}})">
       <div class="">
-        <div class="bg-light p-10 p-r-20 p-l-20">
-          <mat-form-field>
-            <input matInput (keyup)="applyFilterCola()" [(ngModel)]="filtro_cola" placeholder="Filtrar chats">
-            <button mat-button *ngIf="filtro_cola && filtro_cola!=''" matSuffix mat-icon-button aria-label="Clear"
-              (click)="filtro_cola=null;applyFilterCola();">
-              <mat-icon>close</mat-icon>
-            </button>
-          </mat-form-field>
+        <div class="container-filter">
+          <div class="element-filter element-filter-1">
+              <mat-form-field>
+                  <input matInput (keyup)="applyFilterCola()" [(ngModel)]="filtro_cola" placeholder="Filtrar chats">
+                  <mat-icon *ngIf="!filtro_cola" class="search-icon">search</mat-icon>
+                  <button mat-button *ngIf="filtro_cola && filtro_cola!=''" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="filtro_cola=null;applyFilterCola();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+              </mat-form-field>
+          </div>
         </div>
+
         <mat-card class="conversacion-lista" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
           *ngFor="let chat of chats_en_fila_filtrados">
           <div *ngIf="chat.cliente">

@@ -1,6 +1,6 @@
-<div class="contenedor-general">
-  <mat-card *ngIf="create_message">
-    <mat-card-content>
+<div class="general-container">
+  <mat-card *ngIf="create_message" class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
       <mat-card-title>Crear Mensaje Automatico</mat-card-title>
       <div fxLayaout="100" class="contenedor-column-form">
         <form class="m-t-20" fxFlex="70">
@@ -45,8 +45,9 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <mat-card>
-    <mat-card-content>
+
+  <mat-card class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
       <div class="botones m-b-20" *ngIf="!create_message">
         <button class="custom__btn custom__btn--primary" (click)="create_message=!create_message">
           <mat-icon>add</mat-icon> Crear Mensaje Automatico

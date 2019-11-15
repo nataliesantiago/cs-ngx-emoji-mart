@@ -1,6 +1,6 @@
-<div class="contenedor contenedor-general">
-    <mat-card *ngIf="is_created">  
-        <mat-card-content>
+<div class="general-container">
+    <mat-card *ngIf="is_created" class="mat-card-root">  
+        <mat-card-content class="mat-card-content-root">
         
             <h3>Formulario de Motivo Cierre del Chat</h3>
             <hr>
@@ -26,18 +26,17 @@
     <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
                 
-            <mat-card>
-                <mat-card-content>
+            <mat-card class="mat-card-root">
+                <mat-card-content class="mat-card-content-root">
                     <br>
-                    <button class="custom__btn custom__btn--primary" (click)="is_created = !is_created">
+                    <button class="custom__btn custom__btn--primary" (click)="is_created = !is_created" *ngIf="!is_created">
                         <mat-icon>add</mat-icon>
                         Ingresar Motivos de Cierre 
                     </button>
                     <br>
                     <br>
-                    <br>
                     <mat-card-title>Motivos Cierre de Chat</mat-card-title>
-                    <br>
+                    
                     
                     <div class="container-filter">
                         <div class="element-filter element-filter-1">

@@ -1,6 +1,6 @@
-<div class="contenedor-principal contenedor-general">
-  <mat-card *ngIf="creando_intencion">
-    <mat-card-content>
+<div class="contenedor-principal general-container">
+  <mat-card *ngIf="creando_intencion" class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
       <mat-card-title>Datos Intención</mat-card-title>
 
       <form class="m-t-20">
@@ -41,8 +41,9 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card>
-    <mat-card-content>
+  <mat-card class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
+      <br>
       <div class="botones" *ngIf="!creando_intencion">
         <button class="custom__btn custom__btn--primary" (click)="creando_intencion=!creando_intencion">
           <mat-icon>add</mat-icon> Crear Intención

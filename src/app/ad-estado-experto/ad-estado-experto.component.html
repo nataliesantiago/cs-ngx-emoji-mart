@@ -1,6 +1,6 @@
-<div class="contenedor-general">
-  <mat-card *ngIf="create_state">
-    <mat-card-content>
+<div class="general-container">
+  <mat-card *ngIf="create_state" class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
       <mat-card-title>Crear Estados de Inactividad Experto</mat-card-title>
       <div fxLayaout="100">
         <form class="m-t-20" >
@@ -30,8 +30,9 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <mat-card>
-    <mat-card-content>
+
+  <mat-card class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
       <div class="botones m-b-20" *ngIf="!create_state">
         <button class="custom__btn custom__btn--primary" (click)="create_state=!create_state">
           <mat-icon>add</mat-icon> Crear Estado Inactividad
