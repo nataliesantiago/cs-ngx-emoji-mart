@@ -151,8 +151,10 @@ span {
     }
 }
 
-.bg-light {
-    background-color: $color-424242;
+.container-filter {
+    .element-filter {
+        background-color: $color-424242;
+    }
 }
 
 .componente-pequeno {
@@ -312,3 +314,7 @@ span {
         color: $color-ffffff !important;
     }
 }   
+
+.search-icon {
+    color: $color-ffffff;
+}

@@ -3575,7 +3575,29 @@ app-search-component {
   }
 }
 
-@media only screen and (min-width: 767px) and (max-width: 1023px) {
-
+.container-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .element-filter {
+    padding: 15px 20px 0;
+    position: relative;
+    background-color: #f7f7f7;
+    &.element-filter-1 {
+      width: 100%;
+    }
+    &.element-filter-2 {
+      width: 49%;
+    }
+    &.element-filter-3 {
+      width: 32%;
+    }
+    .search-icon {
+      position: absolute;
+      right: 0;
+      color: #b5b5b5;
+    }
+  }
 }
 

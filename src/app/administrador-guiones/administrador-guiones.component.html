@@ -43,11 +43,26 @@
           <mat-icon>add</mat-icon> Crear Guión
         </button>
       </div>
-      <div class="bg-light p-10 p-r-20 p-l-20">
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-        </mat-form-field>
+      
+      <div class="container-filter">
+          <div class="element-filter element-filter-2">
+              <mat-form-field>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                  <mat-icon class="search-icon">search</mat-icon>
+              </mat-form-field>
+          </div>
+          <div class="element-filter element-filter-2">
+              <mat-form-field>
+                  <mat-label>Activo</mat-label>
+                  <mat-select name="estado" (selectionChange)="filterData('activo', $event)">
+                      <mat-option value="todos">Todos</mat-option>
+                      <mat-option value="1">Si</mat-option>
+                      <mat-option value="0">No</mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </div>
       </div>
+      
       <div class="responsive-table">
         <mat-table [dataSource]="dataSource" matSort>
   

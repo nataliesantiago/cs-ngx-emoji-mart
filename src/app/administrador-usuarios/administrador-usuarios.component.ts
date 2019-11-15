@@ -42,8 +42,10 @@ export class AdministradorUsuariosComponent implements OnInit {
     { field: 'nombre_perfil', type: 'string' },
     { field: 'peso_chat', type: 'number' }
   ];
+  filters = {};
 
-  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService) {
+  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, 
+              private cg: ChangeDetectorRef, private qs: QuillService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
@@ -53,10 +55,7 @@ export class AdministradorUsuariosComponent implements OnInit {
 
     this.userService.getAllUsers().then(p => {
       this.usuarios = p;
-      this.dataSource = new MatTableDataSource(this.usuarios);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+      this.createTable(p);
     });
 
     this.userService.getPerfilesUsuario().then(p => {
@@ -76,6 +75,14 @@ export class AdministradorUsuariosComponent implements OnInit {
     this.modificarUsuario = true;
   }
 
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+    this.cg.detectChanges();
+  }
+
   ngOnInit() {
   }
 
@@ -89,11 +96,7 @@ export class AdministradorUsuariosComponent implements OnInit {
     this.modificarUsuario = false;
     this.userService.getAllUsers().then(p => {
       this.usuarios = p;
-      this.dataSource = new MatTableDataSource(this.usuarios);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
-      this.cg.detectChanges();
+      this.createTable(p);
     });
   }
 
@@ -150,11 +153,7 @@ export class AdministradorUsuariosComponent implements OnInit {
         this.closeAll();
         this.userService.getAllUsers().then(p => {
           this.usuarios = p;
-          this.dataSource = new MatTableDataSource(this.usuarios);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
-          this.cg.detectChanges();
+          this.createTable(p);
         });
       }
     })
@@ -171,6 +170,21 @@ export class AdministradorUsuariosComponent implements OnInit {
       this.mostrar_acciones = false;
     }
     
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.usuarios);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.usuarios;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }

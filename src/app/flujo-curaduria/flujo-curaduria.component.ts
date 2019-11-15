@@ -9,6 +9,7 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
 import { matTableFilter } from '../../common/matTableFilter';
+import { FiltrosService } from '../providers/filtros.service';
 
 @Component({
   selector: 'app-flujo-curaduria',
@@ -45,8 +46,10 @@ export class FlujoCuraduriaComponent implements OnInit {
   activo_aprobacion = false;
   activo_aprobados = false;
   flujo_actual = "Preguntas en Curaduria";
+  estados_pregunta;
+  filters = {};
 
-  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
+  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService) { 
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
@@ -104,13 +107,17 @@ export class FlujoCuraduriaComponent implements OnInit {
       if(p.success){
         
         this.data = p.preguntas;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
-        this.cg.detectChanges();
+        this.createTable(this.data);
       }
     })
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+    this.cg.detectChanges();
   }
 
   cargarRevision(){
@@ -123,11 +130,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       if(p.success){
         
         this.data = p.preguntas;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
-        this.cg.detectChanges();
+        this.createTable(this.data);
       }
     })
   }
@@ -142,11 +145,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       if(p.success){
         
         this.data = p.preguntas;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
-        this.cg.detectChanges();
+        this.createTable(this.data);
       }
     })
   }
@@ -161,11 +160,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       if(p.success){
         
         this.data = p.preguntas;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
-        this.cg.detectChanges();
+        this.createTable(this.data);
       }
     })
   }
@@ -181,11 +176,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         
         this.cant_curaduria = p.preguntas.length;
         this.data = p.preguntas;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;     
-        this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);   
-        this.cg.detectChanges();
+        this.createTable(this.data);
       }
     })
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p1 => {
@@ -207,6 +198,9 @@ export class FlujoCuraduriaComponent implements OnInit {
       }
     })
 
+    this.filtros_service.getQuestionStates().then(result => {
+      this.estados_pregunta = result;
+    });
   }
 
   previsualizar(e) {
@@ -271,6 +265,21 @@ export class FlujoCuraduriaComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.data);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.data;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }

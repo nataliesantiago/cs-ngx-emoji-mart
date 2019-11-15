@@ -3,6 +3,7 @@ import { AjaxService } from '../providers/ajax.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import swal from 'sweetalert2';
 import { matTableFilter } from '../../common/matTableFilter';
+import { FiltrosService } from '../providers/filtros.service';
 
 @Component({
   selector: 'app-carga-masiva',
@@ -24,13 +25,18 @@ export class CargaMasivaComponent implements OnInit {
   filterColumns = [];
   data = [];
   loading = false;
+  estados_pregunta;
+  filters = {};
 
-  constructor(private ajax: AjaxService, private change_detector: ChangeDetectorRef, public dialog: MatDialog) {
+  constructor(private ajax: AjaxService, private change_detector: ChangeDetectorRef, public dialog: MatDialog, 
+              private filtros_service: FiltrosService) {
 
   }
 
   ngOnInit() {
-
+    this.filtros_service.getQuestionStates().then(result => {
+      this.estados_pregunta = result;
+    });
   }
 
   /**
@@ -98,10 +104,7 @@ export class CargaMasivaComponent implements OnInit {
       this.ajax.postData('preguntas/cargar-archivo', form_data).subscribe(data => {
         if (data.success == true) {
           this.data = data.questions;
-          this.dataSource = new MatTableDataSource(this.data);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.change_detector.detectChanges();
+          this.createTable(this.data);
           this.loading = false;
         } else {
 
@@ -109,6 +112,13 @@ export class CargaMasivaComponent implements OnInit {
 
       });
     }
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.change_detector.detectChanges();
   }
 
   /**
@@ -149,6 +159,21 @@ export class CargaMasivaComponent implements OnInit {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.data);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.data;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }
