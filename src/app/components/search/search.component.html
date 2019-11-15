@@ -15,7 +15,7 @@
   -->
     <mat-form-field class="caja-buscador">
       <span #segundo class="contenido"  [innerHTML]="texto_sugerido"></span>
-      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def"
+      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def" floatPlaceholder="never"
         #primero (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto" autocomplete="off"
         (keydown)="limpiarSugerencia()">
       <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear"
