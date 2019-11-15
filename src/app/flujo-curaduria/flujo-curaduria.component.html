@@ -1,6 +1,6 @@
-<div class="contenedor-general">
-    <mat-card>
-        <mat-card-content>
+<div class="general-container">
+    <mat-card class="mat-card-root">
+        <mat-card-content class="mat-card-content-root">
             <div class="flujo-curaduria" fxLayout="row wrap" style="text-align: center;">
                     <!-- column -->
                     <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
@@ -122,14 +122,11 @@
                     <!-- column -->
                 </div>
                 
-                <br>
-                <br>
-                
                 <div fxLayout="row wrap">
                     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
                             
-                        <mat-card>
-                            <mat-card-content>
+                        <mat-card class="mat-card-root">
+                            <mat-card-content class="mat-card-content-root">
                                 <br>
                                 <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario-preguntas-flujo-curaduria/nuevo']"><mat-icon>add</mat-icon> Ingresar Pregunta</a>
                                 <br>

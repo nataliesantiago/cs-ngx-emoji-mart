@@ -1,6 +1,6 @@
-<div class="contenedor-general">
-  <mat-card *ngIf="creando_horario">
-    <mat-card-content>
+<div class="general-container">
+  <mat-card *ngIf="creando_horario" class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
       <mat-card-title>Nuevo Horario</mat-card-title>
   
       <form class="m-t-20">
@@ -38,8 +38,9 @@
       </form>
     </mat-card-content>
   </mat-card>
-  <mat-card>
-    <mat-card-content>
+
+  <mat-card class="mat-card-root">
+    <mat-card-content class="mat-card-content-root">
       <div class="botones m-b-20" *ngIf="!creando_horario">
         <button class="custom__btn custom__btn--primary" (click)="creando_horario=!creando_horario">
           <mat-icon>add</mat-icon> Crear Horario

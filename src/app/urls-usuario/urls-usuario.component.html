@@ -1,6 +1,6 @@
-<div class="contenedor contenedor-general">
-    <mat-card *ngIf="is_created">  
-        <mat-card-content>
+<div class="general-container">
+    <mat-card *ngIf="is_created" class="mat-card-root">  
+        <mat-card-content class="mat-card-content-root">
         
             <h3>Formulario agregar url</h3>
             <hr>
@@ -30,18 +30,16 @@
         </mat-card-content>
     </mat-card>
     
-    <mat-card>
-        <mat-card-content>
+    <mat-card class="mat-card-root">
+        <mat-card-content class="mat-card-content-root">
             <br>
-            <button class="custom__btn custom__btn--primary" (click)="is_created = !is_created">
+            <button class="custom__btn custom__btn--primary" (click)="is_created = !is_created" *ngIf="!is_created">
                 <mat-icon>add</mat-icon>
                 Añadir Url
             </button>
             <br>
             <br>
-            <br>
             <mat-card-title>Url del menu</mat-card-title>
-            <br>
             
             <div class="container-filter">
                 <div class="element-filter element-filter-1">
