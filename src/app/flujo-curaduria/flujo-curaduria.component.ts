@@ -9,6 +9,8 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
 import { matTableFilter } from '../../common/matTableFilter';
+import { HistorialCuraduriaComponent } from '../components/historial-curaduria/historial-curaduria.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-flujo-curaduria',
@@ -46,7 +48,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   activo_aprobados = false;
   flujo_actual = "Preguntas en Curaduria";
 
-  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef) { 
+  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private dialog: MatDialog) { 
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
@@ -61,7 +63,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       }
     })
 
-    /*this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
         this.cant_curaduria = p.preguntas.length;
         this.data = p.preguntas;
@@ -89,7 +91,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.cant_aprobados = p3.preguntas.length;
         this.cg.detectChanges();
       }
-    })*/
+    })
      // create the source
     
   }
@@ -213,8 +215,11 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.router.navigate(['/respuestas', e.idtbl_pregunta]);
   }
 
-  async comentarios(e){
+  comentarios(e){
+    this.dialog.open(HistorialCuraduriaComponent).afterClosed().subscribe(d => {
 
+    });
+    /*
     let notas = {};
 
     this.ajax.get('preguntas/obtener-comentarios-pregunta', {idtbl_pregunta: e.idtbl_pregunta}).subscribe(async p => {
@@ -260,7 +265,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         }
       }
     })
-    
+   */ 
   }
 
   cambiarEstado(e){
