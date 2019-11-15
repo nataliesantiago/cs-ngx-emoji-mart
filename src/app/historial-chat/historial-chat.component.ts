@@ -6,6 +6,7 @@ import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/m
 import { matTableFilter } from '../../common/matTableFilter';
 import { DialogoDetalleChatComponent } from './dialogo-detalle-chat/dialogo-detalle-chat.component';
 import { ActivatedRoute } from '@angular/router';
+import { FiltrosService } from '../providers/filtros.service';
 
 @Component({
   selector: 'app-historial-chat',
@@ -28,9 +29,12 @@ export class HistorialChatComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   column_user;
   is_expert;
+  chat_states;
+  filters = {};
+  chats;
 
   constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog, 
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private filtros_service: FiltrosService) {
     this.user = this.user_service.getUsuario();
     if (this.user) {
       this.init();
@@ -76,6 +80,7 @@ export class HistorialChatComponent implements OnInit {
       this.is_expert = false;
       this.getClientChat();
     }
+    this.getChatState();
   }
 
   createTable(result) {
@@ -86,15 +91,23 @@ export class HistorialChatComponent implements OnInit {
     this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
   }
 
+  getChatState() {
+    this.filtros_service.getConversationStates().then(result => {
+      this.chat_states = result;
+    });
+  }
+
   getExpertChat() {
     this.historial_service.getExpertChats(this.user.getId()).then(result => {
-      this.createTable(result);
+      this.chats = result;
+      this.createTable(this.chats);
       this.change_detector.detectChanges();
     });
   }
 
   getClientChat() {
     this.historial_service.getClientChats(this.user.getId()).then(result => {
+      this.chats = result;
       this.createTable(result);
       this.change_detector.detectChanges();
     });
@@ -125,6 +138,21 @@ export class HistorialChatComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.chats);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.chats;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }

@@ -64,15 +64,16 @@
         <div *ngIf="!myControl.value">
           <p>Acá se muestran las intenciones de las categorías</p>
         </div>
-        <div class="bg-light p-10 p-r-20 p-l-20" *ngIf="categoria && intenciones">
-          <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda" autocomplete="off"
-              [(ngModel)]="filtro_intenciones">
-            <!-- <button mat-button *ngIf="filtro_intenciones" matSuffix mat-icon-button aria-label="Clear" (click)="filtro_intenciones='';applyFilter()">
-              <mat-icon>close</mat-icon>
-            </button> -->
-          </mat-form-field>
+
+        <div class="container-filter" *ngIf="categoria && intenciones">
+            <div class="element-filter element-filter-1">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda" [(ngModel)]="filtro_intenciones">
+                    <mat-icon class="search-icon">search</mat-icon>
+                </mat-form-field>
+            </div>
         </div>
+
         <div *ngFor="let intencion of intenciones" class="intencion-chat-lista">
           <span class="frase"> {{intencion.frase}}</span>
           <i class="icono-borrar ti-trash danger-color m-r-10 mouse-over ml-1"

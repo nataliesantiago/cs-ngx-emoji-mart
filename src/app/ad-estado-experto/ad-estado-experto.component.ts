@@ -25,6 +25,8 @@ export class AdEstadoExpertoComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   is_edit_timeout = false;
+  filters = {};
+  expert_states;
 
   constructor(private userService: UserService, private estado_experto_service: EstadoExpertoService, private cg: ChangeDetectorRef) {
     this.user = this.userService.getUsuario();
@@ -50,12 +52,17 @@ export class AdEstadoExpertoComponent implements OnInit {
 
   getAllStates() {
     this.estado_experto_service.getAllStates().then((result) => {
-      this.dataSource = new MatTableDataSource(result);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.cg.detectChanges();
-      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+      this.expert_states = result;
+      this.createTable(this.expert_states);
     });
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.cg.detectChanges();
+    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
   }
 
   onChangeState(event) {
@@ -119,6 +126,21 @@ export class AdEstadoExpertoComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.expert_states);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.expert_states;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }

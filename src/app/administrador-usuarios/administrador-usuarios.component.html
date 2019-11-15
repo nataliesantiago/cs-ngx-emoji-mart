@@ -8,10 +8,32 @@
             <mat-slide-toggle (change)="editarVarios()">Seleccionar Varios</mat-slide-toggle>
             <br>
             <br>
-            <div class="bg-light p-10 p-r-20 p-l-20">
-                <mat-form-field>
-                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-                </mat-form-field>
+            
+            <div class="container-filter">
+                <div class="element-filter element-filter-3">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                        <mat-icon class="search-icon">search</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="element-filter element-filter-3">
+                    <mat-form-field>
+                        <mat-label>Rol</mat-label>
+                        <mat-select name="nombre_rol" (selectionChange)="filterData('nombre_rol', $event)">
+                            <mat-option value="todos">Todos</mat-option>
+                            <mat-option *ngFor="let rol of roles" [value]="rol.nombre">{{rol.nombre}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="element-filter element-filter-3">
+                    <mat-form-field>
+                        <mat-label>Perfil</mat-label>
+                        <mat-select name="nombre_perfil" (selectionChange)="filterData('nombre_perfil', $event)">
+                            <mat-option value="todos">Todos</mat-option>
+                            <mat-option *ngFor="let perfil of perfiles" [value]="perfil.nombre">{{perfil.nombre}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
             </div>
 
             <div class="elementos-seleccionados" *ngIf="total_seleccionado > 0">

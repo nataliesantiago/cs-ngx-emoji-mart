@@ -30,6 +30,8 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   is_edit_timeout = false;
   is_correct = false;
+  filters = {};
+  messages;
 
   constructor(private userService: UserService, private mensajeAutomatico: MensajeAutomaticoService, private cg: ChangeDetectorRef) {
     this.user = this.userService.getUsuario();
@@ -68,16 +70,21 @@ export class AdMensajesAutomaticosComponent implements OnInit {
    */
   getAllMessages() {
     this.mensajeAutomatico.getAllMessagesWithType().then((result) => {
+      this.messages = result;
       result.forEach((message) => {
         message.texto_tmp = message.texto;
         message.timeout_tmp = message.timeout;
       });
-      this.dataSource = new MatTableDataSource(result);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.cg.detectChanges();
-      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+      this.createTable(result);
     });
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.cg.detectChanges();
+    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
   }
 
   /**
@@ -285,6 +292,21 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.messages);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.messages;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
   }
 
 }

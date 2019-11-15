@@ -27,6 +27,7 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   nuevo_guion: GuionChat = { activo: true };
   correcto = false;
+  filters = {};
   
   constructor(private chatService: ChatService, private userService: UserService) {
     this.user = this.userService.getUsuario();
@@ -52,12 +53,17 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
       this.guiones.forEach((e: GuionChat) => {
         e.texto_tmp = e.texto;
       })
-      this.dataSource = new MatTableDataSource(this.guiones);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+      this.createTable(this.guiones);
     });
   }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+  }
+
   ngAfterViewInit() {
     
   }
@@ -145,6 +151,22 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  filterData(name, event) {
+    if (event.value == 'todos') {
+      this.createTable(this.guiones);
+    } else {
+      this.filters[name] = event.value;
+      let newArray = this.guiones;
+      for (const key in this.filters) {
+        newArray = newArray.filter(element => {
+          return element[key] == this.filters[key];
+        });
+      }
+      this.createTable(newArray);
+    }
+  }
+
 }
 
 

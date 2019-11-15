@@ -3,11 +3,24 @@
     <mat-card-content>
       <mat-card-title>Historial de Chats</mat-card-title>
       
-      <div class="bg-light p-10 p-r-20 p-l-20 m-t-20">
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-        </mat-form-field>
+      <div class="container-filter">
+        <div class="element-filter element-filter-2">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                <mat-icon class="search-icon">search</mat-icon>
+            </mat-form-field>
+        </div>
+        <div class="element-filter element-filter-2">
+            <mat-form-field>
+                <mat-label>Estado Conversación</mat-label>
+                <mat-select name="estado" (selectionChange)="filterData('estado',$event)">
+                    <mat-option value="todos">Todos</mat-option>
+                    <mat-option *ngFor="let state of chat_states" [value]="state.nombre">{{state.nombre}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
       </div>
+      
       <div class="responsive-table">
         <div class="container-table">
           <mat-table [dataSource]="dataSource" matSort>
