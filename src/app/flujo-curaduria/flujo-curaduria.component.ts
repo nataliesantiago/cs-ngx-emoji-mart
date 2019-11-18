@@ -210,7 +210,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   comentarios(e){
-    this.dialog.open(HistorialCuraduriaComponent).afterClosed().subscribe(d => {
+    this.dialog.open(HistorialCuraduriaComponent, {data: {pregunta: e}}).afterClosed().subscribe(d => {
 
     });
     /*

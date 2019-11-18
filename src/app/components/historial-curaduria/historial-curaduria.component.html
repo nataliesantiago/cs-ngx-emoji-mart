@@ -1,40 +1,37 @@
 <mat-card class="contenido">
   <mat-card-content class="contenido-interno">
     <perfect-scrollbar>
-      <ul class="timeline">
-        <li>
-          <div class="timeline-badge success">
-            <img class="img-responsive" alt="user" src="assets/images/users/1.jpg" alt="img"> </div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Genelia</h4>
-              <p>
-                <small class="text-muted">
-                  <i class="fa fa-clock-o"></i> 11 hours ago via Twitter</small>
-              </p>
+      <div class="mensajes">
+        <ul class="timeline">
+          <li *ngFor="let comentario of comentarios; let i = index" [ngClass]="{'timeline-inverted':i%2 === 0}">
+            <div class="timeline-badge success">
+              <img class="img-responsive" alt="user" src="{{comentario.imagen}}" alt="img"> </div>
+            <div class="timeline-panel">
+              <div class="timeline-heading">
+                <h4 class="timeline-title">{{comentario.nombre_usuario}}</h4>
+                <p>
+                  <small class="text-muted">
+                    <i class="fa fa-clock-o"></i>{{comentario.fecha | MomentDate:'MMM DD, YYYY hh:mm a'}}</small>
+                </p>
+              </div>
+              <div class="timeline-body">
+                <p>{{comentario.notas}}</p>
+              </div>
             </div>
-            <div class="timeline-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero laboriosam dolor perspiciatis omnis
-                exercitationem. Beatae, officia pariatur? Est cum veniam excepturi. Maiores praesentium, porro
-                voluptas suscipit facere rem dicta, debitis.</p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge warning">
-            <img class="img-responsive" alt="user" src="assets/images/users/2.jpg" alt="img"> </div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Ritesh Deshmukh</h4>
-            </div>
-            <div class="timeline-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium maiores odit qui est tempora
-                eos, nostrum provident explicabo dignissimos debitis vel! Adipisci eius voluptates, ad aut recusandae
-                minus eaque facere.</p>
-            </div>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </perfect-scrollbar>
   </mat-card-content>
+  <div class="formulario">
+    <mat-form-field>
+      <textarea matInput placeholder="Nuevo Comentario" name="notas" [(ngModel)]="nota" matAutosizeMinRows=1
+        matAutosizeMaxRows=10></textarea>
+    </mat-form-field>
+    <div fxLayout="row wrap">
+        <div fxFlex="100" fxLayoutAlign="space-between center" class="responsive-btn">
+          <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="guardarComentario()">Comentar</button>
+        </div>
+      </div>
+  </div>
 </mat-card>
