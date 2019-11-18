@@ -50,17 +50,21 @@ export class FlujoCuraduriaComponent implements OnInit {
   flujo_actual = "Preguntas en Curaduria";
   estados_pregunta;
   filters = {};
+  rol_usuario;
+  mostrar_accion = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog) { 
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
+      this.rol_usuario = this.usuario.id_rol;
       this.init();
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
+      this.rol_usuario = u.id_rol;
       if (this.usuario) {
         this.init();
       }
@@ -74,6 +78,9 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;        
         this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+        if(this.rol_usuario == 5){
+          this.mostrar_accion = true;
+        }
         this.cg.detectChanges();
       }
     })
@@ -105,6 +112,11 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.activo_revision = false;
     this.activo_aprobacion = false;
     this.activo_aprobados = false;
+    if(this.rol_usuario == 5){
+      this.mostrar_accion = true;
+    }else{
+      this.mostrar_accion = false;
+    }
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
         
@@ -128,6 +140,11 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.activo_revision = true;
     this.activo_aprobacion = false;
     this.activo_aprobados = false;
+    if(this.rol_usuario == 7){
+      this.mostrar_accion = true;
+    }else{
+      this.mostrar_accion = false;
+    }
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 2}).subscribe(p => {
       if(p.success){
         
@@ -143,6 +160,11 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.activo_revision = false;
     this.activo_aprobacion = true;
     this.activo_aprobados = false;
+    if(this.rol_usuario == 8){
+      this.mostrar_accion = true;
+    }else{
+      this.mostrar_accion = false;
+    }
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 3}).subscribe(p => {
       if(p.success){
         
@@ -158,6 +180,11 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.activo_revision = false;
     this.activo_aprobacion = false;
     this.activo_aprobados = true;
+    if(this.rol_usuario == 8){
+      this.mostrar_accion = true;
+    }else{
+      this.mostrar_accion = false;
+    }
     this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 4}).subscribe(p => {
       if(p.success){
         

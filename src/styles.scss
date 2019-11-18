@@ -155,6 +155,7 @@ body {
 
   .mat-drawer-container {
     width: 100%;
+    height: 100%;
   }
 }
 
@@ -2795,7 +2796,11 @@ input:-webkit-autofill:active {
 .alertas-nlp {
   max-width: 300px !important;
   width: 300px !important;
-
+  height: 450px !important;
+  max-height: 80% !important;
+  .mat-menu-content{
+    height: 100%;
+  }
   .titulo-notificacion-nlp {
     margin-top: 10px;
     text-align: center;
@@ -2936,20 +2941,6 @@ input:-webkit-autofill:active {
     font-style: italic;
     color: #1a0dab;
     cursor: pointer;
-  }
-}
-
-@media only screen and (max-width: 960px) {
-  .contenedor-sidenav-chat-experto {
-    margin-left: 00px !important;
-  }
-
-  .responsive-btn {
-    max-width: 50% !important;
-  }
-
-  .punt-estado-chat {
-    left: -145px !important;
   }
 }
 
@@ -3633,9 +3624,22 @@ app-search-component {
   }
 }
 
+@media only screen and (max-width: 960px) {
+  .contenedor-sidenav-chat-experto {
+    margin-left: 00px !important;
+  }
 
+  .responsive-btn {
+    max-width: 50% !important;
+  }
 
-
+  .punt-estado-chat {
+    left: -145px !important;
+  }
+  .max-width-10 {
+    max-width: 13%;
+  }
+}
 
 @media only screen and (max-width: 767px) {
   .general-container {
@@ -3688,12 +3692,6 @@ app-search-component {
       .mat-card-content {
         padding: 0;
       }
-    }
-  }
-
-  .ad-preguntas-table {
-    .max-width-10 {
-      max-width: 20%;
     }
   }
 
@@ -3796,6 +3794,7 @@ mat-card {
 
         .mat-card-title {
           margin-bottom: 20px;
+          margin-top: 8px;
         }
       }
     }
