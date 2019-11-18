@@ -4,9 +4,7 @@
     <mat-card class="mat-card-root">
         <mat-card-content class="mat-card-content-root">
             <mat-card-title class="m-t-20">Administrador de Usuarios</mat-card-title>
-            <br>
             <mat-slide-toggle (change)="editarVarios()">Seleccionar Varios</mat-slide-toggle>
-            <br>
             <br>
             
             <div class="container-filter">
@@ -129,7 +127,7 @@
                         </mat-row>
                     </mat-table>
                 </div>
-                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[7, 15, 25, 100]"></mat-paginator>
             </div>
         </mat-card-content>
     </mat-card>

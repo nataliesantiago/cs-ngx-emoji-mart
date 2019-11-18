@@ -127,7 +127,7 @@
                         (click)="cerrarMenu()">Administración de Horarios</a>
                 </li>-->
                 <li *ngFor="let i of modulos" (click)="cerrarMenu()" class="menu-link">
-                    <a [routerLink]="['/'+i.url]" (click)="cerrarMenu()">{{i.nombre_mostrar}}</a>
+                    <a [routerLink]="['/'+i.url]" routerLinkActive="active" (click)="cerrarMenu()">{{i.nombre_mostrar}}</a>
                 </li>
                 <li *ngFor="let i of nuevas_urls" (click)="cerrarMenu()" class="menu-link">
                     <a href="{{i.url}}" target="_blank" (click)="cerrarMenu()">{{i.label}} <mat-icon>open_in_new

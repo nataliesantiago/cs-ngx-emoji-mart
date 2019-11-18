@@ -28,12 +28,10 @@
                 
             <mat-card class="mat-card-root">
                 <mat-card-content class="mat-card-content-root">
-                    <br>
                     <button class="custom__btn custom__btn--primary" (click)="is_created = !is_created" *ngIf="!is_created">
                         <mat-icon>add</mat-icon>
                         Ingresar Motivos de Cierre 
                     </button>
-                    <br>
                     <br>
                     <mat-card-title>Motivos Cierre de Chat</mat-card-title>
                     
@@ -87,7 +85,7 @@
                             </mat-row>
                         </mat-table>
     
-                        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+                        <mat-paginator [pageSizeOptions]="[7, 15, 25, 100]"></mat-paginator>
                     </div>
                 </mat-card-content>
             </mat-card>

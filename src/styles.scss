@@ -155,6 +155,7 @@ body {
 
   .mat-drawer-container {
     width: 100%;
+    height: 100%;
   }
 }
 
@@ -2936,20 +2937,6 @@ input:-webkit-autofill:active {
   }
 }
 
-@media only screen and (max-width: 960px) {
-  .contenedor-sidenav-chat-experto {
-    margin-left: 00px !important;
-  }
-
-  .responsive-btn {
-    max-width: 50% !important;
-  }
-
-  .punt-estado-chat {
-    left: -145px !important;
-  }
-}
-
 .dialog-chat {
   .mat-button-ripple-round {
     .mat-ripple-element {
@@ -3630,9 +3617,22 @@ app-search-component {
   }
 }
 
+@media only screen and (max-width: 960px) {
+  .contenedor-sidenav-chat-experto {
+    margin-left: 00px !important;
+  }
 
+  .responsive-btn {
+    max-width: 50% !important;
+  }
 
-
+  .punt-estado-chat {
+    left: -145px !important;
+  }
+  .max-width-10 {
+    max-width: 13%;
+  }
+}
 
 @media only screen and (max-width: 767px) {
   .general-container {
@@ -3685,12 +3685,6 @@ app-search-component {
       .mat-card-content {
         padding: 0;
       }
-    }
-  }
-
-  .ad-preguntas-table {
-    .max-width-10 {
-      max-width: 20%;
     }
   }
 
@@ -3793,6 +3787,7 @@ mat-card {
 
         .mat-card-title {
           margin-bottom: 20px;
+          margin-top: 8px;
         }
       }
     }
