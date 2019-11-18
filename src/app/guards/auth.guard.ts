@@ -34,6 +34,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                 user.codigo_firebase = data.codigo_firebase;
                 user.pass_firebase = data.pass_firebase;
                 user.modo_nocturno = data.modo_nocturno;
+                user.modulos = data.modulos;
                 this.userService.definirPaisUsuario(data.pais);
                 user.pais = data.pais;
                 this.userService.setUsuario(user).then(() => {
@@ -48,13 +49,24 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
             })
 
         } else if (this.userService.getUsuario()) {
+            if (next.data.bypass) {
+                return true;
+            } else {
+                let modulos_usuario = this.userService.getUsuario().modulos;
+                for (let index = 0; index < modulos_usuario.length; index++) {
+                    if (modulos_usuario[index].idtbl_modulo == next.data.modulo) {
+                        return true
+                    }
 
+                }
+                this.router.navigate(['home']);
+                console.log('Invalid route');
+                return false;
+            }
             //this.responseSearch.setActive(false);
-            return true;
-
         } else {
             console.log('loading...');
-            
+
             return new Promise<boolean>(resolve => {
 
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
@@ -68,6 +80,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.setId(d.profile.idtbl_usuario);
                         user.setIdPerfil(d.profile.id_perfil);
                         user.setIdRol(d.profile.id_rol);
+                        user.modulos = d.modulos;
                         user.url_foto = d.profile.foto;
                         user.codigo_firebase = d.profile.codigo_firebase;
                         user.pass_firebase = d.profile.pass_firebase;

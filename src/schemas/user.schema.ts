@@ -1,4 +1,5 @@
 import { Conversacion } from "./conversacion.schema";
+import { Modulo } from "./interfaces";
 
 
 export class User {
@@ -29,6 +30,7 @@ export class User {
     peso_chat: number;
     estado_actual: number;
     pais: string;
+    modulos: Array<Modulo>;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;

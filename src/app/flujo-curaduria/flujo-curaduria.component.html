@@ -4,7 +4,7 @@
             <div class="flujo-curaduria" fxLayout="row wrap" style="text-align: center;">
                     <!-- column -->
                     <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
-                        <mat-card *ngIf="activo_curaduria" class="flujo-activo flujo-mouse-over" (click)="cargarCuraduria()">
+                        <mat-card *ngIf="activo_curaduria" class="flujo-activo flujo-mouse-over" (click)="cargarCuraduria()" class="card-flujo">
                             <mat-card-content>  
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -16,7 +16,7 @@
                                 </div>
                             </mat-card-content>
                         </mat-card>
-                        <mat-card *ngIf="!activo_curaduria" class="flujo-mouse-over" (click)="cargarCuraduria()">
+                        <mat-card *ngIf="!activo_curaduria" class="flujo-mouse-over" (click)="cargarCuraduria()" class="card-flujo">
                             <mat-card-content>  
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -32,7 +32,7 @@
                     <!-- column -->
                     <!-- column -->
                     <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
-                        <mat-card *ngIf="activo_revision" [ngClass]="{'class': true}" class="flujo-activo flujo-mouse-over" (click)="cargarRevision()">
+                        <mat-card *ngIf="activo_revision" [ngClass]="{'class': true}" class="flujo-activo flujo-mouse-over" (click)="cargarRevision()" class="card-flujo">
                             <mat-card-content>
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -45,7 +45,7 @@
                                 </div>
                             </mat-card-content>
                         </mat-card>
-                        <mat-card *ngIf="!activo_revision" class="flujo-mouse-over" (click)="cargarRevision()">
+                        <mat-card *ngIf="!activo_revision" class="flujo-mouse-over" (click)="cargarRevision()" class="card-flujo">
                             <mat-card-content>
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -62,7 +62,7 @@
                     <!-- column -->
                     <!-- column -->
                     <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
-                        <mat-card *ngIf="activo_aprobacion" class="flujo-activo flujo-mouse-over" (click)="cargarAprobacion()">
+                        <mat-card *ngIf="activo_aprobacion" class="flujo-activo flujo-mouse-over" (click)="cargarAprobacion()" class="card-flujo">
                             <mat-card-content>
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -75,7 +75,7 @@
                                 </div>
                             </mat-card-content>
                         </mat-card>
-                        <mat-card *ngIf="!activo_aprobacion" class="flujo-mouse-over" (click)="cargarAprobacion()">
+                        <mat-card *ngIf="!activo_aprobacion" class="flujo-mouse-over" (click)="cargarAprobacion()" class="card-flujo">
                             <mat-card-content>
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -92,7 +92,7 @@
                     <!-- column -->
                     <!-- column -->
                     <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
-                        <mat-card *ngIf="activo_aprobados" class="flujo-activo flujo-mouse-over" (click)="cargarAprobados()">
+                        <mat-card *ngIf="activo_aprobados" class="flujo-activo flujo-mouse-over" (click)="cargarAprobados()" class="card-flujo">
                             <mat-card-content>
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -105,7 +105,7 @@
                                 </div>
                             </mat-card-content>
                         </mat-card>
-                        <mat-card *ngIf="!activo_aprobados" class="flujo-mouse-over" (click)="cargarAprobados()">
+                        <mat-card *ngIf="!activo_aprobados" class="flujo-mouse-over" (click)="cargarAprobados()" class="card-flujo"> 
                             <mat-card-content>
                                 <!-- Row -->
                                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">

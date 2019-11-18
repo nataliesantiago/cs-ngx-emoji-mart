@@ -20,10 +20,11 @@ export class AppSidebarComponent implements OnDestroy {
   nuevas_urls = [];
   user: User;
   id_usuario;
-  state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
+  state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
 
   private _mobileQueryListener: () => void;
   status: boolean = false;
+  modulos = [];
   @Output() cerrado = new EventEmitter<boolean>();
   clickEvent() {
     this.status = !this.status;
@@ -32,7 +33,7 @@ export class AppSidebarComponent implements OnDestroy {
   subclickEvent() {
     this.status = true;
   }
-  constructor(private ajax: AjaxService, private userService: UserService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, public menuItems: MenuItems, 
+  constructor(private ajax: AjaxService, private userService: UserService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, public menuItems: MenuItems,
     public autenticationService: AutenticationService, private router: Router, private estadoExpertoService: EstadoExpertoService) {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -56,6 +57,7 @@ export class AppSidebarComponent implements OnDestroy {
         this.nuevas_urls = p.items;
       }
     });
+    this.modulos = this.user.modulos;
   }
 
 
@@ -65,7 +67,7 @@ export class AppSidebarComponent implements OnDestroy {
 
   deslogueo() {
     this.autenticationService.logOut();
-    if(this.user && this.user.getIdRol() == 2) {
+    if (this.user && this.user.getIdRol() == 2) {
       this.state.id_usuario_experto = this.user.getId();
       this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
       this.state.estado_ingreso = 0;

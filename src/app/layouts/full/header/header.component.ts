@@ -32,7 +32,8 @@ export class AppHeaderComponent {
   emergencia_actual = false;
   is_dark_mode;
   modo_nocturno;
-  state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
+  state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
+  muestra_boton_sos: boolean;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
     private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument,
@@ -47,7 +48,7 @@ export class AppHeaderComponent {
       }
     });
 
-    
+
     if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
       this.init();
@@ -59,6 +60,28 @@ export class AppHeaderComponent {
       }
 
     }
+
+
+    this.getAllStates();
+  }
+
+  init() {
+    let t = this.user.modulos.find(m => {
+      return m.idtbl_modulo == 26;
+    })
+    if (!t) {
+      this.muestra_boton_sos = true;
+    }
+    this.chatService.getEstadosExperto().then(estados => {
+      this.estados_operador = estados;
+      if (this.user.getIdRol() == 2) {
+        this.cambiarEstadoExperto({ value: 1 });
+      }
+      if (this.user.getIdRol() == 3) {
+        this.user.estado_experto = 1;
+        this.cambiarEstadoExperto({ value: this.user.estado_experto });
+      }
+    });
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // console.log(emergencia);
       if (emergencia) {
@@ -69,21 +92,6 @@ export class AppHeaderComponent {
 
           }
         });
-      }
-    });
-
-    this.getAllStates();
-  }
-
-  init() {
-    this.chatService.getEstadosExperto().then(estados => {
-      this.estados_operador = estados;
-      if (this.user.getIdRol() == 2) {
-        this.cambiarEstadoExperto({ value: 1 });
-      }
-      if (this.user.getIdRol() == 3) {
-        this.user.estado_experto = 1;
-        this.cambiarEstadoExperto({ value: this.user.estado_experto });
       }
     });
   }
@@ -113,7 +121,7 @@ export class AppHeaderComponent {
       }
     }
     this.userService.setActivoExpertoGlobal(e.value);
-    if(actual != null) {
+    if (actual != null) {
       this.createLogState(actual, e.value, null);
     }
     this.user.setEstadoExpertoActual(e.value);
@@ -204,7 +212,7 @@ export class AppHeaderComponent {
 
   getAllStates() {
     this.estadoExpertoService.getAllStates().then(result => {
-      
+
       this.estados_operador = result;
     });
   }

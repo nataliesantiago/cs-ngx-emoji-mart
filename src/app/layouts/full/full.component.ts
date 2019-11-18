@@ -72,6 +72,8 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   color_toolbar = '';
   muestra_barra: boolean = false;
   reason = '';
+  muetra_alarmas_nlp = false;
+  
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
@@ -138,6 +140,12 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   }
 
   init() {
+    let t = this.usuario.modulos.find(m => {
+      return m.idtbl_modulo == 27;
+    })
+    if (t) {
+      this.muetra_alarmas_nlp = true;
+    }
     
     if (this.usuario.getModoNocturno() == 0 || this.usuario.getModoNocturno() == null) {
       this.look_service.getSpecificSetting('color_barra_superior').then((result) => {

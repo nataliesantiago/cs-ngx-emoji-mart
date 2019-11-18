@@ -177,3 +177,11 @@ export interface LogEstadoExperto {
     id_estado_experto_nuevo?: number;
     estado_ingreso?: number;
 }
+
+export interface Modulo {
+    idtbl_modulo?: number;
+    nombre_modulo?: string;
+    nombre_mostrar?: string;
+    url?: string;
+    activo?: boolean;
+}

@@ -249,19 +249,6 @@ script.childNodes.forEach(c => {
     HttpClientModule,
     SharedModule,
     MatTreeModule,
-    /*QuillModule.forRoot({modules: {
-      syntax: true,
-      toolbar: {
-        container: [['bold', 'italic'],        // toggled buttons
-    
-        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'align': [] }],
-    
-        ['link', 'image', 'video'],],
-      }
-    }}),*/
     QuillModule,
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes, { useHash: true }),

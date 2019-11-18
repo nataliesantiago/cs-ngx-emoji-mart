@@ -132,8 +132,8 @@ export class UserService {
             if (u) {
                 //this.initializeSocket();
                 this.initFirebase().then(() => {
-                    resolve();
                     this.subjectUsuario.next(u);
+                    resolve();
                 });
             }
         });
