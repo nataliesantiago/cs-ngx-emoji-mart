@@ -6,6 +6,7 @@
 export const environment = {
   production: true,
   ambiente: 'col',
+  pais:'',
   id_origen_conecta: '',
   id_origen_drive: '',
   id_origen_chat: ''

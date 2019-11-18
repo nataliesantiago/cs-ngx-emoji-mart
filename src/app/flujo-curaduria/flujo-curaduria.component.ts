@@ -9,6 +9,8 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
 import { matTableFilter } from '../../common/matTableFilter';
+import { HistorialCuraduriaComponent } from '../components/historial-curaduria/historial-curaduria.component';
+import { MatDialog } from '@angular/material';
 import { FiltrosService } from '../providers/filtros.service';
 
 @Component({
@@ -49,7 +51,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   estados_pregunta;
   filters = {};
 
-  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService) { 
+  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog) { 
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
@@ -64,7 +66,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       }
     })
 
-    /*this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
+    this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', {estado_flujo_pregunta: 1}).subscribe(p => {
       if(p.success){
         this.cant_curaduria = p.preguntas.length;
         this.data = p.preguntas;
@@ -92,7 +94,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.cant_aprobados = p3.preguntas.length;
         this.cg.detectChanges();
       }
-    })*/
+    })
      // create the source
     
   }
@@ -207,53 +209,10 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.router.navigate(['/respuestas', e.idtbl_pregunta]);
   }
 
-  async comentarios(e){
+  comentarios(e){
+    this.dialog.open(HistorialCuraduriaComponent, {height: '90%', width: '560px', data: {pregunta: e}}).afterClosed().subscribe(d => {
 
-    let notas = {};
-
-    this.ajax.get('preguntas/obtener-comentarios-pregunta', {idtbl_pregunta: e.idtbl_pregunta}).subscribe(async p => {
-      if(p.success){
-        
-        for(let i = 0; i < p.comentarios.length; i++){
-          p.comentarios[i].fecha = moment(p.comentarios[i].fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm');
-        }
-        let comentarios = '<div style="height: 250px; overflow-x: hidden;">';
-        
-        for(let i = 0; i < p.comentarios.length; i++){
-          comentarios += '<div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; padding: 2px 16px; width: 95%; margin-left: 2%;"><h3><strong>' + p.comentarios[i].nombre_usuario + ' ' + p.comentarios[i].fecha + '</strong></h3>';
-          comentarios += '<h6>' + p.comentarios[i].notas + '</strong></h6></div><br>';
-        }
-
-        comentarios += '</div>';
-
-        const { value: text } = await Swal.fire({
-          input: 'textarea',
-          inputPlaceholder: 'Nuevo Comentario',
-          inputAttributes: {
-            'aria-label': 'Nuevo Comentario'
-          },
-          html: comentarios,
-          showCancelButton: true,
-          buttonsStyling: false,
-          confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-          confirmButtonText: 'Aceptar',
-          cancelButtonClass: 'custom__btn custom__btn--cancel',
-          cancelButtonText: 'Cancelar',
-          customClass: {
-            container: 'custom-sweet'
-          }
-        })
-        
-        if (text) {
-          notas = {notas: text, id_estado: e.id_estado, id_estado_flujo: e.id_estado_flujo, idtbl_pregunta: e.idtbl_pregunta, id_usuario: this.id_usuario}
-          this.ajax.post('preguntas/guardar-nota-curaduria', {nota: notas}).subscribe(p => {
-            if(p.success){
-              
-            }
-          })
-        }
-      }
-    })
+    });
     
   }
 
