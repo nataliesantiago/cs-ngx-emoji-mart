@@ -182,13 +182,36 @@ Timeline page
 }
 
 .contenido{
-    height: 350px;
-    width: 500px;
+    height: 100%;
+    width: 100%;
+    margin: 0;
 }
 
 .contenido-interno{
     width: 100%;
-    .mensajes{
-      height: 70%;
+    height: calc(100% - 126px);
+    .mensajes-historial-curaduria{
+      .timeline-title{
+        font-size: 14px;
+        font-weight: bold;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 100%;
+        margin: 0;
+      }
+      .text-muted{
+        margin: 0;
+        font-size: 9px;
+        text-align: left;
+      }
+      .timeline-body{
+        margin: 0;
+        font-size: 12px;
+        width: 100%;
+      }      
     }
+}
+
+.formulario-historial{
+  width: 95%;
 }

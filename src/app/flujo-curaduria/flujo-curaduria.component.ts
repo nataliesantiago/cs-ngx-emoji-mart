@@ -210,56 +210,10 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   comentarios(e){
-    this.dialog.open(HistorialCuraduriaComponent, {data: {pregunta: e}}).afterClosed().subscribe(d => {
+    this.dialog.open(HistorialCuraduriaComponent, {height: '90%', width: '560px', data: {pregunta: e}}).afterClosed().subscribe(d => {
 
     });
-    /*
-    let notas = {};
-
-    this.ajax.get('preguntas/obtener-comentarios-pregunta', {idtbl_pregunta: e.idtbl_pregunta}).subscribe(async p => {
-      if(p.success){
-        
-        for(let i = 0; i < p.comentarios.length; i++){
-          p.comentarios[i].fecha = moment(p.comentarios[i].fecha).tz('America/Bogota').format('YYYY-MM-DD HH:mm');
-        }
-        let comentarios = '<div style="height: 250px; overflow-x: hidden;">';
-        
-        for(let i = 0; i < p.comentarios.length; i++){
-          comentarios += '<div style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); transition: 0.3s; padding: 2px 16px; width: 95%; margin-left: 2%;"><h3><strong>' + p.comentarios[i].nombre_usuario + ' ' + p.comentarios[i].fecha + '</strong></h3>';
-          comentarios += '<h6>' + p.comentarios[i].notas + '</strong></h6></div><br>';
-        }
-
-        comentarios += '</div>';
-
-        const { value: text } = await Swal.fire({
-          input: 'textarea',
-          inputPlaceholder: 'Nuevo Comentario',
-          inputAttributes: {
-            'aria-label': 'Nuevo Comentario'
-          },
-          html: comentarios,
-          showCancelButton: true,
-          buttonsStyling: false,
-          confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-          confirmButtonText: 'Aceptar',
-          cancelButtonClass: 'custom__btn custom__btn--cancel',
-          cancelButtonText: 'Cancelar',
-          customClass: {
-            container: 'custom-sweet'
-          }
-        })
-        
-        if (text) {
-          notas = {notas: text, id_estado: e.id_estado, id_estado_flujo: e.id_estado_flujo, idtbl_pregunta: e.idtbl_pregunta, id_usuario: this.id_usuario}
-          this.ajax.post('preguntas/guardar-nota-curaduria', {nota: notas}).subscribe(p => {
-            if(p.success){
-              
-            }
-          })
-        }
-      }
-    })
-   */ 
+    
   }
 
   cambiarEstado(e){
