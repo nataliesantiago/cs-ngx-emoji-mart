@@ -128,6 +128,7 @@ import { BuscadorHightlighter } from '../pipes/buscador-highligther.pipe';
 import { AdministradorHorariosComponent } from './administrador-horarios/administrador-horarios.component';
 import { HistorialCuraduriaComponent } from './components/historial-curaduria/historial-curaduria.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { AdminsitracionRolesComponent } from './adminsitracion-roles/adminsitracion-roles.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -229,7 +230,8 @@ script.childNodes.forEach(c => {
     DialogoDetalleChatComponent,
     AdministradorHorariosComponent,
     HistorialCuraduriaComponent,
-    FooterComponent
+    FooterComponent,
+    AdminsitracionRolesComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

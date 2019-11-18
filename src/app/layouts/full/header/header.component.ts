@@ -69,7 +69,7 @@ export class AppHeaderComponent {
     let t = this.user.modulos.find(m => {
       return m.idtbl_modulo == 26;
     })
-    if (!t) {
+    if (!t && this.user.boton_sos) {
       this.muestra_boton_sos = true;
     }
     this.chatService.getEstadosExperto().then(estados => {

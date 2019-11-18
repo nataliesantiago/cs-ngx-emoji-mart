@@ -501,4 +501,34 @@ export class UserService {
         })
     }
 
+    getRolesAplicacion(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/getRolesAplicacion').subscribe(p => {
+                if (p.success) {
+                    resolve(p);
+                }
+            });
+        })
+    }
+
+    actualizarRol(rol): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/actualiza-rol', rol).subscribe(p => {
+                if (p.success) {
+                    resolve();
+                }
+            });
+        })
+    }
+
+    actualizarPerfil(rol): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.ajax.post('user/actualiza-perfil', rol).subscribe(p => {
+                if (p.success) {
+                    resolve();
+                }
+            });
+        })
+    }
+
 }

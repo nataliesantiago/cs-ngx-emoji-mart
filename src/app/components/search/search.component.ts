@@ -20,7 +20,7 @@ import { AutocompleteComponent } from 'angular-ng-autocomplete';
 import { LookFeelService } from '../../providers/look-feel.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { MatPaginator, MatTabGroup } from '@angular/material';
-
+import swal from 'sweetalert2';
 interface IWindow extends Window {
   webkitSpeechRecognition: any;
   SpeechRecognition: any;
@@ -32,7 +32,7 @@ interface IWindow extends Window {
   styleUrls: ['./search.component.scss']
 })
 export class AppSearchComponent implements OnChanges, OnInit {
-  url: String = '';
+  url: string = '';
   metodo = 1;
   public def = new FormControl(''); // Model del autocomplete
   searchText: string; // ngModel del autocomplete
@@ -164,7 +164,6 @@ export class AppSearchComponent implements OnChanges, OnInit {
      * al input de busqueda para realizar el metodo de buscar()
   */
   onFileSelected(event) {
-    console.log('paso por aca')
     this.metodo = 2;
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
@@ -173,14 +172,14 @@ export class AppSearchComponent implements OnChanges, OnInit {
       this.searchService.searchFile(formData).subscribe((data) => {
         //debugger;
         this.dataImage = data.data.parrafos;
-        this.url = data.data.url;
+        this.url = encodeURI(data.data.url);
+        let texto = this.dataImage.join('+');
         if (this.dataImage && this.dataImage.length > 0) {
-          this.def.setValue(this.dataImage.join(' '));
+          this.def.setValue(texto);
           this.adjunto.nativeElement.value = '';
           this.buscar(2);
-
         } else {
-
+          swal.fire({ type: 'error', text: 'No se encontró texto en la imagen' });
         }
       }
       );
@@ -368,9 +367,10 @@ export class AppSearchComponent implements OnChanges, OnInit {
       if (this.searchText === null && this.searchText === undefined) {
         this.searchText = '';
       }
+      let url = btoa(this.url);
 
       setTimeout(() => {
-        this.router.navigateByUrl('/search?tipo=' + metodo + '&&busqueda=' + encodeURI(this.def.value) + '&&url=' + this.url);
+        this.router.navigateByUrl('/search?tipo=' + metodo + '&&url=' + url + '&&busqueda=' + encodeURI(this.def.value));
       }, 0);
 
     }

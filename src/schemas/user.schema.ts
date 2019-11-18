@@ -31,6 +31,7 @@ export class User {
     estado_actual: number;
     pais: string;
     modulos: Array<Modulo>;
+    boton_sos: boolean;
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
         this.token_acceso = token;

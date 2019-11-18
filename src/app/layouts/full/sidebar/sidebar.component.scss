@@ -8,3 +8,14 @@
         margin: auto 6px;
     }
 }
+
+.contenedor-menu {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.opciones-menu {
+    height: calc(100% - 70px);
+    flex: 1;
+}
