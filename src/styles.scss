@@ -2790,9 +2790,10 @@ input:-webkit-autofill:active {
 .alertas-nlp {
   max-width: 300px !important;
   width: 300px !important;
-  
-  .alertas-nlp-interno{
-    height: 100% !important;  
+  height: 450px !important;
+  max-height: 80% !important;
+  .mat-menu-content{
+    height: 100%;
   }
   .titulo-notificacion-nlp {
     margin-top: 10px;
