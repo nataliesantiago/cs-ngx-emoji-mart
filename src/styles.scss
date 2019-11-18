@@ -2789,7 +2789,10 @@ input:-webkit-autofill:active {
 .alertas-nlp {
   max-width: 300px !important;
   width: 300px !important;
-
+  
+  .alertas-nlp-interno{
+    height: 100% !important;  
+  }
   .titulo-notificacion-nlp {
     margin-top: 10px;
     text-align: center;

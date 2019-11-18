@@ -67,8 +67,14 @@
         </button-->
 
     </mat-toolbar>
+
+    <div>
+        
+    </div>
     <mat-menu #message="matMenu" class="alertas-nlp">
+
         <mat-nav-list appAccordion class="contenedor__campana" *ngIf="conversaciones_nlp && conversaciones_nlp[0]">
+
             <h3>Incidencias</h3>
             <div *ngFor="let mensajes of conversaciones_nlp[0]" class="pointer" (click)="consolaSupervisor(mensajes)"
                 [ngClass]="{ 'notificacion-nueva': mensajes.leido == 0 }">
@@ -100,6 +106,7 @@
         </mat-nav-list>
 
     </mat-menu>
+
     <!-- ============================================================== -->
     <!-- End Topbar - style you can find in pages.scss -->
     <!-- ============================================================== -->

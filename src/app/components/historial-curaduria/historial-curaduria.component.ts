@@ -37,7 +37,7 @@ export class HistorialCuraduriaComponent implements OnInit {
     })
   }
 
-  init(){
+  init() {
     this.ajax.get('preguntas/obtener-comentarios-pregunta', { idtbl_pregunta: this.data.pregunta.idtbl_pregunta }).subscribe(async p => {
       if (p.success) {
         this.comentarios = p.comentarios;
@@ -50,12 +50,17 @@ export class HistorialCuraduriaComponent implements OnInit {
   }
 
   guardarComentario() {
-    this.notas = { notas: this.nota, id_estado: this.data.pregunta.id_estado, id_estado_flujo: this.data.pregunta.id_estado_flujo, idtbl_pregunta: this.data.pregunta.idtbl_pregunta, id_usuario: this.id_usuario }
-    this.ajax.post('preguntas/guardar-nota-curaduria', { nota: this.notas }).subscribe(p => {
-      if (p.success) {
-        this.dialogRef.close({ success: true });
-      }
-    })
+    if (this.nota != "" && this.nota) {
+      this.notas = { notas: this.nota, id_estado: this.data.pregunta.id_estado, id_estado_flujo: this.data.pregunta.id_estado_flujo, idtbl_pregunta: this.data.pregunta.idtbl_pregunta, id_usuario: this.id_usuario }
+      this.ajax.post('preguntas/guardar-nota-curaduria', { nota: this.notas }).subscribe(p => {
+        if (p.success) {
+          this.dialogRef.close({ success: true });
+        }
+      })
+    }else{
+      this.dialogRef.close({ success: true });
+    }
+
   }
 
 }
