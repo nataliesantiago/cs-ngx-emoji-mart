@@ -92,7 +92,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       }
     })
 
-    this.ajax.get('user/obtener-todos', {}).subscribe(d => {
+    this.ajax.get('user/obtener-todos-curador', {}).subscribe(d => {
       if (d.success) {
         this.todos_usuarios = d.usuario;
       }
