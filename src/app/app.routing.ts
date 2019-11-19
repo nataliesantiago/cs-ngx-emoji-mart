@@ -45,6 +45,7 @@ import { AdEstadoExpertoComponent } from './ad-estado-experto/ad-estado-experto.
 import { AdministradorOrigenesDriveComponent } from './administrador-origenes-drive/administrador-origenes-drive.component';
 import { HistorialChatComponent } from './historial-chat/historial-chat.component';
 import { AdministradorHorariosComponent } from './administrador-horarios/administrador-horarios.component';
+import { AdminsitracionRolesComponent } from './adminsitracion-roles/adminsitracion-roles.component';
 
 
 
@@ -94,4 +95,5 @@ export const AppRoutes: Routes = [
   { path: 'administrar-origenes-drive', component: AdministradorOrigenesDriveComponent, canActivate: [AuthGuard], data: { modulo: 23 } },
   { path: 'historial-chats', component: HistorialChatComponent, canActivate: [AuthGuard], data: { modulo: 24 } },
   { path: 'historial-chats/:id_conversacion', component: HistorialChatComponent, canActivate: [AuthGuard], data: { modulo: 24 } },
+  { path: 'administracion-roles', component: AdminsitracionRolesComponent, canActivate: [AuthGuard], data: { modulo: 28 } },
 ];

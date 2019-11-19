@@ -787,7 +787,9 @@ a {
   cursor: pointer;
 }
 
-.sidebar_mt {}
+.sidebar_mt {
+  height: 50px;
+}
 
 .side_gear {
   margin-left: 70px;
@@ -858,9 +860,10 @@ a {
 }
 
 .img_pequeña {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  border: 1px solid #dadada;
 }
 
 .img__campana {
@@ -2652,7 +2655,7 @@ input:-webkit-autofill:active {
   max-width: 85%;
 
   .mat-drawer-inner-container {
-    height: auto !important;
+    height: 100% !important;
     overflow: hidden;
   }
 
@@ -2679,9 +2682,12 @@ input:-webkit-autofill:active {
 .mat-card {
   .card-flujo {
     border: $borde-tarjeta;
-    &.activo{
-      background: rgba(0,0,0,.1);
+    cursor: pointer;
+
+    &.activo {
+      background: rgba(0, 0, 0, .1);
     }
+
     &:hover {
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
     }

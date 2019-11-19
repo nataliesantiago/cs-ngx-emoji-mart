@@ -60,7 +60,7 @@ export class ResultadosComponent implements OnInit {
       this.params = params;
       this.tipo_busqueda = params['tipo'] || 1;
       if (this.tipo_busqueda == 2) {
-        this.url_imagen_busqueda = decodeURI(params['url']);
+        this.url_imagen_busqueda = decodeURI(atob(params['url']));
       }
       if (params['origen']) {
         this.origen = params['origen'];
