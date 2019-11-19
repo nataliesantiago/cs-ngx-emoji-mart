@@ -23,7 +23,7 @@
                         </div>
                       </mat-card-content>
                   
-                  <button class="custom__btn custom__btn--accept" (click)="sendCsvFile()">Cargar formato</button>
+                  <button class="custom__btn custom__btn--accept" (click)="sendCsvFile()" [disabled]="loading">Cargar formato</button>
                 </div>
 
               <br>
@@ -54,6 +54,11 @@
                 <div class="container-table">
                     <mat-table [dataSource]="dataSource" matSort>
                         <!-- ID Column -->
+                        <ng-container matColumnDef="question_id">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Id Pregunta</mat-header-cell>
+                          <mat-cell *matCellDef="let row" style="max-width:10%;"> {{row.create_id}} </mat-cell>
+                      </ng-container>
+
                         <ng-container matColumnDef="title">
                             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:25%;"> Pregunta </mat-header-cell>
                             <mat-cell *matCellDef="let row" style="max-width:25%;"> {{row.Pregunta}} </mat-cell>
@@ -78,7 +83,7 @@
                         </ng-container>
     
                         <ng-container matColumnDef="details">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Detalles </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:10%;"> Detalles y Respuesta </mat-header-cell>
                             <mat-cell *matCellDef="let row" style="max-width:10%;">
                                 <i class="ti-info warning-color m-r-10 mouse-over" (click)="moreInfo(row)"></i>
                             </mat-cell>

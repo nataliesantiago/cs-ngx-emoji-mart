@@ -24,10 +24,8 @@ export class AdMotivoCierreChatComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   matTableFilter:matTableFilter;
   filterColumns = [
-    {field:'fecha_busqueda', type:'string'},
-    {field: 'texto_busqueda', type:'string'},
-    {field: 'id_tipo_busqueda', type:'string'},
-    {field: 'url', type:'string'}
+    {field:'id', type:'string'},
+    {field: 'name', type:'string'}
   ];
   user;
   user_id;
@@ -61,11 +59,10 @@ export class AdMotivoCierreChatComponent implements OnInit {
   getReasons() {
     this.motivo_service.getAllReasons().then((result) => {
       this.data = result;
-      this.dataSource = new MatTableDataSource(this.data);
+      this.dataSource = new MatTableDataSource(result);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.cg.detectChanges();
-      this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
     });
   }
 
