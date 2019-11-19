@@ -800,6 +800,7 @@ a {
   display: flex;
   align-items: center;
   padding: 0 15px 0 0;
+  cursor: pointer;
 }
 
 .sidebar_mt ul li a {
@@ -2798,9 +2799,11 @@ input:-webkit-autofill:active {
   width: 300px !important;
   height: 450px !important;
   max-height: 80% !important;
-  .mat-menu-content{
+
+  .mat-menu-content {
     height: 100%;
   }
+
   .titulo-notificacion-nlp {
     margin-top: 10px;
     text-align: center;
@@ -3227,15 +3230,8 @@ input:-webkit-autofill:active {
     overflow: hidden;
   }
 
-
-  &.mat-focused,
-  &.mat-form-field-can-float {
-    label.mat-form-field-label {
-      background: white !important;
-      display: inline-block !important;
-      width: auto !important;
-      position: relative !important;
-      top: 6px;
+  &.mat-focused {
+    .mat-form-field-label {
       display: none !important;
     }
   }
@@ -3636,6 +3632,7 @@ app-search-component {
   .punt-estado-chat {
     left: -145px !important;
   }
+
   .max-width-10 {
     max-width: 13%;
   }

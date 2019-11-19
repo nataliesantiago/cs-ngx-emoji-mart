@@ -4,7 +4,7 @@
 
     <mat-tab-group (selectedTabChange)="cambiaTab($event)">
       <mat-tab label="Preguntas y respuestas"></mat-tab>
-      <mat-tab label="Conecta autogestión"></mat-tab>
+      <mat-tab label="Procesos" *ngIf="origenes_drive && origenes_drive.length>0"></mat-tab>
       <mat-tab label="Mis Chats"></mat-tab>
     </mat-tab-group>
     <div class="imagen-busqueda" *ngIf="url_imagen_busqueda">
