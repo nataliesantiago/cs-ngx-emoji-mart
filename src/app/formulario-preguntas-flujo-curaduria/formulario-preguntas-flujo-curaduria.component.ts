@@ -337,6 +337,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.pregunta.id_estado = 1;
           this.pregunta.id_usuario_revision = null;
         } else {
+          if(this.rol_usuario == 7){
+            this.pregunta.id_estado_flujo = 3;
+          }
           this.pregunta.id_usuario_revision = this.id_usuario;
         }
 
