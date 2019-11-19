@@ -35,7 +35,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                 user.pass_firebase = data.pass_firebase;
                 user.modo_nocturno = data.modo_nocturno;
                 user.modulos = data.modulos;
-                user.boton_sos = data.boton_sos;
+                user.boton_sos_perfil = data.boton_sos_perfil;
+                user.boton_sos_rol = data.boton_sos_rol;
                 this.userService.definirPaisUsuario(data.pais);
                 user.pais = data.pais;
                 this.userService.setUsuario(user).then(() => {
@@ -83,7 +84,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.setIdRol(d.profile.id_rol);
                         user.modulos = d.modulos;
                         user.url_foto = d.profile.foto;
-                        user.boton_sos = d.profile.boton_sos;
+                        user.boton_sos_perfil = d.profile.boton_sos_perfil;
+                        user.boton_sos_rol = d.profile.boton_sos_rol;
                         user.codigo_firebase = d.profile.codigo_firebase;
                         user.pass_firebase = d.profile.pass_firebase;
                         user.modo_nocturno = d.profile.modo_nocturno;

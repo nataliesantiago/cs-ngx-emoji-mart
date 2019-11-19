@@ -66,10 +66,8 @@ export class AppHeaderComponent {
   }
 
   init() {
-    let t = this.user.modulos.find(m => {
-      return m.idtbl_modulo == 26;
-    })
-    if (!t && this.user.boton_sos) {
+
+    if (this.user.boton_sos_perfil && this.user.boton_sos_rol) {
       this.muestra_boton_sos = true;
     }
     this.chatService.getEstadosExperto().then(estados => {
