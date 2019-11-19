@@ -272,7 +272,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
 
-            this.router.navigate(['/ad-preguntas']);
+            this.router.navigate(['/admin/preguntas']);
           }
         })
       } else {
@@ -292,7 +292,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         this.ajax.post('preguntas/guardar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
 
-            this.router.navigate(['/ad-preguntas']);
+            this.router.navigate(['/admin/preguntas']);
           }
         })
       }
