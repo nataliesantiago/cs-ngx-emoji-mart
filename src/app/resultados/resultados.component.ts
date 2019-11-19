@@ -32,6 +32,7 @@ export class ResultadosComponent implements OnInit {
   origen: string;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatTabGroup) tabs: MatTabGroup;
+  origenes_drive = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -40,6 +41,11 @@ export class ResultadosComponent implements OnInit {
     private searchService: SearchService,
     private chatService: ChatService
   ) {
+    this.searchService.buscarOrigenesDrive().then(origenes => {
+      this.origenes_drive = origenes.filter(o => {
+        return o.activo;
+      });
+    })
   }
 
   ngOnInit() {
