@@ -287,13 +287,13 @@ giveShape(employees, manager) {
     if(this.id_producto_editar){
       this.ajax.post('producto/editar', { producto: this.categoria, id_usuario: this.id_usuario }).subscribe(d => {
         if(d.success){
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/categorias']);
         }
       })
     }else{
       this.ajax.post('producto/guardar', { producto: this.categoria, id_usuario: this.id_usuario }).subscribe(d => {
         if(d.success){
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/categorias']);
         }
       })
     }
