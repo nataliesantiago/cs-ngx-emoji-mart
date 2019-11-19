@@ -74,6 +74,7 @@ export class AppHeaderComponent {
       this.estados_operador = estados;
       if (this.user.getIdRol() == 2) {
         this.cambiarEstadoExperto({ value: 1 });
+        this.user.estado_actual = 1;
       }
       if (this.user.getIdRol() == 3) {
         this.user.estado_experto = 1;
