@@ -103,18 +103,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   quillModulesFc(ql: any) {
-    //let toolbar = ql.getModule('toolbar');
-    //ql.modules = JSON.parse(JSON.stringify(this.quillModules));
+
     setTimeout(() => { ql.getModule('toolbar').addHandler('image', () => { this.qs.fileStorageHandler(ql) }); }, 1000);
-    /*let m = {
-      syntax: true,
-      toolbar: {
-        handlers: { 
-          'image': ()=>{this.qs.fileStorageHandler(ql)}
-        }
-      }
-    };
-    return m;*/
+
   }
 
   ngOnInit() {
@@ -157,7 +148,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
       });
 
-    if(this.id_pregunta_editar == "sugerida" || this.id_pregunta_editar == "nuevo"){
+    if (this.id_pregunta_editar == "sugerida" || this.id_pregunta_editar == "nuevo") {
       this.nombre_boton = "Guardar";
     }
 
@@ -173,7 +164,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
                 this.pregunta = p.pregunta[0];
                 this.validar_flujo = p.pregunta[0].id_usuario_revision;
-                if(p.pregunta[0].id_estado_flujo == 4){
+                if (p.pregunta[0].id_estado_flujo == 4) {
                   this.nombre_boton = "Guardar";
                 }
                 this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
@@ -258,7 +249,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   guardarPregunta() {
 
-    if (this.pregunta.titulo == "" || this.pregunta.id_producto == "") {
+    if (this.pregunta.titulo == "" || (this.id_pregunta_editar != "sugerida" && this.pregunta.id_producto == "")) {
 
       swal.fire({
         title: 'Complete los campos obligatorios',
@@ -336,8 +327,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.pregunta.id_estado_flujo = 2;
           this.pregunta.id_estado = 1;
           this.pregunta.id_usuario_revision = null;
+          delete this.pregunta.id_producto;
         } else {
-          if(this.rol_usuario == 7){
+          if (this.rol_usuario == 7) {
             this.pregunta.id_estado_flujo = 3;
           }
           this.pregunta.id_usuario_revision = this.id_usuario;
@@ -376,11 +368,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         }
         if (this.pregunta.id_estado_flujo == 2) {
           this.pregunta.id_estado_flujo = 1;
+          if (!this.pregunta.id_usuario_revision) {
+            this.pregunta.id_estado = 4;
+          }
         } else if (this.pregunta.id_estado_flujo == 3) {
           this.pregunta.id_estado_flujo = 2;
         } else if (this.pregunta.id_estado_flujo == 4) {
           this.pregunta.id_estado_flujo = 3;
-        }if(this.pregunta.id_estado_flujo == 1){
+        } if (this.pregunta.id_estado_flujo == 1) {
           this.pregunta.id_estado = 4;
         }
 
@@ -743,10 +738,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
-  regresarPagina(){
-    if(this.id_pregunta_editar == "sugerida"){
+  regresarPagina() {
+    if (this.id_pregunta_editar == "sugerida") {
       this.router.navigate(['/home']);
-    }else{
+    } else {
       this.router.navigate(['/flujo-curaduria']);
     }
   }
