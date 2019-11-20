@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, Inject } from '@angular/core';
+import { Component, ViewChild, Input, Inject, ChangeDetectorRef } from '@angular/core';
 import { AutenticationService } from './services/autenticacion.service';
 import { ResponseSearch } from './models/response-search';
 import { User } from '../schemas/user.schema';
@@ -20,9 +20,12 @@ const moment = _rollupMoment || _moment;
 })
 export class AppComponent {
   user: User;
-  version = '0.3.0'
+  version = '0.3.2'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService,
-    @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService) {
+    @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService, private changeRef: ChangeDetectorRef) {
+    setInterval(() => {
+      this.changeRef.detectChanges();
+    }, 200);
     this.responseSearch.setActive(true);
     moment.locale('es');
     this.ajax.sethost(environment.URL_BACK);
