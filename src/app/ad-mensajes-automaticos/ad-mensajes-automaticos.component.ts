@@ -51,6 +51,9 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * inicializa la informacion necesaria
+   */
   init() {
     this.getMessageType();
     this.getAllMessages();
@@ -79,12 +82,15 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     });
   }
 
+  /**
+   * crea la tabla correspondiente con sus datos
+   * @param data 
+   */
   createTable(data) {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.cg.detectChanges();
-    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
   }
 
   /**
@@ -118,7 +124,6 @@ export class AdMensajesAutomaticosComponent implements OnInit {
    * crea el mensaje automatico
    */
   createMessage() {
-    
     if(this.message.texto == '' || this.message.id_tipo_mensaje == null) {
       swal.fire({
         title: 'Complete todos los campos',
@@ -140,6 +145,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
         this.mensajeAutomatico.createMessage(this.message).then(id => {
           this.init();
           this.create_message = false;
+          this.clearFields();
         })
       }
     } 
@@ -307,6 +313,11 @@ export class AdMensajesAutomaticosComponent implements OnInit {
       }
       this.createTable(newArray);
     }
+  }
+
+  clearFields() {
+    this.message.texto = '';
+    this.message.timeout = null;
   }
 
 }

@@ -26,7 +26,7 @@
               <button fxFlex="45" class="custom__btn custom__btn--accept"
                 (click)="createMessage()">Crear</button> 
               <button fxFlex="45" class="custom__btn custom__btn--cancel"
-                (click)="create_message=!create_message">Cancelar</button>
+                (click)="create_message=!create_message; clearFields()">Cancelar</button>
             </div>
           </div>
         </form>
