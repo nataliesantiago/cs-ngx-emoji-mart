@@ -2,15 +2,25 @@ import { Injectable } from "@angular/core";
 import { AjaxService } from "./ajax.service";
 import { Configuracion } from "../../schemas/interfaces";
 import { text } from "@angular/core/src/render3";
+import { UserService } from "./user.service";
+import { User } from "../../schemas/user.schema";
 
 
 @Injectable()
 export class UtilsService {
     configuraciones: Array<any>;
     palabras_clave_pregunta = ['quien', 'quien', 'que', 'donde', 'cuando', 'como', 'cual', 'cuanto', 'cuantas'];
+    user: User;
+    constructor(private ajax: AjaxService, private userService: UserService) {
+        this.user = this.userService.getUsuario();
+        this.userService.observableUsuario.subscribe(u => {
+            this.user = u;
+            this.getConfiguraciones();
+        });
+        if (this.user) {
+            this.getConfiguraciones();
+        }
 
-    constructor(private ajax: AjaxService) {
-        this.getConfiguraciones();
     }
 
 
