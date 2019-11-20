@@ -304,13 +304,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             confirmButtonText: 'Aceptar',
           })
 
+        }else{
+          this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
+            if (d.success) {
+              this.router.navigate(['/flujo-curaduria']);
+            }
+          })
         }
-
-        this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
-          if (d.success) {
-            this.router.navigate(['/flujo-curaduria']);
-          }
-        })
+        
       } else {
 
         if (this.pregunta.muestra_fecha_actualizacion) {
@@ -338,7 +339,12 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.chatService.sugerencia_activa = false;
-            this.router.navigate(['/flujo-curaduria']);
+            if (this.id_pregunta_editar == "sugerida") {
+              this.router.navigate(['/home']);
+            }else{
+              this.router.navigate(['/flujo-curaduria']);
+            }
+            
           }
         })
       }
