@@ -86,9 +86,9 @@ export class SearchService {
           delete this.busqueda_actual;
           delete this.cantidad_busquedas;
           delete this.fecha_inicio_busquedas;
-          localStorage.setItem('fib', null);
-          localStorage.setItem('cmc', null);
-          localStorage.setItem('ubc', null);
+          localStorage.removeItem('fib');
+          localStorage.removeItem('cmc');
+          localStorage.removeItem('ubc');
           Swal.fire({
             title: '¿Deseas buscar un experto?',
             text: '',

@@ -14,10 +14,11 @@
     </ng-autocomplete>
   -->
     <mat-form-field class="caja-buscador">
-      <span #segundo class="contenido"  [innerHTML]="texto_sugerido"></span>
-      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def" floatPlaceholder="never"
-        #primero (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto" autocomplete="off"
-        (keydown)="limpiarSugerencia()">
+
+      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def"
+        floatPlaceholder="never" #primero (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto"
+        autocomplete="off" (keydown)="limpiarSugerencia()">
+      <input #segundo class="contenido" matInput [ngModel]="texto_sugerido">
       <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear"
         (click)="def.setValue('');texto_sugerido=null;">
         <mat-icon>close</mat-icon>
@@ -43,20 +44,20 @@
   </button>
 </div>
 <div class="contendor-general-respuestas">
-<div *ngIf="modo==3" class="panel-respuestas">
-  <div class="contenedor-respuestas" *ngIf="!cargando_respuestas">
-    <perfect-scrollbar>
-      <div *ngFor="let r of resultados; let i = index" class="contenedor__texto center">
-        <app-resultado-search [respuesta]="r" [pos]="i+1" [busqueda]="busqueda" [modo]="modo"></app-resultado-search>
-      </div>
-      <h3 *ngIf="resultados && resultados.length<1" class="sin-resultados">No hay resultados</h3>
-    </perfect-scrollbar>
+  <div *ngIf="modo==3" class="panel-respuestas">
+    <div class="contenedor-respuestas" *ngIf="!cargando_respuestas">
+      <perfect-scrollbar>
+        <div *ngFor="let r of resultados; let i = index" class="contenedor__texto center">
+          <app-resultado-search [respuesta]="r" [pos]="i+1" [busqueda]="busqueda" [modo]="modo"></app-resultado-search>
+        </div>
+        <h3 *ngIf="resultados && resultados.length<1" class="sin-resultados">No hay resultados</h3>
+      </perfect-scrollbar>
+    </div>
+    <mat-paginator [length]="length" [hidePageSize]="true" (page)="paginar($event)" [pageIndex]="page"
+      [showFirstLastButtons]="true" *ngIf="!cargando_respuestas && length>10" [pageSize]="10">
+    </mat-paginator>
+    <mat-progress-spinner class="spinner-cargando-respuestas" [mode]="'indeterminate'" [diameter]="68"
+      *ngIf="cargando_respuestas">
+    </mat-progress-spinner>
   </div>
-  <mat-paginator [length]="length" [hidePageSize]="true" (page)="paginar($event)" [pageIndex]="page"
-    [showFirstLastButtons]="true" *ngIf="!cargando_respuestas && length>10" [pageSize]="10">
-  </mat-paginator>
-  <mat-progress-spinner class="spinner-cargando-respuestas" [mode]="'indeterminate'" [diameter]="68"
-    *ngIf="cargando_respuestas">
-  </mat-progress-spinner>
-</div>
 </div>

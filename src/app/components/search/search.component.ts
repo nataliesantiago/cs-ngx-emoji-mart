@@ -269,7 +269,10 @@ export class AppSearchComponent implements OnChanges, OnInit {
       this.sugerencias = d.suggestResults;
       if (this.sugerencias && this.sugerencias.length > 0) {
         let t = this.sugerencias[0].suggestedQuery;
-        this.texto_sugerido = t.replace(t.substring(0, this.def.value.length), this.def.value);
+        // this.texto_sugerido = t.replace(t.substring(0, this.def.value.length), this.def.value);
+        if (this.def.value && this.def.value != '' && this.def.value != 'undefined') {
+          this.texto_sugerido = this.def.value + t.replace(this.def.value, '');
+        }
         setTimeout(() => {
           this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
           //console.log(this.segundo, this.primero);
@@ -279,6 +282,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     });
     return [];
   }
+
 
   paginar(pagina: any) {
     //console.log(pagina);

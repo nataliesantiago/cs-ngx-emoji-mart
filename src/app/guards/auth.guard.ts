@@ -22,11 +22,12 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         }
         let d = next.params.data;
         if (d != null && d !== "") {
-            
+
             return new Promise<boolean>(resolve => {
                 let data = JSON.parse(atob(d));
-                /*
+
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('pais', data.pais);
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
                     //debugger;
                     this.primer_login = false;
@@ -62,29 +63,30 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                     }
 
                 })
-                */
-                let user = new User(data.email, data.token, data.nombre);
-                user.setId(data.idtbl_usuario);
-                user.setIdPerfil(data.id_perfil);
-                user.setIdRol(data.id_rol);
-                user.url_foto = data.foto;
-                user.codigo_firebase = data.codigo_firebase;
-                user.pass_firebase = data.pass_firebase;
-                user.modo_nocturno = data.modo_nocturno;
-                user.modulos = JSON.parse(decodeURIComponent(escape(JSON.stringify(data.modulos))));
-                user.boton_sos_perfil = data.boton_sos_perfil;
-                user.boton_sos_rol = data.boton_sos_rol;
-                this.userService.definirPaisUsuario(data.pais);
-                user.pais = data.pais;
-                this.userService.setUsuario(user).then(() => {
-                    this.responseSearch.setActive(false);
-                    localStorage.setItem("token", data.token);
-                    this.router.navigate(['home']);
 
-                    setTimeout(() => {
-                        resolve(true);
-                    }, 1);
-                });
+                /* let user = new User(data.email, data.token, data.nombre);
+                 user.setId(data.idtbl_usuario);
+                 user.setIdPerfil(data.id_perfil);
+                 user.setIdRol(data.id_rol);
+                 user.url_foto = data.foto;
+                 user.codigo_firebase = data.codigo_firebase;
+                 user.pass_firebase = data.pass_firebase;
+                 user.modo_nocturno = data.modo_nocturno;
+                 user.modulos = JSON.parse(decodeURIComponent(escape(JSON.stringify(data.modulos))));
+                 user.boton_sos_perfil = data.boton_sos_perfil;
+                 user.boton_sos_rol = data.boton_sos_rol;
+                 this.userService.definirPaisUsuario(data.pais);
+                 user.pais = data.pais;
+                 this.userService.setUsuario(user).then(() => {
+                     this.responseSearch.setActive(false);
+                     localStorage.setItem("token", data.token);
+                     this.router.navigate(['home']);
+ 
+                     setTimeout(() => {
+                         resolve(true);
+                     }, 1);
+                 });
+                 */
 
             })
 

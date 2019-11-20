@@ -3228,6 +3228,7 @@ input:-webkit-autofill:active {
     white-space: nowrap;
     width: 100%;
     overflow: hidden;
+    z-index: 1;
   }
 
   &.mat-focused {
