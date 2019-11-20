@@ -42,6 +42,10 @@ export class UrlsUsuarioComponent implements OnInit {
     this.getUrls();
 
   }
+
+  /**
+   * obtiene las url asociadas al usuario
+   */
   getUrls() {
     this.ajax.get('administracion/obtener-url', { id_usuario: this.id_usuario }).subscribe(p => {
       if (p.success) {
@@ -57,6 +61,9 @@ export class UrlsUsuarioComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * crea una nueva url dependiendo el usuario
+   */
   async nuevoRegistro() {
     if (this.nueva_url.label == '' || this.nueva_url.url == '') {
       Swal.fire({
@@ -81,15 +88,27 @@ export class UrlsUsuarioComponent implements OnInit {
     }
   }
 
+  /**
+   * edita una url especifica
+   * @param u 
+   */
   editarRegistro(u) {
     u.editando = true;
     this.cg.detectChanges();
   }
 
+  /**
+   * cancela la edicion de una url especifica
+   * @param u 
+   */
   cancelarEdicion(u) {
     u.editando = false;
   }
 
+  /**
+   * guarda la informacion editada de una url especifica
+   * @param u 
+   */
   guardarRegistro(u) {
     u.usuario_modificacion = this.id_usuario;
     this.ajax.post('administracion/editar-url', { item: u }).subscribe(d => {
@@ -99,6 +118,10 @@ export class UrlsUsuarioComponent implements OnInit {
     })
   }
 
+  /**
+   * desactiva una url especifica
+   * @param u 
+   */
   eliminarRegistro(u) {
     Swal.fire({
       title: 'Eliminar Url',
@@ -124,6 +147,10 @@ export class UrlsUsuarioComponent implements OnInit {
     })
   }
 
+  /**
+   * aplica filtros generales a la tabla
+   * @param filterValue 
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches

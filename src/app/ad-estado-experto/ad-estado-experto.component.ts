@@ -46,10 +46,16 @@ export class AdEstadoExpertoComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * inicializa la informacion necesaria
+   */
   init() {
     this.getAllStates();
   }
 
+  /**
+   * obtiene todos los estados que puede tener un experto
+   */
   getAllStates() {
     this.estado_experto_service.getAllStates().then((result) => {
       this.expert_states = result;
@@ -57,6 +63,10 @@ export class AdEstadoExpertoComponent implements OnInit {
     });
   }
 
+  /**
+   * crea la tabla con la informacion necesaria
+   * @param data 
+   */
   createTable(data) {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
@@ -65,10 +75,17 @@ export class AdEstadoExpertoComponent implements OnInit {
     this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
   }
 
+  /**
+   * identifica si el estado a crear se puede modificar o no
+   * @param event 
+   */
   onChangeState(event) {
     this.states.es_modificable = event.value;
   }
 
+  /**
+   * crea un nuevo estado de inactividad
+   */
   createState() {
     if(this.states.nombre == '' || this.states.es_modificable == '') {
       swal.fire({
@@ -91,6 +108,10 @@ export class AdEstadoExpertoComponent implements OnInit {
     } 
   }
 
+  /**
+   * actualiza un estado de inactividad
+   * @param e 
+   */
   updateState(e){
     e.update = false;
     e.id_usuario_modificador = this.user.getId();
@@ -99,6 +120,10 @@ export class AdEstadoExpertoComponent implements OnInit {
     });
   }
 
+  /**
+   * desactiva un estado de inactividad
+   * @param e 
+   */
   inactiveState(e){
     swal.fire({
       title: 'Cuidado',
@@ -122,12 +147,21 @@ export class AdEstadoExpertoComponent implements OnInit {
     });
   }
 
+  /**
+   * aplica los filtros generales a la tabla
+   * @param filterValue 
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
+  /**
+   * filtra los valores de la tabla por estado
+   * @param name 
+   * @param event 
+   */
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.expert_states);
