@@ -318,3 +318,11 @@ span {
 .search-icon {
     color: $color-ffffff;
 }
+
+.general-container {
+    &.general-container-question {
+        .content-sidenav-preguntas {
+            background-color: #555555;
+        }
+    }
+} 

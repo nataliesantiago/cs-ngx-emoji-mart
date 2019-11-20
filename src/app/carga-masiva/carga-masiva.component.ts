@@ -19,7 +19,7 @@ export class CargaMasivaComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['title', 'user_id', 'create_date', 'state_id', 'details', 'create', 'errors'];
+  displayedColumns = ['question_id', 'title', 'user_id', 'create_date', 'state_id', 'details', 'create', 'errors'];
   dataSource = new MatTableDataSource([]);
   matTableFilter:matTableFilter;
   filterColumns = [];
@@ -106,10 +106,19 @@ export class CargaMasivaComponent implements OnInit {
           this.data = data.questions;
           this.createTable(this.data);
           this.loading = false;
-        } else {
-
         }
-
+      });
+    } else {
+      swal.fire({
+        title: 'Advertencia',
+        text: "Por favor suba un archivo .csv",
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
       });
     }
   }
@@ -161,6 +170,11 @@ export class CargaMasivaComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
+  /**
+   * funcion para realizar filtros por algun tipo o estado
+   * @param name nombre del campo por el cual se va a filtrar
+   * @param event de este parametro se obtiene el valor seleccionado a filtrar
+   */
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.data);
@@ -195,6 +209,9 @@ export class DialogOverviewDetailQuestion {
     this.data_question = data;
   }
 
+  /**
+   * funcion para cerrar la modal que muestra la informacion o los errores de las preguntas
+   */
   closeDialog() {
     this.dialogRef.close();
   }
