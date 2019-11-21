@@ -27,6 +27,7 @@ export class Mensaje {
     mensaje_sugerido: boolean;
     es_cliente: boolean;
     encontrado: boolean;
+    uuid: string;
     constructor(id_usuario?, tipo_mensaje?, url?) {
         this.id_usuario = id_usuario;
         this.tipo_mensaje = tipo_mensaje;
