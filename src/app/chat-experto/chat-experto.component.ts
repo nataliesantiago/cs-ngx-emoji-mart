@@ -24,7 +24,7 @@ import { ChatPendienteComponent } from '../components/chat-pendiente/chat-pendie
 import { DomSanitizer } from '@angular/platform-browser';
 import { TouchSequence } from 'selenium-webdriver';
 import { EstadoExpertoService } from '../providers/estado-experto.service';
-
+import * as uuid from 'uuid';
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -62,7 +62,7 @@ export class ChatExpertoComponent {
   @Output() mensajes_nuevos: EventEmitter<number> = new EventEmitter<number>();
   file_url;
   loading = false;
-  state: LogEstadoExperto = {id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null};
+  state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -102,7 +102,7 @@ export class ChatExpertoComponent {
         this.user.filas.forEach(f => {
           let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
           //this.chats_cola.push(fila)
-          let cola = this.fireStore.collection('paises/'+this.user.pais+'/'+'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
+          let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
           cola.subscribe(chats => {
 
             let tmp = [];
@@ -123,7 +123,7 @@ export class ChatExpertoComponent {
               this.soundService.sonar(2);
               chats.forEach((c: any, index) => {
                 let refConversacion = c.payload.doc.id;
-                this.chatService.getDocumentoFirebase('paises/'+this.user.pais+'/conversaciones/' + refConversacion).then(async datos => {
+                this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + refConversacion).then(async datos => {
                   let c: Conversacion = datos;
                   c.codigo = refConversacion;
                   c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
@@ -164,7 +164,7 @@ export class ChatExpertoComponent {
             }
           })
         });
-        let chats = this.fireStore.collection('paises/'+this.user.pais+'/'+'expertos/' + this.user.getId() + '/chats').snapshotChanges();
+        let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').snapshotChanges();
         chats.subscribe(chat => {
 
           let temporal: Array<Conversacion> = [];
@@ -180,7 +180,7 @@ export class ChatExpertoComponent {
           }
           chat.forEach((change: any, index) => {
             let codigo = change.payload.doc.id;
-            this.chatService.getDocumentoFirebase('paises/'+this.user.pais+'/conversaciones/' + codigo).then((d: Conversacion) => {
+            this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo).then((d: Conversacion) => {
               let c = d;
               c.codigo = codigo;
               this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
@@ -214,7 +214,7 @@ export class ChatExpertoComponent {
       });
       this.expertos.forEach(e => {
         this.abrirConversacionExperto(e, true);
-        this.fireStore.doc('paises/'+this.user.pais+'/'+'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
           } else {
@@ -274,9 +274,9 @@ export class ChatExpertoComponent {
   }
 
   recibirChatAutomatico() {
-    let config = this.buscarConfiguracion(2);
+    let config = this.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
     // console.log(config)
-    this.chatService.getConversacionesExperto().then((conversaciones: Array<Conversacion>) => {
+    this.chatService.getConversacionesExperto().then(async (conversaciones: Array<Conversacion>) => {
       if (config) {
         if (parseInt(config.valor) > conversaciones.length) {
           let chats = [];
@@ -295,8 +295,8 @@ export class ChatExpertoComponent {
             }
           });
           let c = chats.pop();
-
-          if (c) {
+          let disponibilidad = await this.chatService.getDisponibilidadExperto();
+          if (c && disponibilidad) {
             this.onSelectCola(c);
           }
         }
@@ -306,10 +306,10 @@ export class ChatExpertoComponent {
   }
 
   agregaListenerConversacion(c: Conversacion) {
-    this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       if (data.id_experto_actual != this.user.getId()) {
-        this.fireStore.doc('paises/'+this.user.pais+'/'+'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
       } else {
         c.id_estado_conversacion = data.id_estado_conversacion;
         c.llamada_activa = data.llamada_activa;
@@ -386,16 +386,16 @@ export class ChatExpertoComponent {
 
   }
 
-  buscarConfiguracion(id: number): Configuracion {
-    return this.configuraciones.find(c => {
-      return c.idtbl_configuracion === id;
+  buscarConfiguracion(id: number | string): Configuracion {
+    return this.configuraciones.find((c: Configuracion) => {
+      return c.idtbl_configuracion === id || c.nombre == id;
     });
   }
 
   agregarListenerMensajes(c: Conversacion) {
     c.mensajes = [];
     let primera_vez = true;
-    c.messages = this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo + '/mensajes', ref =>
+    c.messages = this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
     c.listener_mensajes = c.messages.subscribe(async d => {
@@ -404,7 +404,7 @@ export class ChatExpertoComponent {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
       //console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
-      c.mensajes = await this.procesarMensajes(d, c, primera_vez, 0, []);
+      c.mensajes = c.mensajes.concat(await this.procesarMensajes(d, c, primera_vez, 0, []));
       if (!c.primera_consulta) {
         c.mensajes.filter(m => {
           return m.id_usuario == c.id_usuario_creador && (!m.es_nota_voz && !m.es_archivo);
@@ -413,7 +413,7 @@ export class ChatExpertoComponent {
             if (rta && !c.primera_consulta) {
               c.primera_consulta = m.texto;
               c.busqueda_interna = m.texto;
-              this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).update({ primera_consulta: c.primera_consulta });
+              this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ primera_consulta: c.primera_consulta });
             }
           });
         })
@@ -428,7 +428,7 @@ export class ChatExpertoComponent {
       //console.log(this.cantidad_mensajes_sin_leer);
       this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     });
-    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo + '/mensajes/').snapshotChanges().subscribe((changes: any) => {
+    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes/').snapshotChanges().subscribe((changes: any) => {
       changes.forEach(a => {
         const data = a.payload.doc.data() as Mensaje;
         const id = a.payload.doc.id;
@@ -439,7 +439,7 @@ export class ChatExpertoComponent {
       })
     });
     c.usuarios_escribiendo = [];
-    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo + '/usuarios_escribiendo/').snapshotChanges().subscribe((changes: any) => {
+    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/usuarios_escribiendo/').snapshotChanges().subscribe((changes: any) => {
       let tmp = [];
       changes.forEach(a => {
         let data = a.payload.doc.data();
@@ -469,8 +469,9 @@ export class ChatExpertoComponent {
   }
 
   async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number, tmp: Array<Mensaje>) {
-    let m = d.shift();
-    if (m) {
+    for (let index = 0; index < d.length; index++) {
+      const m = d[index];
+      //console.log(m);
       let experto = this.usuarios.find((e: User) => {
         return e.idtbl_usuario == m.id_usuario;
       });
@@ -483,19 +484,17 @@ export class ChatExpertoComponent {
         this.asignarAudio(m);
       }
 
-      //c.mensajes[i] = m;
-      tmp.push(m);
-      if (!primera_vez && !c.focuseado && m.id_usuario != this.user.getId() && c.id_estado_conversacion == 2) {
-        this.soundService.sonar(1);
-        c.mensajes_nuevos = true;
-        // c.cantidad_mensajes_nuevos++;
+      //  c.mensajes[i] = m;
+      let bus: Mensaje = c.mensajes.find(mm => {
+        return mm.uuid == m.uuid;
+      });
+      //console.log(bus);
+      if (!bus) {
+        tmp.push(m);
       } else {
-
+        bus.estado = m.estado;
       }
-
-      //console.log('mensaje sin leer', this.cantidad_mensajes_sin_leer);
-
-      if (d.length < 1) {
+      if (d.length == (index + 1)) {
         c.ultimo_mensaje = m;
         if (m.es_nota_voz) {
           c.ultimo_mensaje.label = 'Nota de voz';
@@ -505,12 +504,58 @@ export class ChatExpertoComponent {
           c.ultimo_mensaje.label = m.texto;
         }
       }
-      i++;
-      return await this.procesarMensajes(d, c, primera_vez, i, tmp);
-    } else {
-      //console.log(' mensajes', m)
-      return tmp;
+
     }
+    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
+      this.soundService.sonar(1);
+      //c.cantidad_mensajes_nuevos++;
+      c.mensajes_nuevos = true;
+    }
+
+    //console.log(tmp);
+    return tmp;
+    /* let m = d.shift();
+     if (m) {
+       let experto = this.usuarios.find((e: User) => {
+         return e.idtbl_usuario == m.id_usuario;
+       });
+       if (!experto) {
+         let u = await this.userService.getInfoUsuario(m.id_usuario);
+         this.usuarios.push(u);
+       }
+       if (m.es_nota_voz) {
+         m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
+         this.asignarAudio(m);
+       }
+ 
+       //c.mensajes[i] = m;
+       tmp.push(m);
+       if (!primera_vez && !c.focuseado && m.id_usuario != this.user.getId() && c.id_estado_conversacion == 2) {
+         this.soundService.sonar(1);
+         c.mensajes_nuevos = true;
+         // c.cantidad_mensajes_nuevos++;
+       } else {
+ 
+       }
+ 
+       //console.log('mensaje sin leer', this.cantidad_mensajes_sin_leer);
+ 
+       if (d.length < 1) {
+         c.ultimo_mensaje = m;
+         if (m.es_nota_voz) {
+           c.ultimo_mensaje.label = 'Nota de voz';
+         } else if (m.es_archivo) {
+           c.ultimo_mensaje.label = 'Archivo adjunto';
+         } else {
+           c.ultimo_mensaje.label = m.texto;
+         }
+       }
+       i++;
+       return await this.procesarMensajes(d, c, primera_vez, i, tmp);
+     } else {
+       //console.log(' mensajes', m)
+       return tmp;
+     }*/
   }
 
   passByMensajes(mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {
@@ -675,6 +720,7 @@ export class ChatExpertoComponent {
         chat.texto_mensaje = '';
       }
       let m = new Mensaje();
+      m.uuid = uuid.v4();
       m.tipo_conversacion = chat.id_tipo_conversacion;
       m.id_usuario = this.user.getId();
       m.texto = chat.texto_mensaje;
@@ -927,7 +973,7 @@ export class ChatExpertoComponent {
   }
 
   toggleNotas(c: Conversacion) {
-    this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).set({ notas_voz: c.notas_voz }, { merge: true });
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).set({ notas_voz: c.notas_voz }, { merge: true });
   }
 
   cerrarChat(c: Conversacion) {
@@ -950,7 +996,7 @@ export class ChatExpertoComponent {
     if (c.conversacion_recomendada) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
-        this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).update({ muestra_boton_recomendacion: c.muestra_boton_recomendacion, mostrar_encuesta: c.mostrar_encuesta, encuesta_realizada: c.encuesta_realizada });
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ muestra_boton_recomendacion: c.muestra_boton_recomendacion, mostrar_encuesta: c.mostrar_encuesta, encuesta_realizada: c.encuesta_realizada });
       }
 
       return true;
@@ -966,7 +1012,7 @@ export class ChatExpertoComponent {
       if (this.chat.codigo == c.codigo) {
         delete this.chat;
       }
-      this.fireStore.doc('paises/'+this.user.pais+'/'+'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
     }
   }
 
@@ -976,7 +1022,7 @@ export class ChatExpertoComponent {
       // console.log('creo', d);
       // this.enviarMensaje(c, 4, d);
       c.buscando_llamada = false;
-      this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).update({ llamada_activa: true, url_llamada: d });
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ llamada_activa: true, url_llamada: d });
     });
   }
 
@@ -989,12 +1035,12 @@ export class ChatExpertoComponent {
   sugerirPregunta(c: Conversacion) {
     c.muestra_interfaz_recomendacion = true;
     c.muestra_boton_recomendacion = false;
-    this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).update({ muestra_interfaz_recomendacion: true, muestra_boton_recomendacion: false });
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ muestra_interfaz_recomendacion: true, muestra_boton_recomendacion: false });
     this.chatService.aceptarSugerenciaNlp(c);
   }
 
   actualizaMensajeSugerido(m: Mensaje) {
-    this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + m.codigo + '/mensajes/' + m.id).set(m);
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + m.codigo + '/mensajes/' + m.id).set(m);
     //this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + m.codigo + '/mensajes').doc(m.id).set(m);
   }
 
@@ -1002,7 +1048,7 @@ export class ChatExpertoComponent {
     if (this.chat.codigo == c.codigo) {
       delete this.chat;
     }
-    this.fireStore.doc('paises/'+this.user.pais+'/'+'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
   }
 
   irSugerencia(c: Conversacion) {

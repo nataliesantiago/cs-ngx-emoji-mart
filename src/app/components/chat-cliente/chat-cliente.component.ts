@@ -16,7 +16,7 @@ import { SonidosService } from '../../providers/sonidos.service';
 import swal from 'sweetalert2';
 import { UtilsService } from '../../providers/utils.service';
 import { FormControl } from '@angular/forms';
-
+import * as uuid from 'uuid';
 const moment = _rollupMoment || _moment;
 
 
@@ -211,12 +211,12 @@ export class ChatClienteComponent implements OnInit {
     let primera_vez = true;
 
     c.messages.subscribe(async d => {
-      //console.log(d.length, c.mensajes, primera_vez);
+      //console.log(d.length, c.mensajes.length);
       if (!primera_vez && c.mensajes && d.length > c.mensajes.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
 
-      c.mensajes = await this.procesarMensajes(d, c, primera_vez, 0, []);
+      c.mensajes = c.mensajes.concat(await this.procesarMensajes(d, c, primera_vez, 0, []));
 
       primera_vez = false;
       if (this.intervalo) {
@@ -241,8 +241,9 @@ export class ChatClienteComponent implements OnInit {
   }
 
   async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number, tmp) {
-    let m = d.shift();
-    if (m) {
+    for (let index = 0; index < d.length; index++) {
+      const m = d[index];
+      //console.log(m);
       let experto = this.expertos.find((e: User) => {
         return e.idtbl_usuario == m.id_usuario;
       });
@@ -256,19 +257,60 @@ export class ChatClienteComponent implements OnInit {
       }
 
       //  c.mensajes[i] = m;
-      tmp.push(m);
-      if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
-        this.soundService.sonar(1);
-        //c.cantidad_mensajes_nuevos++;
-        c.mensajes_nuevos = true;
-
+      let bus: Mensaje = c.mensajes.find(mm => {
+        return mm.uuid == m.uuid;
+      });
+      //console.log(bus);
+      if (!bus) {
+        tmp.push(m);
+      } else {
+        bus.estado = m.estado;
       }
 
-      i++;
-      return await this.procesarMensajes(d, c, primera_vez, i, tmp);
-    } else {
-      return tmp;
     }
+    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
+      this.soundService.sonar(1);
+      //c.cantidad_mensajes_nuevos++;
+      c.mensajes_nuevos = true;
+    }
+    //console.log(tmp);
+    return tmp;
+    /*
+        let m = d.shift();
+        if (m) {
+          let experto = this.expertos.find((e: User) => {
+            return e.idtbl_usuario == m.id_usuario;
+          });
+          if (!experto) {
+            let u = await this.userService.getInfoUsuario(m.id_usuario);
+            this.expertos.push(u);
+          }
+          if (m.es_nota_voz) {
+            m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
+            this.asignarAudio(m);
+          }
+    
+          //  c.mensajes[i] = m;
+          let bus = c.mensajes.find(mm => {
+    
+            return mm.codigo == m.codigo;
+          });
+          console.log(bus);
+          if (!bus) {
+            tmp.push(m);
+          }
+          if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
+            this.soundService.sonar(1);
+            //c.cantidad_mensajes_nuevos++;
+            c.mensajes_nuevos = true;
+    
+          }
+    
+          i++;
+          return await this.procesarMensajes(d, c, primera_vez, i, tmp);
+        } else {
+          return tmp;
+        }*/
   }
 
 
@@ -537,6 +579,7 @@ export class ChatClienteComponent implements OnInit {
         chat.texto_mensaje = '';
       }
       let m = new Mensaje();
+      m.uuid = uuid.v4();
       m.tipo_conversacion = 1;
       m.es_cliente = true;
       m.id_usuario = this.user.getId();
@@ -648,7 +691,7 @@ export class ChatClienteComponent implements OnInit {
           disableLogs: true
         });
 
-        this.startTimer(tiempo, c).then(() => {
+        this.startTimer(tiempo, c, comp).then(() => {
           c.mediaRecorder.stop(audioBlob => {
             this.onStopRecordingNotaVoz(audioBlob, c, comp);
 
@@ -670,12 +713,12 @@ export class ChatClienteComponent implements OnInit {
 
   }
 
-  startTimer(duration: number, c: Conversacion): Promise<any> {
+  startTimer(duration: number, c: Conversacion, comp: PerfectScrollbarComponent): Promise<any> {
 
     var timer: number = duration;
     let minutes;
     let seconds;
-
+    console.log(timer)
 
     return new Promise((resolve, reject) => {
 
@@ -690,6 +733,7 @@ export class ChatClienteComponent implements OnInit {
       c.inicia_grabacion = new Date();
       this.chatService.usuarioEscribiendoConversacion(c, 2);
       c.interval_grabando = setInterval(() => {
+        console.log(timer)
         timer -= 1;
         minutes = Math.floor(timer / 60);
         seconds = Math.floor(timer % 60);
@@ -702,10 +746,10 @@ export class ChatClienteComponent implements OnInit {
 
 
         if (timer <= 0) {
-          window.clearInterval(c.interval_grabando);
-          resolve();
+          this.enviarNota(c, comp);
+        } else {
+          this.chatService.usuarioEscribiendoConversacion(c, 2);
         }
-        this.chatService.usuarioEscribiendoConversacion(c, 2);
       }, 1000);
     });
 

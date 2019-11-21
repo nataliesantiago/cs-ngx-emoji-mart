@@ -47,8 +47,11 @@ export class ChatService {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
+      this.getConfiguracionesChat();
     });
-    this.getConfiguracionesChat();
+    if (this.user) {
+      this.getConfiguracionesChat();
+    }
   }
   /**
    * @description Se encarga de buscar las conversaciones activas del cliente y las aloja en memoria ram para futuras consultas
@@ -81,6 +84,23 @@ export class ChatService {
             resolve(d.conversaciones);
           } else {
             reject();
+          }
+        });
+      }
+    })
+  }
+  /**
+   * @description Devuelve si el experto está disponible en este momento
+   * @returns Promise
+   */
+  getDisponibilidadExperto(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.user) {
+        this.ajax.get('chat/getDisponibilidadExperto', { id_usuario: this.user.getId() }).subscribe((d: any) => {
+          if (d.success) {
+            resolve(d.disponibilidad);
+          } else {
+            //reject();
           }
         });
       }
