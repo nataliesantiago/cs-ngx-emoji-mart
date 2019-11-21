@@ -57,6 +57,9 @@ export class AdministradorShortcutsComponent implements OnInit {
     });
   }
 
+  /**
+   * inicializa la informacion necesaria
+   */
   init() {
 
     this.chatService.getGuiones().then((guiones: Array<GuionChat>) => {
@@ -92,6 +95,10 @@ export class AdministradorShortcutsComponent implements OnInit {
     })
   }
 
+  /**
+   * identifica que guion ha sido seleccionado
+   * @param value 
+   */
   seleccionaGuion(value: GuionChat) {
     this.nuevo_shortcut.id_guion = value.idtbl_guion_chat;
     this.nuevo_shortcut.guion = value.texto;
@@ -101,6 +108,10 @@ export class AdministradorShortcutsComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * identifica los comandos ingresados
+   * @param event 
+   */
   add(event: KeyboardEvent): void {
     // console.log(event);
     event.preventDefault();
@@ -131,6 +142,9 @@ export class AdministradorShortcutsComponent implements OnInit {
     }
   }
 
+  /**
+   * identifica si se ha ingresado algun comando
+   */
   soltar() {
     if (this.comandos.length > 0)
       setTimeout(() => {
@@ -138,12 +152,19 @@ export class AdministradorShortcutsComponent implements OnInit {
       }, 200);
   }
 
+  /**
+   * limpia el formulario de creacion de un shortcut
+   */
   reset() {
     this.nuevo_shortcut = { activo: true };
     this.comandos = [];
     this.habilitado = true;
   }
 
+  /**
+   * limpia el campo de ingresar un nuevo shortcut
+   * @param index 
+   */
   remove(index: any): void {
     console.log(index);
     if (index >= 0) {
@@ -151,6 +172,9 @@ export class AdministradorShortcutsComponent implements OnInit {
     }
   }
 
+  /**
+   * crea un nuevo shortcut
+   */
   crearShortcut() {
     this.nuevo_shortcut.id_usuario = this.user.getId();
     this.shortcutsService.crearShortcut(this.nuevo_shortcut).then(id => {
@@ -178,6 +202,10 @@ export class AdministradorShortcutsComponent implements OnInit {
     });
   }
 
+  /**
+   * desactiva un shortcut especifico
+   * @param e 
+   */
   eliminarShortcut(e) {
     swal.fire({
       title: 'Cuidado',
@@ -201,6 +229,10 @@ export class AdministradorShortcutsComponent implements OnInit {
     });
   }
 
+  /**
+   * aplica filtros generales a la tabla
+   * @param filterValue 
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches

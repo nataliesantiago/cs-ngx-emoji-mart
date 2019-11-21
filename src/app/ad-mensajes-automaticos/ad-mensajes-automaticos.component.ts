@@ -294,12 +294,21 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     });
   }
 
+  /**
+   * aplica los filtros generales a la tabla
+   * @param filterValue 
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
+  /**
+   * aplica filtros especificos a la tabla
+   * @param name 
+   * @param event 
+   */
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.messages);
@@ -315,6 +324,9 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     }
   }
 
+  /**
+   * limpia los campos del formulario de creacion
+   */
   clearFields() {
     this.message.texto = '';
     this.message.timeout = null;

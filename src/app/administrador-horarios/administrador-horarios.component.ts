@@ -53,6 +53,10 @@ export class AdministradorHorariosComponent implements OnInit {
     })
   }
 
+  /**
+   * crea la tabla con la informacion necesaria
+   * @param data 
+   */
   createTable(data) {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
@@ -64,11 +68,19 @@ export class AdministradorHorariosComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * edita un registro de un horario
+   * @param u 
+   */
   editarRegistro(u) {
     u.editando = true;
     this.cg.detectChanges();
   }
 
+  /**
+   * cancela la edicion de un horario
+   * @param u 
+   */
   cancelarEdicion(u) {
     this.user.obtenerHorarios().then(d => {
       this.horarios = d;
@@ -77,7 +89,10 @@ export class AdministradorHorariosComponent implements OnInit {
     })
   }
 
-
+  /**
+   * guarda la edicion de un registro de un horario
+   * @param u 
+   */
   guardarRegistro(u) {
     u.usuario_modificacion = this.id_usuario;
     this.user.editarHorario(u).then(d => {
@@ -90,12 +105,19 @@ export class AdministradorHorariosComponent implements OnInit {
     })
   }
 
+  /**
+   * aplica filtros generales a la tabla
+   * @param filterValue 
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
+  /**
+   * crea un nuevo horario
+   */
   crearHorario() {
     this.user.crearHorario(this.horario_nuevo, this.id_usuario).then(d => {
       this.user.obtenerHorarios().then(d => {
@@ -107,6 +129,10 @@ export class AdministradorHorariosComponent implements OnInit {
     })
   }
 
+  /**
+   * activa un horario especifico
+   * @param u 
+   */
   activarHorario(u) {
     swal.fire({
       title: 'Activar Horario',
@@ -136,7 +162,10 @@ export class AdministradorHorariosComponent implements OnInit {
     })
   }
 
-
+  /**
+   * desactiva un horario especifico
+   * @param u 
+   */
   desactivarHorario(u) {
     swal.fire({
       title: 'Desactivar Horario',
@@ -166,6 +195,11 @@ export class AdministradorHorariosComponent implements OnInit {
     })
   }
 
+  /**
+   * aplica filtros especificos a la tabla
+   * @param name 
+   * @param event 
+   */
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.horarios);

@@ -112,6 +112,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   }
 
+  /**
+   * realiza una busqueda para validar si la pregunta ya existe
+   * @param value 
+   */
   cambiarBusqueda(value) {
     console.log(value);
     this.texto_buscador = value
@@ -119,6 +123,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     return this.texto_buscador;
   }
 
+  /**
+   * inicializa la informacion necesaria
+   */
   init() {
 
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
@@ -247,6 +254,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   }
 
+  /**
+   * crea una nueva pregunta
+   */
   guardarPregunta() {
 
     if (this.pregunta.titulo == "" || (this.id_pregunta_editar != "sugerida" && this.pregunta.id_producto == "")) {
@@ -353,6 +363,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   }
 
+  /**
+   * rechaza una pregunta especifica
+   */
   rechazarPregunta() {
 
     swal.fire({
@@ -399,10 +412,16 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
+  /**
+   * crea un nuevo segmento
+   */
   anadirSegmento() {
     this.segmentos.push({ titulo: '', respuesta: '' });
   }
 
+  /**
+   * crea una nueva subrespuesta
+   */
   anadirSubRespuesta() {
     this.subrespuestas.push({ titulo: '', respuesta: '', posicion: '', categoria: '' });
   }
@@ -460,6 +479,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
+  /**
+   * desactiva una subrespuesta especifica
+   * @param e 
+   * @param pos 
+   */
   eliminarSubRespuesta(e, pos) {
     swal.fire({
       title: 'Eliminar Subrespuesta',
@@ -494,6 +518,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
+  /**
+   * valida un segmento especifico
+   * @param e 
+   */
   validarSegmento(e) {
     /*this.array_mostrar = [];
     this.cant_subrespuestas_segmento = 0;
@@ -504,6 +532,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     }*/
   }
 
+  /**
+   * crea una sub respuesta a un segmento especifico
+   * @param e 
+   */
   anadirSubRespuestaSegmento(e) {
     this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: e, segmento: '' });
 
@@ -515,6 +547,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   }
 
+  /**
+   * desactiva una sub respuesta a un segmento especifico
+   * @param e 
+   * @param pos 
+   */
   eliminarSubRespuestaSegmento(e, pos) {
     swal.fire({
       title: 'Eliminar Subrespuesta del segmento',
@@ -549,10 +586,18 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
+  /**
+   * verifica una pregunta asociada
+   * @param pregunta 
+   */
   verificarPreguntaAsociada(pregunta) {
 
   }
 
+  /**
+   * realiza el filtro correspondiente de la informacion asociada
+   * @param value 
+   */
   private _filter(value: any): string[] {
 
     if (value.nombre) {
@@ -565,6 +610,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   }
 
+  /**
+   * crea una pregunta asociada a una pregunta especifica
+   * @param e 
+   */
   anadirPreguntaAsociada(e) {
     this.preguntas_adicion.push(e);
 
@@ -580,6 +629,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     this.cg.detectChanges();
   }
 
+  /**
+   * desactiva una pregunta asociada a la pregunta
+   * @param e 
+   */
   borrarElemento(e) {
 
     swal.fire({
@@ -641,6 +694,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
+  /**
+   * crea un cargo asociado a la pregunta
+   * @param e 
+   */
   anadirCargoAsociado(e) {
     let validador = true;
     for (let i = 0; i < this.cargos_asociados.length; i++) {
@@ -679,6 +736,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   }
 
+  /**
+   * desactiva un cargo asociado a la pregunta
+   * @param e 
+   */
   borrarCargo(e) {
 
     swal.fire({
@@ -744,6 +805,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     })
   }
 
+  /**
+   * redirecciona a una nueva ventana dependiendo las acciones realizadas
+   */
   regresarPagina() {
     if (this.id_pregunta_editar == "sugerida") {
       this.router.navigate(['/home']);

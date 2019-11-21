@@ -47,6 +47,11 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
   }
+
+  /**
+   * inicializa la informacion necesaria
+   * @param recarga 
+   */
   init(recarga?: boolean) {
     this.chatService.getGuiones().then(guiones => {
       this.guiones = guiones;
@@ -57,6 +62,10 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * crea la tabla con la informacion necesaria
+   * @param data 
+   */
   createTable(data) {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
@@ -68,12 +77,20 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     
   }
 
+  /**
+   * aplica filtros generales a la tabla
+   * @param filterValue 
+   */
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
+  /**
+   * verifica que las variables ingresadas sean correctas
+   * @param texto 
+   */
   validarVariablesPermitidas(texto) {
     let variables_permitidas = ['{nombre_cliente}', '{correo_cliente}', '{categoria}', '{fecha_actual}', '{busqueda}', '{id_conversacion}'];
     let variables = texto.match(/{.*?}/g);
@@ -85,6 +102,9 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * muestra la modal de error cuando una variable ingresada no es correcta
+   */
   modalErrorVariables() {
     swal.fire({
       title: 'Advertencia',
@@ -99,6 +119,9 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * crea un nuevo guion
+   */
   crearGuion() {
     this.validarVariablesPermitidas(this.nuevo_guion.texto);
     
@@ -114,6 +137,10 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     
   }
 
+  /**
+   * edita un guion especifico
+   * @param e 
+   */
   editarGuion(e) {
     e.editando = false;
     e.texto = e.texto_tmp;
@@ -129,6 +156,10 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     
   }
 
+  /**
+   * desactiva un guion especifico
+   * @param e 
+   */
   eliminarExtension(e) {
     swal.fire({
       title: 'Cuidado',
@@ -152,6 +183,11 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * aplica filtros especificos a la tabla
+   * @param name 
+   * @param event 
+   */
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.guiones);
