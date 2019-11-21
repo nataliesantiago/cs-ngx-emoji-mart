@@ -45,12 +45,12 @@ export class CargaMasivaComponent implements OnInit {
   downloadCsvFile() {
     let csv_headers = [
       ['Pregunta,Respuesta,Correo_usuario_creador,Fecha_creacion,Correo_usuario_ultima_modificacion,Fecha_ultima_modificacion,Identificador_producto,Estado,Estado_flujo,Muestra_fecha_actualizacion'],
-      [',,,,,,,,,0']
+      ['"","","","","","",","","",0']
     ];
     let csv_content = csv_headers.map(e => e.join(",")).join("\n");
 
     let link = document.createElement("a");
-    link.href = 'data:text/csv; charset=utf-8,' + encodeURIComponent(csv_content);
+    link.href = 'data:text/csv; charset=UTF-8,%EF%BB%BF' + encodeURIComponent(csv_content);
     link.download = "formato-preguntas-respuestas.csv";
     window.document.body.appendChild(link);
     link.click();
