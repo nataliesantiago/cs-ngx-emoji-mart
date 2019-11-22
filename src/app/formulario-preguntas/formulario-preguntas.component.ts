@@ -60,6 +60,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   texto_buscador: string;
   buscador = false;
 
+
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
@@ -75,12 +76,14 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
+      console.log(this.usuario);
       this.init();
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
       if (this.usuario) {
+        console.log(this.usuario);
         this.init();
       }
     })
@@ -120,7 +123,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   }
 
-  cambiarBusqueda(value){
+  cambiarBusqueda(value) {
     console.log(value);
     this.texto_buscador = value
     this.buscador = true;
@@ -209,7 +212,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                               this.dataSource.paginator = this.paginator;
                               this.dataSource.sort = this.sort;
                               this.ajax.get('preguntas/obtener-cargos-asociados', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(carg => {
-                                if (carg.success) {                                  
+                                if (carg.success) {
                                   this.cargos_asociados = carg.cargos_asociados;
                                   this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
                                   this.dataSource2.paginator = this.paginator2;

@@ -177,6 +177,7 @@ export class FormularioEncuestasComponent implements OnInit {
     let suma_total = 0;
     let validar_orden = true;
     let validar_campos = true;
+    this.permitir_envio = true;
     if (this.permitir_envio) {
 
       if (this.preguntas.length == 0) {
@@ -204,8 +205,12 @@ export class FormularioEncuestasComponent implements OnInit {
             this.preguntas[i].maximo = null;
           }
           if (this.preguntas[i].id_tipo == 1) {
+            console.log("Entra");
             if (this.preguntas[i].minimo == "" || this.preguntas[i].maximo == "") {
               validar_campos = false;
+            }
+            if (parseInt(this.preguntas[i].minimo) >= parseInt(this.preguntas[i].maximo)) {
+              this.permitir_envio = false;
             }
           }
           if (this.preguntas[i].id_tipo == 5) {
@@ -230,43 +235,55 @@ export class FormularioEncuestasComponent implements OnInit {
           validar_campos = false;
         }
 
-        console.log(suma_total);
-
-        if (validar_campos) {
-          if (validar_orden) {
-            if (suma_total == 100) {
-              if (this.editar) {
-                this.ajax.post('encuestas/editar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
-                  if (d.success) {
-
-                    this.router.navigate(['/ad-encuestas']);
+        if (this.permitir_envio) {
+          if (validar_campos) {
+            if (validar_orden) {
+              if (suma_total == 100) {
+                if (this.editar) {
+                  this.ajax.post('encuestas/editar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
+                    if (d.success) {
+  
+                      this.router.navigate(['/ad-encuestas']);
+                    }
+                  })
+                } else {
+                  this.ajax.post('encuestas/guardar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
+                    if (d.success) {
+  
+                      this.router.navigate(['/ad-encuestas']);
+                    }
+                  })
+                }
+  
+              } else if (suma_total < 100) {
+                swal.fire({
+                  title: 'Peso incorrecto',
+                  text: 'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar',
+                  type: 'warning',
+                  buttonsStyling: false,
+                  confirmButtonClass: 'custom__btn custom__btn--accept',
+                  confirmButtonText: 'Aceptar',
+                  customClass: {
+                    container: 'custom-sweet'
                   }
                 })
-              } else {
-                this.ajax.post('encuestas/guardar', { encuesta: this.encuesta, preguntas: this.preguntas, id_usuario: this.user.idtbl_usuario }).subscribe(d => {
-                  if (d.success) {
-
-                    this.router.navigate(['/ad-encuestas']);
+              } else if (suma_total > 100) {
+                swal.fire({
+                  title: 'Peso incorrecto',
+                  text: 'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar',
+                  type: 'warning',
+                  buttonsStyling: false,
+                  confirmButtonClass: 'custom__btn custom__btn--accept',
+                  confirmButtonText: 'Aceptar',
+                  customClass: {
+                    container: 'custom-sweet'
                   }
                 })
               }
-
-            } else if (suma_total < 100) {
+            } else {
               swal.fire({
-                title: 'Peso incorrecto',
-                text: 'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar',
-                type: 'warning',
-                buttonsStyling: false,
-                confirmButtonClass: 'custom__btn custom__btn--accept',
-                confirmButtonText: 'Aceptar',
-                customClass: {
-                  container: 'custom-sweet'
-                }
-              })
-            } else if (suma_total > 100) {
-              swal.fire({
-                title: 'Peso incorrecto',
-                text: 'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar',
+                title: 'Orden Incorrecto',
+                text: 'Seleccione el orden de las preguntas adecuadamente',
                 type: 'warning',
                 buttonsStyling: false,
                 confirmButtonClass: 'custom__btn custom__btn--accept',
@@ -278,8 +295,8 @@ export class FormularioEncuestasComponent implements OnInit {
             }
           } else {
             swal.fire({
-              title: 'Orden Incorrecto',
-              text: 'Seleccione el orden de las preguntas adecuadamente',
+              title: 'Datos Incompletos',
+              text: 'Digite todos los campos en el formulario',
               type: 'warning',
               buttonsStyling: false,
               confirmButtonClass: 'custom__btn custom__btn--accept',
@@ -289,10 +306,10 @@ export class FormularioEncuestasComponent implements OnInit {
               }
             })
           }
-        } else {
+        }else {
           swal.fire({
-            title: 'Datos Incompletos',
-            text: 'Digite todos los campos en el formulario',
+            title: 'Datos Incorrectos',
+            text: 'Los valores máximos deben ser mayores a los mínimos',
             type: 'warning',
             buttonsStyling: false,
             confirmButtonClass: 'custom__btn custom__btn--accept',
@@ -302,8 +319,6 @@ export class FormularioEncuestasComponent implements OnInit {
             }
           })
         }
-
-
       }
     } else {
       swal.fire({
@@ -325,6 +340,7 @@ export class FormularioEncuestasComponent implements OnInit {
     let suma_total = 0;
     let validar_orden = true;
     let validar_campos = true;
+    this.permitir_envio = true;
     if (this.permitir_envio) {
 
       if (this.preguntas.length == 0) {
@@ -354,7 +370,7 @@ export class FormularioEncuestasComponent implements OnInit {
           if (this.preguntas[i].id_tipo == 1) {
             if (this.preguntas[i].minimo == "" || this.preguntas[i].maximo == "") {
               validar_campos = false;
-            }
+            }            
           }
           if (this.preguntas[i].id_tipo == 5) {
             if (this.preguntas[i].maximo == "") {
@@ -378,33 +394,45 @@ export class FormularioEncuestasComponent implements OnInit {
           validar_campos = false;
         }
 
-        console.log(suma_total);
-
-        if (validar_campos) {
-          if (validar_orden) {
-            if (suma_total == 100) {
-              if (this.editar) {
-                this.router.navigate(['/ad-encuestas']);
-              } else {
-                this.router.navigate(['/ad-encuestas']);
-              }
-
-            } else if (suma_total < 100) {
-              swal.fire({
-                title: 'Peso incorrecto',
-                text: 'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar',
-                type: 'warning',
-                buttonsStyling: false,
-                confirmButtonClass: 'custom__btn custom__btn--accept',
-                confirmButtonText: 'Aceptar',
-                customClass: {
-                  container: 'custom-sweet'
+        if (this.permitir_envio) {
+          if (validar_campos) {
+            if (validar_orden) {
+              if (suma_total == 100) {
+                if (this.editar) {
+                  this.router.navigate(['/ad-encuestas']);
+                } else {
+                  this.router.navigate(['/ad-encuestas']);
                 }
-              })
-            } else if (suma_total > 100) {
+
+              } else if (suma_total < 100) {
+                swal.fire({
+                  title: 'Peso incorrecto',
+                  text: 'La sumatoria del peso de las preguntas es menor a 100, ajuste los valores antes de guardar',
+                  type: 'warning',
+                  buttonsStyling: false,
+                  confirmButtonClass: 'custom__btn custom__btn--accept',
+                  confirmButtonText: 'Aceptar',
+                  customClass: {
+                    container: 'custom-sweet'
+                  }
+                })
+              } else if (suma_total > 100) {
+                swal.fire({
+                  title: 'Peso incorrecto',
+                  text: 'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar',
+                  type: 'warning',
+                  buttonsStyling: false,
+                  confirmButtonClass: 'custom__btn custom__btn--accept',
+                  confirmButtonText: 'Aceptar',
+                  customClass: {
+                    container: 'custom-sweet'
+                  }
+                })
+              }
+            } else {
               swal.fire({
-                title: 'Peso incorrecto',
-                text: 'La sumatoria del peso de las preguntas es mayor a 100, ajuste los valores antes de guardar',
+                title: 'Orden Incorrecto',
+                text: 'Seleccione el orden de las preguntas adecuadamente',
                 type: 'warning',
                 buttonsStyling: false,
                 confirmButtonClass: 'custom__btn custom__btn--accept',
@@ -416,8 +444,8 @@ export class FormularioEncuestasComponent implements OnInit {
             }
           } else {
             swal.fire({
-              title: 'Orden Incorrecto',
-              text: 'Seleccione el orden de las preguntas adecuadamente',
+              title: 'Datos Incompletos',
+              text: 'Digite todos los campos en el formulario',
               type: 'warning',
               buttonsStyling: false,
               confirmButtonClass: 'custom__btn custom__btn--accept',
@@ -429,8 +457,8 @@ export class FormularioEncuestasComponent implements OnInit {
           }
         } else {
           swal.fire({
-            title: 'Datos Incompletos',
-            text: 'Digite todos los campos en el formulario',
+            title: 'Datos Incorrectos',
+            text: 'Verifique que todos los valores sean correctos',
             type: 'warning',
             buttonsStyling: false,
             confirmButtonClass: 'custom__btn custom__btn--accept',

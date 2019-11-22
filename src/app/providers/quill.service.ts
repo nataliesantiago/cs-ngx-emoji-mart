@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { AjaxService } from './ajax.service';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuillService {
   editor;
-  constructor(private ajax: AjaxService) { }
+  constructor(private ajax: AjaxService, private utilService: UtilsService) { }
 
   fileStorageHandler = (a) => {
     
     this.editor = a;
-    this.selectLocalImage();
+    this.utilService.loadPicker();
+    //this.selectLocalImage();
 
   }
 

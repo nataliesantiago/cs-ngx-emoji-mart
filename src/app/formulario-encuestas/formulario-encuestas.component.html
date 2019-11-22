@@ -69,15 +69,15 @@
                     <div fxLayout="row wrap" *ngIf="pregunta.id_tipo == 1 || pregunta.id_tipo == 5">
                       <mat-form-field fxFlex.gt-sm="45" fxFlex="100" *ngIf="pregunta.id_tipo != 5">
                         <mat-label>Digite el valor minimo</mat-label>
-                        <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" min="0" onlyNumber matInput [(ngModel)]="pregunta.minimo" name="minimo">
-                        <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" min="0" onlyNumber matInput [(ngModel)]="pregunta.minimo" name="minimo" disabled>
+                        <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" min="1" onlyNumber matInput [(ngModel)]="pregunta.minimo" name="minimo">
+                        <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" min="1" onlyNumber matInput [(ngModel)]="pregunta.minimo" name="minimo" disabled>
                       </mat-form-field>                    
                       <div fxFlex.gt-sm="10" fxFlex="100" *ngIf="pregunta.id_tipo != 5">
                       </div>
                       <mat-form-field fxFlex.gt-sm="45" fxFlex="100">
                         <mat-label>Digite el valor maximo</mat-label>
-                        <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" min="0" onlyNumber matInput [(ngModel)]="pregunta.maximo" (change)="validarDato(pregunta)" name="maximo">
-                        <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" min="0" onlyNumber matInput [(ngModel)]="pregunta.maximo" (change)="validarDato(pregunta)" name="maximo" disabled>
+                        <input *ngIf="!pregunta.idtbl_pregunta_encuesta" type="number" min="1" onlyNumber matInput [(ngModel)]="pregunta.maximo" name="maximo">
+                        <input *ngIf="pregunta.idtbl_pregunta_encuesta" type="number" min="1" onlyNumber matInput [(ngModel)]="pregunta.maximo" name="maximo" disabled>
                       </mat-form-field>
                     </div>
                     <br>

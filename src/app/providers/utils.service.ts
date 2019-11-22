@@ -4,13 +4,22 @@ import { Configuracion } from "../../schemas/interfaces";
 import { text } from "@angular/core/src/render3";
 import { UserService } from "./user.service";
 import { User } from "../../schemas/user.schema";
-
+import { GoogleApiModule, GoogleApiService, GoogleAuthService, NgGapiClientConfig, NG_GAPI_CONFIG, GoogleApiConfig } from "ng-gapi";
+import { environment } from '../../environments/environment';
+declare let gapi: any;
+declare let google: any;
 
 @Injectable()
 export class UtilsService {
     configuraciones: Array<any>;
     palabras_clave_pregunta = ['quien', 'quien', 'que', 'donde', 'cuando', 'como', 'cual', 'cuanto', 'cuantas'];
     user: User;
+    developerKey = environment.APIKEY;
+    clientId = environment.CLIENT_ID;
+    appId = environment.APPID;
+    scope = ['https://www.googleapis.com/auth/drive.file'];
+    pickerApiLoaded = false;
+    oauthToken;
     constructor(private ajax: AjaxService, private userService: UserService) {
         this.user = this.userService.getUsuario();
         this.userService.observableUsuario.subscribe(u => {
@@ -60,9 +69,9 @@ export class UtilsService {
     }
 
     /**
-   * @description Carga desde el servidor las configuracionesa asociadas al chat
-   * @returns Promise
-   */
+    * @description Carga desde el servidor las configuracionesa asociadas al chat
+    * @returns Promise
+    */
     getConfiguraciones(recarga?: boolean): Promise<any> {
 
         return new Promise((resolve, reject) => {
@@ -168,5 +177,67 @@ export class UtilsService {
             }
         });
     }
+
+    loadPicker() {
+        //gapi.load('auth', { 'callback': this.onAuthApiLoad });
+        gapi.load('picker', { 'callback': () => {this.onPickerApiLoad()} });
+    }
+
+    onPickerApiLoad() {
+        console.log('entra');
+        this.pickerApiLoaded = true;
+        this.abrirPickerDrive();
+    }
+
+    handleAuthResult(authResult) {
+        if (authResult && !authResult.error) {
+            
+            this.oauthToken = authResult.access_token;
+            this.createPicker();
+        }
+    }
+
+    abrirPickerDrive(){
+        this.ajax.post('user/getAccessToken', { token: this.user.token_acceso }).subscribe(d => {
+            if(d.success){
+                this.oauthToken = d.token;
+                console.log(this.oauthToken);
+                if(this.pickerApiLoaded){
+                    this.createPicker();
+                }else{
+                    this.loadPicker();
+                }
+            }
+        })
+    }
+
+    // Create and render a Picker object for searching images.
+    createPicker() {
+        if (this.pickerApiLoaded && this.oauthToken) {
+            console.log(this.developerKey);
+            var view = new google.picker.View(google.picker.ViewId.DOCS);
+            view.setMimeTypes("*");
+            var picker = new google.picker.PickerBuilder()
+                .enableFeature(google.picker.Feature.NAV_HIDDEN)
+                .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                .setAppId(this.appId)
+                .setOAuthToken(this.oauthToken)
+                .addView(view)
+                .addView(new google.picker.DocsUploadView())
+                .setDeveloperKey(this.developerKey)
+                .setCallback(this.pickerCallback)
+                .build();
+            picker.setVisible(true);
+        }
+    }
+
+    // A simple callback implementation.
+    pickerCallback(data) {
+        if (data.action == google.picker.Action.PICKED) {
+            console.log(data.docs);
+            var fileId = data.docs[0].id;
+        }
+    }
+
 
 }

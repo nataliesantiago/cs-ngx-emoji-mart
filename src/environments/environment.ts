@@ -7,6 +7,8 @@ export const environment = {
   production: false,
   URL_BACK: 'http://localhost:8080/api/',
   CLIENT_ID: '993073337079-0qt03a4l3pk7psfnpk1nto8m5bt14vnt.apps.googleusercontent.com', //id de cliente de google para la aplicacion
+  APIKEY: 'AIzaSyBEKRnunoggWof_mmJDfHRG9-fgKYfYOF8',
+  APPID: '537955814682',
   firebaseConfig: {
     apiKey: "AIzaSyBEKRnunoggWof_mmJDfHRG9-fgKYfYOF8",
     authDomain: "comusoporte-desarrollo.firebaseapp.com",
