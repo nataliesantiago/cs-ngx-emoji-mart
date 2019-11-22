@@ -615,18 +615,58 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
    * @param e 
    */
   anadirPreguntaAsociada(e) {
-    this.preguntas_adicion.push(e);
+    let validador = true;
+    for (let i = 0; i < this.preguntas_adicion.length; i++) {
+      if (this.preguntas_adicion[i].idtbl_pregunta == e.idtbl_pregunta) {
+        validador = false;
+      }
+    }
 
-    this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    if (validador) {
+      this.preguntas_adicion.push(e);
 
-    this.myControl = new FormControl(e.titulo);
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this.utilsService.filter(this.preguntas_adicion, value, 'titulo'))
-    );
-    this.cg.detectChanges();
+      this.dataSource = new MatTableDataSource(this.preguntas_adicion);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.myControl = new FormControl();
+      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+        if (p.success) {
+  
+          this.options = p.preguntas;
+          this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this.utilsService.filter(this.options, value, 'titulo'))
+          );
+        }
+      })
+      
+      this.cg.detectChanges();
+    } else {
+      this.myControl = new FormControl();
+      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+        if (p.success) {
+  
+          this.options = p.preguntas;
+          this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this.utilsService.filter(this.options, value, 'titulo'))
+          );
+        }
+      })
+      
+      this.cg.detectChanges();
+      swal.fire({
+        title: 'La pregunta ya fue asociada previamente',
+        text: '',
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
+      })
+    }
   }
 
   /**
@@ -713,14 +753,24 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       this.dataSource2.paginator = this.paginator2;
       this.dataSource2.sort = this.sort2;
 
-      this.myControl2 = new FormControl('');
-      this.filteredOptions2 = this.myControl2.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+      this.myControl2 = new FormControl();
+      this.user.getPerfilesUsuario().then(p => {
+        this.options2 = p;
+        this.filteredOptions2 = this.myControl2.valueChanges.pipe(
+          startWith(''),
+          map(value2 => this.utilsService.filter(this.options2, value2, 'nombre'))
+        );
+      })
       this.cg.detectChanges();
     } else {
-      this.myControl2 = new FormControl(e.nombre);
+      this.myControl2 = new FormControl();
+      this.user.getPerfilesUsuario().then(p => {
+        this.options2 = p;
+        this.filteredOptions2 = this.myControl2.valueChanges.pipe(
+          startWith(''),
+          map(value2 => this.utilsService.filter(this.options2, value2, 'nombre'))
+        );
+      })
       swal.fire({
         title: 'El cargo ya fue asociado previamente',
         text: '',

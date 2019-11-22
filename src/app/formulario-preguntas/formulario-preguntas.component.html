@@ -239,7 +239,7 @@
               <mat-card-title>Cargos</mat-card-title>
               <form class="example-form">
                 <mat-form-field class="example-full-width">
-                  <input type="text" placeholder="Seleccione la pregunta" matInput [formControl]="myControl2"
+                  <input type="text" placeholder="Seleccione el cargo" matInput [formControl]="myControl2"
                     [matAutocomplete]="auto2" (ngModelChange)="verificarPreguntaAsociada(myControl2.value)"
                     autocomplete="off">
                   <button mat-button *ngIf="myControl2.value!==null && myControl2.value.length>0" matSuffix

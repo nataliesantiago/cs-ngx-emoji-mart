@@ -493,15 +493,33 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       this.dataSource = new MatTableDataSource(this.preguntas_adicion);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.myControl = new FormControl();
+      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+        if (p.success) {
 
-      this.myControl = new FormControl(e.titulo);
-      this.filteredOptions = this.myControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this.utilsService.filter(this.preguntas_adicion, value, 'titulo'))
-      );
+          this.options = p.preguntas;
+          this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this.utilsService.filter(this.options, value, 'titulo'))
+          );
+        }
+      })
+
       this.cg.detectChanges();
     } else {
-      this.myControl = new FormControl(e.titulo);
+      this.myControl = new FormControl();
+      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+        if (p.success) {
+
+          this.options = p.preguntas;
+          this.filteredOptions = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this.utilsService.filter(this.options, value, 'titulo'))
+          );
+        }
+      })
+
+      this.cg.detectChanges();
       swal.fire({
         title: 'La pregunta ya fue asociada previamente',
         text: '',
@@ -533,14 +551,24 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       this.dataSource2.paginator = this.paginator2;
       this.dataSource2.sort = this.sort2;
 
-      this.myControl2 = new FormControl('');
-      this.filteredOptions2 = this.myControl2.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+      this.myControl2 = new FormControl();
+      this.user.getPerfilesUsuario().then(p => {
+        this.options2 = p;
+        this.filteredOptions2 = this.myControl2.valueChanges.pipe(
+          startWith(''),
+          map(value2 => this.utilsService.filter(this.options2, value2, 'nombre'))
+        );
+      })
       this.cg.detectChanges();
     } else {
-      this.myControl2 = new FormControl(e.nombre);
+      this.myControl2 = new FormControl();
+      this.user.getPerfilesUsuario().then(p => {
+        this.options2 = p;
+        this.filteredOptions2 = this.myControl2.valueChanges.pipe(
+          startWith(''),
+          map(value2 => this.utilsService.filter(this.options2, value2, 'nombre'))
+        );
+      })
       swal.fire({
         title: 'El cargo ya fue asociado previamente',
         text: '',

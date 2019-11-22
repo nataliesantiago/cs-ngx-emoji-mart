@@ -200,8 +200,7 @@ export class UtilsService {
     abrirPickerDrive(){
         this.ajax.post('user/getAccessToken', { token: this.user.token_acceso }).subscribe(d => {
             if(d.success){
-                this.oauthToken = d.token;
-                console.log(this.oauthToken);
+                this.oauthToken = d.token;                
                 if(this.pickerApiLoaded){
                     this.createPicker();
                 }else{
