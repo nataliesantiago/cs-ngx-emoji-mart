@@ -41,7 +41,7 @@ export class AppHeaderComponent {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {
-        console.log(u)
+        
         this.user = u;
         this.profileImage = u.url_foto;
         this.init();

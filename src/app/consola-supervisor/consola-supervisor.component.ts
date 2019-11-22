@@ -167,7 +167,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         this.usuarios.push(u);
       }
       if (!usuario) {
-        console.log(data);
+        
       }
       data.cliente = usuario;
       data.asesor_actual = experto;
@@ -305,7 +305,7 @@ export class ConsolaSupervisorComponent implements OnInit {
 
         if (this.utilService.normalizeText(c.cliente.nombre.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1
           || this.utilService.normalizeText(c.cliente.correo.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1) {
-          console.log('entro', palabra)
+          
           return true;
         } else {
           c.filas.forEach((f: CategoriaExperticia) => {
@@ -313,7 +313,7 @@ export class ConsolaSupervisorComponent implements OnInit {
               este = true;
             }
           });
-          console.log('entro', palabra)
+          
           return este;
         }
       });

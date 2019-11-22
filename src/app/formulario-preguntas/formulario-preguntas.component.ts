@@ -76,14 +76,14 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
-      console.log(this.usuario);
+      
       this.init();
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
       if (this.usuario) {
-        console.log(this.usuario);
+        
         this.init();
       }
     })
@@ -124,7 +124,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   cambiarBusqueda(value) {
-    console.log(value);
+    
     this.texto_buscador = value
     this.buscador = true;
     return this.texto_buscador;

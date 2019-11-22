@@ -441,7 +441,7 @@ export class DialogoDetalleChatComponent implements OnInit {
           c.cant_coincidencias = 0;
           c.mensajes.forEach((m: Mensaje) => {
             if (m.texto.toLowerCase().indexOf(value.toLowerCase()) != -1) {
-              console.log('Encontro mensaje', m.texto.toLowerCase());
+              
               m.encontrado = true;
               c.cant_coincidencias++;
             } else {

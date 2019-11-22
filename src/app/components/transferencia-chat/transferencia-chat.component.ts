@@ -40,7 +40,7 @@ export class TransferenciaChatComponent implements OnInit {
   asginado = false;
   constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore, @Inject(MAT_DIALOG_DATA) private data: TransferenciaData, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
-    console.log(this.data);
+    
     if (this.data.asignar) {
       this.asginado = true;
       this.tipo = 2;
@@ -88,7 +88,7 @@ export class TransferenciaChatComponent implements OnInit {
     }
     if (this.asginado) {
       this.data.conversacion.filas.forEach(f => {
-        console.log(f);
+        
         this.fireStore.doc('paises/'+this.user.pais+'/'+'categorias_experticia/' + f.id + '/chats/' + this.data.conversacion.codigo).delete();
       });
     }

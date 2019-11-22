@@ -117,7 +117,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
    * @param value 
    */
   cambiarBusqueda(value) {
-    console.log(value);
+    
     this.texto_buscador = value
     this.buscador = true;
     return this.texto_buscador;

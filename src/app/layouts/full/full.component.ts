@@ -134,7 +134,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
       this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
-      console.log("Entra a actualizar notificaciones");
+      
     });
 
   }

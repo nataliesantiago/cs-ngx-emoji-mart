@@ -184,7 +184,7 @@ export class UtilsService {
     }
 
     onPickerApiLoad() {
-        console.log('entra');
+        
         this.pickerApiLoaded = true;
         this.abrirPickerDrive();
     }
@@ -213,7 +213,7 @@ export class UtilsService {
     // Create and render a Picker object for searching images.
     createPicker() {
         if (this.pickerApiLoaded && this.oauthToken) {
-            console.log(this.developerKey);
+            
             var view = new google.picker.View(google.picker.ViewId.DOCS);
             view.setMimeTypes("*");
             var picker = new google.picker.PickerBuilder()
@@ -233,7 +233,7 @@ export class UtilsService {
     // A simple callback implementation.
     pickerCallback(data) {
         if (data.action == google.picker.Action.PICKED) {
-            console.log(data.docs);
+            
             var fileId = data.docs[0].id;
         }
     }

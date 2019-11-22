@@ -118,7 +118,7 @@ export class ResultadosComponent implements OnInit {
     this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
   }
   abrirRuta(ruta) {
-    console.log(ruta);
+    
     this.router.navigateByUrl(ruta);
   }
   cambioParametros(params) {

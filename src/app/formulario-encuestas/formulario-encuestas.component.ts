@@ -205,7 +205,7 @@ export class FormularioEncuestasComponent implements OnInit {
             this.preguntas[i].maximo = null;
           }
           if (this.preguntas[i].id_tipo == 1) {
-            console.log("Entra");
+            
             if (this.preguntas[i].minimo == "" || this.preguntas[i].maximo == "") {
               validar_campos = false;
             }

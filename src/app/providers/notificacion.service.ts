@@ -76,7 +76,7 @@ export class NotificacionService {
         fd.append('archivo', file);
         this.ajax.postData('notificacion/subir-imagen', fd).subscribe(d => {
           if (d.success) {
-            console.log(d.archivo.url);
+            
             this.ajax.post('notificacion/guardar', { notificacion: notificacion, url: d.archivo.url, lista_asociada: lista_asociada, id_usuario: id_usuario }).subscribe(d => {
               if (d.success) {
                 resolve(d);
