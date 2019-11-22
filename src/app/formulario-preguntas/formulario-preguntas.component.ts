@@ -103,8 +103,23 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     };
   }
 
-  quillModulesFc(ql: any) {
-    setTimeout(() => { ql.getModule('toolbar').addHandler('image', () => { this.qs.fileStorageHandler(ql) }); }, 1000);
+  quillModulesFc(ql: any, contenido: any, index?: number) {
+    setTimeout(() => {
+      ql.getModule('toolbar').addHandler('video', () => {
+        this.qs.fileVideoHandler(ql).then(html => {
+          if (contenido == 1) {
+            this.pregunta.respuesta = ql.getText();
+          } else if (contenido == 2) {
+            this.segmentos[index].respuesta = ql.getText();
+          } else if (contenido == 3) {
+            this.array_mostrar[index].respuesta = ql.getText();
+          } else if (contenido == 4) {
+            this.subrespuestas[index].respuesta = ql.getText();
+          }
+        })
+      });
+      ql.getModule('toolbar').addHandler('image', () => { this.qs.fileStorageHandler(ql) });
+    }, 1000);
   }
   ngAfterViewInit() {
     /*

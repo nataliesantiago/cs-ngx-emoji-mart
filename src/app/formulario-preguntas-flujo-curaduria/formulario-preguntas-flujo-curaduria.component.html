@@ -19,7 +19,7 @@
             <br>
             <br>
             <mat-card-title>Por favor digite la respuesta</mat-card-title>
-            <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}"
+            <quill-editor (onEditorCreated)="quillModulesFc($event,1)" [style]="{height: '200px'}"
               [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor>
             <br>
             <div *ngIf="id_pregunta_editar != 'sugerida'" fxLayout="row wrap">
@@ -80,7 +80,7 @@
                     <br>
                     <br>
                     <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                    <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}"
+                    <quill-editor (onEditorCreated)="quillModulesFc($event,2,i)" [style]="{height: '200px'}"
                       [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>
                     <br>
                     <div fxLayout="row wrap">
@@ -102,7 +102,7 @@
                             <br>
                             <br>
                             <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                            <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}"
+                            <quill-editor (onEditorCreated)="quillModulesFc($event,3,cont)" [style]="{height: '200px'}"
                               [(ngModel)]="arr.respuesta" name="respuesta"></quill-editor>
                             <br>
                           </mat-expansion-panel>
@@ -162,7 +162,7 @@
                     <br>
                     <br>
                     <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                    <quill-editor (onEditorCreated)="quillModulesFc($event)" [style]="{height: '200px'}"
+                    <quill-editor (onEditorCreated)="quillModulesFc($event,4,i)" [style]="{height: '200px'}"
                       [(ngModel)]="subrespuesta.respuesta" name="respuesta"></quill-editor>
                   </mat-expansion-panel>
                 </mat-accordion>
@@ -360,9 +360,12 @@
             <br>
             <div fxLayout="row wrap">
               <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
-                <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="guardarPregunta()">{{nombre_boton}}</button>
-                <a *ngIf="id_pregunta_editar != 'sugerida' && id_pregunta_editar != 'nuevo'" fxFlex="45" class="custom__btn custom__btn--cancel" (click)="rechazarPregunta()">Rechazar</a>
-                <a *ngIf="id_pregunta_editar == 'sugerida' || id_pregunta_editar == 'nuevo'" fxFlex="45" class="custom__btn custom__btn--cancel" (click)="regresarPagina()">Cancelar</a>
+                <button fxFlex="45" class="custom__btn custom__btn--accept"
+                  (click)="guardarPregunta()">{{nombre_boton}}</button>
+                <a *ngIf="id_pregunta_editar != 'sugerida' && id_pregunta_editar != 'nuevo'" fxFlex="45"
+                  class="custom__btn custom__btn--cancel" (click)="rechazarPregunta()">Rechazar</a>
+                <a *ngIf="id_pregunta_editar == 'sugerida' || id_pregunta_editar == 'nuevo'" fxFlex="45"
+                  class="custom__btn custom__btn--cancel" (click)="regresarPagina()">Cancelar</a>
               </div>
             </div>
 

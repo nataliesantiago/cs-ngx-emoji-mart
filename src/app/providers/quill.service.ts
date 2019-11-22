@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { AjaxService } from './ajax.service';
 import { UtilsService } from './utils.service';
 
+import Block from "quill/blots/block";
+import Inline from "quill/blots/inline";
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,12 +14,30 @@ export class QuillService {
   editor;
   constructor(private ajax: AjaxService, private utilService: UtilsService) { }
 
-  fileStorageHandler = (a) => {
-    
-    this.editor = a;
-    this.utilService.loadPicker();
-    //this.selectLocalImage();
+  fileVideoHandler(a): Promise<any> {
+    return new Promise(resolve => {
+      this.editor = a;
+      this.utilService.abrirPickerDrive().then(archivo => {
+        //console.log(archivo);
+        const range = this.editor.getSelection();
+        let url = (archivo.mimeType.indexOf('google-apps') != (-1)) ? archivo.url : archivo.embedUrl;
+        this.editor.insertEmbed(range.index, 'video', `${url}`, 'user');
+        //this.editor.insertText(range.index+2,' ')
+        //console.log(this.editor.getText());
+        //let html = `<p><iframe src="${url}" class="archivo-drive-embedido"></iframe></p>`;
+        //let delta = this.editor.clipboard.convert(html);
+        //this.editor.insertText(range.index, html); 
+        //resolve();
+      });
+    });
+  }
 
+  fileStorageHandler(a): Promise<any> {
+    console.log('paso')
+    return new Promise(resolve => {
+      this.editor = a;
+      this.selectLocalImage();
+    });
   }
 
   selectLocalImage() {
@@ -42,7 +65,7 @@ export class QuillService {
   saveToServer(file: File) {
     const range = this.editor.getSelection();
     var resultado = this.editor.insertEmbed(range.index, 'image', '/assets/images/loading-image.gif');
-    
+
     const fd = new FormData();
     fd.append('archivo', file);
     this.ajax.postData('preguntas/cargar-imagen', fd).subscribe(d => {
@@ -63,10 +86,10 @@ export class QuillService {
     const range = this.editor.getSelection();
     if (tipo_archivo === 1) {
       this.editor.insertEmbed(range.index, 'image', `${url}`);
-  } else if (tipo_archivo === 2) {
+    } else if (tipo_archivo === 2) {
       this.editor.insertEmbed(range.index, 'video', `${url}`);
-  }
-    
+    }
+
   }
 
 }
