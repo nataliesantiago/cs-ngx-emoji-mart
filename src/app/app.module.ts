@@ -254,7 +254,7 @@ script.childNodes.forEach(c => {
     HttpClientModule,
     SharedModule,
     MatTreeModule,
-    QuillModule,
+    QuillModule.forRoot(),
     PerfectScrollbarModule,
     RouterModule.forRoot(AppRoutes, { useHash: true }),
     AutocompleteLibModule,

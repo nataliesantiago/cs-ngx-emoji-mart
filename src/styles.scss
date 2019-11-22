@@ -3788,6 +3788,19 @@ app-search-component {
   }
 }
 
+.archivo-drive-embedido {
+  width: 90%;
+  height: 400px;
+}
+
+.container-texto {
+  iframe.ql-video {
+    width: 500px !important;
+    height: 460px !important;
+  }
+}
+
+
 mat-card {
   &.mat-card-root {
     margin: 0;

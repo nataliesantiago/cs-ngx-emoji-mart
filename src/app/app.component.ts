@@ -12,7 +12,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 import { AjaxService } from './providers/ajax.service';
 import { SearchService } from './providers/search.service';
 const moment = _rollupMoment || _moment;
-
+import Quill from "quill";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -41,6 +41,8 @@ export class AppComponent {
     });
     /// borrar este bloque despues
     //this.searchService.callTest();
+    var icons = Quill.import('ui/icons');
+    icons['video']='<img src="/assets/images/drive.svg" width="18" height="18"  />';
   }
 
   init() {

@@ -102,9 +102,24 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     }
   }
 
-  quillModulesFc(ql: any) {
-
-    setTimeout(() => { ql.getModule('toolbar').addHandler('image', () => { this.qs.fileStorageHandler(ql) }); }, 1000);
+  quillModulesFc(ql: any, contenido: any, index?: number) {
+    console.log(ql.getModule('toolbar'))
+    ql.getModule('toolbar')
+    setTimeout(() => {
+      ql.getModule('toolbar').addHandler('video', () => {
+        this.qs.fileVideoHandler(ql).then(html => {
+          if (contenido == 1) {
+            this.pregunta.respuesta = ql.getText();
+          } else if (contenido == 2) {
+            this.segmentos[index].respuesta = ql.getText();
+          } else if (contenido == 3) {
+            this.array_mostrar[index].respuesta = ql.getText();
+          } else if (contenido == 4) {
+            this.subrespuestas[index].respuesta = ql.getText();
+          }
+        })
+      });
+    }, 1000);
 
   }
 
@@ -314,14 +329,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             confirmButtonText: 'Aceptar',
           })
 
-        }else{
+        } else {
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
               this.router.navigate(['/flujo-curaduria']);
             }
           })
         }
-        
+
       } else {
 
         if (this.pregunta.muestra_fecha_actualizacion) {
@@ -351,10 +366,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             this.chatService.sugerencia_activa = false;
             if (this.id_pregunta_editar == "sugerida") {
               this.router.navigate(['/home']);
-            }else{
+            } else {
               this.router.navigate(['/flujo-curaduria']);
             }
-            
+
           }
         })
       }
