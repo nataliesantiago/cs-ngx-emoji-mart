@@ -82,7 +82,7 @@ export class AdministradorLookFeelComponent implements OnInit {
   onLogoChange(event) {
     let file = event.target.files[0];
     if(file != undefined) {
-      if (file.type.match(/image\/*/) == null) {
+      if (!file.name.match(/.(jpg|jpeg|png|svg)$/i)) {
         this.showModal();
       } else {
         this.logo_file = file;
