@@ -75,6 +75,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   @ViewChild('primero') primero: ElementRef;
   @ViewChild('segundo') segundo: ElementRef;
   @ViewChild('adjunto') adjunto: ElementRef;
+  url_logo = '';
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -97,6 +98,13 @@ export class AppSearchComponent implements OnChanges, OnInit {
       console.log('Navegador incompatible con reconocimiento de voz');
     }
     this.responseSearch.setActiveMostrarBarra(false);
+    this.look_service.getSpecificSetting('url_logo').then((result) => {
+      if (result && result[0] && result[0].valor) {
+        this.url_logo = result[0].valor;
+        this.changeDetector.detectChanges();
+      }
+
+    });
 
   }
 

@@ -20,7 +20,7 @@ import Quill from "quill";
 })
 export class AppComponent {
   user: User;
-  version = '0.3.2'
+  version = '0.3.5'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService,
     @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService, private changeRef: ChangeDetectorRef) {
     setInterval(() => {

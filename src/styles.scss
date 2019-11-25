@@ -3316,6 +3316,10 @@ input:-webkit-autofill:active {
         top: -26px;
         font-size: 20px;
 
+        &.url-drive-icono {
+          top: 5px;
+          left: -20px;
+        }
 
       }
 

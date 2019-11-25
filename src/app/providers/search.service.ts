@@ -154,11 +154,19 @@ export class SearchService {
             for (let index = 0; index < d.resultados.results.length; index++) {
               const r = d.resultados.results[index];
               let tmp = r.url.split('/');
+
               // console.log(tmp)
               r.idtbl_pregunta = parseInt(tmp[tmp.length - 1]);
               this.obtenerPregunta(r.idtbl_pregunta).then(pregunta => {
                 //console.log('paso por aca', pregunta);
                 //r.contenido = pregunta.respuesta.replace(/<[^>]*>/g, '');
+                let tmp_url = pregunta.respuesta.split('iconodrive=');
+                if (tmp_url.length > 1) {
+                  let indice = tmp_url[1].indexOf('"');
+                  let url_drive = tmp_url[1].substring(0, indice);
+                  //console.log(url_drive);
+                  r.url_drive = url_drive;
+                }
                 if (r.metadata.source.name == environment.pais[this.user.pais].id_origen_conecta) {
                   r.url_icono = pregunta.icono_padre;
                 }
