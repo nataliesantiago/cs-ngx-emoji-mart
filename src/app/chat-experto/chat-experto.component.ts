@@ -164,9 +164,14 @@ export class ChatExpertoComponent {
             }
           })
         });
-        let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').snapshotChanges();
-        chats.subscribe(chat => {
+        let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
+        chats.subscribe(async chaters => {
+          console.log('paso por acá')
+          let chat = await this.chatService.getConversacionesExperto();
+          if (!chat) {
+            chat = [];
 
+          }
           let temporal: Array<Conversacion> = [];
 
           this.chats_experto.forEach((c: Conversacion) => {
@@ -177,9 +182,12 @@ export class ChatExpertoComponent {
           }
           if (chat.length < 1) {
             this.chats_experto = [];
+            if (this.chat.id_tipo_conversacion == 1) {
+              delete this.chat;
+            }
           }
           chat.forEach((change: any, index) => {
-            let codigo = change.payload.doc.id;
+            let codigo = change.codigo;
             this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo).then((d: Conversacion) => {
               let c = d;
               c.codigo = codigo;

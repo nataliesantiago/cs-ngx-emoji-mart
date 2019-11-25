@@ -156,7 +156,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
         this.nzone.run(() => {
           this.def.setValue(interimTranscript);
           setTimeout(() => {
-            this.buscar(2);
+            this.buscar(3);
           }, 100);
         });
 

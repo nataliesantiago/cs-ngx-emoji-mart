@@ -45,6 +45,7 @@ export class ResultadosComponent implements OnInit {
       this.origenes_drive = origenes.filter(o => {
         return o.activo;
       });
+      console.log(this.origenes_drive);
     })
   }
 
@@ -102,23 +103,23 @@ export class ResultadosComponent implements OnInit {
   }
 
   cambiaTab(e: MatTabChangeEvent) {
-    //console.log(e);
+    console.log(e);
     this.page = 0;
-    switch (e.index) {
-      case 0:
+    switch (e.tab.textLabel) {
+      case 'Preguntas y respuestas':
         this.origen = 'conecta';
         break;
-      case 2:
+      case 'Mis Chats':
         this.origen = 'chat';
         break;
-      case 1:
+      case 'Preguntas y respuestas':
         this.origen = 'drive';
         break;
     }
     this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
   }
   abrirRuta(ruta) {
-    
+
     this.router.navigateByUrl(ruta);
   }
   cambioParametros(params) {
@@ -127,6 +128,7 @@ export class ResultadosComponent implements OnInit {
     this.cargando_respuestas = true;
     this.resultados = [];
     this.resultado = true;
+    let guardar = true;
     if (this.busqueda != params.busqueda) {
       this.busqueda = params.busqueda;
       this.ortografia = false;
@@ -137,8 +139,10 @@ export class ResultadosComponent implements OnInit {
       this.busquedaUrl = '/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen;
     } else {
       this.resultado = true;
+      guardar = false;
     }
-    this.searchService.queryCloudSearch(this.busqueda, this.tipo_busqueda, this.origen, this.page, true, params.url).then(d => {
+
+    this.searchService.queryCloudSearch(this.busqueda, this.tipo_busqueda, this.origen, this.page, guardar, params.url).then(d => {
       // console.log(d);
       /*d.results.forEach((r: ResultadoCloudSearch) => {
         let id = r.url.split('_')[0];

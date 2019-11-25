@@ -57,7 +57,7 @@ export class AppSidebarComponent implements OnDestroy {
         this.nuevas_urls = p.items;
       }
     });
-    this.modulos = this.user.modulos;
+    this.modulos = this.user.modulos.sort((a, b) => a.nombre_mostrar > b.nombre_mostrar ? 1 : -1);
   }
 
 

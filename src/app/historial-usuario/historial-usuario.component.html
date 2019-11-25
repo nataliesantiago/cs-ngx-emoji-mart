@@ -40,7 +40,7 @@
                             <!-- Progress Column -->
                             <ng-container matColumnDef="fecha_busqueda">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Fecha de Busqueda </mat-header-cell>
-                                    <mat-cell *matCellDef="let row" style="max-width:20%;"> {{row.fecha_busqueda | MomentDate:'MMM DD, YYYY HH:MM a'}} </mat-cell>
+                                    <mat-cell *matCellDef="let row" style="max-width:20%;"> {{row.fecha_busqueda | MomentDate:'MMM DD, YYYY HH:mm a'}} </mat-cell>
                                 </ng-container>
                     
                             <ng-container matColumnDef="url">
