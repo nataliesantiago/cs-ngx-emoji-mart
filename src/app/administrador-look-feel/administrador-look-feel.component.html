@@ -34,6 +34,7 @@
               </ng-template>
               <input type="file" (change)="onLogoChange($event)">
             </div>
+            <p class="logo-help">**Para una mejor visualización se recomienda que la imagen tenga las siguientes dimensiones ancho: 500px, alto: 142px</p>
           </div>
 
           <div fxLayout="column" fxFlex="45" class="m-t-20 look-feel-option">
@@ -62,7 +63,7 @@
           
         </div>
         
-        <button class="custom__btn custom__btn--accept m-t-30" (click)="saveSetting()" [disabled]="!is_change">Guardar configuración</button>
+        <button class="custom__btn custom__btn--accept save-config" (click)="saveSetting()" [disabled]="!is_change">Guardar configuración</button>
     </mat-card-content>
 </mat-card>
 
