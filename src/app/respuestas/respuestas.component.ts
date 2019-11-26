@@ -158,9 +158,21 @@ export class RespuestasComponent implements OnInit {
                       if (pras.success) {
 
                         this.preguntas_adicion = pras.preguntas_asociadas;
-                        this.cg.detectChanges();
+                        if (this.preguntas_adicion.length < 5) {
+                          this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
+                            console.log(asociadas);
+                            if (asociadas.results) {
+                              asociadas.results.filter(f => {
+                                return f.idtbl_pregunta != this.pregunta.idtbl_pregunta;
+                              }).forEach(a => {
+                                this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
+                              });
+                            }
+                          })
+                        }
+                        //this.cg.detectChanges();
                       }
-                    })
+                    });
                   }
                 })
               }
@@ -189,9 +201,9 @@ export class RespuestasComponent implements OnInit {
       this.activadoSi = true;
       this.activadoNo = false;
     } else {
-      if(this.usuario.id_rol == 2 || this.usuario.id_rol == 3){
-        this.boton = "Enviar";  
-      }else{
+      if (this.usuario.id_rol == 2 || this.usuario.id_rol == 3) {
+        this.boton = "Enviar";
+      } else {
         this.boton = "Buscar Experto";
       }
       this.activadoNo = true;
@@ -235,7 +247,7 @@ export class RespuestasComponent implements OnInit {
   }
 
   validarPadding(muestra_fecha, pregunta_nueva) {
-    
+
   }
 
 }

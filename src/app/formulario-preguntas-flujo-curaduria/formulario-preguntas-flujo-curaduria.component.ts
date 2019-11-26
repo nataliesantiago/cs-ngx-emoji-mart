@@ -132,7 +132,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
    * @param value 
    */
   cambiarBusqueda(value) {
-    
+
     this.texto_buscador = value
     this.buscador = true;
     return this.texto_buscador;
@@ -366,6 +366,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             this.chatService.sugerencia_activa = false;
             if (this.id_pregunta_editar == "sugerida") {
               this.router.navigate(['/home']);
+              setTimeout(() => {
+                swal.fire(
+                  '¡Gracias por ayudarnos a mejorar Conecta!',
+                  'Tu pregunta ha sido recibida y pronto será validada por el equipo Conecta',
+                  'success'
+                )
+              }, 0);
+
             } else {
               this.router.navigate(['/flujo-curaduria']);
             }
@@ -646,7 +654,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       this.myControl = new FormControl();
       this.ajax.get('preguntas/obtener', {}).subscribe(p => {
         if (p.success) {
-  
+
           this.options = p.preguntas;
           this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(''),
@@ -654,13 +662,13 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           );
         }
       })
-      
+
       this.cg.detectChanges();
     } else {
       this.myControl = new FormControl();
       this.ajax.get('preguntas/obtener', {}).subscribe(p => {
         if (p.success) {
-  
+
           this.options = p.preguntas;
           this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(''),
@@ -668,7 +676,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           );
         }
       })
-      
+
       this.cg.detectChanges();
       swal.fire({
         title: 'La pregunta ya fue asociada previamente',

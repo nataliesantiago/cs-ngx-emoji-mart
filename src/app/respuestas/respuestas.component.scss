@@ -11,6 +11,14 @@ mat-expansion-panel {
     border: thin solid #dadce0;
     border-radius: .5rem;
     margin: 2.625rem 0 0;
+    &.sin-asociadas{
+        max-width: 95% !important;
+        flex: auto !important;
+    }
+}
+.sin-asociadas{
+    max-width: 95% !important;
+    flex: auto !important;
 }
 
 .container-texto {

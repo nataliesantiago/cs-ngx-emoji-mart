@@ -19,7 +19,7 @@
             <br>
             <br>
             <mat-card-title>Por favor digite la respuesta*</mat-card-title>
-            <quill-editor (onEditorCreated)="quillModulesFc($event,1)" [style]="{height: '200px'}"
+            <quill-editor (onEditorCreated)="quillModulesFc($event,1)" class="editor-preguntas"
               [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor>
             <br>
             <div *ngIf="id_pregunta_editar != 'sugerida'" fxLayout="row wrap">
@@ -80,7 +80,7 @@
                     <br>
                     <br>
                     <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                    <quill-editor (onEditorCreated)="quillModulesFc($event,2,i)" [style]="{height: '200px'}"
+                    <quill-editor (onEditorCreated)="quillModulesFc($event,2,i)" class="editor-preguntas"
                       [(ngModel)]="segmento.respuesta" name="respuesta" id="respuesta{{i}}"></quill-editor>
                     <br>
                     <div fxLayout="row wrap">
@@ -102,7 +102,7 @@
                             <br>
                             <br>
                             <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                            <quill-editor (onEditorCreated)="quillModulesFc($event,3,cont)" [style]="{height: '200px'}"
+                            <quill-editor (onEditorCreated)="quillModulesFc($event,3,cont)" class="editor-preguntas"
                               [(ngModel)]="arr.respuesta" name="respuesta"></quill-editor>
                             <br>
                           </mat-expansion-panel>
@@ -162,7 +162,7 @@
                     <br>
                     <br>
                     <mat-card-title>Por favor digite la respuesta</mat-card-title>
-                    <quill-editor (onEditorCreated)="quillModulesFc($event,4,i)" [style]="{height: '200px'}"
+                    <quill-editor (onEditorCreated)="quillModulesFc($event,4,i)" class="editor-preguntas"
                       [(ngModel)]="subrespuesta.respuesta" name="respuesta"></quill-editor>
                   </mat-expansion-panel>
                 </mat-accordion>
