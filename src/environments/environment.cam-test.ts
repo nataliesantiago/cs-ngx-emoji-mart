@@ -7,6 +7,8 @@ export const environment = {
   production: false,
   URL_BACK: 'https://comusoportecam-desarrollo.appspot.com/api/',
   CLIENT_ID: '659384240459-jfjf9poq9fra3focm0hajoalvnbcu525.apps.googleusercontent.com', //id de cliente de google para la aplicacion
+  APIKEY: 'AIzaSyAx-GuSyaatybFcHxajdLBo9pcU7UYwP98',
+  APPID: '659384240459',
   firebaseConfig: {
     apiKey: "AIzaSyAx-GuSyaatybFcHxajdLBo9pcU7UYwP98",
     authDomain: "comusoportecam-desarrollo.firebaseapp.com",
