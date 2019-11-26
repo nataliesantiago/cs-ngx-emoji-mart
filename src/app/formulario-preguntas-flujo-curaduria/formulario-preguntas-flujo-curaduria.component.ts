@@ -14,6 +14,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 const moment = _rollupMoment || _moment;
 import { UtilsService } from '../providers/utils.service';
 import { ChatService } from '../providers/chat.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -69,7 +70,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   nombre_boton = "Aprobar";
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
-    private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService) {
+    private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService, private location: Location) {
     this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {
         this.preguntas_todas = p.preguntas;
@@ -332,7 +333,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         } else {
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
-              this.router.navigate(['/flujo-curaduria']);
+              this.location.back();
             }
           })
         }
@@ -375,7 +376,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               }, 0);
 
             } else {
-              this.router.navigate(['/flujo-curaduria']);
+              this.location.back();
             }
 
           }
@@ -428,7 +429,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
 
-            this.router.navigate(['/flujo-curaduria']);
+            this.location.back();
           }
         })
       }
@@ -885,7 +886,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     if (this.id_pregunta_editar == "sugerida") {
       this.router.navigate(['/home']);
     } else {
-      this.router.navigate(['/flujo-curaduria']);
+      this.location.back();
+      
     }
   }
 

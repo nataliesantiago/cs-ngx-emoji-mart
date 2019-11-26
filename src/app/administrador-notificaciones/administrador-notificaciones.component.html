@@ -43,7 +43,7 @@
                         <ng-container matColumnDef="usuario">
                             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Usuario
                             </mat-header-cell>
-                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.nombre_usuario}} </mat-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.usuario}} </mat-cell>
                         </ng-container>
                         <!-- Progress Column -->
                         <ng-container matColumnDef="titulo">
@@ -55,7 +55,7 @@
                         <ng-container matColumnDef="contenido">
                             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Contenido
                             </mat-header-cell>
-                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.texto}} </mat-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;"> {{row.contenido}} </mat-cell>
                         </ng-container>
 
 
@@ -64,7 +64,7 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Publicación
                             </mat-header-cell>
                             <mat-cell *matCellDef="let row" style="max-width:35%;">
-                                {{row.fecha_inicio | MomentDate:'YYYY-MM-DD'}} </mat-cell>
+                                {{row.fecha_publicacion | MomentDate:'YYYY-MM-DD'}} </mat-cell>
                         </ng-container>
 
 
@@ -100,7 +100,7 @@
                         </mat-row>
                     </mat-table>
                 </div>
-                <mat-paginator [pageSizeOptions]="[5, 15, 25, 100]"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[50, 100, 200]"></mat-paginator>
             </div>
         </mat-card-content>
     </mat-card>

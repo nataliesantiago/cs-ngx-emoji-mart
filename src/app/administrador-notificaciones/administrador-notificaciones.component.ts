@@ -20,10 +20,8 @@ export class AdministradorNotificacionesComponent implements OnInit {
   id_usuario;
   usuarios = [];
   displayedColumns = ['acciones', 'idtbl_notificacion', 'usuario', 'titulo', 'contenido', 'fecha_publicacion', 'fecha_creacion', 'activo'];
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
-  @ViewChild(MatSort)
-  sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource([]);
   matTableFilter: matTableFilter;
   filterColumns = [

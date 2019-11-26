@@ -3434,6 +3434,12 @@ input:-webkit-autofill:active {
   .ql-container {
     height: 90vh;
   }
+
+  &.sugerida-ome {
+    .ql-container {
+      height: 45vh;
+    }
+  }
 }
 
 app-search-component {
@@ -3487,7 +3493,9 @@ app-search-component {
 .container-sidenav-preguntas {
   height: calc(100vh - 64px);
   width: 100vw;
-
+  perfect-scrollbar{
+    padding-right: 15px;
+  }
   .mat-drawer-inner-container {
     overflow: hidden !important;
   }

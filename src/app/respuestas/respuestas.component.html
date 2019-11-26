@@ -3,13 +3,16 @@
   <mat-card>
     <mat-card-content>
       <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="70" fxFlex="100" [ngClass]="{'sin-asociadas':preguntas_adicion.length<1}">
-          <app-search-component [modo]="2"></app-search-component>
+        <div fxFlex.gt-sm="100" fxFlex="100">
+          <div fxFlex.gt-sm="70" fxFlex="100" [ngClass]="{'sin-asociadas':preguntas_adicion.length<1}">
+            <app-search-component [modo]="2"></app-search-component>
+          </div>
         </div>
         <div fxFlex.gt-sm="70" fxFlex="100" class="container-principal"
           [ngClass]="{'sin-asociadas':preguntas_adicion.length<1}">
           <div class="container-texto" *ngIf="pregunta">
-            <mat-icon class="icono" *ngIf="pregunta_nueva">star</mat-icon>
+            <!--<mat-icon class="icono" *ngIf="pregunta_nueva">star</mat-icon>-->
+            <img *ngIf="pregunta_nueva" src="/assets/images/nuevo.png" class="icono" />
             <div class="fecha-modificacion" *ngIf="pregunta.muestra_fecha_actualizacion == 1">
               <strong>Última modificación: {{pregunta.fecha_ultima_modificacion}}</strong>
               <br>

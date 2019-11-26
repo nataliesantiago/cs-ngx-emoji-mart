@@ -156,7 +156,6 @@ export class RespuestasComponent implements OnInit {
 
                     this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
                       if (pras.success) {
-
                         this.preguntas_adicion = pras.preguntas_asociadas;
                         if (this.preguntas_adicion.length < 5) {
                           this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
