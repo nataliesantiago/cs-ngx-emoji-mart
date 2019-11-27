@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  URL_BACK: 'https://comusoporte-laboratorio.appspot.com/api/',
+  URL_BACK: 'http://localhost:8080/api/',
   CLIENT_ID: '426288128680-qfderp9ncl2fru7o5jq0n43b9dq82bf2.apps.googleusercontent.com', //id de cliente de google para la aplicacion
   APIKEY: 'AIzaSyA1gxXCglazlny7FVA2MKrRRmxpPzwRp4I',
   APPID: '426288128680',

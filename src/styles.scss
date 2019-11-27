@@ -633,10 +633,13 @@ h1,
 h2,
 h3,
 h4,
-p,
-a {
+p {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
   color: var(--color-font);
+}
+
+a:hover {
+  text-decoration: underline !important;
 }
 
 .titulo_h2 {
@@ -3427,6 +3430,18 @@ input:-webkit-autofill:active {
 
 }
 
+.editor-preguntas {
+  .ql-container {
+    height: 90vh;
+  }
+
+  &.sugerida-ome {
+    .ql-container {
+      height: 45vh;
+    }
+  }
+}
+
 app-search-component {
   height: 100%;
 }
@@ -3478,7 +3493,9 @@ app-search-component {
 .container-sidenav-preguntas {
   height: calc(100vh - 64px);
   width: 100vw;
-
+  perfect-scrollbar{
+    padding-right: 15px;
+  }
   .mat-drawer-inner-container {
     overflow: hidden !important;
   }
@@ -3799,8 +3816,8 @@ app-search-component {
 
 .container-texto {
   iframe.ql-video {
-    width: 500px !important;
-    height: 460px !important;
+    width: 100% !important;
+    height: 480px !important;
   }
 }
 

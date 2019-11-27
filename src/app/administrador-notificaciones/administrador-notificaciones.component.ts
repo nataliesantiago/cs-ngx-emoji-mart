@@ -19,22 +19,20 @@ export class AdministradorNotificacionesComponent implements OnInit {
   user: User;
   id_usuario;
   usuarios = [];
-  displayedColumns = ['acciones', 'idtbl_notificacion', 'titulo', 'fecha_publicacion', 'fecha_creacion', 'activo'];
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
-  @ViewChild(MatSort)
-  sort: MatSort;
+  displayedColumns = ['acciones', 'idtbl_notificacion', 'usuario', 'titulo', 'contenido', 'fecha_publicacion', 'fecha_creacion', 'activo'];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource([]);
-  matTableFilter:matTableFilter;
+  matTableFilter: matTableFilter;
   filterColumns = [
-    {field:'idtbl_notificacion', type:'number'},
-    {field: 'titulo', type:'string'},
-    {field: 'activo', type:'string'}
+    { field: 'idtbl_notificacion', type: 'number' },
+    { field: 'titulo', type: 'string' },
+    { field: 'activo', type: 'string' }
   ];
   notificaciones;
   filters = {};
 
-  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private notificacionService: NotificacionService){
+  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private notificacionService: NotificacionService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
@@ -42,7 +40,7 @@ export class AdministradorNotificacionesComponent implements OnInit {
       }
     });
 
-    this.notificacionService.obtenerNotificacionesAdministracion().then( n => {
+    this.notificacionService.obtenerNotificacionesAdministracion().then(n => {
       this.notificaciones = n;
       this.createTable(n);
     });
@@ -66,14 +64,14 @@ export class AdministradorNotificacionesComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.notificacionService.cancelarNotificacion(e).then(() => {
-          this.notificacionService.obtenerNotificacionesAdministracion().then( n => {
+          this.notificacionService.obtenerNotificacionesAdministracion().then(n => {
             this.notificaciones = n;
             this.createTable(n);
           });
         });
       }
     })
-    
+
   }
 
   createTable(data) {
@@ -90,7 +88,7 @@ export class AdministradorNotificacionesComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }  
+  }
 
   filterData(name, event) {
     if (event.value == 'todos') {
@@ -106,5 +104,9 @@ export class AdministradorNotificacionesComponent implements OnInit {
       this.createTable(newArray);
     }
   }
-  
+
+  editarNotificacion(e){
+    this.router.navigate(['/formulario-notificaciones', e.idtbl_notificacion]);
+  }
+
 }

@@ -315,10 +315,12 @@ export class AppSearchComponent implements OnChanges, OnInit {
     // console.log('entro aca mono', this.modo);
     //console.log('paso por aca');
     const name: SimpleChange = changes.texto_buscar;
-    this.texto_buscar = name.currentValue;
-    this.def.setValue(this.texto_buscar);
-    if (this.modo == 3) {
-      this.buscar(1);
+    if (name && name.currentValue) {
+      this.texto_buscar = name.currentValue;
+      this.def.setValue(this.texto_buscar);
+      if (this.modo == 3) {
+        this.buscar(1);
+      }
     }
   }
 

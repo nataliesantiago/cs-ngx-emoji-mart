@@ -172,12 +172,13 @@ export class SearchService {
                 }
                 //console.log(this.respuesta, pregunta);
                 //this.mostrando = true;
-                if (index == d.resultados.results.length - 1) {
+                /*if (index == d.resultados.results.length - 1) {
                   resolve(d.resultados);
-                }
+                }*/
               });
 
             }
+            resolve(d.resultados);
           } else {
             resolve(d.resultados);
           }

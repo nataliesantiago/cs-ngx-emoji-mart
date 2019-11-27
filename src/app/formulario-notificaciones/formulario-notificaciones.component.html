@@ -13,29 +13,34 @@
       <div fxLayout="row wrap">
         <mat-form-field appearance="outline" class="texto" fxFlex.gt-sm="100" fxFlex="100">
           <mat-label>Digite el Texto</mat-label>
-          <textarea matInput class="campo-texto" name="texto" maxlength="{{limite_caracteres}}" [(ngModel)]="notificacion.texto"></textarea>
+          <textarea matInput class="campo-texto" name="texto" maxlength="{{limite_caracteres}}"
+            [(ngModel)]="notificacion.texto"></textarea>
         </mat-form-field>
       </div>
       <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="40" fxFlex="100" class="m-b-20">
+        <div fxFlex.gt-sm="20" fxFlex="100" class="m-b-20">
           <div fxLayout="column" class="upload-file-wrapper m-t-20">
             <span class="ti ti-upload"></span>
-            <label class="m-r-20" *ngIf="nombre_archivo == ''; else nombreArchivo">Seleccione o arrastre un archivo</label>
+            <label class="m-r-20" *ngIf="nombre_archivo == ''; else nombreArchivo">Seleccione o arrastre un
+              archivo</label>
             <ng-template #nombreArchivo>
               <label class="m-r-20">{{nombre_archivo}}</label>
             </ng-template>
             <input class="form-control" placeholder="Archivo" type="file" (change)="onFileChange($event)">
           </div>
         </div>
+        <div fxFlex.gt-sm="5" fxFlex="100"></div>
+        <div fxFlex.gt-sm="40" fxFlex="100" class="m-b-20" *ngIf="editar && notificacion.url_adjunto">
+          <img src="{{notificacion.url_adjunto}}" class="imagen-previa">
+        </div>
       </div>
       <div fxLayout="row wrap">
         <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
           <mat-label>Fecha Inicio*</mat-label>
-          <input matInput [min]="fecha_actual" [matDatepicker]="picker"
-           [(ngModel)]="notificacion.fecha_inicio">
+          <input matInput [min]="fecha_actual" [matDatepicker]="picker" [(ngModel)]="notificacion.fecha_inicio">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>        
+        </mat-form-field>
         <div fxFlex.gt-sm="5" fxFlex="100"></div>
         <mat-form-field fxFlex.gt-sm="10" fxFlex="100">
           <mat-label>Seleccione la Hora Inicio*</mat-label>
@@ -75,15 +80,16 @@
           <mat-card-title>{{tipo_seleccion}}</mat-card-title>
           <form class="example-form">
             <mat-form-field class="example-full-width">
-              <input type="text" placeholder="Seleccione..." matInput [formControl]="myControl"
-                [matAutocomplete]="auto" autocomplete="off">
-              <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
+              <input type="text" placeholder="Seleccione..." matInput [formControl]="myControl" [matAutocomplete]="auto"
+                autocomplete="off">
+              <button mat-button *ngIf="myControl.value!=null && myControl.value.length>0" matSuffix mat-icon-button
+                aria-label="Clear" (click)="myControl.setValue('')">
                 <mat-icon>close</mat-icon>
               </button>
               <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                 (optionSelected)='seleccionarObjeto($event.option.value)'>
                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                  {{option.nombre}}
+                  {{option.codigo}} {{option.nombre}}
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
@@ -94,10 +100,10 @@
         <div fxFlex.gt-sm="40" fxFlex="100" *ngIf="lista_asociada.length > 0">
           <div class="container-filter">
             <div class="element-filter element-filter-1">
-                <mat-form-field>
-                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
-                    <mat-icon class="search-icon">search</mat-icon>
-                </mat-form-field>
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                <mat-icon class="search-icon">search</mat-icon>
+              </mat-form-field>
             </div>
           </div>
           <div class="responsive-table">
@@ -108,6 +114,11 @@
               <ng-container matColumnDef="objeto">
                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:85%;"> Nombre </mat-header-cell>
                 <mat-cell *matCellDef="let row" style="max-width:70%;"> {{row.nombre}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="codigo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:85%;"> Codigo </mat-header-cell>
+                <mat-cell *matCellDef="let row" style="max-width:70%;"> {{row.codigo}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="acciones">
@@ -122,7 +133,7 @@
               </mat-row>
             </mat-table>
 
-            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[50, 100, 200]"></mat-paginator>
           </div>
         </div>
       </div>
@@ -130,7 +141,8 @@
       <div fxLayout="row wrap">
         <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
           <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarNotificacion()">Enviar</button>
-          <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/administrador-notificaciones']"><span class="texto-boton">Cancelar</span></a>
+          <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/administrador-notificaciones']"><span
+              class="texto-boton">Cancelar</span></a>
         </div>
       </div>
 

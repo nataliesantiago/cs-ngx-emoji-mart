@@ -1,5 +1,7 @@
 <div class="contendor-logo" *ngIf="modo==2">
-  <img [src]="url_logo" alt="imagen" class="img-buscador" *ngIf="url_logo"  />
+  <a [routerLink]="['/home']">
+    <img [src]="url_logo" alt="imagen" class="img-buscador" *ngIf="url_logo" />
+  </a>
 </div>
 <div class="search-bar"
   [ngClass]="{'barra-superior':modo==0,'barra-izquierda':modo==2,'up':!modo,'panel-lateral':modo==3}">

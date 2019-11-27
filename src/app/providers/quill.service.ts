@@ -18,9 +18,9 @@ export class QuillService {
     return new Promise(resolve => {
       this.editor = a;
       this.utilService.abrirPickerDrive().then(archivo => {
-        console.log(archivo);
+        //console.log(archivo);
         const range = this.editor.getSelection();
-        let url = (archivo.mimeType.indexOf('google-apps') != (-1)) ? archivo.url : archivo.embedUrl;
+        let url = (archivo.mimeType.indexOf('google-apps') != (-1)) ? archivo.embedUrl+'?' : archivo.embedUrl;
         url += '&&iconodrive=' + archivo.iconUrl;
         this.editor.insertEmbed(range.index, 'video', `${url}`, 'user');
         //this.editor.insertText(range.index+2,' ')
