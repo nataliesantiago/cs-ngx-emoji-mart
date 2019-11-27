@@ -8,6 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuillService } from '../providers/quill.service';
 import { matTableFilter } from '../../common/matTableFilter';
 import swal from 'sweetalert2';
+import * as _moment from 'moment-timezone';
+import { default as _rollupMoment } from 'moment-timezone';
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'app-administrador-notificaciones',
@@ -31,6 +34,7 @@ export class AdministradorNotificacionesComponent implements OnInit {
   ];
   notificaciones;
   filters = {};
+  fecha_actual;
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private qs: QuillService, private notificacionService: NotificacionService) {
     this.user = this.userService.getUsuario();
@@ -42,8 +46,11 @@ export class AdministradorNotificacionesComponent implements OnInit {
 
     this.notificacionService.obtenerNotificacionesAdministracion().then(n => {
       this.notificaciones = n;
+      this.fecha_actual = moment().tz("America/Bogota").format();
       this.createTable(n);
     });
+
+    
 
   }
 

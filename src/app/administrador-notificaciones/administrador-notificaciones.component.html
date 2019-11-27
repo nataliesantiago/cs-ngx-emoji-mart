@@ -92,7 +92,7 @@
                             <mat-cell *matCellDef="let row" style="max-width:15%;">
                                 <i *ngIf="row.activo == 1" class="ti-close danger-color m-r-10 mouse-over"
                                     title="Cancelar Notificación" (click)="cancelarNotificacion(row)"></i>
-                                <i *ngIf="row.activo == 1" class="ti-pencil info-color m-r-10 mouse-over"
+                                <i *ngIf="row.fecha_publicacion >= fecha_actual" class="ti-pencil info-color m-r-10 mouse-over"
                                     title="Editar Notificación" (click)="editarNotificacion(row)"></i>
                             </mat-cell>
                         </ng-container>

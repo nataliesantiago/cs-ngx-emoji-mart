@@ -84,7 +84,6 @@ export class FormularioNotificacionesComponent implements OnInit {
     if (this.id_notificacion_editar != 'nuevo') {
       this.editar = true;
       this.notificacionService.notificacionEditar(this.id_notificacion_editar).then(r => {
-        console.log(r);
         this.notificacion = r[0];
         let tipo_envio = this.notificacion[0].tipo_notificacion;
         this.notificacion = this.notificacion[0];
