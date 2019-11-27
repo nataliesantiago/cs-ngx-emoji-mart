@@ -83,6 +83,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.route.queryParams.subscribe(a => {
       // console.log(a);
       if (a.vista != this.vista) {
+        //console.log('se movio')
         this.filtro_tabla = (a.filter && a.filter != 'undefined') ? a.filter : '';
         switch (a.vista) {
           case 'curaduria':
@@ -104,7 +105,7 @@ export class FlujoCuraduriaComponent implements OnInit {
         }
 
 
-      } else {
+      } else if (!a.vista) {
         this.cargarCuraduria(a.filter);
       }
     });
