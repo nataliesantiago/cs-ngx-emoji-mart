@@ -18,7 +18,7 @@
         </mat-form-field>
       </div>
       <div fxLayout="row wrap">
-        <div fxFlex.gt-sm="40" fxFlex="100" class="m-b-20">
+        <div fxFlex.gt-sm="20" fxFlex="100" class="m-b-20">
           <div fxLayout="column" class="upload-file-wrapper m-t-20">
             <span class="ti ti-upload"></span>
             <label class="m-r-20" *ngIf="nombre_archivo == ''; else nombreArchivo">Seleccione o arrastre un
@@ -28,6 +28,10 @@
             </ng-template>
             <input class="form-control" placeholder="Archivo" type="file" (change)="onFileChange($event)">
           </div>
+        </div>
+        <div fxFlex.gt-sm="5" fxFlex="100"></div>
+        <div fxFlex.gt-sm="40" fxFlex="100" class="m-b-20" *ngIf="editar && notificacion.url_adjunto">
+          <img src="{{notificacion.url_adjunto}}" class="imagen-previa">
         </div>
       </div>
       <div fxLayout="row wrap">

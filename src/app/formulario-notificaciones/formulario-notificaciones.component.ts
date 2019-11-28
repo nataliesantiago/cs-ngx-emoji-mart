@@ -44,6 +44,8 @@ export class FormularioNotificacionesComponent implements OnInit {
   nombre_archivo = '';
   limite_caracteres;
   fecha_actual;
+  id_notificacion_editar;
+  editar = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
     private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService, private utilsService: UtilsService) {
@@ -69,6 +71,61 @@ export class FormularioNotificacionesComponent implements OnInit {
 
 
   init() {
+
+    this.route.params
+      .filter(params => params.id_notificacion)
+      .subscribe(params => {
+
+
+        this.id_notificacion_editar = params.id_notificacion;
+
+      });
+
+    if (this.id_notificacion_editar != 'nuevo') {
+      this.editar = true;
+      this.notificacionService.notificacionEditar(this.id_notificacion_editar).then(r => {
+        this.notificacion = r[0];
+        let tipo_envio = this.notificacion[0].tipo_notificacion;
+        this.notificacion = this.notificacion[0];
+        this.lista_asociada = r[1];
+        this.notificacion.tipo_envio = tipo_envio;
+        this.notificacion.hora_envio = moment(this.notificacion.fecha_inicio).add(5, 'hours').format('HH:mm');
+        this.notificacion.hora_fin = moment(this.notificacion.fecha_fin).add(5, 'hours').format('HH:mm');
+        if (this.notificacion.tipo_envio == "2") {
+          this.displayedColumns = ['objeto', 'acciones'];
+          this.tipo_seleccion = "Personas";
+          this.user.obtenerListaEmpleados().then(n => {
+
+            this.lista_objetos = n;
+            this.options = this.lista_objetos;
+            this.filteredOptions = this.myControl.valueChanges.pipe(
+              startWith(''),
+              map(value => this.utilsService.filter(this.lista_objetos, value, 'nombre'))
+            );
+            this.dataSource = new MatTableDataSource(this.lista_asociada);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.cg.detectChanges();
+          });
+        } else if (this.notificacion.tipo_envio == "3") {
+          this.displayedColumns = ['objeto', 'codigo', 'acciones'];
+          this.tipo_seleccion = "Dependencias";
+          this.notificacionService.obtenerListaDependencias().then(n => {
+
+            this.lista_objetos = n;
+            this.options = this.lista_objetos;
+            this.filteredOptions = this.myControl.valueChanges.pipe(
+              startWith(''),
+              map(value => this.utilsService.filter(this.lista_objetos, value, 'nombre'))
+            );
+            this.dataSource = new MatTableDataSource(this.lista_asociada);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.cg.detectChanges();
+          });
+        }
+      });
+    }
 
   }
 
@@ -202,34 +259,65 @@ export class FormularioNotificacionesComponent implements OnInit {
           }
         })
       } else {
-        this.notificacionService.guardarNotificacion(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
-          let id_notificacion = u.usuarios[0];
-          let ids_usuarios = [];
-          for (let i = 1; i < u.usuarios.length; i++) {
-            let arreglo_actual = u.usuarios[i];
-            for (let j = 0; j < arreglo_actual.length; j++) {
-              if (!ids_usuarios.includes(arreglo_actual[j].idtbl_usuario)) {
-                ids_usuarios.push(arreglo_actual[j].idtbl_usuario);
+        if (this.editar) {
+          this.notificacionService.guardarNotificacionEditada(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
+            let id_notificacion = this.id_notificacion_editar;
+            let ids_usuarios = [];
+            for (let i = 1; i < u.usuarios.length; i++) {
+              let arreglo_actual = u.usuarios[i];
+              for (let j = 0; j < arreglo_actual.length; j++) {
+                if (!ids_usuarios.includes(arreglo_actual[j].idtbl_usuario)) {
+                  ids_usuarios.push(arreglo_actual[j].idtbl_usuario);
+                }
               }
             }
-          }
-          if (this.notificacion.tipo_envio == '2') {
-            this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
-              if (u.success) {
-                this.router.navigate(['/administrador-notificaciones']);
-              }
-            });
-          } else if (this.notificacion.tipo_envio == '3') {
+            if (this.notificacion.tipo_envio == '2') {
+              this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
+                if (u.success) {
+                  this.router.navigate(['/administrador-notificaciones']);
+                }
+              });
+            } else if (this.notificacion.tipo_envio == '3') {
 
-            this.notificacionService.guardarDependencias(this.lista_asociada, id_notificacion).then(u => {
-              if (u.success) {
-                this.router.navigate(['/administrador-notificaciones']);
+              this.notificacionService.guardarDependencias(this.lista_asociada, id_notificacion).then(u => {
+                if (u.success) {
+                  this.router.navigate(['/administrador-notificaciones']);
+                }
+              });
+            } else {
+              this.router.navigate(['/administrador-notificaciones']);
+            }
+          });
+        } else {
+          this.notificacionService.guardarNotificacion(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
+            let id_notificacion = u.usuarios[0];
+            let ids_usuarios = [];
+            for (let i = 1; i < u.usuarios.length; i++) {
+              let arreglo_actual = u.usuarios[i];
+              for (let j = 0; j < arreglo_actual.length; j++) {
+                if (!ids_usuarios.includes(arreglo_actual[j].idtbl_usuario)) {
+                  ids_usuarios.push(arreglo_actual[j].idtbl_usuario);
+                }
               }
-            });
-          } else {
-            this.router.navigate(['/administrador-notificaciones']);
-          }
-        });
+            }
+            if (this.notificacion.tipo_envio == '2') {
+              this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
+                if (u.success) {
+                  this.router.navigate(['/administrador-notificaciones']);
+                }
+              });
+            } else if (this.notificacion.tipo_envio == '3') {
+
+              this.notificacionService.guardarDependencias(this.lista_asociada, id_notificacion).then(u => {
+                if (u.success) {
+                  this.router.navigate(['/administrador-notificaciones']);
+                }
+              });
+            } else {
+              this.router.navigate(['/administrador-notificaciones']);
+            }
+          });
+        }
       }
     }
   }

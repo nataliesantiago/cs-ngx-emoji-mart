@@ -275,6 +275,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
    */
   guardarPregunta() {
 
+    let enviar_correo = false;
+
     if (this.pregunta.titulo == "" || (this.id_pregunta_editar != "sugerida" && this.pregunta.id_producto == "")) {
 
       swal.fire({
@@ -301,6 +303,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.pregunta.id_estado_flujo = 3;
         } else if (this.pregunta.id_estado_flujo == 3) {
           this.pregunta.id_estado_flujo = 4;
+          enviar_correo = true;
         } else if (this.pregunta.id_estado_flujo == 4) {
           this.pregunta.id_estado_flujo = 3;
         }
@@ -333,9 +336,20 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         } else {
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
-              this.location.back();
+              console.log(enviar_correo);
+              if(enviar_correo){
+                this.ajax.post('email/correo-aprobacion-pregunta', { pregunta: this.pregunta }).subscribe(d => {
+                  if (d.success) {
+                    //this.location.back();
+                  }
+                })
+              }else{
+                //this.location.back();
+              }
+              
             }
           })
+          
         }
 
       } else {
