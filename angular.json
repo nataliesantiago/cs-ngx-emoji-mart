@@ -62,15 +62,37 @@
                                 "with": "src/environments/environment.test.ts"
                             }]
                         },
-                        "cam": {
+                        "lablocal": {
                             "fileReplacements": [{
                                 "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.cam.ts"
-                            },
-                            {
-                                "replace": "src/firebase-messaging-sw.js",
-                                "with": "src/firebase-messaging-sw-cam.js"
+                                "with": "src/environments/environment.laboratorio.local.ts"
                             }]
+                        },
+                        "lab": {
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.laboratorio.ts"
+                            }]
+                        },
+                        "cam": {
+                            "fileReplacements": [{
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.cam.ts"
+                                },
+                                {
+                                    "replace": "src/firebase-messaging-sw.js",
+                                    "with": "src/firebase-messaging-sw-cam.js"
+                                }
+                            ]
                         },
                         "cam-test": {
                             "optimization": true,
@@ -83,13 +105,14 @@
                             "vendorChunk": false,
                             "buildOptimizer": true,
                             "fileReplacements": [{
-                                "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.cam-test.ts"
-                            },
-                            {
-                                "replace": "src/firebase-messaging-sw.js",
-                                "with": "src/firebase-messaging-sw-cam.js"
-                            }]
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.cam-test.ts"
+                                },
+                                {
+                                    "replace": "src/firebase-messaging-sw.js",
+                                    "with": "src/firebase-messaging-sw-cam.js"
+                                }
+                            ]
                         },
                         "cam-prod": {
                             "optimization": true,
@@ -102,13 +125,14 @@
                             "vendorChunk": false,
                             "buildOptimizer": true,
                             "fileReplacements": [{
-                                "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.cam-prod.ts"
-                            },
-                            {
-                                "replace": "src/firebase-messaging-sw.js",
-                                "with": "src/firebase-messaging-sw-cam.js"
-                            }]
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.cam-prod.ts"
+                                },
+                                {
+                                    "replace": "src/firebase-messaging-sw.js",
+                                    "with": "src/firebase-messaging-sw-cam.js"
+                                }
+                            ]
                         }
                     }
                 },
@@ -123,7 +147,15 @@
                         },
                         "cam": {
                             "browserTarget": "material:build:cam"
-                            
+
+                        },
+                        "lablocal": {
+                            "browserTarget": "material:build:lablocal"
+
+                        },
+                        "lab": {
+                            "browserTarget": "material:build:lab"
+
                         }
                     }
                 },

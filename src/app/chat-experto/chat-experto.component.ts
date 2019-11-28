@@ -84,6 +84,22 @@ export class ChatExpertoComponent {
         this.recibirChatAutomatico();
       }
     });
+    window.addEventListener('beforeunload', (e) => {
+
+      let pregunta = false;
+      this.chats_experto.forEach(c => {
+        if (c.id_estado_conversacion == 2) {
+          pregunta = true;
+        }
+      })
+      if (pregunta) {
+        console.log('bueno');
+        e.returnValue = 'Tienes conversaciones activas';
+      } else {
+        console.log('malo');
+        // return true;
+      }
+    });
   }
 
   init() {
@@ -166,7 +182,7 @@ export class ChatExpertoComponent {
         });
         let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
         chats.subscribe(async chaters => {
-          console.log('paso por acá')
+
           let chat = await this.chatService.getConversacionesExperto();
           if (!chat) {
             chat = [];
@@ -182,7 +198,7 @@ export class ChatExpertoComponent {
           }
           if (chat.length < 1) {
             this.chats_experto = [];
-            if (this.chat.id_tipo_conversacion == 1) {
+            if (this.chat && this.chat.id_tipo_conversacion == 1) {
               delete this.chat;
             }
           }
@@ -402,17 +418,18 @@ export class ChatExpertoComponent {
 
   agregarListenerMensajes(c: Conversacion) {
     c.mensajes = [];
-    let primera_vez = true;
+    c.primera_vez = true;
     c.messages = this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
     c.listener_mensajes = c.messages.subscribe(async d => {
 
-      if (!primera_vez && c.mensajes && c.mensajes.length < d.length) {
+      if (!c.primera_vez && c.mensajes && c.mensajes.length < d.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
       //console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
-      c.mensajes = c.mensajes.concat(await this.procesarMensajes(d, c, primera_vez, 0, []));
+      let mensajes_nuevos = await this.procesarMensajes(d, c, c.primera_vez, 0, []);
+      c.mensajes = c.mensajes.concat(mensajes_nuevos);
       if (!c.primera_consulta) {
         c.mensajes.filter(m => {
           return m.id_usuario == c.id_usuario_creador && (!m.es_nota_voz && !m.es_archivo);
@@ -426,7 +443,7 @@ export class ChatExpertoComponent {
           });
         })
       }
-      primera_vez = false;
+      c.primera_vez = false;
       this.cantidad_mensajes_sin_leer = 0;
       this.expertos.forEach(e => {
         if (e.conversacion_experto) {
@@ -514,13 +531,17 @@ export class ChatExpertoComponent {
       }
 
     }
-    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
-      this.soundService.sonar(1);
-      //c.cantidad_mensajes_nuevos++;
-      c.mensajes_nuevos = true;
+    if (c.id_tipo_conversacion == 1) {
+      if (!c.primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
+        this.soundService.sonar(1);
+        c.mensajes_nuevos = true;
+      }
+    } else {
+      if (!c.primera_vez && !c.focuseado) {
+        this.soundService.sonar(1);
+        c.mensajes_nuevos = true;
+      }
     }
-
-    //console.log(tmp);
     return tmp;
     /* let m = d.shift();
      if (m) {
