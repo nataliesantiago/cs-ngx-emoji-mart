@@ -245,7 +245,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.activo_revision = false;
     this.activo_aprobacion = false;
     this.activo_aprobados = true;
-    if (this.rol_usuario == 8) {
+    if (this.rol_usuario == 8 || this.rol_usuario == 7) {
       this.mostrar_accion = true;
     } else {
       this.mostrar_accion = false;

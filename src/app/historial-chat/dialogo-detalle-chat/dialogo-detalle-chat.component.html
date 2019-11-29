@@ -43,10 +43,10 @@
               </div>
 
             </div>
-            <span class="foto-mensaje">
+            <span class="foto-mensaje" *ngIf="message.url_imagen_gsuite">
               <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40" title="{{message.nombre}}" *ngIf="message.id_usuario_envia!==chat.idtbl_usuario">
             </span>
-            <div class="chat-date">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
+            <div class="chat-date" *ngIf="message.muestra_hora">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
           </div>
           <p class="no-message" *ngIf="is_empty_messages">No se han encontrado mensajes en este chat.</p>
         </div>
@@ -124,11 +124,11 @@
               <mat-icon class="icono-burbuja-mensaje" *ngIf="message.estado==2">done</mat-icon>
             </span>
           </div>
-          <span class="foto-mensaje" *ngIf="message.id_usuario_envia!==chat.idtbl_usuario">
+          <span class="foto-mensaje" *ngIf="message.id_usuario_envia!==chat.idtbl_usuario && message.url_imagen_gsuite">
             <img src="{{message.url_imagen_gsuite}}" class="img-circle" width="40"
               title="{{message.nombre}}">
           </span>
-          <div class="chat-date" *ngIf="message.mensaje_antiguo">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
+          <div class="chat-date" *ngIf="message.mensaje_antiguo && message.muestra_hora">{{message.fecha_envio | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
           <div class="chat-date" *ngIf="!message.mensaje_antiguo">{{message.fecha_mensaje | MomentDate:'h:mm a' }}</div>
         </div>
       </div>
@@ -187,7 +187,7 @@
             <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
           </button>
           <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
-          (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
+          (keydown.enter)="enviarMensaje(chat,1,null,$event,este)"
           (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
           [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
           (blur)="setFocus(chat,false)"></textarea>

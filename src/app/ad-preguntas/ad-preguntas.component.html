@@ -54,6 +54,12 @@
                                     <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Categoria </mat-header-cell>
                                     <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_producto}} </mat-cell>
                                 </ng-container>
+
+                                <!-- Color Column -->
+                                <ng-container matColumnDef="nombre_estado_flujo">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Estado Flujo </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_estado_flujo}} </mat-cell>
+                                </ng-container>
         
                                 <!-- Color Column -->
                                 <ng-container matColumnDef="nombre_estado">

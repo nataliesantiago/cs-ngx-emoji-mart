@@ -17,6 +17,7 @@ import { UserService } from '../../providers/user.service';
 import { NotificacionService } from '../../providers/notificacion.service';
 import { LookFeelService } from '../../providers/look-feel.service';
 import { User } from '../../../schemas/user.schema';
+import { AjaxService } from '../../providers/ajax.service';
 
 /** @title Responsive sidenav */
 @Component({
@@ -42,6 +43,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   notificaciones_usuario_nuevas = [];
   conversaciones_nlp = [];
   mensajes_sin_leer_nlp;
+  paisActual;
 
   public config: PerfectScrollbarConfigInterface = {};
   private _mobileQueryListener: () => void;
@@ -73,7 +75,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   muestra_barra: boolean = false;
   reason = '';
   muetra_alarmas_nlp = false;
-  
+
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
@@ -86,7 +88,8 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     private nzone: NgZone,
     private user: UserService,
     private notificacionService: NotificacionService,
-    private look_service: LookFeelService
+    private look_service: LookFeelService,
+    private ajax: AjaxService
   ) {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -95,15 +98,18 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
+      this.paisActual = this.usuario.pais;
       this.init();
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
+      this.paisActual = this.usuario.pais;
       this.id_usuario = u.idtbl_usuario;
       if (this.usuario) {
         this.init();
       }
     });
+
     this.user.observablePanelNotificaciones.subscribe(abrir => {
       if (abrir) {
         this.end.open();
@@ -134,7 +140,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
       this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
-      
+
     });
 
   }
@@ -146,7 +152,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     if (t) {
       this.muetra_alarmas_nlp = true;
     }
-    
+
     if (this.usuario.getModoNocturno() == 0 || this.usuario.getModoNocturno() == null) {
       this.look_service.getSpecificSetting('color_barra_superior').then((result) => {
         if (result && result[0] && result[0].valor) {
@@ -236,6 +242,19 @@ export class FullComponent implements OnDestroy, AfterViewInit {
         this.router.navigate(['/consola-supervisor/' + e.idtbl_conversacion]);
       });
     });
+  }
+
+  activarBoton(pais, cambio) {
+    return pais == cambio;
+  }
+
+  cambiarPais(pais) {
+    this.usuario.pais = pais;
+    this.ajax.pais = pais;
+    this.paisActual = pais;
+    localStorage.setItem('pais', pais);
+    this.changeDetector.detectChanges();
+    this.router.navigate(['/home']);
   }
 
 }
