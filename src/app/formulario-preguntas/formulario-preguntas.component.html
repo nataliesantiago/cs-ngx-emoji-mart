@@ -23,15 +23,23 @@
             [(ngModel)]="pregunta.respuesta" name="respuesta"></quill-editor>
           <br>
           <div fxLayout="row wrap">
-            <mat-form-field fxFlex.gt-sm="45" fxFlex="100">
+            <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
               <mat-label>Categoria (Más bajo nivel)*</mat-label>
               <mat-select [(ngModel)]="pregunta.id_producto" name="producto">
                 <mat-option *ngFor="let i of productos" [value]="i.idtbl_producto">{{i.nombre}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <div fxFlex.gt-sm="10" fxFlex="100">
+            <div fxFlex.gt-sm="5" fxFlex="100">
             </div>
-            <mat-form-field fxFlex.gt-sm="45" fxFlex="100">
+            <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
+              <mat-label>Estado del flujo de la pregunta*</mat-label>
+              <mat-select [(ngModel)]="pregunta.id_estado_flujo" name="estado flujo">
+                <mat-option *ngFor="let i of estado_flujo_pregunta" [value]="i.idtbl_estado_flujo_pregunta">{{i.nombre}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div fxFlex.gt-sm="5" fxFlex="100">
+            </div>
+            <mat-form-field fxFlex.gt-sm="30" fxFlex="100">
               <mat-label>Estado de la pregunta*</mat-label>
               <mat-select [(ngModel)]="pregunta.id_estado" name="estado">
                 <mat-option *ngFor="let i of estados_pregunta" [value]="i.idtbl_estado_pregunta">{{i.nombre}}</mat-option>

@@ -27,7 +27,7 @@ export class AdPreguntasComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['acciones', 'idtbl_pregunta', 'titulo', 'nombre_producto', 'nombre_estado', 'muestra_fecha_actualizacion'];
+  displayedColumns = ['acciones', 'idtbl_pregunta', 'titulo', 'nombre_producto', 'nombre_estado_flujo', 'nombre_estado', 'muestra_fecha_actualizacion'];
   matTableFilter:matTableFilter;
   filterColumns = [
     {field:'idtbl_pregunta', type:'number'},

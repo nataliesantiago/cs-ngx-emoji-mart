@@ -22,11 +22,16 @@
         <!-- Search - style you can find in header.scss -->
         <!-- ============================================================== -->
         <span class="comunidad_titulo" (click)="irHome()">Conecta</span>
+
         <span fxFlex>
             <div class="buscador-barra-superior" *ngIf="muestra_barra">
                 <app-search-component [modo]="1"></app-search-component>
             </div>
         </span>
+
+
+
+
 
         <!--button mat-icon-button class="m-r-10">
             <img src="../../../../assets/images/sos.png" alt="" class="sos">

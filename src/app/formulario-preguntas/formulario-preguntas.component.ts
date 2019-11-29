@@ -20,7 +20,7 @@ import { UtilsService } from '../providers/utils.service';
 export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   productos = [];
-  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 1, muestra_fecha_actualizacion: 0 };
+  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 4, muestra_fecha_actualizacion: 0 };
   segmentos = [];
   subrespuestas = [];
   subrespuestas_segmentos = [];
@@ -59,6 +59,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   titulo_control = new FormControl();
   texto_buscador: string;
   buscador = false;
+  estado_flujo_pregunta = [];
 
 
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
@@ -256,6 +257,13 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         this.estados_pregunta = d.estados_pregunta;
       }
     })
+
+    this.ajax.get('estado-pregunta/obtener-flujos', {}).subscribe(d => {
+      if (d.success) {
+        this.estado_flujo_pregunta = d.estados_flujo_pregunta;
+        this.cg.detectChanges();
+      }
+    })
   }
 
   guardarPregunta() {
@@ -324,7 +332,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   anadirSubRespuesta() {
-    this.subrespuestas.push({ titulo: '', respuesta: '', posicion: '', categoria: '' });
+    this.subrespuestas.push({ titulo: '', respuesta: '', posicion: 2, categoria: '' });
   }
 
   eliminarSegmento(e, pos) {

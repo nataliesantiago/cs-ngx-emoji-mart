@@ -2,8 +2,6 @@
 <!-- Notification - style you can find in header.scss -->
 <!-- ============================================================== -->
 
-
-
 <button mat-icon-button class="m-r-10" (click)="emergenciaSOS()" title="No es un botón de pánico"
     *ngIf="muestra_boton_sos" [disabled]="creando_emergencia">
     <img src="../../../../assets/images/sos.png" alt="" class="sos">
@@ -62,6 +60,18 @@
                 [checked]="is_dark_mode == 1" />
             <div class="slider-switch round-switch"></div>
         </label>
+    </div>
+    <div *ngIf="ambiente && ambiente=='cam'">
+        <mat-divider></mat-divider>
+        <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="25">
+            <mat-label class="active-text m-r-20">Pais</mat-label>
+            <mat-select [(ngModel)]="paisActual" name="envio" (selectionChange)="cambiarPais()">
+                <mat-option [value]="pan">Panamá</mat-option>
+                <mat-option [value]="cos">Costa Rica</mat-option>
+                <mat-option [value]="hon">Honduras</mat-option>
+                <mat-option [value]="sal">El Salvador</mat-option>
+            </mat-select>
+        </div>
     </div>
 </mat-menu>
 

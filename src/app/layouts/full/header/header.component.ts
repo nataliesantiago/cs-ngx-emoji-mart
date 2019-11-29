@@ -14,6 +14,7 @@ import { DOCUMENT } from '@angular/platform-browser';
 import { EstadoExpertoService } from '../../../providers/estado-experto.service';
 import { LookFeelService } from '../../../providers/look-feel.service';
 import { LogEstadoExperto } from '../../../../schemas/interfaces';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -34,6 +35,10 @@ export class AppHeaderComponent {
   modo_nocturno;
   state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
   muestra_boton_sos: boolean;
+  paisActual;
+  correo_usuario = "";
+  validacion_pais_usuario = [];
+  ambiente = environment.ambiente;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
     private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument,
@@ -41,8 +46,8 @@ export class AppHeaderComponent {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {
-        
         this.user = u;
+        this.paisActual = this.user.pais;
         this.profileImage = u.url_foto;
         this.init();
       }
@@ -51,6 +56,7 @@ export class AppHeaderComponent {
 
     if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
+      this.paisActual = this.user.pais;
       this.init();
 
       if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
@@ -66,6 +72,10 @@ export class AppHeaderComponent {
   }
 
   init() {
+
+    this.correo_usuario = this.user.getCorreo();
+    this.validacion_pais_usuario = this.correo_usuario.split(".");
+    this.correo_usuario = this.validacion_pais_usuario[(this.validacion_pais_usuario.length - 1)];
 
     if (this.user.boton_sos_perfil && this.user.boton_sos_rol) {
       this.muestra_boton_sos = true;
@@ -223,6 +233,10 @@ export class AppHeaderComponent {
     this.state.estado_ingreso = estado_ingreso
     this.estadoExpertoService.createLogState(this.state).then(result => {
     });
+  }
+
+  cambiarPais(){
+
   }
 
 }
