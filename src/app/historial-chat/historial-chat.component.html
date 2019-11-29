@@ -29,6 +29,8 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:8%;"> Acciones </mat-header-cell>
               <mat-cell *matCellDef="let row" style="max-width:8%;">
                 <i class="ti-eye success-color m-r-10 mouse-over" (click)="showMoreChat(row)"></i>
+                <i class="ti-download info-color m-r-10 mouse-over" (click)="descargarChat(row)" *ngIf="row.id_estado_conversacion!=7 && !row.loading"></i>
+                <mat-progress-spinner *ngIf="row.loading" class="loading-chat-button" color="basic" [mode]="'indeterminate'" [diameter]="20"></mat-progress-spinner>
               </mat-cell>
             </ng-container>
     

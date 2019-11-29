@@ -40,6 +40,7 @@ export class DialogoDetalleChatComponent implements OnInit {
   recording_url = [];
   is_recording = false;
   is_closed = false;
+  is_user;
 
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
               private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef) {
@@ -58,6 +59,7 @@ export class DialogoDetalleChatComponent implements OnInit {
     });
 
     this.chat = data;
+    this.is_user = data.user_chat;
     this.chats.push(this.chat);
     
     this.getMessages();
@@ -86,7 +88,7 @@ export class DialogoDetalleChatComponent implements OnInit {
    * verifica si la modal se ha cerrado dando clic en el area de afuera de la modal
    */
   closeModalPending() {
-    if (this.chat.id_estado_conversacion == 7) {
+    if (this.chat.expert_chat && this.chat.id_estado_conversacion == 7) {
       this.dialogRef.backdropClick().subscribe(() => {
         this.dialogRef.close({closed: this.is_closed});
       });
@@ -112,7 +114,7 @@ export class DialogoDetalleChatComponent implements OnInit {
    * obtiene los mensajes de una conversacion
    */
   getMessages() {
-    this.historial_service.getConversationMessages(this.chat.idtbl_conversacion).then((result: Array<Mensaje>) => {
+    this.historial_service.getConversationMessages(this.chat.idtbl_conversacion, this.chat.id_estado_conversacion, this.is_user).then((result: Array<Mensaje>) => {
       (result.length == 0) ? this.is_empty_messages = true : this.is_empty_messages = false;
       let nuevos_mensajes = this.validateMessages(result, 0);
       this.chat.mensajes = nuevos_mensajes;

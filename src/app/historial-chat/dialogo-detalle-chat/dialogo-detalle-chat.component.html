@@ -88,6 +88,8 @@
                               [ngClass]="{'odd': message.id_usuario_envia!==chat.idtbl_usuario,'even': message.id_usuario_envia===chat.idtbl_usuario || message.id_usuario===chat.idtbl_usuario}">
           
           <div class="chat-block" [ngClass]="{'encontrado':message.encontrado && chat.buscando_texto}">
+            <div *ngIf="!message.es_archivo || !message.es_nota_voz"
+              [innerHTML]="decodeText(message.texto) | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
             <div class="contendor-archivo" *ngIf="message.es_archivo || message.es_nota_voz">
               <div *ngIf="message.es_archivo">
                 <a [href]="message.url" target="_blank">
@@ -117,8 +119,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="!message.es_archivo || !message.es_nota_voz"
-              [innerHTML]="decodeText(message.texto) | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
+            
               
             <span *ngIf="message.id_usuario==chat.idtbl_usuario">
               <mat-icon class="icono-burbuja-mensaje" *ngIf="message.estado==2">done</mat-icon>
