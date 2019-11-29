@@ -65,6 +65,9 @@ export class DialogoDetalleChatComponent implements OnInit {
     this.closeModalPending();
   }
   
+  /**
+   * inicializa la informacion necesaria
+   */
   init() {
     this.chatService.obtenerLimiteTexto().then(valor => {
       this.limite_texto_chat = valor;
@@ -79,6 +82,9 @@ export class DialogoDetalleChatComponent implements OnInit {
     
   }
 
+  /**
+   * verifica si la modal se ha cerrado dando clic en el area de afuera de la modal
+   */
   closeModalPending() {
     if (this.chat.id_estado_conversacion == 7) {
       this.dialogRef.backdropClick().subscribe(() => {
@@ -87,6 +93,9 @@ export class DialogoDetalleChatComponent implements OnInit {
     } 
   }
 
+  /**
+   * obtiene las url de grabacion de la llamada
+   */
   getRecordingUrl() {
     this.historial_service.getRecordingUrl(this.chat.idtbl_conversacion).then(result => {
       if (result != undefined && result.url_grabacion != '') {
@@ -99,10 +108,14 @@ export class DialogoDetalleChatComponent implements OnInit {
     });
   }
 
+  /**
+   * obtiene los mensajes de una conversacion
+   */
   getMessages() {
     this.historial_service.getConversationMessages(this.chat.idtbl_conversacion).then((result: Array<Mensaje>) => {
       (result.length == 0) ? this.is_empty_messages = true : this.is_empty_messages = false;
-      this.chat.mensajes = result;
+      let nuevos_mensajes = this.validateMessages(result, 0);
+      this.chat.mensajes = nuevos_mensajes;
       this.chat.mensajes.forEach(element => {
         element.mensaje_antiguo = true;
         if (element.es_nota_voz == 1) {
@@ -113,10 +126,43 @@ export class DialogoDetalleChatComponent implements OnInit {
     });
   }
 
+  /**
+   * valida los mensajes de un usuario en el rango de 1 minuto
+   * @param mensajes 
+   * @param index 
+   * @param mensaje_anterior 
+   */
+  validateMessages(mensajes, index, mensaje_anterior?) {
+    let m = mensajes[index];
+    if (m) {
+        m.muestra_hora = true;
+        index++;
+        if (mensaje_anterior && m.id_usuario_envia == mensaje_anterior.id_usuario_envia) {
+          let fecha_anterior = moment(mensaje_anterior.fecha_envio);
+          let fecha_actual = moment(m.fecha_envio);
+          let diff = fecha_anterior.diff(fecha_actual, 'minutes');
+          
+          if (diff == 0) {
+            mensaje_anterior.muestra_hora = false;
+            delete mensaje_anterior.url_imagen_gsuite;
+          }
+        }
+        this.validateMessages(mensajes, index, m);
+    }
+    return mensajes;
+  }
+
+  /**
+   * decodifia el texto del mensaje
+   * @param text 
+   */
   decodeText(text) {
     return decodeURI(text);
   }
 
+  /**
+   * cierra la modal 
+   */
   closeDialog() {
     this.dialogRef.close();
   }
@@ -124,6 +170,9 @@ export class DialogoDetalleChatComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * permite desplazar los mensajes hasta el ultimo
+   */
   verNuevosMensajes() {
     if (this.componentRef && this.componentRef.directiveRef) {
       setTimeout(() => {
@@ -133,6 +182,11 @@ export class DialogoDetalleChatComponent implements OnInit {
     }
   }
 
+  /**
+   * activa el focus de la conversacion
+   * @param c 
+   * @param estado 
+   */
   setFocus(c: Conversacion, estado: boolean) {
     c.focuseado = estado;
     if (estado) {
@@ -142,6 +196,10 @@ export class DialogoDetalleChatComponent implements OnInit {
     }
   }
 
+  /**
+   * habilita o deshabilita los emojis
+   * @param c 
+   */
   toggleEmojis(c: Conversacion) {
     if (c.mostrar_emojis) {
       c.mostrar_emojis = false;
@@ -150,18 +208,23 @@ export class DialogoDetalleChatComponent implements OnInit {
     }
   }
 
+  /**
+   * reemplaza el emoji enviado
+   * @param c 
+   */
   remplazaEmoji(c: Conversacion) {
     c.texto_mensaje = this.chatService.findEmojiData(c.texto_mensaje);
   }
 
-  escribiendo(c: Conversacion, event: KeyboardEvent) {
-
-    let code = event.which || event.keyCode;
-    if (code != 13 && code != 8) {
-      this.chatService.usuarioEscribiendoConversacion(c);
-    }
-  }
-
+  /**
+   * envia el mensaje correspondiente
+   * @param chat 
+   * @param tipo_mensaje 
+   * @param url 
+   * @param event 
+   * @param comp 
+   * @param duration 
+   */
   enviarMensaje(chat: Conversacion, tipo_mensaje: number, url?: string, event?: Event, comp?: PerfectScrollbarComponent, duration?: number) {
     if (chat.texto_mensaje) {
       chat.texto_mensaje = chat.texto_mensaje.trim();
@@ -229,6 +292,11 @@ export class DialogoDetalleChatComponent implements OnInit {
     }
   }
 
+  /**
+   * asigna el formato audio a enviar
+   * @param m 
+   * @param audio 
+   */
   asignarAudio(m: Mensaje, audio?: HTMLAudioElement) {
     //audio.load();
 
@@ -259,6 +327,13 @@ export class DialogoDetalleChatComponent implements OnInit {
 
   }
 
+  /**
+   * adjunta un archivo 
+   * @param c 
+   * @param evento 
+   * @param form 
+   * @param input 
+   */
   adjuntarArchivo(c: Conversacion, evento: Event, form: HTMLFormElement, input: HTMLInputElement) {
 
     let target = <any>evento.target;
@@ -278,11 +353,21 @@ export class DialogoDetalleChatComponent implements OnInit {
     }
   }
 
+  /**
+   * remueve el archivo adjuntado
+   * @param c 
+   * @param input 
+   */
   quitarArchivoAdjunto(c: Conversacion, input: HTMLInputElement) {
     delete c.archivo_adjunto;
     input.value = "";
   }
 
+  /**
+   * selecciona un emoji especifico
+   * @param evento 
+   * @param c 
+   */
   seleccionarEmoji(evento, c: Conversacion) {
     // console.log(evento);
     if (c.texto_mensaje) {
@@ -294,6 +379,11 @@ export class DialogoDetalleChatComponent implements OnInit {
     //c.mostrar_emojis = false;
   }
 
+  /**
+   * graba una nota de voz
+   * @param c 
+   * @param comp 
+   */
   grabarNotaVoz(c: Conversacion, comp: PerfectScrollbarComponent) {
 
     let minutos = parseInt(this.buscarConfiguracion(7).valor);
@@ -322,12 +412,21 @@ export class DialogoDetalleChatComponent implements OnInit {
       });
   }
 
+  /**
+   * busca una configuracion especifica de la administracion
+   * @param id 
+   */
   buscarConfiguracion(id: number): Configuracion {
     return this.configuraciones.find(c => {
       return c.idtbl_configuracion === id;
     });
   }
 
+  /**
+   * inicializa la duracion de una nota de voz
+   * @param duration 
+   * @param c 
+   */
   startTimer(duration: number, c: Conversacion): Promise<any> {
 
     var timer: number = duration;
@@ -369,6 +468,12 @@ export class DialogoDetalleChatComponent implements OnInit {
 
   }
 
+  /**
+   * deteniene la grabacion de una nota de voz
+   * @param audioBlob 
+   * @param c 
+   * @param comp 
+   */
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
 
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
@@ -379,6 +484,13 @@ export class DialogoDetalleChatComponent implements OnInit {
 
   }
 
+  /**
+   * adjunta la nota de voz grabada
+   * @param c 
+   * @param file 
+   * @param duration 
+   * @param comp 
+   */
   adjuntarNotaVoz(c: Conversacion, file: File, duration: number, comp: PerfectScrollbarComponent) {
 
     c.cargando_archivo = true;
@@ -390,6 +502,11 @@ export class DialogoDetalleChatComponent implements OnInit {
     });
   }
 
+  /**
+   * envia la nota de voz grabada
+   * @param c 
+   * @param comp 
+   */
   enviarNota(c: Conversacion, comp: PerfectScrollbarComponent) {
     c.mediaRecorder.stop(audioBlob => {
       this.onStopRecordingNotaVoz(audioBlob, c, comp);
@@ -398,6 +515,10 @@ export class DialogoDetalleChatComponent implements OnInit {
 
   }
 
+  /**
+   * remueve la nota de voz grabada
+   * @param c 
+   */
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
     c.mediaRecorder.stop();
@@ -405,12 +526,21 @@ export class DialogoDetalleChatComponent implements OnInit {
     this.stream.getTracks().forEach(track => track.stop());
   }
 
+  /**
+   * cambia de estado el segundo audio
+   * @param m 
+   */
   cambiarSegundoAudio(m: Mensaje) {
     m.audio.pause();
     m.audio.currentTime = m.audioControls.segundo;
     m.audio.play();
   }
 
+  /**
+   * pausa o reproduce una nota de voz
+   * @param c 
+   * @param m 
+   */
   toggleAudio(c: Conversacion, m: Mensaje) {
     c.mensajes.filter(m => {
       return m.es_nota_voz && m.audio;
@@ -425,6 +555,12 @@ export class DialogoDetalleChatComponent implements OnInit {
     }
   }
 
+  /**
+   * busca un texto dentro del chat
+   * @param c 
+   * @param e 
+   * @param input 
+   */
   buscarTexto(c: Conversacion, e: KeyboardEvent, input: HTMLInputElement) {
     e.preventDefault();
     e.stopPropagation();
@@ -459,6 +595,10 @@ export class DialogoDetalleChatComponent implements OnInit {
     }
   }
 
+  /**
+   * cierra el chat correspondiente
+   * @param c 
+   */
   cerrarChat(c: Conversacion) {
     this.chatService.cerrarConversacion(c, 3).then(() => {
       this.is_closed = true;
@@ -468,6 +608,10 @@ export class DialogoDetalleChatComponent implements OnInit {
     });
   }
 
+  /**
+   * envia el resultado de la encuesta
+   * @param c 
+   */
   finalizaEncuesta(c: Conversacion) {
     let index = this.chats.findIndex(chat => {
       return chat.codigo === c.codigo;
@@ -478,6 +622,10 @@ export class DialogoDetalleChatComponent implements OnInit {
     this.dialogRef.close({closed: this.is_closed});
   }
 
+  /**
+   * descarga el archivo correspondiente con la informacion del chat
+   * @param c 
+   */
   descargarChat(c) {
     this.loading = true
     this.chatService.generarPdf(c.idtbl_conversacion).then((d) => {
