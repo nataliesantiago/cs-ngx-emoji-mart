@@ -30,9 +30,10 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                 localStorage.setItem('pais', data.pais);
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
                     //debugger;
+                    //console.log(d);
                     this.primer_login = false;
                     if (d.url) {
-                        window.location.href = d.url;
+                        //window.location.href = d.url;
                         reject(false);
                     } else if (d.profile) {
                         let user = new User(d.profile.email, d.profile.token, d.profile.nombre);

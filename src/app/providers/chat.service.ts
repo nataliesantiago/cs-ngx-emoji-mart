@@ -479,9 +479,10 @@ export class ChatService {
    */
   transferirChat(c: Conversacion, id_transferencia: number, id_tipo: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+
       this.ajax.post('chat/conversacion/transferir', { id_experto: this.user.getId(), id_conversacion: c.idtbl_conversacion, id_cliente: c.cliente.idtbl_usuario, codigo: c.codigo, id_tipo: id_tipo, coidgo_chat: c.codigo_chat, id_transferencia: id_transferencia }).subscribe(d => {
         if (d.success) {
+          //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
           resolve();
         } else {
           reject();
@@ -859,10 +860,10 @@ export class ChatService {
 
   conversacionPendiente(c: Conversacion, estado: number, hora_recordatorio?: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      
+
       this.ajax.post('chat/recordatorio/crear', { id_conversacion: c.idtbl_conversacion, codigo: c.codigo, id_usuario: this.user.getId(), correo_cliente: c.cliente.correo, nombre_cliente: c.cliente.nombre, token: this.user.token_acceso, hora_recordatorio: hora_recordatorio, id_estado: estado }).subscribe(d => {
         if (d.success) {
-          
+
           resolve();
         }
       })

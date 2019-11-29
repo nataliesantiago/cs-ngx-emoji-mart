@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutes } from './app.routing';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
@@ -129,19 +129,22 @@ import { AdministradorHorariosComponent } from './administrador-horarios/adminis
 import { HistorialCuraduriaComponent } from './components/historial-curaduria/historial-curaduria.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AdminsitracionRolesComponent } from './adminsitracion-roles/adminsitracion-roles.component';
-
+import { HttpConfigInterceptor } from './providers/generalHttpInterceptor';
+declare var gtag: any;
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
   wheelPropagation: true
 };
-
+/*
 let item = document.getElementById('analytics');
 let script = document.createElement('div')
 script.innerHTML = (environment.analytics);
 script.childNodes.forEach(c => {
-  document.getElementsByTagName('head')[0].insertBefore(c, item);
-})
+  // document.getElementsByTagName('body')[0].appendChild(c);
+})*/
+
+gtag('config', environment.analytics);
 
 
 @NgModule({
@@ -273,6 +276,7 @@ script.childNodes.forEach(c => {
   ],
 
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
     {
       provide: AuthServiceConfig,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,

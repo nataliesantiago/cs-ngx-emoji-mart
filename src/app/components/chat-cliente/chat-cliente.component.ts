@@ -209,16 +209,17 @@ export class ChatClienteComponent implements OnInit {
     c.messages = query.valueChanges();
     c.mensajes = [];
     let primera_vez = true;
-
+    c.primera_vez = true;
     c.messages.subscribe(async d => {
       //console.log(d.length, c.mensajes.length);
       if (!primera_vez && c.mensajes && d.length > c.mensajes.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
 
-      c.mensajes = c.mensajes.concat(await this.procesarMensajes(d, c, primera_vez, 0, []));
+      let mensajes_nuevos = await this.procesarMensajes(d, c, c.primera_vez, 0, []);
+      c.mensajes = c.mensajes.concat(mensajes_nuevos);
 
-      primera_vez = false;
+      c.primera_vez = false;
       if (this.intervalo) {
         window.clearInterval(this.intervalo);
       }

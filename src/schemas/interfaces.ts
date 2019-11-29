@@ -86,6 +86,7 @@ export interface GuionChat {
 export interface MotivoCierreChat {
     idtbl_motivo_cierre_chat?: number;
     name?: string;
+    nombre?: string;
     create_user_id?: number;
     create_date?: Date;
     update_last_user_id?: number;

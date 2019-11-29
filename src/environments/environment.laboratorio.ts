@@ -27,13 +27,6 @@ export const environment = {
       id_origen_chat: 'datasources/2721fbfe980dfcd221c70095e8d11769'
     }
   },
-  analytics: `<script  src="https://www.googletagmanager.com/gtag/js?id=G-W8VKE6BFXF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-W8VKE6BFXF');
-  </script>`
+  analytics: 'G-W8VKE6BFXF'
 };
 

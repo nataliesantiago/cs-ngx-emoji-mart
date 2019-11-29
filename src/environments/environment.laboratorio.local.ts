@@ -22,18 +22,11 @@ export const environment = {
   ambiente: 'col',
   pais: {
     col: {
-      id_origen_conecta: 'datasources/2721fbfe980dfcd21c1c5aece9cacef5',
-      id_origen_drive: 'datasources/2721fbfe980dfcd20dfd92cb9961df38',
-      id_origen_chat: 'datasources/2721fbfe980dfcd221c70095e8d11769'
+      id_origen_conecta: 'datasources/2721fbfe980dfcd24289f0dbfe458285',
+      id_origen_drive: 'datasources/2721fbfe980dfcd2893b8efb36855a7a',
+      id_origen_chat: 'datasources/2721fbfe980dfcd26b2de43b9fdf90ea'
     }
   },
-  analytics: `<script src="https://www.googletagmanager.com/gtag/js?id=G-W8VKE6BFXF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-W8VKE6BFXF');
-  </script>`
+  analytics: 'G-W8VKE6BFXF'
 };
 

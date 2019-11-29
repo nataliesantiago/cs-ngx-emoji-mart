@@ -94,10 +94,10 @@ export class ChatExpertoComponent {
       })
       if (pregunta) {
         console.log('bueno');
-        e.returnValue = 'Tienes conversaciones activas';
+        //e.returnValue = 'Tienes conversaciones activas';
       } else {
         console.log('malo');
-        // return true;
+
       }
     });
   }
@@ -181,54 +181,57 @@ export class ChatExpertoComponent {
           })
         });
         let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
-        chats.subscribe(async chaters => {
+        chats.subscribe(chaters => {
+          
+          this.chatService.getConversacionesExperto().then(chat => {
+            if (!chat) {
+              chat = [];
 
-          let chat = await this.chatService.getConversacionesExperto();
-          if (!chat) {
-            chat = [];
-
-          }
-          let temporal: Array<Conversacion> = [];
-
-          this.chats_experto.forEach((c: Conversacion) => {
-            c.listener_mensajes.unsubscribe();
-          });
-          if (chat.length > 0) {
-            this.soundService.sonar(2);
-          }
-          if (chat.length < 1) {
-            this.chats_experto = [];
-            if (this.chat && this.chat.id_tipo_conversacion == 1) {
-              delete this.chat;
             }
-          }
-          chat.forEach((change: any, index) => {
-            let codigo = change.codigo;
-            this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo).then((d: Conversacion) => {
-              let c = d;
-              c.codigo = codigo;
-              this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
-                //// console.log(d);
-                c.cliente = d;
-                this.agregarListenerMensajes(c);
-                this.agregaListenerConversacion(c);
-                temporal.push(c);
-                if (!this.chat) {
-                  this.obligaCambio = false;
-                  this.onSelect(c);
-                }
-                if (index == (chat.length - 1)) {
-                  paso_por_chats = true;
-                  this.chats_experto = temporal;
-                  this.changeRef.detectChanges();
-                }
+            let temporal: Array<Conversacion> = [];
+
+            this.chats_experto.forEach((c: Conversacion) => {
+              c.listener_mensajes.unsubscribe();
+            });
+            if (chat.length > 0) {
+              this.soundService.sonar(2);
+            }
+            
+            if (chat.length < 1) {
+              this.chats_experto = [];
+
+              if (this.chat && this.chat.id_tipo_conversacion == 1) {
+                
+                delete this.chat;
+              }
+            }
+            chat.forEach((change: any, index) => {
+              let codigo = change.codigo;
+              this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo).then((d: Conversacion) => {
+                let c = d;
+                c.codigo = codigo;
+                this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
+                  //// console.log(d);
+                  c.cliente = d;
+                  this.agregarListenerMensajes(c);
+                  this.agregaListenerConversacion(c);
+                  temporal.push(c);
+                  if (!this.chat) {
+                    this.obligaCambio = false;
+                    this.onSelect(c);
+                  }
+                  if (index == (chat.length - 1)) {
+                    paso_por_chats = true;
+                    this.chats_experto = temporal;
+                    this.changeRef.detectChanges();
+                  }
+                });
+                this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
+                  c.historial = historial;
+                })
               });
-              this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
-                c.historial = historial;
-              })
             });
           });
-
         });
       });
     });
@@ -299,7 +302,7 @@ export class ChatExpertoComponent {
 
   recibirChatAutomatico() {
     let config = this.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
-    // console.log(config)
+    
     this.chatService.getConversacionesExperto().then(async (conversaciones: Array<Conversacion>) => {
       if (config) {
         if (parseInt(config.valor) > conversaciones.length) {
@@ -333,7 +336,7 @@ export class ChatExpertoComponent {
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       if (data.id_experto_actual != this.user.getId()) {
-        this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
+        //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
       } else {
         c.id_estado_conversacion = data.id_estado_conversacion;
         c.llamada_activa = data.llamada_activa;
@@ -1006,7 +1009,7 @@ export class ChatExpertoComponent {
   }
 
   cerrarChat(c: Conversacion) {
-    this.dialog.open(CerrarChatExpertoComponent).afterClosed().subscribe(d => {
+    this.dialog.open(CerrarChatExpertoComponent,{width:'80%'}).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         let estado = 3;
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {

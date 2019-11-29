@@ -4,6 +4,7 @@ import { ChatService } from '../../providers/chat.service';
 import { MotivoCierreChat } from '../../../schemas/interfaces';
 import { User } from '../../../schemas/user.schema';
 import { MatDialogRef } from '@angular/material';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-cerrar-chat-experto',
@@ -14,14 +15,29 @@ export class CerrarChatExpertoComponent implements OnInit {
   motivos: Array<MotivoCierreChat>;
   user: User;
   id_motivo_cierre: number;
+  filtro = new FormControl();
+  motivos_filtrados = [];
   constructor(private dialogRef: MatDialogRef<CerrarChatExpertoComponent>, private userService: UserService, private chatServivce: ChatService) {
     this.user = this.userService.getUsuario();
     this.chatServivce.buscarMotivosCierreChat().then(m => {
-      this.motivos = m;
+      this.motivos = this.motivos_filtrados = m;
     });
   }
 
   ngOnInit() {
+    this.filtro.valueChanges.subscribe(() => {
+      if (!this.filtro.value || this.filtro.value == '') {
+        this.motivos_filtrados = this.motivos;
+      } else {
+        this.motivos_filtrados = this.motivos.filter(m => {
+          return m.nombre.toLowerCase().indexOf(this.filtro.value.toLowerCase()) != (-1);
+        })
+      }
+    });
+  }
+  limpiar() {
+    this.motivos_filtrados = this.motivos;
+    this.filtro.setValue('');
   }
   cerrar(enviar: boolean) {
     if (enviar) {

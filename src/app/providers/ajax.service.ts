@@ -17,7 +17,7 @@ import { Subject } from 'rxjs/Rx';
  */
 @Injectable()
 export class AjaxService {
-
+    
     host: string = environment.URL_BACK; // URL base del API
     private modoDebug: boolean = false; // Definir si hace logs o no
     private enckey: string = "p2=5DT^lvk7/JbvCP^J_!o#*~I[TH"; // Clave de encriptado/desencriptado 

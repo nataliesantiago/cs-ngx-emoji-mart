@@ -1,6 +1,13 @@
 <h3>Por favor indique la razón para cerrar el chat</h3>
+<mat-form-field class="mr-1 ml-1 filtro">
+  <input matInput [formControl]="filtro" />
+  <button mat-icon-button title="Cerrar" (click)="limpiar()" *ngIf="filtro.value && filtro.value!=''" matSuffix>
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
 <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="id_motivo_cierre">
-  <mat-radio-button class="example-radio-button" *ngFor="let m of motivos" [value]="m.idtbl_motivo_cierre_chat">
+  <mat-radio-button class="example-radio-button" *ngFor="let m of motivos_filtrados"
+    [value]="m.idtbl_motivo_cierre_chat">
     {{m.nombre}}
   </mat-radio-button>
 </mat-radio-group>
