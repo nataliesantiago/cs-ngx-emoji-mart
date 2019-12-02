@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterModule, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, debounceTime, switchMap } from 'rxjs/operators';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import swal from 'sweetalert2';
 import { QuillService } from '../providers/quill.service';
@@ -15,6 +15,8 @@ const moment = _rollupMoment || _moment;
 import { UtilsService } from '../providers/utils.service';
 import { ChatService } from '../providers/chat.service';
 import { Location } from '@angular/common';
+import { SearchService } from '../providers/search.service';
+import { ResultadoCloudSearch } from '../../schemas/interfaces';
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -41,7 +43,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   preguntas_todas = [];
   myControl = new FormControl();
   options = [];
-  filteredOptions: Observable<string[]>;
+  filteredOptions: Array<any>;
   preguntas_adicion = [];
   displayedColumns = ['id', 'pregunta', 'acciones'];
   @ViewChild(MatPaginator)
@@ -70,12 +72,8 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   nombre_boton = "Aprobar";
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
-    private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService, private location: Location) {
-    this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-      if (p.success) {
-        this.preguntas_todas = p.preguntas;
-      }
-    })
+    private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService, private location: Location, private searchService: SearchService) {
+
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
@@ -104,7 +102,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   quillModulesFc(ql: any, contenido: any, index?: number) {
-    console.log(ql.getModule('toolbar'))
+    //console.log(ql.getModule('toolbar'))
     ql.getModule('toolbar')
     setTimeout(() => {
       ql.getModule('toolbar').addHandler('video', () => {
@@ -139,20 +137,36 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     return this.texto_buscador;
   }
 
+  buscarPreguntas(query: string) {
+
+    if (query && query != '')
+      this.searchService.queryCloudSearch(query, 1, 'conecta', 0, false).then(preguntas => {
+
+        let tmp = [];
+        preguntas.results.forEach((r: ResultadoCloudSearch) => {
+          let id = r.metadata.fields.find(f => {
+            return f.name == 'id';
+          }).textValues.values[0];
+          let titulo = r.title;
+          tmp.push({ idtbl_pregunta: id, titulo: titulo });
+        });
+        this.filteredOptions = tmp;
+      });
+    return [];
+  }
+
   /**
    * inicializa la informacion necesaria
    */
   init() {
 
-    this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-      if (p.success) {
-        this.options = p.preguntas;
-        this.filteredOptions = this.myControl.valueChanges.pipe(
-          startWith(''),
-          map(value => this.utilsService.filter(this.options, value, 'titulo'))
-        );
-      }
-    })
+    this.myControl.valueChanges
+      .pipe(
+        debounceTime(200),
+        switchMap(value => this.buscarPreguntas(value))
+      ).subscribe(d => {
+        console.log(d);
+      });
 
     this.user.getPerfilesUsuario().then(p => {
       this.options2 = p;
@@ -337,19 +351,19 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
               console.log(enviar_correo);
-              if(enviar_correo){
+              if (enviar_correo) {
                 this.ajax.post('email/correo-aprobacion-pregunta', { pregunta: this.pregunta }).subscribe(d => {
                   if (d.success) {
                     //this.location.back();
                   }
                 })
-              }else{
+              } else {
                 //this.location.back();
               }
-              
+
             }
           })
-          
+
         }
 
       } else {
@@ -671,31 +685,13 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.preguntas_adicion);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.myControl = new FormControl();
-      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-        if (p.success) {
 
-          this.options = p.preguntas;
-          this.filteredOptions = this.myControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this.utilsService.filter(this.options, value, 'titulo'))
-          );
-        }
-      })
+
 
       this.cg.detectChanges();
     } else {
-      this.myControl = new FormControl();
-      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-        if (p.success) {
 
-          this.options = p.preguntas;
-          this.filteredOptions = this.myControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this.utilsService.filter(this.options, value, 'titulo'))
-          );
-        }
-      })
+
 
       this.cg.detectChanges();
       swal.fire({
@@ -710,6 +706,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         }
       })
     }
+    this.myControl.setValue('');
   }
 
   /**
@@ -906,7 +903,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       this.router.navigate(['/home']);
     } else {
       this.location.back();
-      
+
     }
   }
 

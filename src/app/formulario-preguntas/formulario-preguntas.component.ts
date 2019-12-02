@@ -11,6 +11,8 @@ import swal from 'sweetalert2';
 import { QuillEditorComponent } from 'ngx-quill';
 import { QuillService } from '../providers/quill.service';
 import { UtilsService } from '../providers/utils.service';
+import { SearchService } from '../providers/search.service';
+import { ResultadoCloudSearch } from '../../schemas/interfaces';
 
 @Component({
   selector: 'app-formulario-preguntas',
@@ -37,7 +39,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   preguntas_todas = [];
   myControl = new FormControl();
   options = [];
-  filteredOptions: Observable<string[]>;
+  filteredOptions: Observable<string[]> | Array<any>;
   preguntas_adicion = [];
   displayedColumns = ['id', 'pregunta', 'acciones'];
   @ViewChild(MatPaginator)
@@ -65,26 +67,20 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
-    private qs: QuillService, private utilsService: UtilsService) {
-    this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-      if (p.success) {
-        this.preguntas_todas = p.preguntas;
+    private qs: QuillService, private utilsService: UtilsService, private searchService: SearchService) {
 
-
-      }
-    })
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
-      
+
       this.init();
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
       if (this.usuario) {
-        
+
         this.init();
       }
     })
@@ -140,10 +136,28 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   cambiarBusqueda(value) {
-    
+
     this.texto_buscador = value
     this.buscador = true;
     return this.texto_buscador;
+  }
+
+  buscarPreguntas(query: string) {
+    
+    if (query && query != '')
+      this.searchService.queryCloudSearch(query, 1, 'conecta', 0, false).then(preguntas => {
+        
+        let tmp = [];
+        preguntas.results.forEach((r: ResultadoCloudSearch) => {
+          let id = r.metadata.fields.find(f => {
+            return f.name == 'id';
+          }).textValues.values[0];
+          let titulo = r.title;
+          tmp.push({ idtbl_pregunta: id, titulo: titulo });
+        });
+        this.filteredOptions = tmp;
+      });
+    return [];
   }
 
 
@@ -151,7 +165,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
     //this.titulo_control.valueChanges.pipe(debounceTime(200), switchMap(value => this.cambiarBusqueda(value)));
 
-    this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+    /*this.ajax.get('preguntas/obtener', {}).subscribe(p => {
       if (p.success) {
 
         this.options = p.preguntas;
@@ -160,7 +174,15 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
           map(value => this.utilsService.filter(this.options, value, 'titulo'))
         );
       }
-    })
+    })*/
+    this.myControl.valueChanges
+      .pipe(
+        debounceTime(200),
+        switchMap(value => this.buscarPreguntas(value))
+      ).subscribe(d => {
+        console.log(d);
+      });
+
 
     this.user.getPerfilesUsuario().then(p => {
       this.options2 = p;
@@ -516,31 +538,13 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       this.dataSource = new MatTableDataSource(this.preguntas_adicion);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.myControl = new FormControl();
-      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-        if (p.success) {
 
-          this.options = p.preguntas;
-          this.filteredOptions = this.myControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this.utilsService.filter(this.options, value, 'titulo'))
-          );
-        }
-      })
+
 
       this.cg.detectChanges();
     } else {
-      this.myControl = new FormControl();
-      this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-        if (p.success) {
 
-          this.options = p.preguntas;
-          this.filteredOptions = this.myControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this.utilsService.filter(this.options, value, 'titulo'))
-          );
-        }
-      })
+
 
       this.cg.detectChanges();
       swal.fire({
@@ -555,7 +559,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         }
       })
     }
-
+    this.myControl.setValue('');
   }
 
 
@@ -574,24 +578,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       this.dataSource2.paginator = this.paginator2;
       this.dataSource2.sort = this.sort2;
 
-      this.myControl2 = new FormControl();
-      this.user.getPerfilesUsuario().then(p => {
-        this.options2 = p;
-        this.filteredOptions2 = this.myControl2.valueChanges.pipe(
-          startWith(''),
-          map(value2 => this.utilsService.filter(this.options2, value2, 'nombre'))
-        );
-      })
+
       this.cg.detectChanges();
     } else {
-      this.myControl2 = new FormControl();
-      this.user.getPerfilesUsuario().then(p => {
-        this.options2 = p;
-        this.filteredOptions2 = this.myControl2.valueChanges.pipe(
-          startWith(''),
-          map(value2 => this.utilsService.filter(this.options2, value2, 'nombre'))
-        );
-      })
+
       swal.fire({
         title: 'El cargo ya fue asociado previamente',
         text: '',
@@ -604,6 +594,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         }
       })
     }
+    this.myControl2.setValue('');
 
   }
 

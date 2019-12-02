@@ -1,24 +1,25 @@
 <div class="general-container">
     <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
-                
+
             <mat-card class="mat-card-root">
                 <mat-card-content class="mat-card-content-root">
 
                     <br>
                     <a class="custom__btn custom__btn--primary" [routerLink]="['/formulario_pregunta/nuevo']">
                         <mat-icon>add</mat-icon>
-                        Ingresar Pregunta 
+                        Ingresar Pregunta
                     </a>
                     <br>
                     <br>
-                    
+
                     <mat-card-title>Preguntas y Respuestas</mat-card-title>
 
                     <div class="container-filter">
                         <div class="element-filter element-filter-2">
                             <mat-form-field>
-                                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                                <input matInput (keyup)="applyFilter($event.target.value)"
+                                    placeholder="Filtrar busqueda">
                                 <mat-icon class="search-icon">search</mat-icon>
                             </mat-form-field>
                         </div>
@@ -27,7 +28,8 @@
                                 <mat-label>Estado</mat-label>
                                 <mat-select name="estado" (selectionChange)="filterData('nombre_estado', $event)">
                                     <mat-option value="todos">Todos</mat-option>
-                                    <mat-option *ngFor="let i of estados_pregunta" [value]="i.nombre">{{i.nombre}}</mat-option>
+                                    <mat-option *ngFor="let i of estados_pregunta" [value]="i.nombre">{{i.nombre}}
+                                    </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -36,60 +38,73 @@
                     <div class="responsive-table">
                         <div class="container-table ad-preguntas-table">
                             <mat-table [dataSource]="dataSource" matSort>
-    
+
                                 <!-- ID Column -->
                                 <ng-container matColumnDef="idtbl_pregunta">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-5"> ID </mat-header-cell>
-                                    <mat-cell *matCellDef="let row" class="max-width-5"> {{row.idtbl_pregunta}} </mat-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-5"> ID
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="max-width-5"> {{row.idtbl_pregunta}}
+                                    </mat-cell>
                                 </ng-container>
-        
+
                                 <!-- Progress Column -->
                                 <ng-container matColumnDef="titulo">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-40"> Pregunta </mat-header-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-40"> Pregunta
+                                    </mat-header-cell>
                                     <mat-cell *matCellDef="let row" class="max-width-40"> {{row.titulo}} </mat-cell>
                                 </ng-container>
-        
+
                                 <!-- Name Column -->
                                 <ng-container matColumnDef="nombre_producto">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Categoria </mat-header-cell>
-                                    <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_producto}} </mat-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Categoria
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_producto}}
+                                    </mat-cell>
                                 </ng-container>
 
                                 <!-- Color Column -->
                                 <ng-container matColumnDef="nombre_estado_flujo">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Estado Flujo </mat-header-cell>
-                                    <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_estado_flujo}} </mat-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Estado
+                                        Flujo </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_estado_flujo}}
+                                    </mat-cell>
                                 </ng-container>
-        
+
                                 <!-- Color Column -->
                                 <ng-container matColumnDef="nombre_estado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Estado </mat-header-cell>
-                                    <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_estado}} </mat-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Estado
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="max-width-15"> {{row.nombre_estado}}
+                                    </mat-cell>
                                 </ng-container>
-    
+
                                 <ng-container matColumnDef="muestra_fecha_actualizacion">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Fecha Modificación </mat-header-cell>
-                                        <mat-cell *matCellDef="let row" class="max-width-15">
-                                            <span *ngIf="row.muestra_fecha_actualizacion == 1">Si</span>
-                                            <span *ngIf="row.muestra_fecha_actualizacion == 0">No</span>
-                                        </mat-cell>
-                                    </ng-container>
-    
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-15"> Fecha
+                                        Modificación </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="max-width-15">
+                                        <span *ngIf="row.muestra_fecha_actualizacion == 1">Si</span>
+                                        <span *ngIf="row.muestra_fecha_actualizacion == 0">No</span>
+                                    </mat-cell>
+                                </ng-container>
+
                                 <ng-container matColumnDef="acciones">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Acciones </mat-header-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="max-width-10"> Acciones
+                                    </mat-header-cell>
                                     <mat-cell *matCellDef="let row" class="max-width-10">
-                                        <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editarElemento(row)"></i>
-                                        <i class="ti-trash danger-color m-r-10 mouse-over" (click)="borrarElemento(row)"></i>
+                                        <i class="ti-pencil info-color m-r-10 mouse-over"
+                                            (click)="editarElemento(row)"></i>
+                                        <i class="ti-trash danger-color m-r-10 mouse-over"
+                                            (click)="borrarElemento(row)"></i>
                                         <i class="ti-eye info-color m-r-10 mouse-over" (click)="previsualizar(row)"></i>
                                     </mat-cell>
                                 </ng-container>
-        
+
                                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: displayedColumns;">
                                 </mat-row>
                             </mat-table>
                         </div>
-                        <mat-paginator [pageSizeOptions]="[50, 100, 200]"></mat-paginator>
+                        <mat-paginator [pageSizeOptions]="[50, 100, 200]" [length]="length"></mat-paginator>
                     </div>
                 </mat-card-content>
             </mat-card>

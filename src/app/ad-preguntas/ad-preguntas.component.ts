@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild , ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { LocalDataSource } from 'ng2-smart-table';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
 import {
   BreakpointObserver,
   Breakpoints,
@@ -15,6 +15,8 @@ const moment = _rollupMoment || _moment;
 import swal from 'sweetalert2';
 import { matTableFilter } from '../../common/matTableFilter';
 import { FiltrosService } from '../providers/filtros.service';
+import { SearchService } from '../providers/search.service';
+import { UtilsService } from '../providers/utils.service';
 
 @Component({
   selector: 'app-ad-preguntas',
@@ -28,13 +30,13 @@ export class AdPreguntasComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   displayedColumns = ['acciones', 'idtbl_pregunta', 'titulo', 'nombre_producto', 'nombre_estado_flujo', 'nombre_estado', 'muestra_fecha_actualizacion'];
-  matTableFilter:matTableFilter;
+  matTableFilter: matTableFilter;
   filterColumns = [
-    {field:'idtbl_pregunta', type:'number'},
-    {field: 'titulo', type:'string'},
-    {field: 'nombre_producto', type:'string'},
-    {field: 'nombre_estado', type:'string'},
-    {field: 'muestra_fecha_actualizacion', type:'boolean', values:{"1":"Si","0":"No"}}];
+    { field: 'idtbl_pregunta', type: 'number' },
+    { field: 'titulo', type: 'string' },
+    { field: 'nombre_producto', type: 'string' },
+    { field: 'nombre_estado', type: 'string' },
+    { field: 'muestra_fecha_actualizacion', type: 'boolean', values: { "1": "Si", "0": "No" } }];
   dataSource = new MatTableDataSource([]);
   productos = [];
   pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 3, id_estado_flujo: 4 };
@@ -44,49 +46,94 @@ export class AdPreguntasComponent implements OnInit {
   mostrar_fecha_ultima_modificacion = false;
   estados_pregunta;
   filters = {};
-
-  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService) { 
+  pagina = 0;
+  limite = 50;
+  length = 0;
+  setData = new Set();
+  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private searchService: SearchService, private utilsService: UtilsService) {
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
+      this.init();
     }
     this.user.observableUsuario.subscribe(u => {
       this.usuario = u;
       this.id_usuario = u.idtbl_usuario;
       if (this.usuario) {
+        this.init();
       }
     })
-
-    this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-      if(p.success){
-        
-        this.data = p.preguntas;
-        this.createTable(this.data);
-      }
-    })
-     // create the source
+    /*
+        this.ajax.get('preguntas/obtener', {}).subscribe(p => {
+          console.log(p);
+          if (p.success) {
+            console.log(p.preguntas);
+            this.data = p.preguntas;
+            this.createTable(this.data);
+          }
+        })*/
+    // create the source
     this.filtros_service.getQuestionStates().then(result => {
       this.estados_pregunta = result;
     });
   }
 
+  init() {
+
+    this.cargarPreguntas();
+
+  }
+
+  cargarPreguntas() {
+    this.searchService.obtenerPreguntas(this.limite, this.pagina).then(preguntas => {
+      console.log(preguntas);
+      this.data = this.data.concat(preguntas);
+      /*this.setData = new Set(this.data);
+      console.log(this.setData.size);
+      this.data = Array.from(this.setData);*/
+      this.data = this.utilsService.getUnique(this.data, 'idtbl_pregunta');
+      this.createTable(this.data);
+      this.searchService.totalPreguntas().then(t => {
+        setTimeout(() => {
+          this.length = t;
+          this.paginator.length = t;
+        }, 0);
+
+      })
+    })
+  }
+
+  cambiaSize(e: Event) {
+    console.log(e);
+  }
+
   ngOnInit() {
-    
+    this.paginator.page.subscribe((p: PageEvent) => {
+      console.log(p);
+      let index = p.pageIndex + 1;
+      let cant = index * p.pageSize;
+      console.log(cant);
+      if (cant > this.data.length) {
+        this.limite = p.pageSize;
+        this.pagina = index;
+        this.cargarPreguntas();
+      }
+    })
   }
 
   createTable(data) {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+    this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
   }
 
-  editarElemento(e){
+  editarElemento(e) {
     this.router.navigate(['/formulario_pregunta', e.idtbl_pregunta]);
   }
 
-  borrarElemento(e){
+  borrarElemento(e) {
 
     swal.fire({
       title: 'Eliminar Pregunta',
@@ -104,15 +151,10 @@ export class AdPreguntasComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.ajax.post('preguntas/eliminar', { pregunta: e, id_usuario: this.id_usuario }).subscribe(p => {
-          if(p.success){
-            this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-              if(p.success){
-                
-                this.data = p.preguntas;
-                this.createTable(this.data);
-                this.cg.detectChanges();
-              }
-            })
+          if (p.success) {
+            this.pagina = 0;
+            this.paginator.pageIndex = 0;
+            this.init();
           }
         })
       }
@@ -120,8 +162,8 @@ export class AdPreguntasComponent implements OnInit {
 
   }
 
-  asociarPreguntas(e){
-    this.router.navigate(['/asociar-preguntas'], {queryParams: {id_pregunta: e.idtbl_pregunta}});
+  asociarPreguntas(e) {
+    this.router.navigate(['/asociar-preguntas'], { queryParams: { id_pregunta: e.idtbl_pregunta } });
   }
 
   applyFilter(filterValue: string) {
@@ -133,7 +175,7 @@ export class AdPreguntasComponent implements OnInit {
   previsualizar(e) {
     this.router.navigate(['/respuestas', e.idtbl_pregunta]);
   }
-  
+
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.data);

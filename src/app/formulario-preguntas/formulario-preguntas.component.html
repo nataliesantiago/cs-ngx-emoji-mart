@@ -187,7 +187,7 @@
                   </button>
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                     (optionSelected)='anadirPreguntaAsociada($event.option.value)'>
-                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    <mat-option *ngFor="let option of filteredOptions" [value]="option">
                       {{option.titulo}}
                     </mat-option>
                   </mat-autocomplete>

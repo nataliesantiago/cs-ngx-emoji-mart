@@ -10,6 +10,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 import { ChatService } from './chat.service';
 import { UtilsService } from './utils.service';
 import Swal from 'sweetalert2';
+import { resolve } from 'url';
 
 
 const moment = _rollupMoment || _moment;
@@ -47,6 +48,34 @@ export class SearchService {
     setInterval(() => {
       this.validaOpenChat();
     }, 1000);
+  }
+
+  obtenerPreguntas(limite?: number, pagina?: number): Promise<any> {
+
+    if (!pagina) {
+      pagina = 0;
+    }
+    if (!limite) {
+      limite = 50;
+    }
+    return new Promise(resolve => {
+      this.ajax.get('preguntas/obtenerPreguntas', { pagina: pagina, limite: limite }).subscribe(p => {
+        if (p.success) {
+          resolve(p.preguntas);
+        }
+      })
+    })
+  }
+
+  totalPreguntas(): Promise<any> {
+
+    return new Promise(resolve => {
+      this.ajax.get('preguntas/totalPreguntas', {}).subscribe(p => {
+        if (p.success) {
+          resolve(p.total);
+        }
+      })
+    })
   }
 
 
