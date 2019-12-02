@@ -531,4 +531,11 @@ export class UserService {
         })
     }
 
+
+    actualizarSuperAdminCam(): Promise<any>{
+        return new Promise((resolve, reject) => {
+            
+        })
+    }
+
 }

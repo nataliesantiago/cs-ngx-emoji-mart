@@ -36,6 +36,7 @@ export class AdPreguntasComponent implements OnInit {
     { field: 'titulo', type: 'string' },
     { field: 'nombre_producto', type: 'string' },
     { field: 'nombre_estado', type: 'string' },
+    { field: 'nombre_estado_flujo', type: 'string' },
     { field: 'muestra_fecha_actualizacion', type: 'boolean', values: { "1": "Si", "0": "No" } }];
   dataSource = new MatTableDataSource([]);
   productos = [];
@@ -86,8 +87,9 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   cargarPreguntas() {
+    
     this.searchService.obtenerPreguntas(this.limite, this.pagina).then(preguntas => {
-      console.log(preguntas);
+      //console.log(preguntas);
       this.data = this.data.concat(preguntas);
       /*this.setData = new Set(this.data);
       console.log(this.setData.size);
@@ -105,15 +107,15 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   cambiaSize(e: Event) {
-    console.log(e);
+    //console.log(e);
   }
 
   ngOnInit() {
     this.paginator.page.subscribe((p: PageEvent) => {
-      console.log(p);
+      //console.log(p);
       let index = p.pageIndex + 1;
       let cant = index * p.pageSize;
-      console.log(cant);
+      //console.log(cant);
       if (cant > this.data.length) {
         this.limite = p.pageSize;
         this.pagina = index;

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef } from '@angular/core';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserService } from '../../../providers/user.service';
 import { User } from '../../../../schemas/user.schema';
@@ -15,6 +15,9 @@ import { EstadoExpertoService } from '../../../providers/estado-experto.service'
 import { LookFeelService } from '../../../providers/look-feel.service';
 import { LogEstadoExperto } from '../../../../schemas/interfaces';
 import { environment } from '../../../../environments/environment';
+import { AjaxService } from '../../../providers/ajax.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -35,19 +38,21 @@ export class AppHeaderComponent {
   modo_nocturno;
   state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
   muestra_boton_sos: boolean;
-  paisActual;
+  paisActual = "";
   correo_usuario = "";
   validacion_pais_usuario = [];
   ambiente = environment.ambiente;
+  perfil_usuario;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
     private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument,
-    private estadoExpertoService: EstadoExpertoService, private look_service: LookFeelService) {
+    private estadoExpertoService: EstadoExpertoService, private look_service: LookFeelService, private ajax: AjaxService, private changeDetector: ChangeDetectorRef, private router: Router) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe((u: User) => {
       if (u) {
         this.user = u;
         this.paisActual = this.user.pais;
+        this.perfil_usuario = this.user.id_rol;
         this.profileImage = u.url_foto;
         this.init();
       }
@@ -57,6 +62,7 @@ export class AppHeaderComponent {
     if (this.user) {
       this.profileImage = this.userService.getUsuario().url_foto;
       this.paisActual = this.user.pais;
+      this.perfil_usuario = this.user.id_rol;
       this.init();
 
       if (this.user.getModoNocturno() == 0 || this.user.getModoNocturno() == null) {
@@ -72,10 +78,6 @@ export class AppHeaderComponent {
   }
 
   init() {
-
-    this.correo_usuario = this.user.getCorreo();
-    this.validacion_pais_usuario = this.correo_usuario.split(".");
-    this.correo_usuario = this.validacion_pais_usuario[(this.validacion_pais_usuario.length - 1)];
 
     if (this.user.boton_sos_perfil && this.user.boton_sos_rol) {
       this.muestra_boton_sos = true;
@@ -235,8 +237,15 @@ export class AppHeaderComponent {
     });
   }
 
-  cambiarPais(){
-
+  cambiarPais(pais){
+    console.log(pais);
+    this.user.pais = pais;
+    this.ajax.pais = pais;
+    localStorage.setItem('pais', pais);
+    this.changeDetector.detectChanges();
+    console.log(this.paisActual);
+    //Super admin validar
+    this.router.navigate(['/home']);
   }
 
 }
