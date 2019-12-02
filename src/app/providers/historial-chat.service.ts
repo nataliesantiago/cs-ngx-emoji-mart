@@ -11,6 +11,10 @@ export class HistorialChatService {
     
   }
 
+  /**
+   * ontiene todos los chat de un experto
+   * @param user_id 
+   */
   getExpertChats(user_id): Promise<any> {
     return new Promise((resolve, reject) => {
         this.ajax.post('historial-chats/obtener-conversacion-experto', { user_id: user_id }).subscribe((chats) => {
@@ -23,6 +27,10 @@ export class HistorialChatService {
     });
   }
 
+  /**
+   * obtiene todos los chat de un cliente
+   * @param user_id 
+   */
   getClientChats(user_id): Promise<any> {
     return new Promise((resolve, reject) => {
         this.ajax.post('historial-chats/obtener-conversacion-cliente', { user_id: user_id }).subscribe((chats) => {
@@ -35,9 +43,17 @@ export class HistorialChatService {
     });
   }
 
-  getConversationMessages(conversation_id): Promise<any> {
+  /**
+   * obtiene los mensajes de una conversacion, si la conversacion esta en estado pendiente y es un usuario cliente solo obtiene los mensajes 
+   * enviados hasta el momento de actualizar a estado pendiente la conversacion, si la conversacion esta en un estado diferente
+   * obtiene todos los mensajes
+   * @param conversation_id 
+   * @param state_id 
+   * @param is_user 
+   */
+  getConversationMessages(conversation_id, state_id, is_user): Promise<any> {
     return new Promise((resolve, reject) => {
-        this.ajax.post('historial-chats/obtener-mensajes', { conversation_id: conversation_id }).subscribe((message) => {
+        this.ajax.post('historial-chats/obtener-mensajes', { conversation_id: conversation_id, state_id: state_id, is_user: is_user }).subscribe((message) => {
           if (message.success) {
             resolve(message.messages);
           } else {
@@ -47,6 +63,11 @@ export class HistorialChatService {
     });
   }
 
+  /**
+   * obtiene una conversacion por usuario
+   * @param conversation_id 
+   * @param user_id 
+   */
   getOneConversation(conversation_id, user_id): Promise<any> {
     return new Promise((resolve, reject) => {
         this.ajax.post('historial-chats/obtener-una-conversacion', { conversation_id: conversation_id, user_id: user_id }).subscribe((c) => {
@@ -59,6 +80,10 @@ export class HistorialChatService {
     });
   }
 
+  /**
+   * obtiene las url de grabacion de una conversacion 
+   * @param conversation_id 
+   */
   getRecordingUrl(conversation_id): Promise<any> {
     return new Promise((resolve, reject) => {
         this.ajax.post('historial-chats/obtener-url-grabacion', { conversation_id: conversation_id }).subscribe((c) => {

@@ -221,4 +221,14 @@ $border-separador: 1px solid #e4e4e4;
         width: 100%;
         height: calc(100vh - 144px);
     }
+
+    .panel-analitica {
+        width: 100%;
+        height: calc(100vh - 144px);
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+    }
 }
