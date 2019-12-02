@@ -41,7 +41,7 @@ export class DialogoDetalleChatComponent implements OnInit {
   is_recording = false;
   is_closed = false;
   is_user;
-
+  
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
               private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef) {
 
@@ -66,7 +66,19 @@ export class DialogoDetalleChatComponent implements OnInit {
     this.getRecordingUrl();
     this.closeModalPending();
   }
-  
+
+  /**
+   * identifica si el scroll llega al final del contenido
+   */
+  onReachEnd() {
+    if (this.componentRef && this.componentRef.directiveRef) {
+      setTimeout(() => {
+        if (this.componentRef.directiveRef.position().y === 'end') {
+          this.ocultar_ultimos_mensajes = false;
+        }
+      }, 1000);
+    }
+  }
   /**
    * inicializa la informacion necesaria
    */
