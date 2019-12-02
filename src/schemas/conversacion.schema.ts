@@ -87,6 +87,7 @@ export class Conversacion {
     busqueda_interna: string;
     expert_chat: any;
     primera_vez: boolean;
+    iniciando_grabacion: boolean;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;

@@ -55,7 +55,7 @@
                         [ngClass]="{'odd': m.id_usuario!=user.idtbl_usuario,'even': m.id_usuario==user.idtbl_usuario}"
                         *ngFor="let m of chat.mensajes | mensajesExperto: [2,expertos]" class="chat-list">
                         <div class="chat-message">
-                          <div class="chat-block"  [ngClass]="{'encontrado':m.encontrado && chat.buscando_texto}">
+                          <div class="chat-block" [ngClass]="{'encontrado':m.encontrado && chat.buscando_texto}">
                             <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
                               <div *ngIf="m.es_archivo">
                                 <a [href]="m.url" target="_blank">
@@ -195,7 +195,7 @@
                         <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
                       </button>
                       <button mat-icon-button color="primary" (click)="grabarNotaVoz(chat,este)" *ngIf="chat.notas_voz"
-                        [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto">
+                        [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto  || c.iniciando_grabacion">
                         <mat-icon aria-label="Example icon-button with a heart icon">mic</mat-icon>
                       </button>
                     </div>

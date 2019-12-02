@@ -662,6 +662,7 @@ export class ChatClienteComponent implements OnInit {
 
     c.cargando_archivo = true;
     c.grabando_nota = false;
+    c.iniciando_grabacion = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
       this.chatService.usuarioDejaEscribir(c, this.user.getId());
       this.enviarMensaje(c, 3, archivo.url, null, comp, duration);
@@ -675,7 +676,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   grabarNotaVoz(c: Conversacion, comp: PerfectScrollbarComponent) {
-
+    c.iniciando_grabacion = true;
     let minutos = parseInt(this.buscarConfiguracion(7).valor);
     let tiempo = minutos * 60;
     const options = { mimeType: 'audio/webm' };
@@ -705,12 +706,12 @@ export class ChatClienteComponent implements OnInit {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-
+    this.stream.getTracks().forEach(track => track.stop());
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
     var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
     this.adjuntarNotaVoz(c, voice_file, duration, comp);
-    this.stream.getTracks().forEach(track => track.stop());
+
 
   }
 
@@ -734,7 +735,7 @@ export class ChatClienteComponent implements OnInit {
       c.inicia_grabacion = new Date();
       this.chatService.usuarioEscribiendoConversacion(c, 2);
       c.interval_grabando = setInterval(() => {
-        console.log(timer)
+        console.log(timer);
         timer -= 1;
         minutes = Math.floor(timer / 60);
         seconds = Math.floor(timer % 60);
