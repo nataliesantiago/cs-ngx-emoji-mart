@@ -9,5 +9,5 @@ export const environment = {
   pais:'',
   id_origen_conecta: '',
   id_origen_drive: '',
-  id_origen_chat: ''
+  id_origen_chat: 'UA-151598857-4'
 };

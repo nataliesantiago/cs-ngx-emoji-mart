@@ -45,7 +45,7 @@ export class ResultadosComponent implements OnInit {
       this.origenes_drive = origenes.filter(o => {
         return o.activo;
       });
-      console.log(this.origenes_drive);
+      //console.log(this.origenes_drive);
     })
   }
 
