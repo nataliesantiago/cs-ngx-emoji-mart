@@ -138,7 +138,20 @@ export class FlujoCuraduriaComponent implements OnInit {
       setTimeout(() => {
         this.applyFilter(filter);
       }, 1);
-    } else
+    } else {
+      if (this.rol_usuario == 5) {
+        this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria-curaduria', { estado_flujo_pregunta: 1, id_usuario: this.id_usuario }).subscribe(p => {
+          if (p.success) {
+            this.curaduria_reg = p.preguntas;
+            this.data = p.preguntas;
+            this.createTable(this.data);
+            setTimeout(() => {
+              this.applyFilter(filter);
+            }, 1);
+
+          }
+        })
+      }
       this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 1 }).subscribe(p => {
         if (p.success) {
           this.curaduria_reg = p.preguntas;
@@ -150,6 +163,8 @@ export class FlujoCuraduriaComponent implements OnInit {
 
         }
       })
+    }
+
   }
 
   createTable(data) {

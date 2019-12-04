@@ -61,16 +61,18 @@
             <div class="slider-switch round-switch"></div>
         </label>
     </div>
-    <div *ngIf="ambiente && ambiente=='cam'">
-        <mat-divider></mat-divider>
-        <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="25">
-            <mat-label class="active-text m-r-20">Pais</mat-label>
-            <mat-select [(ngModel)]="paisActual" name="envio" (selectionChange)="cambiarPais()">
-                <mat-option [value]="pan">Panamá</mat-option>
-                <mat-option [value]="cos">Costa Rica</mat-option>
-                <mat-option [value]="hon">Honduras</mat-option>
-                <mat-option [value]="sal">El Salvador</mat-option>
-            </mat-select>
+    <mat-divider class="divisor-paises" *ngIf="ambiente && ambiente=='cam' && perfil_usuario == 6"></mat-divider>
+    <div *ngIf="ambiente && ambiente=='cam' && perfil_usuario == 6">
+        <div fxLayout="row wrap" fxLayoutAlign="center center" (click)="$event.stopPropagation()">
+            <mat-form-field>
+                <mat-label class="active-text m-r-20">Pais Actual</mat-label>
+                <mat-select [(ngModel)]="paisActual" name="envio" (selectionChange)="cambiarPais($event.value)">
+                    <mat-option value="pan"><ngx-emoji emoji="flag-pa" set="google" class="icon-pais" size="16"></ngx-emoji> Panamá</mat-option>
+                    <mat-option value="cos"><ngx-emoji emoji="flag-cr" set="google" class="icon-pais" size="16"></ngx-emoji> Costa Rica</mat-option>
+                    <mat-option value="hon"><ngx-emoji emoji="flag-hn" set="google" class="icon-pais" size="16"></ngx-emoji> Honduras</mat-option>
+                    <mat-option value="sal"><ngx-emoji emoji="flag-sv" set="google" class="icon-pais" size="16"></ngx-emoji> El Salvador</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
     </div>
 </mat-menu>
