@@ -238,14 +238,16 @@ export class AppHeaderComponent {
   }
 
   cambiarPais(pais){
-    console.log(pais);
     this.user.pais = pais;
     this.ajax.pais = pais;
     localStorage.setItem('pais', pais);
     this.changeDetector.detectChanges();
-    console.log(this.paisActual);
-    //Super admin validar
-    this.router.navigate(['/home']);
+    this.userService.actualizarSuperAdminCam(this.user.codigo_firebase, this.user.pass_firebase).then(d => {
+      if(d.success){
+        this.user.setId(d.profile.idtbl_usuario);
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
 }

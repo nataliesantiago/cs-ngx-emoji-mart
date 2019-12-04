@@ -35,6 +35,7 @@ export class AdministracionComponent implements OnInit {
 
 
     this.usuario = this.user.getUsuario();
+    console.log(this.usuario);
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
       this.init();
