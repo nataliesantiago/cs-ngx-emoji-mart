@@ -182,7 +182,7 @@ export class ChatExpertoComponent {
         });
         let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
         chats.subscribe(chaters => {
-          
+
           this.chatService.getConversacionesExperto().then(chat => {
             if (!chat) {
               chat = [];
@@ -196,12 +196,12 @@ export class ChatExpertoComponent {
             if (chat.length > 0) {
               this.soundService.sonar(2);
             }
-            
+
             if (chat.length < 1) {
               this.chats_experto = [];
 
               if (this.chat && this.chat.id_tipo_conversacion == 1) {
-                
+
                 delete this.chat;
               }
             }
@@ -302,7 +302,7 @@ export class ChatExpertoComponent {
 
   recibirChatAutomatico() {
     let config = this.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
-    
+
     this.chatService.getConversacionesExperto().then(async (conversaciones: Array<Conversacion>) => {
       if (config) {
         if (parseInt(config.valor) > conversaciones.length) {
@@ -842,6 +842,7 @@ export class ChatExpertoComponent {
 
     c.cargando_archivo = true;
     c.grabando_nota = false;
+    c.iniciando_grabacion = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
       this.chatService.usuarioDejaEscribir(c, this.user.getId());
       this.enviarMensaje(c, 3, archivo.url, null, comp, duration);
@@ -856,6 +857,7 @@ export class ChatExpertoComponent {
 
   grabarNotaVoz(c: Conversacion, comp: PerfectScrollbarComponent) {
 
+    c.iniciando_grabacion = true;
     let minutos = parseInt(this.buscarConfiguracion(7).valor);
     let tiempo = minutos * 60;
     const options = { mimeType: 'audio/webm' };
@@ -899,7 +901,7 @@ export class ChatExpertoComponent {
     var timer: number = duration;
     let minutes;
     let seconds;
-
+    c.inicia_grabacion = new Date();
 
     return new Promise((resolve, reject) => {
 
@@ -911,7 +913,7 @@ export class ChatExpertoComponent {
       c.cuenta_regresiva = minutes + ":" + seconds;
       c.mediaRecorder.record();
       c.grabando_nota = true;
-      c.inicia_grabacion = new Date();
+
       this.chatService.usuarioEscribiendoConversacion(c, 2);
       c.interval_grabando = setInterval(() => {
         timer -= 1;
@@ -921,15 +923,18 @@ export class ChatExpertoComponent {
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        c.cuenta_regresiva = minutes + ":" + seconds;
+
 
 
 
         if (timer <= 0) {
           window.clearInterval(c.interval_grabando);
           resolve();
+        } else {
+          c.cuenta_regresiva = minutes + ":" + seconds;
+          this.chatService.usuarioEscribiendoConversacion(c, 2);
         }
-        this.chatService.usuarioEscribiendoConversacion(c, 2);
+
       }, 1000);
     });
 
@@ -945,6 +950,7 @@ export class ChatExpertoComponent {
 
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
+    delete c.iniciando_grabacion;
     c.mediaRecorder.stop();
     window.clearInterval(c.interval_grabando);
     this.stream.getTracks().forEach(track => track.stop());
@@ -1009,7 +1015,7 @@ export class ChatExpertoComponent {
   }
 
   cerrarChat(c: Conversacion) {
-    this.dialog.open(CerrarChatExpertoComponent,{width:'80%'}).afterClosed().subscribe(d => {
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%' }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         let estado = 3;
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {

@@ -720,7 +720,7 @@ export class ChatClienteComponent implements OnInit {
     var timer: number = duration;
     let minutes;
     let seconds;
-    console.log(timer)
+    // console.log(timer)
 
     return new Promise((resolve, reject) => {
 
@@ -730,12 +730,12 @@ export class ChatClienteComponent implements OnInit {
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
       c.cuenta_regresiva = minutes + ":" + seconds;
+      c.inicia_grabacion = new Date();
       c.mediaRecorder.record();
       c.grabando_nota = true;
-      c.inicia_grabacion = new Date();
       this.chatService.usuarioEscribiendoConversacion(c, 2);
       c.interval_grabando = setInterval(() => {
-        console.log(timer);
+
         timer -= 1;
         minutes = Math.floor(timer / 60);
         seconds = Math.floor(timer % 60);
@@ -743,13 +743,10 @@ export class ChatClienteComponent implements OnInit {
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        c.cuenta_regresiva = minutes + ":" + seconds;
-
-
-
         if (timer <= 0) {
           this.enviarNota(c, comp);
         } else {
+          c.cuenta_regresiva = minutes + ":" + seconds;
           this.chatService.usuarioEscribiendoConversacion(c, 2);
         }
       }, 1000);
@@ -767,6 +764,7 @@ export class ChatClienteComponent implements OnInit {
 
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
+    delete c.iniciando_grabacion;
     c.mediaRecorder.stop();
     window.clearInterval(c.interval_grabando);
     this.stream.getTracks().forEach(track => track.stop());

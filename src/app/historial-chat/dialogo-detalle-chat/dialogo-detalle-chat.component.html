@@ -72,7 +72,7 @@
       </mat-menu>
     </div>
     
-    <perfect-scrollbar class="contenedor" [attr.data-conversacion-id]="chat.codigo" [config]="config" #scroll>
+    <perfect-scrollbar class="contenedor" [attr.data-conversacion-id]="chat.codigo" [config]="config" #scroll (psYReachEnd)="onReachEnd()">
       <div  class="list-messages">
         <div class="panel-buscador-texto" *ngIf="chat.buscando_texto">
           <div class="contenido-buscador">
