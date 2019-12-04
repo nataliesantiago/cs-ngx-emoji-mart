@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { HistorialChatService } from '../../providers/historial-chat.service';
 import { Conversacion } from '../../../schemas/conversacion.schema';
 import { Mensaje } from '../../../schemas/mensaje.schema';
@@ -12,6 +12,7 @@ import { default as _rollupMoment } from 'moment-timezone';
 import swal from 'sweetalert2';
 import { Configuracion, AudioControls } from '../../../schemas/interfaces';
 import { FormControl } from '@angular/forms';
+import { CerrarChatExpertoComponent } from '../../components/cerrar-chat-experto/cerrar-chat-experto.component';
 
 const moment = _rollupMoment || _moment;
 declare var StereoAudioRecorder: any;
@@ -43,7 +44,8 @@ export class DialogoDetalleChatComponent implements OnInit {
   is_user;
   
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
-              private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef) {
+              private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef, 
+              private dialog: MatDialog) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -614,11 +616,15 @@ export class DialogoDetalleChatComponent implements OnInit {
    * @param c 
    */
   cerrarChat(c: Conversacion) {
-    this.chatService.cerrarConversacion(c, 3).then(() => {
-      this.is_closed = true;
-      c.mostrar_encuesta = true;
-      c.mostrar_descarga_chat = true;
-      this.chatService.eliminarRecordatorioPendiente(c.idtbl_conversacion).then(() => {});
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%' }).afterClosed().subscribe(d => {
+      if (d && d.motivo) {
+        this.chatService.cerrarConversacion(c, 3, d.motivo).then(() => {
+          this.is_closed = true;
+          c.mostrar_encuesta = true;
+          c.mostrar_descarga_chat = true;
+          this.chatService.eliminarRecordatorioPendiente(c.idtbl_conversacion).then(() => {});
+        });
+      }
     });
   }
 

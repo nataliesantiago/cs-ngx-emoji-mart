@@ -535,3 +535,52 @@ mat-card {
         }
     }
 }
+
+.contenedores-chat {
+    .panel-chat {
+        .ventana-chat {
+            .barra-superior {
+                background-color: $color-7a7a7a !important;
+            }
+            .contenedor-mensajes {
+                .contenedor {
+                    .chat-list.odd {
+                        .chat-block {
+                            background-color: $color-7a7a7a !important;
+                        }
+                    } 
+                } 
+            } 
+            .contenedor-encuesta {
+                background-color: $color-424242 !important;
+            }
+        } 
+    } 
+} 
+
+@keyframes titila {
+    0% {
+      color: #888888 !important;
+      background: whitesmoke;
+    }
+  
+    25% {
+      background: orange;
+      color: white !important;
+    }
+  
+    50% {
+      color: #888888 !important;
+      background: whitesmoke;
+    }
+  
+    75% {
+      background: orange;
+      color: white !important;
+    }
+  
+    100% {
+      color: #967777 !important;
+      background: whitesmoke;
+    }
+}
