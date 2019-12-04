@@ -532,9 +532,14 @@ export class UserService {
     }
 
 
-    actualizarSuperAdminCam(): Promise<any>{
+    actualizarSuperAdminCam(codigo_firebase, pass_firebase): Promise<any>{
         return new Promise((resolve, reject) => {
-            
+            let t = localStorage.getItem('token');
+            this.ajax.post('user/validar-superadmin', { token: t, primer_login: true, codigo_firebase: codigo_firebase, pass_firebase: pass_firebase }).subscribe(p => {
+                if(p.success){
+                    resolve(p);
+                }
+            })
         })
     }
 

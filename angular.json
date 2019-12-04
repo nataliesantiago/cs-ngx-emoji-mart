@@ -133,6 +133,35 @@
                                     "with": "src/firebase-messaging-sw-cam.js"
                                 }
                             ]
+                        },
+                        "lablocal-cam": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment-cam.laboratorio.local.ts"
+                            },
+                            {
+                                "replace": "src/firebase-messaging-sw.js",
+                                "with": "src/firebase-messaging-sw-cam.js"
+                            }]
+                        },
+                        "lab-cam": {
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment-cam.laboratorio.ts"
+                            },
+                            {
+                                "replace": "src/firebase-messaging-sw.js",
+                                "with": "src/firebase-messaging-sw-cam.js"
+                            }]
                         }
                     }
                 },

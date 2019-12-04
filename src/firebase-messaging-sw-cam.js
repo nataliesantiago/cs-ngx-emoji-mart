@@ -2,9 +2,9 @@ importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
 // Initialize the Firebase app in the service worker by passing in the
-// messagingSenderId.
+// messagingSenderId. Desarrollo 659384240459, QA 945105371213
 firebase.initializeApp({
-  'messagingSenderId': '659384240459'
+  'messagingSenderId': '945105371213'
 });
 const messaging = firebase.messaging();
 self.addEventListener('notificationclick', function (event) {
