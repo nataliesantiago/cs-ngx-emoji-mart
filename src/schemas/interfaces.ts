@@ -91,7 +91,8 @@ export interface MotivoCierreChat {
     create_date?: Date;
     update_last_user_id?: number;
     update_date?: Date;
-    active: boolean;
+    active?: boolean;
+    category_id?: number;
 }
 
 export interface Emergencia {
