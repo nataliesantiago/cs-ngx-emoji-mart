@@ -185,6 +185,14 @@
                         "lab": {
                             "browserTarget": "material:build:lab"
 
+                        },
+                        "lablocal-cam": {
+                            "browserTarget": "material:build:lablocal-cam"
+
+                        },
+                        "lab-cam": {
+                            "browserTarget": "material:build:lab-cam"
+
                         }
                     }
                 },
