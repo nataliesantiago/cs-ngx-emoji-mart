@@ -13,6 +13,7 @@ import { AjaxService } from './providers/ajax.service';
 import { SearchService } from './providers/search.service';
 const moment = _rollupMoment || _moment;
 import Quill from "quill";
+import { Router, NavigationEnd } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,7 +23,7 @@ export class AppComponent {
   user: User;
   version = '0.4.1'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService,
-    @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService, private changeRef: ChangeDetectorRef) {
+    @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService, private changeRef: ChangeDetectorRef, private router: Router) {
     setInterval(() => {
       this.changeRef.detectChanges();
     }, 200);
@@ -42,7 +43,16 @@ export class AppComponent {
     /// borrar este bloque despues
     //this.searchService.callTest();
     var icons = Quill.import('ui/icons');
-    icons['video']='<img src="/assets/images/drive.svg" width="18" height="18"  />';
+    icons['video'] = '<img src="/assets/images/drive.svg" width="18" height="18"  />';
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // console.log('hizo el hit', event.urlAfterRedirects);
+        /*  (<any>window).gtag('set', 'page', event.urlAfterRedirects);
+          (<any>window).gtag('send', 'pageview');
+          (<any>window).gtag('event', event.urlAfterRedirects);*/
+        (<any>window).gtag('config', environment.analytics, { 'page_path': event.urlAfterRedirects });
+      }
+    });
   }
 
   init() {

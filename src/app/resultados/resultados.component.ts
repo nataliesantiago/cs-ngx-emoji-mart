@@ -112,7 +112,7 @@ export class ResultadosComponent implements OnInit {
       case 'Mis Chats':
         this.origen = 'chat';
         break;
-      case 'Preguntas y respuestas':
+      case 'Procesos':
         this.origen = 'drive';
         break;
     }

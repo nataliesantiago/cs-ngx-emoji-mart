@@ -45,20 +45,25 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.url_foto = d.profile.foto;
                         user.boton_sos_perfil = d.profile.boton_sos_perfil;
                         user.boton_sos_rol = d.profile.boton_sos_rol;
+
                         user.codigo_firebase = d.profile.codigo_firebase;
                         user.pass_firebase = d.profile.pass_firebase;
                         user.modo_nocturno = d.profile.modo_nocturno;
                         user.pais = d.profile.pais;
                         this.userService.definirPaisUsuario(d.profile.pais);
-                        this.userService.setUsuario(user).then(() => {
-                            this.responseSearch.setActive(false);
-                            localStorage.setItem("token", data.token);
-                            this.router.navigate(['home']);
+                        this.userService.getInfoUsuario(d.profile.idtbl_usuario).then(u => {
+                            user.nombre_perfil = u.nombre_perfil;
+                            this.userService.setUsuario(user).then(() => {
+                                this.responseSearch.setActive(false);
+                                localStorage.setItem("token", data.token);
+                                this.router.navigate(['home']);
 
-                            setTimeout(() => {
-                                resolve(true);
-                            }, 1);
+                                setTimeout(() => {
+                                    resolve(true);
+                                }, 1);
+                            });
                         });
+
                     } else {
                         console.error('No se puede cargar la aplicación');
                         reject(false);
@@ -133,16 +138,20 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.modo_nocturno = d.profile.modo_nocturno;
                         user.pais = d.profile.pais;
                         this.userService.definirPaisUsuario(d.profile.pais);
-                        this.userService.setUsuario(user).then(() => {
-                            this.responseSearch.setActive(false);
-                            setTimeout(() => {
-                                if (next.routeConfig.path == "") {
-                                    this.router.navigate(['home']);
-                                } else {
-                                    //this.router.navigate([next.routeConfig.path]);
-                                }
-                                resolve(true);
-                            }, 1);
+                        this.userService.getInfoUsuario(d.profile.idtbl_usuario).then(u => {
+                            console.log(u);
+                            user.nombre_perfil = u.nombre_perfil;
+                            this.userService.setUsuario(user).then(() => {
+                                this.responseSearch.setActive(false);
+                                setTimeout(() => {
+                                    if (next.routeConfig.path == "") {
+                                        this.router.navigate(['home']);
+                                    } else {
+                                        //this.router.navigate([next.routeConfig.path]);
+                                    }
+                                    resolve(true);
+                                }, 1);
+                            });
                         });
                     } else {
                         console.error('No se puede cargar la aplicación');

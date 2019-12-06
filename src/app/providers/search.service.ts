@@ -156,7 +156,10 @@ export class SearchService {
     }
 
     return new Promise((resolve, reject) => {
-      let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen };
+
+
+      console.log('cargo', this.user.nombre_perfil);
+      let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen, cargo: this.user.nombre_perfil };
       if (guardar) {
         this.ajax.post('preguntas/cloud-search/guardar-historial', datos).subscribe(d => {
           if (d.success) {
