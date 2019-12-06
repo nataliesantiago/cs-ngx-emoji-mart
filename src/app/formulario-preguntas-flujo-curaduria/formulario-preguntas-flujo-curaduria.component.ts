@@ -17,6 +17,7 @@ import { ChatService } from '../providers/chat.service';
 import { Location } from '@angular/common';
 import { SearchService } from '../providers/search.service';
 import { ResultadoCloudSearch } from '../../schemas/interfaces';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -70,6 +71,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   buscador = false;
   rol_usuario;
   nombre_boton = "Aprobar";
+  ambiente = environment.ambiente;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
     private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService, private location: Location, private searchService: SearchService) {

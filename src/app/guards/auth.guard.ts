@@ -25,8 +25,6 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
 
             return new Promise<boolean>(resolve => {
                 let data = JSON.parse(atob(d));
-                console.log(data.pais);
-                console.log(data.token);
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('pais', data.pais);
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
