@@ -254,7 +254,7 @@ export class SearchService {
   }
   callTestEsquemaConecta() {
     this.ajax.post('connector_drive/cloud-search/crearEsquemaConecta', {}).subscribe(d => {
-
+      
     });
   }
 
