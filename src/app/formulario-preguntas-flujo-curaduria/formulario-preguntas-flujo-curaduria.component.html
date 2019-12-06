@@ -35,9 +35,9 @@
                     <mat-option *ngFor="let i of productos" [value]="i.idtbl_producto">{{i.nombre}}</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <div fxFlex.gt-sm="5" *ngIf="rol_usuario == 8" fxFlex="100">
+                <div fxFlex.gt-sm="5" *ngIf="rol_usuario == 8 || (ambiente && ambiente == 'cam' && rol_usuario == 7)" fxFlex="100">
                 </div>
-                <mat-form-field *ngIf="rol_usuario == 8" fxFlex.gt-sm="30" fxFlex="100">
+                <mat-form-field *ngIf="rol_usuario == 8 || rol_usuario == 7 || (ambiente && ambiente == 'cam' && rol_usuario == 7)" fxFlex.gt-sm="30" fxFlex="100">
                   <mat-label>Estado de la pregunta</mat-label>
                   <mat-select [(ngModel)]="pregunta.id_estado" name="estado">
                     <mat-option *ngFor="let i of estados_pregunta" [value]="i.idtbl_estado_pregunta">{{i.nombre}}

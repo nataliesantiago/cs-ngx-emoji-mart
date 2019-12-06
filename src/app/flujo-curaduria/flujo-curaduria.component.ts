@@ -13,6 +13,7 @@ import { HistorialCuraduriaComponent } from '../components/historial-curaduria/h
 import { MatDialog } from '@angular/material';
 import { FiltrosService } from '../providers/filtros.service';
 import { Route } from '@angular/compiler/src/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-flujo-curaduria',
@@ -59,6 +60,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   aprobado_reg = [];
   vista = '';
   filtro_tabla: string = '';
+  ambiente = environment.ambiente;
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog, private route: ActivatedRoute) {
 
     this.usuario = this.user.getUsuario();
@@ -225,7 +227,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.activo_revision = false;
     this.activo_aprobacion = true;
     this.activo_aprobados = false;
-    if (this.rol_usuario == 8) {
+    if (this.rol_usuario == 8 || (this.ambiente && this.ambiente == 'cam' && this.rol_usuario == 7)) {
       this.mostrar_accion = true;
     } else {
       this.mostrar_accion = false;
