@@ -11,6 +11,20 @@
                 <mat-label>Digite el motivo del cierre</mat-label>
                 <input matInput [(ngModel)]="reason.name" name="name" autocomplete="off">
                 </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <input type="text" placeholder="Selecciona una categoría de experticia" matInput
+                        [formControl]="reason_control" [matAutocomplete]="auto" autocomplete="off"/>
+                    <button mat-button *ngIf="reason_control.value" matSuffix mat-icon-button aria-label="Clear"
+                        (click)="reason_control.setValue('')">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='seleccionarCategoriaNueva($event.option.value)'>
+                        <mat-option *ngFor="let option of filtered_options | async" [value]="option">
+                        {{option.nombre}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
             </div>
             </div>
                 
@@ -54,12 +68,12 @@
                                 <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:20%;"> Acciones </mat-header-cell>
                                 <mat-cell *matCellDef="let row" style="max-width:20%;">
                                     <div *ngIf="!row.update">
-                                        <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.update=true"></i>
+                                        <i class="ti-pencil info-color m-r-10 mouse-over" (click)="editReason(row)"></i>
                                         <i class="ti-trash danger-color m-r-10 mouse-over" (click)="deleteReason(row)"></i>
                                     </div>
                                     <div *ngIf="row.update">
                                         <i class="ti-save success-color m-r-10 mouse-over" (click)="updateReason(row)"></i>
-                                        <i class="ti-close danger-color m-r-10 mouse-over" (click)="row.update=false"></i>
+                                        <i class="ti-close danger-color m-r-10 mouse-over" (click)="cancelUpdate(row)"></i>
                                     </div>
                                 </mat-cell>
                             </ng-container>
@@ -76,7 +90,27 @@
                                 <mat-cell *matCellDef="let row" style="max-width:65%;"> 
                                     <span *ngIf="!row.update">{{row.nombre}}</span>
                                     <mat-form-field *ngIf="row.update">
-                                        <input matInput type="text" name="name" [(ngModel)]="row.nombre" autocomplete="off">
+                                        <input matInput type="text" name="name" [(ngModel)]="row.texto_tmp" autocomplete="off">
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="category">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:65%;"> Categoría de Experticia </mat-header-cell>
+                                <mat-cell *matCellDef="let row" style="max-width:65%;"> 
+                                    <span *ngIf="!row.update">{{row.categoria}}</span>
+                                    <mat-form-field *ngIf="row.update">
+                                        <input type="text" placeholder="Selecciona una categoría" aria-label="Number" matInput
+                                            [formControl]="edit_reason_control" [matAutocomplete]="auto" autocomplete="off"/>
+                                        <button mat-button *ngIf="edit_reason_control.value" matSuffix mat-icon-button aria-label="Clear"
+                                            (click)="edit_reason_control.setValue('')">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectEditCategory($event.option.value, row)'>
+                                            <mat-option *ngFor="let option of edit_filtered_options | async" [value]="option">
+                                            {{option.nombre}}
+                                            </mat-option>
+                                        </mat-autocomplete>
                                     </mat-form-field>
                                 </mat-cell>
                             </ng-container>

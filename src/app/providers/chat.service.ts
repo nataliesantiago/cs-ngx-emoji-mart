@@ -773,7 +773,7 @@ export class ChatService {
    */
   buscarMotivosCierreChat(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.get('chat/obtenerMotivosCierre', {}).subscribe(d => {
+      this.ajax.get('chat/obtenerMotivosCierre', {id_usuario: this.userService.getUsuario().getId()}).subscribe(d => {
         if (d.success) {
           resolve(d.motivos);
         }

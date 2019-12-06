@@ -57,9 +57,9 @@ export class MotivoCierreChatService {
    /**
    * Funcion para actualizar un motivo
    */
-  updateReason(reason_id, name, user_id) {
+  updateReason(reason_id, name, category_id, user_id) {
     return new Promise((resolve, reject) => {
-      this.ajax.post('motivos-cierre-chat/editar', { reason: {reason_id: reason_id, name: name }, user_id: user_id }).subscribe(d => {
+      this.ajax.post('motivos-cierre-chat/editar', { reason: {reason_id: reason_id, name: name, category_id: category_id }, user_id: user_id }).subscribe(d => {
         if(d.success){
           resolve();
         }else{
