@@ -27,7 +27,7 @@ export class SearchService {
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
         this.user = u
-        //this.callTest();
+        //this.callTestEsquema();
         //this.callTestEsquemaChat();
         //this.callTestEsquemaConecta();
       }
