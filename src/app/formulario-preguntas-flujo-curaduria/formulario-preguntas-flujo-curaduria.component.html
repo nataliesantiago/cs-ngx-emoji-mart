@@ -46,7 +46,7 @@
                 </mat-form-field>
                 <div fxFlex.gt-sm="5" fxFlex="100">
                 </div>
-                <mat-form-field fxFlex.gt-sm="30" fxFlex="100" *ngIf="id_pregunta_editar != 'nuevo'">
+                <mat-form-field fxFlex.gt-sm="30" fxFlex="100" *ngIf="rol_usuario != 5">
                   <mat-label>Seleccionar Curador</mat-label>
                   <mat-select [(ngModel)]="pregunta.id_usuario_revision" name="estado">
                     <mat-option *ngFor="let i of todos_usuarios" [value]="i.idtbl_usuario">{{i.nombre}}</mat-option>

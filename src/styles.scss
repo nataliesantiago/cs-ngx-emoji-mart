@@ -3431,6 +3431,14 @@ input:-webkit-autofill:active {
 
 }
 
+.texto-respuesta{
+  ul{
+      li{
+          list-style: disc !important;
+      }
+  }
+}
+
 .editor-preguntas {
   .ql-container {
     height: 45vh;

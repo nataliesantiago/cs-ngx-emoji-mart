@@ -201,7 +201,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
       });
 
-    this.ajax.get('producto/obtener', {}).subscribe(d => {
+    this.ajax.get('producto/obtener-ordenado-nombre', {}).subscribe(d => {
       if (d.success) {
 
         this.productos = d.productos;
@@ -290,7 +290,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   guardarPregunta() {
 
-    if (this.pregunta.titulo == "" || this.pregunta.id_producto == "" || this.pregunta.id_estado == "") {
+    if (this.pregunta.titulo == "" || this.pregunta.id_producto == "" || this.pregunta.id_estado == "" || !this.pregunta.id_producto) {
 
       swal.fire({
         title: 'Complete los campos obligatorios',

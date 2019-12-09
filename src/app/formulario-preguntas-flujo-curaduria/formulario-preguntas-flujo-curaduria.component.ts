@@ -140,7 +140,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   buscarPreguntas(query: string) {
-
+    
     if (query && query != '')
       this.searchService.queryCloudSearch(query, 1, 'conecta', 0, false).then(preguntas => {
 
@@ -191,7 +191,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       this.nombre_boton = "Guardar";
     }
 
-    this.ajax.get('producto/obtener', {}).subscribe(d => {
+    this.ajax.get('producto/obtener-ordenado-nombre', {}).subscribe(d => {
       if (d.success) {
 
         this.productos = d.productos;
@@ -390,7 +390,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           if (this.rol_usuario == 7) {
             this.pregunta.id_estado_flujo = 3;
           }
-          this.pregunta.id_usuario_revision = this.id_usuario;
+          if(this.pregunta.id_usuario_revision){
+            this.pregunta.id_estado_flujo = 1;
+          }else{
+            this.pregunta.id_usuario_revision = this.id_usuario;
+          }
         }
 
         this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
