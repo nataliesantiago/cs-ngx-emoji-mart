@@ -34,7 +34,7 @@ export class RespuestasComponent implements OnInit {
   activadoSi = false;
   activadoNo = false;
   pregunta_nueva = false;
-  dias_pregunta_nueva = 30;
+  dias_pregunta_nueva;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private chatService: ChatService, private searchService: SearchService) {
 
@@ -55,15 +55,17 @@ export class RespuestasComponent implements OnInit {
       }
     });
 
+    
+
+  }
+
+  init() {
+
     this.ajax.get('administracion/obtener-cantidad-dias-pregunta-nueva').subscribe(r => {
       if (r.success) {
         this.dias_pregunta_nueva = r.item[0].valor;
       }
     })
-
-  }
-
-  init() {
 
     this.route.params
       .filter(params => params.id_pregunta)
@@ -86,10 +88,30 @@ export class RespuestasComponent implements OnInit {
         let fecha_creacion = moment(p.pregunta[0].fecha_creacion).tz('America/Bogota');
 
         let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
-
+        
         if (diferencia_dias <= this.dias_pregunta_nueva) {
           this.pregunta_nueva = true;
         }
+
+        this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
+          if (pras.success) {
+            this.preguntas_adicion = pras.preguntas_asociadas;
+            console.log(pras);
+            if (this.preguntas_adicion.length < 5) {
+              this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
+                console.log(asociadas);
+                if (asociadas.results) {
+                  asociadas.results.filter(f => {
+                    return f.idtbl_pregunta != this.pregunta.idtbl_pregunta;
+                  }).forEach(a => {
+                    this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
+                  });
+                }
+              })
+            }
+            //this.cg.detectChanges();
+          }
+        });
 
         this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(sr => {
           if (sr.success) {
@@ -153,25 +175,6 @@ export class RespuestasComponent implements OnInit {
                         }
                       }
                     }
-
-                    this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
-                      if (pras.success) {
-                        this.preguntas_adicion = pras.preguntas_asociadas;
-                        if (this.preguntas_adicion.length < 5) {
-                          this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
-                            console.log(asociadas);
-                            if (asociadas.results) {
-                              asociadas.results.filter(f => {
-                                return f.idtbl_pregunta != this.pregunta.idtbl_pregunta;
-                              }).forEach(a => {
-                                this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
-                              });
-                            }
-                          })
-                        }
-                        //this.cg.detectChanges();
-                      }
-                    });
                   }
                 })
               }
