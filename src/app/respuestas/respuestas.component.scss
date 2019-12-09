@@ -25,10 +25,27 @@ mat-expansion-panel {
 
 .container-texto {
     margin-top: 5%;
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 7%;
+    margin-right: 7%;
     margin-bottom: 5%;
     position: relative;
+}
+
+.mouse-over{
+    color: blue;
+}
+
+.icono-asociado{
+    position: absolute;
+    color: rgb(89, 70, 141);
+}
+
+.contenedor-texto{
+    padding-left: 0px;
+    flex: 1;
+    position: relative;
+    top: 0px;
+    left: 30px;
 }
 
 .preguntas-asociadas {
@@ -84,7 +101,7 @@ mat-expansion-panel {
     color: #c19d17 !important;
     margin-left: 5px;
     position: absolute;
-    right: 0;
+    right: -5px;
     width: 30px;
     margin-top: -5px;
 }

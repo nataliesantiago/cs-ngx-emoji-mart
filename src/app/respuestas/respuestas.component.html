@@ -8,7 +8,7 @@
             <app-search-component [modo]="2"></app-search-component>
           </div>
         </div>
-        <div fxFlex.gt-sm="70" fxFlex="100" class="container-principal"
+        <div fxFlex.gt-sm="75" fxFlex="100" class="container-principal"
           [ngClass]="{'sin-asociadas':preguntas_adicion.length<1}">
           <div class="container-texto" *ngIf="pregunta">
             <!--<mat-icon class="icono" *ngIf="pregunta_nueva">star</mat-icon>-->
@@ -112,8 +112,14 @@
           <div class="panel-respuestas">
             <div class="respuestas"></div>
             <strong>Preguntas Asociadas</strong>
-            <p class="mouse-over" *ngFor="let pregunta_asociada of preguntas_adicion"
-              (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">{{pregunta_asociada.titulo}}</p>
+            <div class="panel-contenido" *ngFor="let pregunta_asociada of preguntas_adicion">
+              <div class="contenido-respuesta">
+                  <mat-icon class="icono-asociado">{{pregunta_asociada.icono_padre}}</mat-icon>
+                <p class="mouse-over contenedor-texto" (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">
+                  {{pregunta_asociada.titulo}}</p>
+              </div>
+            </div>
+
           </div>
         </div>
 
