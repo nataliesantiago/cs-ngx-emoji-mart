@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material';
 import { FiltrosService } from '../providers/filtros.service';
 import { Route } from '@angular/compiler/src/core';
 import { environment } from '../../environments/environment';
+import { SearchService } from '../providers/search.service';
 
 @Component({
   selector: 'app-flujo-curaduria',
@@ -28,6 +29,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   sort: MatSort;
   displayedColumns = ['acciones', 'idtbl_pregunta', 'titulo', 'nombre_producto', 'nombre_estado', 'nombre', 'nombre_usuario_creador', 'nombre_usuario_modificacion', 'fecha_ultima_modificacion'];
   matTableFilter: matTableFilter;
+  cargando_preguntas = true;
   filterColumns = [
     { field: 'idtbl_pregunta', type: 'number' },
     { field: 'titulo', type: 'string' },
@@ -61,7 +63,7 @@ export class FlujoCuraduriaComponent implements OnInit {
   vista = '';
   filtro_tabla: string = '';
   ambiente = environment.ambiente;
-  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog, private route: ActivatedRoute) {
+  constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog, private route: ActivatedRoute, private searchService: SearchService) {
 
     this.usuario = this.user.getUsuario();
     if (this.usuario) {
@@ -141,30 +143,30 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.applyFilter(filter);
       }, 1);
     } else {
-      if (this.rol_usuario == 5) {
-        this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria-curaduria', { estado_flujo_pregunta: 1, id_usuario: this.id_usuario }).subscribe(p => {
-          if (p.success) {
-            this.curaduria_reg = p.preguntas;
-            this.data = p.preguntas;
-            this.createTable(this.data);
-            setTimeout(() => {
-              this.applyFilter(filter);
-            }, 1);
-
-          }
-        })
-      }
-      this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 1 }).subscribe(p => {
-        if (p.success) {
-          this.curaduria_reg = p.preguntas;
-          this.data = p.preguntas;
-          this.createTable(this.data);
-          setTimeout(() => {
-            this.applyFilter(filter);
-          }, 1);
-
-        }
-      })
+      /* if (this.rol_usuario == 5) {
+         this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria-curaduria', { estado_flujo_pregunta: 1, id_usuario: this.id_usuario }).subscribe(p => {
+           if (p.success) {
+             this.curaduria_reg = p.preguntas;
+             this.data = p.preguntas;
+             this.createTable(this.data);
+             setTimeout(() => {
+               this.applyFilter(filter);
+             }, 1);
+ 
+           }
+         })
+       }
+       this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 1 }).subscribe(p => {
+         if (p.success) {
+           this.curaduria_reg = p.preguntas;
+           this.data = p.preguntas;
+           this.createTable(this.data);
+           setTimeout(() => {
+             this.applyFilter(filter);
+           }, 1);
+ 
+         }
+       })*/
     }
 
   }
@@ -198,19 +200,19 @@ export class FlujoCuraduriaComponent implements OnInit {
 
         this.applyFilter(filter);
       }, 1);
-    } else
-      this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 2 }).subscribe(p => {
-        if (p.success) {
+    } else[]
+    /*this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 2 }).subscribe(p => {
+      if (p.success) {
 
-          this.data = p.preguntas;
-          this.revision_reg = p.preguntas;
-          this.createTable(this.data);
-          setTimeout(() => {
+        this.data = p.preguntas;
+        this.revision_reg = p.preguntas;
+        this.createTable(this.data);
+        setTimeout(() => {
 
-            this.applyFilter();
-          }, 1);
-        }
-      })
+          this.applyFilter();
+        }, 1);
+      }
+    })*/
   }
 
   cambiarUrl(parametro) {
@@ -240,18 +242,18 @@ export class FlujoCuraduriaComponent implements OnInit {
 
         this.applyFilter();
       }, 1);
-    } else
-      this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 3 }).subscribe(p => {
-        if (p.success) {
-          this.aprobar_reg = p.preguntas;
-          this.data = p.preguntas;
-          this.createTable(this.data);
-          setTimeout(() => {
+    } else[]
+    /* this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 3 }).subscribe(p => {
+       if (p.success) {
+         this.aprobar_reg = p.preguntas;
+         this.data = p.preguntas;
+         this.createTable(this.data);
+         setTimeout(() => {
 
-            this.applyFilter();
-          }, 1);
-        }
-      })
+           this.applyFilter();
+         }, 1);
+       }
+     })*/
   }
 
   cargarAprobados(filter) {
@@ -274,25 +276,106 @@ export class FlujoCuraduriaComponent implements OnInit {
 
         this.applyFilter();
       }, 1);
-    } else
-      this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 4 }).subscribe(p => {
-        if (p.success) {
-          this.aprobado_reg = p.preguntas;
-          this.data = p.preguntas;
-          this.createTable(this.data);
-          setTimeout(() => {
+    } else { }
+    /* this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 4 }).subscribe(p => {
+       if (p.success) {
+         this.aprobado_reg = p.preguntas;
+         this.data = p.preguntas;
+         this.createTable(this.data);
+         setTimeout(() => {
 
-            this.applyFilter();
-          }, 1);
-        }
-      })
+           this.applyFilter();
+         }, 1);
+       }
+     })*/
   }
 
   ngOnInit() {
 
   }
 
+  cargarPreguntas(inicio, limite, actual, total) {
+    let cantidad = (inicio + 1) * limite;
+    if (cantidad <= total) {
+      this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
+        //console.log(preguntas.length);
+        preguntas = preguntas.filter(p => {
+          return p.id_estado != 4;
+        })
+        this.curaduria_reg = this.curaduria_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 1;
+        }));
+        this.revision_reg = this.revision_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 2;
+        }));
+        this.aprobar_reg = this.aprobar_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 3;
+        }));
+        this.aprobado_reg = this.aprobado_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 4;
+        }));
+
+      });
+      let proxima = inicio + 1;
+      this.cargarPreguntas(proxima, limite, actual, total);
+    } else {
+      this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
+        //console.log(preguntas.length);
+        preguntas = preguntas.filter(p => {
+          return p.id_estado != 4;
+        })
+        this.curaduria_reg = this.curaduria_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 1;
+        }));
+        this.revision_reg = this.revision_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 2;
+        }));
+        this.aprobar_reg = this.aprobar_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 3;
+        }));
+        this.aprobado_reg = this.aprobado_reg.concat(preguntas.filter(p => {
+          return p.id_estado_flujo == 4;
+        }));
+        let canti = inicio + 1;
+        cantidad = (canti + 1) * limite;
+        if (cantidad >= total) {
+          //console.log(this.curaduria_reg.length);
+          //console.log('paso por aca');
+          this.cargando_preguntas = false;
+          switch (this.vista) {
+            case 'curaduria':
+              this.cargarCuraduria(this.filtro_tabla);
+              break;
+            case 'revision':
+              this.cargarRevision(this.filtro_tabla);
+              break;
+            case 'aprobacion':
+              this.cargarAprobacion(this.filtro_tabla);
+              break;
+            case 'aprobados':
+              this.cargarAprobados(this.filtro_tabla);
+              break;
+
+            default:
+              this.cargarCuraduria(this.filtro_tabla);
+              break;
+          }
+        }
+      });
+    }
+  }
+
   init() {
+
+    this.searchService.totalPreguntas().then(total => {
+      let inicio = 0;
+      let limite = 1000;
+      let actual = 0;
+      this.cargarPreguntas(inicio, limite, actual, total);
+    })
+
+
+
 
     this.ajax.get('preguntas/obtener-cantidad-preguntas-flujo-curaduria', { estado_flujo_pregunta: 1 }).subscribe(p => {
       if (p.success) {
@@ -320,6 +403,10 @@ export class FlujoCuraduriaComponent implements OnInit {
         this.cg.detectChanges();
       }
     })
+
+
+
+
 
     this.filtros_service.getQuestionStates().then(result => {
       this.estados_pregunta = result;
@@ -350,6 +437,9 @@ export class FlujoCuraduriaComponent implements OnInit {
       let filterValue = this.filtro_tabla.trim(); // Remove whitespace
       filterValue = this.filtro_tabla.toLowerCase(); // Datasource defaults to lowercase matches
       this.dataSource.filter = filterValue;
+    } else {
+      this.cambiarUrl(this.vista + '&&filter=');
+      this.dataSource.filter = '';
     }
   }
 

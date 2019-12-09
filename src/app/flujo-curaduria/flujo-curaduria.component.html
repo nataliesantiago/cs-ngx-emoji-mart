@@ -4,7 +4,8 @@
             <div class="flujo-curaduria" fxLayout="row wrap" style="text-align: center;">
                 <!-- column -->
                 <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
-                    <mat-card [ngClass]="{'activo': activo_curaduria}" (click)="cambiarPestana('curaduria')" class="card-flujo">
+                    <mat-card [ngClass]="{'activo': activo_curaduria}" (click)="cambiarPestana('curaduria')"
+                        class="card-flujo">
                         <mat-card-content>
                             <!-- Row -->
                             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -20,8 +21,8 @@
                 <!-- column -->
                 <!-- column -->
                 <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
-                    <mat-card [ngClass]="{'class': true, 'activo': activo_revision}" (click)="cambiarPestana('revision')"
-                        class="card-flujo">
+                    <mat-card [ngClass]="{'class': true, 'activo': activo_revision}"
+                        (click)="cambiarPestana('revision')" class="card-flujo">
                         <mat-card-content>
                             <!-- Row -->
                             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -56,7 +57,8 @@
                 <!-- column -->
                 <!-- column -->
                 <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
-                    <mat-card [ngClass]="{'activo': activo_aprobados}" (click)="cambiarPestana('aprobados')" class="card-flujo">
+                    <mat-card [ngClass]="{'activo': activo_aprobados}" (click)="cambiarPestana('aprobados')"
+                        class="card-flujo">
                         <mat-card-content>
                             <!-- Row -->
                             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
@@ -109,6 +111,7 @@
 
                             <div class="responsive-table flujo-curaduria-table">
                                 <div class="container-table">
+
                                     <mat-table [dataSource]="dataSource" matSort>
 
                                         <!-- ID Column -->
@@ -191,6 +194,9 @@
                                     </mat-table>
                                 </div>
                                 <mat-paginator [pageSizeOptions]="[50, 100, 200]"></mat-paginator>
+                                <div class="spinner-cargando-flujo" *ngIf="cargando_preguntas">
+                                    <mat-spinner></mat-spinner>
+                                </div>
                             </div>
                         </mat-card-content>
                     </mat-card>

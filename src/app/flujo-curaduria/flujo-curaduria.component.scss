@@ -1,9 +1,18 @@
 .piechart {
-    height: 300px;
-    width: 280px;
-    margin: 0 auto;
-  }
+  height: 300px;
+  width: 280px;
+  margin: 0 auto;
+}
 
-.panel-respuestas{
+.panel-respuestas {
   margin-top: 10px;
+}
+
+.spinner-cargando-flujo {
+  display: flex;
+  margin-top: 20px;
+
+  .mat-progress-spinner {
+    margin: auto;
+  }
 }
