@@ -40,7 +40,6 @@ export class ChatClienteComponent implements OnInit {
   cantidad_mensajes_sin_leer = 0;
   limite_texto_chat;
   mensaje_buscando_experto;
-  no_encontro_experto = false;
   mensaje_no_encontro_experto;
   es_despedida = false;
   mensaje_despedida;
@@ -459,11 +458,9 @@ export class ChatClienteComponent implements OnInit {
       let data = datos.payload.data() as Conversacion;
       c.llamada_activa = data.llamada_activa;
       c.url_llamada = data.url_llamada;
-
       if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2 && data.id_estado_conversacion != 10) {
         c.mostrar_encuesta = true;
         this.es_despedida = true;
-        this.no_encontro_experto = false;
       } else if (c.asesor_actual) {
         if (c.asesor_actual.idtbl_usuario != data.id_experto_actual && data.id_experto_actual) {
           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
@@ -499,12 +496,11 @@ export class ChatClienteComponent implements OnInit {
       }
 
       if (data.id_estado_conversacion == 10) {
-        this.no_encontro_experto = true;
+        c.no_encontro_experto = true;
         this.chatService.getMensajeBuscandoExperto(5).then(result => {
           this.mensaje_no_encontro_experto = result;
         });
-      }
-
+      } 
     });
   }
 
@@ -800,26 +796,27 @@ export class ChatClienteComponent implements OnInit {
   }
 
   cerrarChat(c: Conversacion) {
-    let estado;
-    if (c.id_estado_conversacion == 1) {
-      if (c.transferido) {
+    if (c.id_estado_conversacion != 10) {
+      let estado;
+      if (c.id_estado_conversacion == 1) {
+        if (c.transferido) {
+          estado = 3;
+        } else {
+          estado = 9;
+        }
+      } else  {
         estado = 3;
-      } else {
-        estado = 9;
       }
-    } else if (c.id_estado_conversacion == 10) {
+
+      this.chatService.cerrarConversacion(c, estado).then(() => {
+        c.mostrar_encuesta = true;
+        this.es_despedida = true;
+      });
+
+    } else {
       c.mostrar_encuesta = true;
       this.es_despedida = false;
-      estado = 10;
-    } else {
-      estado = 3;
     }
-
-    this.chatService.cerrarConversacion(c, estado).then(() => {
-      c.mostrar_encuesta = true;
-      this.es_despedida = true;
-      this.no_encontro_experto = false;
-    });
   }
 
   finalizaEncuesta(c: Conversacion) {
