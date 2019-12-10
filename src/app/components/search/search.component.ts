@@ -272,7 +272,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   procesaValorCaja(value: string) {
 
     this.searchService.suggestCloudSearch(value, this.sugerencias).then(d => {
-      // console.log(d);
+       console.log(d);
       delete this.texto_sugerido;
       this.sugerencias = d.suggestResults;
       if (this.sugerencias && this.sugerencias.length > 0) {
