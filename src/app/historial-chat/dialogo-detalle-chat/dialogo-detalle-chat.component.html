@@ -2,7 +2,7 @@
   <div *ngIf="!chat.expert_chat" class="container" [ngClass]="{'is-recording': is_recording}">
       <div fxLayout="row" layout-align="none center">
         <h3>{{chat.nombre}} </h3>
-        <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1 options-chat">
+        <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1 options-chat" *ngIf="chat.id_estado_conversacion!=7">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #them="matMenu" x-position="before">
