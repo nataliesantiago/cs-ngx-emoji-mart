@@ -226,7 +226,7 @@ export class SearchService {
 
   suggestCloudSearch(query?: string, sugerencias?: Array<any>): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.get('preguntas/cloud-search/suggest', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(d => {
+      this.ajax.post('preguntas/cloud-search/suggest', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(d => {
         if (d.success) {
           sugerencias = d.sugerencias;
           resolve(d.sugerencias);

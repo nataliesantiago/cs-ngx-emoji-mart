@@ -137,7 +137,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.pais = d.profile.pais;
                         this.userService.definirPaisUsuario(d.profile.pais);
                         this.userService.getInfoUsuario(d.profile.idtbl_usuario).then(u => {
-                            console.log(u);
+                            //console.log(u);
                             user.nombre_perfil = u.nombre_perfil;
                             this.userService.setUsuario(user).then(() => {
                                 this.responseSearch.setActive(false);
