@@ -110,7 +110,7 @@ export class AjaxService {
         if (this.modoDebug) {
 
         }
-        params.access_token = this.token;
+        //params.access_token = this.token;
         //params.pais = this.pais;
         parametros = parametros.append('data', (JSON.stringify(params)));
         parametros = parametros.append('encrypt', '0');
@@ -136,7 +136,7 @@ export class AjaxService {
         }
         let data: any = {};
         data.encrypt = this.usingEnc;
-        params.access_token = this.token;
+        //params.access_token = this.token;
         //params.pais = this.pais;
         data.csrftk = this.csrftk;
         data.pais = this.pais;

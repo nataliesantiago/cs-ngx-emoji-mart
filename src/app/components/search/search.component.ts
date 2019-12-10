@@ -21,6 +21,7 @@ import { LookFeelService } from '../../providers/look-feel.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { MatPaginator, MatTabGroup } from '@angular/material';
 import swal from 'sweetalert2';
+import { UtilsService } from '../../providers/utils.service';
 interface IWindow extends Window {
   webkitSpeechRecognition: any;
   SpeechRecognition: any;
@@ -84,7 +85,8 @@ export class AppSearchComponent implements OnChanges, OnInit {
     private speechRecognizer: SpeechRecognizerService,
     private nzone: NgZone,
     private autenticationService: AutenticationService,
-    private look_service: LookFeelService
+    private look_service: LookFeelService,
+    private utilsService: UtilsService
   ) {
 
 
@@ -273,13 +275,14 @@ export class AppSearchComponent implements OnChanges, OnInit {
 
     this.searchService.suggestCloudSearch(value, this.sugerencias).then(d => {
       // console.log(d);
+      value = this.utilsService.normalizeText(value);
       delete this.texto_sugerido;
       this.sugerencias = d.suggestResults;
       if (this.sugerencias && this.sugerencias.length > 0) {
-        let t = this.sugerencias[0].suggestedQuery;
+        let t = this.utilsService.normalizeText(this.sugerencias[0].suggestedQuery);
         // this.texto_sugerido = t.replace(t.substring(0, this.def.value.length), this.def.value);
-        if (this.def.value && this.def.value != '' && this.def.value != 'undefined') {
-          this.texto_sugerido = this.def.value + t.replace(this.def.value, '');
+        if (value && value != '' && value != 'undefined') {
+          this.texto_sugerido = value + t.replace(value, '');
         }
         setTimeout(() => {
           this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;

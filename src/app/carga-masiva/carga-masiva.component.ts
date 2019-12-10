@@ -45,7 +45,7 @@ export class CargaMasivaComponent implements OnInit {
   downloadCsvFile() {
     let csv_headers = [
       ['Pregunta,Respuesta,Correo_usuario_creador,Fecha_creacion,Correo_usuario_ultima_modificacion,Fecha_ultima_modificacion,Identificador_producto,Estado,Estado_flujo,Muestra_fecha_actualizacion'],
-      ['"","","","","","",","","",0']
+      ['"","","","","","","","","",0']
     ];
     let csv_content = csv_headers.map(e => e.join(",")).join("\n");
 

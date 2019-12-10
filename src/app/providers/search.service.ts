@@ -179,7 +179,7 @@ export class SearchService {
           localStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
         }
       }
-      this.ajax.get('preguntas/cloud-search/query', datos).subscribe(async d => {
+      this.ajax.post('preguntas/cloud-search/query', datos).subscribe(async d => {
         if (d.success) {
           d.resultados.results = (d.resultados.results) ? d.resultados.results : [];
           if (origen == 'conecta') {
