@@ -96,6 +96,7 @@ export class AdPreguntasComponent implements OnInit {
       this.data = Array.from(this.setData);*/
       this.data = this.utilsService.getUnique(this.data, 'idtbl_pregunta');
       this.createTable(this.data);
+      console.log(this.data);
       this.searchService.totalPreguntas().then(t => {
         setTimeout(() => {
           this.length = t;
