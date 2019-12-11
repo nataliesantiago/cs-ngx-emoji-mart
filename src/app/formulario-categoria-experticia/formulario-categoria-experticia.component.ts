@@ -137,12 +137,12 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
       if (result.value) {
         if(this.editar){
           
-          if(e.idtbl_categoria_experticia != undefined){
+          if(e.id_categoria_experticia != undefined){
             this.ajax.post('experticia/eliminar-asociacion-experticia', { experticia_asociada: e }).subscribe(d => {
               if(d.success){
                 let pos = 0;
                 for(let i = 0; i < this.experticia_asociada.length; i++){
-                  if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
+                  if(this.experticia_asociada[i].idtbl_experticia == e.idtbl_experticia){
                     pos = i;
                   }
                 }
@@ -156,7 +156,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
           }else{
             let pos = 0;
             for(let i = 0; i < this.experticia_asociada.length; i++){
-              if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
+              if(this.experticia_asociada[i].idtbl_experticia == e.idtbl_experticia){
                 pos = i;
               }
             }
@@ -169,7 +169,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
         }else{
           let pos = 0;
           for(let i = 0; i < this.experticia_asociada.length; i++){
-            if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
+            if(this.experticia_asociada[i].idtbl_experticia == e.idtbl_experticia){
               pos = i;
             }
           }
@@ -202,7 +202,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
     }else{
 
       if(this.editar){
-      
+        
         this.ajax.post('experticia/editar-categoria', { categoria_expertiz: this.categoria_expertiz, experticia_asociada: this.experticia_asociada }).subscribe(d => {
           if(d.success){
           
