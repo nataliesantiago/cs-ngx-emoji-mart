@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
 
   texto_home = "";
   nuevos_contenidos = [];
+  busquedas_realizadas = [];
   usuario;
   correo_usuario = "";
   validacion_pais_usuario = [];
@@ -186,11 +187,11 @@ export class HomeComponent implements OnInit {
     this.correo_usuario = this.user.getCorreo();
     this.validacion_pais_usuario = this.correo_usuario.split(".");
     this.correo_usuario = this.validacion_pais_usuario[(this.validacion_pais_usuario.length - 1)];
-    this.ajax.get('preguntas/obtener-home', {}).subscribe(p => {
+    this.ajax.get('preguntas/obtener-home', { id_usuario: this.user.getId() }).subscribe(p => {
       if (p.success) {
-
-        this.nuevos_contenidos = p.preguntas;
-
+        
+        this.nuevos_contenidos = p.preguntas[0];
+        this.busquedas_realizadas = p.preguntas[1];
       }
     });
 

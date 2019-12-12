@@ -265,32 +265,19 @@ export class UserService {
 
 
     actualizarTodo() {
-        if(this.user.getIdRol() != 3){
+        this.actualizarMensajesNLP().then(() => {
             this.actualizarNotificaciones().then(r => {
-                if (this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
+                if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
                     if (!this.primera_vez_notificacion) {
                         this.soundService.sonar(4);
                     }
                 }
+                this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
                 this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
                 this.primera_vez_notificacion = false;
                 this.subjectNotificaciones.next(1);
             });
-        }else{
-            this.actualizarMensajesNLP().then(() => {
-                this.actualizarNotificaciones().then(r => {
-                    if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
-                        if (!this.primera_vez_notificacion) {
-                            this.soundService.sonar(4);
-                        }
-                    }
-                    this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
-                    this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
-                    this.primera_vez_notificacion = false;
-                    this.subjectNotificaciones.next(1);
-                });
-            });
-        }
+        });
     }
 
 

@@ -22,7 +22,7 @@
         <mat-card-title class="titulo-card">Lo más buscado</mat-card-title>
       </mat-card-header>
       <mat-card-content class="contenido-card">
-        <p *ngFor="let i of nuevos_contenidos">{{ i.titulo }}</p>
+        <p *ngFor="let i of busquedas_realizadas">{{ i.texto_busqueda }}</p>
       </mat-card-content>
     </mat-card>
   </div>
