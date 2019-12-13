@@ -65,7 +65,7 @@ export class VisualizarEncuestaComponent implements OnInit {
     }
 
     this.ajax.get('encuestas/obtener-encuesta-tipo', { id_tipo: this.id_tipo_encuesta }).subscribe(d => {
-      if (d.success) {
+      if (d.success && d.encuesta[0] != undefined) {
         this.encuesta = d.encuesta[0];
         this.idtbl_encuesta = d.encuesta[0].idtbl_encuesta;
         if (d.encuesta.length == 0) {

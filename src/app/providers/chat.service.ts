@@ -943,4 +943,17 @@ export class ChatService {
     })
   }
 
+  /**
+   * obtiene la encuesta de tipo experto
+   */
+  obtenerEncuestaExperto() {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('encuestas/obtener-encuesta-tipo', { id_tipo: 2 }).subscribe(d => {
+        if (d.success) {
+          resolve(d);
+        }
+      });
+    });
+  }
+
 }
