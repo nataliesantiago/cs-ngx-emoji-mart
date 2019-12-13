@@ -584,3 +584,34 @@ mat-card {
       background: whitesmoke;
     }
 }
+
+.contenedor-texto {
+    &.mouse-over {
+        color: $color-ffffff;
+    }
+}
+
+.icono-asociado {
+    color: $color-ffffff !important;
+}
+
+.dialog-chat {
+    .container-chat {
+        .contenedor {
+            .list-messages {
+                .message {
+                    &.odd {
+                        .chat-block {
+                            background-color: $color-7a7a7a;
+                        }
+                    }
+                    &.even {
+                        .chat-block {
+                            background-color: $color-999999;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -292,6 +292,7 @@ export class FormularioNotificacionesComponent implements OnInit {
           this.notificacionService.guardarNotificacion(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
             let id_notificacion = u.usuarios[0];
             let ids_usuarios = [];
+            
             for (let i = 1; i < u.usuarios.length; i++) {
               let arreglo_actual = u.usuarios[i];
               for (let j = 0; j < arreglo_actual.length; j++) {
