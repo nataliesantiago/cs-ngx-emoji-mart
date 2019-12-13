@@ -141,39 +141,41 @@ export class ChatExpertoComponent {
                 let refConversacion = c.payload.doc.id;
                 this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + refConversacion).then(async datos => {
                   let c: Conversacion = datos;
-                  c.codigo = refConversacion;
-                  c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
-                  tmp.push(c);
-                  this.utilService.getConfiguraciones().then(configs => {
-                    let tiempo_cola = configs.find((c: Configuracion) => {
-                      return c.idtbl_configuracion == 6;
-                    });
-                    c.interval_tiempo_cola = setInterval(() => {
-                      let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
-                      if (duration > (tiempo_cola.valor * 60)) {
-                        c.tiempo_cola = true;
-                        window.clearInterval(c.interval_tiempo_cola);
-                        delete c.interval_tiempo_cola;
-                      }
-                    }, 1000);
-                  });
-
-                  if (index == chats.length - 1) {
-                    if (f.chats)
-                      f.chats.forEach((c: Conversacion) => {
-                        if (c.interval_tiempo_cola) {
-                          window.clearInterval(c.interval_tiempo_cola);
-                        }
+                  if (c) {
+                    c.codigo = refConversacion;
+                    c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
+                    tmp.push(c);
+                    this.utilService.getConfiguraciones().then(configs => {
+                      let tiempo_cola = configs.find((c: Configuracion) => {
+                        return c.idtbl_configuracion == 6;
                       });
-                    fila.chats = tmp;
+                      c.interval_tiempo_cola = setInterval(() => {
+                        let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
+                        if (duration > (tiempo_cola.valor * 60)) {
+                          c.tiempo_cola = true;
+                          window.clearInterval(c.interval_tiempo_cola);
+                          delete c.interval_tiempo_cola;
+                        }
+                      }, 1000);
+                    });
 
-                    this.procesaFilas(fila);
-                    if (paso_por_chats) {
-                      if (this.user.experto_activo) {
-                        this.recibirChatAutomatico();
+                    if (index == chats.length - 1) {
+                      if (f.chats)
+                        f.chats.forEach((c: Conversacion) => {
+                          if (c.interval_tiempo_cola) {
+                            window.clearInterval(c.interval_tiempo_cola);
+                          }
+                        });
+                      fila.chats = tmp;
+
+                      this.procesaFilas(fila);
+                      if (paso_por_chats) {
+                        if (this.user.experto_activo) {
+                          this.recibirChatAutomatico();
+                        }
                       }
-                    }
 
+                    }
                   }
                 });
               });
