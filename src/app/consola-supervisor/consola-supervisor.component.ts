@@ -49,7 +49,7 @@ export class ConsolaSupervisorComponent implements OnInit {
 
   init() {
 
-    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
+    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes);
 
@@ -57,6 +57,16 @@ export class ConsolaSupervisorComponent implements OnInit {
         this.chats_activos = chats;
         for (let c of this.chats_activos) {
           this.agregarListenerMensaes(c);
+          setInterval(() => {
+
+            if (c.fecha_asignacion) {
+
+              if (c.fecha_asignacion) {
+                c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
+              }
+
+            }
+          }, 1000);
         }
       } else {
         chats.forEach(cn => {
@@ -73,7 +83,9 @@ export class ConsolaSupervisorComponent implements OnInit {
           } else {
             this.agregarListenerMensaes(cn);
             this.chats_activos.push(cn);
+
           }
+
         });
         this.chats_activos.forEach((item, index, object) => {
           let t = chats.find(c => {
@@ -90,8 +102,8 @@ export class ConsolaSupervisorComponent implements OnInit {
       }
       this.applyFilterActivos();
     });
-    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 1).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
-      let chats = await this.procesaConversaciones(changes);
+    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 1).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
+      let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
       for (let c of chats) {
         if (c.idtbl_conversacion) {
           await this.chatService.getFilasConversacion(c);
@@ -102,13 +114,16 @@ export class ConsolaSupervisorComponent implements OnInit {
           });
           c.interval_tiempo_cola = setInterval(() => {
             let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
+
             if (duration > (tiempo_cola.valor * 60)) {
               c.tiempo_cola = true;
               window.clearInterval(c.interval_tiempo_cola);
               delete c.interval_tiempo_cola;
             }
+
           }, 1000);
         });
+
       }
       this.chats_en_fila.forEach((item, index, object) => {
         let t = chats.find(c => {
@@ -151,7 +166,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     for (let c of changes) {
       let data = c.payload.doc.data() as Conversacion;
       data.codigo = c.payload.doc.id;
-      let usuario = this.usuarios.find((e: User) => { 
+      let usuario = this.usuarios.find((e: User) => {
         // console.log(e);
         return e.idtbl_usuario == data.id_usuario_creador;
       });
@@ -167,7 +182,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         this.usuarios.push(u);
       }
       if (!usuario) {
-        
+
       }
       data.cliente = usuario;
       data.asesor_actual = experto;
@@ -178,10 +193,10 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   agregarListenerMensaes(c: Conversacion) {
-    c.messages = this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo + '/mensajes', ref =>
+    c.messages = this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
-    this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo + '/mensajes', ref => ref.orderBy('fecha_mensaje')).snapshotChanges().subscribe(async changes => {
+    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes', ref => ref.orderBy('fecha_mensaje')).snapshotChanges().subscribe(async changes => {
       let tmp = [];
       changes.forEach(mensaje => {
         let data = mensaje.payload.doc.data() as Mensaje;
@@ -280,7 +295,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   toggleConversacion(c: Conversacion) {
     let estado = !c.viendo_supervisor;
     c.viendo_supervisor = !c.viendo_supervisor;
-    this.fireStore.doc('paises/'+this.user.pais+'/'+'conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
   }
   applyFilterActivos() {
     let palabra = this.filtro_activos;
@@ -305,7 +320,7 @@ export class ConsolaSupervisorComponent implements OnInit {
 
         if (this.utilService.normalizeText(c.cliente.nombre.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1
           || this.utilService.normalizeText(c.cliente.correo.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1) {
-          
+
           return true;
         } else {
           c.filas.forEach((f: CategoriaExperticia) => {
@@ -313,7 +328,7 @@ export class ConsolaSupervisorComponent implements OnInit {
               este = true;
             }
           });
-          
+
           return este;
         }
       });

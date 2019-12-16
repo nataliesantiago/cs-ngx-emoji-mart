@@ -234,7 +234,8 @@ gtag('config', environment.analytics);
     AdministradorHorariosComponent,
     HistorialCuraduriaComponent,
     FooterComponent,
-    AdminsitracionRolesComponent
+    AdminsitracionRolesComponent,
+    MinuteSecondsPipe
   ],
   entryComponents: [
     TransferenciaChatComponent,

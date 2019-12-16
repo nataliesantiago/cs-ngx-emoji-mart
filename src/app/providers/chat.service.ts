@@ -505,6 +505,7 @@ export class ChatService {
       })
     });
   }
+  
   /**
    * @description trae el snapshot de una coleccion en firebase
    * @param  {string} url
