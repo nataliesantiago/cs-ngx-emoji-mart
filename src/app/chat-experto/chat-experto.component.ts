@@ -63,7 +63,7 @@ export class ChatExpertoComponent {
   file_url;
   loading = false;
   state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
-
+  
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
     private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService,
@@ -343,14 +343,24 @@ export class ChatExpertoComponent {
         c.url_llamada = data.url_llamada;
         c.conversacion_recomendada = data.conversacion_recomendada;
         if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
-
-          if (!c.encuesta_realizada) {
-            c.mostrar_encuesta = true;
-          }
+          
+          this.obtenerEncuestaExperto(c);
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
           }
 
+        }
+      }
+    });
+  }
+
+  obtenerEncuestaExperto(c) {
+    this.chatService.obtenerEncuestaExperto().then((d: any) => {
+      if (d.encuesta.length == 0) {
+        this.validarCerrarConversacion(c);
+      } else {
+        if (!c.encuesta_realizada) {
+          c.mostrar_encuesta = true;
         }
       }
     });
@@ -1046,6 +1056,10 @@ export class ChatExpertoComponent {
   finalizaEncuesta(c: Conversacion) {
     c.mostrar_encuesta = false;
     c.encuesta_realizada = true;
+    this.validarCerrarConversacion(c);
+  }
+
+  validarCerrarConversacion(c) {
     if (!this.validaRecomendacionConversacion(c)) {
       if (this.chat.codigo == c.codigo) {
         delete this.chat;
