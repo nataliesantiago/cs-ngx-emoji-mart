@@ -46,6 +46,7 @@ export class UserService {
     primera_vez_notificacion = true;
     public panelNotificacionesSubject = new Subject<any>();
     public observablePanelNotificaciones = this.panelNotificacionesSubject.asObservable();
+    suena_notificacion = true;
     state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
 
     constructor(private ajax: AjaxService, private fireStore: AngularFirestore, private firebaseAuth: AngularFireAuth, private afMessaging: AngularFireMessaging,
@@ -268,7 +269,7 @@ export class UserService {
         this.actualizarMensajesNLP().then(() => {
             this.actualizarNotificaciones().then(r => {
                 if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
-                    if (!this.primera_vez_notificacion) {
+                    if (!this.primera_vez_notificacion && this.suena_notificacion) {
                         this.soundService.sonar(4);
                     }
                 }
@@ -295,8 +296,14 @@ export class UserService {
 
             this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
                 if (d.success) {
+                    console.log(d.notificaciones[1]);
                     this.notificaciones_usuario = d.notificaciones[0];
                     this.notificaciones_sin_leer = d.notificaciones[1].length;
+                    if(this.notificaciones_sin_leer > 0){
+                        this.suena_notificacion = true;
+                    }else{
+                        this.suena_notificacion = false;
+                    }
                     this.subjectNotificaciones.next(1);
                     resolve(d.notificaciones);
                 } else {

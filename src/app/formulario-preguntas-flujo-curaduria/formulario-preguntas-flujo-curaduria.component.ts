@@ -140,7 +140,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   buscarPreguntas(query: string) {
-    
+
     if (query && query != '')
       this.searchService.queryCloudSearch(query, 1, 'conecta', 0, false).then(preguntas => {
 
@@ -314,6 +314,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.pregunta.muestra_fecha_actualizacion = 0;
         }
         if (this.pregunta.id_estado_flujo == 1) {
+          this.pregunta.id_estado = 1;
           this.pregunta.id_estado_flujo = 2;
         } else if (this.pregunta.id_estado_flujo == 2) {
           this.pregunta.id_estado_flujo = 3;
@@ -390,9 +391,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           if (this.rol_usuario == 7) {
             this.pregunta.id_estado_flujo = 3;
           }
-          if(this.pregunta.id_usuario_revision){
+          if (this.pregunta.id_usuario_revision) {
             this.pregunta.id_estado_flujo = 1;
-          }else{
+          } else {
             this.pregunta.id_usuario_revision = this.id_usuario;
           }
         }
@@ -439,37 +440,118 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
-        if (this.pregunta.muestra_fecha_actualizacion) {
-          this.pregunta.muestra_fecha_actualizacion = 1;
-        } else {
-          this.pregunta.muestra_fecha_actualizacion = 0;
-        }
-        if (this.pregunta.id_estado_flujo == 2) {
-          this.pregunta.id_estado_flujo = 1;
-          if (!this.pregunta.id_usuario_revision) {
-            this.pregunta.id_estado = 4;
+        if (this.pregunta.id_estado_flujo == 2 && !this.pregunta.id_usuario_revision) {
+          if (!this.notas.notas || this.notas.notas == "" || this.notas.notas == " ") {
+            swal.fire({
+              title: 'Debe ingresar un comentario',
+              text: "Ingrese un comentario para poder rechazar la pregunta",
+              type: 'warning',
+              buttonsStyling: false,
+              confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+              confirmButtonText: 'Aceptar'
+            }).then((result) => {
+
+            })
+          } else {
+            if (this.pregunta.muestra_fecha_actualizacion) {
+              this.pregunta.muestra_fecha_actualizacion = 1;
+            } else {
+              this.pregunta.muestra_fecha_actualizacion = 0;
+            }
+            if (this.pregunta.id_estado_flujo == 2) {
+              this.pregunta.id_estado_flujo = 1;
+              if (!this.pregunta.id_usuario_revision) {
+                this.pregunta.id_estado = 4;
+                this.pregunta.id_estado_flujo = 2;
+              }
+            } else if (this.pregunta.id_estado_flujo == 3) {
+              this.pregunta.id_estado_flujo = 2;
+            } else if (this.pregunta.id_estado_flujo == 4) {
+              this.pregunta.id_estado_flujo = 3;
+            } else if (this.pregunta.id_estado_flujo == 1) {
+              this.pregunta.id_estado = 4;
+              this.pregunta.id_estado_flujo = 1;
+            }
+
+            this.notas.id_usuario_comentario = this.id_usuario;
+
+            this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+            for (let i = 0; i < this.array_mostrar.length; i++) {
+              this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+            }
+            this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
+              if (d.success) {
+
+                this.location.back();
+              }
+            })
           }
-        } else if (this.pregunta.id_estado_flujo == 3) {
-          this.pregunta.id_estado_flujo = 2;
-        } else if (this.pregunta.id_estado_flujo == 4) {
-          this.pregunta.id_estado_flujo = 3;
         } else if (this.pregunta.id_estado_flujo == 1) {
-          this.pregunta.id_estado = 4;
-          this.pregunta.id_estado_flujo = 5;
-        }
+          if (!this.notas.notas || this.notas.notas == "" || this.notas.notas == " ") {
+            swal.fire({
+              title: 'Debe ingresar un comentario',
+              text: "Ingrese un comentario para poder rechazar la pregunta",
+              type: 'warning',
+              buttonsStyling: false,
+              confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+              confirmButtonText: 'Aceptar'
+            }).then((result) => {
 
-        this.notas.id_usuario_comentario = this.id_usuario;
+            })
+          } else {
+            if (this.pregunta.id_estado_flujo == 1) {
+              this.pregunta.id_estado = 4;
+              this.pregunta.id_estado_flujo = 1;
+            }
 
-        this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-        for (let i = 0; i < this.array_mostrar.length; i++) {
-          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
-        }
-        this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
-          if (d.success) {
+            this.notas.id_usuario_comentario = this.id_usuario;
 
-            this.location.back();
+            this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+            for (let i = 0; i < this.array_mostrar.length; i++) {
+              this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+            }
+            this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
+              if (d.success) {
+
+                this.location.back();
+              }
+            })
           }
-        })
+        } else {
+          if (this.pregunta.muestra_fecha_actualizacion) {
+            this.pregunta.muestra_fecha_actualizacion = 1;
+          } else {
+            this.pregunta.muestra_fecha_actualizacion = 0;
+          }
+          if (this.pregunta.id_estado_flujo == 2) {
+            this.pregunta.id_estado_flujo = 1;
+            if (!this.pregunta.id_usuario_revision) {
+              this.pregunta.id_estado = 4;
+              this.pregunta.id_estado_flujo = 2;
+            }
+          } else if (this.pregunta.id_estado_flujo == 3) {
+            this.pregunta.id_estado_flujo = 2;
+          } else if (this.pregunta.id_estado_flujo == 4) {
+            this.pregunta.id_estado_flujo = 3;
+          } else if (this.pregunta.id_estado_flujo == 1) {
+            this.pregunta.id_estado = 4;
+            this.pregunta.id_estado_flujo = 1;
+          }
+
+          this.notas.id_usuario_comentario = this.id_usuario;
+
+          this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+          for (let i = 0; i < this.array_mostrar.length; i++) {
+            this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+          }
+          this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
+            if (d.success) {
+
+              this.location.back();
+            }
+          })
+        }
+
       }
     })
   }

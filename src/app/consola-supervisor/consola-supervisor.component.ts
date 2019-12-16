@@ -98,8 +98,10 @@ export class ConsolaSupervisorComponent implements OnInit {
         }
         this.utilService.getConfiguraciones().then(configs => {
           let tiempo_cola = configs.find((c: Configuracion) => {
+            console.log(tiempo_cola);
             return c.idtbl_configuracion == 6;
           });
+          console.log(c.interval_tiempo_cola);
           c.interval_tiempo_cola = setInterval(() => {
             let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
             if (duration > (tiempo_cola.valor * 60)) {
