@@ -243,15 +243,17 @@ export class ChatExpertoComponent {
       });
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
-          console.log(experto);
+          
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
-            e.estado_actual_experto = experto.estado_experto;
+            e.estado_actual_experto = "Desconectado";
           } else {
+            console.log(experto);
             var duration = moment().unix() - experto.fecha.seconds;
             if (experto.activo && duration < 30) {
               e.activo_chat = true;
               e.estado_actual_experto = experto.estado_experto;
+              
             } else {
               e.activo_chat = false;
               e.estado_actual_experto = experto.estado_experto;

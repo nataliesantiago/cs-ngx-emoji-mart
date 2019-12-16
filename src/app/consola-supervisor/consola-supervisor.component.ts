@@ -105,12 +105,23 @@ export class ConsolaSupervisorComponent implements OnInit {
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 1).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
       let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
       for (let c of chats) {
+        setInterval(() => {
+
+          if (c.fecha_creacion) {
+          
+            if (c.fecha_creacion) {
+              c.tiempo_en_conversacion = moment().diff(moment(c.fecha_creacion), 'seconds');
+            }
+  
+          }
+        }, 1000);
+        
         if (c.idtbl_conversacion) {
           await this.chatService.getFilasConversacion(c);
         }
         this.utilService.getConfiguraciones().then(configs => {
           let tiempo_cola = configs.find((c: Configuracion) => {
-            console.log(tiempo_cola);
+            
             return c.idtbl_configuracion == 6;
           });
           
@@ -319,7 +330,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     if (palabra && palabra != '') {
       this.chats_en_fila_filtrados = this.chats_en_fila.filter((c: Conversacion) => {
         let este = false;
-
+        
         if (this.utilService.normalizeText(c.cliente.nombre.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1
           || this.utilService.normalizeText(c.cliente.correo.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1) {
 

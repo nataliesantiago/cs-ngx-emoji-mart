@@ -2808,6 +2808,37 @@ input:-webkit-autofill:active {
       }
     }
   }
+  .conversacion-lista-cola {
+    border: $borde-tarjeta;
+
+    .mat-card-subtitle {
+      div {
+        margin: 5px 0;
+        word-wrap: break-all;
+      }
+    }
+
+    .mat-card-header-text {
+      width: calc(100% - 70px);
+    }
+
+    .nombre-chat {
+      flex: 1;
+      display: inline-block;
+      width: 100%;
+      height: 24px;
+      display: flex;
+      flex-direction: row;
+      white-space: nowrap;
+
+      span {
+        text-overflow: ellipsis;
+        display: inline-block;
+        overflow: hidden;
+        flex: 1;
+      }
+    }
+  }
 }
 
 .caras-encuesta {

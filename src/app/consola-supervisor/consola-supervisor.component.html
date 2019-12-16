@@ -176,7 +176,7 @@
           </div>
         </div>
 
-        <mat-card class="conversacion-lista" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
+        <mat-card class="conversacion-lista-cola" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
           *ngFor="let chat of chats_en_fila_filtrados">
           <div *ngIf="chat.cliente">
             <mat-card-header>
@@ -186,12 +186,14 @@
               <div class="punt-estado-chat"
                 [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola)}">
               </div>
+              <div class="tiempo-conversa" *ngIf="chat.tiempo_en_conversacion ">
+                {{chat.tiempo_en_conversacion | minuteSeconds}}</div>
               <mat-card-title class="nombre-chat"><span>{{chat.cliente.nombre}}</span> <img *ngIf="chat.llamada_activa"
                   src="../../assets/images/videollamada.png" title="Llamada en curso" class="icono-llamda" />
               </mat-card-title>
               <mat-card-subtitle>
                 <div class="nombre-chat"><span>{{chat.cliente.correo}}</span></div>
-                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}} {{ chat.interval_tiempo_cola | MomentDate: 'HH:mm:ss'}} </div>
+                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content class="chat-middle-box contenedor-filas">
