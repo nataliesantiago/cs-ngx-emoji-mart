@@ -3,7 +3,7 @@
     <mat-tab label="Chats activos ({{chats_activos.length}})">
       <div class="">
         <div class="container-filter">
-          <div class="element-filter element-filter-1">
+          <div class="element-filter element-filter-2">
               <mat-form-field>
                   <input matInput (keyup)="applyFilterActivos()" [(ngModel)]="filtro_activos" placeholder="Filtrar chats">
                   <mat-icon *ngIf="!filtro_activos" class="search-icon">search</mat-icon>
@@ -12,6 +12,14 @@
                     <mat-icon>close</mat-icon>
                   </button>
               </mat-form-field>
+          </div>
+          <div class="element-filter element-filter-2">
+            <mat-form-field>
+              <mat-label>Categoría experticia</mat-label>
+              <mat-select multiple (selectionChange)="filtrarCategorias($event)">
+                <mat-option *ngFor="let categoria_experticia of categorias_experticia" [value]="categoria_experticia.idtbl_categoria_experticia">{{categoria_experticia.nombre}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
 

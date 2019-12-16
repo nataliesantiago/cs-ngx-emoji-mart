@@ -33,6 +33,8 @@ export class ConsolaSupervisorComponent implements OnInit {
   expertos: Array<Experto>;
   expertos_filtro: Experto[];
   mensajes_nuevos = 0;
+  categorias_experticia: Array<CategoriaExperticia> = [];
+
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -127,6 +129,8 @@ export class ConsolaSupervisorComponent implements OnInit {
 
       this.applyFilterCola();
     });
+
+    this.getCategoriasExperticia();
   }
 
 
@@ -323,4 +327,30 @@ export class ConsolaSupervisorComponent implements OnInit {
       this.chats_en_fila_filtrados = this.chats_en_fila;
     }
   }
+
+  getCategoriasExperticia() {
+    this.chatService.getCategoriasExperticia().then((c) => {
+      this.categorias_experticia = c;
+    });
+  }
+
+  filtrarCategorias(event) {
+    let categorias = event.value;
+    if (categorias.length != 0) {
+      this.chatService.obtenerUsuarioPorCategoria(categorias).then((expertos: any) => {
+        this.chats_activos_filtrados = this.chats_activos.filter((c: Conversacion) => {
+          let chat_filtrado = false;
+          expertos.forEach(experto => {
+            if (c.asesor_actual.idtbl_usuario === experto.id_usuario) {
+              chat_filtrado = true;
+            }
+          });
+          return chat_filtrado;
+        });
+      });
+    } else {
+      this.chats_activos_filtrados = this.chats_activos;
+    }
+  }
+
 }
