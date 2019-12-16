@@ -34,6 +34,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   expertos_filtro: Experto[];
   mensajes_nuevos = 0;
   categorias_experticia: Array<CategoriaExperticia> = [];
+  loading = false;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
@@ -350,6 +351,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   filtrarCategorias(event) {
+    this.loading = true;
     let categorias = event.value;
     if (categorias.length != 0) {
       this.chatService.obtenerUsuarioPorCategoria(categorias).then((expertos: any) => {
@@ -360,11 +362,13 @@ export class ConsolaSupervisorComponent implements OnInit {
               chat_filtrado = true;
             }
           });
+          this.loading = false;
           return chat_filtrado;
         });
       });
     } else {
       this.chats_activos_filtrados = this.chats_activos;
+      this.loading = false;
     }
   }
 

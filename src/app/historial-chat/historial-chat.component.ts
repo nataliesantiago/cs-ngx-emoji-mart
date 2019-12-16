@@ -69,7 +69,13 @@ export class HistorialChatComponent implements OnInit {
         if (id_conversacion) {
           this.getOneConversation(id_conversacion);
         }
-      });
+    });
+    if (this.consola == 1 && this.user.getIdRol() == 3) {
+      this.column_user = 'Nombre Experto';
+      this.is_expert = false;
+      this.user_chat = true;
+      this.getPendingChat();
+    }
   }
 
   /**
@@ -139,6 +145,17 @@ export class HistorialChatComponent implements OnInit {
    */
   getClientChat() {
     this.historial_service.getClientChats(this.user.getId()).then(result => {
+      this.chats = result;
+      this.createTable(result);
+      this.change_detector.detectChanges();
+    });
+  }
+
+  /**
+   * obtiene los chat pendientes para mostrar en el historial del supervisor
+   */
+  getPendingChat() {
+    this.historial_service.getPendingChat().then(result => {
       this.chats = result;
       this.createTable(result);
       this.change_detector.detectChanges();

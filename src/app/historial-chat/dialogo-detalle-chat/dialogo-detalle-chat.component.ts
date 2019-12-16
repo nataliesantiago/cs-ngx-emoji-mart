@@ -616,7 +616,7 @@ export class DialogoDetalleChatComponent implements OnInit {
    * @param c 
    */
   cerrarChat(c: Conversacion) {
-    this.dialog.open(CerrarChatExpertoComponent, { width: '80%' }).afterClosed().subscribe(d => {
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         this.chatService.cerrarConversacion(c, 3, d.motivo).then(() => {
           this.is_closed = true;

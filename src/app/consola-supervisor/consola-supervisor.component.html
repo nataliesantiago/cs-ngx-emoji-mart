@@ -23,6 +23,8 @@
           </div>
         </div>
 
+        <mat-progress-spinner *ngIf="loading" class="loading-filter" color="basic" [mode]="'indeterminate'" [diameter]="40"></mat-progress-spinner>
+
         <mat-card class="conversacion-lista" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
           *ngFor="let chat of chats_activos_filtrados">
           <div *ngIf="chat.cliente">

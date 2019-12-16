@@ -96,4 +96,20 @@ export class HistorialChatService {
     });
   }
 
+  /**
+   * obtiene todas las conversaciones pendientes para el historial 
+   * 
+   */
+  getPendingChat(): Promise<any> {
+    return new Promise((resolve, reject) => {
+        this.ajax.get('historial-chats/obtener-conversaciones-pendientes', { }).subscribe((c) => {
+          if (c.success) {
+            resolve(c.chats);
+          } else {
+            reject();
+          }
+        });
+    });
+  }
+
 }
