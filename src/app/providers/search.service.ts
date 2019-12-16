@@ -11,7 +11,7 @@ import { ChatService } from './chat.service';
 import { UtilsService } from './utils.service';
 import Swal from 'sweetalert2';
 import { resolve } from 'url';
- 
+
 
 const moment = _rollupMoment || _moment;
 @Injectable({
@@ -30,6 +30,7 @@ export class SearchService {
         //this.callTestEsquema();
         //this.callTestEsquemaChat();
         //this.callTestEsquemaConecta();
+        //this.callTestEsquemaSynonyms();
       }
     });
 
@@ -254,7 +255,13 @@ export class SearchService {
   }
   callTestEsquemaConecta() {
     this.ajax.post('connector_drive/cloud-search/crearEsquemaConecta', {}).subscribe(d => {
-      
+
+    });
+  }
+
+  callTestEsquemaSynonyms() {
+    this.ajax.post('connector_drive/cloud-search/crearEsquemaSynonyms', {}).subscribe(d => {
+
     });
   }
 

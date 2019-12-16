@@ -63,7 +63,7 @@ export class ChatExpertoComponent {
   file_url;
   loading = false;
   state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
-  
+
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
     private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService,
@@ -141,39 +141,41 @@ export class ChatExpertoComponent {
                 let refConversacion = c.payload.doc.id;
                 this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + refConversacion).then(async datos => {
                   let c: Conversacion = datos;
-                  c.codigo = refConversacion;
-                  c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
-                  tmp.push(c);
-                  this.utilService.getConfiguraciones().then(configs => {
-                    let tiempo_cola = configs.find((c: Configuracion) => {
-                      return c.idtbl_configuracion == 6;
-                    });
-                    c.interval_tiempo_cola = setInterval(() => {
-                      let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
-                      if (duration > (tiempo_cola.valor * 60)) {
-                        c.tiempo_cola = true;
-                        window.clearInterval(c.interval_tiempo_cola);
-                        delete c.interval_tiempo_cola;
-                      }
-                    }, 1000);
-                  });
-
-                  if (index == chats.length - 1) {
-                    if (f.chats)
-                      f.chats.forEach((c: Conversacion) => {
-                        if (c.interval_tiempo_cola) {
-                          window.clearInterval(c.interval_tiempo_cola);
-                        }
+                  if (c) {
+                    c.codigo = refConversacion;
+                    c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
+                    tmp.push(c);
+                    this.utilService.getConfiguraciones().then(configs => {
+                      let tiempo_cola = configs.find((c: Configuracion) => {
+                        return c.idtbl_configuracion == 6;
                       });
-                    fila.chats = tmp;
+                      c.interval_tiempo_cola = setInterval(() => {
+                        let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
+                        if (duration > (tiempo_cola.valor * 60)) {
+                          c.tiempo_cola = true;
+                          window.clearInterval(c.interval_tiempo_cola);
+                          delete c.interval_tiempo_cola;
+                        }
+                      }, 1000);
+                    });
 
-                    this.procesaFilas(fila);
-                    if (paso_por_chats) {
-                      if (this.user.experto_activo) {
-                        this.recibirChatAutomatico();
+                    if (index == chats.length - 1) {
+                      if (f.chats)
+                        f.chats.forEach((c: Conversacion) => {
+                          if (c.interval_tiempo_cola) {
+                            window.clearInterval(c.interval_tiempo_cola);
+                          }
+                        });
+                      fila.chats = tmp;
+
+                      this.procesaFilas(fila);
+                      if (paso_por_chats) {
+                        if (this.user.experto_activo) {
+                          this.recibirChatAutomatico();
+                        }
                       }
-                    }
 
+                    }
                   }
                 });
               });
@@ -182,7 +184,7 @@ export class ChatExpertoComponent {
         });
         let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
         chats.subscribe(chaters => {
-
+          
           this.chatService.getConversacionesExperto().then(chat => {
             if (!chat) {
               chat = [];
@@ -347,12 +349,29 @@ export class ChatExpertoComponent {
         c.url_llamada = data.url_llamada;
         c.conversacion_recomendada = data.conversacion_recomendada;
         if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
-          
-          this.obtenerEncuestaExperto(c);
-          if (this.user.experto_activo) {
-            this.recibirChatAutomatico();
-          }
 
+          if (c.cerro_experto == false) {
+            this.motivoCierreChat(c);
+          } else {
+            this.obtenerEncuestaExperto(c);
+            if (this.user.experto_activo) {
+              this.recibirChatAutomatico();
+            }
+          }
+           
+        }
+
+        if (data.id_estado_conversacion == 4) {
+          c.cerrado_inactividad = true;
+          this.mensajeInactividadDesconexion(c);
+        } 
+        if (data.id_estado_conversacion == 5) {
+          c.cerrado_inactividad = true;
+          this.mensajeInactividadCliente(c);
+        } 
+        if (data.id_estado_conversacion == 6) {
+          c.cerrado_inactividad = true;
+          this.mensajeInactividadExperto(c);
         }
       }
     });
@@ -703,6 +722,9 @@ export class ChatExpertoComponent {
     if (chat) {
       chat.mensajes_nuevos = false;
       this.setFocus(chat, false);
+      if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
+        this.motivoCierreChat(chat);
+      }
     }
   }
 
@@ -1031,18 +1053,18 @@ export class ChatExpertoComponent {
   }
 
   cerrarChat(c: Conversacion) {
-    this.dialog.open(CerrarChatExpertoComponent, { width: '80%' }).afterClosed().subscribe(d => {
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: {no_cerro_experto: false} }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         let estado = 3;
+        c.cerro_experto = true;
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
-          c.mostrar_encuesta = true;
+          this.obtenerEncuestaExperto(c);
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
           }
         });
       }
     });
-
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
@@ -1139,6 +1161,54 @@ export class ChatExpertoComponent {
         }
       });
 
+    });
+  }
+
+  /**
+   * habilita la modal para seleccionar un motivo de cierre cuando el chat ha sido cerrado por el usuario o por inactividad
+   * @param c 
+   */
+  motivoCierreChat(c) {
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: {no_cerro_experto: true} }).afterClosed().subscribe(d => {
+      if (d && d.motivo) {
+        c.cerro_experto = false;
+        this.chatService.cerrarConversacion(c, c.id_estado_conversacion, d.motivo).then(() => {
+          this.obtenerEncuestaExperto(c);
+          if (this.user.experto_activo) {
+            this.recibirChatAutomatico();
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * obtiene el mensaje automatico de inactividad del cliente
+   * @param chat 
+   */
+  mensajeInactividadCliente(chat) {
+    this.chatService.getMensajesGenerales(chat.idtbl_conversacion, 8).then(result => {
+      chat.mensaje_inactividad = result;
+    });
+  }
+
+  /**
+   * obtiene el mensaje automatico de inactividad del experto
+   * @param chat 
+   */
+  mensajeInactividadExperto(chat) {
+    this.chatService.getMensajesGenerales(chat.idtbl_conversacion, 7).then(result => {
+      chat.mensaje_inactividad = result;
+    });
+  }
+
+  /**
+   * obtiene el mensaje automatico de inactividad por desconexion
+   * @param chat 
+   */
+  mensajeInactividadDesconexion(chat) {
+    this.chatService.getMensajesGenerales(chat.idtbl_conversacion, 9).then(result => {
+      chat.mensaje_inactividad = result;
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
 import { User } from '../../schemas/user.schema';
 import { UserService } from '../providers/user.service';
 import { HistorialChatService } from '../providers/historial-chat.service';
@@ -32,6 +32,7 @@ export class HistorialChatComponent implements OnInit {
     { field: 'busqueda', type: 'string' }];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @Input() consola: number;
   column_user;
   is_expert;
   chat_states;
@@ -40,7 +41,7 @@ export class HistorialChatComponent implements OnInit {
   user_chat = false;
   file_url;
 
-  constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog, 
+  constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog,
     private route: ActivatedRoute, private filtros_service: FiltrosService, private chatService: ChatService) {
     this.user = this.user_service.getUsuario();
     if (this.user) {
@@ -62,13 +63,13 @@ export class HistorialChatComponent implements OnInit {
    */
   ngOnInit() {
     this.route.params
-    .filter(params => params.id_conversacion)
-    .subscribe(params => {
-      let id_conversacion = params.id_conversacion;
-      if (id_conversacion) {
-        this.getOneConversation(id_conversacion);
-      }
-    });
+      .filter(params => params.id_conversacion)
+      .subscribe(params => {
+        let id_conversacion = params.id_conversacion;
+        if (id_conversacion) {
+          this.getOneConversation(id_conversacion);
+        }
+      });
   }
 
   /**
@@ -77,7 +78,7 @@ export class HistorialChatComponent implements OnInit {
    */
   getOneConversation(conversation_id) {
     this.historial_service.getOneConversation(conversation_id, this.user.getId()).then(result => {
-      if(result.length != 0) {
+      if (result.length != 0) {
         result[0].estado = 'Pendiente';
         this.showMoreChat(result[0]);
       }
@@ -110,7 +111,7 @@ export class HistorialChatComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.change_detector.detectChanges();
-    this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+    this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
   }
 
   /**
@@ -154,8 +155,8 @@ export class HistorialChatComponent implements OnInit {
     let user_chat = this.user_chat;
     if (this.is_expert && (row.estado == 'Pendiente' || row.id_estado_conversacion == 7)) {
       expert_chat = true;
-    } 
-    
+    }
+
     let dialog_ref = this.dialog.open(DialogoDetalleChatComponent, {
       panelClass: 'dialog-chat',
       width: '550px',
@@ -212,12 +213,12 @@ export class HistorialChatComponent implements OnInit {
         const byteCharacters = atob(file);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'application/pdf' });
         this.file_url = URL.createObjectURL(blob);
-  
+
         let date = moment(row.fecha_creacion).format('YYYY-MM-DD');
         let hour = moment(row.fecha_creacion).format('HH:mm');
 

@@ -505,6 +505,7 @@ export class ChatService {
       })
     });
   }
+  
   /**
    * @description trae el snapshot de una coleccion en firebase
    * @param  {string} url
@@ -851,6 +852,20 @@ export class ChatService {
   getMensajeBuscandoExperto(id_tipo_mensaje_automatico): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.post('chat/obtener-mensaje-buscando', { id_usuario: this.userService.getUsuario().getId(), id_tipo_mensaje_automatico: id_tipo_mensaje_automatico }).subscribe(result => {
+        if (result.success) {
+          resolve(result.mensaje);
+        }
+      })
+    });
+  }
+
+  /**
+   * obtiene los mensajes automaticos de busqueda de expertos
+   * @param id_tipo_mensaje_automatico 
+   */
+  getMensajesGenerales(id_conversacion, id_tipo_mensaje_automatico): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/obtener-mensaje-general', { id_conversacion: id_conversacion, id_tipo_mensaje_automatico: id_tipo_mensaje_automatico }).subscribe(result => {
         if (result.success) {
           resolve(result.mensaje);
         }

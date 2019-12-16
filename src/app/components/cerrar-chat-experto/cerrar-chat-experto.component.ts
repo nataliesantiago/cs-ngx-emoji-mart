@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from '../../providers/user.service';
 import { ChatService } from '../../providers/chat.service';
 import { MotivoCierreChat } from '../../../schemas/interfaces';
 import { User } from '../../../schemas/user.schema';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -17,11 +17,15 @@ export class CerrarChatExpertoComponent implements OnInit {
   id_motivo_cierre: number;
   filtro = new FormControl();
   motivos_filtrados = [];
-  constructor(private dialogRef: MatDialogRef<CerrarChatExpertoComponent>, private userService: UserService, private chatServivce: ChatService) {
+  constructor(private dialogRef: MatDialogRef<CerrarChatExpertoComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
+          private userService: UserService, private chatServivce: ChatService) {
     this.user = this.userService.getUsuario();
     this.chatServivce.buscarMotivosCierreChat().then(m => {
       this.motivos = this.motivos_filtrados = m;
     });
+    if (data.no_cerro_experto) {
+      dialogRef.disableClose = true;
+    }    
   }
 
   ngOnInit() {

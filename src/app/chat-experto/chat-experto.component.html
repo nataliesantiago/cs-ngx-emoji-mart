@@ -326,7 +326,10 @@
               </div>
             </mat-toolbar>
 
-            <div>
+            <div class="contenedor-encuesta">
+              <div *ngIf="chat.cerrado_inactividad" class="goodbye-message">
+                <h2>{{chat.mensaje_inactividad}}</h2>
+              </div>
               <app-visualizar-encuesta [tipo]="'2'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
               </app-visualizar-encuesta>
             </div>
