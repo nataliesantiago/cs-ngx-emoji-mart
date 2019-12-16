@@ -226,6 +226,9 @@
                   <div *ngIf="es_despedida" class="goodbye-message">
                     <h2>{{mensaje_despedida}}</h2>
                   </div>
+                  <div *ngIf="chat.cerrado_inactividad" class="goodbye-message">
+                    <h2>{{chat.mensaje_inactividad}}</h2>
+                  </div>
                   <app-visualizar-encuesta [tipo]="'1'" [chat]="chat" (onfinish)="finalizaEncuesta(chat)">
                   </app-visualizar-encuesta>
                 </perfect-scrollbar>

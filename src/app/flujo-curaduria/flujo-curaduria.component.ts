@@ -167,6 +167,11 @@ export class FlujoCuraduriaComponent implements OnInit {
  
          }
        })*/
+      this.data = [];
+      this.createTable(this.data);
+      setTimeout(() => {
+        this.applyFilter(filter);
+      }, 1);
     }
 
   }
@@ -300,10 +305,14 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
         //console.log(preguntas.length);
         preguntas = preguntas.filter(p => {
-          return p.id_estado != 4;
+          return p.id_estado;
         })
         this.curaduria_reg = this.curaduria_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 1;
+          if (this.rol_usuario == 5) {
+            return p.id_estado_flujo == 1 && p.id_usuario_revision == this.id_usuario;
+          } else {
+            return p.id_estado_flujo == 1;
+          }
         }));
         this.revision_reg = this.revision_reg.concat(preguntas.filter(p => {
           return p.id_estado_flujo == 2;
@@ -322,10 +331,14 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
         //console.log(preguntas.length);
         preguntas = preguntas.filter(p => {
-          return p.id_estado != 4;
+          return p.id_estado;
         })
         this.curaduria_reg = this.curaduria_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 1;
+          if (this.rol_usuario == 5) {
+            return p.id_estado_flujo == 1 && p.id_usuario_revision == this.id_usuario;
+          } else {
+            return p.id_estado_flujo == 1;
+          }
         }));
         this.revision_reg = this.revision_reg.concat(preguntas.filter(p => {
           return p.id_estado_flujo == 2;
@@ -375,16 +388,25 @@ export class FlujoCuraduriaComponent implements OnInit {
     })
 
 
+    if (this.rol_usuario == 5) {
+      this.ajax.get('preguntas/obtener-cantidad-preguntas-flujo-curaduria-persona', { estado_flujo_pregunta: 1, id_usuario: this.id_usuario }).subscribe(p => {
+        if (p.success) {
 
+          this.cant_curaduria = p.cantidad;
+          //this.data = p.preguntas;
+          //this.createTable(this.data);
+        }
+      })
+    } else {
+      this.ajax.get('preguntas/obtener-cantidad-preguntas-flujo-curaduria', { estado_flujo_pregunta: 1 }).subscribe(p => {
+        if (p.success) {
 
-    this.ajax.get('preguntas/obtener-cantidad-preguntas-flujo-curaduria', { estado_flujo_pregunta: 1 }).subscribe(p => {
-      if (p.success) {
-
-        this.cant_curaduria = p.cantidad;
-        //this.data = p.preguntas;
-        //this.createTable(this.data);
-      }
-    })
+          this.cant_curaduria = p.cantidad;
+          //this.data = p.preguntas;
+          //this.createTable(this.data);
+        }
+      })
+    }
     this.ajax.get('preguntas/obtener-cantidad-preguntas-flujo-curaduria', { estado_flujo_pregunta: 2 }).subscribe(p1 => {
       if (p1.success) {
         this.cant_revision = p1.cantidad;

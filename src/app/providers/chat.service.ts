@@ -859,6 +859,20 @@ export class ChatService {
     });
   }
 
+  /**
+   * obtiene los mensajes automaticos de busqueda de expertos
+   * @param id_tipo_mensaje_automatico 
+   */
+  getMensajesGenerales(id_conversacion, id_tipo_mensaje_automatico): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/obtener-mensaje-general', { id_conversacion: id_conversacion, id_tipo_mensaje_automatico: id_tipo_mensaje_automatico }).subscribe(result => {
+        if (result.success) {
+          resolve(result.mensaje);
+        }
+      })
+    });
+  }
+
   conversacionPendiente(c: Conversacion, estado: number, hora_recordatorio?: string): Promise<any> {
     return new Promise((resolve, reject) => {
 
@@ -942,6 +956,19 @@ export class ChatService {
         }
       });
     })
+  }
+
+  /**
+   * obtiene la encuesta de tipo experto
+   */
+  obtenerEncuestaExperto() {
+    return new Promise((resolve, reject) => {
+      this.ajax.get('encuestas/obtener-encuesta-tipo', { id_tipo: 2 }).subscribe(d => {
+        if (d.success) {
+          resolve(d);
+        }
+      });
+    });
   }
 
 }

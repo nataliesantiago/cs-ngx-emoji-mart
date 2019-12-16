@@ -501,6 +501,23 @@ export class ChatClienteComponent implements OnInit {
           this.mensaje_no_encontro_experto = result;
         });
       } 
+
+      if (data.id_estado_conversacion == 4) {
+        c.cerrado_inactividad = true;
+        this.es_despedida = false;
+        this.mensajeInactividadDesconexion(c);
+      } 
+      if (data.id_estado_conversacion == 5) {
+        c.cerrado_inactividad = true;
+        this.es_despedida = false;
+        this.mensajeInactividadCliente(c);
+      }
+      if (data.id_estado_conversacion == 6) {
+        c.cerrado_inactividad = true;
+        this.es_despedida = false;
+        this.mensajeInactividadExperto(c);
+      }
+
     });
   }
 
@@ -862,15 +879,51 @@ export class ChatClienteComponent implements OnInit {
     }
   }
 
+  /**
+   * obtiene el mensaje automatico de buscar experto
+   */
   mensajeBuscandoExperto() {
     this.chatService.obtenerTextoBuscandoExperto().then(result => {
       this.mensaje_buscando_experto = result;
     });
   }
 
+  /**
+   * obtiene el mensaje automatico de despedida
+   */
   mensajeDespedida() {
     this.chatService.getMensajeBuscandoExperto(2).then(result => {
       this.mensaje_despedida = result;
+    });
+  }
+
+  /**
+   * obtiene el mensaje automatico de inactividad del cliente
+   * @param chat 
+   */
+  mensajeInactividadCliente(chat) {
+    this.chatService.getMensajesGenerales(chat.idtbl_conversacion, 8).then(result => {
+      chat.mensaje_inactividad = result;
+    });
+  }
+
+  /**
+   * obtiene el mensaje automatico de inactividad del experto
+   * @param chat 
+   */
+  mensajeInactividadExperto(chat) {
+    this.chatService.getMensajesGenerales(chat.idtbl_conversacion, 7).then(result => {
+      chat.mensaje_inactividad = result;
+    });
+  }
+
+  /**
+   * obtiene el mensaje automatico de inactividad por desconexion
+   * @param chat 
+   */
+  mensajeInactividadDesconexion(chat) {
+    this.chatService.getMensajesGenerales(chat.idtbl_conversacion, 9).then(result => {
+      chat.mensaje_inactividad = result;
     });
   }
 
