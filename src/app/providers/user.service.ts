@@ -56,14 +56,14 @@ export class UserService {
         //this.ajax.sethost('https://davivienda-comunidades-col-dev.appspot.com/api/');
         window.onbeforeunload = () => {
             if (this.user && this.user.getIdRol() == 2) {
-                this.setActivoExperto(false);
+                this.setActivoExperto(false, false);
 
             }
         };
 
         window.onunload = () => {
             if (this.user && this.user.getIdRol() == 2) {
-                this.setActivoExperto(false);
+                this.setActivoExperto(false, false);
                 this.state.id_usuario_experto = this.user.getId();
                 this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
                 this.state.estado_ingreso = 0;
@@ -203,10 +203,18 @@ export class UserService {
         });
     }
 
-    setActivoExperto(activo) {
+        setActivoExperto(activo, value_estado) {
         this.user.experto_activo = activo;
-        //console.log(activo)
-        this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
+        if(value_estado){
+            this.ajax.get('user/getEstadoExperto', { id_estado: value_estado }).subscribe(d => {
+                if(d.success){
+                    this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: d.estado[0].nombre });
+                }
+            })
+        }else{
+            this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado' });
+        }
+        
     }
 
     setActivoExpertoGlobal(estado: number) {

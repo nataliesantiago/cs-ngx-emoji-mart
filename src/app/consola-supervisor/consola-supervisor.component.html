@@ -183,7 +183,7 @@
               </mat-card-title>
               <mat-card-subtitle>
                 <div class="nombre-chat"><span>{{chat.cliente.correo}}</span></div>
-                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}} </div>
+                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}} {{ chat.interval_tiempo_cola | MomentDate: 'HH:mm:ss'}} </div>
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content class="chat-middle-box contenedor-filas">

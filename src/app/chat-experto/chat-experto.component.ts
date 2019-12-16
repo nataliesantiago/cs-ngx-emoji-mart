@@ -240,18 +240,22 @@ export class ChatExpertoComponent {
         return experto.idtbl_usuario != this.user.getId();
       });
       this.expertos.forEach(e => {
-        this.abrirConversacionExperto(e, true);
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
+          console.log(experto);
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
+            e.estado_actual_experto = experto.estado_experto;
           } else {
             var duration = moment().unix() - experto.fecha.seconds;
             if (experto.activo && duration < 30) {
               e.activo_chat = true;
+              e.estado_actual_experto = experto.estado_experto;
             } else {
               e.activo_chat = false;
+              e.estado_actual_experto = experto.estado_experto;
             }
           }
+          this.abrirConversacionExperto(e, true);
         });
       });
     })
@@ -374,9 +378,11 @@ export class ChatExpertoComponent {
 
   abrirConversacionExperto(e: User, oculta?: boolean) {
     if (e.conversacion_experto && !oculta) {
+      console.log(e);
       this.onSelect(e.conversacion_experto);
     } else {
       this.chatService.getConversacionExperto(e.idtbl_usuario).then(data => {
+        
         e.conversacion_experto = new Conversacion(this.user.getId(), 2, data.codigo);
         e.conversacion_experto.cliente = JSON.parse(JSON.stringify(e));
         e.conversacion_experto.idtbl_conversacion = data.idtbl_conversacion;

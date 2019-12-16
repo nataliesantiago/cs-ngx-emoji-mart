@@ -115,16 +115,16 @@ export class AppHeaderComponent {
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
       let activo = (e.value == 1) ? true : false;
-      this.userService.setActivoExperto(activo);
+      this.userService.setActivoExperto(activo, this.user.estado_actual);
     } else {
       let activo = (e.value == 1) ? true : false;
       if (activo) {
         this.createLogState(1, 1, 1);
       }
-      this.userService.setActivoExperto(activo);
+      this.userService.setActivoExperto(activo, this.user.estado_actual);
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_experto == 1) ? true : false;
-        this.userService.setActivoExperto(activo);
+        this.userService.setActivoExperto(activo, this.user.estado_actual);
       }, 10000);
 
       if (this.user.getIdRol() == 2) {

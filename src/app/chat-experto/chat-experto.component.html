@@ -126,6 +126,7 @@
                     <mat-grid-tile><b>Correo:</b> {{chat.cliente.correo}}</mat-grid-tile>
                     <mat-grid-tile><b>Perfil:</b> {{chat.cliente.nombre_perfil}}</mat-grid-tile>
                     <mat-grid-tile><b>Rol:</b> {{chat.cliente.nombre_rol}}</mat-grid-tile>
+                    <mat-grid-tile *ngIf="chat.id_tipo_conversacion!=1"><b>Estado:</b> {{chat.cliente.estado_actual_experto}}</mat-grid-tile>
                   </mat-grid-list>
                 </div>
                 <div class="panel-buscador-texto" *ngIf="chat.buscando_texto">
