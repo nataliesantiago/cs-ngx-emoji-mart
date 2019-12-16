@@ -858,6 +858,20 @@ export class ChatService {
     });
   }
 
+  /**
+   * obtiene los mensajes automaticos de busqueda de expertos
+   * @param id_tipo_mensaje_automatico 
+   */
+  getMensajesGenerales(id_conversacion, id_tipo_mensaje_automatico): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ajax.post('chat/obtener-mensaje-general', { id_conversacion: id_conversacion, id_tipo_mensaje_automatico: id_tipo_mensaje_automatico }).subscribe(result => {
+        if (result.success) {
+          resolve(result.mensaje);
+        }
+      })
+    });
+  }
+
   conversacionPendiente(c: Conversacion, estado: number, hora_recordatorio?: string): Promise<any> {
     return new Promise((resolve, reject) => {
 

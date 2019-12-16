@@ -89,6 +89,9 @@ export class Conversacion {
     primera_vez: boolean;
     iniciando_grabacion: boolean;
     no_encontro_experto: boolean;
+    cerro_experto: boolean;
+    cerrado_inactividad: boolean;
+    mensaje_inactividad: string;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;
