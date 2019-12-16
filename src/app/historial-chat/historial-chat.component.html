@@ -4,7 +4,7 @@
       <mat-card-title *ngIf="!consola">Historial de Chats</mat-card-title>
 
       <div class="container-filter">
-        <div class="element-filter element-filter-2" [ngClass]="{'completo':!completo}">
+        <div class="element-filter element-filter-1" [ngClass]="{'element-filter-2':!consola}">
           <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar chats">
             <mat-icon class="search-icon">search</mat-icon>
