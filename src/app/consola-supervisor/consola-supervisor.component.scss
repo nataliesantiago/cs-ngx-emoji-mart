@@ -4,7 +4,7 @@ $border-separador: 1px solid #e4e4e4;
     padding: 15px;
 
     .conversacion-lista {
-        max-width: 300px;
+        //max-width: 300px;
         float: left;
 
         margin: 5px !important;
@@ -13,7 +13,9 @@ $border-separador: 1px solid #e4e4e4;
         position: relative;
         padding: 16px;
         border-radius: 4px;
-        
+        width: 352px;
+        height: 136px;
+
         &:hover {
             /*transform: translateY(-3px);*/
         }
@@ -25,14 +27,15 @@ $border-separador: 1px solid #e4e4e4;
         &.ver-conversacion {
             max-width: 100%;
             width: 500px;
-
+            height: auto;
         }
 
 
 
         .icono-llamda {
-            width: 26px !important;
-            height: 26px !important;
+            width: 22px !important;
+            height: 22px !important;
+            margin-right: 10px;
         }
 
         .contenedor-filas {
@@ -217,6 +220,14 @@ $border-separador: 1px solid #e4e4e4;
         background-color: red;
     }
 
+    .tiempo-conversa {
+        position: absolute;
+        left: 14px;
+        top: 60px;
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 14px;
+    }
+
     .panel-consola-chat {
         width: 100%;
         height: calc(100vh - 144px);
@@ -225,7 +236,7 @@ $border-separador: 1px solid #e4e4e4;
     .panel-analitica {
         width: 100%;
         height: calc(100vh - 144px);
-        
+
         iframe {
             width: 100%;
             height: 100%;

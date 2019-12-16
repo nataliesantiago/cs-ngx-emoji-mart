@@ -32,17 +32,22 @@
               </div>
               <div class="chat-alarma-nlp" *ngIf="chat.alarma_nlp">
               </div>
+              <div class="tiempo-conversa" *ngIf="chat.tiempo_en_conversacion ">
+                {{chat.tiempo_en_conversacion | minuteSeconds}}</div>
               <mat-card-title class="nombre-chat"><span>{{chat.cliente.nombre}}</span> <img *ngIf="chat.llamada_activa"
                   src="../../assets/images/videollamada.png" title="Llamada en curso" class="icono-llamda" />
               </mat-card-title>
               <mat-card-subtitle>
-                <div class="nombre-chat"><span>{{chat.cliente.correo}}</span></div>
+                <div class="nombre-chat"><span>{{chat.cliente.nombre_perfil}}</span></div>
+              </mat-card-subtitle>
+              <mat-card-subtitle class="campos-tarjeta-supervisor">
                 <div *ngIf="chat.asesor_actual">
-                  <div class="nombre-chat"><b>Asesor:</b> <span>{{chat.asesor_actual.nombre}}</span></div>
-                  <div class="nombre-chat"><span>{{chat.asesor_actual.correo}}</span></div>
+                  <div class="nombre-chat"><b>Asesor:</b>&nbsp;<span>{{chat.asesor_actual.nombre}}</span></div>
                 </div>
-                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}} </div>
-                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}} </div>
+                <div class="nombre-chat"><b>Tema:</b>&nbsp;<span>{{chat.tema_busqueda}}</span></div>
+                <div class="nombre-chat"><b>Expertis:</b> &nbsp;<span>{{chat.categoria}}</span></div>
+                <div><b>Fecha y hora de inicio:</b>&nbsp;{{chat.fecha_creacion | MomentDate:'DD/MM/YYYY h:mm a'}} </div>
+
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content class="chat-middle-box contenedor-mensajes"
@@ -152,10 +157,13 @@
               <div [hidden]="chat.ocultar_nuevos_mensajes" class="boton-nuevos-mensajes"><button mat-raised-button
                   (click)="verNuevosMensajes(este,chat)" color="basic">Nuevos Mensajes</button></div>
             </mat-card-content>
-            <mat-card-actions>
-              <button mat-button (click)="toggleConversacion(chat)"><span *ngIf="!chat.viendo_supervisor">Ver
-                  Conversación</span><span *ngIf="chat.viendo_supervisor">Ocultar Conversación</span></button>
-              <button mat-button (click)="transferirChat(chat)">Transferir</button>
+            <mat-card-actions class="acciones-tarjeta-supervisor">
+              <button mat-icon-button (click)="toggleConversacion(chat)" [ngClass]="{'viendo':chat.viendo_supervisor}">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button (click)="transferirChat(chat)">
+                <mat-icon>swap_horiz</mat-icon>
+              </button>
             </mat-card-actions>
           </div>
         </mat-card>
@@ -165,14 +173,14 @@
       <div class="">
         <div class="container-filter">
           <div class="element-filter element-filter-1">
-              <mat-form-field>
-                  <input matInput (keyup)="applyFilterCola()" [(ngModel)]="filtro_cola" placeholder="Filtrar chats">
-                  <mat-icon *ngIf="!filtro_cola" class="search-icon">search</mat-icon>
-                  <button mat-button *ngIf="filtro_cola && filtro_cola!=''" matSuffix mat-icon-button aria-label="Clear"
-                    (click)="filtro_cola=null;applyFilterCola();">
-                    <mat-icon>close</mat-icon>
-                  </button>
-              </mat-form-field>
+            <mat-form-field>
+              <input matInput (keyup)="applyFilterCola()" [(ngModel)]="filtro_cola" placeholder="Filtrar chats">
+              <mat-icon *ngIf="!filtro_cola" class="search-icon">search</mat-icon>
+              <button mat-button *ngIf="filtro_cola && filtro_cola!=''" matSuffix mat-icon-button aria-label="Clear"
+                (click)="filtro_cola=null;applyFilterCola();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
           </div>
         </div>
 
@@ -191,7 +199,7 @@
               </mat-card-title>
               <mat-card-subtitle>
                 <div class="nombre-chat"><span>{{chat.cliente.correo}}</span></div>
-                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}} </div>
+                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}} {{ chat.interval_tiempo_cola | MomentDate: 'HH:mm:ss'}} </div>
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content class="chat-middle-box contenedor-filas">
@@ -208,6 +216,9 @@
         </mat-card>
       </div>
     </mat-tab>
+    <mat-tab label="Chats pendientes">
+      <app-historial-chat [consola]="1"></app-historial-chat>
+    </mat-tab>
     <mat-tab label="Conversaciones Expertos ({{mensajes_nuevos}})">
       <div class="panel-consola-chat">
         <app-chat [esSupervisor]="true" (mensajes_nuevos)="mensajes_nuevos=$event"></app-chat>
@@ -216,13 +227,15 @@
 
     <mat-tab label="Analítica Buscador">
       <div class="panel-analitica">
-        <iframe src="https://datastudio.google.com/embed/reporting/1hqmPLdaHMyE4LGyb4L-H4gwlGByDUUG1/page/ERh4" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+        <iframe src="https://datastudio.google.com/embed/reporting/1hqmPLdaHMyE4LGyb4L-H4gwlGByDUUG1/page/ERh4"
+          frameborder="0" style="border:0" allowfullscreen=""></iframe>
       </div>
     </mat-tab>
 
     <mat-tab label="Analítica Chat Experto">
       <div class="panel-analitica">
-        <iframe src="https://datastudio.google.com/embed/reporting/1B_UcL5gwYpCiBmqoV9-omG5A0BIjJj81/page/P0A4" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+        <iframe src="https://datastudio.google.com/embed/reporting/1B_UcL5gwYpCiBmqoV9-omG5A0BIjJj81/page/P0A4"
+          frameborder="0" style="border:0" allowfullscreen=""></iframe>
       </div>
     </mat-tab>
   </mat-tab-group>

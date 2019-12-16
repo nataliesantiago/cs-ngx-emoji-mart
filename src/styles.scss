@@ -2754,12 +2754,35 @@ input:-webkit-autofill:active {
 }
 
 .consola-supervisor {
+  .campos-tarjeta-supervisor {
+    margin-top: 15px !important;
+  }
+
+  .acciones-tarjeta-supervisor {
+    position: absolute;
+    width: 40px;
+    top: 0px;
+    right: 0px;
+
+    button {
+      width: 100%;
+      height: 28px;
+      line-height: 28px;
+
+      &.viendo {
+        color: #3f4ec0;
+      }
+    }
+  }
+
   .conversacion-lista {
     border: $borde-tarjeta;
 
     .mat-card-subtitle {
+      font-size: 12px !important;
+
       div {
-        margin: 5px 0;
+        margin: 0;
         word-wrap: break-all;
       }
     }
@@ -2772,7 +2795,7 @@ input:-webkit-autofill:active {
       flex: 1;
       display: inline-block;
       width: 100%;
-      height: 24px;
+      //height: 24px;
       display: flex;
       flex-direction: row;
       white-space: nowrap;
@@ -3431,11 +3454,11 @@ input:-webkit-autofill:active {
 
 }
 
-.texto-respuesta{
-  ul{
-      li{
-          list-style: disc !important;
-      }
+.texto-respuesta {
+  ul {
+    li {
+      list-style: disc !important;
+    }
   }
 }
 
@@ -3502,9 +3525,11 @@ app-search-component {
 .container-sidenav-preguntas {
   height: calc(100vh - 64px);
   width: 100vw;
-  perfect-scrollbar{
+
+  perfect-scrollbar {
     padding-right: 15px;
   }
+
   .mat-drawer-inner-container {
     overflow: hidden !important;
   }
@@ -3796,6 +3821,10 @@ app-search-component {
       width: 32%;
     }
 
+    &.completo {
+      width: 100% !important;
+    }
+
     .search-icon {
       position: absolute;
       right: 0;
@@ -3858,12 +3887,12 @@ mat-card {
   margin-bottom: 20px !important;
 }
 
-.icon-pais{
+.icon-pais {
   position: relative;
   top: 2px;
 }
 
-.divisor-paises{
+.divisor-paises {
   margin-top: 5px !important;
   margin-bottom: 10px !important;
 }

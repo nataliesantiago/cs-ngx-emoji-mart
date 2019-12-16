@@ -89,6 +89,9 @@ export class Conversacion {
     primera_vez: boolean;
     iniciando_grabacion: boolean;
     no_encontro_experto: boolean;
+    tiempo_en_conversacion: number;
+    tiempo_en_fila: number;
+    fecha_asignacion: Date;
     cerro_experto: boolean;
     cerrado_inactividad: boolean;
     mensaje_inactividad: string;

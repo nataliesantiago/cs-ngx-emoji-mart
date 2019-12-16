@@ -33,6 +33,7 @@ export class User {
     modulos: Array<Modulo>;
     boton_sos_perfil: boolean;
     boton_sos_rol: boolean;
+    estado_actual_experto: string;
 
     constructor(correo: string, token: string, nombre: string) {
         this.correo = correo;
