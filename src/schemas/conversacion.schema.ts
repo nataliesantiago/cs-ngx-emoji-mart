@@ -92,9 +92,10 @@ export class Conversacion {
     tiempo_en_conversacion: number;
     tiempo_en_fila: number;
     fecha_asignacion: Date;
-    cerro_experto: boolean;
+    cerro_experto: boolean = false;
     cerrado_inactividad: boolean;
     mensaje_inactividad: string;
+    esta_seleccionado: boolean;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;

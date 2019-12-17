@@ -460,7 +460,7 @@ export class ChatClienteComponent implements OnInit {
       c.url_llamada = data.url_llamada;
       if (data.id_estado_conversacion != 1 && data.id_estado_conversacion != 2 && data.id_estado_conversacion != 10) {
         c.mostrar_encuesta = true;
-        this.es_despedida = true;
+        c.cerrado_inactividad = true;
       } else if (c.asesor_actual) {
         if (c.asesor_actual.idtbl_usuario != data.id_experto_actual && data.id_experto_actual) {
           this.userService.getInfoUsuario(data.id_experto_actual).then((u: User) => {
@@ -502,19 +502,20 @@ export class ChatClienteComponent implements OnInit {
         });
       } 
 
+      if (data.id_estado_conversacion == 3) {
+        c.cerrado_inactividad = true;
+        this.mensajeDespedida(c);
+      }
       if (data.id_estado_conversacion == 4) {
         c.cerrado_inactividad = true;
-        this.es_despedida = false;
         this.mensajeInactividadDesconexion(c);
       } 
       if (data.id_estado_conversacion == 5) {
         c.cerrado_inactividad = true;
-        this.es_despedida = false;
         this.mensajeInactividadCliente(c);
       }
       if (data.id_estado_conversacion == 6) {
         c.cerrado_inactividad = true;
-        this.es_despedida = false;
         this.mensajeInactividadExperto(c);
       }
 
@@ -523,7 +524,6 @@ export class ChatClienteComponent implements OnInit {
 
   ngOnInit() {
     this.mensajeBuscandoExperto();
-    this.mensajeDespedida();
   }
   openChat(data?: any) {
     this.chatService.getConversacionActivaUsuario().then(result => {
@@ -823,16 +823,15 @@ export class ChatClienteComponent implements OnInit {
         }
       } else  {
         estado = 3;
-      }
-
+      }      
       this.chatService.cerrarConversacion(c, estado).then(() => {
         c.mostrar_encuesta = true;
-        this.es_despedida = true;
+        c.cerrado_inactividad = true;
       });
 
     } else {
       c.mostrar_encuesta = true;
-      this.es_despedida = false;
+      c.cerrado_inactividad = false;
     }
   }
 
@@ -891,9 +890,9 @@ export class ChatClienteComponent implements OnInit {
   /**
    * obtiene el mensaje automatico de despedida
    */
-  mensajeDespedida() {
+  mensajeDespedida(chat) {
     this.chatService.getMensajeBuscandoExperto(2).then(result => {
-      this.mensaje_despedida = result;
+      chat.mensaje_inactividad = result;
     });
   }
 
