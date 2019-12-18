@@ -357,12 +357,7 @@ export class ChatExpertoComponent {
           
           if (!c.cerro_experto && c.esta_seleccionado) {
             this.motivoCierreChat(c);
-          } else {
-            this.obtenerEncuestaExperto(c);
-            if (this.user.experto_activo) {
-              this.recibirChatAutomatico();
-            }
-          }
+          } 
         }
 
         if (data.id_estado_conversacion == 4) {

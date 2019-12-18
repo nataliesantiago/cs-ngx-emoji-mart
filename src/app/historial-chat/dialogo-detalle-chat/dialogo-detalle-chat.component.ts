@@ -114,7 +114,7 @@ export class DialogoDetalleChatComponent implements OnInit {
    */
   getRecordingUrl() {
     this.historial_service.getRecordingUrl(this.chat.idtbl_conversacion).then(result => {
-      if (result != undefined && result.url_grabacion != '') {
+      if (result != undefined && result.url_grabacion != '' && result.url_grabacion != null) {
         let urls = result.url_grabacion.split(',');
         this.is_recording = true;
         this.recording_url = urls;
