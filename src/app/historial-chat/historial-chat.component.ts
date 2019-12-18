@@ -55,7 +55,6 @@ export class HistorialChatComponent implements OnInit {
         delete this.user;
       }
     });
-
   }
 
   /**
@@ -70,7 +69,7 @@ export class HistorialChatComponent implements OnInit {
           this.getOneConversation(id_conversacion);
         }
     });
-    if (this.consola == 1 && this.user.getIdRol() == 3) {
+    if (this.consola != undefined && this.user.getIdRol() == 3) {
       this.column_user = 'Nombre Experto';
       this.is_expert = false;
       this.user_chat = true;
