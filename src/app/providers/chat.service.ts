@@ -539,6 +539,25 @@ export class ChatService {
       })
     });
   }
+
+  /**
+   * @description CIerra uan conversacion en la base de datos y en firebase
+   * @param  {Conversacion} c
+   * @returns Promise
+   */
+  cerrarConversacionUsuario(c: Conversacion, id_estado: number, motivo?: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (c.llamada_activa) {
+        this.finalizarVideollamada(c);
+      }
+      this.ajax.post('chat/conversacion/cerrar-conversacion-usuario', { id_conversacion: c.idtbl_conversacion, codigo: c.codigo, id_usuario: this.user.getId(), id_estado: id_estado, motivo: motivo }).subscribe(d => {
+        if (d.success) {
+          resolve();
+        }
+      })
+    });
+  }
+
   /**
    * @description Crea un guión para ser usado por el chat del experto
    * @param  {string} texto

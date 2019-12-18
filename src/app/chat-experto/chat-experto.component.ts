@@ -187,6 +187,7 @@ export class ChatExpertoComponent {
         chats.subscribe(chaters => {
 
           this.chatService.getConversacionesExperto().then(chat => {
+
             if (!chat) {
               chat = [];
 
@@ -730,6 +731,7 @@ export class ChatExpertoComponent {
       chat.mensajes_nuevos = false;
       this.setFocus(chat, false);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
+        chat.esta_seleccionado = false;
         this.motivoCierreChat(chat);
       }
     }
@@ -1179,7 +1181,7 @@ export class ChatExpertoComponent {
     c.cerro_experto = false;
     this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
-        this.chatService.cerrarConversacion(c, c.id_estado_conversacion, d.motivo).then(() => {
+        this.chatService.cerrarConversacionUsuario(c, c.id_estado_conversacion, d.motivo).then(() => {
           this.obtenerEncuestaExperto(c);
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
