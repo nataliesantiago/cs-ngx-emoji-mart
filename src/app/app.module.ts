@@ -57,7 +57,7 @@ import { ChatExpertoComponent } from './chat-experto/chat-experto.component';
 import { ChatService } from './providers/chat.service';
 import { MatSelectModule, MatListOption, MatListModule, MatDividerModule } from '@angular/material';
 import { ScrollDirective } from '../directives/scroll.directive';
-import { MinuteSecondsPipe } from '../directives/minutes.pipe';
+
 import { AsociarPreguntasComponent } from './asociar-preguntas/asociar-preguntas.component';
 import { FlujoCuraduriaComponent } from './flujo-curaduria/flujo-curaduria.component';
 import { FormularioPreguntasFlujoCuraduriaComponent } from './formulario-preguntas-flujo-curaduria/formulario-preguntas-flujo-curaduria.component';
@@ -130,6 +130,7 @@ import { HistorialCuraduriaComponent } from './components/historial-curaduria/hi
 import { FooterComponent } from './components/footer/footer.component';
 import { AdminsitracionRolesComponent } from './adminsitracion-roles/adminsitracion-roles.component';
 import { HttpConfigInterceptor } from './providers/generalHttpInterceptor';
+import { MinuteSecondsPipe } from '../pipes/minute.seconds.pipe';
 declare var gtag: any;
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -234,8 +235,7 @@ gtag('config', environment.analytics);
     AdministradorHorariosComponent,
     HistorialCuraduriaComponent,
     FooterComponent,
-    AdminsitracionRolesComponent,
-    MinuteSecondsPipe
+    AdminsitracionRolesComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,

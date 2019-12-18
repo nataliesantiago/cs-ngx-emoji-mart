@@ -98,7 +98,7 @@ export class ChatService {
       if (this.user) {
         this.ajax.get('chat/getDisponibilidadExperto', { id_usuario: this.user.getId() }).subscribe((d: any) => {
           if (d.success) {
-            resolve(d.disponibilidad);
+            resolve(d.disponible);
           } else {
             //reject();
           }
@@ -505,7 +505,7 @@ export class ChatService {
       })
     });
   }
-  
+
   /**
    * @description trae el snapshot de una coleccion en firebase
    * @param  {string} url
@@ -774,7 +774,7 @@ export class ChatService {
    */
   buscarMotivosCierreChat(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.get('chat/obtenerMotivosCierre', {id_usuario: this.userService.getUsuario().getId()}).subscribe(d => {
+      this.ajax.get('chat/obtenerMotivosCierre', { id_usuario: this.userService.getUsuario().getId() }).subscribe(d => {
         if (d.success) {
           resolve(d.motivos);
         }

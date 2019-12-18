@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class MinuteSecondsPipe implements PipeTransform {
 
     transform(value: number): string {
-        console.log(value);
+        // console.log(value);
         let minutes: any = Math.floor(value / 60);
         let seconds: any = Math.floor(value % 60);
         minutes = minutes < 10 ? "0" + minutes : minutes;

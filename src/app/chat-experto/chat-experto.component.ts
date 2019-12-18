@@ -121,7 +121,7 @@ export class ChatExpertoComponent {
           //this.chats_cola.push(fila)
           let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
           cola.subscribe(chats => {
-
+            // console.log(chats);
             let tmp = [];
 
             if (chats.length < 1) {
@@ -185,7 +185,7 @@ export class ChatExpertoComponent {
         });
         let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
         chats.subscribe(chaters => {
-          
+
           this.chatService.getConversacionesExperto().then(chat => {
             if (!chat) {
               chat = [];
@@ -244,7 +244,7 @@ export class ChatExpertoComponent {
       });
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
-          
+
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
             e.estado_actual_experto = "Desconectado";
@@ -254,7 +254,7 @@ export class ChatExpertoComponent {
             if (experto.activo && duration < 30) {
               e.activo_chat = true;
               e.estado_actual_experto = experto.estado_experto;
-              
+
             } else {
               e.activo_chat = false;
               e.estado_actual_experto = experto.estado_experto;
@@ -314,6 +314,9 @@ export class ChatExpertoComponent {
 
     this.chatService.getConversacionesExperto().then(async (conversaciones: Array<Conversacion>) => {
       if (config) {
+        conversaciones = conversaciones.filter((c: Conversacion) => {
+          return c.id_estado_conversacion == 2;
+        });
         if (parseInt(config.valor) > conversaciones.length) {
           let chats = [];
           this.chats_cola.forEach(f => {
@@ -332,6 +335,7 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
+          // console.log(disponibilidad);
           if (c && disponibilidad) {
             this.onSelectCola(c);
           }
@@ -352,22 +356,22 @@ export class ChatExpertoComponent {
         c.url_llamada = data.url_llamada;
         c.conversacion_recomendada = data.conversacion_recomendada;
         c.cerro_experto = c.cerro_experto ? c.cerro_experto : false;
-        
+
         if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
-          
+
           if (!c.cerro_experto && c.esta_seleccionado) {
             this.motivoCierreChat(c);
-          } 
+          }
         }
 
         if (data.id_estado_conversacion == 4) {
           c.cerrado_inactividad = true;
           this.mensajeInactividadDesconexion(c);
-        } 
+        }
         if (data.id_estado_conversacion == 5) {
           c.cerrado_inactividad = true;
           this.mensajeInactividadCliente(c);
-        } 
+        }
         if (data.id_estado_conversacion == 6) {
           c.cerrado_inactividad = true;
           this.mensajeInactividadExperto(c);
@@ -400,7 +404,7 @@ export class ChatExpertoComponent {
       this.onSelect(e.conversacion_experto);
     } else {
       this.chatService.getConversacionExperto(e.idtbl_usuario).then(data => {
-        
+
         e.conversacion_experto = new Conversacion(this.user.getId(), 2, data.codigo);
         e.conversacion_experto.cliente = JSON.parse(JSON.stringify(e));
         e.conversacion_experto.idtbl_conversacion = data.idtbl_conversacion;
@@ -717,7 +721,7 @@ export class ChatExpertoComponent {
   }
 
   onSelect(chat: Conversacion): void {
-    if(this.chat){
+    if (this.chat) {
       this.chat.esta_seleccionado = false;
     }
     this.chat = chat;
@@ -1057,14 +1061,14 @@ export class ChatExpertoComponent {
 
   cerrarChat(c: Conversacion) {
     c.cerro_experto = true;
-    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: {no_cerro_experto: false} }).afterClosed().subscribe(d => {
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         let estado = 3;
         this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
           this.obtenerEncuestaExperto(c);
-            if (this.user.experto_activo) {
-              this.recibirChatAutomatico();
-            }
+          if (this.user.experto_activo) {
+            this.recibirChatAutomatico();
+          }
         });
       }
     });
@@ -1173,7 +1177,7 @@ export class ChatExpertoComponent {
    */
   motivoCierreChat(c) {
     c.cerro_experto = false;
-    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: {no_cerro_experto: true} }).afterClosed().subscribe(d => {
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         this.chatService.cerrarConversacion(c, c.id_estado_conversacion, d.motivo).then(() => {
           this.obtenerEncuestaExperto(c);

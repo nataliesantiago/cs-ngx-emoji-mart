@@ -21,7 +21,7 @@
                 <mat-list-item (click)="onSelectCola(chat)" *ngFor="let chat of fila_chats | filaChats" class="espera">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
-                    [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola)}">
+                    [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola),'gris':(chat.id_estado_conversacion!=2 && chat.id_estado_conversacion!=1)}">
                   </div>
                   <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
                 </mat-list-item>
