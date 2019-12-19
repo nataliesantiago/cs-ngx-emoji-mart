@@ -211,7 +211,7 @@ export class ChatClienteComponent implements OnInit {
     c.primera_vez = true;
     c.messages.subscribe(async d => {
       //console.log(d.length, c.mensajes.length);
-      if (!primera_vez && c.mensajes && d.length > c.mensajes.length) {
+      if (!c.primera_vez && c.mensajes && d.length > c.mensajes.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
 
@@ -224,12 +224,14 @@ export class ChatClienteComponent implements OnInit {
       }
 
       this.intervalo = setInterval(() => {
-        if (document.title == this.nombre_pestana && !primera_vez) {
+        if (document.title == this.nombre_pestana && !c.primera_vez) {
+          
           this.cantidad_mensajes_sin_leer = 0;
           this.chats.forEach(chat => {
             // console.log(this.chats);
             this.cantidad_mensajes_sin_leer += chat.cantidad_mensajes_nuevos;
           });
+          
           if (this.cantidad_mensajes_sin_leer > 0) {
             document.title = 'Mensajes(' + this.cantidad_mensajes_sin_leer + ') nuevos en el chat';
           }
