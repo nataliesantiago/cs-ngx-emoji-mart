@@ -155,6 +155,7 @@ export class ConsolaSupervisorComponent implements OnInit {
       });
       this.chats_en_fila = chats;
 
+      // console.log(this.chats_en_fila);
       this.applyFilterCola();
     });
 
