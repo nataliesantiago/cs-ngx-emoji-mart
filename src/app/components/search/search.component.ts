@@ -22,6 +22,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { MatPaginator, MatTabGroup } from '@angular/material';
 import swal from 'sweetalert2';
 import { UtilsService } from '../../providers/utils.service';
+import { Configuracion } from '../../../schemas/interfaces';
 interface IWindow extends Window {
   webkitSpeechRecognition: any;
   SpeechRecognition: any;

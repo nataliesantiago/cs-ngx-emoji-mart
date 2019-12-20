@@ -304,7 +304,7 @@ export class UserService {
 
             this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
                 if (d.success) {
-                    console.log(d.notificaciones[1]);
+                    //console.log(d.notificaciones[1]);
                     this.notificaciones_usuario = d.notificaciones[0];
                     this.notificaciones_sin_leer = d.notificaciones[1].length;
                     if(this.notificaciones_sin_leer > 0){
