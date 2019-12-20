@@ -104,7 +104,7 @@ export class FlujoCuraduriaComponent implements OnInit {
             break;
 
           default:
-            this.cargarCuraduria(a.filter);
+            //this.cargarCuraduria(a.filter);
             break;
         }
 
@@ -205,7 +205,9 @@ export class FlujoCuraduriaComponent implements OnInit {
 
         this.applyFilter(filter);
       }, 1);
-    } else[]
+    } else{
+
+    }
     /*this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 2 }).subscribe(p => {
       if (p.success) {
 
@@ -247,7 +249,9 @@ export class FlujoCuraduriaComponent implements OnInit {
 
         this.applyFilter();
       }, 1);
-    } else[]
+    } else{
+
+    }
     /* this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 3 }).subscribe(p => {
        if (p.success) {
          this.aprobar_reg = p.preguntas;
