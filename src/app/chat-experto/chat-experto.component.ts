@@ -126,7 +126,7 @@ export class ChatExpertoComponent {
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
             cola.subscribe(chats => {
-              // console.log(chats);
+              //console.log(chats);
               let tmp = [];
 
               if (chats.length < 1) {
@@ -350,7 +350,7 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          console.log(disponibilidad);
+          // console.log(disponibilidad);
           if (c && disponibilidad) {
             this.onSelectCola(c);
           }
@@ -1102,17 +1102,20 @@ export class ChatExpertoComponent {
   cerrarChat(c: Conversacion) {
     c.cerro_experto = true;
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true });
-    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
-      if (d && d.motivo) {
-        let estado = 3;
-        this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
-          this.obtenerEncuestaExperto(c);
-          if (this.user.experto_activo) {
-            this.recibirChatAutomatico();
-          }
-        });
-      }
-    });
+    setTimeout(() => {
+      this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
+        if (d && d.motivo) {
+          let estado = 3;
+          this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
+            this.obtenerEncuestaExperto(c);
+            if (this.user.experto_activo) {
+              this.recibirChatAutomatico();
+            }
+          });
+        }
+      });
+    }, 100);
+
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
