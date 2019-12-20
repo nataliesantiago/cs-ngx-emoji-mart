@@ -350,7 +350,7 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          // console.log(disponibilidad);
+          console.log(disponibilidad);
           if (c && disponibilidad) {
             this.onSelectCola(c);
           }
