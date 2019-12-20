@@ -350,7 +350,7 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          // console.log(disponibilidad);
+          console.log(disponibilidad);
           if (c && disponibilidad) {
             this.onSelectCola(c);
           }
@@ -1101,6 +1101,7 @@ export class ChatExpertoComponent {
 
   cerrarChat(c: Conversacion) {
     c.cerro_experto = true;
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true });
     this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         let estado = 3;
