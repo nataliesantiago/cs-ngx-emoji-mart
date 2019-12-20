@@ -10,6 +10,7 @@ import { FiltrosService } from '../providers/filtros.service';
 import { ChatService } from '../providers/chat.service';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
+import { Conversacion } from '../../schemas/conversacion.schema';
 
 const moment = _rollupMoment || _moment;
 
@@ -40,6 +41,8 @@ export class HistorialChatComponent implements OnInit {
   chats;
   user_chat = false;
   file_url;
+  categorias_experticia;
+  loading = false;
 
   constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog,
     private route: ActivatedRoute, private filtros_service: FiltrosService, private chatService: ChatService) {
@@ -61,6 +64,7 @@ export class HistorialChatComponent implements OnInit {
    * se obtiene el identificador de una conversacion solo si viene por parametro en la url
    */
   ngOnInit() {
+    this.change_detector.detectChanges();
     this.route.params
       .filter(params => params.id_conversacion)
       .subscribe(params => {
@@ -74,6 +78,7 @@ export class HistorialChatComponent implements OnInit {
       this.is_expert = false;
       this.user_chat = true;
       this.getPendingChat();
+      this.getCategoriasExperticia();
     }
   }
 
@@ -246,6 +251,36 @@ export class HistorialChatComponent implements OnInit {
         row.loading = false;
       }
     });
+  }
+
+  getCategoriasExperticia() {
+    this.chatService.getCategoriasExperticia().then((c) => {
+      this.categorias_experticia = c;
+    });
+  }
+
+  filtrarCategorias(event) {
+    this.loading = true;
+    let categorias = event.value;
+    if (categorias.length != 0) {
+      this.chatService.obtenerUsuarioPorCategoria(categorias).then((expertos: any) => {
+        let newArray = this.chats;
+        newArray = newArray.filter(element => {
+          let chat_filtrado = false;
+          expertos.forEach(experto => {
+            if (element.id_experto_actual === experto.id_usuario) {
+              chat_filtrado = true;
+            }
+          });
+          this.loading = false;
+          return chat_filtrado;
+        });
+        this.createTable(newArray);
+      });
+    } else {
+      this.createTable(this.chats);
+      this.loading = false;
+    }
   }
 
 }

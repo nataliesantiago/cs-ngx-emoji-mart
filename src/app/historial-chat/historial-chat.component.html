@@ -4,7 +4,7 @@
       <mat-card-title *ngIf="!consola">Historial de Chats</mat-card-title>
 
       <div class="container-filter">
-        <div class="element-filter element-filter-1" [ngClass]="{'element-filter-2':!consola}">
+        <div class="element-filter element-filter-2">
           <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar chats">
             <mat-icon class="search-icon">search</mat-icon>
@@ -19,7 +19,16 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <div class="element-filter element-filter-2" *ngIf="consola">
+          <mat-form-field>
+            <mat-label>Categoría experticia</mat-label>
+            <mat-select multiple (selectionChange)="filtrarCategorias($event)">
+              <mat-option *ngFor="let categoria_experticia of categorias_experticia" [value]="categoria_experticia.idtbl_categoria_experticia">{{categoria_experticia.nombre}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
+      <mat-progress-spinner *ngIf="loading" class="loading-filter" color="basic" [mode]="'indeterminate'" [diameter]="35"></mat-progress-spinner>
 
       <div class="responsive-table">
         <div class="container-table">
