@@ -59,11 +59,14 @@ export class ChatExpertoComponent {
   shortcuts: Array<ShortCut>;
   @Input() esSupervisor: boolean;
   cantidad_mensajes_sin_leer = 0;
+  cantidad_mensajes_sin_leer_usuarios = 0;
   @Output() mensajes_nuevos: EventEmitter<number> = new EventEmitter<number>();
   file_url;
   loading = false;
   state: LogEstadoExperto = { id_usuario_experto: null, id_estado_experto_actual: null, id_estado_experto_nuevo: null, estado_ingreso: null };
   cerro_experto = false;
+  intervalo;
+  nombre_pestana = 'Conecta';
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -461,17 +464,41 @@ export class ChatExpertoComponent {
   agregarListenerMensajes(c: Conversacion) {
     c.mensajes = [];
     c.primera_vez = true;
+    c.cantidad_mensajes_nuevos = 0;
     c.messages = this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes', ref =>
       ref.orderBy('fecha_mensaje')
     ).valueChanges();
     c.listener_mensajes = c.messages.subscribe(async d => {
-
       if (!c.primera_vez && c.mensajes && c.mensajes.length < d.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
       //console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
       let mensajes_nuevos = await this.procesarMensajes(d, c, c.primera_vez, 0, []);
       c.mensajes = c.mensajes.concat(mensajes_nuevos);
+
+      c.primera_vez = false;
+      if (this.intervalo) {
+        window.clearInterval(this.intervalo);
+      }
+
+      this.intervalo = setInterval(() => {
+        if (document.title == this.nombre_pestana && !c.primera_vez) {
+          
+          this.cantidad_mensajes_sin_leer_usuarios = 0;
+          this.chats_experto.forEach(chat => {
+            this.cantidad_mensajes_sin_leer_usuarios += chat.cantidad_mensajes_nuevos;
+          });
+          
+          if (this.cantidad_mensajes_sin_leer_usuarios > 0) {
+            document.title = 'Mensajes(' + this.cantidad_mensajes_sin_leer_usuarios + ') nuevos en el chat';
+          } else {
+            document.title = this.nombre_pestana;
+          }
+        } else {
+          document.title = this.nombre_pestana;
+        }
+      }, 1400);
+
       if (!c.primera_consulta) {
         c.mensajes.filter(m => {
           return m.id_usuario == c.id_usuario_creador && (!m.es_nota_voz && !m.es_archivo);
@@ -485,14 +512,14 @@ export class ChatExpertoComponent {
           });
         })
       }
-      c.primera_vez = false;
+      
       this.cantidad_mensajes_sin_leer = 0;
       this.expertos.forEach(e => {
         if (e.conversacion_experto) {
           this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
         }
       });
-      //console.log(this.cantidad_mensajes_sin_leer);
+      // console.log(this.cantidad_mensajes_sin_leer);
       this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     });
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes/').snapshotChanges().subscribe((changes: any) => {
