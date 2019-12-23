@@ -96,6 +96,8 @@ export class Conversacion {
     cerrado_inactividad: boolean;
     mensaje_inactividad: string;
     esta_seleccionado: boolean;
+    motivo_cierre_enviado: boolean;
+    esta_pendiente: boolean;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;
