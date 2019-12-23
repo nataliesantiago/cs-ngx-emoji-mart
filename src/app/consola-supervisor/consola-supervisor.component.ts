@@ -60,17 +60,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         this.chats_activos = chats;
         for (let c of this.chats_activos) {
           this.agregarListenerMensaes(c);
-          setInterval(() => {
-            
-            if (c.fecha_asignacion) {
-              
-              if (c.fecha_asignacion) {
-              
-                c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
-              }
-
-            }
-          }, 1000);
+          this.agregarTiempoConversacion(c);
         }
       } else {
         chats.forEach(cn => {
@@ -163,7 +153,21 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
 
+  agregarTiempoConversacion(c: Conversacion){
 
+    setInterval(() => {
+            
+      if (c.fecha_asignacion) {
+        
+        if (c.fecha_asignacion) {
+        
+          c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
+        }
+
+      }
+    }, 1000);
+
+  }
 
   ngOnInit() {
   }
