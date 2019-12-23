@@ -66,7 +66,6 @@ export class DialogoDetalleChatComponent implements OnInit {
     
     this.getMessages();
     this.getRecordingUrl();
-    this.closeModalPending();
   }
 
   /**
@@ -96,17 +95,6 @@ export class DialogoDetalleChatComponent implements OnInit {
       });
     });
     
-  }
-
-  /**
-   * verifica si la modal se ha cerrado dando clic en el area de afuera de la modal
-   */
-  closeModalPending() {
-    if (this.chat.expert_chat && this.chat.id_estado_conversacion == 7) {
-      this.dialogRef.backdropClick().subscribe(() => {
-        this.dialogRef.close({closed: this.is_closed});
-      });
-    } 
   }
 
   /**
@@ -619,10 +607,13 @@ export class DialogoDetalleChatComponent implements OnInit {
     this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         this.chatService.cerrarConversacion(c, 3, d.motivo).then(() => {
-          this.is_closed = true;
           c.mostrar_encuesta = true;
           c.mostrar_descarga_chat = true;
           this.chatService.eliminarRecordatorioPendiente(c.idtbl_conversacion).then(() => {});
+          if (c.expert_chat && c.mostrar_encuesta) {
+            this.dialogRef.disableClose = true;
+          }
+          this.is_closed = true;
         });
       }
     });

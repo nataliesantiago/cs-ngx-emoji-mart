@@ -373,8 +373,7 @@ export class ChatExpertoComponent {
         c.cerro_experto = c.cerro_experto ? c.cerro_experto : false;
 
         if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
-
-          if (!c.cerro_experto && c.esta_seleccionado) {
+          if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente) {
             this.motivoCierreChat(c);
           }
         }
@@ -770,7 +769,9 @@ export class ChatExpertoComponent {
       this.setFocus(chat, false);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
         chat.esta_seleccionado = false;
-        this.motivoCierreChat(chat);
+        if (!chat.motivo_cierre_enviado) {
+          this.motivoCierreChat(chat);
+        }
       }
     }
   }
@@ -1107,6 +1108,8 @@ export class ChatExpertoComponent {
         if (d && d.motivo) {
           let estado = 3;
           this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
+            c.motivo_cierre_enviado = true;
+            this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true });
             this.obtenerEncuestaExperto(c);
             if (this.user.experto_activo) {
               this.recibirChatAutomatico();
@@ -1204,6 +1207,8 @@ export class ChatExpertoComponent {
       let estado = 7;
       this.chatService.conversacionPendiente(c, estado, d.hora_recordatorio).then(() => {
         //c.mostrar_encuesta = true;
+        c.esta_pendiente = true;
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ esta_pendiente: true });
         if (this.chat.codigo == c.codigo) {
           delete this.chat;
         }
@@ -1224,6 +1229,8 @@ export class ChatExpertoComponent {
     this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         this.chatService.cerrarConversacionUsuario(c, c.id_estado_conversacion, d.motivo).then(() => {
+          c.motivo_cierre_enviado = true;
+          this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true });
           this.obtenerEncuestaExperto(c);
           if (this.user.experto_activo) {
             this.recibirChatAutomatico();
