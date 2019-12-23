@@ -34,6 +34,7 @@ export class HistorialChatComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @Input() consola: number;
+  @Input() cargar_pendientes: boolean;
   column_user;
   is_expert;
   chat_states;
@@ -43,6 +44,7 @@ export class HistorialChatComponent implements OnInit {
   file_url;
   categorias_experticia;
   loading = false;
+  cargar_chat_pendiente;
 
   constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog,
     private route: ActivatedRoute, private filtros_service: FiltrosService, private chatService: ChatService) {
@@ -73,12 +75,15 @@ export class HistorialChatComponent implements OnInit {
           this.getOneConversation(id_conversacion);
         }
     });
+    
     if (this.consola != undefined && this.user.getIdRol() == 3) {
-      this.column_user = 'Nombre Experto';
-      this.is_expert = false;
-      this.user_chat = true;
-      this.getPendingChat();
-      this.getCategoriasExperticia();
+      this.loadPendingChat();
+    }
+  }
+
+  ngOnChanges(changes: any) {
+    if (!changes.cargar_pendientes.firstChange) {
+      this.loadPendingChat();
     }
   }
 
@@ -164,6 +169,17 @@ export class HistorialChatComponent implements OnInit {
       this.createTable(result);
       this.change_detector.detectChanges();
     });
+  }
+
+  /**
+   * carga los chat pendientes
+   */
+  loadPendingChat() {
+    this.column_user = 'Nombre Experto';
+    this.is_expert = false;
+    this.user_chat = true;
+    this.getPendingChat();
+    this.getCategoriasExperticia();
   }
 
   /**

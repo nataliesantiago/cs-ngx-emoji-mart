@@ -12,16 +12,19 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./cerrar-chat-experto.component.scss']
 })
 export class CerrarChatExpertoComponent implements OnInit {
+
   motivos: Array<MotivoCierreChat>;
   user: User;
   id_motivo_cierre: number;
   filtro = new FormControl();
   motivos_filtrados = [];
+
   constructor(private dialogRef: MatDialogRef<CerrarChatExpertoComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
           private userService: UserService, private chatServivce: ChatService) {
     this.user = this.userService.getUsuario();
     this.chatServivce.buscarMotivosCierreChat().then(m => {
       this.motivos = this.motivos_filtrados = m;
+      
     });
     if (data.no_cerro_experto) {
       dialogRef.disableClose = true;
