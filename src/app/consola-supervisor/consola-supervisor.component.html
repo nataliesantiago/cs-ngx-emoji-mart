@@ -220,9 +220,13 @@
         </mat-card>
       </div>
     </mat-tab>
-    <mat-tab label="Chats pendientes">
-      <app-historial-chat [consola]="1"></app-historial-chat>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span (click)="cargar_pendientes=!cargar_pendientes">Chats pendientes</span>
+      </ng-template>
+      <app-historial-chat [consola]="1" [cargar_pendientes]="cargar_pendientes"></app-historial-chat>
     </mat-tab>
+
     <mat-tab label="Conversaciones Expertos ({{mensajes_nuevos}})">
       <div class="panel-consola-chat">
         <app-chat [esSupervisor]="true" (mensajes_nuevos)="mensajes_nuevos=$event"></app-chat>
