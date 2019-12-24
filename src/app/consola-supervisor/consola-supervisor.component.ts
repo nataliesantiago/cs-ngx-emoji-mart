@@ -154,7 +154,7 @@ export class ConsolaSupervisorComponent implements OnInit {
 
 
   agregarTiempoConversacion(c: Conversacion){
-
+    console.log(c);
     setInterval(() => {
             
       if (c.fecha_asignacion) {
