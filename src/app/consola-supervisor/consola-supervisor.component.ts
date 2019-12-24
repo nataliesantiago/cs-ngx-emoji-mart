@@ -36,6 +36,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   categorias_experticia: Array<CategoriaExperticia> = [];
   loading = false;
   cargar_pendientes = false;
+  es_col = false;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
@@ -53,9 +54,13 @@ export class ConsolaSupervisorComponent implements OnInit {
 
   init() {
 
+    if (this.user.pais == 'col') {
+      this.es_col = true;
+    }
+
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
-      let chats = await this.procesaConversaciones(changes);
+      let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
       console.log(chats);
       if (!this.chats_activos || this.chats_activos.length < 1) {
         this.chats_activos = chats;
@@ -151,6 +156,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     });
 
     this.getCategoriasExperticia();
+    
   }
 
 
