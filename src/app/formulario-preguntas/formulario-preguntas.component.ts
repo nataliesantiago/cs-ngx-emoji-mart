@@ -101,6 +101,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   quillModulesFc(ql: any, contenido: any, index?: number) {
+    //console.log(ql.getModule('toolbar'))
+    ql.getModule('toolbar')
     setTimeout(() => {
       ql.getModule('toolbar').addHandler('video', () => {
         this.qs.fileVideoHandler(ql).then(html => {
@@ -115,8 +117,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
           }
         })
       });
-      ql.getModule('toolbar').addHandler('image', () => { this.qs.fileStorageHandler(ql) });
     }, 1000);
+
   }
   ngAfterViewInit() {
     /*
@@ -289,7 +291,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   guardarPregunta() {
-
+    console.log(this.pregunta);
     if (this.pregunta.titulo == "" || this.pregunta.id_producto == "" || this.pregunta.id_estado == "" || !this.pregunta.id_producto) {
 
       swal.fire({
