@@ -779,7 +779,7 @@ export class ChatService {
    */
   finalizarVideollamada(c: Conversacion): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.post('chat/videollamada/finalizar', { id_llamada: c.id_llamada, codigo: c.codigo }).subscribe(d => {
+      this.ajax.post('chat/videollamada/finalizar', { id_llamada: c.id_llamada, codigo: c.codigo, id_experto_actual: c.id_experto_actual, id_conversacion: c.idtbl_conversacion }).subscribe(d => {
         if (d.success) {
           resolve();
         }
