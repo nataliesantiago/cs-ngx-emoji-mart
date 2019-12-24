@@ -1,29 +1,34 @@
 <div class="consola-supervisor">
   <mat-tab-group dynamicHeight>
-    <mat-tab label="Chats activos ({{chats_activos.length}})">
+    <mat-tab>
+      <ng-template mat-tab-label>
+          <span (click)="init()">Chats activos ({{chats_activos.length}})</span>
+      </ng-template>
       <div class="">
         <div class="container-filter">
           <div class="element-filter element-filter-2">
-              <mat-form-field>
-                  <input matInput (keyup)="applyFilterActivos()" [(ngModel)]="filtro_activos" placeholder="Filtrar chats">
-                  <mat-icon *ngIf="!filtro_activos" class="search-icon">search</mat-icon>
-                  <button mat-button *ngIf="filtro_activos && filtro_activos!=''" matSuffix mat-icon-button aria-label="Clear"
-                    (click)="filtro_activos=null;applyFilterActivos();">
-                    <mat-icon>close</mat-icon>
-                  </button>
-              </mat-form-field>
+            <mat-form-field>
+              <input matInput (keyup)="applyFilterActivos()" [(ngModel)]="filtro_activos" placeholder="Filtrar chats">
+              <mat-icon *ngIf="!filtro_activos" class="search-icon">search</mat-icon>
+              <button mat-button *ngIf="filtro_activos && filtro_activos!=''" matSuffix mat-icon-button
+                aria-label="Clear" (click)="filtro_activos=null;applyFilterActivos();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
           </div>
           <div class="element-filter element-filter-2">
             <mat-form-field>
               <mat-label>Categoría experticia</mat-label>
               <mat-select multiple (selectionChange)="filtrarCategorias($event)">
-                <mat-option *ngFor="let categoria_experticia of categorias_experticia" [value]="categoria_experticia.idtbl_categoria_experticia">{{categoria_experticia.nombre}}</mat-option>
+                <mat-option *ngFor="let categoria_experticia of categorias_experticia"
+                  [value]="categoria_experticia.idtbl_categoria_experticia">{{categoria_experticia.nombre}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
         </div>
 
-        <mat-progress-spinner *ngIf="loading" class="loading-filter" color="basic" [mode]="'indeterminate'" [diameter]="40"></mat-progress-spinner>
+        <mat-progress-spinner *ngIf="loading" class="loading-filter" color="basic" [mode]="'indeterminate'"
+          [diameter]="40"></mat-progress-spinner>
 
         <mat-card class="conversacion-lista" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
           *ngFor="let chat of chats_activos_filtrados">
@@ -47,7 +52,8 @@
                   <div class="nombre-chat"><b>Asesor:</b>&nbsp;<span>{{chat.asesor_actual.nombre}}</span></div>
                 </div>
                 <div class="nombre-chat"><b>Tema:</b>&nbsp;<span>{{chat.tema_busqueda}}</span></div>
-                <div class="nombre-chat"><b>Expertis:</b> &nbsp;<span>{{chat.categoria}}</span></div>
+                <div class="nombre-chat"><b>Expertis:</b> &nbsp;<span
+                    *ngIf="chat.categoria">{{chat.categoria}}</span><span *ngIf="!chat.categoria">N/A</span></div>
                 <div><b>Fecha y hora de inicio:</b>&nbsp;{{chat.fecha_creacion | MomentDate:'DD/MM/YYYY h:mm a'}} </div>
 
               </mat-card-subtitle>

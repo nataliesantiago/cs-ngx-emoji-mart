@@ -35,6 +35,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   mensajes_nuevos = 0;
   categorias_experticia: Array<CategoriaExperticia> = [];
   loading = false;
+  cargar_pendientes = false;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
@@ -55,12 +56,12 @@ export class ConsolaSupervisorComponent implements OnInit {
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes);
-
+      console.log(chats);
       if (!this.chats_activos || this.chats_activos.length < 1) {
         this.chats_activos = chats;
         for (let c of this.chats_activos) {
           this.agregarListenerMensaes(c);
-          this.agregarTiempoConversacion(c);
+          await this.agregarTiempoConversacion(c);
         }
       } else {
         chats.forEach(cn => {
@@ -153,7 +154,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
 
-  agregarTiempoConversacion(c: Conversacion){
+  async agregarTiempoConversacion(c: Conversacion){
     console.log(c);
     setInterval(() => {
             
