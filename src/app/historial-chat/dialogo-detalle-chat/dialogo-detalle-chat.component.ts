@@ -610,10 +610,16 @@ export class DialogoDetalleChatComponent implements OnInit {
           c.mostrar_encuesta = true;
           c.mostrar_descarga_chat = true;
           this.chatService.eliminarRecordatorioPendiente(c.idtbl_conversacion).then(() => {});
-          if (c.expert_chat && c.mostrar_encuesta) {
-            this.dialogRef.disableClose = true;
-          }
           this.is_closed = true;
+          this.chatService.obtenerEncuestaExperto().then((d: any) => {
+            if (d.encuesta.length != 0) {
+              if (c.expert_chat && c.mostrar_encuesta) {
+                this.dialogRef.disableClose = true;
+              }
+            } else {
+              this.dialogRef.close({closed: this.is_closed});
+            }
+          });
         });
       }
     });
