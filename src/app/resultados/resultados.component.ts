@@ -30,6 +30,7 @@ export class ResultadosComponent implements OnInit {
   params: any;
   url_imagen_busqueda: string;
   origen: string;
+  mostrar_alerta_palabras: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatTabGroup) tabs: MatTabGroup;
   origenes_drive = [];
@@ -51,7 +52,6 @@ export class ResultadosComponent implements OnInit {
 
   ngOnInit() {
     this.init();
-
   }
 
   paginar(pagina: any) {
@@ -94,6 +94,15 @@ export class ResultadosComponent implements OnInit {
       this.cambioParametros(this.params);
     });
 
+    this.chatService.getConfiguracionesChat().then(d => {
+      this.mostrar_alerta_palabras = false;
+      let cantidad_palabras = this.params['busqueda'].split(" ").length;
+      let cantidad_palabras_minimas_buscador = parseInt(d['configuraciones'][0]['valor']);
+
+      if(cantidad_palabras < cantidad_palabras_minimas_buscador){
+        this.mostrar_alerta_palabras = true;
+      }
+    })
   }
 
   abrirChat() {
@@ -102,7 +111,7 @@ export class ResultadosComponent implements OnInit {
     this.chatService.crearConversacion(null, id_busqueda);
   }
 
-  cambiaTab(e: MatTabChangeEvent) {
+  cambiaTab(e: MatTabChangeEvent) {    
     console.log(e);
     this.page = 0;
     switch (e.tab.textLabel) {
