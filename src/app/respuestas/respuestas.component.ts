@@ -240,6 +240,7 @@ export class RespuestasComponent implements OnInit {
               }
               console.log(this.pregunta.id_producto);
               this.chatService.crearConversacion(this.pregunta.id_producto, id_busqueda);
+              this.router.navigate(['/home']);
             }
           })
         } else {
