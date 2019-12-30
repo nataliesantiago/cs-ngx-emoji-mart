@@ -53,6 +53,7 @@ export class TransferenciaChatComponent implements OnInit {
       );
     });
     this.chatService.getExpertosTransferencia().then(expertos => {
+      console.log(expertos);
       this.expertos = expertos.filter(e => {
         return e.idtbl_usuario != this.user.getId() && e.idtbl_usuario != this.data.conversacion.id_experto_actual;
       });
