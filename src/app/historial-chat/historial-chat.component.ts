@@ -269,12 +269,19 @@ export class HistorialChatComponent implements OnInit {
     });
   }
 
+  /**
+   * obtiene todas las categorias de experticia
+   */
   getCategoriasExperticia() {
     this.chatService.getCategoriasExperticia().then((c) => {
       this.categorias_experticia = c;
     });
   }
 
+  /**
+   * filtra los chat de acuerdo a las categorias de experticia
+   * @param event 
+   */
   filtrarCategorias(event) {
     this.loading = true;
     let categorias = event.value;

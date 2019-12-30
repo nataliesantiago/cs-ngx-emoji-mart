@@ -180,7 +180,7 @@
     <mat-tab label="Chats en fila ({{chats_en_fila.length}})">
       <div class="">
         <div class="container-filter">
-          <div class="element-filter element-filter-1">
+          <div class="element-filter element-filter-2">
             <mat-form-field>
               <input matInput (keyup)="applyFilterCola()" [(ngModel)]="filtro_cola" placeholder="Filtrar chats">
               <mat-icon *ngIf="!filtro_cola" class="search-icon">search</mat-icon>
@@ -188,6 +188,17 @@
                 (click)="filtro_cola=null;applyFilterCola();">
                 <mat-icon>close</mat-icon>
               </button>
+            </mat-form-field>
+          </div>
+          <div class="element-filter element-filter-2">
+            <mat-form-field>
+              <mat-label>Categoría experticia</mat-label>
+              <mat-select multiple (selectionChange)="filtrarCategoriasFila($event)">
+                <mat-option value="Todos">Todos</mat-option>
+                <mat-option *ngFor="let categoria_experticia of categorias_experticia"
+                  [value]="categoria_experticia.nombre">{{categoria_experticia.nombre}}</mat-option>
+              </mat-select>
+
             </mat-form-field>
           </div>
         </div>
