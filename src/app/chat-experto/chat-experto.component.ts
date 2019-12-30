@@ -253,6 +253,7 @@ export class ChatExpertoComponent {
       this.expertos = this.expertos_filtro = e.filter(experto => {
         return experto.idtbl_usuario != this.user.getId();
       });
+      console.log(this.expertos);
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
 
