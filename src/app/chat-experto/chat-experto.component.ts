@@ -263,7 +263,7 @@ export class ChatExpertoComponent {
           } else {
             // console.log(experto);
             var duration = moment().unix() - experto.fecha.seconds;
-            if (experto.activo && duration < 30) {
+            if (experto.activo && duration < 500) {
               if (!e.activo_chat) {
                 e.activo_chat = true;
               }
