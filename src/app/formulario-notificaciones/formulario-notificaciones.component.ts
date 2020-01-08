@@ -324,8 +324,20 @@ export class FormularioNotificacionesComponent implements OnInit {
   }
 
   onFileChange($event) {
-    this.file = $event.target.files[0];
-    this.nombre_archivo = $event.target.files[0].name;
+    let file = $event.target.files[0];
+    if(file.type.match(/image\/*/) || file.type.match(/video\/*/)){
+      this.file = $event.target.files[0];
+      this.nombre_archivo = $event.target.files[0].name;
+    } else {
+      swal.fire({
+        title: 'Formato no permitido',
+        text: "Solo se permiten imagenes o videos",
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar'
+      });
+    }
   }
 
   ngOnInit() {
