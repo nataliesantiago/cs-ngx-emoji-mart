@@ -1112,6 +1112,7 @@ export class ChatExpertoComponent {
             c.motivo_cierre_enviado = true;
             this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true });
             this.obtenerEncuestaExperto(c);
+            console.log(this.user.experto_activo);
             if (this.user.experto_activo) {
               this.recibirChatAutomatico();
             }
