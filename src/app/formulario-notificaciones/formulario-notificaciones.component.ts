@@ -46,6 +46,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   fecha_actual;
   id_notificacion_editar;
   editar = false;
+  guardando = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
     private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService, private utilsService: UtilsService) {
@@ -259,6 +260,7 @@ export class FormularioNotificacionesComponent implements OnInit {
           }
         })
       } else {
+        this.guardando = true;
         if (this.editar) {
           this.notificacionService.guardarNotificacionEditada(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
             let id_notificacion = this.id_notificacion_editar;
