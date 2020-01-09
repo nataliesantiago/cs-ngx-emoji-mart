@@ -67,6 +67,12 @@
                                 {{row.fecha_publicacion | MomentDate:'YYYY-MM-DD'}} </mat-cell>
                         </ng-container>
 
+                        <ng-container matColumnDef="fecha_fin">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width:35%;"> Fecha Fin
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="max-width:35%;">
+                                {{row.fecha_fin | MomentDate:'YYYY-MM-DD'}} </mat-cell>
+                        </ng-container>
 
                         <!-- Progress Column -->
                         <ng-container matColumnDef="fecha_creacion">

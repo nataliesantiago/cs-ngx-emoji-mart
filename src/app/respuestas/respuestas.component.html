@@ -17,9 +17,9 @@
               <strong>Última modificación: {{pregunta.fecha_ultima_modificacion}}</strong>
               <br>
             </div>
-            <h3 [ngClass]="{ 'titulo-pregunta': (pregunta.muestra_fecha_actualizacion == 1 || pregunta_nueva)}">
+            <h2 [ngClass]="{ 'titulo-pregunta': (pregunta.muestra_fecha_actualizacion == 1 || pregunta_nueva)}">
               <strong>{{pregunta.titulo}}</strong>
-            </h3>
+            </h2>
             <div class="texto-respuesta" [innerHTML]="pregunta.respuesta  | safe:'html'"></div>
             <div *ngIf="categorias_subrespuestas_superior.length > 0">
               <div *ngFor="let categoria_superior of categorias_subrespuestas_superior">

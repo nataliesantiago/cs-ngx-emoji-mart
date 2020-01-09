@@ -15,11 +15,13 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Experto } from '../../schemas/xhr.schema';
 const moment = _rollupMoment || _moment;
+
 @Component({
   selector: 'app-consola-supervisor',
   templateUrl: './consola-supervisor.component.html',
   styleUrls: ['./consola-supervisor.component.scss']
 })
+
 export class ConsolaSupervisorComponent implements OnInit {
   user: User;
   chats_activos: Array<Conversacion> = [];
@@ -400,26 +402,26 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   filtrarCategoriasFila(event) {
-    this.loading = true;
     let categorias = event.value;
     if (categorias.length != 0) {
       this.chats_en_fila_filtrados = this.chats_en_fila.filter((c: any) => {
         let chat_filtrado = false;
-        if (c.categoria != null) {
-          categorias.forEach(element => {
+        categorias.forEach(element => {
+          if (c.categoria != null) {
             if (this.utilService.normalizeText(c.categoria.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
               chat_filtrado = true;
             }
-          });
-          return chat_filtrado;
-        } else {
-          console.log(c);
-          
-        }
+          } 
+          if (element == 'Todas') {
+            if (c.categoria == null) {
+              chat_filtrado = true;
+            }
+          }
+        });
+        return chat_filtrado;
       });
     } else {
       this.chats_en_fila_filtrados = this.chats_en_fila;
-      this.loading = false;
     }
   }
 

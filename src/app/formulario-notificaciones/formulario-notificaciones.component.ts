@@ -46,6 +46,7 @@ export class FormularioNotificacionesComponent implements OnInit {
   fecha_actual;
   id_notificacion_editar;
   editar = false;
+  guardando = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
     private qs: QuillService, private http: HttpClient, private notificacionService: NotificacionService, private utilsService: UtilsService) {
@@ -259,6 +260,7 @@ export class FormularioNotificacionesComponent implements OnInit {
           }
         })
       } else {
+        this.guardando = true;
         if (this.editar) {
           this.notificacionService.guardarNotificacionEditada(this.notificacion, this.file, this.lista_asociada, this.id_usuario).then(u => {
             let id_notificacion = this.id_notificacion_editar;
@@ -324,8 +326,20 @@ export class FormularioNotificacionesComponent implements OnInit {
   }
 
   onFileChange($event) {
-    this.file = $event.target.files[0];
-    this.nombre_archivo = $event.target.files[0].name;
+    let file = $event.target.files[0];
+    if(file.type.match(/image\/*/) || file.type.match(/video\/*/)){
+      this.file = $event.target.files[0];
+      this.nombre_archivo = $event.target.files[0].name;
+    } else {
+      swal.fire({
+        title: 'Formato no permitido',
+        text: "Solo se permiten imagenes o videos",
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar'
+      });
+    }
   }
 
   ngOnInit() {
