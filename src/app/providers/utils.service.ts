@@ -5,6 +5,7 @@ import { text } from "@angular/core/src/render3";
 import { UserService } from "./user.service";
 import { User } from "../../schemas/user.schema";
 import { environment } from '../../environments/environment';
+import { AngularFirestore } from "@angular/fire/firestore";
 declare let gapi: any;
 declare let google: any;
 
@@ -19,15 +20,21 @@ export class UtilsService {
     scope = ['https://www.googleapis.com/auth/drive.file'];
     pickerApiLoaded = false;
     oauthToken;
-    constructor(private ajax: AjaxService, private userService: UserService) {
+    public sendkey: string;
+    constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore) {
         this.user = this.userService.getUsuario();
         this.userService.observableUsuario.subscribe(u => {
             this.user = u;
-            this.getConfiguraciones();
+            if (u) {
+                this.getConfiguraciones();
+            }
         });
         if (this.user) {
             this.getConfiguraciones();
         }
+        this.getCipherKey().then(c => {
+            this.sendkey = c;
+        });
 
     }
 
@@ -73,7 +80,12 @@ export class UtilsService {
     */
     getConfiguraciones(recarga?: boolean): Promise<any> {
 
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+
+            if (!this.sendkey) {
+                this.sendkey = await this.getCipherKey();
+            }
+
             if (recarga) {
                 this.ajax.get('administracion/obtener', {}).subscribe(d => {
                     if (d.success) {
@@ -183,7 +195,7 @@ export class UtilsService {
     }
 
     onPickerApiLoad(resolve) {
-        
+
         this.pickerApiLoaded = true;
         this.createPicker(resolve);
     }
@@ -209,7 +221,7 @@ export class UtilsService {
     // Create and render a Picker object for searching images.
     createPicker(resolve) {
         if (this.pickerApiLoaded && this.oauthToken) {
-            
+
             var view = new google.picker.View(google.picker.ViewId.DOCS);
             //view.setMimeTypes("*");
             var picker = new google.picker.PickerBuilder()
@@ -229,10 +241,23 @@ export class UtilsService {
     // A simple callback implementation.
     pickerCallback(data, resolve) {
         if (data.action == google.picker.Action.PICKED) {
-            
+
             resolve(data.docs[0]);
         }
     }
 
+
+    /**
+     * @description Se encarga de traer la llave de crifrado desde firebase
+     * @returns Promise
+     */
+    async getCipherKey(): Promise<any> {
+        return new Promise((res, rej) => {
+            this.fireStore.doc('paises/parametros').valueChanges().subscribe((d: any) => {
+                //console.log(d);
+                res(d.sendkey);
+            })
+        });
+    }
 
 }
