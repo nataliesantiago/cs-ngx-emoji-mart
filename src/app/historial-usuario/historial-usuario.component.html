@@ -5,7 +5,7 @@
                 <div class="container-filter">
                     <div class="element-filter element-filter-2">
                         <mat-form-field>
-                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda" [(ngModel)]="filter_value">
                             <mat-icon class="search-icon">search</mat-icon>
                         </mat-form-field>
                     </div>

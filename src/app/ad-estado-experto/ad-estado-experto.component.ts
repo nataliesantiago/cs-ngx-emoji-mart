@@ -16,7 +16,7 @@ export class AdEstadoExpertoComponent implements OnInit {
 
   user: User;
   create_state = false;
-  states: EstadoExperto = {nombre: '', es_modificable: '', id_usuario_modificador: null, idtbl_estado_experto: null};
+  states: EstadoExperto = {nombre: '', id_usuario_modificador: null, idtbl_estado_experto: null};
   displayedColumns = ['acciones', 'nombre', 'es_modificable'];
   dataSource: MatTableDataSource<any>;
   matTableFilter: matTableFilter;
@@ -76,18 +76,10 @@ export class AdEstadoExpertoComponent implements OnInit {
   }
 
   /**
-   * identifica si el estado a crear se puede modificar o no
-   * @param event 
-   */
-  onChangeState(event) {
-    this.states.es_modificable = event.value;
-  }
-
-  /**
    * crea un nuevo estado de inactividad
    */
   createState() {
-    if(this.states.nombre == '' || this.states.es_modificable == '') {
+    if(this.states.nombre == '') {
       swal.fire({
         title: 'Complete todos los campos',
         text: '',
