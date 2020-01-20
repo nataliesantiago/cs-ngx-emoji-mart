@@ -27,6 +27,7 @@ export const environment = {
       id_origen_chat: 'datasources/2721fbfe980dfcd26b2de43b9fdf90ea'
     }
   },
-  analytics: 'UA-151598857-2'
+  analytics: 'UA-151598857-2',
+  enckey:'DvC1=2D4ns3n&41R0mpRr?¿'
 };
 

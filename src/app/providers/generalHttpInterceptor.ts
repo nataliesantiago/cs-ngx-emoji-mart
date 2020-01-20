@@ -13,9 +13,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (!this.utilsService.sendkey) {
-            this.utilsService.getCipherKey().then(c => {
-                this.utilsService = c;
-            });
+           
         }
         if (req.method == 'GET') {
             let data = req.params.get('data');

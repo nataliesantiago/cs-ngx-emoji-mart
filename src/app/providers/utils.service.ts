@@ -6,6 +6,7 @@ import { UserService } from "./user.service";
 import { User } from "../../schemas/user.schema";
 import { environment } from '../../environments/environment';
 import { AngularFirestore } from "@angular/fire/firestore";
+
 declare let gapi: any;
 declare let google: any;
 
@@ -20,7 +21,7 @@ export class UtilsService {
     scope = ['https://www.googleapis.com/auth/drive.file'];
     pickerApiLoaded = false;
     oauthToken;
-    public sendkey: string;
+    public sendkey: string = environment.enckey;
     constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore) {
         this.user = this.userService.getUsuario();
         this.userService.observableUsuario.subscribe(u => {
@@ -32,9 +33,7 @@ export class UtilsService {
         if (this.user) {
             this.getConfiguraciones();
         }
-        this.getCipherKey().then(c => {
-            this.sendkey = c;
-        });
+       
 
     }
 
@@ -82,9 +81,7 @@ export class UtilsService {
 
         return new Promise(async (resolve, reject) => {
 
-            if (!this.sendkey) {
-                this.sendkey = await this.getCipherKey();
-            }
+           
 
             if (recarga) {
                 this.ajax.get('administracion/obtener', {}).subscribe(d => {
