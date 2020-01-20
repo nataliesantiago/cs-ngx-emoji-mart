@@ -153,6 +153,8 @@ export class AppHeaderComponent {
           this.cambiarEstadoExperto({ value: this.user.estado_experto })
         } else {
           this.emergencia_actual = false;
+          this.user.estado_experto = 1;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto })
         }
       });
     }

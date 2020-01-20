@@ -1,8 +1,5 @@
 import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ResponseSearch } from '../models/response-search';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { HistorialUsuariosService } from '../providers/historial-usuarios.service';
 import { matTableFilter } from '../../common/matTableFilter';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
@@ -34,6 +31,8 @@ export class HistorialUsuarioComponent implements OnInit {
   busquedas: any;
   tipos_busqueda;
   filters = {};
+  filter_value;
+  selected_value;
 
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, 
               private cg: ChangeDetectorRef, private qs: QuillService, private filtros_service: FiltrosService) {
@@ -70,21 +69,31 @@ export class HistorialUsuarioComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+    this.filter_value = filterValue;
+    if (this.selected_value != undefined && this.selected_value.value != 'todos') {
+      this.filterData('tipo_busqueda', this.selected_value);
+    }
   }
 
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.busquedas);
+      this.filter_value = '';
     } else {
       this.filters[name] = event.value;
       let newArray = this.busquedas;
       for (const key in this.filters) {
         newArray = newArray.filter(element => {
-          return element[key] == this.filters[key];
+          if (this.filter_value == '' || this.filter_value == undefined) {
+            return element[key] == this.filters[key];
+          } else {
+            return element[key] == this.filters[key] && element.texto_busqueda.indexOf(this.filter_value) !== -1;
+          }
         });
       }
       this.createTable(newArray);
     }
+    this.selected_value = event;
   }
 
 }
