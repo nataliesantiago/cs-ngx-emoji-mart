@@ -120,7 +120,13 @@
                                 }
                             ]
                         },
-                        "cam-prod": {
+                        "productionlocal-cam": { 
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.cam.prod.local.ts"
+                            }]
+                        },
+                        "production-cam": {
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
@@ -132,7 +138,7 @@
                             "buildOptimizer": true,
                             "fileReplacements": [{
                                     "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.cam-prod.ts"
+                                    "with": "src/environments/environment.cam.prod.ts"
                                 },
                                 {
                                     "replace": "src/firebase-messaging-sw.js",
@@ -202,7 +208,9 @@
                         },
                         "lab-cam": {
                             "browserTarget": "material:build:lab-cam"
-
+                        },
+                        "prodlocal-cam": {
+                            "browserTarget": "material:build:productionlocal-cam"
                         }
                     }
                 },
