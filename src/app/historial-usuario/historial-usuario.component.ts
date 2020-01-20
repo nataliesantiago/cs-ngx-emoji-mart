@@ -70,7 +70,6 @@ export class HistorialUsuarioComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
     this.filter_value = filterValue;
-    console.log(this.selected_value);
     if (this.selected_value != undefined && this.selected_value.value != 'todos') {
       this.filterData('tipo_busqueda', this.selected_value);
     }
