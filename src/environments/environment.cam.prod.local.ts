@@ -5,22 +5,37 @@ export const environment = {
     APIKEY: 'AIzaSyDOgOkyOuWaq4Z0YVzNuUPpcJD1DG4ZWBE',
     APPID: '269068096594',
     firebaseConfig: {
-      apiKey: "AIzaSyDOgOkyOuWaq4Z0YVzNuUPpcJD1DG4ZWBE",
-      authDomain: "comusoportecam-produccion.firebaseapp.com",
-      databaseURL: "https://comusoportecam-produccion.firebaseio.com",
-      projectId: "comusoportecam-produccion",
-      storageBucket: "comusoportecam-produccion.appspot.com",
-      messagingSenderId: "269068096594",
-      appId: "1:269068096594:web:d1876c2d13325ef4bcbb8b"
+        apiKey: "AIzaSyDOgOkyOuWaq4Z0YVzNuUPpcJD1DG4ZWBE",
+        authDomain: "comusoportecam-produccion.firebaseapp.com",
+        databaseURL: "https://comusoportecam-produccion.firebaseio.com",
+        projectId: "comusoportecam-produccion",
+        storageBucket: "comusoportecam-produccion.appspot.com",
+        messagingSenderId: "269068096594",
+        appId: "1:269068096594:web:d1876c2d13325ef4bcbb8b"
     },
     ambiente: 'cam',
     pais: {
-      pan: {
-        id_origen_conecta: 'datasources/c039757a44e91d2bb4b98465235e9c9d',
-        id_origen_drive: 'datasources/c039757a44e91d2bf60199c0684f8268',
-        id_origen_chat: 'datasources/c039757a44e91d2b31313e7e4a465851'
-      }
+        pan: {
+            id_origen_conecta: 'datasources/c039757a44e91d2bd128fc49d7f466364',
+            id_origen_drive: 'datasources/c039757a44e91d2baaea0db7d0805052',
+            id_origen_chat: 'datasources/c039757a44e91d2bb89d21564d5d1834'
+        },
+        sal: {
+            id_origen_conecta: 'datasources/f45e1c58b9ab7a3dc0a52aedbc8a45af',
+            id_origen_drive: 'datasources/f45e1c58b9ab7a3d7c09343ac8e08b6b',
+            id_origen_chat: 'datasources/f45e1c58b9ab7a3ddf98e4fe0a3072d0'
+        },
+        cos: {
+            id_origen_conecta: 'datasources/711772214966c48cc46154e8dd81d9dd',
+            id_origen_drive: 'datasources/f45e1c58b9ab7a3d7c09343ac8e08b6b',
+            id_origen_chat: 'datasources/711772214966c48cb619b47ffe040b04'
+        },
+        hon: {
+            id_origen_conecta: 'datasources/45c0c1d1bb4100dc66f6483da043322f',
+            id_origen_drive: 'datasources/45c0c1d1bb4100dcab33bc338b90a9d0',
+            id_origen_chat: 'datasources/45c0c1d1bb4100dc4be3e54d1f42fbb3'
+        }
     },
     analytics: 'G-BVSYD26YKY',
-    enckey:'DvC1=2D4ns3n&41R0mpRr?¿'
+    enckey: 'DvC1=2D4ns3n&41R0mpRr?¿'
 };
