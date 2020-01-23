@@ -47,9 +47,13 @@ export class ChatService {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
-      this.getConfiguracionesChat();
+      if (u) {
+        
+        this.getConfiguracionesChat();
+      }
     });
     if (this.user) {
+      
       this.getConfiguracionesChat();
     }
   }

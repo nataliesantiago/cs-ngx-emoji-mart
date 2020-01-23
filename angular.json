@@ -126,7 +126,7 @@
                                 "with": "src/environments/environment.cam.prod.local.ts"
                             }]
                         },
-                        "production-cam": {
+                        "prodcam": {
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
@@ -185,6 +185,9 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "material:build:production"
+                        },
+                        "prodcam": {
+                            "browserTarget": "material:build:prodcam"
                         },
                         "cam": {
                             "browserTarget": "material:build:cam"

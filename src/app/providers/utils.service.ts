@@ -27,10 +27,12 @@ export class UtilsService {
         this.userService.observableUsuario.subscribe(u => {
             this.user = u;
             if (u) {
+                
                 this.getConfiguraciones();
             }
         });
         if (this.user) {
+            
             this.getConfiguraciones();
         }
        
