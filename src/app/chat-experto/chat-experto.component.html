@@ -26,7 +26,10 @@
                   <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
                 </mat-list-item>
                 <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos"
-                  [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos&&chat.id_estado_conversacion==2}">
+                  [ngClass]="{'mensajes-nuevos':
+                    (chat.mensajes_nuevos && chat.id_estado_conversacion==2) ||
+                    new_messages.includes(chat.idtbl_conversacion)
+                  }">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
                     [ngClass]="{'green':(chat.id_estado_conversacion==2),'gris':(chat.id_estado_conversacion!=2)}">

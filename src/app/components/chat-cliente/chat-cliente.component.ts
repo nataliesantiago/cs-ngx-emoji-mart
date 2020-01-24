@@ -520,7 +520,7 @@ export class ChatClienteComponent implements OnInit {
         c.cerrado_inactividad = true;
         this.mensajeInactividadExperto(c);
       }
-
+      
     });
   }
 

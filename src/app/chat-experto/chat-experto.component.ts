@@ -67,6 +67,7 @@ export class ChatExpertoComponent {
   cerro_experto = false;
   intervalo;
   nombre_pestana = 'Conecta';
+  new_messages = []
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -368,6 +369,7 @@ export class ChatExpertoComponent {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
       } else {
         c.id_estado_conversacion = data.id_estado_conversacion;
+        c.mensajes_nuevos = data.mensajes_nuevos;
         c.llamada_activa = data.llamada_activa;
         c.url_llamada = data.url_llamada;
         c.conversacion_recomendada = data.conversacion_recomendada;
@@ -530,8 +532,7 @@ export class ChatExpertoComponent {
           this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
         }
       });
-      // console.log(this.cantidad_mensajes_sin_leer);
-      this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
+      this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer); 
     });
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes/').snapshotChanges().subscribe((changes: any) => {
       changes.forEach(a => {
@@ -620,6 +621,14 @@ export class ChatExpertoComponent {
       if (!c.primera_vez && !c.focuseado) {
         this.soundService.sonar(1);
         c.mensajes_nuevos = true;
+      }
+    }
+
+    if(!c.primera_vez){
+      for(let i = 0; i < tmp.length; i++){
+        if(!this.new_messages.includes(tmp[i].id_conversacion)){
+          this.new_messages.push(tmp[i].id_conversacion);
+        }
       }
     }
     return tmp;
@@ -765,6 +774,12 @@ export class ChatExpertoComponent {
     }
     this.chat = chat;
     if (chat) {
+
+      let index = this.new_messages.indexOf(chat.idtbl_conversacion);
+      if(index >= 0){
+        this.new_messages.splice(index, 1);
+      }
+
       chat.esta_seleccionado = true;
       chat.mensajes_nuevos = false;
       this.setFocus(chat, false);
