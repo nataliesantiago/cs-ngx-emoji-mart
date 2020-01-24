@@ -9,14 +9,6 @@
             <input matInput [(ngModel)]="states.nombre" name="estado" autocomplete="off"/>
           </mat-form-field>
   
-          <mat-form-field>
-            <mat-label>Se puede modificar</mat-label>
-            <mat-select name="modificar" (selectionChange)="onChangeState($event)">
-              <mat-option value="Si">Si</mat-option>
-              <mat-option value="No">No</mat-option>
-            </mat-select>
-          </mat-form-field>
-  
           <div fxLayout="row wrap">
             <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
               <button fxFlex="45" class="custom__btn custom__btn--accept"

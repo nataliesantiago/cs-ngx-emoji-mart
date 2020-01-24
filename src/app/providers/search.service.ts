@@ -22,15 +22,23 @@ export class SearchService {
   busqueda_actual: Busqueda;
   cantidad_busquedas: number;
   fecha_inicio_busquedas: any | Date;
+  interval_chat: any;
   constructor(private ajax: AjaxService, private userService: UserService, private chatService: ChatService, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
+      if (this.interval_chat) {
+        window.clearInterval(this.interval_chat);
+      }
       if (u) {
         this.user = u
         //this.callTestEsquema();
         //this.callTestEsquemaChat();
         //this.callTestEsquemaConecta();
         //this.callTestEsquemaSynonyms();
+
+        this.interval_chat = setInterval(() => {
+          this.validaOpenChat();
+        }, 1000);
       }
     });
 
@@ -46,9 +54,7 @@ export class SearchService {
     if (b) {
       this.busqueda_actual = JSON.parse(b);
     }
-    setInterval(() => {
-      this.validaOpenChat();
-    }, 1000);
+
   }
 
   obtenerPreguntas(limite?: number, pagina?: number): Promise<any> {
@@ -103,6 +109,7 @@ export class SearchService {
   }
 
   async validaOpenChat() {
+
     let a = await this.utilsService.getConfiguraciones();
     let tiempo_minimo = parseInt(this.utilsService.buscarConfiguracion('cantidad_minutos_minimo_chat').valor);
     let consultas_minimas = parseInt(this.utilsService.buscarConfiguracion('cantidad_consultas_minima_chat').valor);

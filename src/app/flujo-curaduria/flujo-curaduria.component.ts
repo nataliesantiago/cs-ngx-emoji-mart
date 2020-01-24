@@ -201,7 +201,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.data = this.revision_reg;
       this.createTable(this.data);
       setTimeout(() => {
-        //console.log('algo')
+        //
 
         this.applyFilter(filter);
       }, 1);
@@ -245,7 +245,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.data = this.aprobar_reg;
       this.createTable(this.data);
       setTimeout(() => {
-        // console.log('algo')
+        // 
 
         this.applyFilter();
       }, 1);

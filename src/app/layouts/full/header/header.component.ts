@@ -109,24 +109,22 @@ export class AppHeaderComponent {
 
   cambiarEstadoExperto(e) {
     //debugger;    
+    
     let actual = this.user.estado_actual;
-
     this.user.estado_actual = e.value;
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
       let activo = (e.value == 1) ? true : false;
-      
-      this.userService.setActivoExperto(activo, this.user.estado_actual);
+      this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
     } else {
       let activo = (e.value == 1) ? true : false;
-      
       if (activo) {
         this.createLogState(1, 1, 1);
       }
-      this.userService.setActivoExperto(activo, this.user.estado_actual);
+      this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_experto == 1) ? true : false;
-        this.userService.setActivoExperto(activo, this.user.estado_actual);
+        this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       }, 10000);
 
       if (this.user.getIdRol() == 2) {
@@ -153,6 +151,8 @@ export class AppHeaderComponent {
           this.cambiarEstadoExperto({ value: this.user.estado_experto })
         } else {
           this.emergencia_actual = false;
+          this.user.estado_experto = 1;
+          this.cambiarEstadoExperto({ value: this.user.estado_experto })
         }
       });
     }

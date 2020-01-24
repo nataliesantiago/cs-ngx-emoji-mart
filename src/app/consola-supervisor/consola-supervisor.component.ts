@@ -200,10 +200,14 @@ export class ConsolaSupervisorComponent implements OnInit {
       data.codigo = c.payload.doc.id;
       let usuario = this.usuarios.find((e: User) => {
         // console.log(e);
-        return e.idtbl_usuario == data.id_usuario_creador;
+        if (e != undefined) {
+          return e.idtbl_usuario == data.id_usuario_creador;
+        }
       });
       let experto = this.usuarios.find((e: User) => {
-        return e.idtbl_usuario == data.id_experto_actual;
+        if (e != undefined) {
+          return e.idtbl_usuario == data.id_usuario_creador;
+        }
       });
       if (!experto && data.id_experto_actual) {
         let u = experto = await this.userService.getInfoUsuario(data.id_experto_actual);

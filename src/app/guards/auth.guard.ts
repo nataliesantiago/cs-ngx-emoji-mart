@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AutenticationService } from '../services/autenticacion.service';
 import { ResponseSearch } from '../models/response-search';
 import { UserService } from '../providers/user.service';
+import { UtilsService } from '../providers/utils.service';
 import { User } from '../../schemas/user.schema';
 import { reject } from 'q';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,7 +13,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
     primer_login: boolean = true; // Se enmcarga de controlar cuando el usuario abre la aplicacion por primera vez
-    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch, private userService: UserService, private route: ActivatedRoute, private firebaseAuth: AngularFireAuth) { }
+    constructor(private router: Router, private autenticationService: AutenticationService, private responseSearch: ResponseSearch, private userService: UserService, private route: ActivatedRoute, private firebaseAuth: AngularFireAuth, private utilsService: UtilsService) { }
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -23,7 +24,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         let d = next.params.data;
         if (d != null && d !== "") {
 
-            return new Promise<boolean>(resolve => {
+            return new Promise<boolean>(async resolve => {
+                
                 let data = JSON.parse(atob(d));
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('pais', data.pais);
@@ -114,7 +116,8 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         } else {
             console.log('loading...');
 
-            return new Promise<boolean>(resolve => {
+            return new Promise<boolean>(async resolve => {
+               
 
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
                     //debugger;
@@ -175,4 +178,9 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         }
         return false;
     }
+
+
+
+
+
 }

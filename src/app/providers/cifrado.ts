@@ -1,17 +1,22 @@
 import * as GibberishAES from 'dz-gibberish-aes/dist/gibberish-aes-1.0.0.js';
+import { UtilsService } from './utils.service';
+
 
 export class Cifrado {
-    sendedKey: Readonly<String> = "DvC1=2D4ns3n&41R0mpRr?¿";
+    sendedKey: Readonly<String>;
 
-    constructor() {
-        
+    constructor(private utilsService: UtilsService) {
+
     }
 
-    dec(data){
-        return GibberishAES.dec(atob(data),this.sendedKey);
+
+    dec(data) {
+
+        return GibberishAES.dec(atob(data), this.utilsService.sendkey);
     }
 
-    enc(data){
-        return btoa(GibberishAES.enc(data,this.sendedKey));
+    enc(data) {
+        //console.log(this.utilsService.sendkey);
+        return btoa(GibberishAES.enc(data, this.utilsService.sendkey));
     }
 };

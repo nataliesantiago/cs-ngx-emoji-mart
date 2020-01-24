@@ -130,7 +130,6 @@ export interface MensajeAutomatico {
 export interface EstadoExperto {
     idtbl_estado_experto: number;
     nombre: string;
-    es_modificable: string;
     id_usuario_modificador: number;
 }
 

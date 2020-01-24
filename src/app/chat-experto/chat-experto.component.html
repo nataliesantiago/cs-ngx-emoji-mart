@@ -62,8 +62,11 @@
                     *ngFor="let experto of expertos_filtro | ordenarExpertos" transition-group-item
                     [ngClass]="{'mensajes-nuevos':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}">
                     <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
-                    <div class="punt-estado-chat"
+                    <div *ngIf="!esSupervisor" class="punt-estado-chat"
                       [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat,'punto-supervisor':esSupervisor}">
+                    </div>
+                    <div *ngIf="esSupervisor" class="punt-estado-chat" 
+                      [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat,'red-emergency':experto.atendiendo_emergencia,'punto-supervisor':esSupervisor}">
                     </div>
                     <h3 matLine> {{experto.nombre}} </h3>
                     <p matLine class="text-muted preview-mensaje"

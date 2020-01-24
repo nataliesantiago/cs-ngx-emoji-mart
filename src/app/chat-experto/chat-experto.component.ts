@@ -254,27 +254,30 @@ export class ChatExpertoComponent {
       this.expertos = this.expertos_filtro = e.filter(experto => {
         return experto.idtbl_usuario != this.user.getId();
       });
-      console.log(this.expertos);
+      // console.log(this.expertos);
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
-
+          // console.log(experto);
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
             e.estado_actual_experto = "Desconectado";
           } else {
-            // console.log(experto);
-            var duration = moment().unix() - experto.fecha.seconds;
-            if (experto.activo && duration < 500) {
-              if (!e.activo_chat) {
-                e.activo_chat = true;
-              }
-              if (e.estado_actual_experto != experto.estado_experto) {
+            if (experto.atendiendo_emergencia == true) {
+              e.atendiendo_emergencia = true;
+            } else {
+              e.atendiendo_emergencia = false;
+              var duration = moment().unix() - experto.fecha.seconds;
+              if (experto.activo && duration < 500) {
+                if (!e.activo_chat) {
+                  e.activo_chat = true;
+                }
+                if (e.estado_actual_experto != experto.estado_experto) {
+                  e.estado_actual_experto = experto.estado_experto;
+                }
+              } else {
+                e.activo_chat = false;
                 e.estado_actual_experto = experto.estado_experto;
               }
-
-            } else {
-              e.activo_chat = false;
-              e.estado_actual_experto = experto.estado_experto;
             }
           }
           this.abrirConversacionExperto(e, true);
@@ -1127,6 +1130,7 @@ export class ChatExpertoComponent {
             c.motivo_cierre_enviado = true;
             this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true });
             this.obtenerEncuestaExperto(c);
+            console.log(this.user.experto_activo);
             if (this.user.experto_activo) {
               this.recibirChatAutomatico();
             }

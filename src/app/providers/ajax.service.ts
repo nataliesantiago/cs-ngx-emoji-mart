@@ -94,6 +94,8 @@ export class AjaxService {
         this.usingEnc = use;
     }
 
+    
+
 
     /**
      * @description Encapsula todas las peticiones GET de la aplicación

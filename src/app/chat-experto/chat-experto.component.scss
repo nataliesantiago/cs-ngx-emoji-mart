@@ -254,6 +254,23 @@
     &.gris {
         background-color: #e4e4e4;
     }
+
+    &.red-emergency {
+        background-color: red;
+
+        &::after {
+            content: "";
+            position: absolute;
+            height: 25px;
+            width: 25px;
+            border: 5px solid red;
+            border-radius: 70px;
+            left: -13px;
+            bottom: -13px;
+            -webkit-animation: heartbit 1s ease-out infinite;
+            animation: heartbit .7s ease-out infinite;
+        }
+    }
 }
 
 .barra-recomendacion {

@@ -2,12 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpResponse, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Cifrado } from "./cifrado";
+import { UtilsService } from './utils.service';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
-    cifrado: Cifrado = new Cifrado();
+    constructor(private utilsService: UtilsService) {
+
+    }
+    cifrado: Cifrado = new Cifrado(this.utilsService);
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (!this.utilsService.sendkey) {
+           
+        }
         if (req.method == 'GET') {
             let data = req.params.get('data');
             req = req.clone({ params: req.params.delete('data') });

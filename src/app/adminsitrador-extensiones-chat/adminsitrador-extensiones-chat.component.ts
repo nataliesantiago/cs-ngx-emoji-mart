@@ -70,11 +70,26 @@ export class AdminsitradorExtensionesChatComponent implements OnInit, AfterViewI
 
   crearExtension() {
     this.nueva_extension.id_usuario_creador = this.user.getId();
-    this.chatService.crearExtensionArchivo(this.nueva_extension).then(d => {
-      this.nueva_extension = { extension: null, megabytes_maximos: null };
-      this.creando_extension = false;
-      this.init(true);
-    })
+    console.log(this.nueva_extension.extension, this.nueva_extension.megabytes_maximos);
+    if (this.nueva_extension.extension != null || this.nueva_extension.megabytes_maximos != null) {
+      this.chatService.crearExtensionArchivo(this.nueva_extension).then(d => {
+        this.nueva_extension = { extension: null, megabytes_maximos: null };
+        this.creando_extension = false;
+        this.init(true);
+      });
+    } else {
+      swal.fire({
+        title: 'Advertencia',
+        text: "Por favor complete todos los campos",
+        type: 'warning',
+        buttonsStyling: false,
+        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          container: 'custom-sweet'
+        }
+      });
+    }
   }
 
   editarExtension(e: ExtensionArchivoChat) {

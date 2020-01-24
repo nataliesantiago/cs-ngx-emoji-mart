@@ -380,7 +380,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   asignarAsesor(c: Conversacion, expertos: Array<any>) {
-
+    console.log(expertos);
     expertos.forEach(async (e, index) => {
       let data = await this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/expertos/' + e.id_usuario);
       if (!data) {
@@ -550,6 +550,7 @@ export class ChatClienteComponent implements OnInit {
   crearNuevaConversacion(data) {
     let c = new Conversacion();
     this.ajax.post('chat/conversacion/crear', { id_usuario: this.user.getId(), id_tipo: 1, ...data }).subscribe(d => {
+      console.log(d);
       if (d.success) {
         c.idtbl_conversacion = d.id_conversacion;
         c.codigo = d.codigo_conversacion;
