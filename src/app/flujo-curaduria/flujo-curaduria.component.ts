@@ -135,7 +135,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     } else {
       this.mostrar_accion = false;
     }
-    if (this.curaduria_reg && this.curaduria_reg.length > 0) {
+    if (this.curaduria_reg && this.curaduria_reg.length >= 0) {
       // console.log('aqui')
       this.data = this.curaduria_reg;
       this.createTable(this.data);
@@ -197,7 +197,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     } else {
       this.mostrar_accion = false;
     }
-    if (this.revision_reg && this.revision_reg.length > 0) {
+    if (this.revision_reg && this.revision_reg.length >= 0) {
       this.data = this.revision_reg;
       this.createTable(this.data);
       setTimeout(() => {
@@ -241,7 +241,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     } else {
       this.mostrar_accion = false;
     }
-    if (this.aprobar_reg && this.aprobar_reg.length > 0) {
+    if (this.aprobar_reg && this.aprobar_reg.length >= 0) {
       this.data = this.aprobar_reg;
       this.createTable(this.data);
       setTimeout(() => {
@@ -278,7 +278,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     } else {
       this.mostrar_accion = false;
     }
-    if (this.aprobado_reg && this.aprobado_reg.length > 0) {
+    if (this.aprobado_reg && this.aprobado_reg.length >= 0) {
       this.data = this.aprobado_reg;
       this.createTable(this.data);
       setTimeout(() => {
