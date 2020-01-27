@@ -55,7 +55,7 @@ export class RespuestasComponent implements OnInit {
       }
     });
 
-    
+
 
   }
 
@@ -80,7 +80,7 @@ export class RespuestasComponent implements OnInit {
 
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if (p.success) {
-
+        console.log('pregunta',p.pregunta[0].fecha_ultima_modificacion)
         p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
 
         this.pregunta = p.pregunta[0];
@@ -88,7 +88,7 @@ export class RespuestasComponent implements OnInit {
         let fecha_creacion = moment(p.pregunta[0].fecha_creacion).tz('America/Bogota');
 
         let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
-        
+
         if (diferencia_dias <= this.dias_pregunta_nueva) {
           this.pregunta_nueva = true;
         }
@@ -101,10 +101,13 @@ export class RespuestasComponent implements OnInit {
               this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
                 console.log(asociadas);
                 if (asociadas.results) {
+
                   asociadas.results.filter(f => {
                     return f.idtbl_pregunta != this.pregunta.idtbl_pregunta;
                   }).forEach(a => {
-                    this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
+                    if (this.preguntas_adicion.length < 5) {
+                      this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
+                    }
                   });
                 }
               })

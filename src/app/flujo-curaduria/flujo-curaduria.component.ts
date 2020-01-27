@@ -43,10 +43,10 @@ export class FlujoCuraduriaComponent implements OnInit {
   usuario;
   id_usuario;
   data;
-  cant_curaduria;
-  cant_revision;
-  cant_aprobacion;
-  cant_aprobados;
+  cant_curaduria = 0;
+  cant_revision = 0;
+  cant_aprobacion = 0;
+  cant_aprobados = 0;
   activo_curaduria = true;
   activo_revision = false;
   activo_aprobacion = false;
@@ -65,54 +65,6 @@ export class FlujoCuraduriaComponent implements OnInit {
   ambiente = environment.ambiente;
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog, private route: ActivatedRoute, private searchService: SearchService) {
 
-    this.usuario = this.user.getUsuario();
-    if (this.usuario) {
-      this.id_usuario = this.usuario.idtbl_usuario;
-      this.rol_usuario = this.usuario.id_rol;
-      this.init();
-    }
-    this.user.observableUsuario.subscribe(u => {
-      this.usuario = u;
-      this.id_usuario = u.idtbl_usuario;
-      this.rol_usuario = u.id_rol;
-      if (this.usuario) {
-        this.init();
-      }
-    })
-    if (this.rol_usuario == 5) {
-      this.mostrar_accion = true;
-    }
-
-    // create the source
-    this.route.queryParams.subscribe(a => {
-      // console.log(a);
-      if (a.vista != this.vista) {
-        //console.log('se movio')
-        this.filtro_tabla = (a.filter && a.filter != 'undefined') ? a.filter : '';
-        switch (a.vista) {
-          case 'curaduria':
-            this.cargarCuraduria(a.filter);
-            break;
-          case 'revision':
-            this.cargarRevision(a.filter);
-            break;
-          case 'aprobacion':
-            this.cargarAprobacion(a.filter);
-            break;
-          case 'aprobados':
-            this.cargarAprobados(a.filter);
-            break;
-
-          default:
-            //this.cargarCuraduria(a.filter);
-            break;
-        }
-
-
-      } else if (!a.vista) {
-        this.cargarCuraduria(a.filter);
-      }
-    });
 
 
   }
@@ -122,7 +74,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.cambiarUrl(vista + '&&filter=' + encodeURI(f));
   }
 
-  cargarCuraduria(filter) {
+  cargarCuraduria(filter, primera) {
     this.vista = 'curaduria';
     //this.cambiarUrl(this.vista + '&&filter=' + this.filtro_tabla);
     this.flujo_actual = "Preguntas en Curaduria";
@@ -140,7 +92,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.data = this.curaduria_reg;
       this.createTable(this.data);
       setTimeout(() => {
-        this.applyFilter(filter);
+        this.applyFilter(filter, primera);
       }, 1);
     } else {
       /* if (this.rol_usuario == 5) {
@@ -170,7 +122,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.data = [];
       this.createTable(this.data);
       setTimeout(() => {
-        this.applyFilter(filter);
+        this.applyFilter(filter, primera);
       }, 1);
     }
 
@@ -184,7 +136,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.cg.detectChanges();
   }
 
-  cargarRevision(filter) {
+  cargarRevision(filter, primera) {
     this.vista = 'revision';
     //this.cambiarUrl(this.vista + '&&filter=' + this.filtro_tabla);
     this.flujo_actual = "Preguntas en Revisión";
@@ -203,9 +155,10 @@ export class FlujoCuraduriaComponent implements OnInit {
       setTimeout(() => {
         //
 
-        this.applyFilter(filter);
+
+        this.applyFilter(filter, primera);
       }, 1);
-    } else{
+    } else {
 
     }
     /*this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 2 }).subscribe(p => {
@@ -228,7 +181,7 @@ export class FlujoCuraduriaComponent implements OnInit {
 
 
 
-  cargarAprobacion(filter) {
+  cargarAprobacion(filter, primera) {
     this.vista = 'aprobacion';
     //this.cambiarUrl(this.vista + '&&filter=' + this.filtro_tabla);
     this.flujo_actual = "Preguntas por Aprobar";
@@ -247,9 +200,9 @@ export class FlujoCuraduriaComponent implements OnInit {
       setTimeout(() => {
         // 
 
-        this.applyFilter();
+        this.applyFilter(filter, primera);
       }, 1);
-    } else{
+    } else {
 
     }
     /* this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 3 }).subscribe(p => {
@@ -265,7 +218,7 @@ export class FlujoCuraduriaComponent implements OnInit {
      })*/
   }
 
-  cargarAprobados(filter) {
+  cargarAprobados(filter, primera) {
     this.vista = 'aprobados';
     //this.cambiarUrl(this.vista + '&&filter=' + this.filtro_tabla);
     this.flujo_actual = "Preguntas Aprobadas";
@@ -283,7 +236,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.createTable(this.data);
       setTimeout(() => {
 
-        this.applyFilter();
+        this.applyFilter(filter, primera);
       }, 1);
     } else { }
     /* this.ajax.get('preguntas/obtener-preguntas-flujo-curaduria', { estado_flujo_pregunta: 4 }).subscribe(p => {
@@ -301,6 +254,59 @@ export class FlujoCuraduriaComponent implements OnInit {
 
   ngOnInit() {
 
+    this.usuario = this.user.getUsuario();
+    if (this.usuario) {
+      this.id_usuario = this.usuario.idtbl_usuario;
+      this.rol_usuario = this.usuario.id_rol;
+      this.init();
+    }
+    this.user.observableUsuario.subscribe(u => {
+      this.usuario = u;
+      this.id_usuario = u.idtbl_usuario;
+      this.rol_usuario = u.id_rol;
+      if (this.usuario) {
+        this.init();
+      }
+    })
+    if (this.rol_usuario == 5) {
+      this.mostrar_accion = true;
+    }
+
+    // create the source
+    this.route.queryParams.subscribe(a => {
+      // console.log(a);
+      let primera = false;
+      if (this.vista == '') {
+        primera = true;
+      }
+
+      if (a.vista != this.vista) {
+        //console.log('se movio')
+        this.filtro_tabla = decodeURI((a.filter && a.filter != 'undefined') ? a.filter : '');
+        switch (a.vista) {
+          case 'curaduria':
+            this.cargarCuraduria(a.filter, primera);
+            break;
+          case 'revision':
+            this.cargarRevision(a.filter, primera);
+            break;
+          case 'aprobacion':
+            this.cargarAprobacion(a.filter, primera);
+            break;
+          case 'aprobados':
+            this.cargarAprobados(a.filter, primera);
+            break;
+
+          default:
+            //this.cargarCuraduria(a.filter);
+            break;
+        }
+
+
+      } else if (!a.vista) {
+        this.cargarCuraduria(a.filter, primera);
+      }
+    });
   }
 
   cargarPreguntas(inicio, limite, actual, total) {
@@ -359,22 +365,23 @@ export class FlujoCuraduriaComponent implements OnInit {
           //console.log(this.curaduria_reg.length);
           //console.log('paso por aca');
           this.cargando_preguntas = false;
+          let primera = true;
           switch (this.vista) {
             case 'curaduria':
-              this.cargarCuraduria(this.filtro_tabla);
+              this.cargarCuraduria(this.filtro_tabla, primera);
               break;
             case 'revision':
-              this.cargarRevision(this.filtro_tabla);
+              this.cargarRevision(this.filtro_tabla, primera);
               break;
             case 'aprobacion':
-              this.cargarAprobacion(this.filtro_tabla);
+              this.cargarAprobacion(this.filtro_tabla, primera);
               break;
             case 'aprobados':
-              this.cargarAprobados(this.filtro_tabla);
+              this.cargarAprobados(this.filtro_tabla, primera);
               break;
 
             default:
-              this.cargarCuraduria(this.filtro_tabla);
+              this.cargarCuraduria(this.filtro_tabla, primera);
               break;
           }
         }
@@ -454,18 +461,33 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.router.navigate(['/formulario-preguntas-flujo-curaduria', e.idtbl_pregunta]);
   }
 
-  applyFilter(filterValuees?: string) {
+  applyFilter(filterValuees?: string, primera?: boolean) {
     if (!this.filtro_tabla) {
       this.filtro_tabla = filterValuees;
     }
+
     if (this.filtro_tabla) {
-      this.cambiarUrl(this.vista + '&&filter=' + encodeURI(this.filtro_tabla.trim()));
+      this.filtro_tabla = decodeURI(this.filtro_tabla);
+      if (!primera) {
+        console.log('algo')
+        this.cambiarUrl(this.vista + '&&filter=' + encodeURI(this.filtro_tabla.trim()));
+      }
       let filterValue = this.filtro_tabla.trim(); // Remove whitespace
       filterValue = this.filtro_tabla.toLowerCase(); // Datasource defaults to lowercase matches
-      this.dataSource.filter = filterValue;
+      setTimeout(() => {
+        this.dataSource.filter = filterValue;
+      }, 0);
+
     } else {
-      this.cambiarUrl(this.vista + '&&filter=');
-      this.dataSource.filter = '';
+      if (!primera) {
+        console.log('algo')
+        this.cambiarUrl(this.vista + '&&filter=');
+      }
+      setTimeout(() => {
+        this.dataSource.filter = '';
+      }, 0);
+
+
     }
   }
 
