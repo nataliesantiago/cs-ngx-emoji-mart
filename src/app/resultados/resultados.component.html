@@ -14,7 +14,7 @@
     </div>
     <div *ngIf="resultado" class="caja-resultados">
       <div class="quisistes-decir" *ngIf="mostrar_alerta_palabras">
-        <span>Alerta: debe buscar utilizando más palabras</span>
+        <span>Alerta: Para obtener mejores resultados por favor amplia tu consulta</span>
       </div>
       <div *ngIf="ortografia" class="quisistes-decir"><span>Quizas quisiste decir: </span> <a
           (click)="abrirRuta(busquedaUrl)"><b>{{busquedaCorregida}}</b></a></div>
