@@ -96,6 +96,7 @@ export class AdEstadoExpertoComponent implements OnInit {
       this.estado_experto_service.createState(this.states).then(id => {
         this.init();
         this.create_state = false;
+        this.states.nombre = '';
       });
     } 
   }
