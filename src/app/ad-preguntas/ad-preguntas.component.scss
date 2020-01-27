@@ -5,3 +5,11 @@
     min-height: 500px;
     padding: 15px;
 }
+.spinner-cargando-flujo {
+    display: flex;
+    margin-top: 20px;
+  
+    .mat-progress-spinner {
+      margin: auto;
+    }
+  }

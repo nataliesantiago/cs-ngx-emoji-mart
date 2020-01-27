@@ -44,13 +44,15 @@ export class AdPreguntasComponent implements OnInit {
   usuario;
   id_usuario;
   data = [];
+  temporal = [];
   mostrar_fecha_ultima_modificacion = false;
   estados_pregunta;
   filters = {};
   pagina = 0;
-  limite = 50;
+  limite = 500;
   length = 0;
   setData = new Set();
+  cargando_preguntas = true;
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private searchService: SearchService, private utilsService: UtilsService) {
 
     this.usuario = this.user.getUsuario();
@@ -87,24 +89,43 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   cargarPreguntas() {
-    
-    this.searchService.obtenerPreguntas(this.limite, this.pagina).then(preguntas => {
-      //// console.log(preguntas);
-      this.data = this.data.concat(preguntas);
-      /*this.setData = new Set(this.data);
-      // console.log(this.setData.size);
-      this.data = Array.from(this.setData);*/
-      this.data = this.utilsService.getUnique(this.data, 'idtbl_pregunta');
-      this.createTable(this.data);
-      // // console.log(this.data);
-      this.searchService.totalPreguntas().then(t => {
-        setTimeout(() => {
-          this.length = t;
-          this.paginator.length = t;
-        }, 0);
+    this.searchService.totalPreguntas().then(t => {
+      setTimeout(() => {
+        this.length = t;
+        this.paginator.length = t;
+        this.fillPreguntas();
+      }, 0);
+
+    });
+
+  }
+
+  fillPreguntas() {
+    let peticiones = Math.ceil(this.length / this.limite)
+    for (let index = 0; index < peticiones; index++) {
+      this.searchService.obtenerPreguntas(this.limite, index).then(preguntas => {
+        //// console.log(preguntas);
+
+        this.temporal = this.temporal.concat(preguntas);
+        if (this.temporal.length < this.length) {
+          //this.pagina++;
+          //this.fillPreguntas();
+        } else {
+          this.cargando_preguntas = false;
+          this.data = this.utilsService.getUnique(this.temporal, 'idtbl_pregunta');
+          this.createTable(this.data);
+        }
+        /*this.setData = new Set(this.data);
+        // console.log(this.setData.size);
+        this.data = Array.from(this.setData);*/
+
+        // // console.log(this.data);
+
 
       })
-    })
+
+    }
+
   }
 
   cambiaSize(e: Event) {
