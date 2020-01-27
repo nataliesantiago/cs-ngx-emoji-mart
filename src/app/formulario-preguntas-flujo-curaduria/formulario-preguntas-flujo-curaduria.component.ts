@@ -104,7 +104,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   quillModulesFc(ql: any, contenido: any, index?: number) {
-    //console.log(ql.getModule('toolbar'))
+    //// console.log(ql.getModule('toolbar'))
     ql.getModule('toolbar')
     setTimeout(() => {
       ql.getModule('toolbar').addHandler('video', () => {
@@ -167,7 +167,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         debounceTime(200),
         switchMap(value => this.buscarPreguntas(value))
       ).subscribe(d => {
-        console.log(d);
+        // console.log(d);
       });
 
     this.user.getPerfilesUsuario().then(p => {
@@ -353,10 +353,10 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         } else {
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
-              console.log(enviar_correo);
+              // console.log(enviar_correo);
               if (enviar_correo) {
                 this.ajax.post('email/correo-aprobacion-pregunta', { pregunta: this.pregunta }).subscribe(d => {
-                  console.log(d);
+                  // console.log(d);
                   if (d.success) {
                     this.location.back();
                   }

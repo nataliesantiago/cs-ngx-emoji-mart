@@ -118,7 +118,7 @@ export class SearchService {
         let diff = moment().utc().diff(this.fecha_inicio_busquedas.utc(), 'seconds');
         let segundos = tiempo_minimo * 60;
         if (this.cantidad_busquedas >= consultas_minimas && diff >= segundos) {
-          //console.log('abrir chat', this.busqueda_actual);
+          //// console.log('abrir chat', this.busqueda_actual);
           let id_busqueda = this.busqueda_actual.idtbl_busqueda_usuario;
           delete this.busqueda_actual;
           delete this.cantidad_busquedas;
@@ -145,10 +145,10 @@ export class SearchService {
             }
           })
         } else {
-          //console.log(this.cantidad_busquedas, diff, segundos);
+          //// console.log(this.cantidad_busquedas, diff, segundos);
         }
 
-        // console.log(diff, moment(), this.fecha_inicio_busquedas);
+        // // console.log(diff, moment(), this.fecha_inicio_busquedas);
       }
     }
   }
@@ -166,7 +166,7 @@ export class SearchService {
     return new Promise((resolve, reject) => {
 
 
-      // console.log('cargo', this.user.nombre_perfil);
+      // // console.log('cargo', this.user.nombre_perfil);
       let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen, cargo: this.user.nombre_perfil };
       if (guardar) {
         this.ajax.post('preguntas/cloud-search/guardar-historial', datos).subscribe(d => {
@@ -183,7 +183,7 @@ export class SearchService {
         localStorage.setItem('cmc', this.cantidad_busquedas + '');
         if (!this.fecha_inicio_busquedas) {
           this.fecha_inicio_busquedas = moment().utc();
-          //console.log(this.fecha_inicio_busquedas);
+          //// console.log(this.fecha_inicio_busquedas);
           localStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
         }
       }
@@ -195,22 +195,22 @@ export class SearchService {
               const r = d.resultados.results[index];
               let tmp = r.url.split('/');
 
-              // console.log(tmp)
+              // // console.log(tmp)
               r.idtbl_pregunta = parseInt(tmp[tmp.length - 1]);
               this.obtenerPregunta(r.idtbl_pregunta).then(pregunta => {
-                //console.log('paso por aca', pregunta);
+                //// console.log('paso por aca', pregunta);
                 //r.contenido = pregunta.respuesta.replace(/<[^>]*>/g, '');
                 let tmp_url = pregunta.respuesta.split('iconodrive=');
                 if (tmp_url.length > 1) {
                   let indice = tmp_url[1].indexOf('"');
                   let url_drive = tmp_url[1].substring(0, indice);
-                  //console.log(url_drive);
+                  //// console.log(url_drive);
                   r.url_drive = url_drive;
                 }
                 if (r.metadata.source.name == environment.pais[this.user.pais].id_origen_conecta) {
                   r.url_icono = pregunta.icono_padre;
                 }
-                //console.log(this.respuesta, pregunta);
+                //// console.log(this.respuesta, pregunta);
                 //this.mostrando = true;
                 /*if (index == d.resultados.results.length - 1) {
                   resolve(d.resultados);

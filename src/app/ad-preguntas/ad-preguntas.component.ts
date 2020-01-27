@@ -67,9 +67,9 @@ export class AdPreguntasComponent implements OnInit {
     })
     /*
         this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-          console.log(p);
+          // console.log(p);
           if (p.success) {
-            console.log(p.preguntas);
+            // console.log(p.preguntas);
             this.data = p.preguntas;
             this.createTable(this.data);
           }
@@ -89,14 +89,14 @@ export class AdPreguntasComponent implements OnInit {
   cargarPreguntas() {
     
     this.searchService.obtenerPreguntas(this.limite, this.pagina).then(preguntas => {
-      //console.log(preguntas);
+      //// console.log(preguntas);
       this.data = this.data.concat(preguntas);
       /*this.setData = new Set(this.data);
-      console.log(this.setData.size);
+      // console.log(this.setData.size);
       this.data = Array.from(this.setData);*/
       this.data = this.utilsService.getUnique(this.data, 'idtbl_pregunta');
       this.createTable(this.data);
-      console.log(this.data);
+      // // console.log(this.data);
       this.searchService.totalPreguntas().then(t => {
         setTimeout(() => {
           this.length = t;
@@ -108,15 +108,15 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   cambiaSize(e: Event) {
-    //console.log(e);
+    //// console.log(e);
   }
 
   ngOnInit() {
     this.paginator.page.subscribe((p: PageEvent) => {
-      //console.log(p);
+      //// console.log(p);
       let index = p.pageIndex + 1;
       let cant = index * p.pageSize;
-      //console.log(cant);
+      //// console.log(cant);
       if (cant > this.data.length) {
         this.limite = p.pageSize;
         this.pagina = index;

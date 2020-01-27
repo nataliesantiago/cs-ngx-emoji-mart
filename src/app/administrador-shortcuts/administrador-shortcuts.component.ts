@@ -113,7 +113,7 @@ export class AdministradorShortcutsComponent implements OnInit {
    * @param event 
    */
   add(event: KeyboardEvent): void {
-    // console.log(event);
+    // // console.log(event);
     event.preventDefault();
     event.stopPropagation();
     if (!this.nuevo_shortcut.comando) {
@@ -166,7 +166,7 @@ export class AdministradorShortcutsComponent implements OnInit {
    * @param index 
    */
   remove(index: any): void {
-    console.log(index);
+    // // console.log(index);
     if (index >= 0) {
       this.comandos.splice(index, 1);
     }

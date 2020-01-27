@@ -21,7 +21,7 @@ export class MensajesExpertoPipe implements PipeTransform {
     this.expertos = args[1];
     if (mensajes)
       this.passByMensajes(args[0], mensajes, 0);
-    //console.log(mensajes);
+    //// console.log(mensajes);
     return mensajes;
   }
 
@@ -68,7 +68,7 @@ export class MensajesExpertoPipe implements PipeTransform {
             }
             this.passByMensajes(tipo, mensajes, index, m);
           } else {
-            // console.log('buscando data idiota');
+            // // console.log('buscando data idiota');
             let u = m.user = await this.userService.getInfoUsuario(m.id_usuario);
             this.expertos.push(u);
             index++;

@@ -94,7 +94,7 @@ export class AppHeaderComponent {
       }
     });
     this.chatService.getEmergenciaUsuario().then(emergencia => {
-      // console.log(emergencia);
+      // // console.log(emergencia);
       if (emergencia) {
         let exito = (emergencia.id_usuario_operador) ? true : false;
         this.dialog.open(SosComponent, { disableClose: true, data: { exito: exito } }).afterClosed().subscribe((result) => {
@@ -142,7 +142,7 @@ export class AppHeaderComponent {
     if (!this.escuchando_emergencia) {
       this.escuchando_emergencia = true;
       this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/emergencia/1').valueChanges().subscribe((d: any) => {
-        // console.log(d);
+        // // console.log(d);
         if (d) {
           this.emergencia_actual = true;
           this.sonidosService.sonar(3);

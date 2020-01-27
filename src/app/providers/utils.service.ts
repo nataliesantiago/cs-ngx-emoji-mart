@@ -124,7 +124,7 @@ export class UtilsService {
      * @returns string
      */
     filter(options: Array<any>, value: string, option: string): string[] {
-        //console.log(options, value);
+        //// console.log(options, value);
         if (value && typeof value == 'string') {
             const filterValue = value.toLowerCase();
             return options.filter(fila => fila[option].toLowerCase().indexOf(filterValue) != (-1));
@@ -205,7 +205,7 @@ export class UtilsService {
             this.ajax.post('user/getAccessToken', { token: this.user.token_acceso }).subscribe(d => {
                 if (d.success) {
                     this.oauthToken = d.token;
-                    console.log(this.oauthToken);
+                    // console.log(this.oauthToken);
                     if (this.pickerApiLoaded) {
                         this.createPicker(resolve);
                     } else {
@@ -253,7 +253,7 @@ export class UtilsService {
     async getCipherKey(): Promise<any> {
         return new Promise((res, rej) => {
             this.fireStore.doc('paises/parametros').valueChanges().subscribe((d: any) => {
-                //console.log(d);
+                //// console.log(d);
                 res(d.sendkey);
             })
         });

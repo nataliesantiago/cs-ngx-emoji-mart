@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                 localStorage.setItem('pais', data.pais);
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
                     //debugger;
-                    //console.log(d);
+                    //// console.log(d);
                     this.primer_login = false;
                     if (d.url) {
                         //window.location.href = d.url;
@@ -109,12 +109,12 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
 
                 }
                 this.router.navigate(['home']);
-                console.log('Invalid route');
+                // console.log('Invalid route');
                 return false;
             }
             //this.responseSearch.setActive(false);
         } else {
-            console.log('loading...');
+            // console.log('loading...');
 
             return new Promise<boolean>(async resolve => {
                
@@ -140,7 +140,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                         user.pais = d.profile.pais;
                         this.userService.definirPaisUsuario(d.profile.pais);
                         this.userService.getInfoUsuario(d.profile.idtbl_usuario).then(u => {
-                            //console.log(u);
+                            //// console.log(u);
                             user.nombre_perfil = u.nombre_perfil;
                             this.userService.setUsuario(user).then(() => {
                                 this.responseSearch.setActive(false);

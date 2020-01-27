@@ -66,7 +66,7 @@ export class ReplaceEmojisMensajePipe implements PipeTransform {
         size = ReplaceEmojisMensajePipe.DEFAULT_IMAGE_SIZE,
         sheetSize: 16 | 20 | 32 | 64 = ReplaceEmojisMensajePipe.DEFAULT_SHEET_SIZE,
         backgroundImageFn?: (set: string, sheetSize: number) => string): any {
-        // console.log('validando emoji', html);
+        // // console.log('validando emoji', html);
         //return this.sanitizer.bypassSecurityTrustHtml(
         return this.emojisToImages(
             html,

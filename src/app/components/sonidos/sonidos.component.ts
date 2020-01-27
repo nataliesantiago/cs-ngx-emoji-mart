@@ -46,7 +46,7 @@ export class SonidosComponent implements OnInit {
           playPromise.catch((e) => {
             setTimeout(() => {
               media.play().catch((err) => {
-                console.log('No se puede reproducir el sonido ahora', e, err);
+                // console.log('No se puede reproducir el sonido ahora', e, err);
               });
             }, 1000);
           })

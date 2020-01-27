@@ -101,7 +101,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   quillModulesFc(ql: any, contenido: any, index?: number) {
-    //console.log(ql.getModule('toolbar'))
+    //// console.log(ql.getModule('toolbar'))
     ql.getModule('toolbar')
     setTimeout(() => {
       ql.getModule('toolbar').addHandler('video', () => {
@@ -182,7 +182,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         debounceTime(200),
         switchMap(value => this.buscarPreguntas(value))
       ).subscribe(d => {
-        console.log(d);
+        // console.log(d);
       });
 
 
@@ -291,7 +291,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   guardarPregunta() {
-    console.log(this.pregunta);
+    // console.log(this.pregunta);
     if (this.pregunta.titulo == "" || this.pregunta.id_producto == "" || this.pregunta.id_estado == "" || !this.pregunta.id_producto) {
 
       swal.fire({

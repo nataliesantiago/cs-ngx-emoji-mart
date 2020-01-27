@@ -102,9 +102,9 @@ if (!('webkitSpeechRecognition' in window)) {
     }
     final_transcript = capitalize(final_transcript);
     //    final_span.innerHTML = linebreak(final_transcript);
-    // console.log(linebreak(final_transcript))
+    // // console.log(linebreak(final_transcript))
     //interim_span.innerHTML = linebreak(interim_transcript);
-    // console.log(linebreak(interim_transcript))
+    // // console.log(linebreak(interim_transcript))
     document.getElementById('value-text').innerHTML = interim_transcript;
     if (final_transcript || interim_transcript) {
       //showButtons('inline-block');

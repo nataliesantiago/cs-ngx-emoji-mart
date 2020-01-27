@@ -122,7 +122,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     /* this.router.events.subscribe(val => {
        if (val instanceof NavigationEnd) {
          if (val.url.indexOf('/search/') == 0) {
-           // console.log('estoy en donde quiero');
+           // // console.log('estoy en donde quiero');
            this.muestra_barra = true;
          } else {
            this.muestra_barra == false;

@@ -14,7 +14,7 @@ self.addEventListener('notificationclick', function (event) {
   );
 })
 messaging.setBackgroundMessageHandler((payload) => {
-  console.log('Message received. ', payload);
+  // console.log('Message received. ', payload);
   // Customize notification here
   let ruta = '/';
   if(payload.data.origen == 'recordatorio' || payload.data.origen == 'nlp'){

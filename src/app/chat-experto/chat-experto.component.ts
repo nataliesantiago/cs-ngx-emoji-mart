@@ -98,10 +98,10 @@ export class ChatExpertoComponent {
         }
       })
       if (pregunta) {
-        console.log('bueno');
+        // console.log('bueno');
         //e.returnValue = 'Tienes conversaciones activas';
       } else {
-        console.log('malo');
+        // console.log('malo');
 
       }
     });
@@ -127,7 +127,7 @@ export class ChatExpertoComponent {
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
             cola.subscribe(chats => {
-              //console.log(chats);
+              //// console.log(chats);
               let tmp = [];
 
               if (chats.length < 1) {
@@ -221,7 +221,7 @@ export class ChatExpertoComponent {
                   let c = d;
                   c.codigo = codigo;
                   this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
-                    //// console.log(d);
+                    //// // console.log(d);
                     c.cliente = d;
                     this.agregarListenerMensajes(c);
                     this.agregaListenerConversacion(c);
@@ -254,10 +254,10 @@ export class ChatExpertoComponent {
       this.expertos = this.expertos_filtro = e.filter(experto => {
         return experto.idtbl_usuario != this.user.getId();
       });
-      // console.log(this.expertos);
+      // // console.log(this.expertos);
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
-          // console.log(experto);
+          // // console.log(experto);
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
             e.estado_actual_experto = "Desconectado";
@@ -302,7 +302,7 @@ export class ChatExpertoComponent {
           c.cant_coincidencias = 0;
           c.mensajes.forEach((m: Mensaje) => {
             if (m.texto.toLowerCase().indexOf(value.toLowerCase()) != -1) {
-              console.log('Encontro mensaje', m.texto.toLowerCase());
+              // console.log('Encontro mensaje', m.texto.toLowerCase());
               m.encontrado = true;
               c.cant_coincidencias++;
             } else {
@@ -355,7 +355,7 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          // console.log(disponibilidad);
+          // // console.log(disponibilidad);
           if (c && disponibilidad) {
             this.onSelectCola(c);
           }
@@ -420,7 +420,7 @@ export class ChatExpertoComponent {
 
   abrirConversacionExperto(e: User, oculta?: boolean) {
     if (e.conversacion_experto && !oculta) {
-      console.log(e);
+      // console.log(e);
       this.onSelect(e.conversacion_experto);
     } else if (!e.conversacion_experto) {
       this.chatService.getConversacionExperto(e.idtbl_usuario).then(data => {
@@ -488,7 +488,7 @@ export class ChatExpertoComponent {
       if (!c.primera_vez && c.mensajes && c.mensajes.length < d.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
-      //console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
+      //// console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
       let mensajes_nuevos = await this.procesarMensajes(d, c, c.primera_vez, 0, []);
       c.mensajes = c.mensajes.concat(mensajes_nuevos);
 
@@ -580,7 +580,7 @@ export class ChatExpertoComponent {
   async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number, tmp: Array<Mensaje>) {
     for (let index = 0; index < d.length; index++) {
       const m = d[index];
-      //console.log(m);
+      //// console.log(m);
       let experto = this.usuarios.find((e: User) => {
         return e.idtbl_usuario == m.id_usuario;
       });
@@ -597,7 +597,7 @@ export class ChatExpertoComponent {
       let bus: Mensaje = c.mensajes.find(mm => {
         return mm.uuid == m.uuid;
       });
-      //console.log(bus);
+      //// console.log(bus);
       if (!bus) {
         tmp.push(m);
       } else {
@@ -659,7 +659,7 @@ export class ChatExpertoComponent {
  
        }
  
-       //console.log('mensaje sin leer', this.cantidad_mensajes_sin_leer);
+       //// console.log('mensaje sin leer', this.cantidad_mensajes_sin_leer);
  
        if (d.length < 1) {
          c.ultimo_mensaje = m;
@@ -674,7 +674,7 @@ export class ChatExpertoComponent {
        i++;
        return await this.procesarMensajes(d, c, primera_vez, i, tmp);
      } else {
-       //console.log(' mensajes', m)
+       //// console.log(' mensajes', m)
        return tmp;
      }*/
   }
@@ -808,9 +808,9 @@ export class ChatExpertoComponent {
   }
 
   setFocus(c: Conversacion, estado: boolean) {
-    // console.log(c);
+    // // console.log(c);
     c.focuseado = estado;
-    // console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
+    // // console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
     this.cantidad_mensajes_sin_leer -= c.cantidad_mensajes_nuevos;
     this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     c.cantidad_mensajes_nuevos = 0;
@@ -821,7 +821,7 @@ export class ChatExpertoComponent {
   }
 
   seleccionarEmoji(evento, c: Conversacion) {
-    console.log(evento.emoji);
+    // console.log(evento.emoji);
     if (c.texto_mensaje) {
       c.texto_mensaje += '' + evento.emoji.native;
     } else {
@@ -1075,7 +1075,7 @@ export class ChatExpertoComponent {
     let code = event.which;
     let shortcut: ShortCut = { activo: true };
     if ((event.ctrlKey || event.altKey || event.shiftKey) && (this.shortcutsService.iniciadores.indexOf(code) == (-1))) {
-      // console.log('encuentra cosas', event);
+      // // console.log('encuentra cosas', event);
       if (event.ctrlKey) {
         shortcut.ctrl = true;
       }
@@ -1090,7 +1090,7 @@ export class ChatExpertoComponent {
 
         return (s.comando == shortcut.comando && (((s.ctrl && shortcut.ctrl) || (!s.ctrl && !shortcut.ctrl)) && ((s.alt && shortcut.alt) || (!s.alt && !shortcut.alt)) && ((s.shift && shortcut.shift) || (!s.shift && !shortcut.shift))));
       });
-      // console.log('encuentra cosas', s, shortcut.alt);
+      // // console.log('encuentra cosas', s, shortcut.alt);
       if (s) {
         event.preventDefault();
         event.stopPropagation();
@@ -1098,7 +1098,7 @@ export class ChatExpertoComponent {
           c.texto_mensaje = '';
         }
         c.texto_mensaje += this.reemplazaVariablesShortcut(s.guion, c);
-        // console.log('encuentra cosas');
+        // // console.log('encuentra cosas');
 
       }
 
@@ -1130,7 +1130,7 @@ export class ChatExpertoComponent {
             c.motivo_cierre_enviado = true;
             this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true });
             this.obtenerEncuestaExperto(c);
-            console.log(this.user.experto_activo);
+            // console.log(this.user.experto_activo);
             if (this.user.experto_activo) {
               this.recibirChatAutomatico();
             }
@@ -1142,7 +1142,7 @@ export class ChatExpertoComponent {
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
-    // console.log(c);
+    // // console.log(c);
     if (c.conversacion_recomendada) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
@@ -1173,7 +1173,7 @@ export class ChatExpertoComponent {
   iniciarVideollamada(c: Conversacion) {
     c.buscando_llamada = true;
     this.chatService.iniciarVideollamada(c).then(d => {
-      // console.log('creo', d);
+      // // console.log('creo', d);
       // this.enviarMensaje(c, 4, d);
       c.buscando_llamada = false;
       this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ llamada_activa: true, url_llamada: d });

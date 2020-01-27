@@ -88,7 +88,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.mostrar_accion = false;
     }
     if (this.curaduria_reg && this.curaduria_reg.length >= 0) {
-      // console.log('aqui')
+      // // console.log('aqui')
       this.data = this.curaduria_reg;
       this.createTable(this.data);
       setTimeout(() => {
@@ -274,14 +274,14 @@ export class FlujoCuraduriaComponent implements OnInit {
 
     // create the source
     this.route.queryParams.subscribe(a => {
-      // console.log(a);
+      // // console.log(a);
       let primera = false;
       if (this.vista == '') {
         primera = true;
       }
 
       if (a.vista != this.vista) {
-        //console.log('se movio')
+        //// console.log('se movio')
         this.filtro_tabla = decodeURI((a.filter && a.filter != 'undefined') ? a.filter : '');
         switch (a.vista) {
           case 'curaduria':
@@ -313,7 +313,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     let cantidad = (inicio + 1) * limite;
     if (cantidad <= total) {
       this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
-        //console.log(preguntas.length);
+        //// console.log(preguntas.length);
         preguntas = preguntas.filter(p => {
           return p.id_estado;
         })
@@ -339,7 +339,7 @@ export class FlujoCuraduriaComponent implements OnInit {
       this.cargarPreguntas(proxima, limite, actual, total);
     } else {
       this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
-        //console.log(preguntas.length);
+        //// console.log(preguntas.length);
         preguntas = preguntas.filter(p => {
           return p.id_estado;
         })
@@ -362,8 +362,8 @@ export class FlujoCuraduriaComponent implements OnInit {
         let canti = inicio + 1;
         cantidad = (canti + 1) * limite;
         if (cantidad >= total) {
-          //console.log(this.curaduria_reg.length);
-          //console.log('paso por aca');
+          //// console.log(this.curaduria_reg.length);
+          //// console.log('paso por aca');
           this.cargando_preguntas = false;
           let primera = true;
           switch (this.vista) {
@@ -469,7 +469,7 @@ export class FlujoCuraduriaComponent implements OnInit {
     if (this.filtro_tabla) {
       this.filtro_tabla = decodeURI(this.filtro_tabla);
       if (!primera) {
-        console.log('algo')
+        // console.log('algo')
         this.cambiarUrl(this.vista + '&&filter=' + encodeURI(this.filtro_tabla.trim()));
       }
       let filterValue = this.filtro_tabla.trim(); // Remove whitespace
@@ -480,7 +480,7 @@ export class FlujoCuraduriaComponent implements OnInit {
 
     } else {
       if (!primera) {
-        console.log('algo')
+        // console.log('algo')
         this.cambiarUrl(this.vista + '&&filter=');
       }
       setTimeout(() => {

@@ -98,7 +98,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       this.recognition = new webkitSpeechRecognition();
       this.recognition.lang = this.languages[1];
     } catch (e) {
-      console.log('Navegador incompatible con reconocimiento de voz');
+      // console.log('Navegador incompatible con reconocimiento de voz');
     }
     this.responseSearch.setActiveMostrarBarra(false);
     this.look_service.getSpecificSetting('url_logo').then((result) => {
@@ -239,7 +239,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     * asignar a la variable title a searchText
   */
   selectEvent(item) {
-    console.log(item);
+    // console.log(item);
     this.metodo = 1;
     //this.searchText = item.title;
     this.def.setValue(item.suggestedQuery);
@@ -259,7 +259,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
 
 
   ngOnInit(): void {
-    // console.log('estuvo por aqui')
+    // // console.log('estuvo por aqui')
     this.initRecognition();
     this.notification = null;
     this.def.setValue(this.texto_buscar);
@@ -268,14 +268,14 @@ export class AppSearchComponent implements OnChanges, OnInit {
         debounceTime(200),
         switchMap(value => this.procesaValorCaja(value))
       ).subscribe(d => {
-        // console.log(d);
+        // // console.log(d);
       });
     this.getPlaceholder();
   }
   procesaValorCaja(value: string) {
 
     this.searchService.suggestCloudSearch(value, this.sugerencias).then(d => {
-      // console.log(d);
+      // // console.log(d);
       value = this.utilsService.normalizeText(value);
       delete this.texto_sugerido;
       this.sugerencias = d.suggestResults;
@@ -287,7 +287,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
         }
         setTimeout(() => {
           this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
-          //console.log(this.segundo, this.primero);
+          //// console.log(this.segundo, this.primero);
         }, 0);
 
       }
@@ -297,7 +297,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
 
 
   paginar(pagina: any) {
-    //console.log(pagina);
+    //// console.log(pagina);
     this.page = pagina.pageIndex;
     this.buscar(this.metodo);
   }
@@ -311,13 +311,13 @@ export class AppSearchComponent implements OnChanges, OnInit {
         let element = this.primero.nativeElement;
         this.primero.nativeElement.scrollLeft = element.scrollWidth - element.clientWidth;
         this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
-        //console.log(this.segundo, this.primero);
+        //// console.log(this.segundo, this.primero);
       }, 0);
     }
   }
   ngOnChanges(changes: SimpleChanges) {
-    // console.log('entro aca mono', this.modo);
-    //console.log('paso por aca');
+    // // console.log('entro aca mono', this.modo);
+    //// console.log('paso por aca');
     const name: SimpleChange = changes.texto_buscar;
     if (name && name.currentValue) {
       this.texto_buscar = name.currentValue;
@@ -333,10 +333,10 @@ export class AppSearchComponent implements OnChanges, OnInit {
   }
 
   updateScroll(primero: HTMLElement, segundo: HTMLElement) {
-    console.log('paso por aca')
+    // console.log('paso por aca')
     setTimeout(() => {
       segundo.scrollLeft = primero.scrollLeft;
-      console.log(segundo, primero);
+      // console.log(segundo, primero);
     }, 1);
 
   }
@@ -350,7 +350,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       this.busqueda = this.def.value;
       this.cargando_respuestas = true;
       this.searchService.queryCloudSearch(this.busqueda, metodo, 'conecta', this.page).then(d => {
-        // console.log(d);
+        // // console.log(d);
         /*d.results.forEach((r: ResultadoCloudSearch) => {
           let id = r.url.split('_')[0];
           this.searchService.obtenerPregunta(parseInt(id)).then(pregunta => {

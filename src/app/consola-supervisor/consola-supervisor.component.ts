@@ -63,7 +63,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
-      console.log(chats);
+      // console.log(chats);
       if (!this.chats_activos || this.chats_activos.length < 1) {
         this.chats_activos = chats;
         for (let c of this.chats_activos) {
@@ -78,7 +78,7 @@ export class ConsolaSupervisorComponent implements OnInit {
           if (t) {
             for (let attr in cn) {
               if (attr != 'mensajes' && attr != 'messages') {
-                // console.log('atributo:', attr);
+                // // console.log('atributo:', attr);
                 t[attr] = cn[attr];
               }
             }
@@ -162,7 +162,7 @@ export class ConsolaSupervisorComponent implements OnInit {
 
 
   async agregarTiempoConversacion(c: Conversacion){
-    console.log(c);
+    // console.log(c);
     setInterval(() => {
             
       if (c.fecha_asignacion) {
@@ -199,7 +199,7 @@ export class ConsolaSupervisorComponent implements OnInit {
       let data = c.payload.doc.data() as Conversacion;
       data.codigo = c.payload.doc.id;
       let usuario = this.usuarios.find((e: User) => {
-        // console.log(e);
+        // // console.log(e);
         if (e != undefined) {
           return e.idtbl_usuario == data.id_usuario_creador;
         }

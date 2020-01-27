@@ -29,12 +29,12 @@ export class SosComponent implements OnInit {
     if (!this.data.exito) {
       this.puede_cerrar_sos = true;
       this.chatService.getEmergenciaUsuario().then(emergencia => {
-        // console.log(emergencia);
+        // // console.log(emergencia);
         this.emergencia = emergencia;
       });
     } else {
       this.chatService.getEmergenciaUsuario().then(emergencia => {
-        // console.log(emergencia);
+        // // console.log(emergencia);
         this.emergencia = emergencia;
         setInterval(() => {
           let diff = moment().diff(moment(emergencia.fecha_emergencia), 'seconds');

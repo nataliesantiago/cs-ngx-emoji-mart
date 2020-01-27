@@ -16,7 +16,7 @@ export class Cifrado {
     }
 
     enc(data) {
-        //console.log(this.utilsService.sendkey);
+        //// console.log(this.utilsService.sendkey);
         return btoa(GibberishAES.enc(data, this.utilsService.sendkey));
     }
 };

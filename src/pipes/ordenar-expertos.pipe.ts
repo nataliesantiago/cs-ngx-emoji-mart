@@ -32,7 +32,7 @@ export class OrdenarExpertosPipe implements PipeTransform {
                 }
             });
         }
-        // console.log(expertos);
+        // // console.log(expertos);
         return expertos;
     }
 }

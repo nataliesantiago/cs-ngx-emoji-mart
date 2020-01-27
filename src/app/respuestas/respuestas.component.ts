@@ -80,7 +80,7 @@ export class RespuestasComponent implements OnInit {
 
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if (p.success) {
-        console.log('pregunta',p.pregunta[0].fecha_ultima_modificacion)
+        // // console.log('pregunta',p.pregunta[0].fecha_ultima_modificacion)
         p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
 
         this.pregunta = p.pregunta[0];
@@ -96,10 +96,10 @@ export class RespuestasComponent implements OnInit {
         this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
           if (pras.success) {
             this.preguntas_adicion = pras.preguntas_asociadas;
-            console.log(pras);
+            // console.log(pras);
             if (this.preguntas_adicion.length < 5) {
               this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
-                console.log(asociadas);
+                // console.log(asociadas);
                 if (asociadas.results) {
 
                   asociadas.results.filter(f => {
@@ -241,7 +241,7 @@ export class RespuestasComponent implements OnInit {
               if (this.searchService.busqueda_actual) {
                 id_busqueda = this.searchService.busqueda_actual.idtbl_busqueda_usuario;
               }
-              console.log(this.pregunta.id_producto);
+              // console.log(this.pregunta.id_producto);
               this.chatService.crearConversacion(this.pregunta.id_producto, id_busqueda);
               this.router.navigate(['/home']);
             }
