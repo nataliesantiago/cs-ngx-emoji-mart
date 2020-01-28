@@ -105,8 +105,6 @@ export class SearchService {
     return new Promise(resolve => {
       this.ajax.get('preguntas/total-preguntas-flujo', {}).subscribe(p => {
         if (p.success) {
-          console.log(p.total);
-          
           resolve(p.total);
         }
       })
