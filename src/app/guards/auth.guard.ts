@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
         if (d != null && d !== "") {
 
             return new Promise<boolean>(async resolve => {
-                
+
                 let data = JSON.parse(atob(d));
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('pais', data.pais);
@@ -113,11 +113,14 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                 return false;
             }
             //this.responseSearch.setActive(false);
+        } else if (next.data.isHome) {
+            this.responseSearch.setActive(false);
+            return true;
         } else {
             // console.log('loading...');
 
             return new Promise<boolean>(async resolve => {
-               
+
 
                 this.userService.validarUsuario(this.primer_login).subscribe(d => {
                     //debugger;

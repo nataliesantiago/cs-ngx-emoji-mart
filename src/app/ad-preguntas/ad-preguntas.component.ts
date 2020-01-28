@@ -107,10 +107,9 @@ export class AdPreguntasComponent implements OnInit {
         //// console.log(preguntas);
 
         this.temporal = this.temporal.concat(preguntas);
-        if (this.temporal.length < this.length) {
+        if (this.temporal.length >= this.length) {
           //this.pagina++;
           //this.fillPreguntas();
-        } else {
           this.cargando_preguntas = false;
           this.data = this.utilsService.getUnique(this.temporal, 'idtbl_pregunta');
           this.createTable(this.data);
