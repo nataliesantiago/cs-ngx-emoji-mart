@@ -9102,6 +9102,16 @@
     right: auto;
 }
 
+.san-serif {
+
+    &.a,
+    &.div,
+    &.button {
+        font-family: sans-serif !important;
+    }
+
+    font-family: sans-serif !important;
+}
 
 /*[ Opacity ]
 -----------------------------------------------------------
@@ -9160,6 +9170,7 @@
 .bgblack {
     background-color: black;
 }
+
 .img_small {
     max-width: 500px;
     max-height: 142px;

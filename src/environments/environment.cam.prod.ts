@@ -36,6 +36,6 @@ export const environment = {
             id_origen_chat: 'datasources/45c0c1d1bb4100dc4be3e54d1f42fbb3'
         }
     },
-    analytics: 'G-BVSYD26YKY',
+    analytics: 'UA-151598857-6',
     enckey: 'DvC1=2D4ns3n&41R0mpRr?¿'
 };

@@ -42,15 +42,15 @@ export class SearchService {
       }
     });
 
-    this.fecha_inicio_busquedas = localStorage.getItem('fib');
-    let cant = localStorage.getItem('cmc');
+    this.fecha_inicio_busquedas = sessionStorage.getItem('fib');
+    let cant = sessionStorage.getItem('cmc');
     if (cant) {
       this.cantidad_busquedas = parseInt(cant);
     }
     if (this.fecha_inicio_busquedas) {
       this.fecha_inicio_busquedas = moment(parseInt(this.fecha_inicio_busquedas));
     }
-    let b = localStorage.getItem('ubc');
+    let b = sessionStorage.getItem('ubc');
     if (b) {
       this.busqueda_actual = JSON.parse(b);
     }
@@ -147,9 +147,9 @@ export class SearchService {
           delete this.busqueda_actual;
           delete this.cantidad_busquedas;
           delete this.fecha_inicio_busquedas;
-          localStorage.removeItem('fib');
-          localStorage.removeItem('cmc');
-          localStorage.removeItem('ubc');
+          sessionStorage.removeItem('fib');
+          sessionStorage.removeItem('cmc');
+          sessionStorage.removeItem('ubc');
           Swal.fire({
             title: '¿Deseas buscar un experto?',
             text: '',
@@ -196,7 +196,7 @@ export class SearchService {
         this.ajax.post('preguntas/cloud-search/guardar-historial', datos).subscribe(d => {
           if (d.success) {
             this.busqueda_actual = d.busqueda;
-            localStorage.setItem('ubc', JSON.stringify(this.busqueda_actual));
+            sessionStorage.setItem('ubc', JSON.stringify(this.busqueda_actual));
           }
         });
         if (!this.cantidad_busquedas) {
@@ -204,11 +204,11 @@ export class SearchService {
         } else {
           this.cantidad_busquedas++;
         }
-        localStorage.setItem('cmc', this.cantidad_busquedas + '');
+        sessionStorage.setItem('cmc', this.cantidad_busquedas + '');
         if (!this.fecha_inicio_busquedas) {
           this.fecha_inicio_busquedas = moment().utc();
           //// console.log(this.fecha_inicio_busquedas);
-          localStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
+          sessionStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
         }
       }
       this.ajax.post('preguntas/cloud-search/query', datos).subscribe(async d => {
