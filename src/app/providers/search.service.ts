@@ -74,6 +74,22 @@ export class SearchService {
     })
   }
 
+  obtenerPreguntasFlujo(limite?: number, pagina?: number): Promise<any> {
+    if (!pagina) {
+      pagina = 0;
+    }
+    if (!limite) {
+      limite = 50;
+    }
+    return new Promise(resolve => {
+      this.ajax.get('preguntas/obtener-preguntas-flujo', { pagina: pagina, limite: limite }).subscribe(p => {
+        if (p.success) {
+          resolve(p.preguntas);
+        }
+      })
+    })
+  }
+
   totalPreguntas(): Promise<any> {
 
     return new Promise(resolve => {
@@ -85,7 +101,17 @@ export class SearchService {
     })
   }
 
-
+  totalPreguntasFlujo(): Promise<any> {
+    return new Promise(resolve => {
+      this.ajax.get('preguntas/total-preguntas-flujo', {}).subscribe(p => {
+        if (p.success) {
+          console.log(p.total);
+          
+          resolve(p.total);
+        }
+      })
+    })
+  }
 
   autocompleteText(query: any) {
 

@@ -63,6 +63,11 @@ export class FlujoCuraduriaComponent implements OnInit {
   vista = '';
   filtro_tabla: string = '';
   ambiente = environment.ambiente;
+  pagina = 0;
+  limite = 1000;
+  length = 0;
+  temporal = [];
+
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog, private route: ActivatedRoute, private searchService: SearchService) {
 
 
@@ -309,61 +314,31 @@ export class FlujoCuraduriaComponent implements OnInit {
     });
   }
 
-  cargarPreguntas(inicio, limite, actual, total) {
-    let cantidad = (inicio + 1) * limite;
-    if (cantidad <= total) {
-      this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
-        //// console.log(preguntas.length);
-        preguntas = preguntas.filter(p => {
-          return p.id_estado;
-        })
-        this.curaduria_reg = this.curaduria_reg.concat(preguntas.filter(p => {
-          if (this.rol_usuario == 5) {
-            return p.id_estado_flujo == 1 && p.id_usuario_revision == this.id_usuario;
-          } else {
-            return p.id_estado_flujo == 1;
-          }
-        }));
-        this.revision_reg = this.revision_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 2;
-        }));
-        this.aprobar_reg = this.aprobar_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 3;
-        }));
-        this.aprobado_reg = this.aprobado_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 4;
-        }));
+  cargarPreguntas() {
+    let peticiones = Math.ceil(this.length / this.limite)
+    for (let index = 0; index < peticiones; index++) {
+      this.searchService.obtenerPreguntasFlujo(this.limite, index).then(preguntas => {
+        
+        this.temporal = this.temporal.concat(preguntas);
+        
+        if (this.temporal.length >= this.length) {
+          this.curaduria_reg = this.curaduria_reg.concat(this.temporal.filter(p => {
+            if (this.rol_usuario == 5) {
+              return p.id_estado_flujo == 1 && p.id_usuario_revision == this.id_usuario;
+            } else {
+              return p.id_estado_flujo == 1;
+            }
+          }));
+          this.revision_reg = this.revision_reg.concat(this.temporal.filter(p => {
+            return p.id_estado_flujo == 2;
+          }));
+          this.aprobar_reg = this.aprobar_reg.concat(this.temporal.filter(p => {
+            return p.id_estado_flujo == 3;
+          }));
+          this.aprobado_reg = this.aprobado_reg.concat(this.temporal.filter(p => {
+            return p.id_estado_flujo == 4;
+          }));
 
-      });
-      let proxima = inicio + 1;
-      this.cargarPreguntas(proxima, limite, actual, total);
-    } else {
-      this.searchService.obtenerPreguntas(limite, inicio).then(preguntas => {
-        //// console.log(preguntas.length);
-        preguntas = preguntas.filter(p => {
-          return p.id_estado;
-        })
-        this.curaduria_reg = this.curaduria_reg.concat(preguntas.filter(p => {
-          if (this.rol_usuario == 5) {
-            return p.id_estado_flujo == 1 && p.id_usuario_revision == this.id_usuario;
-          } else {
-            return p.id_estado_flujo == 1;
-          }
-        }));
-        this.revision_reg = this.revision_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 2;
-        }));
-        this.aprobar_reg = this.aprobar_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 3;
-        }));
-        this.aprobado_reg = this.aprobado_reg.concat(preguntas.filter(p => {
-          return p.id_estado_flujo == 4;
-        }));
-        let canti = inicio + 1;
-        cantidad = (canti + 1) * limite;
-        if (cantidad >= total) {
-          //// console.log(this.curaduria_reg.length);
-          //// console.log('paso por aca');
           this.cargando_preguntas = false;
           let primera = true;
           switch (this.vista) {
@@ -385,19 +360,18 @@ export class FlujoCuraduriaComponent implements OnInit {
               break;
           }
         }
-      });
+      })
     }
   }
 
   init() {
 
-    this.searchService.totalPreguntas().then(total => {
-      let inicio = 0;
-      let limite = 1000;
-      let actual = 0;
-      this.cargarPreguntas(inicio, limite, actual, total);
-    })
-
+    this.searchService.totalPreguntasFlujo().then(total => {
+      setTimeout(() => {
+        this.length = total;
+        this.cargarPreguntas();
+      }, 0);
+    });
 
     if (this.rol_usuario == 5) {
       this.ajax.get('preguntas/obtener-cantidad-preguntas-flujo-curaduria-persona', { estado_flujo_pregunta: 1, id_usuario: this.id_usuario }).subscribe(p => {

@@ -95,11 +95,13 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     let variables_permitidas = ['{nombre_cliente}', '{correo_cliente}', '{categoria}', '{fecha_actual}', '{busqueda}', '{id_conversacion}'];
     let variables = texto.match(/{.*?}/g);
     this.correcto = true;
-    variables.forEach(variable => {
-      if(!(variables_permitidas.indexOf(variable) > -1)) {
-        this.correcto = false;
-      } 
-    });
+    if (variables != null || variables != undefined) {
+      variables.forEach(variable => {
+        if(!(variables_permitidas.indexOf(variable) > -1)) {
+          this.correcto = false;
+        } 
+      });
+    }
   }
 
   /**
