@@ -270,13 +270,11 @@ giveShape(employees, manager) {
 
   cargarIcons(){
     this.icons = [];
-    let csv;
-    this.http.get('assets/icons/iconos-material.csv', {responseType: 'text'})
-        .subscribe(data =>  { 
-          csv = data 
-          this.icons = csv.split(/\r\n|\n/);
-        } 
-    );
+    this.ajax.get('producto/obtener-iconos', {}).subscribe(d => {
+      if (d.success) {
+        this.icons = d.iconos;
+      }
+    });
   }
 
   guardarProducto(){
