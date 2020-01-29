@@ -23,6 +23,6 @@ export const environment = {
     }
   },
   analytics: 'UA-151598857-5',
-  enckey: 'DvC1=2D4ns3n&41R0mpRr?¿'
+  ajax: 'DvC1=2D4ns3n&41R0mpRr?¿'
 };
 

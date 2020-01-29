@@ -21,7 +21,7 @@ export class UtilsService {
     scope = ['https://www.googleapis.com/auth/drive.file'];
     pickerApiLoaded = false;
     oauthToken;
-    public sendkey: string = environment.enckey;
+    public sendkey: string = environment.ajax;
     constructor(private ajax: AjaxService, private userService: UserService, private fireStore: AngularFirestore) {
         this.user = this.userService.getUsuario();
         this.userService.observableUsuario.subscribe(u => {
