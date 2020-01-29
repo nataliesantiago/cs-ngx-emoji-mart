@@ -93,7 +93,7 @@
               <mat-cell *matCellDef="let row">
                 <div *ngIf="!row.update">
                   <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.update=true"></i>
-                  <i class="ti-trash danger-color m-r-10 mouse-over" (click)="inactiveMessage(row)"></i>
+                  <i class="ti-close danger-color m-r-10 mouse-over" (click)="inactiveMessage(row)"></i>
                   <i class="ti-check success-color m-r-10 mouse-over" (click)="activeMessage(row)"></i>
                 </div>
                 <div *ngIf="row.update">
@@ -104,7 +104,7 @@
             </ng-container>
     
             <!-- Name Column -->
-            <ng-container matColumnDef="mensaje">
+            <ng-container matColumnDef="texto">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Mensaje Automatico </mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <span *ngIf="!row.update">{{row.texto}}</span>
@@ -113,9 +113,9 @@
                 </mat-form-field>
               </mat-cell>
             </ng-container>
-    
-            <ng-container matColumnDef="tiempo">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo de espera (minutos)</mat-header-cell>
+
+            <ng-container matColumnDef="timeout">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo de espera (minutos) </mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <span *ngIf="!row.is_edit_timeout">{{row.timeout}}</span>
                 <mat-form-field *ngIf="row.is_edit_timeout">

@@ -16,7 +16,7 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
 
   user: User;
   creando_extension = false;
-  displayedColumns = ['acciones', 'guion', 'activo'];
+  displayedColumns = ['acciones', 'texto', 'activo'];
   dataSource: MatTableDataSource<any>;
   matTableFilter:matTableFilter;
   filterColumns = [
