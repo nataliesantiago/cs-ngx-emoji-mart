@@ -20,7 +20,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
                                 fecha_ultima_modificacion:null,id_usuario_modificacion:null,timeout_tmp:null,texto_tmp:''};
   message_types;
   is_timeout = false;
-  displayedColumns = ['acciones', 'mensaje', 'tiempo', 'tipo', 'activo'];
+  displayedColumns = ['acciones', 'texto', 'timeout', 'tipo', 'activo'];
   dataSource: MatTableDataSource<any>;
   matTableFilter: matTableFilter;
   filterColumns = [
@@ -172,7 +172,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   inactiveMessage(e){
     swal.fire({
       title: 'Cuidado',
-      text: "Confirme para desactivar el mensaje automatico",
+      text: "Al momento de activarlo, se desactivarán los otros mensajes del mismo tipo",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

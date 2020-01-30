@@ -22,7 +22,7 @@ export class AdMotivoCierreChatComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['actions', 'id', 'name', 'category'];
+  displayedColumns = ['actions', 'idtbl_motivo_cierre_chat', 'nombre', 'categoria'];
   reason: MotivoCierreChat = { idtbl_motivo_cierre_chat: null, name: '', create_user_id: null, create_date: null, 
           update_last_user_id: null, update_date: null, active: true, category_id: null };
   dataSource = new MatTableDataSource([]);

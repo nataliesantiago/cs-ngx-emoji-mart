@@ -240,6 +240,16 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
     });
     this.crear_experticia = false;
   }
+
+  /**
+   * aplica los filtros generales a la tabla
+   * @param filterValue 
+  */
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
   
   ngOnInit() {
   }
