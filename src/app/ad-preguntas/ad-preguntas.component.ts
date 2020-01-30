@@ -53,6 +53,8 @@ export class AdPreguntasComponent implements OnInit {
   length = 0;
   setData = new Set();
   cargando_preguntas = true;
+  progreso = 0;
+  modo_spinner = 'determinate';
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private searchService: SearchService, private utilsService: UtilsService) {
 
     this.usuario = this.user.getUsuario();
@@ -101,11 +103,15 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   fillPreguntas() {
-    let peticiones = Math.ceil(this.length / this.limite)
+    let peticiones = Math.ceil(this.length / this.limite);
+    let paso = Math.ceil(100 / peticiones);
     for (let index = 0; index < peticiones; index++) {
       this.searchService.obtenerPreguntas(this.limite, index).then(preguntas => {
         //// console.log(preguntas);
-
+        this.progreso += paso;
+        if (this.progreso > 100) {
+          this.progreso = 100;
+        }
         this.temporal = this.temporal.concat(preguntas);
         if (this.temporal.length >= this.length) {
           //this.pagina++;

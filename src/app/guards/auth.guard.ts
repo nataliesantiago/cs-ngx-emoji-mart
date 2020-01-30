@@ -117,7 +117,7 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
             this.responseSearch.setActive(false);
             return true;
         } else {
-            // console.log('loading...');
+            console.log('loading...');
 
             return new Promise<boolean>(async resolve => {
 
@@ -146,13 +146,12 @@ export class AuthGuard implements CanActivate, CanDeactivate<boolean> {
                             //// console.log(u);
                             user.nombre_perfil = u.nombre_perfil;
                             this.userService.setUsuario(user).then(() => {
+
                                 this.responseSearch.setActive(false);
                                 setTimeout(() => {
-                                    if (next.routeConfig.path == "") {
+                                    if (next.routeConfig.path == "login") {
                                         this.router.navigate(['home']);
-                                    } else {
-                                        //this.router.navigate([next.routeConfig.path]);
-                                    }
+                                    } 
                                     resolve(true);
                                 }, 1);
                             });

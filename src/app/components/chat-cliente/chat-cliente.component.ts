@@ -225,13 +225,13 @@ export class ChatClienteComponent implements OnInit {
 
       this.intervalo = setInterval(() => {
         if (document.title == this.nombre_pestana && !c.primera_vez) {
-          
+
           this.cantidad_mensajes_sin_leer = 0;
           this.chats.forEach(chat => {
             // // console.log(this.chats);
             this.cantidad_mensajes_sin_leer += chat.cantidad_mensajes_nuevos;
           });
-          
+
           if (this.cantidad_mensajes_sin_leer > 0) {
             document.title = 'Mensajes(' + this.cantidad_mensajes_sin_leer + ') nuevos en el chat';
           }
@@ -502,7 +502,7 @@ export class ChatClienteComponent implements OnInit {
         this.chatService.getMensajeBuscandoExperto(5).then(result => {
           this.mensaje_no_encontro_experto = result;
         });
-      } 
+      }
 
       if (data.id_estado_conversacion == 3) {
         c.cerrado_inactividad = true;
@@ -511,7 +511,7 @@ export class ChatClienteComponent implements OnInit {
       if (data.id_estado_conversacion == 4) {
         c.cerrado_inactividad = true;
         this.mensajeInactividadDesconexion(c);
-      } 
+      }
       if (data.id_estado_conversacion == 5) {
         c.cerrado_inactividad = true;
         this.mensajeInactividadCliente(c);
@@ -520,7 +520,7 @@ export class ChatClienteComponent implements OnInit {
         c.cerrado_inactividad = true;
         this.mensajeInactividadExperto(c);
       }
-      
+
     });
   }
 
@@ -716,6 +716,9 @@ export class ChatClienteComponent implements OnInit {
           });
         });
 
+      }).catch(() => {
+        c.iniciando_grabacion = false;
+        swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
       });
 
 
@@ -824,9 +827,9 @@ export class ChatClienteComponent implements OnInit {
         } else {
           estado = 9;
         }
-      } else  {
+      } else {
         estado = 3;
-      }      
+      }
       this.chatService.cerrarConversacion(c, estado).then(() => {
         c.mostrar_encuesta = true;
         c.cerrado_inactividad = true;

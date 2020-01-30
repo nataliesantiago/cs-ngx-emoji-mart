@@ -535,7 +535,7 @@ export class ChatExpertoComponent {
           this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
         }
       });
-      this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer); 
+      this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     });
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes/').snapshotChanges().subscribe((changes: any) => {
       changes.forEach(a => {
@@ -627,56 +627,15 @@ export class ChatExpertoComponent {
       }
     }
 
-    if(!c.primera_vez){
-      for(let i = 0; i < tmp.length; i++){
-        if(!this.new_messages.includes(tmp[i].id_conversacion)){
+    if (!c.primera_vez) {
+      for (let i = 0; i < tmp.length; i++) {
+        if (!this.new_messages.includes(tmp[i].id_conversacion)) {
           this.new_messages.push(tmp[i].id_conversacion);
         }
       }
     }
     return tmp;
-    /* let m = d.shift();
-     if (m) {
-       let experto = this.usuarios.find((e: User) => {
-         return e.idtbl_usuario == m.id_usuario;
-       });
-       if (!experto) {
-         let u = await this.userService.getInfoUsuario(m.id_usuario);
-         this.usuarios.push(u);
-       }
-       if (m.es_nota_voz) {
-         m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
-         this.asignarAudio(m);
-       }
- 
-       //c.mensajes[i] = m;
-       tmp.push(m);
-       if (!primera_vez && !c.focuseado && m.id_usuario != this.user.getId() && c.id_estado_conversacion == 2) {
-         this.soundService.sonar(1);
-         c.mensajes_nuevos = true;
-         // c.cantidad_mensajes_nuevos++;
-       } else {
- 
-       }
- 
-       //// console.log('mensaje sin leer', this.cantidad_mensajes_sin_leer);
- 
-       if (d.length < 1) {
-         c.ultimo_mensaje = m;
-         if (m.es_nota_voz) {
-           c.ultimo_mensaje.label = 'Nota de voz';
-         } else if (m.es_archivo) {
-           c.ultimo_mensaje.label = 'Archivo adjunto';
-         } else {
-           c.ultimo_mensaje.label = m.texto;
-         }
-       }
-       i++;
-       return await this.procesarMensajes(d, c, primera_vez, i, tmp);
-     } else {
-       //// console.log(' mensajes', m)
-       return tmp;
-     }*/
+
   }
 
   passByMensajes(mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {
@@ -779,7 +738,7 @@ export class ChatExpertoComponent {
     if (chat) {
 
       let index = this.new_messages.indexOf(chat.idtbl_conversacion);
-      if(index >= 0){
+      if (index >= 0) {
         this.new_messages.splice(index, 1);
       }
 
@@ -985,6 +944,9 @@ export class ChatExpertoComponent {
           });
         });
 
+      }).catch(() => {
+        c.iniciando_grabacion = false;
+        swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
       });
 
 

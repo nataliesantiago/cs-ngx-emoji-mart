@@ -67,7 +67,8 @@ export class FlujoCuraduriaComponent implements OnInit {
   limite = 1000;
   length = 0;
   temporal = [];
-
+  progreso = 0;
+  modo_spinner = 'determinate';
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private dialog: MatDialog, private route: ActivatedRoute, private searchService: SearchService) {
 
 
@@ -315,12 +316,16 @@ export class FlujoCuraduriaComponent implements OnInit {
   }
 
   cargarPreguntas() {
-    let peticiones = Math.ceil(this.length / this.limite)
+    let peticiones = Math.ceil(this.length / this.limite);
+    let paso = Math.ceil(100 / peticiones);
     for (let index = 0; index < peticiones; index++) {
       this.searchService.obtenerPreguntasFlujo(this.limite, index).then(preguntas => {
-        
+        this.progreso += paso;
+        if (this.progreso > 100) {
+          this.progreso = 100;
+        }
         this.temporal = this.temporal.concat(preguntas);
-        
+
         if (this.temporal.length >= this.length) {
           this.curaduria_reg = this.curaduria_reg.concat(this.temporal.filter(p => {
             if (this.rol_usuario == 5) {

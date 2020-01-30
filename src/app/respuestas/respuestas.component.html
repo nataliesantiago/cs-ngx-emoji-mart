@@ -32,7 +32,7 @@
                       <mat-expansion-panel-header>
                         <strong>{{subrespuesta.titulo}}</strong>
                       </mat-expansion-panel-header>
-                      <div [innerHTML]="subrespuesta.texto | safe:'html'"></div>
+                      <div class="texto-respuesta" [innerHTML]="subrespuesta.texto | safe:'html'"></div>
                     </mat-expansion-panel>
                     <hr>
                   </mat-accordion>
@@ -42,20 +42,22 @@
             <mat-tab-group *ngIf="segmentos.length > 0">
               <br>
               <mat-tab *ngFor="let segmento of segmentos; let i = index;" label="{{segmento.titulo}}">
-                <br>
-                <div [innerHTML]="segmento.texto | safe:'html'"></div>
-                <div *ngIf="array_mostrar.length > 0">
-                  <div *ngFor="let arr of array_mostrar; let cont = index;">
-                    <mat-accordion *ngIf="arr.pos_segmento == i">
-                      <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                          <strong>{{arr.titulo}}</strong>
-                        </mat-expansion-panel-header>
-                        <div [innerHTML]="arr.texto  | safe:'html'"></div>
-                      </mat-expansion-panel>
-                      <hr>
-                    </mat-accordion>
-                    <br>
+                <div class="contenedor-segmento-pad">
+                  <br>
+                  <div [innerHTML]="segmento.texto | safe:'html'"></div>
+                  <div *ngIf="array_mostrar.length > 0">
+                    <div *ngFor="let arr of array_mostrar; let cont = index;">
+                      <mat-accordion *ngIf="arr.pos_segmento == i">
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <strong>{{arr.titulo}}</strong>
+                          </mat-expansion-panel-header>
+                          <div class="texto-respuesta" [innerHTML]="arr.texto  | safe:'html'"></div>
+                        </mat-expansion-panel>
+                        <hr>
+                      </mat-accordion>
+                      <br>
+                    </div>
                   </div>
                 </div>
               </mat-tab>
@@ -114,7 +116,7 @@
             <strong>Preguntas Asociadas</strong>
             <div class="panel-contenido" *ngFor="let pregunta_asociada of preguntas_adicion">
               <div class="contenido-respuesta">
-                  <mat-icon class="icono-asociado">{{pregunta_asociada.icono_padre}}</mat-icon>
+                <mat-icon class="icono-asociado">{{pregunta_asociada.icono_padre}}</mat-icon>
                 <p class="mouse-over contenedor-texto" (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">
                   {{pregunta_asociada.titulo}}</p>
               </div>

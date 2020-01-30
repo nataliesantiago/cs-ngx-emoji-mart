@@ -947,10 +947,6 @@ a:hover {
   margin-left: -220px !important;
 }
 
-ul li {
-  list-style: none;
-}
-
 
 .mat-drawer-backdrop.ng-star-inserted.mat-drawer-shown {
   background-color: transparent !important;
@@ -1056,7 +1052,8 @@ ul li {
   }
 
   .comunidad_titulo {
-    display: none;
+    //display: none;
+    
   }
 
   mat-table {
@@ -3486,9 +3483,12 @@ input:-webkit-autofill:active {
 }
 
 .texto-respuesta {
+  a{
+    color: blue !important;
+  }
   ul {
     li {
-      list-style: disc !important;
+     // list-style: disc !important;
     }
   }
 }

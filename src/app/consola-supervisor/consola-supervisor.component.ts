@@ -206,7 +206,7 @@ export class ConsolaSupervisorComponent implements OnInit {
       });
       let experto = this.usuarios.find((e: User) => {
         if (e != undefined) {
-          return e.idtbl_usuario == data.id_usuario_creador;
+          return e.idtbl_usuario == data.id_experto_actual;
         }
       });
       if (!experto && data.id_experto_actual) {
@@ -217,9 +217,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         let u = usuario = await this.userService.getInfoUsuario(data.id_usuario_creador);
         this.usuarios.push(u);
       }
-      if (!usuario) {
-
-      }
+      
       data.cliente = usuario;
       data.asesor_actual = experto;
       tmp.push(data);
@@ -331,7 +329,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   toggleConversacion(c: Conversacion) {
     let estado = !c.viendo_supervisor;
     c.viendo_supervisor = !c.viendo_supervisor;
-    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
+    //this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
   }
   applyFilterActivos() {
     let palabra = this.filtro_activos;

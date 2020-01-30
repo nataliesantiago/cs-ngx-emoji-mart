@@ -21,7 +21,7 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class AppComponent {
   user: User;
-  version = '0.9.5'
+  version = '0.9.8'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService,
     @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService, private changeRef: ChangeDetectorRef, private router: Router) {
     setInterval(() => {
