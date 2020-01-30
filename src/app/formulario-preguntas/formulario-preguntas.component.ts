@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+  import { Component, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -62,7 +62,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   texto_buscador: string;
   buscador = false;
   estado_flujo_pregunta = [];
-
+  loading = false;
 
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
 
@@ -307,9 +307,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       })
 
     } else {
-
+      this.loading = true;
       if (this.editar) {
-
         if (this.pregunta.muestra_fecha_actualizacion) {
           this.pregunta.muestra_fecha_actualizacion = 1;
         } else {
@@ -321,12 +320,11 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         }
         this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
-
             this.router.navigate(['/admin/preguntas']);
           }
         })
       } else {
-
+        this.loading = true;
         if (this.pregunta.muestra_fecha_actualizacion) {
           this.pregunta.muestra_fecha_actualizacion = 1;
         } else {
@@ -338,10 +336,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
-
+        
         this.ajax.post('preguntas/guardar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
-
             this.router.navigate(['/admin/preguntas']);
           }
         })
