@@ -17,10 +17,10 @@ import { Subject } from 'rxjs/Rx';
  */
 @Injectable()
 export class AjaxService {
-    
+
     host: string = environment.URL_BACK; // URL base del API
     private modoDebug: boolean = false; // Definir si hace logs o no
-    private enckey: string = "p2=5DT^lvk7/JbvCP^J_!o#*~I[TH"; // Clave de encriptado/desencriptado 
+    private enckey: string = environment.ajax; // Clave de encriptado/desencriptado 
     private usingEnc = false; // Para configurar si se debe o no encriptar toda la data
     private token: string; // Token del usuario que va en todas las peticiones
     private csrftk: string;
@@ -94,7 +94,7 @@ export class AjaxService {
         this.usingEnc = use;
     }
 
-    
+
 
 
     /**

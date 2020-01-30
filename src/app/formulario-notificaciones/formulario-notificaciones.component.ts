@@ -274,6 +274,7 @@ export class FormularioNotificacionesComponent implements OnInit {
               }
             }
             if (this.notificacion.tipo_envio == '2') {
+              console.log('ids usuarios',ids_usuarios)
               this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
                 if (u.success) {
                   this.router.navigate(['/administrador-notificaciones']);
