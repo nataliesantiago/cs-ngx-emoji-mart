@@ -1,4 +1,5 @@
-<h3>Por favor indique la razón para cerrar el chat</h3>
+<p *ngIf="data.no_cerro_experto">Chat: <strong>{{data.cliente}}</strong></p>
+<p>Por favor indique la razón para cerrar el chat</p>
 <mat-form-field class="mr-1 ml-1 filtro">
 
   <input matInput [formControl]="filtro" />

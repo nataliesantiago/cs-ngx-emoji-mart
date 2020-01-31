@@ -1207,7 +1207,8 @@ export class ChatExpertoComponent {
    */
   motivoCierreChat(c) {
     c.cerro_experto = false;
-    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true } }).afterClosed().subscribe(d => {
+    let cliente = c.cliente.nombre;
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true, cliente: cliente } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         this.chatService.cerrarConversacionUsuario(c, c.id_estado_conversacion, d.motivo).then(() => {
           c.motivo_cierre_enviado = true;
