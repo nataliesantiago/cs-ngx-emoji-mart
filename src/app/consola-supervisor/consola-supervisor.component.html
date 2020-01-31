@@ -251,26 +251,16 @@
     </mat-tab>
 
     <mat-tab label="Analítica Buscador">
-      <div class="panel-analitica" *ngIf="es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1hqmPLdaHMyE4LGyb4L-H4gwlGByDUUG1/page/ERh4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
-      </div>
-
-      <div class="panel-analitica" *ngIf="!es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1JV89eaXHqEWET72CM3_6gu_2CpomUAlK/page/P0A4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
+      <div class="panel-analitica">
+        <iframe [src]="tableros.buscador | safe:'resourceUrl'" 
+          frameborder="0" style="border:0" allowfullscreen></iframe>
       </div>
     </mat-tab>
 
     <mat-tab label="Analítica Chat Experto">
-      <div class="panel-analitica" *ngIf="es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1B_UcL5gwYpCiBmqoV9-omG5A0BIjJj81/page/P0A4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
-      </div>
-
-      <div class="panel-analitica" *ngIf="!es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1Sn4uQ-jPGNbMVPoI2TeIIpUslN4A3o-I/page/P0A4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
+      <div class="panel-analitica">
+        <iframe [src]="tableros.chatExperto | safe:'resourceUrl'" 
+          frameborder="0" style="border:0" allowfullscreen></iframe>
       </div>
     </mat-tab>
 

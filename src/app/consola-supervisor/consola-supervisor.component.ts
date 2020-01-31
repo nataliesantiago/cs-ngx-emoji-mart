@@ -14,6 +14,7 @@ import { CategoriaExperticia, Configuracion } from '../../schemas/interfaces';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Experto } from '../../schemas/xhr.schema';
+import { environment } from '../../environments/environment';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -39,6 +40,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   loading = false;
   cargar_pendientes = false;
   es_col = false;
+  tableros;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
@@ -51,15 +53,12 @@ export class ConsolaSupervisorComponent implements OnInit {
         this.init();
       }
     });
-
   }
 
   init() {
 
-    if (this.user.pais == 'col') {
-      this.es_col = true;
-    }
-
+    this.tableros = environment.tableros[this.user.pais];
+    
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
