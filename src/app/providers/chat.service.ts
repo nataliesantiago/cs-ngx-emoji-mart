@@ -197,7 +197,7 @@ export class ChatService {
 
         if (!extension_valida) {
           if (!mensaje) {
-            mensaje = 'Solo se permiten archivos con las sextensiones: ' + this.extensiones_archivos.join(', ');;
+            mensaje = 'Solo se permiten archivos con las extensiones: ' + this.extensiones_archivos.join(', ');;
           }
           re(mensaje);
         } else {
