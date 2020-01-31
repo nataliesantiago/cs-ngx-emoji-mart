@@ -2,7 +2,7 @@ div {
     //color: black !important;
 }
 
-mat-expansion-panel {
+.mat-expansion-panel-header {
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0), 0px 0px 0px 0px rgba(0, 0, 0, 0), 0px 0px 0px 0px rgba(0, 0, 0, 0) !important;
     color: #1a73e8 !important;
 }
@@ -31,16 +31,16 @@ mat-expansion-panel {
     position: relative;
 }
 
-.mouse-over{
+.mouse-over {
     color: blue;
 }
 
-.icono-asociado{
+.icono-asociado {
     position: absolute;
     color: rgb(89, 70, 141);
 }
 
-.contenedor-texto{
+.contenedor-texto {
     padding-left: 0px;
     flex: 1;
     position: relative;
@@ -110,7 +110,7 @@ mat-expansion-panel {
     padding-top: 25px;
 }
 
-.contenedor-segmento-pad{
+.contenedor-segmento-pad {
     padding-left: 15px;
 }
 
