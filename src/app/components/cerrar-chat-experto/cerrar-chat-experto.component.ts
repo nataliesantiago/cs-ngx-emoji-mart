@@ -18,6 +18,7 @@ export class CerrarChatExpertoComponent implements OnInit {
   id_motivo_cierre: number;
   filtro = new FormControl();
   motivos_filtrados = [];
+  loading = false;
 
   constructor(private dialogRef: MatDialogRef<CerrarChatExpertoComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
           private userService: UserService, private chatServivce: ChatService) {
@@ -48,6 +49,7 @@ export class CerrarChatExpertoComponent implements OnInit {
   }
   cerrar(enviar: boolean) {
     if (enviar) {
+      this.loading = true;
       this.dialogRef.close({ motivo: this.id_motivo_cierre });
     } else {
       this.dialogRef.close();
