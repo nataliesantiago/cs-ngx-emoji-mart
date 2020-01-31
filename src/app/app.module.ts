@@ -279,7 +279,7 @@ gtag('config', environment.analytics);
   ],
 
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
+   // { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
     {
       provide: AuthServiceConfig,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
