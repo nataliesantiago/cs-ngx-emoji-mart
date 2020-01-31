@@ -767,9 +767,8 @@ export class ChatExpertoComponent {
   }
 
   setFocus(c: Conversacion, estado: boolean) {
-    // // console.log(c);
     c.focuseado = estado;
-    // // console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
+    c.mensajes_nuevos = false;
     this.cantidad_mensajes_sin_leer -= c.cantidad_mensajes_nuevos;
     this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     c.cantidad_mensajes_nuevos = 0;

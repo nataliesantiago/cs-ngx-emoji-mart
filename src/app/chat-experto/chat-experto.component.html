@@ -8,16 +8,6 @@
           <div class="panel-chats primero" *ngIf="!esSupervisor">
             <perfect-scrollbar class="contenido">
               <mat-nav-list>
-                <!-- <div *ngFor="let f of chats_cola">
-                  <mat-list-item (click)="onSelectCola(chat)" *ngFor="let chat of f.chats" class="espera">
-                    <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
-                    <div class="punt-estado-chat"
-                      [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola)}">
-                    </div>
-                    <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
-                  </mat-list-item>
-                </div>
-                -->
                 <mat-list-item (click)="onSelectCola(chat)" *ngFor="let chat of fila_chats | filaChats" class="espera">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
@@ -297,7 +287,7 @@
                 <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30" [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto  || chat.iniciando_grabacion"
                   (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
                   (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
-                  [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
+                  [(ngModel)]="chat.texto_mensaje" (focus)="onSelect(chat)"
                   (blur)="setFocus(chat,false)"></textarea>
                 <button mat-icon-button color="primary" (click)="adjuntos.click()"
                   [disabled]="chat.cargando_archivo || chat.grabando_nota">
