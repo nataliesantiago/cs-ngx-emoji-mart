@@ -110,23 +110,23 @@ export class ConsolaSupervisorComponent implements OnInit {
         setInterval(() => {
 
           if (c.fecha_creacion) {
-          
+
             if (c.fecha_creacion) {
               c.tiempo_en_conversacion = moment().diff(moment(c.fecha_creacion), 'seconds');
             }
-  
+
           }
         }, 1000);
-        
+        //console.log(c.filas);
         if (c.idtbl_conversacion) {
           await this.chatService.getFilasConversacion(c);
         }
         this.utilService.getConfiguraciones().then(configs => {
           let tiempo_cola = configs.find((c: Configuracion) => {
-            
+
             return c.idtbl_configuracion == 6;
           });
-          
+
           c.interval_tiempo_cola = setInterval(() => {
             let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
 
@@ -157,18 +157,18 @@ export class ConsolaSupervisorComponent implements OnInit {
     });
 
     this.getCategoriasExperticia();
-    
+
   }
 
 
-  async agregarTiempoConversacion(c: Conversacion){
+  async agregarTiempoConversacion(c: Conversacion) {
     // console.log(c);
     setInterval(() => {
-            
+
       if (c.fecha_asignacion) {
-        
+
         if (c.fecha_asignacion) {
-        
+
           c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
         }
 
@@ -217,7 +217,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         let u = usuario = await this.userService.getInfoUsuario(data.id_usuario_creador);
         this.usuarios.push(u);
       }
-      
+
       data.cliente = usuario;
       data.asesor_actual = experto;
       tmp.push(data);
@@ -351,7 +351,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     if (palabra && palabra != '') {
       this.chats_en_fila_filtrados = this.chats_en_fila.filter((c: Conversacion) => {
         let este = false;
-        
+
         if (this.utilService.normalizeText(c.cliente.nombre.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1
           || this.utilService.normalizeText(c.cliente.correo.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1) {
 
@@ -409,7 +409,7 @@ export class ConsolaSupervisorComponent implements OnInit {
             if (this.utilService.normalizeText(c.categoria.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
               chat_filtrado = true;
             }
-          } 
+          }
           if (element == 'Todas') {
             if (c.categoria == null) {
               chat_filtrado = true;
