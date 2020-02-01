@@ -37,5 +37,23 @@ export const environment = {
         }
     },
     analytics: 'G-BVSYD26YKY',
-    ajax: 'DvC1=2D4ns3n&41R0mpRr?¿'
+    ajax: 'DvC1=2D4ns3n&41R0mpRr?¿',
+    tableros: {
+        cos: {
+            buscador: '',
+            chatExperto: ''
+        },
+        sal: {
+            buscador: '',
+            chatExperto: ''
+        },
+        hon: {
+            buscador: '',
+            chatExperto: ''
+        },
+        pan: {
+            buscador: '',
+            chatExperto: ''
+        },
+    }
 };

@@ -36,6 +36,25 @@ export const environment = {
             id_origen_chat: 'datasources/45c0c1d1bb4100dc4be3e54d1f42fbb3'
         }
     },
+
     analytics: 'UA-151598857-6',
-    ajax: 'DvC1=2D4ns3n&41R0mpRr?¿'
+    ajax: 'DvC1=2D4ns3n&41R0mpRr?¿',
+    tableros: {
+        cos: {
+            buscador: '',
+            chatExperto: ''
+        },
+        sal: {
+            buscador: '',
+            chatExperto: ''
+        },
+        hon: {
+            buscador: '',
+            chatExperto: ''
+        },
+        pan: {
+            buscador: '',
+            chatExperto: ''
+        },
+    }
 };
