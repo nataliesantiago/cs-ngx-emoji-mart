@@ -203,18 +203,18 @@ export class UserService {
         });
     }
 
-        setActivoExperto(activo, value_estado, atendiendo_emergencia?) {
+    setActivoExperto(activo, value_estado, atendiendo_emergencia?) {
         this.user.experto_activo = activo;
-        if(value_estado){
+        if (value_estado) {
             this.ajax.get('user/getEstadoExperto', { id_estado: value_estado }).subscribe(d => {
-                if(d.success){
-                    this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: d.estado[0].nombre, atendiendo_emergencia: atendiendo_emergencia});
+                if (d.success) {
+                    this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: d.estado[0].nombre, atendiendo_emergencia: atendiendo_emergencia });
                 }
             })
-        }else{
-            this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia});
+        } else {
+            this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia });
         }
-        
+
     }
 
     setActivoExpertoGlobal(estado: number) {
@@ -307,9 +307,9 @@ export class UserService {
                     //// console.log(d.notificaciones[1]);
                     this.notificaciones_usuario = d.notificaciones[0];
                     this.notificaciones_sin_leer = d.notificaciones[1].length;
-                    if(this.notificaciones_sin_leer > 0){
+                    if (this.notificaciones_sin_leer > 0) {
                         this.suena_notificacion = true;
-                    }else{
+                    } else {
                         this.suena_notificacion = false;
                     }
                     this.subjectNotificaciones.next(1);
@@ -547,11 +547,11 @@ export class UserService {
     }
 
 
-    actualizarSuperAdminCam(codigo_firebase, pass_firebase): Promise<any>{
+    actualizarSuperAdminCam(codigo_firebase, pass_firebase): Promise<any> {
         return new Promise((resolve, reject) => {
             let t = localStorage.getItem('token');
             this.ajax.post('user/validar-superadmin', { token: t, primer_login: true, codigo_firebase: codigo_firebase, pass_firebase: pass_firebase }).subscribe(p => {
-                if(p.success){
+                if (p.success) {
                     resolve(p);
                 }
             })

@@ -109,7 +109,7 @@ export class AppHeaderComponent {
 
   cambiarEstadoExperto(e) {
     //debugger;    
-    
+
     let actual = this.user.estado_actual;
     this.user.estado_actual = e.value;
     if (this.intervalo) {
@@ -123,7 +123,8 @@ export class AppHeaderComponent {
       }
       this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       this.intervalo = setInterval(() => {
-        let activo = (this.user.estado_experto == 1) ? true : false;
+        let activo = (this.user.estado_actual == 1) ? true : false;
+        console.log('estado', activo),this.user.estado_actual;
         this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       }, 10000);
 
@@ -239,13 +240,13 @@ export class AppHeaderComponent {
     });
   }
 
-  cambiarPais(pais){
+  cambiarPais(pais) {
     this.user.pais = pais;
     this.ajax.pais = pais;
     localStorage.setItem('pais', pais);
     this.changeDetector.detectChanges();
     this.userService.actualizarSuperAdminCam(this.user.codigo_firebase, this.user.pass_firebase).then(d => {
-      if(d.success){
+      if (d.success) {
         this.user.setId(d.profile.idtbl_usuario);
         this.router.navigate(['/home']);
       }

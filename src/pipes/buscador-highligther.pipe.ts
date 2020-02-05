@@ -24,7 +24,7 @@ export class BuscadorHightlighter implements PipeTransform {
                 let p = snippet[index];
                 let n = this.utils.normalizeText(p);
                 if (n.indexOf(np) == (0) || np.indexOf(n) == (0)) {
-                    snippet[index] = '<b>' + p + '</b>'
+                    snippet[index] = '<b> ' + p + ' </b>'
                 }
             }
         });
