@@ -218,7 +218,7 @@ export class UserService {
     }
 
     setActivoExpertoGlobal(estado: number) {
-        this.user.estado_experto = estado;
+        this.user.estado_actual = estado;
         this.subjectEstadoExperto.next(estado);
         //// console.log(activo)
         //this.fireStore.collection('paises/'+this.user.pais+'/'+'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });

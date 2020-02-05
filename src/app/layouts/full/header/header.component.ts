@@ -89,8 +89,9 @@ export class AppHeaderComponent {
         this.user.estado_actual = 1;
       }
       if (this.user.getIdRol() == 3) {
-        this.user.estado_experto = 1;
-        this.cambiarEstadoExperto({ value: this.user.estado_experto });
+        this.user.estado_actual = 1;
+
+        this.cambiarEstadoExperto({ value: this.user.estado_actual });
       }
     });
     this.chatService.getEmergenciaUsuario().then(emergencia => {
@@ -124,7 +125,7 @@ export class AppHeaderComponent {
       this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_actual == 1) ? true : false;
-        console.log('estado', activo),this.user.estado_actual;
+        // console.log('estado', activo),this.user.estado_actual;
         this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       }, 10000);
 
@@ -148,12 +149,12 @@ export class AppHeaderComponent {
           this.emergencia_actual = true;
           this.sonidosService.sonar(3);
           this.mostrarSnack(d);
-          this.user.estado_experto = 7;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto })
+          this.user.estado_actual = 7;
+          this.cambiarEstadoExperto({ value: this.user.estado_actual })
         } else {
           this.emergencia_actual = false;
-          this.user.estado_experto = 1;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto })
+          this.user.estado_actual = 1;
+          this.cambiarEstadoExperto({ value: this.user.estado_actual })
         }
       });
     }

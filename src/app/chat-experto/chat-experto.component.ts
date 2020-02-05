@@ -271,12 +271,12 @@ export class ChatExpertoComponent {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
                 }
-                if (e.estado_actual_experto != experto.estado_experto) {
-                  e.estado_actual_experto = experto.estado_experto;
+                if (e.estado_actual_experto != experto.estado_actual) {
+                  e.estado_actual_experto = experto.estado_actual;
                 }
               } else {
                 e.activo_chat = false;
-                e.estado_actual_experto = experto.estado_experto;
+                e.estado_actual_experto = experto.estado_actual;
               }
             }
           }
