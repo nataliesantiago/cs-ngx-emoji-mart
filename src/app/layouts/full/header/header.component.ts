@@ -125,9 +125,9 @@ export class AppHeaderComponent {
       this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       this.intervalo = setInterval(() => {
         let activo = (this.user.estado_actual == 1) ? true : false;
-        // console.log('estado', activo),this.user.estado_actual;
+        console.log('estado', activo, this.user.estado_actual);
         this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
-      }, 10000);
+      }, 5000);
 
       if (this.user.getIdRol() == 2) {
         this.listenEmergenciaExperto();

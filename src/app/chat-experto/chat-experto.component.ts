@@ -25,6 +25,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TouchSequence } from 'selenium-webdriver';
 import { EstadoExpertoService } from '../providers/estado-experto.service';
 import * as uuid from 'uuid';
+import { Experto } from '../../schemas/xhr.schema';
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -257,7 +258,7 @@ export class ChatExpertoComponent {
       // // console.log(this.expertos);
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
-          // // console.log(experto);
+          // console.log(experto);
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
             e.estado_actual_experto = "Desconectado";
@@ -271,16 +272,17 @@ export class ChatExpertoComponent {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
                 }
-                if (e.estado_actual_experto != experto.estado_actual) {
-                  e.estado_actual_experto = experto.estado_actual;
-                }
+
+                e.estado_actual_experto = experto.estado_experto;
+
               } else {
                 e.activo_chat = false;
-                e.estado_actual_experto = experto.estado_actual;
+                e.estado_actual_experto = experto.estado_experto;
               }
             }
           }
           this.abrirConversacionExperto(e, true);
+          //console.log(e);
         });
       });
     })
@@ -420,7 +422,8 @@ export class ChatExpertoComponent {
 
   abrirConversacionExperto(e: User, oculta?: boolean) {
     if (e.conversacion_experto && !oculta) {
-      // console.log(e);
+      //console.log(e);
+      e.conversacion_experto.cliente.estado_actual_experto = e.estado_actual_experto;
       this.onSelect(e.conversacion_experto);
     } else if (!e.conversacion_experto) {
       this.chatService.getConversacionExperto(e.idtbl_usuario).then(data => {
@@ -433,6 +436,8 @@ export class ChatExpertoComponent {
           this.onSelect(e.conversacion_experto);
         }
       });
+    } else if (e.conversacion_experto) {
+      e.conversacion_experto.cliente.estado_actual_experto = e.estado_actual_experto;
     }
   }
 
@@ -619,11 +624,13 @@ export class ChatExpertoComponent {
       if (!c.primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
         this.soundService.sonar(1);
         c.mensajes_nuevos = true;
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mensajes_nuevos: true });
       }
     } else {
       if (!c.primera_vez && !c.focuseado) {
         this.soundService.sonar(1);
         c.mensajes_nuevos = true;
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mensajes_nuevos: true });
       }
     }
 
@@ -744,7 +751,8 @@ export class ChatExpertoComponent {
 
       chat.esta_seleccionado = true;
       chat.mensajes_nuevos = false;
-      this.setFocus(chat, false);
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + chat.codigo).update({ mensajes_nuevos: false });
+      this.setFocus(chat, true);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
         chat.esta_seleccionado = false;
         if (!chat.motivo_cierre_enviado) {
@@ -769,6 +777,7 @@ export class ChatExpertoComponent {
   setFocus(c: Conversacion, estado: boolean) {
     c.focuseado = estado;
     c.mensajes_nuevos = false;
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mensajes_nuevos: false });
     this.cantidad_mensajes_sin_leer -= c.cantidad_mensajes_nuevos;
     this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     c.cantidad_mensajes_nuevos = 0;

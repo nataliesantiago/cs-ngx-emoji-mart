@@ -15,8 +15,7 @@
                   </div>
                   <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
                 </mat-list-item>
-                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos"
-                  [ngClass]="{'mensajes-nuevos':
+                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos" [ngClass]="{'mensajes-nuevos':
                     (chat.mensajes_nuevos && chat.id_estado_conversacion==2) ||
                     new_messages.includes(chat.idtbl_conversacion)
                   }">
@@ -55,7 +54,7 @@
                     <div *ngIf="!esSupervisor" class="punt-estado-chat"
                       [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat,'punto-supervisor':esSupervisor}">
                     </div>
-                    <div *ngIf="esSupervisor" class="punt-estado-chat" 
+                    <div *ngIf="esSupervisor" class="punt-estado-chat"
                       [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat,'red-emergency':experto.atendiendo_emergencia,'punto-supervisor':esSupervisor}">
                     </div>
                     <h3 matLine> {{experto.nombre}} </h3>
@@ -122,7 +121,8 @@
                     <mat-grid-tile><b>Correo:</b> {{chat.cliente.correo}}</mat-grid-tile>
                     <mat-grid-tile><b>Perfil:</b> {{chat.cliente.nombre_perfil}}</mat-grid-tile>
                     <mat-grid-tile><b>Rol:</b> {{chat.cliente.nombre_rol}}</mat-grid-tile>
-                    <mat-grid-tile *ngIf="chat.id_tipo_conversacion!=1"><b>Estado:</b> {{chat.cliente.estado_actual_experto}}</mat-grid-tile>
+                    <mat-grid-tile *ngIf="chat.id_tipo_conversacion!=1"><b>Estado:</b>
+                      {{chat.cliente.estado_actual_experto}}</mat-grid-tile>
                   </mat-grid-list>
                 </div>
                 <div class="panel-buscador-texto" *ngIf="chat.buscando_texto">
@@ -284,7 +284,8 @@
                 <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                   <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                 </button>
-                <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30" [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto  || chat.iniciando_grabacion"
+                <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
+                  [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto  || chat.iniciando_grabacion"
                   (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
                   (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
                   [(ngModel)]="chat.texto_mensaje" (focus)="onSelect(chat)"
