@@ -35,7 +35,7 @@
                 <br>
               </div>
 
-              <div *ngIf="pregunta.id_tipo == 3">
+              <div *ngIf="pregunta.id_tipo == 4">
                 <br>
                 <div class="row wrap">
                   <a mat-icon-button (click)="agregarRespuesta(i, 1)">
@@ -62,7 +62,7 @@
                 <br>
               </div>
 
-              <div *ngIf="pregunta.id_tipo == 4">
+              <div *ngIf="pregunta.id_tipo == 3">
                 <br>
                 <div class="row wrap caras-encuesta">
                   <a mat-icon-button [ngClass]="{ 'icono-seleccionado': activarBoton(pregunta.respuesta, 1) }"
