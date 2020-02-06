@@ -379,9 +379,12 @@ export class ChatExpertoComponent {
         c.url_llamada = data.url_llamada;
         c.conversacion_recomendada = data.conversacion_recomendada;
         c.cerro_experto = c.cerro_experto ? c.cerro_experto : false;
+        c.motivo_cierre_enviado = c.motivo_cierre_enviado ? c.motivo_cierre_enviado : false;
+        c.esta_pendiente = c.esta_pendiente ? c.esta_pendiente : false;
 
         if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
           if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente) {
+            console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
             this.motivoCierreChat(c);
           }
         }

@@ -212,7 +212,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   activeOtherType(e) {
     swal.fire({
       title: 'Confirme para activar el mensaje',
-      text: "Al momento de activaralo, se desactivará el mensaje de este tipo que este activo",
+      text: "Al momento de activarlo, se desactivarán los otros mensajes del mismo tipo",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

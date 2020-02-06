@@ -80,7 +80,7 @@ export class AdEncuestasComponent implements OnInit {
 
     swal.fire({
       title: 'Confirme para activar la encuesta',
-      text: "Al momento de activarala, se desactivará la encuesta activa",
+      text: "Al momento de activarla, se desactivará la encuesta activa",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

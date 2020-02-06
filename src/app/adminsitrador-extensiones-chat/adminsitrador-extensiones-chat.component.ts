@@ -106,7 +106,7 @@ export class AdminsitradorExtensionesChatComponent implements OnInit, AfterViewI
   eliminarExtension(e: ExtensionArchivoChat) {
     swal.fire({
       title: 'Cuidado',
-      text: "Desea Borrar la extensión",
+      text: "Desea borrar la extensión",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,
