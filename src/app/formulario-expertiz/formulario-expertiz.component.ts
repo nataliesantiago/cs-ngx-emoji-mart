@@ -84,12 +84,23 @@ export class FormularioExpertizComponent implements OnInit {
           this.expertiz = p.experticia[0];
           this.expertiz = this.expertiz[0];
           this.producto_asociado = p.experticia[1];
-          this.dataSource = new MatTableDataSource(this.producto_asociado);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.createTable(this.producto_asociado);
           this.cg.detectChanges();
         }
       });
+    }
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
     }
   }
 
@@ -107,10 +118,7 @@ export class FormularioExpertizComponent implements OnInit {
 
   anadirPreguntaAsociada(e){
     this.producto_asociado.push(e);
-    this.dataSource = new MatTableDataSource(this.producto_asociado);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    
+    this.createTable(this.producto_asociado);
     this.myControl = new FormControl(e.nombre);
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
@@ -148,9 +156,7 @@ export class FormularioExpertizComponent implements OnInit {
                   }
                 }
                 this.producto_asociado.splice(pos,1);
-                this.dataSource = new MatTableDataSource(this.producto_asociado);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
+                this.createTable(this.producto_asociado);
                 this.cg.detectChanges();
               }
             })
@@ -162,9 +168,7 @@ export class FormularioExpertizComponent implements OnInit {
               }
             }
             this.producto_asociado.splice(pos,1);
-            this.dataSource = new MatTableDataSource(this.producto_asociado);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.createTable(this.producto_asociado);
             this.cg.detectChanges();
           }
         }else{
@@ -175,9 +179,7 @@ export class FormularioExpertizComponent implements OnInit {
             }
           }
           this.producto_asociado.splice(pos,1);
-          this.dataSource = new MatTableDataSource(this.producto_asociado);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.createTable(this.producto_asociado);
           this.cg.detectChanges();
         }
       }

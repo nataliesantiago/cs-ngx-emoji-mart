@@ -248,15 +248,11 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                             if (pras.success) {
 
                               this.preguntas_adicion = pras.preguntas_asociadas;
-                              this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-                              this.dataSource.paginator = this.paginator;
-                              this.dataSource.sort = this.sort;
+                              this.crearTablaPreguntasAdicion(this.preguntas_adicion);
                               this.ajax.get('preguntas/obtener-cargos-asociados', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(carg => {
                                 if (carg.success) {
                                   this.cargos_asociados = carg.cargos_asociados;
-                                  this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-                                  this.dataSource2.paginator = this.paginator2;
-                                  this.dataSource2.sort = this.sort2;
+                                  this.crearTablaCargosAdicion(this.cargos_asociados);
                                   this.cg.detectChanges();
                                 }
                               })
@@ -288,6 +284,32 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         this.cg.detectChanges();
       }
     })
+  }
+
+  crearTablaPreguntasAdicion(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
+  }
+
+  crearTablaCargosAdicion(data) {
+    this.dataSource2 = new MatTableDataSource(data);
+    this.dataSource2.paginator = this.paginator2;
+    this.dataSource2.sort = this.sort2;
+    this.dataSource2.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   guardarPregunta() {
@@ -534,11 +556,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     if (validador) {
       this.preguntas_adicion.push(e);
 
-      this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-
-
+      this.crearTablaPreguntasAdicion(this.preguntas_adicion);
 
       this.cg.detectChanges();
     } else {
@@ -573,10 +591,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     if (validador) {
       this.cargos_asociados.push(e);
 
-      this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-      this.dataSource2.paginator = this.paginator2;
-      this.dataSource2.sort = this.sort2;
-
+      this.crearTablaCargosAdicion(this.cargos_asociados);
 
       this.cg.detectChanges();
     } else {
@@ -627,9 +642,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                   }
                 }
                 this.preguntas_adicion.splice(pos, 1);
-                this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
+                this.crearTablaPreguntasAdicion(this.preguntas_adicion);
                 this.cg.detectChanges();
               }
             })
@@ -641,9 +654,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
               }
             }
             this.preguntas_adicion.splice(pos, 1);
-            this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.crearTablaPreguntasAdicion(this.preguntas_adicion);
             this.cg.detectChanges();
           }
         } else {
@@ -654,9 +665,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
             }
           }
           this.preguntas_adicion.splice(pos, 1);
-          this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.crearTablaPreguntasAdicion(this.preguntas_adicion);
           this.cg.detectChanges();
         }
       }
@@ -693,9 +702,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                   }
                 }
                 this.cargos_asociados.splice(pos, 1);
-                this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-                this.dataSource2.paginator = this.paginator2;
-                this.dataSource2.sort = this.sort2;
+                this.crearTablaCargosAdicion(this.cargos_asociados);
                 this.cg.detectChanges();
               }
             })
@@ -707,9 +714,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
               }
             }
             this.cargos_asociados.splice(pos, 1);
-            this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-            this.dataSource2.paginator = this.paginator2;
-            this.dataSource2.sort = this.sort2;
+            this.crearTablaCargosAdicion(this.cargos_asociados);
             this.cg.detectChanges();
           }
         } else {
@@ -720,13 +725,23 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
             }
           }
           this.cargos_asociados.splice(pos, 1);
-          this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-          this.dataSource2.paginator = this.paginator2;
-          this.dataSource2.sort = this.sort2;
+          this.crearTablaCargosAdicion(this.cargos_asociados);
           this.cg.detectChanges();
         }
       }
     })
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  applyFilter2(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource2.filter = filterValue;
   }
 
 }

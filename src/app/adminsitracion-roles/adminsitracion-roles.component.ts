@@ -42,9 +42,24 @@ export class AdminsitracionRolesComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.roles);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+        const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+          return (currentTerm + (data as { [key: string]: any })[key]);
+        }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        return dataStr.indexOf(transformedFilter) != -1;
+      }
+
       this.dataSourcep = new MatTableDataSource(this.perfiles);
       this.dataSourcep.paginator = this.paginatorp;
       this.dataSourcep.sort = this.sortp;
+      this.dataSourcep.filterPredicate = (data: any, filter: string): boolean => {
+        const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+          return (currentTerm + (data as { [key: string]: any })[key]);
+        }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        return dataStr.indexOf(transformedFilter) != -1;
+      }
       //this.matTableFilter = new matTableFilter(this.dataSource, this.roles);
     })
   }

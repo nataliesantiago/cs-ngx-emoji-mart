@@ -380,17 +380,16 @@ export class ConsolaSupervisorComponent implements OnInit {
     this.loading = true;
     let categorias = event.value;
     if (categorias.length != 0) {
-      this.chatService.obtenerUsuarioPorCategoria(categorias).then((expertos: any) => {
-        this.chats_activos_filtrados = this.chats_activos.filter((c: Conversacion) => {
-          let chat_filtrado = false;
-          expertos.forEach(experto => {
-            if (c.asesor_actual.idtbl_usuario === experto.id_usuario) {
+      this.chats_activos_filtrados = this.chats_activos.filter((c: any) => {
+        let chat_filtrado = false;
+        categorias.forEach(element => {
+          if (c.categoria != '') {
+            if (this.utilService.normalizeText(c.categoria.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
               chat_filtrado = true;
             }
-          });
-          this.loading = false;
-          return chat_filtrado;
+          } 
         });
+        return chat_filtrado;
       });
     } else {
       this.chats_activos_filtrados = this.chats_activos;
