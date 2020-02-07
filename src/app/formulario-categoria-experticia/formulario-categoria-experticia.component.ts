@@ -83,9 +83,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
           this.categoria_expertiz = p.categoria[0];
           this.categoria_expertiz = this.categoria_expertiz[0];
           this.experticia_asociada = p.categoria[1];
-          this.dataSource = new MatTableDataSource(this.experticia_asociada);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.createTable(this.experticia_asociada);
           this.cg.detectChanges();
         }
       });
@@ -104,11 +102,22 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
     
   }
 
-  anadirPreguntaAsociada(e){
-    this.experticia_asociada.push(e);
-    this.dataSource = new MatTableDataSource(this.experticia_asociada);
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
+  }
+
+  anadirPreguntaAsociada(e){
+    this.experticia_asociada.push(e);
+    this.createTable(this.experticia_asociada);
     
     this.myControl = new FormControl(e.nombre);
     this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -147,9 +156,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
                   }
                 }
                 this.experticia_asociada.splice(pos,1);
-                this.dataSource = new MatTableDataSource(this.experticia_asociada);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
+                this.createTable(this.experticia_asociada);
                 this.cg.detectChanges();
               }
             })
@@ -161,9 +168,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
               }
             }
             this.experticia_asociada.splice(pos,1);
-            this.dataSource = new MatTableDataSource(this.experticia_asociada);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.createTable(this.experticia_asociada);
             this.cg.detectChanges();
           }
         }else{
@@ -174,9 +179,7 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
             }
           }
           this.experticia_asociada.splice(pos,1);
-          this.dataSource = new MatTableDataSource(this.experticia_asociada);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.createTable(this.experticia_asociada);
           this.cg.detectChanges();
         }
       }
@@ -255,3 +258,4 @@ export class FormularioCategoriaExperticiaComponent implements OnInit {
   }
 
 }
+

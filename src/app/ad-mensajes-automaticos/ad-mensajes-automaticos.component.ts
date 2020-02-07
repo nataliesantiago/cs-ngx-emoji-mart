@@ -91,6 +91,13 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.cg.detectChanges();
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   /**
@@ -212,7 +219,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   activeOtherType(e) {
     swal.fire({
       title: 'Confirme para activar el mensaje',
-      text: "Al momento de activaralo, se desactivará el mensaje de este tipo que este activo",
+      text: "Al momento de activarlo, se desactivarán los otros mensajes del mismo tipo",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

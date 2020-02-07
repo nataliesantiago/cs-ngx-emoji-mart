@@ -141,7 +141,7 @@ export class SearchService {
       if (this.cantidad_busquedas && this.fecha_inicio_busquedas) {
         let diff = moment().utc().diff(this.fecha_inicio_busquedas.utc(), 'seconds');
         let segundos = tiempo_minimo * 60;
-        if (this.cantidad_busquedas >= consultas_minimas && diff >= segundos) {
+        if (this.cantidad_busquedas >= consultas_minimas && diff >= segundos && this.user.id_rol != 2 && this.user.id_rol != 3) {
           //// console.log('abrir chat', this.busqueda_actual);
           let id_busqueda = this.busqueda_actual.idtbl_busqueda_usuario;
           delete this.busqueda_actual;

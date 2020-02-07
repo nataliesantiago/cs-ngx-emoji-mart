@@ -140,6 +140,13 @@ export class FlujoCuraduriaComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
     this.cg.detectChanges();
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   cargarRevision(filter, primera) {

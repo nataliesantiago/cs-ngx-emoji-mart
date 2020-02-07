@@ -67,6 +67,13 @@ export class AdEncuestasComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   ngOnInit() {
@@ -80,7 +87,7 @@ export class AdEncuestasComponent implements OnInit {
 
     swal.fire({
       title: 'Confirme para activar la encuesta',
-      text: "Al momento de activarala, se desactivará la encuesta activa",
+      text: "Al momento de activarla, se desactivará la encuesta activa",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

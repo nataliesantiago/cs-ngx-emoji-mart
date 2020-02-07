@@ -77,7 +77,25 @@ export class RespuestasComponent implements OnInit {
       });
 
     let fecha_actual = moment(new Date());
+    let cantidad_flujos_curaduria = 0;
+    //obtener-fecha-publicacion-pregunta
+    this.ajax.get('preguntas/obtener-fecha-publicacion-pregunta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
+      cantidad_flujos_curaduria = p.pregunta[0].length;
+      if (p.pregunta[0].length != 0) {
+        if (p.pregunta[1].length == 1) {
+          let registro = p.pregunta[1];
+          let fecha_creacion = moment(registro[0].fecha).tz('America/Bogota');
 
+          let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
+
+          if (diferencia_dias <= this.dias_pregunta_nueva) {
+            this.pregunta_nueva = true;
+          }
+        }
+      } else {
+        this.pregunta_nueva = true;
+      }
+    });
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if (p.success) {
         // // console.log('pregunta',p.pregunta[0].fecha_ultima_modificacion)
@@ -85,12 +103,14 @@ export class RespuestasComponent implements OnInit {
 
         this.pregunta = p.pregunta[0];
 
-        let fecha_creacion = moment(p.pregunta[0].fecha_creacion).tz('America/Bogota');
+        if(cantidad_flujos_curaduria == 0){
+          let fecha_creacion = moment(this.pregunta.fecha_creacion).tz('America/Bogota');
 
-        let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
+          let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
 
-        if (diferencia_dias <= this.dias_pregunta_nueva) {
-          this.pregunta_nueva = true;
+          if (diferencia_dias <= this.dias_pregunta_nueva) {
+            this.pregunta_nueva = true;
+          }
         }
 
         this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {

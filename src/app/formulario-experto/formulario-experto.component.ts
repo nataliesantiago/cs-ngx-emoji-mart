@@ -93,12 +93,23 @@ export class FormularioExpertoComponent implements OnInit {
           this.correo_experto = this.nombre_experto[0].correo;
           this.nombre_experto = this.nombre_experto[0].nombre;
           this.experticia_asociada = p.informacion[1];
-          this.dataSource = new MatTableDataSource(this.experticia_asociada);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.createTable(this.experticia_asociada);
           this.cg.detectChanges();
         }
       });
+    }
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
     }
   }
 
@@ -116,10 +127,8 @@ export class FormularioExpertoComponent implements OnInit {
 
   anadirHorarioExperto(e){
     this.experticia_asociada.push(e);
-    this.experticia_asociada[this.experticia_asociada.length - 1].nuevo = 1
-    this.dataSource = new MatTableDataSource(this.experticia_asociada);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.experticia_asociada[this.experticia_asociada.length - 1].nuevo = 1;
+    this.createTable(this.experticia_asociada);
     
     this.myControl = new FormControl(e.nombre);
     this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -175,9 +184,7 @@ export class FormularioExpertoComponent implements OnInit {
                   }
                 }
                 this.experticia_asociada.splice(pos,1);
-                this.dataSource = new MatTableDataSource(this.experticia_asociada);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
+                this.createTable(this.experticia_asociada);
                 this.cg.detectChanges();
               }
             })
@@ -189,9 +196,7 @@ export class FormularioExpertoComponent implements OnInit {
               }
             }
             this.experticia_asociada.splice(pos,1);
-            this.dataSource = new MatTableDataSource(this.experticia_asociada);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.createTable(this.experticia_asociada);
             this.cg.detectChanges();
           }
         }else{
@@ -202,9 +207,7 @@ export class FormularioExpertoComponent implements OnInit {
             }
           }
           this.experticia_asociada.splice(pos,1);
-          this.dataSource = new MatTableDataSource(this.experticia_asociada);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.createTable(this.experticia_asociada);
           this.cg.detectChanges();
         }
       }
@@ -267,4 +270,13 @@ export class FormularioExpertoComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * aplica los filtros generales a la tabla
+   * @param filterValue 
+  */
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 }
