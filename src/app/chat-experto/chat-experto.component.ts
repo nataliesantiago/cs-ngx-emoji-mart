@@ -120,6 +120,7 @@ export class ChatExpertoComponent {
 
       this.chatService.getConfiguracionesChat().then(configs => {
         this.configuraciones = configs.configuraciones;
+        console.log(this.configuraciones);
         this.userService.getFilasExperto().then(() => {
           this.userService.setActivoExpertoGlobal(1);
           this.insertarLogEstadoExperto();
@@ -933,35 +934,68 @@ export class ChatExpertoComponent {
   grabarNotaVoz(c: Conversacion, comp: PerfectScrollbarComponent) {
 
     c.iniciando_grabacion = true;
-    let minutos = parseInt(this.buscarConfiguracion(7).valor);
-    let tiempo = minutos * 60;
-    const options = { mimeType: 'audio/webm' };
-    let detenido = false;
-    let calculaTiempo = { fechaIni: null, fechaFin: null };
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        this.stream = stream;
-        c.mediaRecorder = new StereoAudioRecorder(stream, {
-          sampleRate: 48000,
-          get16BitAudio: true,
-          bufferSize: 4096,
-          numberOfAudioChannels: 1,
-          disableLogs: true
-        });
-        this.startTimer(tiempo, c).then(() => {
-          c.mediaRecorder.stop(audioBlob => {
-            this.onStopRecordingNotaVoz(audioBlob, c, comp);
+    let minutos;
+    if (this.buscarConfiguracion(7)) {
+      minutos = parseInt(this.buscarConfiguracion(7).valor);
 
+      let tiempo = minutos * 60;
+      const options = { mimeType: 'audio/webm' };
+      let detenido = false;
+      let calculaTiempo = { fechaIni: null, fechaFin: null };
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          this.stream = stream;
+          c.mediaRecorder = new StereoAudioRecorder(stream, {
+            sampleRate: 48000,
+            get16BitAudio: true,
+            bufferSize: 4096,
+            numberOfAudioChannels: 1,
+            disableLogs: true
           });
+          this.startTimer(tiempo, c).then(() => {
+            c.mediaRecorder.stop(audioBlob => {
+              this.onStopRecordingNotaVoz(audioBlob, c, comp);
+
+            });
+          });
+
+        }).catch(() => {
+          c.iniciando_grabacion = false;
+          swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
         });
+    } else {
+      this.init();
+      this.chatService.getConfiguracionesChat().then(configs => {
+        this.configuraciones = configs.configuraciones;
+        minutos = parseInt(this.buscarConfiguracion(7).valor);
 
-      }).catch(() => {
-        c.iniciando_grabacion = false;
-        swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
+        let tiempo = minutos * 60;
+        const options = { mimeType: 'audio/webm' };
+        let detenido = false;
+        let calculaTiempo = { fechaIni: null, fechaFin: null };
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(stream => {
+            this.stream = stream;
+            c.mediaRecorder = new StereoAudioRecorder(stream, {
+              sampleRate: 48000,
+              get16BitAudio: true,
+              bufferSize: 4096,
+              numberOfAudioChannels: 1,
+              disableLogs: true
+            });
+            this.startTimer(tiempo, c).then(() => {
+              c.mediaRecorder.stop(audioBlob => {
+                this.onStopRecordingNotaVoz(audioBlob, c, comp);
+
+              });
+            });
+
+          }).catch(() => {
+            c.iniciando_grabacion = false;
+            swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
+          });
       });
-
-
-
+    }
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
