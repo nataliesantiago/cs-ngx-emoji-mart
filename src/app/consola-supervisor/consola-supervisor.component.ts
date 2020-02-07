@@ -100,6 +100,7 @@ export class ConsolaSupervisorComponent implements OnInit {
           }
         });
         //this.chats_activos = chats;
+        
       }
       this.applyFilterActivos();
     });
@@ -381,14 +382,16 @@ export class ConsolaSupervisorComponent implements OnInit {
     if (categorias.length != 0) {
       this.chats_activos_filtrados = this.chats_activos.filter((c: any) => {
         let chat_filtrado = false;
-        let expertis = c.categoria.split(',');
-        categorias.forEach(element => {
-          expertis.forEach(nombre => {
-            if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
-              chat_filtrado = true;
-            }
+        if (c.categoria) {
+          let expertis = c.categoria.split(',');
+          categorias.forEach(element => {
+            expertis.forEach(nombre => {
+              if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
+                chat_filtrado = true;
+              }
+            });
           });
-        });
+        }
         return chat_filtrado;
       });
     } else {
@@ -401,14 +404,16 @@ export class ConsolaSupervisorComponent implements OnInit {
     if (categorias.length != 0) {
       this.chats_en_fila_filtrados = this.chats_en_fila.filter((c: any) => {
         let chat_filtrado = false;
-        let expertis = c.categoria.split(',');
-        categorias.forEach(element => {
-          expertis.forEach(nombre => {
-            if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
-              chat_filtrado = true;
-            }
+        if (c.categoria) {
+          let expertis = c.categoria.split(',');
+          categorias.forEach(element => {
+            expertis.forEach(nombre => {
+              if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
+                chat_filtrado = true;
+              }
+            });
           });
-        });
+        }
         return chat_filtrado;
       });
     } else {

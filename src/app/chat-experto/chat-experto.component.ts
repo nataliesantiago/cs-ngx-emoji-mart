@@ -1128,9 +1128,10 @@ export class ChatExpertoComponent {
 
   cerrarChat(c: Conversacion) {
     c.cerro_experto = true;
+    let cliente = c.cliente.nombre;
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true });
     setTimeout(() => {
-      this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
+      this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false, cliente: cliente } }).afterClosed().subscribe(d => {
         if (d && d.motivo) {
           let estado = 3;
           this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
