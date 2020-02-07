@@ -377,23 +377,22 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   filtrarCategorias(event) {
-    this.loading = true;
     let categorias = event.value;
     if (categorias.length != 0) {
       this.chats_activos_filtrados = this.chats_activos.filter((c: any) => {
         let chat_filtrado = false;
+        let expertis = c.categoria.split(',');
         categorias.forEach(element => {
-          if (c.categoria != '') {
-            if (this.utilService.normalizeText(c.categoria.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
+          expertis.forEach(nombre => {
+            if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
               chat_filtrado = true;
             }
-          } 
+          });
         });
         return chat_filtrado;
       });
     } else {
       this.chats_activos_filtrados = this.chats_activos;
-      this.loading = false;
     }
   }
 
@@ -402,9 +401,10 @@ export class ConsolaSupervisorComponent implements OnInit {
     if (categorias.length != 0) {
       this.chats_en_fila_filtrados = this.chats_en_fila.filter((c: any) => {
         let chat_filtrado = false;
+        let expertis = c.categoria.split(',');
         categorias.forEach(element => {
-          c.filas.forEach(fila => {
-            if (this.utilService.normalizeText(fila.nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
+          expertis.forEach(nombre => {
+            if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
               chat_filtrado = true;
             }
           });
