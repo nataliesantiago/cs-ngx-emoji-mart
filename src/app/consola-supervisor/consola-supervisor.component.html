@@ -21,7 +21,7 @@
               <mat-label>Categoría experticia</mat-label>
               <mat-select multiple (selectionChange)="filtrarCategorias($event)">
                 <mat-option *ngFor="let categoria_experticia of categorias_experticia"
-                  [value]="categoria_experticia.idtbl_categoria_experticia">{{categoria_experticia.nombre}}</mat-option>
+                  [value]="categoria_experticia.nombre">{{categoria_experticia.nombre}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>

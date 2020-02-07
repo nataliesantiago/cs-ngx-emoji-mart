@@ -3484,7 +3484,8 @@ input:-webkit-autofill:active {
 
 }
 
-.texto-respuesta {
+.texto-respuesta,
+.texto-subrespuesta {
   @extend .ql-editor;
 
   a {
@@ -3506,6 +3507,10 @@ input:-webkit-autofill:active {
     color: rgb(96, 96, 96);
     ;
   }
+}
+
+.texto-subrespuesta {
+  padding: 0;
 }
 
 .editor-preguntas {

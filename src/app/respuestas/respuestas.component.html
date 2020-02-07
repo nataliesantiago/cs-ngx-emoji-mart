@@ -73,7 +73,7 @@
                       <mat-expansion-panel-header>
                         <strong>{{subrespuesta.titulo}}</strong>
                       </mat-expansion-panel-header>
-                      <div [innerHTML]="subrespuesta.texto  | safe:'html'"></div>
+                      <div class="texto-subrespuesta" [innerHTML]="subrespuesta.texto  | safe:'html'"></div>
                     </mat-expansion-panel>
                     <hr>
                   </mat-accordion>
