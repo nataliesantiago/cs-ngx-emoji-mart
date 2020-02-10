@@ -1,16 +1,16 @@
 <div class="general-container">
   <mat-card *ngIf="create_message" class="mat-card-root">
     <mat-card-content class="mat-card-content-root">
-      <mat-card-title>Crear Mensaje Automatico</mat-card-title>
+      <mat-card-title>Crear Mensaje Automático</mat-card-title>
       <div fxLayaout="100" class="contenedor-column-form">
         <form class="m-t-20" fxFlex="70">
           <mat-form-field>
-            <mat-label>Digite el mensaje automatico</mat-label>
+            <mat-label>Digite el mensaje automático</mat-label>
             <input matInput [(ngModel)]="message.texto" name="texto_mensaje" autocomplete="off"/>
           </mat-form-field>
   
           <mat-form-field>
-            <mat-label>Tipo de mensaje automatico</mat-label>
+            <mat-label>Tipo de mensaje automático</mat-label>
             <mat-select name="type" (selectionChange)="onChangeType($event)">
               <mat-option *ngFor="let message_type of message_types" [value]="message_type.idtbl_tipo_mensaje_automatico">{{message_type.nombre}}</mat-option>
             </mat-select>

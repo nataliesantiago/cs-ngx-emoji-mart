@@ -109,6 +109,7 @@ export class ResultadosComponent implements OnInit {
     let id_busqueda = this.searchService.busqueda_actual.idtbl_busqueda_usuario;
     //// console.log(id_busqueda);
     this.chatService.crearConversacion(null, id_busqueda);
+    this.router.navigate(['/home']);
   }
 
   cambiaTab(e: MatTabChangeEvent) {    

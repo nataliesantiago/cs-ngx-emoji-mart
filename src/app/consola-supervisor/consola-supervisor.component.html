@@ -64,7 +64,7 @@
                 [chat]="chat">
                 <div class="chat-list">
                   <div class="chat-message"
-                    [ngClass]="{'odd': m.id_usuario!==chat.asesor_actual.idtbl_usuario,'even': m.id_usuario===chat.asesor_actual.idtbl_usuario}"
+                    [ngClass]="{'odd': m.id_usuario!==user.idtbl_usuario,'even': m.id_usuario===user.idtbl_usuario}"
                     *ngFor="let m of chat.mensajes | mensajesExperto: [1,usuarios]">
                     <div class="chat-block" [ngClass]="{'alamra-nlp':m.alarma_nlp}">
                       <div class="contendor-archivo" *ngIf="m.es_archivo || m.es_nota_voz">
