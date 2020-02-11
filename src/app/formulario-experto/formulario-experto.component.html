@@ -140,7 +140,7 @@
         <br>
         <div fxLayout="row wrap">
           <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
-              <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarDato()">Guardar</button>
+              <button fxFlex="45" class="custom__btn custom__btn--accept" (click)="enviarDato()" [disabled]="loading">Guardar</button>
               <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/ad-expertos']"><span class="texto-boton">Cancelar</span></a>
           </div>
         </div>

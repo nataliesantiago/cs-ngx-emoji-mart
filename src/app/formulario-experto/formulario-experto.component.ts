@@ -38,6 +38,7 @@ export class FormularioExpertoComponent implements OnInit {
   nombre_experto;
   correo_experto;
   horarios = [];
+  loading = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, 
               private qs: QuillService, private http: HttpClient, private utilsService: UtilsService){
@@ -216,37 +217,43 @@ export class FormularioExpertoComponent implements OnInit {
 
   enviarDato(){
     let enviarInfo = true;
+    let esNuevo = false;
     for(let i = 0; i < this.experticia_asociada.length; i++){
       if(!this.experticia_asociada[i].idtbl_horario_chat){
         enviarInfo = false;
       }
-    }
-    
-    if(enviarInfo){
-      if(this.editar){
-    
-        this.ajax.post('user/agregar-expertiz', { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto, id_usuario: this.id_usuario }).subscribe(d => {
-          if(d.success){
-          
-            this.router.navigate(['/ad-expertos']);
-          }
-        })
+      if (this.experticia_asociada[i].nuevo) {
+        esNuevo = true;
       }
-
-    }else{
-      swal.fire({
-        title: 'Datos Incompletos',
-        text: 'Porfavor seleccione horario para todas las categorias de expertiz',
-        type: 'warning',
-        buttonsStyling: false,
-        confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-        confirmButtonText: 'Aceptar',
-        customClass: {
-          container: 'custom-sweet'
-        }
-      });
     }
     
+    if (esNuevo) {
+      if(enviarInfo){
+        this.loading = true;
+        if(this.editar){
+          this.ajax.post('user/agregar-expertiz', { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto, id_usuario: this.id_usuario }).subscribe(d => {
+            if(d.success){
+              this.loading = false;
+              this.router.navigate(['/ad-expertos']);
+            }
+          })
+        } 
+      }else{
+        swal.fire({
+          title: 'Datos Incompletos',
+          text: 'Porfavor seleccione horario para todas las categorias de expertiz',
+          type: 'warning',
+          buttonsStyling: false,
+          confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+          confirmButtonText: 'Aceptar',
+          customClass: {
+            container: 'custom-sweet'
+          }
+        });
+      }
+    } else {
+      this.router.navigate(['/ad-expertos']);
+    }
   }
 
   habilitarExperticia(){

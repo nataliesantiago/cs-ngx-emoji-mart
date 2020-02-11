@@ -94,7 +94,6 @@
                           <!-- <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>-->
                         </div>
                       </div>
-
                       <div [innerHTML]="m.texto | linkify | replaceEmojisMensaje:'google' | safe:'html'"></div>
                       <span *ngIf="m.id_usuario==user.idtbl_usuario">
                         <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
