@@ -120,7 +120,7 @@ export class ChatExpertoComponent {
 
       this.chatService.getConfiguracionesChat().then(configs => {
         this.configuraciones = configs.configuraciones;
-        console.log(this.configuraciones);
+        // console.log(this.configuraciones);
         this.userService.getFilasExperto().then(() => {
           this.userService.setActivoExpertoGlobal(1);
           this.insertarLogEstadoExperto();
@@ -358,8 +358,8 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          // // console.log(disponibilidad);
-          if (c && disponibilidad) {
+          console.log(disponibilidad, c);
+          if (c && disponibilidad && !c.id_experto_actual) {
             this.onSelectCola(c);
           }
         }
@@ -769,7 +769,7 @@ export class ChatExpertoComponent {
   onSelectCola(c: Conversacion): void {
     // this.chat = chat;
     // chat.mensajes_nuevos = false;
-    this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo).then(u => {
+    this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
 
     });
   }

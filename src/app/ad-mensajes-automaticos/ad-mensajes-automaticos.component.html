@@ -51,7 +51,7 @@
       <br>
       <div class="botones m-b-20" *ngIf="!create_message">
         <button class="custom__btn custom__btn--primary" (click)="create_message=!create_message">
-          <mat-icon>add</mat-icon> Crear Mensaje Automatico
+          <mat-icon>add</mat-icon> Crear Mensaje Automático
         </button>
       </div>
       
@@ -64,7 +64,7 @@
         </div>
         <div class="element-filter element-filter-3">
             <mat-form-field>
-                <mat-label>Tipo de Mensaje Automatico</mat-label>
+                <mat-label>Tipo de Mensaje Automático</mat-label>
                 <mat-select name="estado" (selectionChange)="filterData('tipo',$event)">
                     <mat-option value="todos">Todos</mat-option>
                     <mat-option *ngFor="let type of message_types" [value]="type.nombre">{{type.nombre}}</mat-option>
@@ -130,7 +130,7 @@
               <mat-cell *matCellDef="let row">
                 <span *ngIf="!row.update">{{row.tipo}}</span>
                 <mat-form-field *ngIf="row.update">
-                  <mat-label>Tipo de mensaje automatico</mat-label>
+                  <mat-label>Tipo de mensaje automático</mat-label>
                   <mat-select name="type" (selectionChange)="onChangeTypeTable($event, row)">
                     <mat-option *ngFor="let message_type of message_types" [value]="message_type.idtbl_tipo_mensaje_automatico">{{message_type.nombre}}</mat-option>
                   </mat-select>
