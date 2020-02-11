@@ -269,7 +269,7 @@ export class ChatExpertoComponent {
             } else {
               e.atendiendo_emergencia = false;
               var duration = moment().unix() - experto.fecha.seconds;
-              if (experto.activo && duration < 500) {
+              if (experto.activo && duration < 30) {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
                 }
@@ -371,7 +371,7 @@ export class ChatExpertoComponent {
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
-      if (data.id_experto_actual != this.user.getId()) {
+      if (data && data.id_experto_actual != this.user.getId()) {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
       } else {
         c.id_estado_conversacion = data.id_estado_conversacion;
