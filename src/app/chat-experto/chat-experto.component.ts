@@ -358,8 +358,8 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          // // console.log(disponibilidad);
-          if (c && disponibilidad) {
+          console.log('disponibilidad', disponibilidad);
+          if (c && disponibilidad && !c.id_experto_actual) {
             this.onSelectCola(c);
           }
         }
