@@ -269,7 +269,7 @@ export class ChatExpertoComponent {
             } else {
               e.atendiendo_emergencia = false;
               var duration = moment().unix() - experto.fecha.seconds;
-              if (experto.activo && duration < 500) {
+              if (experto.activo && duration < 30) {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
                 }
