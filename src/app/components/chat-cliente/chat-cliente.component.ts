@@ -108,7 +108,7 @@ export class ChatClienteComponent implements OnInit {
               //this.procesaFilas(c);
               this.chatService.getExpertoDisponible(c.filas).then(experto => {
                 if (experto) {
-                  this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+                  this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
                     c.id_experto_actual = u.idtbl_usuario;
                     c.nombre_experto_actual = u.nombre;
                     c.asesor_actual = new User(null, null, null);
@@ -425,7 +425,7 @@ export class ChatClienteComponent implements OnInit {
       c.filas.forEach((ce, index) => {
         this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).delete();
       });
-      this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+      this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
         c.id_experto_actual = u.idtbl_usuario;
         c.nombre_experto_actual = u.nombre;
         c.asesor_actual = new User(null, null, null);
@@ -561,7 +561,7 @@ export class ChatClienteComponent implements OnInit {
         c.expertos = [];
         //his.procesaFilas(c);
         if (d.experto) {
-          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
             c.id_experto_actual = u.idtbl_usuario;
             c.nombre_experto_actual = u.nombre;
             c.asesor_actual = new User(null, null, null);

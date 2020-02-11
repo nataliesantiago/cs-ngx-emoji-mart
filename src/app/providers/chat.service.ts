@@ -48,12 +48,12 @@ export class ChatService {
     this.userService.observableUsuario.subscribe(u => {
       this.user = u;
       if (u) {
-        
+
         this.getConfiguracionesChat();
       }
     });
     if (this.user) {
-      
+
       this.getConfiguracionesChat();
     }
   }
@@ -118,9 +118,9 @@ export class ChatService {
    * @param  {string} codigo
    * @returns Promise
    */
-  asignarUsuarioExperto(id_usuario: number, id_conversacion: number, codigo: string): Promise<User> {
+  asignarUsuarioExperto(id_usuario: number, id_conversacion: number, codigo: string, supervisor: boolean): Promise<User> {
     return new Promise((r, re) => {
-      this.ajax.post('chat/conversacion/asignarExperto', { id_usuario: id_usuario, id_conversacion: id_conversacion, codigo }).subscribe(d => {
+      this.ajax.post('chat/conversacion/asignarExperto', { id_usuario: id_usuario, id_conversacion: id_conversacion, codigo, supervisor: supervisor }).subscribe(d => {
         if (d.success) {
           r(d.usuario);
         }
