@@ -769,7 +769,7 @@ export class ChatExpertoComponent {
   onSelectCola(c: Conversacion): void {
     // this.chat = chat;
     // chat.mensajes_nuevos = false;
-    this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo,false).then(u => {
+    this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
 
     });
   }
