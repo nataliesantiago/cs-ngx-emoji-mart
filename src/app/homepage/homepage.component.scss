@@ -9240,21 +9240,28 @@
     transform: scale(1.1);
 }
 
-.iconos{
-    margin: 20px 0;
-    width: 770px;
+.iconos {
+    margin: 100px 0;
+    width: 774px;
     text-align: center;
-    left: -50%;
     position: relative;
-    img{
+    left: -50%;
+    .mat-grid-tile {
+        height: 150px !important;
+    }
+
+    img {
         width: 110px;
         margin: 10px;
-        position: relative;
-        &.tres{
-            top: -19px;
+
+        &.tres {
+            top: -9px;
+            position: relative;
         }
-        &.cuatro{
-            top: -31px;
+
+        &.cuatro {
+            top: -14px;
+            position: relative;
         }
     }
 }
@@ -10030,8 +10037,12 @@ iframe {
 .txt2 {
     font-family: Poppins-Italic;
     font-size: 15px;
-    color: #ed1c27;
+    color: #1e88e5;
     line-height: 1.5;
+    text-decoration: underline;
+    &:hover{
+        color: #1e88e5;
+    }
 }
 
 /*//////////////////////////////////////////////////////////////////
