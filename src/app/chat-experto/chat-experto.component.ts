@@ -382,10 +382,12 @@ export class ChatExpertoComponent {
         c.cerro_experto = c.cerro_experto ? c.cerro_experto : false;
         c.motivo_cierre_enviado = c.motivo_cierre_enviado ? c.motivo_cierre_enviado : false;
         c.esta_pendiente = c.esta_pendiente ? c.esta_pendiente : false;
+        c.mostro_modal_cierre = c.mostro_modal_cierre ? c.mostro_modal_cierre : false;
 
-        if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
-          if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente) {
+        if (c.id_estado_conversacion == 3 || c.id_estado_conversacion == 4 || c.id_estado_conversacion == 5 || c.id_estado_conversacion == 6) {
+          if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente && !c.mostro_modal_cierre) {
             // console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
+            c.mostro_modal_cierre = true;
             this.motivoCierreChat(c);
           }
         }
