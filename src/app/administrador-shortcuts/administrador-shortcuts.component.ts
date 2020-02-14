@@ -216,7 +216,7 @@ export class AdministradorShortcutsComponent implements OnInit {
   eliminarShortcut(e) {
     swal.fire({
       title: 'Cuidado',
-      text: "Desea Borrar el guión",
+      text: "Desea borrar el guión",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

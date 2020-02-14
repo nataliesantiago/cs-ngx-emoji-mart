@@ -761,10 +761,13 @@ export class ChatExpertoComponent {
       this.setFocus(chat, true);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
         chat.esta_seleccionado = false;
-        if (!chat.motivo_cierre_enviado) {
+        // console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
+        if (!chat.motivo_cierre_enviado && !chat.mostro_modal_cierre) {
+          // console.log('no enviado');
           this.motivoCierreChat(chat);
         }
       }
+      
     }
   }
 

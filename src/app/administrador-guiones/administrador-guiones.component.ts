@@ -172,7 +172,7 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   eliminarExtension(e) {
     swal.fire({
       title: 'Cuidado',
-      text: "Desea Borrar el guión",
+      text: "Desea borrar el guión",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,
