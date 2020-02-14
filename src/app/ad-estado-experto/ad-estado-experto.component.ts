@@ -127,7 +127,7 @@ export class AdEstadoExpertoComponent implements OnInit {
   inactiveState(e){
     swal.fire({
       title: 'Cuidado',
-      text: "Confirme para desactivar el mensaje automatico",
+      text: "Confirme para desactivar el estado de inactividad",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,
