@@ -82,18 +82,20 @@ export class AppHeaderComponent {
     if (this.user.boton_sos_perfil && this.user.boton_sos_rol) {
       this.muestra_boton_sos = true;
     }
-    this.chatService.getEstadosExperto().then(estados => {
-      this.estados_operador = estados;
-      if (this.user.getIdRol() == 2) {
-        this.cambiarEstadoExperto({ value: 1 });
-        this.user.estado_actual = 1;
-      }
-      if (this.user.getIdRol() == 3) {
-        this.user.estado_actual = 1;
+    if (this.user.getIdRol() == 2 || this.user.getIdRol() == 3) {
+      this.chatService.getEstadosExperto().then(estados => {
+        this.estados_operador = estados;
+        if (this.user.getIdRol() == 2) {
+          this.cambiarEstadoExperto({ value: 1 });
+          this.user.estado_actual = 1;
+        }
+        if (this.user.getIdRol() == 3) {
+          this.user.estado_actual = 1;
 
-        this.cambiarEstadoExperto({ value: this.user.estado_actual });
-      }
-    });
+          this.cambiarEstadoExperto({ value: this.user.estado_actual });
+        }
+      });
+    }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
       // // console.log(emergencia);
       if (emergencia) {

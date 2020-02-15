@@ -358,7 +358,7 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          console.log(disponibilidad, c);
+          console.log('disponibilidad: ', disponibilidad, c);
           if (c && disponibilidad && !c.id_experto_actual) {
             this.onSelectCola(c);
           }
@@ -382,10 +382,12 @@ export class ChatExpertoComponent {
         c.cerro_experto = c.cerro_experto ? c.cerro_experto : false;
         c.motivo_cierre_enviado = c.motivo_cierre_enviado ? c.motivo_cierre_enviado : false;
         c.esta_pendiente = c.esta_pendiente ? c.esta_pendiente : false;
+        c.mostro_modal_cierre = c.mostro_modal_cierre ? c.mostro_modal_cierre : false;
 
-        if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
-          if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente) {
+        if (c.id_estado_conversacion == 3 || c.id_estado_conversacion == 4 || c.id_estado_conversacion == 5 || c.id_estado_conversacion == 6) {
+          if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente && !c.mostro_modal_cierre) {
             // console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
+            c.mostro_modal_cierre = true;
             this.motivoCierreChat(c);
           }
         }
@@ -759,10 +761,13 @@ export class ChatExpertoComponent {
       this.setFocus(chat, true);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
         chat.esta_seleccionado = false;
-        if (!chat.motivo_cierre_enviado) {
+        // console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
+        if (!chat.motivo_cierre_enviado && !chat.mostro_modal_cierre) {
+          // console.log('no enviado');
           this.motivoCierreChat(chat);
         }
       }
+      
     }
   }
 

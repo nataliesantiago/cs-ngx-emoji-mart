@@ -77,7 +77,7 @@
 
     </div>
     <mat-menu #message="matMenu" class="alertas-nlp">
-        <perfect-scrollbar>
+        <perfect-scrollbar (click)="$event.stopPropagation()"> 
             <mat-nav-list appAccordion class="contenedor__campana" *ngIf="conversaciones_nlp && conversaciones_nlp[0]">
 
                 <h3>Incidencias</h3>

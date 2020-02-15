@@ -40,7 +40,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   loading = false;
   cargar_pendientes = false;
   es_col = false;
-  tableros;
+  tableros:any;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();

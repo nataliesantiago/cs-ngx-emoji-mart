@@ -11,13 +11,25 @@
           Herramienta de autogestión para el soporte interno del Banco Davivienda
         </p>
 
-        <div class="iconos">
-          <img src="/assets/images/iconos-homepage/1.png" />
-          <img src="/assets/images/iconos-homepage/2.png" />
-          <img src="/assets/images/iconos-homepage/3.png" class="tres" />
-          <img src="/assets/images/iconos-homepage/4.png" class="cuatro" />
-          <img src="/assets/images/iconos-homepage/5.png" />
-        </div>
+
+        <mat-grid-list cols="5" rowHeight="100px" class="iconos hidden-mobile ">
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <img src="/assets/images/iconos-homepage/1.png" />
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <img src="/assets/images/iconos-homepage/2.png" />
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <img src="/assets/images/iconos-homepage/3.png" class="tres" />
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <img src="/assets/images/iconos-homepage/4.png" class="cuatro" />
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <img src="/assets/images/iconos-homepage/5.png" />
+          </mat-grid-tile>
+        </mat-grid-list>
+
 
 
         <div class="container-login100-form-btn m-t-40">
