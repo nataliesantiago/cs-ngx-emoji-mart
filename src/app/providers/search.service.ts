@@ -16,7 +16,7 @@ import { resolve } from 'url';
 const moment = _rollupMoment || _moment;
 @Injectable({
   providedIn: 'root'
-})
+}) 
 export class SearchService {
   user: User;
   busqueda_actual: Busqueda;
