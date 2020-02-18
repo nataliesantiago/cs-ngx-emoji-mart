@@ -151,7 +151,7 @@ export class FormularioExpertizComponent implements OnInit {
               if(d.success){
                 let pos = 0;
                 for(let i = 0; i < this.producto_asociado.length; i++){
-                  if(this.producto_asociado[i].idtbl_pregunta == e.idtbl_pregunta){
+                  if(this.producto_asociado[i].idtbl_producto == e.idtbl_producto){
                     pos = i;
                   }
                 }
@@ -163,7 +163,7 @@ export class FormularioExpertizComponent implements OnInit {
           }else{
             let pos = 0;
             for(let i = 0; i < this.producto_asociado.length; i++){
-              if(this.producto_asociado[i].idtbl_pregunta == e.idtbl_pregunta){
+              if(this.producto_asociado[i].idtbl_producto == e.idtbl_producto){
                 pos = i;
               }
             }
@@ -174,7 +174,7 @@ export class FormularioExpertizComponent implements OnInit {
         }else{
           let pos = 0;
           for(let i = 0; i < this.producto_asociado.length; i++){
-            if(this.producto_asociado[i].idtbl_pregunta == e.idtbl_pregunta){
+            if(this.producto_asociado[i].idtbl_producto == e.idtbl_producto){
               pos = i;
             }
           }

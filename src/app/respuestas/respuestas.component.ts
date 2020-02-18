@@ -35,6 +35,7 @@ export class RespuestasComponent implements OnInit {
   activadoNo = false;
   pregunta_nueva = false;
   dias_pregunta_nueva;
+  limite_texto_observacion;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private chatService: ChatService, private searchService: SearchService) {
 
@@ -60,6 +61,10 @@ export class RespuestasComponent implements OnInit {
   }
 
   init() {
+
+    this.chatService.obtenerLimiteTexto().then(valor => {
+      this.limite_texto_observacion = valor;
+    });
 
     this.ajax.get('administracion/obtener-cantidad-dias-pregunta-nueva').subscribe(r => {
       if (r.success) {

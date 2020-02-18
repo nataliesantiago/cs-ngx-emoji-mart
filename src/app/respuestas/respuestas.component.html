@@ -102,7 +102,7 @@
               <br>
               <mat-form-field>
                 <textarea matInput placeholder="Dejanos tus comentarios" name="notas" [(ngModel)]="observaciones"
-                  matAutosizeMinRows=1 matAutosizeMaxRows=10></textarea>
+                  matAutosizeMinRows=1 matAutosizeMaxRows=10 [maxlength]="limite_texto_observacion"></textarea>
               </mat-form-field>
               <a mat-raised-button class="no" (click)="enviarCalificacion()"><span
                   class="texto-boton">{{boton}}</span></a>
