@@ -23,7 +23,7 @@ export class AutenticationService {
   }
 
   logOut() {
-    this.userService.setActivoExperto(false, null);
+    this.userService.setActivoExperto(false, null, false);
     this.userService.logOut();
     window.location.href = '/';
   }

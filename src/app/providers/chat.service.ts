@@ -624,13 +624,25 @@ export class ChatService {
 
   crearSOS(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.get('chat/obtenerFilas', {}).subscribe(d => {
-        if (d.success) {
-          this.procesaFilas(d.filas, resolve);
+      this.ajax.get('chat/obtener-experto-sos', {}).subscribe(e => {
+        if (e.success) {
+          let experto = e.experto;
+          if (experto) {
+            this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId(), id_operador: experto.id_usuario }).subscribe(d => {
+              resolve(d.success);
+              this.getEmergenciaUsuario().then((e: Emergencia) => {
+                this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + experto.id_usuario + '/emergencia/1').set({ id_emergencia: e.idtbl_consultas_sos });
+              })
+      
+            })
+          } else {
+            this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId() }).subscribe(d => {
+              resolve(false);
+            })
+          }
         }
       });
     });
-
   }
 
   procesaFilas(filas: Array<any>, resolve: Function) {
