@@ -154,7 +154,8 @@ export class UserService {
         this.subjectUsuario.next(null);
         window.localStorage.removeItem('tk');
         window.localStorage.removeItem('pais');
-
+        window.localStorage.clear();
+        window.sessionStorage.clear();
     }
 
 

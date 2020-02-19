@@ -6,6 +6,7 @@ import { AuthService } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { Router } from '@angular/router';
 import { AjaxService } from '../providers/ajax.service';
+import { UserService } from '../providers/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { AjaxService } from '../providers/ajax.service';
 export class AutenticationService {
 
   constructor(
-    private ajax: AjaxService
+    private ajax: AjaxService, private userService: UserService
   ) { }
 
   urlAutenticacion() {
@@ -22,7 +23,8 @@ export class AutenticationService {
   }
 
   logOut() {
-    localStorage.removeItem('token');
+    this.userService.setActivoExperto(false, null);
+    this.userService.logOut();
     window.location.href = '/';
   }
 }
