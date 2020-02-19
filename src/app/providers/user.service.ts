@@ -203,16 +203,17 @@ export class UserService {
         });
     }
 
-        setActivoExperto(activo, value_estado, atendiendo_emergencia?) {
+    setActivoExperto(activo, value_estado, atendiendo_emergencia?) {
+        let date = new Date();
         this.user.experto_activo = activo;
         if(value_estado){
             this.ajax.get('user/getEstadoExperto', { id_estado: value_estado }).subscribe(d => {
                 if(d.success){
-                    this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: d.estado[0].nombre, atendiendo_emergencia: atendiendo_emergencia});
+                    this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: date, estado_experto: d.estado[0].nombre, atendiendo_emergencia: atendiendo_emergencia});
                 }
             })
         }else{
-            this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia});
+            this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: date, estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia});
         }
         
     }
