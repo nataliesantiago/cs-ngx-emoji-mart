@@ -269,7 +269,7 @@
               <div class="container-filter">
                 <div class="element-filter element-filter-1">
                     <mat-form-field>
-                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                        <input matInput (keyup)="applyFilter2($event.target.value)" placeholder="Filtrar busqueda">
                         <mat-icon class="search-icon">search</mat-icon>
                     </mat-form-field>
                 </div>
@@ -310,7 +310,7 @@
           <br>
           <div fxLayout="row wrap">
             <div fxFlex="25" fxLayoutAlign="space-between center" class="responsive-btn">
-              <button fxFlex="45"  class="custom__btn custom__btn--accept" (click)="guardarPregunta()">Guardar</button>
+              <button fxFlex="45"  class="custom__btn custom__btn--accept" (click)="guardarPregunta()" [disabled]=loading>Guardar</button>
               <a fxFlex="45" class="custom__btn custom__btn--cancel" [routerLink]="['/admin/preguntas']">Cancelar</a>
             </div>
           </div>

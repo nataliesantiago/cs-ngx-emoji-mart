@@ -25,7 +25,7 @@ export class TiempoColaPipe implements PipeTransform {
                     });
                     this.timer = setInterval(() => {
                         let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
-                        console.log(duration);
+                        // console.log(duration);
                         if (duration > (tiempo_cola * 60)) {
                             c.tiempo_cola = true;
                         }

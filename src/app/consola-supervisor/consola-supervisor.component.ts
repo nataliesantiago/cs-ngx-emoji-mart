@@ -14,6 +14,7 @@ import { CategoriaExperticia, Configuracion } from '../../schemas/interfaces';
 import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Experto } from '../../schemas/xhr.schema';
+import { environment } from '../../environments/environment';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -39,6 +40,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   loading = false;
   cargar_pendientes = false;
   es_col = false;
+  tableros:any;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
@@ -51,19 +53,16 @@ export class ConsolaSupervisorComponent implements OnInit {
         this.init();
       }
     });
-
   }
 
   init() {
 
-    if (this.user.pais == 'col') {
-      this.es_col = true;
-    }
-
+    this.tableros = environment.tableros[this.user.pais];
+    
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
-      console.log(chats);
+      // console.log(chats);
       if (!this.chats_activos || this.chats_activos.length < 1) {
         this.chats_activos = chats;
         for (let c of this.chats_activos) {
@@ -78,7 +77,7 @@ export class ConsolaSupervisorComponent implements OnInit {
           if (t) {
             for (let attr in cn) {
               if (attr != 'mensajes' && attr != 'messages') {
-                // console.log('atributo:', attr);
+                // // console.log('atributo:', attr);
                 t[attr] = cn[attr];
               }
             }
@@ -101,6 +100,7 @@ export class ConsolaSupervisorComponent implements OnInit {
           }
         });
         //this.chats_activos = chats;
+        
       }
       this.applyFilterActivos();
     });
@@ -110,23 +110,23 @@ export class ConsolaSupervisorComponent implements OnInit {
         setInterval(() => {
 
           if (c.fecha_creacion) {
-          
+
             if (c.fecha_creacion) {
               c.tiempo_en_conversacion = moment().diff(moment(c.fecha_creacion), 'seconds');
             }
-  
+
           }
         }, 1000);
-        
+        //console.log(c.filas);
         if (c.idtbl_conversacion) {
           await this.chatService.getFilasConversacion(c);
         }
         this.utilService.getConfiguraciones().then(configs => {
           let tiempo_cola = configs.find((c: Configuracion) => {
-            
+
             return c.idtbl_configuracion == 6;
           });
-          
+
           c.interval_tiempo_cola = setInterval(() => {
             let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
 
@@ -152,23 +152,23 @@ export class ConsolaSupervisorComponent implements OnInit {
         }
       });
       this.chats_en_fila = chats;
-
+      
       this.applyFilterCola();
     });
 
     this.getCategoriasExperticia();
-    
+
   }
 
 
-  async agregarTiempoConversacion(c: Conversacion){
-    console.log(c);
+  async agregarTiempoConversacion(c: Conversacion) {
+    // console.log(c);
     setInterval(() => {
-            
+
       if (c.fecha_asignacion) {
-        
+
         if (c.fecha_asignacion) {
-        
+
           c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
         }
 
@@ -199,14 +199,14 @@ export class ConsolaSupervisorComponent implements OnInit {
       let data = c.payload.doc.data() as Conversacion;
       data.codigo = c.payload.doc.id;
       let usuario = this.usuarios.find((e: User) => {
-        // console.log(e);
+        // // console.log(e);
         if (e != undefined) {
           return e.idtbl_usuario == data.id_usuario_creador;
         }
       });
       let experto = this.usuarios.find((e: User) => {
         if (e != undefined) {
-          return e.idtbl_usuario == data.id_usuario_creador;
+          return e.idtbl_usuario == data.id_experto_actual;
         }
       });
       if (!experto && data.id_experto_actual) {
@@ -217,9 +217,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         let u = usuario = await this.userService.getInfoUsuario(data.id_usuario_creador);
         this.usuarios.push(u);
       }
-      if (!usuario) {
 
-      }
       data.cliente = usuario;
       data.asesor_actual = experto;
       tmp.push(data);
@@ -331,7 +329,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   toggleConversacion(c: Conversacion) {
     let estado = !c.viendo_supervisor;
     c.viendo_supervisor = !c.viendo_supervisor;
-    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
+    //this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ viendo_supervisor: estado });
   }
   applyFilterActivos() {
     let palabra = this.filtro_activos;
@@ -353,7 +351,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     if (palabra && palabra != '') {
       this.chats_en_fila_filtrados = this.chats_en_fila.filter((c: Conversacion) => {
         let este = false;
-        
+
         if (this.utilService.normalizeText(c.cliente.nombre.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1
           || this.utilService.normalizeText(c.cliente.correo.toLowerCase()).indexOf(this.utilService.normalizeText(palabra)) != -1) {
 
@@ -380,24 +378,24 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   filtrarCategorias(event) {
-    this.loading = true;
     let categorias = event.value;
     if (categorias.length != 0) {
-      this.chatService.obtenerUsuarioPorCategoria(categorias).then((expertos: any) => {
-        this.chats_activos_filtrados = this.chats_activos.filter((c: Conversacion) => {
-          let chat_filtrado = false;
-          expertos.forEach(experto => {
-            if (c.asesor_actual.idtbl_usuario === experto.id_usuario) {
-              chat_filtrado = true;
-            }
+      this.chats_activos_filtrados = this.chats_activos.filter((c: any) => {
+        let chat_filtrado = false;
+        if (c.categoria) {
+          let expertis = c.categoria.split(',');
+          categorias.forEach(element => {
+            expertis.forEach(nombre => {
+              if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
+                chat_filtrado = true;
+              }
+            });
           });
-          this.loading = false;
-          return chat_filtrado;
-        });
+        }
+        return chat_filtrado;
       });
     } else {
       this.chats_activos_filtrados = this.chats_activos;
-      this.loading = false;
     }
   }
 
@@ -406,18 +404,16 @@ export class ConsolaSupervisorComponent implements OnInit {
     if (categorias.length != 0) {
       this.chats_en_fila_filtrados = this.chats_en_fila.filter((c: any) => {
         let chat_filtrado = false;
-        categorias.forEach(element => {
-          if (c.categoria != null) {
-            if (this.utilService.normalizeText(c.categoria.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
-              chat_filtrado = true;
-            }
-          } 
-          if (element == 'Todas') {
-            if (c.categoria == null) {
-              chat_filtrado = true;
-            }
-          }
-        });
+        if (c.categoria) {
+          let expertis = c.categoria.split(',');
+          categorias.forEach(element => {
+            expertis.forEach(nombre => {
+              if (this.utilService.normalizeText(nombre.toLowerCase()) == this.utilService.normalizeText(element.toLowerCase())) {
+                chat_filtrado = true;
+              }
+            });
+          });
+        }
         return chat_filtrado;
       });
     } else {

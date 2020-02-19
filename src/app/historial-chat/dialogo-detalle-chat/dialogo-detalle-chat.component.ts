@@ -373,7 +373,7 @@ export class DialogoDetalleChatComponent implements OnInit {
    * @param c 
    */
   seleccionarEmoji(evento, c: Conversacion) {
-    // console.log(evento);
+    // // console.log(evento);
     if (c.texto_mensaje) {
       c.texto_mensaje += '' + evento.emoji.native;
     } else {

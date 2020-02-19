@@ -1,16 +1,16 @@
 <div class="general-container">
   <mat-card *ngIf="create_message" class="mat-card-root">
     <mat-card-content class="mat-card-content-root">
-      <mat-card-title>Crear Mensaje Automatico</mat-card-title>
+      <mat-card-title>Crear Mensaje Automático</mat-card-title>
       <div fxLayaout="100" class="contenedor-column-form">
         <form class="m-t-20" fxFlex="70">
           <mat-form-field>
-            <mat-label>Digite el mensaje automatico</mat-label>
+            <mat-label>Digite el mensaje automático</mat-label>
             <input matInput [(ngModel)]="message.texto" name="texto_mensaje" autocomplete="off"/>
           </mat-form-field>
   
           <mat-form-field>
-            <mat-label>Tipo de mensaje automatico</mat-label>
+            <mat-label>Tipo de mensaje automático</mat-label>
             <mat-select name="type" (selectionChange)="onChangeType($event)">
               <mat-option *ngFor="let message_type of message_types" [value]="message_type.idtbl_tipo_mensaje_automatico">{{message_type.nombre}}</mat-option>
             </mat-select>
@@ -51,7 +51,7 @@
       <br>
       <div class="botones m-b-20" *ngIf="!create_message">
         <button class="custom__btn custom__btn--primary" (click)="create_message=!create_message">
-          <mat-icon>add</mat-icon> Crear Mensaje Automatico
+          <mat-icon>add</mat-icon> Crear Mensaje Automático
         </button>
       </div>
       
@@ -64,7 +64,7 @@
         </div>
         <div class="element-filter element-filter-3">
             <mat-form-field>
-                <mat-label>Tipo de Mensaje Automatico</mat-label>
+                <mat-label>Tipo de Mensaje Automático</mat-label>
                 <mat-select name="estado" (selectionChange)="filterData('tipo',$event)">
                     <mat-option value="todos">Todos</mat-option>
                     <mat-option *ngFor="let type of message_types" [value]="type.nombre">{{type.nombre}}</mat-option>
@@ -93,7 +93,7 @@
               <mat-cell *matCellDef="let row">
                 <div *ngIf="!row.update">
                   <i class="ti-pencil info-color m-r-10 mouse-over" (click)="row.update=true"></i>
-                  <i class="ti-trash danger-color m-r-10 mouse-over" (click)="inactiveMessage(row)"></i>
+                  <i class="ti-close danger-color m-r-10 mouse-over" (click)="inactiveMessage(row)"></i>
                   <i class="ti-check success-color m-r-10 mouse-over" (click)="activeMessage(row)"></i>
                 </div>
                 <div *ngIf="row.update">
@@ -104,8 +104,8 @@
             </ng-container>
     
             <!-- Name Column -->
-            <ng-container matColumnDef="mensaje">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Mensaje Automatico </mat-header-cell>
+            <ng-container matColumnDef="texto">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Mensaje Automático </mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <span *ngIf="!row.update">{{row.texto}}</span>
                 <mat-form-field *ngIf="row.update">
@@ -113,9 +113,9 @@
                 </mat-form-field>
               </mat-cell>
             </ng-container>
-    
-            <ng-container matColumnDef="tiempo">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo de espera (minutos)</mat-header-cell>
+
+            <ng-container matColumnDef="timeout">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tiempo de espera (minutos) </mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <span *ngIf="!row.is_edit_timeout">{{row.timeout}}</span>
                 <mat-form-field *ngIf="row.is_edit_timeout">
@@ -126,11 +126,11 @@
     
             <!-- Color Column -->
             <ng-container matColumnDef="tipo">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Mensaje Automatico </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Mensaje Automático </mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <span *ngIf="!row.update">{{row.tipo}}</span>
                 <mat-form-field *ngIf="row.update">
-                  <mat-label>Tipo de mensaje automatico</mat-label>
+                  <mat-label>Tipo de mensaje automático</mat-label>
                   <mat-select name="type" (selectionChange)="onChangeTypeTable($event, row)">
                     <mat-option *ngFor="let message_type of message_types" [value]="message_type.idtbl_tipo_mensaje_automatico">{{message_type.nombre}}</mat-option>
                   </mat-select>

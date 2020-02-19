@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+  import { Component, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -62,7 +62,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   texto_buscador: string;
   buscador = false;
   estado_flujo_pregunta = [];
-
+  loading = false;
 
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
 
@@ -101,7 +101,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   quillModulesFc(ql: any, contenido: any, index?: number) {
-    //console.log(ql.getModule('toolbar'))
+    //// console.log(ql.getModule('toolbar'))
     ql.getModule('toolbar')
     setTimeout(() => {
       ql.getModule('toolbar').addHandler('video', () => {
@@ -182,7 +182,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         debounceTime(200),
         switchMap(value => this.buscarPreguntas(value))
       ).subscribe(d => {
-        console.log(d);
+        // console.log(d);
       });
 
 
@@ -248,15 +248,11 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                             if (pras.success) {
 
                               this.preguntas_adicion = pras.preguntas_asociadas;
-                              this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-                              this.dataSource.paginator = this.paginator;
-                              this.dataSource.sort = this.sort;
+                              this.crearTablaPreguntasAdicion(this.preguntas_adicion);
                               this.ajax.get('preguntas/obtener-cargos-asociados', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(carg => {
                                 if (carg.success) {
                                   this.cargos_asociados = carg.cargos_asociados;
-                                  this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-                                  this.dataSource2.paginator = this.paginator2;
-                                  this.dataSource2.sort = this.sort2;
+                                  this.crearTablaCargosAdicion(this.cargos_asociados);
                                   this.cg.detectChanges();
                                 }
                               })
@@ -290,8 +286,34 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     })
   }
 
+  crearTablaPreguntasAdicion(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
+  }
+
+  crearTablaCargosAdicion(data) {
+    this.dataSource2 = new MatTableDataSource(data);
+    this.dataSource2.paginator = this.paginator2;
+    this.dataSource2.sort = this.sort2;
+    this.dataSource2.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
+  }
+
   guardarPregunta() {
-    console.log(this.pregunta);
+    // console.log(this.pregunta);
     if (this.pregunta.titulo == "" || this.pregunta.id_producto == "" || this.pregunta.id_estado == "" || !this.pregunta.id_producto) {
 
       swal.fire({
@@ -307,9 +329,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
       })
 
     } else {
-
+      this.loading = true;
       if (this.editar) {
-
         if (this.pregunta.muestra_fecha_actualizacion) {
           this.pregunta.muestra_fecha_actualizacion = 1;
         } else {
@@ -321,12 +342,11 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         }
         this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
-
             this.router.navigate(['/admin/preguntas']);
           }
         })
       } else {
-
+        this.loading = true;
         if (this.pregunta.muestra_fecha_actualizacion) {
           this.pregunta.muestra_fecha_actualizacion = 1;
         } else {
@@ -338,10 +358,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
-
+        
         this.ajax.post('preguntas/guardar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
-
             this.router.navigate(['/admin/preguntas']);
           }
         })
@@ -537,11 +556,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     if (validador) {
       this.preguntas_adicion.push(e);
 
-      this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-
-
+      this.crearTablaPreguntasAdicion(this.preguntas_adicion);
 
       this.cg.detectChanges();
     } else {
@@ -576,10 +591,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     if (validador) {
       this.cargos_asociados.push(e);
 
-      this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-      this.dataSource2.paginator = this.paginator2;
-      this.dataSource2.sort = this.sort2;
-
+      this.crearTablaCargosAdicion(this.cargos_asociados);
 
       this.cg.detectChanges();
     } else {
@@ -630,9 +642,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                   }
                 }
                 this.preguntas_adicion.splice(pos, 1);
-                this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
+                this.crearTablaPreguntasAdicion(this.preguntas_adicion);
                 this.cg.detectChanges();
               }
             })
@@ -644,9 +654,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
               }
             }
             this.preguntas_adicion.splice(pos, 1);
-            this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.crearTablaPreguntasAdicion(this.preguntas_adicion);
             this.cg.detectChanges();
           }
         } else {
@@ -657,9 +665,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
             }
           }
           this.preguntas_adicion.splice(pos, 1);
-          this.dataSource = new MatTableDataSource(this.preguntas_adicion);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.crearTablaPreguntasAdicion(this.preguntas_adicion);
           this.cg.detectChanges();
         }
       }
@@ -696,9 +702,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
                   }
                 }
                 this.cargos_asociados.splice(pos, 1);
-                this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-                this.dataSource2.paginator = this.paginator2;
-                this.dataSource2.sort = this.sort2;
+                this.crearTablaCargosAdicion(this.cargos_asociados);
                 this.cg.detectChanges();
               }
             })
@@ -710,9 +714,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
               }
             }
             this.cargos_asociados.splice(pos, 1);
-            this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-            this.dataSource2.paginator = this.paginator2;
-            this.dataSource2.sort = this.sort2;
+            this.crearTablaCargosAdicion(this.cargos_asociados);
             this.cg.detectChanges();
           }
         } else {
@@ -723,13 +725,23 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
             }
           }
           this.cargos_asociados.splice(pos, 1);
-          this.dataSource2 = new MatTableDataSource(this.cargos_asociados);
-          this.dataSource2.paginator = this.paginator2;
-          this.dataSource2.sort = this.sort2;
+          this.crearTablaCargosAdicion(this.cargos_asociados);
           this.cg.detectChanges();
         }
       }
     })
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  applyFilter2(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource2.filter = filterValue;
   }
 
 }

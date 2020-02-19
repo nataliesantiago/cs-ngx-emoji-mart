@@ -35,6 +35,7 @@ export class RespuestasComponent implements OnInit {
   activadoNo = false;
   pregunta_nueva = false;
   dias_pregunta_nueva;
+  limite_texto_observacion;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private chatService: ChatService, private searchService: SearchService) {
 
@@ -55,11 +56,15 @@ export class RespuestasComponent implements OnInit {
       }
     });
 
-    
+
 
   }
 
   init() {
+
+    this.chatService.obtenerLimiteTexto().then(valor => {
+      this.limite_texto_observacion = valor;
+    });
 
     this.ajax.get('administracion/obtener-cantidad-dias-pregunta-nueva').subscribe(r => {
       if (r.success) {
@@ -77,34 +82,57 @@ export class RespuestasComponent implements OnInit {
       });
 
     let fecha_actual = moment(new Date());
+    let cantidad_flujos_curaduria = 0;
+    //obtener-fecha-publicacion-pregunta
+    this.ajax.get('preguntas/obtener-fecha-publicacion-pregunta', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
+      cantidad_flujos_curaduria = p.pregunta[0].length;
+      if (p.pregunta[0].length != 0) {
+        if (p.pregunta[1].length == 1) {
+          let registro = p.pregunta[1];
+          let fecha_creacion = moment(registro[0].fecha).tz('America/Bogota');
 
+          let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
+
+          if (diferencia_dias <= this.dias_pregunta_nueva) {
+            this.pregunta_nueva = true;
+          }
+        }
+      } else {
+        this.pregunta_nueva = true;
+      }
+    });
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if (p.success) {
-
+        // // console.log('pregunta',p.pregunta[0].fecha_ultima_modificacion)
         p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
 
         this.pregunta = p.pregunta[0];
 
-        let fecha_creacion = moment(p.pregunta[0].fecha_creacion).tz('America/Bogota');
+        if(cantidad_flujos_curaduria == 0){
+          let fecha_creacion = moment(this.pregunta.fecha_creacion).tz('America/Bogota');
 
-        let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
-        
-        if (diferencia_dias <= this.dias_pregunta_nueva) {
-          this.pregunta_nueva = true;
+          let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
+
+          if (diferencia_dias <= this.dias_pregunta_nueva) {
+            this.pregunta_nueva = true;
+          }
         }
 
         this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
           if (pras.success) {
             this.preguntas_adicion = pras.preguntas_asociadas;
-            console.log(pras);
+            // console.log(pras);
             if (this.preguntas_adicion.length < 5) {
               this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
-                console.log(asociadas);
+                // console.log(asociadas);
                 if (asociadas.results) {
+
                   asociadas.results.filter(f => {
                     return f.idtbl_pregunta != this.pregunta.idtbl_pregunta;
                   }).forEach(a => {
-                    this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
+                    if (this.preguntas_adicion.length < 5) {
+                      this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
+                    }
                   });
                 }
               })
@@ -238,7 +266,7 @@ export class RespuestasComponent implements OnInit {
               if (this.searchService.busqueda_actual) {
                 id_busqueda = this.searchService.busqueda_actual.idtbl_busqueda_usuario;
               }
-              console.log(this.pregunta.id_producto);
+              // console.log(this.pregunta.id_producto);
               this.chatService.crearConversacion(this.pregunta.id_producto, id_busqueda);
               this.router.navigate(['/home']);
             }

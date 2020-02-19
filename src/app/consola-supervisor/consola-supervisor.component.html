@@ -2,7 +2,7 @@
   <mat-tab-group dynamicHeight>
     <mat-tab>
       <ng-template mat-tab-label>
-          <span (click)="init()">Chats activos ({{chats_activos.length}})</span>
+        <span (click)="init()">Chats activos ({{chats_activos.length}})</span>
       </ng-template>
       <div class="">
         <div class="container-filter">
@@ -21,7 +21,7 @@
               <mat-label>Categoría experticia</mat-label>
               <mat-select multiple (selectionChange)="filtrarCategorias($event)">
                 <mat-option *ngFor="let categoria_experticia of categorias_experticia"
-                  [value]="categoria_experticia.idtbl_categoria_experticia">{{categoria_experticia.nombre}}</mat-option>
+                  [value]="categoria_experticia.nombre">{{categoria_experticia.nombre}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -94,7 +94,6 @@
                           <!-- <audio [src]="m.url" preload="auto" (loadeddata)="asignarAudio(m,audio)" #audio></audio>-->
                         </div>
                       </div>
-
                       <div [innerHTML]="m.texto | linkify | replaceEmojisMensaje:'google' | safe:'html'"></div>
                       <span *ngIf="m.id_usuario==user.idtbl_usuario">
                         <mat-icon class="icono-burbuja-mensaje" *ngIf="m.estado==1">access_time</mat-icon>
@@ -194,7 +193,6 @@
             <mat-form-field>
               <mat-label>Categoría experticia</mat-label>
               <mat-select multiple (selectionChange)="filtrarCategoriasFila($event)">
-                <mat-option value="Todas">Todas</mat-option>
                 <mat-option *ngFor="let categoria_experticia of categorias_experticia"
                   [value]="categoria_experticia.nombre">{{categoria_experticia.nombre}}</mat-option>
               </mat-select>
@@ -202,13 +200,14 @@
             </mat-form-field>
           </div>
         </div>
-
-        <mat-card class="conversacion-lista-cola" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
+        <mat-card class="conversacion-lista lista-cola" [ngClass]="{'ver-conversacion':chat.viendo_supervisor}"
           *ngFor="let chat of chats_en_fila_filtrados">
           <div *ngIf="chat.cliente">
             <mat-card-header>
               <div mat-card-avatar class="header-image"
                 [style.backgroundImage]="'url('+chat.cliente.url_imagen_gsuite+')'" title="{{chat.cliente.nombre}}">
+              </div>
+              <div class="chat-alarma-nlp" *ngIf="chat.alarma_nlp">
               </div>
               <div class="punt-estado-chat"
                 [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola)}">
@@ -219,19 +218,19 @@
                   src="../../assets/images/videollamada.png" title="Llamada en curso" class="icono-llamda" />
               </mat-card-title>
               <mat-card-subtitle>
-                <div class="nombre-chat"><span>{{chat.cliente.correo}}</span></div>
-                <div><b>Iniciado:</b> {{chat.fecha_creacion | MomentDate:'MMM DD YYYY, h:mm:ss a'}}</div>
+                <div class="nombre-chat"><span>{{chat.cliente.nombre_perfil}}</span></div>
+              </mat-card-subtitle>
+              <mat-card-subtitle class="campos-tarjeta-supervisor">
+                <div class="nombre-chat" [title]="chat.tema_busqueda">
+                  <b>Tema:</b>&nbsp;<span>{{chat.tema_busqueda}}</span></div>
+                <div class="nombre-chat"><b>Expertis:</b> &nbsp;<span
+                    *ngIf="chat.categoria">{{chat.categoria}}</span><span *ngIf="!chat.categoria">N/A</span></div>
               </mat-card-subtitle>
             </mat-card-header>
-            <mat-card-content class="chat-middle-box contenedor-filas">
-              <perfect-scrollbar>
-                <mat-list role="list">
-                  <mat-list-item role="listitem" *ngFor="let item of chat.filas">{{item.nombre}}</mat-list-item>
-                </mat-list>
-              </perfect-scrollbar>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-button (click)="transferirChat(chat,1)">Asignar Chat</button>
+            <mat-card-actions class="acciones-tarjeta-supervisor">
+              <button mat-icon-button (click)="transferirChat(chat,1)" title="Asignar Chat">
+                <mat-icon>swap_horiz</mat-icon>
+              </button>
             </mat-card-actions>
           </div>
         </mat-card>
@@ -251,28 +250,18 @@
     </mat-tab>
 
     <mat-tab label="Analítica Buscador">
-      <div class="panel-analitica" *ngIf="es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1hqmPLdaHMyE4LGyb4L-H4gwlGByDUUG1/page/ERh4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
-      </div>
-
-      <div class="panel-analitica" *ngIf="!es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1JV89eaXHqEWET72CM3_6gu_2CpomUAlK/page/P0A4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
+      <div class="panel-analitica">
+        <iframe [src]="tableros.buscador | safe:'resourceUrl'" 
+          frameborder="0" style="border:0" allowfullscreen></iframe>
       </div>
     </mat-tab>
 
     <mat-tab label="Analítica Chat Experto">
-      <div class="panel-analitica" *ngIf="es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1B_UcL5gwYpCiBmqoV9-omG5A0BIjJj81/page/P0A4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
-      </div>
-
-      <div class="panel-analitica" *ngIf="!es_col">
-        <iframe src="https://datastudio.google.com/embed/reporting/1Sn4uQ-jPGNbMVPoI2TeIIpUslN4A3o-I/page/P0A4"
-          frameborder="0" style="border:0" allowfullscreen=""></iframe>
+      <div class="panel-analitica">
+        <iframe [src]="tableros.chatExperto | safe:'resourceUrl'" 
+          frameborder="0" style="border:0" allowfullscreen></iframe>
       </div>
     </mat-tab>
-    
+
   </mat-tab-group>
 </div>

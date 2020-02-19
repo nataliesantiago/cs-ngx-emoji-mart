@@ -41,7 +41,7 @@ export class HistorialCuraduriaComponent implements OnInit {
     this.ajax.get('preguntas/obtener-comentarios-pregunta', { idtbl_pregunta: this.data.pregunta.idtbl_pregunta }).subscribe(async p => {
       if (p.success) {
         this.comentarios = p.comentarios;
-        console.log(this.comentarios);
+        // console.log(this.comentarios);
       }
     });
   }

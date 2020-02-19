@@ -27,7 +27,7 @@
                   <button mat-icon-button class="ml-1 hidden-mobile" (click)="chat.agrandado=!chat.agrandado">
                     <mat-icon class="icono-agrandar">open_in_new</mat-icon>
                   </button>
-                  <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1">
+                  <button [matMenuTriggerFor]="them" mat-icon-button class="ml-1" *ngIf="!chat.mostrar_encuesta">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #them="matMenu" x-position="before">

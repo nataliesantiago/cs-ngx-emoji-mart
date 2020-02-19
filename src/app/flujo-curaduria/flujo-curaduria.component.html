@@ -2,12 +2,12 @@
     <mat-card class="mat-card-root">
         <mat-card-content class="mat-card-content-root">
             <div class="flujo-curaduria" fxLayout="row wrap" style="text-align: center;">
-                <!-- column -->
+
                 <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                     <mat-card [ngClass]="{'activo': activo_curaduria}" (click)="cambiarPestana('curaduria')"
                         class="card-flujo">
                         <mat-card-content>
-                            <!-- Row -->
+
                             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
                                 <div>
                                     <h3 class="m-0">{{cant_curaduria}}</h3>
@@ -18,15 +18,15 @@
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <!-- column -->
-                <!-- column -->
+
+
                 <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                     <mat-card [ngClass]="{'class': true, 'activo': activo_revision}"
                         (click)="cambiarPestana('revision')" class="card-flujo">
                         <mat-card-content>
-                            <!-- Row -->
+
                             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
-                                <!-- column -->
+
                                 <div>
                                     <h3 class="m-0">{{cant_revision}}</h3>
                                     <h6 class="text-muted m-0">Revisión</h6>
@@ -36,15 +36,15 @@
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <!-- column -->
-                <!-- column -->
+
+
                 <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                     <mat-card [ngClass]="{'activo': activo_aprobacion}" (click)="cambiarPestana('aprobacion')"
                         class="card-flujo">
                         <mat-card-content>
-                            <!-- Row -->
+
                             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
-                                <!-- column -->
+
                                 <div>
                                     <h3 class="m-0">{{cant_aprobacion}}</h3>
                                     <h6 class="text-muted m-0">Por Aprobar</h6>
@@ -54,15 +54,15 @@
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <!-- column -->
-                <!-- column -->
+
+
                 <div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="25">
                     <mat-card [ngClass]="{'activo': activo_aprobados}" (click)="cambiarPestana('aprobados')"
                         class="card-flujo">
                         <mat-card-content>
-                            <!-- Row -->
+
                             <div fxFlex.gt-sm="100" fxFlex.gt-xs="100">
-                                <!-- column -->
+
                                 <div>
                                     <h3 class="m-0">{{cant_aprobados}}</h3>
                                     <h6 class="text-muted m-0">Aprobado</h6>
@@ -72,8 +72,9 @@
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <!-- column -->
+
             </div>
+          
 
             <div fxLayout="row wrap" class="panel-respuestas">
                 <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
@@ -195,7 +196,7 @@
                                 </div>
                                 <mat-paginator [pageSizeOptions]="[50, 100, 200]"></mat-paginator>
                                 <div class="spinner-cargando-flujo" *ngIf="cargando_preguntas">
-                                    <mat-spinner></mat-spinner>
+                                    <mat-progress-spinner [mode]="modo_spinner" [value]="progreso" *ngIf="cargando_preguntas"></mat-progress-spinner>
                                 </div>
                             </div>
                         </mat-card-content>

@@ -2,9 +2,9 @@ importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
 // Initialize the Firebase app in the service worker by passing in the
-// messagingSenderId.
+// messagingSenderId. qa 537955814682, Prod 157185516619
 firebase.initializeApp({
-  'messagingSenderId': '537955814682'
+  'messagingSenderId': '157185516619'
 });
 const messaging = firebase.messaging();
 self.addEventListener('notificationclick', function (event) {
@@ -14,7 +14,7 @@ self.addEventListener('notificationclick', function (event) {
   );
 })
 messaging.setBackgroundMessageHandler((payload) => {
-  console.log('Message received. ', payload);
+  // console.log('Message received. ', payload);
   let ruta = '/';
   if(payload.data.origen == 'recordatorio' || payload.data.origen == 'nlp'){
     ruta = '/#/' + payload.data.route;

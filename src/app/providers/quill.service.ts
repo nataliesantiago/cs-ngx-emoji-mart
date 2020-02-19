@@ -18,13 +18,13 @@ export class QuillService {
     return new Promise(resolve => {
       this.editor = a;
       this.utilService.abrirPickerDrive().then(archivo => {
-        //console.log(archivo);
+        //// console.log(archivo);
         const range = this.editor.getSelection();
         let url = (archivo.mimeType.indexOf('google-apps') != (-1)) ? archivo.embedUrl+'?' : archivo.embedUrl;
         url += '&&iconodrive=' + archivo.iconUrl;
         this.editor.insertEmbed(range.index, 'video', `${url}`, 'user');
         //this.editor.insertText(range.index+2,' ')
-        //console.log(this.editor.getText());
+        //// console.log(this.editor.getText());
         //let html = `<p><iframe src="${url}" class="archivo-drive-embedido"></iframe></p>`;
         //let delta = this.editor.clipboard.convert(html);
         //this.editor.insertText(range.index, html); 
@@ -34,7 +34,7 @@ export class QuillService {
   }
 
   fileStorageHandler(a): Promise<any> {
-    console.log('paso')
+    // console.log('paso')
     return new Promise(resolve => {
       this.editor = a;
       this.selectLocalImage();

@@ -108,7 +108,7 @@ export class ChatClienteComponent implements OnInit {
               //this.procesaFilas(c);
               this.chatService.getExpertoDisponible(c.filas).then(experto => {
                 if (experto) {
-                  this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+                  this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
                     c.id_experto_actual = u.idtbl_usuario;
                     c.nombre_experto_actual = u.nombre;
                     c.asesor_actual = new User(null, null, null);
@@ -210,7 +210,7 @@ export class ChatClienteComponent implements OnInit {
     let primera_vez = true;
     c.primera_vez = true;
     c.messages.subscribe(async d => {
-      //console.log(d.length, c.mensajes.length);
+      //// console.log(d.length, c.mensajes.length);
       if (!c.primera_vez && c.mensajes && d.length > c.mensajes.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
@@ -225,13 +225,13 @@ export class ChatClienteComponent implements OnInit {
 
       this.intervalo = setInterval(() => {
         if (document.title == this.nombre_pestana && !c.primera_vez) {
-          
+
           this.cantidad_mensajes_sin_leer = 0;
           this.chats.forEach(chat => {
-            // console.log(this.chats);
+            // // console.log(this.chats);
             this.cantidad_mensajes_sin_leer += chat.cantidad_mensajes_nuevos;
           });
-          
+
           if (this.cantidad_mensajes_sin_leer > 0) {
             document.title = 'Mensajes(' + this.cantidad_mensajes_sin_leer + ') nuevos en el chat';
           }
@@ -245,7 +245,7 @@ export class ChatClienteComponent implements OnInit {
   async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number, tmp) {
     for (let index = 0; index < d.length; index++) {
       const m = d[index];
-      //console.log(m);
+      //// console.log(m);
       let experto = this.expertos.find((e: User) => {
         return e.idtbl_usuario == m.id_usuario;
       });
@@ -262,7 +262,7 @@ export class ChatClienteComponent implements OnInit {
       let bus: Mensaje = c.mensajes.find(mm => {
         return mm.uuid == m.uuid;
       });
-      //console.log(bus);
+      //// console.log(bus);
       if (!bus) {
         tmp.push(m);
       } else {
@@ -275,7 +275,7 @@ export class ChatClienteComponent implements OnInit {
       //c.cantidad_mensajes_nuevos++;
       c.mensajes_nuevos = true;
     }
-    //console.log(tmp);
+    //// console.log(tmp);
     return tmp;
     /*
         let m = d.shift();
@@ -297,7 +297,7 @@ export class ChatClienteComponent implements OnInit {
     
             return mm.codigo == m.codigo;
           });
-          console.log(bus);
+          // console.log(bus);
           if (!bus) {
             tmp.push(m);
           }
@@ -380,7 +380,7 @@ export class ChatClienteComponent implements OnInit {
   }
 
   asignarAsesor(c: Conversacion, expertos: Array<any>) {
-    console.log(expertos);
+    // console.log(expertos);
     expertos.forEach(async (e, index) => {
       let data = await this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/expertos/' + e.id_usuario);
       if (!data) {
@@ -420,12 +420,12 @@ export class ChatClienteComponent implements OnInit {
     });
     let experto: Experto = c.expertos.pop();
 
-    // console.log(experto, parseInt(this.buscarConfiguracion(2).valor), experto.chats.length);
+    // // console.log(experto, parseInt(this.buscarConfiguracion(2).valor), experto.chats.length);
     if (experto && experto.chats && parseInt(this.buscarConfiguracion(2).valor) > experto.chats.length) {
       c.filas.forEach((ce, index) => {
         this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).delete();
       });
-      this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+      this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
         c.id_experto_actual = u.idtbl_usuario;
         c.nombre_experto_actual = u.nombre;
         c.asesor_actual = new User(null, null, null);
@@ -502,7 +502,7 @@ export class ChatClienteComponent implements OnInit {
         this.chatService.getMensajeBuscandoExperto(5).then(result => {
           this.mensaje_no_encontro_experto = result;
         });
-      } 
+      }
 
       if (data.id_estado_conversacion == 3) {
         c.cerrado_inactividad = true;
@@ -511,7 +511,7 @@ export class ChatClienteComponent implements OnInit {
       if (data.id_estado_conversacion == 4) {
         c.cerrado_inactividad = true;
         this.mensajeInactividadDesconexion(c);
-      } 
+      }
       if (data.id_estado_conversacion == 5) {
         c.cerrado_inactividad = true;
         this.mensajeInactividadCliente(c);
@@ -520,7 +520,7 @@ export class ChatClienteComponent implements OnInit {
         c.cerrado_inactividad = true;
         this.mensajeInactividadExperto(c);
       }
-      
+
     });
   }
 
@@ -550,7 +550,7 @@ export class ChatClienteComponent implements OnInit {
   crearNuevaConversacion(data) {
     let c = new Conversacion();
     this.ajax.post('chat/conversacion/crear', { id_usuario: this.user.getId(), id_tipo: 1, ...data }).subscribe(d => {
-      console.log(d);
+      // console.log(d);
       if (d.success) {
         c.idtbl_conversacion = d.id_conversacion;
         c.codigo = d.codigo_conversacion;
@@ -561,7 +561,7 @@ export class ChatClienteComponent implements OnInit {
         c.expertos = [];
         //his.procesaFilas(c);
         if (d.experto) {
-          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo).then(u => {
+          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
             c.id_experto_actual = u.idtbl_usuario;
             c.nombre_experto_actual = u.nombre;
             c.asesor_actual = new User(null, null, null);
@@ -716,6 +716,9 @@ export class ChatClienteComponent implements OnInit {
           });
         });
 
+      }).catch(() => {
+        c.iniciando_grabacion = false;
+        swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
       });
 
 
@@ -736,7 +739,7 @@ export class ChatClienteComponent implements OnInit {
     var timer: number = duration;
     let minutes;
     let seconds;
-    // console.log(timer)
+    // // console.log(timer)
 
     return new Promise((resolve, reject) => {
 
@@ -797,7 +800,7 @@ export class ChatClienteComponent implements OnInit {
     }
   }
   seleccionarEmoji(evento, c: Conversacion) {
-    // console.log(evento);
+    // // console.log(evento);
     if (c.texto_mensaje) {
       c.texto_mensaje += '' + evento.emoji.native;
     } else {
@@ -824,9 +827,9 @@ export class ChatClienteComponent implements OnInit {
         } else {
           estado = 9;
         }
-      } else  {
+      } else {
         estado = 3;
-      }      
+      }
       this.chatService.cerrarConversacion(c, estado).then(() => {
         c.mostrar_encuesta = true;
         c.cerrado_inactividad = true;
@@ -863,7 +866,7 @@ export class ChatClienteComponent implements OnInit {
           c.cant_coincidencias = 0;
           c.mensajes.forEach((m: Mensaje) => {
             if (m.texto.toLowerCase().indexOf(value.toLowerCase()) != -1) {
-              console.log('Encontro mensaje', m.texto.toLowerCase());
+              // console.log('Encontro mensaje', m.texto.toLowerCase());
               m.encontrado = true;
               c.cant_coincidencias++;
             } else {

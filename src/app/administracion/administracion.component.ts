@@ -35,7 +35,7 @@ export class AdministracionComponent implements OnInit {
 
 
     this.usuario = this.user.getUsuario();
-    console.log(this.usuario);
+    // // console.log(this.usuario);
     if (this.usuario) {
       this.id_usuario = this.usuario.idtbl_usuario;
       this.init();
@@ -52,16 +52,28 @@ export class AdministracionComponent implements OnInit {
   init() {
     this.ajax.get('administracion/obtener', {}).subscribe(p => {
       if (p.success) {
-
-        this.items_administracion = p.items;
-
-        this.dataSource = new MatTableDataSource(this.items_administracion);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+        this.createTable(p.items);        
       }
     })
   }
+
+  createTable(data) {
+    this.items_administracion = data;
+
+    this.dataSource = new MatTableDataSource(this.items_administracion);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
+  }
+
   ngOnInit() {
 
   }
@@ -74,13 +86,7 @@ export class AdministracionComponent implements OnInit {
   cancelarEdicion(u) {
     this.ajax.get('administracion/obtener', {}).subscribe(p => {
       if (p.success) {
-
-        this.items_administracion = p.items;
-
-        this.dataSource = new MatTableDataSource(this.items_administracion);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+        this.createTable(p.items);
         this.cg.detectChanges();
         u.editando = false;
       }

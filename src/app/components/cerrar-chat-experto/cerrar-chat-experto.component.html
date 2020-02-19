@@ -1,4 +1,5 @@
-<h3>Por favor indique la razón para cerrar el chat</h3>
+<p>Chat: <strong>{{data.cliente}}</strong></p>
+<p>Por favor indique la razón para cerrar el chat</p>
 <mat-form-field class="mr-1 ml-1 filtro">
 
   <input matInput [formControl]="filtro" />
@@ -14,7 +15,7 @@
   </mat-radio-button>
 </mat-radio-group>
 <div class="botonera">
-  <button class="custom__btn custom__btn--accept m-r-20" [disabled]="!id_motivo_cierre"
+  <button class="custom__btn custom__btn--accept m-r-20" [disabled]="!id_motivo_cierre && loading"
     (click)="cerrar(true)">Enviar</button>
-  <button class="custom__btn custom__btn--cancel m-r-20" (click)="cerrar(false)" *ngIf="!data.no_cerro_experto">Cancelar</button>
+  <button class="custom__btn custom__btn--cancel m-r-20" (click)="cerrar(false)" *ngIf="!data.no_cerro_experto" [disabled]="loading">Cancelar</button>
 </div>

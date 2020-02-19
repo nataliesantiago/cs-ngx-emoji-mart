@@ -103,9 +103,7 @@ export class FormularioNotificacionesComponent implements OnInit {
               startWith(''),
               map(value => this.utilsService.filter(this.lista_objetos, value, 'nombre'))
             );
-            this.dataSource = new MatTableDataSource(this.lista_asociada);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.createTable(this.lista_asociada);
             this.cg.detectChanges();
           });
         } else if (this.notificacion.tipo_envio == "3") {
@@ -119,15 +117,26 @@ export class FormularioNotificacionesComponent implements OnInit {
               startWith(''),
               map(value => this.utilsService.filter(this.lista_objetos, value, 'nombre'))
             );
-            this.dataSource = new MatTableDataSource(this.lista_asociada);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            this.createTable(this.lista_asociada);
             this.cg.detectChanges();
           });
         }
       });
     }
 
+  }
+
+  createTable(data) {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   listarObjetos() {
@@ -178,9 +187,7 @@ export class FormularioNotificacionesComponent implements OnInit {
 
   seleccionarObjeto(e) {
     this.lista_asociada.push(e);
-    this.dataSource = new MatTableDataSource(this.lista_asociada);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.createTable(this.lista_asociada);
 
     this.myControl = new FormControl();
     this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -221,9 +228,7 @@ export class FormularioNotificacionesComponent implements OnInit {
           }
         }
         this.lista_asociada.splice(pos, 1);
-        this.dataSource = new MatTableDataSource(this.lista_asociada);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.createTable(this.lista_asociada);
         this.cg.detectChanges();
       }
     })
@@ -274,6 +279,7 @@ export class FormularioNotificacionesComponent implements OnInit {
               }
             }
             if (this.notificacion.tipo_envio == '2') {
+              console.log('ids usuarios',ids_usuarios)
               this.notificacionService.guardarUsuariosNotificacion(ids_usuarios, id_notificacion).then(u => {
                 if (u.success) {
                   this.router.navigate(['/administrador-notificaciones']);
@@ -343,6 +349,12 @@ export class FormularioNotificacionesComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
 }

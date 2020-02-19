@@ -81,7 +81,7 @@ export class IntencionesChatComponent implements OnInit {
   }
 
   seleccionarCategoriaNueva(value) {
-    // console.log('Valor', value)
+    // // console.log('Valor', value)
     this.categoria_creando = value;
     this.createControl.setValue(value.nombre);
   }

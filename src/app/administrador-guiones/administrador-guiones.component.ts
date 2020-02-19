@@ -16,7 +16,7 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
 
   user: User;
   creando_extension = false;
-  displayedColumns = ['acciones', 'guion', 'activo'];
+  displayedColumns = ['acciones', 'texto', 'activo'];
   dataSource: MatTableDataSource<any>;
   matTableFilter:matTableFilter;
   filterColumns = [
@@ -71,6 +71,13 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   ngAfterViewInit() {
@@ -95,11 +102,13 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
     let variables_permitidas = ['{nombre_cliente}', '{correo_cliente}', '{categoria}', '{fecha_actual}', '{busqueda}', '{id_conversacion}'];
     let variables = texto.match(/{.*?}/g);
     this.correcto = true;
-    variables.forEach(variable => {
-      if(!(variables_permitidas.indexOf(variable) > -1)) {
-        this.correcto = false;
-      } 
-    });
+    if (variables != null || variables != undefined) {
+      variables.forEach(variable => {
+        if(!(variables_permitidas.indexOf(variable) > -1)) {
+          this.correcto = false;
+        } 
+      });
+    }
   }
 
   /**
@@ -163,7 +172,7 @@ export class AdministradorGuionesComponent implements OnInit, AfterViewInit {
   eliminarExtension(e) {
     swal.fire({
       title: 'Cuidado',
-      text: "Desea Borrar el guión",
+      text: "Desea borrar el guión",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

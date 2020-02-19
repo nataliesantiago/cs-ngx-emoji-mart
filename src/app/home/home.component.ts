@@ -169,7 +169,7 @@ export class HomeComponent implements OnInit {
       }
     });
     this.searchText = "";
-    this.responseSearch.setActiveMostrarBarra(false);
+    
 
 
   }
@@ -268,6 +268,7 @@ export class HomeComponent implements OnInit {
  
   ngOnInit(): void {
     /**speech recognizion */
+    this.responseSearch.setActiveMostrarBarra(false);
     this.currentLanguage = this.languages[0];
     this.speechRecognizer.initialize(this.currentLanguage);
     this.initRecognition();

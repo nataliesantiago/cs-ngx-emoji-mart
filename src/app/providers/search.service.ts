@@ -16,7 +16,7 @@ import { resolve } from 'url';
 const moment = _rollupMoment || _moment;
 @Injectable({
   providedIn: 'root'
-})
+}) 
 export class SearchService {
   user: User;
   busqueda_actual: Busqueda;
@@ -42,15 +42,15 @@ export class SearchService {
       }
     });
 
-    this.fecha_inicio_busquedas = localStorage.getItem('fib');
-    let cant = localStorage.getItem('cmc');
+    this.fecha_inicio_busquedas = sessionStorage.getItem('fib');
+    let cant = sessionStorage.getItem('cmc');
     if (cant) {
       this.cantidad_busquedas = parseInt(cant);
     }
     if (this.fecha_inicio_busquedas) {
       this.fecha_inicio_busquedas = moment(parseInt(this.fecha_inicio_busquedas));
     }
-    let b = localStorage.getItem('ubc');
+    let b = sessionStorage.getItem('ubc');
     if (b) {
       this.busqueda_actual = JSON.parse(b);
     }
@@ -74,6 +74,22 @@ export class SearchService {
     })
   }
 
+  obtenerPreguntasFlujo(limite?: number, pagina?: number): Promise<any> {
+    if (!pagina) {
+      pagina = 0;
+    }
+    if (!limite) {
+      limite = 50;
+    }
+    return new Promise(resolve => {
+      this.ajax.get('preguntas/obtener-preguntas-flujo', { pagina: pagina, limite: limite }).subscribe(p => {
+        if (p.success) {
+          resolve(p.preguntas);
+        }
+      })
+    })
+  }
+
   totalPreguntas(): Promise<any> {
 
     return new Promise(resolve => {
@@ -85,7 +101,15 @@ export class SearchService {
     })
   }
 
-
+  totalPreguntasFlujo(): Promise<any> {
+    return new Promise(resolve => {
+      this.ajax.get('preguntas/total-preguntas-flujo', {}).subscribe(p => {
+        if (p.success) {
+          resolve(p.total);
+        }
+      })
+    })
+  }
 
   autocompleteText(query: any) {
 
@@ -110,22 +134,22 @@ export class SearchService {
 
   async validaOpenChat() {
 
-    let a = await this.utilsService.getConfiguraciones();
+    
     let tiempo_minimo = parseInt(this.utilsService.buscarConfiguracion('cantidad_minutos_minimo_chat').valor);
     let consultas_minimas = parseInt(this.utilsService.buscarConfiguracion('cantidad_consultas_minima_chat').valor);
     if (this.busqueda_actual) {
       if (this.cantidad_busquedas && this.fecha_inicio_busquedas) {
         let diff = moment().utc().diff(this.fecha_inicio_busquedas.utc(), 'seconds');
         let segundos = tiempo_minimo * 60;
-        if (this.cantidad_busquedas >= consultas_minimas && diff >= segundos) {
-          //console.log('abrir chat', this.busqueda_actual);
+        if (this.cantidad_busquedas >= consultas_minimas && diff >= segundos && this.user.id_rol != 2 && this.user.id_rol != 3) {
+          //// console.log('abrir chat', this.busqueda_actual);
           let id_busqueda = this.busqueda_actual.idtbl_busqueda_usuario;
           delete this.busqueda_actual;
           delete this.cantidad_busquedas;
           delete this.fecha_inicio_busquedas;
-          localStorage.removeItem('fib');
-          localStorage.removeItem('cmc');
-          localStorage.removeItem('ubc');
+          sessionStorage.removeItem('fib');
+          sessionStorage.removeItem('cmc');
+          sessionStorage.removeItem('ubc');
           Swal.fire({
             title: '¿Deseas buscar un experto?',
             text: '',
@@ -145,10 +169,10 @@ export class SearchService {
             }
           })
         } else {
-          //console.log(this.cantidad_busquedas, diff, segundos);
+          //// console.log(this.cantidad_busquedas, diff, segundos);
         }
 
-        // console.log(diff, moment(), this.fecha_inicio_busquedas);
+        // // console.log(diff, moment(), this.fecha_inicio_busquedas);
       }
     }
   }
@@ -166,13 +190,13 @@ export class SearchService {
     return new Promise((resolve, reject) => {
 
 
-      // console.log('cargo', this.user.nombre_perfil);
+      // // console.log('cargo', this.user.nombre_perfil);
       let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen, cargo: this.user.nombre_perfil };
       if (guardar) {
         this.ajax.post('preguntas/cloud-search/guardar-historial', datos).subscribe(d => {
           if (d.success) {
             this.busqueda_actual = d.busqueda;
-            localStorage.setItem('ubc', JSON.stringify(this.busqueda_actual));
+            sessionStorage.setItem('ubc', JSON.stringify(this.busqueda_actual));
           }
         });
         if (!this.cantidad_busquedas) {
@@ -180,11 +204,11 @@ export class SearchService {
         } else {
           this.cantidad_busquedas++;
         }
-        localStorage.setItem('cmc', this.cantidad_busquedas + '');
+        sessionStorage.setItem('cmc', this.cantidad_busquedas + '');
         if (!this.fecha_inicio_busquedas) {
           this.fecha_inicio_busquedas = moment().utc();
-          //console.log(this.fecha_inicio_busquedas);
-          localStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
+          //// console.log(this.fecha_inicio_busquedas);
+          sessionStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
         }
       }
       this.ajax.post('preguntas/cloud-search/query', datos).subscribe(async d => {
@@ -195,22 +219,22 @@ export class SearchService {
               const r = d.resultados.results[index];
               let tmp = r.url.split('/');
 
-              // console.log(tmp)
+              // // console.log(tmp)
               r.idtbl_pregunta = parseInt(tmp[tmp.length - 1]);
               this.obtenerPregunta(r.idtbl_pregunta).then(pregunta => {
-                //console.log('paso por aca', pregunta);
+                //// console.log('paso por aca', pregunta);
                 //r.contenido = pregunta.respuesta.replace(/<[^>]*>/g, '');
                 let tmp_url = pregunta.respuesta.split('iconodrive=');
                 if (tmp_url.length > 1) {
                   let indice = tmp_url[1].indexOf('"');
                   let url_drive = tmp_url[1].substring(0, indice);
-                  //console.log(url_drive);
+                  //// console.log(url_drive);
                   r.url_drive = url_drive;
                 }
                 if (r.metadata.source.name == environment.pais[this.user.pais].id_origen_conecta) {
                   r.url_icono = pregunta.icono_padre;
                 }
-                //console.log(this.respuesta, pregunta);
+                //// console.log(this.respuesta, pregunta);
                 //this.mostrando = true;
                 /*if (index == d.resultados.results.length - 1) {
                   resolve(d.resultados);

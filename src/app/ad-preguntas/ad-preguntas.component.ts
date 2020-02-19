@@ -44,13 +44,17 @@ export class AdPreguntasComponent implements OnInit {
   usuario;
   id_usuario;
   data = [];
+  temporal = [];
   mostrar_fecha_ultima_modificacion = false;
   estados_pregunta;
   filters = {};
   pagina = 0;
-  limite = 50;
+  limite = 500;
   length = 0;
   setData = new Set();
+  cargando_preguntas = true;
+  progreso = 0;
+  modo_spinner = 'determinate';
   constructor(private ajax: AjaxService, private user: UserService, private router: Router, private cg: ChangeDetectorRef, private filtros_service: FiltrosService, private searchService: SearchService, private utilsService: UtilsService) {
 
     this.usuario = this.user.getUsuario();
@@ -67,9 +71,9 @@ export class AdPreguntasComponent implements OnInit {
     })
     /*
         this.ajax.get('preguntas/obtener', {}).subscribe(p => {
-          console.log(p);
+          // console.log(p);
           if (p.success) {
-            console.log(p.preguntas);
+            // console.log(p.preguntas);
             this.data = p.preguntas;
             this.createTable(this.data);
           }
@@ -87,36 +91,58 @@ export class AdPreguntasComponent implements OnInit {
   }
 
   cargarPreguntas() {
-    
-    this.searchService.obtenerPreguntas(this.limite, this.pagina).then(preguntas => {
-      //console.log(preguntas);
-      this.data = this.data.concat(preguntas);
-      /*this.setData = new Set(this.data);
-      console.log(this.setData.size);
-      this.data = Array.from(this.setData);*/
-      this.data = this.utilsService.getUnique(this.data, 'idtbl_pregunta');
-      this.createTable(this.data);
-      console.log(this.data);
-      this.searchService.totalPreguntas().then(t => {
-        setTimeout(() => {
-          this.length = t;
-          this.paginator.length = t;
-        }, 0);
+    this.searchService.totalPreguntas().then(t => {
+      setTimeout(() => {
+        this.length = t;
+        this.paginator.length = t;
+        this.fillPreguntas();
+      }, 0);
+
+    });
+
+  }
+
+  fillPreguntas() {
+    let peticiones = Math.ceil(this.length / this.limite);
+    let paso = Math.ceil(100 / peticiones);
+    for (let index = 0; index < peticiones; index++) {
+      this.searchService.obtenerPreguntas(this.limite, index).then(preguntas => {
+        //// console.log(preguntas);
+        this.progreso += paso;
+        if (this.progreso > 100) {
+          this.progreso = 100;
+        }
+        this.temporal = this.temporal.concat(preguntas);
+        if (this.temporal.length >= this.length) {
+          //this.pagina++;
+          //this.fillPreguntas();
+          this.cargando_preguntas = false;
+          this.data = this.utilsService.getUnique(this.temporal, 'idtbl_pregunta');
+          this.createTable(this.data);
+        }
+        /*this.setData = new Set(this.data);
+        // console.log(this.setData.size);
+        this.data = Array.from(this.setData);*/
+
+        // // console.log(this.data);
+
 
       })
-    })
+
+    }
+
   }
 
   cambiaSize(e: Event) {
-    //console.log(e);
+    //// console.log(e);
   }
 
   ngOnInit() {
     this.paginator.page.subscribe((p: PageEvent) => {
-      //console.log(p);
+      //// console.log(p);
       let index = p.pageIndex + 1;
       let cant = index * p.pageSize;
-      //console.log(cant);
+      //// console.log(cant);
       if (cant > this.data.length) {
         this.limite = p.pageSize;
         this.pagina = index;
@@ -130,6 +156,13 @@ export class AdPreguntasComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   editarElemento(e) {

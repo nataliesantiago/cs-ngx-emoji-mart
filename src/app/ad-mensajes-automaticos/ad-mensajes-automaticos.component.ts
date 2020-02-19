@@ -20,7 +20,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
                                 fecha_ultima_modificacion:null,id_usuario_modificacion:null,timeout_tmp:null,texto_tmp:''};
   message_types;
   is_timeout = false;
-  displayedColumns = ['acciones', 'mensaje', 'tiempo', 'tipo', 'activo'];
+  displayedColumns = ['acciones', 'texto', 'timeout', 'tipo', 'activo'];
   dataSource: MatTableDataSource<any>;
   matTableFilter: matTableFilter;
   filterColumns = [
@@ -91,6 +91,13 @@ export class AdMensajesAutomaticosComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.cg.detectChanges();
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   /**
@@ -172,7 +179,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   inactiveMessage(e){
     swal.fire({
       title: 'Cuidado',
-      text: "Confirme para desactivar el mensaje automatico",
+      text: "Al momento de activarlo, se desactivarán los otros mensajes del mismo tipo",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,
@@ -212,7 +219,7 @@ export class AdMensajesAutomaticosComponent implements OnInit {
   activeOtherType(e) {
     swal.fire({
       title: 'Confirme para activar el mensaje',
-      text: "Al momento de activaralo, se desactivará el mensaje de este tipo que este activo",
+      text: "Al momento de activarlo, se desactivarán los otros mensajes del mismo tipo",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

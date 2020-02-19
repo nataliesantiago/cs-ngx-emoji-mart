@@ -70,7 +70,7 @@ export class AdminsitradorExtensionesChatComponent implements OnInit, AfterViewI
 
   crearExtension() {
     this.nueva_extension.id_usuario_creador = this.user.getId();
-    console.log(this.nueva_extension.extension, this.nueva_extension.megabytes_maximos);
+    // console.log(this.nueva_extension.extension, this.nueva_extension.megabytes_maximos);
     if (this.nueva_extension.extension != null || this.nueva_extension.megabytes_maximos != null) {
       this.chatService.crearExtensionArchivo(this.nueva_extension).then(d => {
         this.nueva_extension = { extension: null, megabytes_maximos: null };
@@ -106,7 +106,7 @@ export class AdminsitradorExtensionesChatComponent implements OnInit, AfterViewI
   eliminarExtension(e: ExtensionArchivoChat) {
     swal.fire({
       title: 'Cuidado',
-      text: "Desea Borrar la extensión",
+      text: "Desea borrar la extensión",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

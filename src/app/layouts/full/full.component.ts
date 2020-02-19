@@ -13,6 +13,7 @@ import { SpeechNotification } from '../../home/web-speech/shared/model/speech-no
 import { SpeechError } from '../../home/web-speech/shared/model/speech-error';
 import { ActionContext } from '../../home/web-speech/shared/model/strategy/action-context';
 import { MatSidenav } from '@angular/material';
+import {MatMenuTrigger} from '@angular/material/menu';
 import { UserService } from '../../providers/user.service';
 import { NotificacionService } from '../../providers/notificacion.service';
 import { LookFeelService } from '../../providers/look-feel.service';
@@ -26,6 +27,7 @@ import { AjaxService } from '../../providers/ajax.service';
   styleUrls: ['full.component.scss']
 })
 export class FullComponent implements OnDestroy, AfterViewInit {
+  
   mobileQuery: MediaQueryList;
   dir = 'ltr';
   green: boolean;
@@ -70,6 +72,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   textError = 'no hay resultados'; // label del autocomplete
   @ViewChild('snav') sidenav: MatSidenav;
   @ViewChild('end') end: MatSidenav;
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
 
   color_toolbar = '';
   muestra_barra: boolean = false;
@@ -122,7 +125,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     /* this.router.events.subscribe(val => {
        if (val instanceof NavigationEnd) {
          if (val.url.indexOf('/search/') == 0) {
-           // console.log('estoy en donde quiero');
+           // // console.log('estoy en donde quiero');
            this.muestra_barra = true;
          } else {
            this.muestra_barra == false;
@@ -240,6 +243,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
       this.user.actualizarMensajesNLP().then(r => {
         this.conversaciones_nlp = r;
         this.router.navigate(['/consola-supervisor/' + e.idtbl_conversacion]);
+        this.trigger.closeMenu();
       });
     });
   }

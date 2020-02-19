@@ -82,19 +82,22 @@ export class AppHeaderComponent {
     if (this.user.boton_sos_perfil && this.user.boton_sos_rol) {
       this.muestra_boton_sos = true;
     }
-    this.chatService.getEstadosExperto().then(estados => {
-      this.estados_operador = estados;
-      if (this.user.getIdRol() == 2) {
-        this.cambiarEstadoExperto({ value: 1 });
-        this.user.estado_actual = 1;
-      }
-      if (this.user.getIdRol() == 3) {
-        this.user.estado_experto = 1;
-        this.cambiarEstadoExperto({ value: this.user.estado_experto });
-      }
-    });
+    if (this.user.getIdRol() == 2 || this.user.getIdRol() == 3) {
+      this.chatService.getEstadosExperto().then(estados => {
+        this.estados_operador = estados;
+        if (this.user.getIdRol() == 2) {
+          this.cambiarEstadoExperto({ value: 1 });
+          this.user.estado_actual = 1;
+        }
+        if (this.user.getIdRol() == 3) {
+          this.user.estado_actual = 1;
+
+          this.cambiarEstadoExperto({ value: this.user.estado_actual });
+        }
+      });
+    }
     this.chatService.getEmergenciaUsuario().then(emergencia => {
-      // console.log(emergencia);
+      // // console.log(emergencia);
       if (emergencia) {
         let exito = (emergencia.id_usuario_operador) ? true : false;
         this.dialog.open(SosComponent, { disableClose: true, data: { exito: exito } }).afterClosed().subscribe((result) => {
@@ -109,7 +112,7 @@ export class AppHeaderComponent {
 
   cambiarEstadoExperto(e) {
     //debugger;    
-    
+
     let actual = this.user.estado_actual;
     this.user.estado_actual = e.value;
     if (this.intervalo) {
@@ -123,9 +126,10 @@ export class AppHeaderComponent {
       }
       this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       this.intervalo = setInterval(() => {
-        let activo = (this.user.estado_experto == 1) ? true : false;
+        let activo = (this.user.estado_actual == 1) ? true : false;
+        console.log('estado', activo, this.user.estado_actual);
         this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
-      }, 10000);
+      }, 5000);
 
       if (this.user.getIdRol() == 2) {
         this.listenEmergenciaExperto();
@@ -142,17 +146,17 @@ export class AppHeaderComponent {
     if (!this.escuchando_emergencia) {
       this.escuchando_emergencia = true;
       this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/emergencia/1').valueChanges().subscribe((d: any) => {
-        // console.log(d);
+        // // console.log(d);
         if (d) {
           this.emergencia_actual = true;
           this.sonidosService.sonar(3);
           this.mostrarSnack(d);
-          this.user.estado_experto = 7;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto })
+          this.user.estado_actual = 7;
+          this.cambiarEstadoExperto({ value: this.user.estado_actual })
         } else {
           this.emergencia_actual = false;
-          this.user.estado_experto = 1;
-          this.cambiarEstadoExperto({ value: this.user.estado_experto })
+          this.user.estado_actual = 1;
+          this.cambiarEstadoExperto({ value: this.user.estado_actual })
         }
       });
     }
@@ -239,13 +243,13 @@ export class AppHeaderComponent {
     });
   }
 
-  cambiarPais(pais){
+  cambiarPais(pais) {
     this.user.pais = pais;
     this.ajax.pais = pais;
     localStorage.setItem('pais', pais);
     this.changeDetector.detectChanges();
     this.userService.actualizarSuperAdminCam(this.user.codigo_firebase, this.user.pass_firebase).then(d => {
-      if(d.success){
+      if (d.success) {
         this.user.setId(d.profile.idtbl_usuario);
         this.router.navigate(['/home']);
       }

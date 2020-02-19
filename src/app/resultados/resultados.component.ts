@@ -46,7 +46,7 @@ export class ResultadosComponent implements OnInit {
       this.origenes_drive = origenes.filter(o => {
         return o.activo;
       });
-      //console.log(this.origenes_drive);
+      //// console.log(this.origenes_drive);
     })
   }
 
@@ -55,14 +55,14 @@ export class ResultadosComponent implements OnInit {
   }
 
   paginar(pagina: any) {
-    //console.log(pagina);
+    //// console.log(pagina);
     this.page = pagina.pageIndex;
     this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
   }
 
 
   init() {
-    //console.log(this.activatedRoute.snapshot.queryParamMap.get('fombre'));
+    //// console.log(this.activatedRoute.snapshot.queryParamMap.get('fombre'));
     this.activatedRoute.queryParams.subscribe(params => {
       this.params = params;
       this.tipo_busqueda = params['tipo'] || 1;
@@ -107,12 +107,13 @@ export class ResultadosComponent implements OnInit {
 
   abrirChat() {
     let id_busqueda = this.searchService.busqueda_actual.idtbl_busqueda_usuario;
-    //console.log(id_busqueda);
+    //// console.log(id_busqueda);
     this.chatService.crearConversacion(null, id_busqueda);
+    this.router.navigate(['/home']);
   }
 
   cambiaTab(e: MatTabChangeEvent) {    
-    console.log(e);
+    // console.log(e);
     this.page = 0;
     switch (e.tab.textLabel) {
       case 'Preguntas y respuestas':
@@ -152,7 +153,7 @@ export class ResultadosComponent implements OnInit {
     }
 
     this.searchService.queryCloudSearch(this.busqueda, this.tipo_busqueda, this.origen, this.page, guardar, params.url).then(d => {
-      // console.log(d);
+      // // console.log(d);
       /*d.results.forEach((r: ResultadoCloudSearch) => {
         let id = r.url.split('_')[0];
         this.searchService.obtenerPregunta(parseInt(id)).then(pregunta => {

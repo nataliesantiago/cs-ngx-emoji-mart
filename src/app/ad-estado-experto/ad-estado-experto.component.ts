@@ -73,6 +73,13 @@ export class AdEstadoExpertoComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.cg.detectChanges();
     this.matTableFilter = new matTableFilter(this.dataSource,this.filterColumns);
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+      const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+        return (currentTerm + (data as { [key: string]: any })[key]);
+      }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      return dataStr.indexOf(transformedFilter) != -1;
+    }
   }
 
   /**
@@ -96,6 +103,7 @@ export class AdEstadoExpertoComponent implements OnInit {
       this.estado_experto_service.createState(this.states).then(id => {
         this.init();
         this.create_state = false;
+        this.states.nombre = '';
       });
     } 
   }
@@ -119,7 +127,7 @@ export class AdEstadoExpertoComponent implements OnInit {
   inactiveState(e){
     swal.fire({
       title: 'Cuidado',
-      text: "Confirme para desactivar el mensaje automatico",
+      text: "Confirme para desactivar el estado de inactividad",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

@@ -1,7 +1,7 @@
 <div class="general-container">
   <mat-card *ngIf="creando_extension" class="mat-card-root">
     <mat-card-content class="mat-card-content-root">
-      <mat-card-title>Datos Extensión</mat-card-title>
+      <mat-card-title>Crear guión</mat-card-title>
       <div fxLayout="row wrap" class="contenedor-column-form">
         <form class="m-t-20" fxFlex="70">
           <mat-form-field class="example-full-width">
@@ -84,7 +84,7 @@
           </ng-container>
   
           <!-- Name Column -->
-          <ng-container matColumnDef="guion">
+          <ng-container matColumnDef="texto">
             <mat-header-cell *matHeaderCellDef mat-sort-header style="max-width: 70%;"> Guión </mat-header-cell>
             <mat-cell *matCellDef="let row" style="max-width: 70%;"> 
               <span *ngIf="!row.editando">{{row.texto}}</span>

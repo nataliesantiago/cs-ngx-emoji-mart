@@ -25,6 +25,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TouchSequence } from 'selenium-webdriver';
 import { EstadoExpertoService } from '../providers/estado-experto.service';
 import * as uuid from 'uuid';
+import { Experto } from '../../schemas/xhr.schema';
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -98,10 +99,10 @@ export class ChatExpertoComponent {
         }
       })
       if (pregunta) {
-        console.log('bueno');
+        // console.log('bueno');
         //e.returnValue = 'Tienes conversaciones activas';
       } else {
-        console.log('malo');
+        // console.log('malo');
 
       }
     });
@@ -119,6 +120,7 @@ export class ChatExpertoComponent {
 
       this.chatService.getConfiguracionesChat().then(configs => {
         this.configuraciones = configs.configuraciones;
+        // console.log(this.configuraciones);
         this.userService.getFilasExperto().then(() => {
           this.userService.setActivoExpertoGlobal(1);
           this.insertarLogEstadoExperto();
@@ -127,7 +129,7 @@ export class ChatExpertoComponent {
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
             cola.subscribe(chats => {
-              //console.log(chats);
+              //// console.log(chats);
               let tmp = [];
 
               if (chats.length < 1) {
@@ -221,7 +223,7 @@ export class ChatExpertoComponent {
                   let c = d;
                   c.codigo = codigo;
                   this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
-                    //// console.log(d);
+                    //// // console.log(d);
                     c.cliente = d;
                     this.agregarListenerMensajes(c);
                     this.agregaListenerConversacion(c);
@@ -254,7 +256,7 @@ export class ChatExpertoComponent {
       this.expertos = this.expertos_filtro = e.filter(experto => {
         return experto.idtbl_usuario != this.user.getId();
       });
-      // console.log(this.expertos);
+      // // console.log(this.expertos);
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
           // console.log(experto);
@@ -267,13 +269,13 @@ export class ChatExpertoComponent {
             } else {
               e.atendiendo_emergencia = false;
               var duration = moment().unix() - experto.fecha.seconds;
-              if (experto.activo && duration < 500) {
+              if (experto.activo && duration < 30) {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
                 }
-                if (e.estado_actual_experto != experto.estado_experto) {
-                  e.estado_actual_experto = experto.estado_experto;
-                }
+
+                e.estado_actual_experto = experto.estado_experto;
+
               } else {
                 e.activo_chat = false;
                 e.estado_actual_experto = experto.estado_experto;
@@ -281,6 +283,7 @@ export class ChatExpertoComponent {
             }
           }
           this.abrirConversacionExperto(e, true);
+          //console.log(e);
         });
       });
     })
@@ -302,7 +305,7 @@ export class ChatExpertoComponent {
           c.cant_coincidencias = 0;
           c.mensajes.forEach((m: Mensaje) => {
             if (m.texto.toLowerCase().indexOf(value.toLowerCase()) != -1) {
-              console.log('Encontro mensaje', m.texto.toLowerCase());
+              // console.log('Encontro mensaje', m.texto.toLowerCase());
               m.encontrado = true;
               c.cant_coincidencias++;
             } else {
@@ -355,8 +358,8 @@ export class ChatExpertoComponent {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          // console.log(disponibilidad);
-          if (c && disponibilidad) {
+          console.log('disponibilidad: ', disponibilidad, c);
+          if (c && disponibilidad && !c.id_experto_actual) {
             this.onSelectCola(c);
           }
         }
@@ -368,7 +371,7 @@ export class ChatExpertoComponent {
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
-      if (data.id_experto_actual != this.user.getId()) {
+      if (data && data.id_experto_actual != this.user.getId()) {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
       } else {
         c.id_estado_conversacion = data.id_estado_conversacion;
@@ -377,9 +380,14 @@ export class ChatExpertoComponent {
         c.url_llamada = data.url_llamada;
         c.conversacion_recomendada = data.conversacion_recomendada;
         c.cerro_experto = c.cerro_experto ? c.cerro_experto : false;
+        c.motivo_cierre_enviado = c.motivo_cierre_enviado ? c.motivo_cierre_enviado : false;
+        c.esta_pendiente = c.esta_pendiente ? c.esta_pendiente : false;
+        c.mostro_modal_cierre = c.mostro_modal_cierre ? c.mostro_modal_cierre : false;
 
-        if (c.id_estado_conversacion != 1 && c.id_estado_conversacion != 2 && c.id_estado_conversacion != 7) {
-          if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente) {
+        if (c.id_estado_conversacion == 3 || c.id_estado_conversacion == 4 || c.id_estado_conversacion == 5 || c.id_estado_conversacion == 6) {
+          if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente && !c.mostro_modal_cierre) {
+            // console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
+            c.mostro_modal_cierre = true;
             this.motivoCierreChat(c);
           }
         }
@@ -420,7 +428,8 @@ export class ChatExpertoComponent {
 
   abrirConversacionExperto(e: User, oculta?: boolean) {
     if (e.conversacion_experto && !oculta) {
-      console.log(e);
+      //console.log(e);
+      e.conversacion_experto.cliente.estado_actual_experto = e.estado_actual_experto;
       this.onSelect(e.conversacion_experto);
     } else if (!e.conversacion_experto) {
       this.chatService.getConversacionExperto(e.idtbl_usuario).then(data => {
@@ -433,6 +442,8 @@ export class ChatExpertoComponent {
           this.onSelect(e.conversacion_experto);
         }
       });
+    } else if (e.conversacion_experto) {
+      e.conversacion_experto.cliente.estado_actual_experto = e.estado_actual_experto;
     }
   }
 
@@ -488,7 +499,7 @@ export class ChatExpertoComponent {
       if (!c.primera_vez && c.mensajes && c.mensajes.length < d.length) {
         c.cantidad_mensajes_nuevos += d.length - c.mensajes.length;
       }
-      //console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
+      //// console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
       let mensajes_nuevos = await this.procesarMensajes(d, c, c.primera_vez, 0, []);
       c.mensajes = c.mensajes.concat(mensajes_nuevos);
 
@@ -535,7 +546,7 @@ export class ChatExpertoComponent {
           this.cantidad_mensajes_sin_leer += e.conversacion_experto.cantidad_mensajes_nuevos;
         }
       });
-      this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer); 
+      this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     });
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes/').snapshotChanges().subscribe((changes: any) => {
       changes.forEach(a => {
@@ -580,7 +591,7 @@ export class ChatExpertoComponent {
   async procesarMensajes(d: Array<Mensaje>, c: Conversacion, primera_vez: boolean, i: number, tmp: Array<Mensaje>) {
     for (let index = 0; index < d.length; index++) {
       const m = d[index];
-      //console.log(m);
+      //// console.log(m);
       let experto = this.usuarios.find((e: User) => {
         return e.idtbl_usuario == m.id_usuario;
       });
@@ -597,7 +608,7 @@ export class ChatExpertoComponent {
       let bus: Mensaje = c.mensajes.find(mm => {
         return mm.uuid == m.uuid;
       });
-      //console.log(bus);
+      //// console.log(bus);
       if (!bus) {
         tmp.push(m);
       } else {
@@ -619,64 +630,25 @@ export class ChatExpertoComponent {
       if (!c.primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
         this.soundService.sonar(1);
         c.mensajes_nuevos = true;
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mensajes_nuevos: true });
       }
     } else {
       if (!c.primera_vez && !c.focuseado) {
         this.soundService.sonar(1);
         c.mensajes_nuevos = true;
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mensajes_nuevos: true });
       }
     }
 
-    if(!c.primera_vez){
-      for(let i = 0; i < tmp.length; i++){
-        if(!this.new_messages.includes(tmp[i].id_conversacion)){
+    if (!c.primera_vez) {
+      for (let i = 0; i < tmp.length; i++) {
+        if (!this.new_messages.includes(tmp[i].id_conversacion)) {
           this.new_messages.push(tmp[i].id_conversacion);
         }
       }
     }
     return tmp;
-    /* let m = d.shift();
-     if (m) {
-       let experto = this.usuarios.find((e: User) => {
-         return e.idtbl_usuario == m.id_usuario;
-       });
-       if (!experto) {
-         let u = await this.userService.getInfoUsuario(m.id_usuario);
-         this.usuarios.push(u);
-       }
-       if (m.es_nota_voz) {
-         m.audioControls = { reproduciendo: false, segundo: m.duracion, min: 0, max: m.duracion };
-         this.asignarAudio(m);
-       }
- 
-       //c.mensajes[i] = m;
-       tmp.push(m);
-       if (!primera_vez && !c.focuseado && m.id_usuario != this.user.getId() && c.id_estado_conversacion == 2) {
-         this.soundService.sonar(1);
-         c.mensajes_nuevos = true;
-         // c.cantidad_mensajes_nuevos++;
-       } else {
- 
-       }
- 
-       //console.log('mensaje sin leer', this.cantidad_mensajes_sin_leer);
- 
-       if (d.length < 1) {
-         c.ultimo_mensaje = m;
-         if (m.es_nota_voz) {
-           c.ultimo_mensaje.label = 'Nota de voz';
-         } else if (m.es_archivo) {
-           c.ultimo_mensaje.label = 'Archivo adjunto';
-         } else {
-           c.ultimo_mensaje.label = m.texto;
-         }
-       }
-       i++;
-       return await this.procesarMensajes(d, c, primera_vez, i, tmp);
-     } else {
-       //console.log(' mensajes', m)
-       return tmp;
-     }*/
+
   }
 
   passByMensajes(mensajes: Array<Mensaje>, index: number, mensaje_anterior?: Mensaje) {
@@ -779,26 +751,30 @@ export class ChatExpertoComponent {
     if (chat) {
 
       let index = this.new_messages.indexOf(chat.idtbl_conversacion);
-      if(index >= 0){
+      if (index >= 0) {
         this.new_messages.splice(index, 1);
       }
 
       chat.esta_seleccionado = true;
       chat.mensajes_nuevos = false;
-      this.setFocus(chat, false);
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + chat.codigo).update({ mensajes_nuevos: false });
+      this.setFocus(chat, true);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
         chat.esta_seleccionado = false;
-        if (!chat.motivo_cierre_enviado) {
+        // console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
+        if (!chat.motivo_cierre_enviado && !chat.mostro_modal_cierre) {
+          // console.log('no enviado');
           this.motivoCierreChat(chat);
         }
       }
+      
     }
   }
 
   onSelectCola(c: Conversacion): void {
     // this.chat = chat;
     // chat.mensajes_nuevos = false;
-    this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo).then(u => {
+    this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
 
     });
   }
@@ -808,9 +784,9 @@ export class ChatExpertoComponent {
   }
 
   setFocus(c: Conversacion, estado: boolean) {
-    // console.log(c);
     c.focuseado = estado;
-    // console.log(this.cantidad_mensajes_sin_leer,c.cantidad_mensajes_nuevos);
+    c.mensajes_nuevos = false;
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mensajes_nuevos: false });
     this.cantidad_mensajes_sin_leer -= c.cantidad_mensajes_nuevos;
     this.mensajes_nuevos.emit(this.cantidad_mensajes_sin_leer);
     c.cantidad_mensajes_nuevos = 0;
@@ -821,7 +797,7 @@ export class ChatExpertoComponent {
   }
 
   seleccionarEmoji(evento, c: Conversacion) {
-    console.log(evento.emoji);
+    // console.log(evento.emoji);
     if (c.texto_mensaje) {
       c.texto_mensaje += '' + evento.emoji.native;
     } else {
@@ -963,32 +939,68 @@ export class ChatExpertoComponent {
   grabarNotaVoz(c: Conversacion, comp: PerfectScrollbarComponent) {
 
     c.iniciando_grabacion = true;
-    let minutos = parseInt(this.buscarConfiguracion(7).valor);
-    let tiempo = minutos * 60;
-    const options = { mimeType: 'audio/webm' };
-    let detenido = false;
-    let calculaTiempo = { fechaIni: null, fechaFin: null };
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        this.stream = stream;
-        c.mediaRecorder = new StereoAudioRecorder(stream, {
-          sampleRate: 48000,
-          get16BitAudio: true,
-          bufferSize: 4096,
-          numberOfAudioChannels: 1,
-          disableLogs: true
-        });
-        this.startTimer(tiempo, c).then(() => {
-          c.mediaRecorder.stop(audioBlob => {
-            this.onStopRecordingNotaVoz(audioBlob, c, comp);
+    let minutos;
+    if (this.buscarConfiguracion(7)) {
+      minutos = parseInt(this.buscarConfiguracion(7).valor);
 
+      let tiempo = minutos * 60;
+      const options = { mimeType: 'audio/webm' };
+      let detenido = false;
+      let calculaTiempo = { fechaIni: null, fechaFin: null };
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          this.stream = stream;
+          c.mediaRecorder = new StereoAudioRecorder(stream, {
+            sampleRate: 48000,
+            get16BitAudio: true,
+            bufferSize: 4096,
+            numberOfAudioChannels: 1,
+            disableLogs: true
           });
+          this.startTimer(tiempo, c).then(() => {
+            c.mediaRecorder.stop(audioBlob => {
+              this.onStopRecordingNotaVoz(audioBlob, c, comp);
+
+            });
+          });
+
+        }).catch(() => {
+          c.iniciando_grabacion = false;
+          swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
         });
+    } else {
+      this.init();
+      this.chatService.getConfiguracionesChat().then(configs => {
+        this.configuraciones = configs.configuraciones;
+        minutos = parseInt(this.buscarConfiguracion(7).valor);
 
+        let tiempo = minutos * 60;
+        const options = { mimeType: 'audio/webm' };
+        let detenido = false;
+        let calculaTiempo = { fechaIni: null, fechaFin: null };
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(stream => {
+            this.stream = stream;
+            c.mediaRecorder = new StereoAudioRecorder(stream, {
+              sampleRate: 48000,
+              get16BitAudio: true,
+              bufferSize: 4096,
+              numberOfAudioChannels: 1,
+              disableLogs: true
+            });
+            this.startTimer(tiempo, c).then(() => {
+              c.mediaRecorder.stop(audioBlob => {
+                this.onStopRecordingNotaVoz(audioBlob, c, comp);
+
+              });
+            });
+
+          }).catch(() => {
+            c.iniciando_grabacion = false;
+            swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
+          });
       });
-
-
-
+    }
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
@@ -1075,7 +1087,7 @@ export class ChatExpertoComponent {
     let code = event.which;
     let shortcut: ShortCut = { activo: true };
     if ((event.ctrlKey || event.altKey || event.shiftKey) && (this.shortcutsService.iniciadores.indexOf(code) == (-1))) {
-      // console.log('encuentra cosas', event);
+      // // console.log('encuentra cosas', event);
       if (event.ctrlKey) {
         shortcut.ctrl = true;
       }
@@ -1090,7 +1102,7 @@ export class ChatExpertoComponent {
 
         return (s.comando == shortcut.comando && (((s.ctrl && shortcut.ctrl) || (!s.ctrl && !shortcut.ctrl)) && ((s.alt && shortcut.alt) || (!s.alt && !shortcut.alt)) && ((s.shift && shortcut.shift) || (!s.shift && !shortcut.shift))));
       });
-      // console.log('encuentra cosas', s, shortcut.alt);
+      // // console.log('encuentra cosas', s, shortcut.alt);
       if (s) {
         event.preventDefault();
         event.stopPropagation();
@@ -1098,7 +1110,7 @@ export class ChatExpertoComponent {
           c.texto_mensaje = '';
         }
         c.texto_mensaje += this.reemplazaVariablesShortcut(s.guion, c);
-        // console.log('encuentra cosas');
+        // // console.log('encuentra cosas');
 
       }
 
@@ -1121,16 +1133,17 @@ export class ChatExpertoComponent {
 
   cerrarChat(c: Conversacion) {
     c.cerro_experto = true;
+    let cliente = c.cliente.nombre;
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true });
     setTimeout(() => {
-      this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false } }).afterClosed().subscribe(d => {
+      this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false, cliente: cliente } }).afterClosed().subscribe(d => {
         if (d && d.motivo) {
           let estado = 3;
           this.chatService.cerrarConversacion(c, estado, d.motivo).then(() => {
             c.motivo_cierre_enviado = true;
             this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true });
             this.obtenerEncuestaExperto(c);
-            console.log(this.user.experto_activo);
+            // console.log(this.user.experto_activo);
             if (this.user.experto_activo) {
               this.recibirChatAutomatico();
             }
@@ -1142,7 +1155,7 @@ export class ChatExpertoComponent {
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
-    // console.log(c);
+    // // console.log(c);
     if (c.conversacion_recomendada) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
@@ -1173,7 +1186,7 @@ export class ChatExpertoComponent {
   iniciarVideollamada(c: Conversacion) {
     c.buscando_llamada = true;
     this.chatService.iniciarVideollamada(c).then(d => {
-      // console.log('creo', d);
+      // // console.log('creo', d);
       // this.enviarMensaje(c, 4, d);
       c.buscando_llamada = false;
       this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ llamada_activa: true, url_llamada: d });
@@ -1246,7 +1259,8 @@ export class ChatExpertoComponent {
    */
   motivoCierreChat(c) {
     c.cerro_experto = false;
-    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true } }).afterClosed().subscribe(d => {
+    let cliente = c.cliente.nombre;
+    this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true, cliente: cliente } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         this.chatService.cerrarConversacionUsuario(c, c.id_estado_conversacion, d.motivo).then(() => {
           c.motivo_cierre_enviado = true;

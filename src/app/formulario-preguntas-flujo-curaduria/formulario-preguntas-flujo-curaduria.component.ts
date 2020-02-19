@@ -104,7 +104,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   }
 
   quillModulesFc(ql: any, contenido: any, index?: number) {
-    //console.log(ql.getModule('toolbar'))
+    //// console.log(ql.getModule('toolbar'))
     ql.getModule('toolbar')
     setTimeout(() => {
       ql.getModule('toolbar').addHandler('video', () => {
@@ -167,7 +167,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         debounceTime(200),
         switchMap(value => this.buscarPreguntas(value))
       ).subscribe(d => {
-        console.log(d);
+        // console.log(d);
       });
 
     this.user.getPerfilesUsuario().then(p => {
@@ -334,7 +334,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
         this.notas.id_usuario_comentario = this.id_usuario;
 
-        //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+        this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
@@ -351,12 +351,13 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           })
 
         } else {
+          
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
-              console.log(enviar_correo);
+              // console.log(enviar_correo);
               if (enviar_correo) {
                 this.ajax.post('email/correo-aprobacion-pregunta', { pregunta: this.pregunta }).subscribe(d => {
-                  console.log(d);
+                  // console.log(d);
                   if (d.success) {
                     this.location.back();
                   }
@@ -378,7 +379,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           this.pregunta.muestra_fecha_actualizacion = 0;
         }
         this.pregunta.id_usuario = this.id_usuario;
-        //this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+        this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }

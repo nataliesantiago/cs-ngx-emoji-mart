@@ -78,7 +78,7 @@ export class UserService {
     definirPaisUsuario(p: string) {
         this.ajax.pais = p;
         localStorage.setItem('pais', p);
-        // console.log(this.ajax.pais);
+        // // console.log(this.ajax.pais);
     }
 
 
@@ -96,7 +96,7 @@ export class UserService {
                 res();
             }).catch(error => {
                 // Handle Errors here.
-                console.log('Invalid login firebase');
+                // console.log('Invalid login firebase');
                 rej();
             });
         });
@@ -154,7 +154,8 @@ export class UserService {
         this.subjectUsuario.next(null);
         window.localStorage.removeItem('tk');
         window.localStorage.removeItem('pais');
-
+        window.localStorage.clear();
+        window.sessionStorage.clear();
     }
 
 
@@ -204,24 +205,22 @@ export class UserService {
     }
 
     setActivoExperto(activo, value_estado, atendiendo_emergencia?) {
-        let date = new Date();
         this.user.experto_activo = activo;
-        if(value_estado){
+        if (value_estado) {
             this.ajax.get('user/getEstadoExperto', { id_estado: value_estado }).subscribe(d => {
-                if(d.success){
-                    this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: date, estado_experto: d.estado[0].nombre, atendiendo_emergencia: atendiendo_emergencia});
+                if (d.success) {
+                    this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: d.estado[0].nombre, atendiendo_emergencia: atendiendo_emergencia });
                 }
             })
-        }else{
-            this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: date, estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia});
+        } else {
+            this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia });
         }
-        
     }
 
     setActivoExpertoGlobal(estado: number) {
-        this.user.estado_experto = estado;
+        this.user.estado_actual = estado;
         this.subjectEstadoExperto.next(estado);
-        //console.log(activo)
+        //// console.log(activo)
         //this.fireStore.collection('paises/'+this.user.pais+'/'+'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
     }
 
@@ -253,7 +252,7 @@ export class UserService {
     }
 
     listen() {
-        // console.log(this.user.getIdRol());
+        // // console.log(this.user.getIdRol());
 
         this.actualizarTodo();
 
@@ -305,12 +304,12 @@ export class UserService {
 
             this.ajax.get('notificacion/obtener-notificaciones-usuario', { id_usuario: id_usuario }).subscribe(d => {
                 if (d.success) {
-                    //console.log(d.notificaciones[1]);
+                    //// console.log(d.notificaciones[1]);
                     this.notificaciones_usuario = d.notificaciones[0];
                     this.notificaciones_sin_leer = d.notificaciones[1].length;
-                    if(this.notificaciones_sin_leer > 0){
+                    if (this.notificaciones_sin_leer > 0) {
                         this.suena_notificacion = true;
-                    }else{
+                    } else {
                         this.suena_notificacion = false;
                     }
                     this.subjectNotificaciones.next(1);
@@ -428,8 +427,8 @@ export class UserService {
     sendEmailChat(info_correo): Promise<any> {
         return new Promise((resolve, reject) => {
             this.ajax.post('email/enviar-correo', { info_correo }).subscribe(d => {
-                //console.log(d);
-                //console.log(d);
+                //// console.log(d);
+                //// console.log(d);
                 if (d) {
                     resolve(d);
                 }
@@ -548,11 +547,11 @@ export class UserService {
     }
 
 
-    actualizarSuperAdminCam(codigo_firebase, pass_firebase): Promise<any>{
+    actualizarSuperAdminCam(codigo_firebase, pass_firebase): Promise<any> {
         return new Promise((resolve, reject) => {
             let t = localStorage.getItem('token');
             this.ajax.post('user/validar-superadmin', { token: t, primer_login: true, codigo_firebase: codigo_firebase, pass_firebase: pass_firebase }).subscribe(p => {
-                if(p.success){
+                if (p.success) {
                     resolve(p);
                 }
             })

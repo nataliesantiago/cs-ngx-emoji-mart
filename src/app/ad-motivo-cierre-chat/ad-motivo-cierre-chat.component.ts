@@ -22,7 +22,7 @@ export class AdMotivoCierreChatComponent implements OnInit {
   paginator: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns = ['actions', 'id', 'name', 'category'];
+  displayedColumns = ['actions', 'idtbl_motivo_cierre_chat', 'nombre', 'categoria'];
   reason: MotivoCierreChat = { idtbl_motivo_cierre_chat: null, name: '', create_user_id: null, create_date: null, 
           update_last_user_id: null, update_date: null, active: true, category_id: null };
   dataSource = new MatTableDataSource([]);
@@ -115,6 +115,13 @@ export class AdMotivoCierreChatComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.cg.detectChanges();
+      this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+        const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+          return (currentTerm + (data as { [key: string]: any })[key]);
+        }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        return dataStr.indexOf(transformedFilter) != -1;
+      }
     });
   }
 

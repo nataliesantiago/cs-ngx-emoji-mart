@@ -46,14 +46,17 @@ import { AdministradorOrigenesDriveComponent } from './administrador-origenes-dr
 import { HistorialChatComponent } from './historial-chat/historial-chat.component';
 import { AdministradorHorariosComponent } from './administrador-horarios/administrador-horarios.component';
 import { AdminsitracionRolesComponent } from './adminsitracion-roles/adminsitracion-roles.component';
+import { HomepageComponent } from './homepage/homepage.component';
 
 
 
 
 
 export const AppRoutes: Routes = [
-  { path: '', component: PaginaBlancoComponent, canActivate: [AuthGuard], data: { bypass: true } },
+  { path: '', component: HomepageComponent, canActivate: [AuthGuard], data: { isHome: true } },
+  { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard], data: { isHome: true } },
   { path: 'valida/:data', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: PaginaBlancoComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { bypass: true } },
   { path: 'home/:abrir', component: HomeComponent, canActivate: [AuthGuard], data: { bypass: true } },
   { path: 'search', component: ResultadosComponent, canActivate: [AuthGuard], data: { bypass: true } },

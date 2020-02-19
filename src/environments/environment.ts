@@ -26,8 +26,14 @@ export const environment = {
       id_origen_chat: 'datasources/2721fbfe980dfcd221c70095e8d11769'
     }
   },
+  tableros: {
+    col: {
+      buscador: 'https://datastudio.google.com/embed/reporting/1hqmPLdaHMyE4LGyb4L-H4gwlGByDUUG1/page/ERh4',
+      chatExperto: 'https://datastudio.google.com/embed/reporting/1B_UcL5gwYpCiBmqoV9-omG5A0BIjJj81/page/P0A4'
+    }
+  },
   analytics: 'UA-151598857-1',
-  enckey:'DvC1=2D4ns3n&41R0mpRr?¿'
+  ajax:'DvC1=2D4ns3n&41R0mpRr?¿'
 
 };
 

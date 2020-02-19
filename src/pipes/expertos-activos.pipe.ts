@@ -17,7 +17,7 @@ export class ExpertosActivosePipe implements PipeTransform {
         if (pais != 'col' && pais != 'pan') {
             tz = 'America/Tegucigalpa';
         }
-        console.log(tz);
+        // console.log(tz);
         return expertos.filter(e => {
             if (e.idtbl_usuario == this.userService.getUsuario().getId()) {
                 return false;
@@ -26,7 +26,7 @@ export class ExpertosActivosePipe implements PipeTransform {
                 return false;
             }
             var duration = moment().tz(tz).unix() - e.ultima_conexion.seconds;
-            // console.log(duration, e);
+            // // console.log(duration, e);
             return e.activo && duration < 11;
         });
     }

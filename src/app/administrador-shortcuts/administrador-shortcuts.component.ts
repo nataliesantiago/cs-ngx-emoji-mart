@@ -92,6 +92,13 @@ export class AdministradorShortcutsComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.matTableFilter = new matTableFilter(this.dataSource, this.filterColumns);
+      this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+        const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+          return (currentTerm + (data as { [key: string]: any })[key]);
+        }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        return dataStr.indexOf(transformedFilter) != -1;
+      }
     })
   }
 
@@ -113,7 +120,7 @@ export class AdministradorShortcutsComponent implements OnInit {
    * @param event 
    */
   add(event: KeyboardEvent): void {
-    // console.log(event);
+    // // console.log(event);
     event.preventDefault();
     event.stopPropagation();
     if (!this.nuevo_shortcut.comando) {
@@ -166,7 +173,7 @@ export class AdministradorShortcutsComponent implements OnInit {
    * @param index 
    */
   remove(index: any): void {
-    console.log(index);
+    // // console.log(index);
     if (index >= 0) {
       this.comandos.splice(index, 1);
     }
@@ -209,7 +216,7 @@ export class AdministradorShortcutsComponent implements OnInit {
   eliminarShortcut(e) {
     swal.fire({
       title: 'Cuidado',
-      text: "Desea Borrar el guión",
+      text: "Desea borrar el guión",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

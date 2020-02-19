@@ -21,7 +21,7 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class AppComponent {
   user: User;
-  version = '0.9.10'
+  version = '1.0.8'
   constructor(public responseSearch: ResponseSearch, private userService: UserService, private ajax: AjaxService, private searchService: SearchService,
     @Inject(DOCUMENT) private _document: HTMLDocument, private look_service: LookFeelService, private changeRef: ChangeDetectorRef, private router: Router) {
     setInterval(() => {
@@ -46,7 +46,7 @@ export class AppComponent {
     icons['video'] = '<img src="/assets/images/drive.svg" width="18" height="18"  />';
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        // console.log('hizo el hit', event.urlAfterRedirects);
+        // // console.log('hizo el hit', event.urlAfterRedirects);
         /*  (<any>window).gtag('set', 'page', event.urlAfterRedirects);
           (<any>window).gtag('send', 'pageview');
           (<any>window).gtag('event', event.urlAfterRedirects);*/
@@ -62,7 +62,7 @@ export class AppComponent {
       this.userService.getFilasExperto();
     }
     /*this.searchService.queryCloudSearch().then(d => {
-      console.log('it worked');
+      // console.log('it worked');
     })*/
     this.initFavicon();
     this.getDarkMode();

@@ -131,6 +131,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { AdminsitracionRolesComponent } from './adminsitracion-roles/adminsitracion-roles.component';
 import { HttpConfigInterceptor } from './providers/generalHttpInterceptor';
 import { MinuteSecondsPipe } from '../pipes/minute.seconds.pipe';
+import { HomepageComponent } from './homepage/homepage.component';
 declare var gtag: any;
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -235,7 +236,8 @@ gtag('config', environment.analytics);
     AdministradorHorariosComponent,
     HistorialCuraduriaComponent,
     FooterComponent,
-    AdminsitracionRolesComponent
+    AdminsitracionRolesComponent,
+    HomepageComponent
   ],
   entryComponents: [
     TransferenciaChatComponent,
@@ -277,7 +279,7 @@ gtag('config', environment.analytics);
   ],
 
   providers: [
-    //{ provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
     {
       provide: AuthServiceConfig,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,

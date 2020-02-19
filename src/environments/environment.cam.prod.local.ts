@@ -16,26 +16,44 @@ export const environment = {
     ambiente: 'cam',
     pais: {
         pan: {
-            id_origen_conecta: 'datasources/c039757a44e91d2bd128fc49d7f466364',
+            id_origen_conecta: 'datasources/c039757a44e91d2b7d8c5e420efe2556',
             id_origen_drive: 'datasources/c039757a44e91d2baaea0db7d0805052',
             id_origen_chat: 'datasources/c039757a44e91d2bb89d21564d5d1834'
         },
         sal: {
-            id_origen_conecta: 'datasources/f45e1c58b9ab7a3dc0a52aedbc8a45af',
+            id_origen_conecta: 'datasources/f45e1c58b9ab7a3d2ee5605e37eca67e',
             id_origen_drive: 'datasources/f45e1c58b9ab7a3d7c09343ac8e08b6b',
             id_origen_chat: 'datasources/f45e1c58b9ab7a3ddf98e4fe0a3072d0'
         },
         cos: {
-            id_origen_conecta: 'datasources/711772214966c48cc46154e8dd81d9dd',
+            id_origen_conecta: 'datasources/711772214966c48c4850b5eae883cc60',
             id_origen_drive: 'datasources/f45e1c58b9ab7a3d7c09343ac8e08b6b',
             id_origen_chat: 'datasources/711772214966c48cb619b47ffe040b04'
         },
         hon: {
-            id_origen_conecta: 'datasources/45c0c1d1bb4100dc66f6483da043322f',
+            id_origen_conecta: 'datasources/45c0c1d1bb4100dc052b6c522007f8a6',
             id_origen_drive: 'datasources/45c0c1d1bb4100dcab33bc338b90a9d0',
             id_origen_chat: 'datasources/45c0c1d1bb4100dc4be3e54d1f42fbb3'
         }
     },
     analytics: 'G-BVSYD26YKY',
-    enckey: 'DvC1=2D4ns3n&41R0mpRr?¿'
+    ajax: 'DvC1=2D4ns3n&41R0mpRr?¿',
+    tableros: {
+        cos: {
+            buscador: '',
+            chatExperto: ''
+        },
+        sal: {
+            buscador: '',
+            chatExperto: ''
+        },
+        hon: {
+            buscador: '',
+            chatExperto: ''
+        },
+        pan: {
+            buscador: '',
+            chatExperto: ''
+        },
+    }
 };

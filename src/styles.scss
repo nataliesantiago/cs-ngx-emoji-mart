@@ -5,6 +5,7 @@
 @import '~@swimlane/ngx-datatable/release/themes/material.css';
 @import '~@swimlane/ngx-datatable/release/assets/icons.css';
 @import './assets/styles/variable.scss';
+@import './assets/styles/quill.bubble.scss';
 
 /*Variables*/
 
@@ -947,10 +948,6 @@ a:hover {
   margin-left: -220px !important;
 }
 
-ul li {
-  list-style: none;
-}
-
 
 .mat-drawer-backdrop.ng-star-inserted.mat-drawer-shown {
   background-color: transparent !important;
@@ -1056,7 +1053,8 @@ ul li {
   }
 
   .comunidad_titulo {
-    display: none;
+    //display: none;
+
   }
 
   mat-table {
@@ -2808,6 +2806,7 @@ input:-webkit-autofill:active {
       }
     }
   }
+
   .conversacion-lista-cola {
     border: $borde-tarjeta;
 
@@ -2994,7 +2993,7 @@ input:-webkit-autofill:active {
 
   span {
     color: rgb(34, 34, 34);
-
+    font-size: 14px;
   }
 
   a {
@@ -3485,12 +3484,33 @@ input:-webkit-autofill:active {
 
 }
 
-.texto-respuesta {
-  ul {
-    li {
-      list-style: disc !important;
-    }
+.texto-respuesta,
+.texto-subrespuesta {
+  @extend .ql-editor;
+
+  a {
+    color: blue !important;
   }
+
+  span,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  div,
+  b,
+  p,
+  li,
+  strong {
+    color: rgb(96, 96, 96);
+    ;
+  }
+}
+
+.texto-subrespuesta {
+  padding: 0;
 }
 
 .editor-preguntas {
@@ -3929,12 +3949,6 @@ mat-card {
 }
 
 .loading-filter {
-    position: relative;
-    left: 40%;
-}
-
-.texto-respuesta {
-  .ql-indent-1 {
-      padding-left: 40px !important;
-  }
+  position: relative;
+  left: 40%;
 }

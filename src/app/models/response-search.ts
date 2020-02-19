@@ -7,7 +7,7 @@ export class ResponseSearch {
     _mostrar: boolean = false;
 
     _mostrarBarra: boolean = false;
-
+    en_home = true;
     _historial = [
         { id: 1, time: '2018-08-11 17:25:30.0', busqueda: 'Hola juan', tipoBusqueda: 'texto', url: 'www.notiene.com' },
         { id: 2, time: '2018-08-12 17:25:30.0', busqueda: 'Hola camilo', tipoBusqueda: 'voz', url: 'www.notiene.com' },
@@ -21,7 +21,7 @@ export class ResponseSearch {
         { id: 10, time: '2018-08-19 17:25:30.0', busqueda: 'vodka', tipoBusqueda: 'voz', url: 'www.notiene.com' },
     ];
 
-    
+
     setResultados(val: any) {
         this._resultados = val;
     }
@@ -31,6 +31,7 @@ export class ResponseSearch {
     }
 
     setActive(val: boolean) {
+        this.en_home = !val;
         this._mostrar = val;
     }
 
@@ -38,6 +39,9 @@ export class ResponseSearch {
         return this._mostrar;
     }
 
+    isHomePage() {
+        return this.en_home;
+    }
     setActiveMostrarBarra(val: boolean) {
         this._mostrarBarra = val;
     }
