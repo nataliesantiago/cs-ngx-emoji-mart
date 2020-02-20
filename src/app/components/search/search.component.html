@@ -20,10 +20,10 @@
   -->
     <mat-form-field class="caja-buscador">
 
-      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def"
+      <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def" floatLabel="never" (focus)="mostrando_sugerencia=true" (blur)="soltarCaja()"
         floatPlaceholder="never" #primero (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto"
         autocomplete="off" (keydown)="limpiarSugerencia()">
-      <input #segundo class="contenido" matInput [ngModel]="texto_sugerido">
+      <span #segundo class="contenido" [innerHTML]="texto_sugerido"  contenteditable="true"></span>
       <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear"
         (click)="def.setValue('');texto_sugerido=null;">
         <mat-icon>close</mat-icon>

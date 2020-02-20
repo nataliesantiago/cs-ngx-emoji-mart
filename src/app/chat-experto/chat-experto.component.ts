@@ -178,10 +178,9 @@ export class ChatExpertoComponent {
                         fila.chats = tmp;
 
                         this.procesaFilas(fila);
-                        if (paso_por_chats) {
-                          if (this.user.experto_activo) {
-                            this.recibirChatAutomatico();
-                          }
+                        console.log(this.user);
+                        if (this.user.estado_actual == 1) {
+                          this.recibirChatAutomatico();
                         }
 
                       }
@@ -373,7 +372,7 @@ export class ChatExpertoComponent {
       let data = datos.payload.data() as Conversacion;
       if (data && data.id_experto_actual != this.user.getId()) {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
-      } else {
+      } else if (data) {
         c.id_estado_conversacion = data.id_estado_conversacion;
         c.mensajes_nuevos = data.mensajes_nuevos;
         c.llamada_activa = data.llamada_activa;
@@ -767,7 +766,7 @@ export class ChatExpertoComponent {
           this.motivoCierreChat(chat);
         }
       }
-      
+
     }
   }
 
