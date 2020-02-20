@@ -178,10 +178,9 @@ export class ChatExpertoComponent {
                         fila.chats = tmp;
 
                         this.procesaFilas(fila);
-                        if (paso_por_chats) {
-                          if (this.user.experto_activo) {
-                            this.recibirChatAutomatico();
-                          }
+                        console.log(this.user);
+                        if (this.user.estado_actual == 1) {
+                          this.recibirChatAutomatico();
                         }
 
                       }
@@ -368,12 +367,17 @@ export class ChatExpertoComponent {
 
   }
 
+  toggleRecomendacion(c: Conversacion) {
+   
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ recomendacion_manual: c.recomendacion_manual });
+  }
+
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       if (data && data.id_experto_actual != this.user.getId()) {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
-      } else {
+      } else if (data) {
         c.id_estado_conversacion = data.id_estado_conversacion;
         c.mensajes_nuevos = data.mensajes_nuevos;
         c.llamada_activa = data.llamada_activa;
@@ -765,11 +769,11 @@ export class ChatExpertoComponent {
         chat.esta_seleccionado = false;
         // console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
         if (!chat.motivo_cierre_enviado && !chat.mostro_modal_cierre) {
-          // console.log('no enviado');
+          console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
           this.motivoCierreChat(chat);
         }
       }
-      
+
     }
   }
 
@@ -955,7 +959,7 @@ export class ChatExpertoComponent {
           c.mediaRecorder = new StereoAudioRecorder(stream, {
             sampleRate: 48000,
             get16BitAudio: true,
-            bufferSize: 4096,
+            //bufferSize: 4096,
             numberOfAudioChannels: 1,
             disableLogs: true
           });
@@ -1136,8 +1140,7 @@ export class ChatExpertoComponent {
   cerrarChat(c: Conversacion) {
     c.cerro_experto = true;
     let cliente = c.cliente.nombre;
-    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true });
-    setTimeout(() => {
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true }).then(() => {
       this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false, cliente: cliente } }).afterClosed().subscribe(d => {
         if (d && d.motivo) {
           let estado = 3;
@@ -1152,13 +1155,14 @@ export class ChatExpertoComponent {
           });
         }
       });
-    }, 100);
+    });
+
 
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
     // // console.log(c);
-    if (c.conversacion_recomendada) {
+    if (c.conversacion_recomendada || c.recomendacion_manual) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ muestra_boton_recomendacion: c.muestra_boton_recomendacion, mostrar_encuesta: c.mostrar_encuesta, encuesta_realizada: c.encuesta_realizada });

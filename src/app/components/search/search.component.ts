@@ -78,6 +78,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   @ViewChild('segundo') segundo: ElementRef;
   @ViewChild('adjunto') adjunto: ElementRef;
   url_logo = '';
+  mostrando_sugerencia = false;
   constructor(
     private router: Router,
     private searchService: SearchService,
@@ -275,6 +276,20 @@ export class AppSearchComponent implements OnChanges, OnInit {
         // // console.log(d);
       });
     this.getPlaceholder();
+    this.primero.nativeElement.addEventListener('*', e => {
+      console.log(e);
+      // var percentage = this.primero.nativeElement.scrollTop / (this.primero.nativeElement.scrollHeight - this.primero.nativeElement.offsetHeight);
+      //this.segundo.nativeElement.scrollLeft = percentage * (this.segundo.nativeElement.scrollWidth - this.segundo.nativeElement.offsetWidth);
+      this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
+
+
+    });
+
+  }
+
+  soltarCaja() {
+    this.mostrando_sugerencia = false;
+    this.segundo.nativeElement.scrollLeft = 0;
   }
   procesaValorCaja(value: string) {
 
@@ -287,11 +302,17 @@ export class AppSearchComponent implements OnChanges, OnInit {
         let t = this.utilsService.normalizeText(this.sugerencias[0].suggestedQuery);
         // this.texto_sugerido = t.replace(t.substring(0, this.def.value.length), this.def.value);
         if (value && value != '' && value != 'undefined') {
-          this.texto_sugerido = value + t.replace(value, '');
+          if (t.indexOf(value) != 0) {
+            this.mostrando_sugerencia = false;
+          } else {
+            this.mostrando_sugerencia = true;
+            this.texto_sugerido = value + t.replace(value, '');
+          }
+
         }
         setTimeout(() => {
           this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
-          //// console.log(this.segundo, this.primero);
+          
         }, 0);
 
       }

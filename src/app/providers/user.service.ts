@@ -151,7 +151,7 @@ export class UserService {
 
         delete this.ref;
         delete this.user;
-        this.subjectUsuario.next(null);
+        //this.subjectUsuario.next(null);
         window.localStorage.removeItem('tk');
         window.localStorage.removeItem('pais');
         window.localStorage.clear();
@@ -213,6 +213,9 @@ export class UserService {
                 }
             })
         } else {
+            if (!atendiendo_emergencia) {
+                atendiendo_emergencia = false;
+            }
             this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia });
         }
     }
