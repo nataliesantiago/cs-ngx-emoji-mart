@@ -105,6 +105,12 @@
                   </div>
                   <button mat-menu-item (click)="trasnferirChat(chat)">Transferir cliente</button>
                   <button mat-menu-item (click)="chatPendiente(chat)">Dejar Pendiente</button>
+                  <div mat-menu-item>
+                    <mat-slide-toggle [color]="megna" [(ngModel)]="chat.recomendacion_manual"
+                      (click)="$event.stopPropagation();" (change)="toggleRecomendacion(chat)">
+                      Recomendar Chat
+                    </mat-slide-toggle>
+                  </div>
                   <button mat-menu-item (click)="cerrarChat(chat)">Cerrar Chat</button>
                 </mat-menu>
               </div>
@@ -263,10 +269,14 @@
               <div *ngIf="chat.muestra_boton_recomendacion" class="ventana-conversacion-activa">
                 <div class="contenedor-llamada">
                   <div class="contenedor-icono">
-                    <div class="titulo-recomendacion">
+                    <div class="titulo-recomendacion" *ngIf="chat.conversacion_recomendada && !chat.recomendacion_manual">
                       <div class="texto">Sugerir conversación como pregunta de la base de conocimiento?</div>
                       <button mat-button class="" (click)="sugerirPregunta(chat)">Si</button>
                       <button mat-button class="rechazar" (click)="rechazarSugerencia(chat)">No</button>
+                    </div>
+                    <div class="titulo-recomendacion" *ngIf="!chat.conversacion_recomendada && chat.recomendacion_manual">
+                      <div class="texto">A continuación selecciona los mensajes para sugerir la pregunta</div>
+                      <button mat-button class="" (click)="sugerirPregunta(chat)">Continuar</button>
                     </div>
                   </div>
                 </div>
@@ -288,8 +298,7 @@
                   [disabled]="chat.cargando_archivo || chat.grabando_nota  || chat.archivo_adjunto  || chat.iniciando_grabacion"
                   (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
                   (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
-                  [(ngModel)]="chat.texto_mensaje" (focus)="onSelect(chat)"
-                  (blur)="setFocus(chat,false)"></textarea>
+                  [(ngModel)]="chat.texto_mensaje" (focus)="onSelect(chat)" (blur)="setFocus(chat,false)"></textarea>
                 <button mat-icon-button color="primary" (click)="adjuntos.click()"
                   [disabled]="chat.cargando_archivo || chat.grabando_nota">
                   <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>

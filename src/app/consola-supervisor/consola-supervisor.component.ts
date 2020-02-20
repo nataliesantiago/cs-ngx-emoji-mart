@@ -40,7 +40,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   loading = false;
   cargar_pendientes = false;
   es_col = false;
-  tableros:any;
+  tableros: any;
 
   constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
     this.user = this.userService.getUsuario();
@@ -58,7 +58,7 @@ export class ConsolaSupervisorComponent implements OnInit {
   init() {
 
     this.tableros = environment.tableros[this.user.pais];
-    
+
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
@@ -67,7 +67,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         this.chats_activos = chats;
         for (let c of this.chats_activos) {
           this.agregarListenerMensaes(c);
-          await this.agregarTiempoConversacion(c);
+          this.agregarTiempoConversacion(c);
         }
       } else {
         chats.forEach(cn => {
@@ -83,6 +83,7 @@ export class ConsolaSupervisorComponent implements OnInit {
             }
           } else {
             this.agregarListenerMensaes(cn);
+            this.agregarTiempoConversacion(cn);
             this.chats_activos.push(cn);
 
           }
@@ -100,7 +101,7 @@ export class ConsolaSupervisorComponent implements OnInit {
           }
         });
         //this.chats_activos = chats;
-        
+
       }
       this.applyFilterActivos();
     });
@@ -152,7 +153,7 @@ export class ConsolaSupervisorComponent implements OnInit {
         }
       });
       this.chats_en_fila = chats;
-      
+
       this.applyFilterCola();
     });
 
@@ -167,12 +168,12 @@ export class ConsolaSupervisorComponent implements OnInit {
 
       if (c.fecha_asignacion) {
 
-        if (c.fecha_asignacion) {
-
-          c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
-        }
-
+        c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
+      }else if(c.fecha_creacion){
+        c.tiempo_en_conversacion = moment().diff(moment(c.fecha_creacion), 'seconds');
       }
+
+
     }, 1000);
 
   }

@@ -367,6 +367,11 @@ export class ChatExpertoComponent {
 
   }
 
+  toggleRecomendacion(c: Conversacion) {
+   
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ recomendacion_manual: c.recomendacion_manual });
+  }
+
   agregaListenerConversacion(c: Conversacion) {
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
@@ -385,7 +390,7 @@ export class ChatExpertoComponent {
 
         if (c.id_estado_conversacion == 3 || c.id_estado_conversacion == 4 || c.id_estado_conversacion == 5 || c.id_estado_conversacion == 6) {
           if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente && !c.mostro_modal_cierre) {
-            console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
+            // console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
             c.mostro_modal_cierre = true;
             this.motivoCierreChat(c);
           }
@@ -952,7 +957,7 @@ export class ChatExpertoComponent {
           c.mediaRecorder = new StereoAudioRecorder(stream, {
             sampleRate: 48000,
             get16BitAudio: true,
-            bufferSize: 4096,
+            //bufferSize: 4096,
             numberOfAudioChannels: 1,
             disableLogs: true
           });
@@ -1133,8 +1138,7 @@ export class ChatExpertoComponent {
   cerrarChat(c: Conversacion) {
     c.cerro_experto = true;
     let cliente = c.cliente.nombre;
-    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true });
-    setTimeout(() => {
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ cerro_experto: true }).then(() => {
       this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: false, cliente: cliente } }).afterClosed().subscribe(d => {
         if (d && d.motivo) {
           let estado = 3;
@@ -1149,13 +1153,14 @@ export class ChatExpertoComponent {
           });
         }
       });
-    }, 100);
+    });
+
 
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
     // // console.log(c);
-    if (c.conversacion_recomendada) {
+    if (c.conversacion_recomendada || c.recomendacion_manual) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ muestra_boton_recomendacion: c.muestra_boton_recomendacion, mostrar_encuesta: c.mostrar_encuesta, encuesta_realizada: c.encuesta_realizada });
