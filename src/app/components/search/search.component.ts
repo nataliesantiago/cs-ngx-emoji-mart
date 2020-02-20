@@ -134,7 +134,11 @@ export class AppSearchComponent implements OnChanges, OnInit {
    * de cada evento del api
    */
   private initRecognition() {
-    if (this.recognition) {
+    if (this.recognition) {  
+      this.recognition.onerror = event => {
+        alert("Error con el micrófono");
+      }
+
       this.recognition.onaudiostart = () => {
         this.recognizing = true;
         this.changeDetector.detectChanges();
@@ -145,7 +149,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
         this.changeDetector.detectChanges();
       }
 
-      this.recognition.onresult = event => {
+      this.recognition.onresult = event => {       
         let interimTranscript = '';
         for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
           let transcript = event.results[i][0].transcript;
