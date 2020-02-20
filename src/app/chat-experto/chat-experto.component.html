@@ -15,9 +15,9 @@
                   </div>
                   <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
                 </mat-list-item>
-                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos" [ngClass]="{'mensajes-nuevos':
-                    (chat.mensajes_nuevos && chat.id_estado_conversacion==2) ||
-                    new_messages.includes(chat.idtbl_conversacion)
+                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos" 
+                  [ngClass]="{
+                    'mensajes-nuevos':new_messages.includes(chat.idtbl_conversacion)
                   }">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
                   <div class="punt-estado-chat"
@@ -49,7 +49,8 @@
                 <div [transition-group]="'flip-list'">
                   <mat-list-item (click)="abrirConversacionExperto(experto)" class="item-experto-chat"
                     *ngFor="let experto of expertos_filtro | ordenarExpertos" transition-group-item
-                    [ngClass]="{'mensajes-nuevos':experto.conversacion_experto && experto.conversacion_experto.mensajes_nuevos}">
+                    [ngClass]="{'mensajes-nuevos':new_messages.includes(experto.conversacion_experto.idtbl_conversacion)}">
+
                     <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
                     <div *ngIf="!esSupervisor" class="punt-estado-chat"
                       [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat,'punto-supervisor':esSupervisor}">
