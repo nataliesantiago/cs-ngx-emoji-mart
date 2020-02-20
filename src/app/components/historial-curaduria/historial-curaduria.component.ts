@@ -52,6 +52,7 @@ export class HistorialCuraduriaComponent implements OnInit {
   guardarComentario() {
     if (this.nota != "" && this.nota) {
       this.notas = { notas: this.nota, id_estado: this.data.pregunta.id_estado, id_estado_flujo: this.data.pregunta.id_estado_flujo, idtbl_pregunta: this.data.pregunta.idtbl_pregunta, id_usuario: this.id_usuario }
+      
       this.ajax.post('preguntas/guardar-nota-curaduria', { nota: this.notas }).subscribe(p => {
         if (p.success) {
           this.dialogRef.close({ success: true });
