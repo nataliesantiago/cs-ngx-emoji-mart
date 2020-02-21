@@ -22,16 +22,16 @@ export class CerrarChatExpertoComponent implements OnInit {
   loading = false;
 
   constructor(private dialogRef: MatDialogRef<CerrarChatExpertoComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-          private userService: UserService, private chatServivce: ChatService, private utilsService: UtilsService) {
+    private userService: UserService, private chatServivce: ChatService, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.chatServivce.buscarMotivosCierreChat().then(m => {
       let motivos_cierre = this.utilsService.getUnique(m, 'nombre');
       this.motivos = this.motivos_filtrados = motivos_cierre;
-      
+
     });
     if (data.no_cerro_experto) {
       dialogRef.disableClose = true;
-    }    
+    }
   }
 
   ngOnInit() {
@@ -40,7 +40,7 @@ export class CerrarChatExpertoComponent implements OnInit {
         this.motivos_filtrados = this.motivos;
       } else {
         this.motivos_filtrados = this.motivos.filter(m => {
-          return m.nombre.toLowerCase().indexOf(this.filtro.value.toLowerCase()) != (-1);
+          return this.utilsService.normalizeText(m.nombre.toLowerCase()).indexOf(this.utilsService.normalizeText(this.filtro.value.toLowerCase())) != (-1);
         })
       }
     });

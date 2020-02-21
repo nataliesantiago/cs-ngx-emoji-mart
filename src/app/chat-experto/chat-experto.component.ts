@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild, ModuleWithComponentFactories, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, ModuleWithComponentFactories, NgZone, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { UserService } from '../providers/user.service';
 import { ChatService } from '../providers/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -35,8 +35,8 @@ declare var StereoAudioRecorder: any;
   templateUrl: './chat-experto.component.html',
   styleUrls: ['./chat-experto.component.scss']
 })
-export class ChatExpertoComponent {
-
+export class ChatExpertoComponent implements OnInit {
+  ngOnInit() { }
   them;
   sidePanelOpened = true;
   texto_mensaje: string;
@@ -68,7 +68,8 @@ export class ChatExpertoComponent {
   cerro_experto = false;
   intervalo;
   nombre_pestana = 'Conecta';
-  new_messages = []
+  new_messages = [];
+  listeners_conversaciones = [];
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -109,6 +110,7 @@ export class ChatExpertoComponent {
   }
 
   init() {
+    this.listeners_conversaciones = [];
     this.chatService.obtenerLimiteTexto().then(valor => {
       this.limite_texto_chat = valor;
     });
@@ -129,7 +131,7 @@ export class ChatExpertoComponent {
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
             cola.subscribe(chats => {
-              //// console.log(chats);
+              console.log(chats);
               let tmp = [];
 
               if (chats.length < 1) {
@@ -145,6 +147,7 @@ export class ChatExpertoComponent {
                 fila.chats = [];
                 this.procesaFilas(fila);
               } else {
+                console.log('por aca paso')
                 this.soundService.sonar(2);
                 chats.forEach((c: any, index) => {
                   let refConversacion = c.payload.doc.id;
@@ -367,13 +370,25 @@ export class ChatExpertoComponent {
 
   }
 
+  ngOnDestroy() {
+    this.listeners_conversaciones.forEach(l => {
+      l.unsubscribe();
+    });
+    this.chats_experto.forEach(c => {
+      c.listener_mensajes.unsubscribe();
+    })
+
+  }
+
   toggleRecomendacion(c: Conversacion) {
-   
+
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ recomendacion_manual: c.recomendacion_manual });
   }
 
   agregaListenerConversacion(c: Conversacion) {
-    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+
+
+    let l = this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       if (data && data.id_experto_actual != this.user.getId()) {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
@@ -410,6 +425,7 @@ export class ChatExpertoComponent {
         }
       }
     });
+    this.listeners_conversaciones.push(l);
   }
 
   obtenerEncuestaExperto(c) {
@@ -472,17 +488,28 @@ export class ChatExpertoComponent {
         existe = true;
         indice = i;
       }
-      if (f.chats) {
-        tmp = tmp.concat(f.chats);
-      }
+
     });
-    this.fila_chats = tmp;
+
     if (!existe) {
 
       this.chats_cola.push(fila);
     } else {
       this.chats_cola[indice].chats = fila.chats;
     }
+    this.chats_cola.forEach((f, i) => {
+
+      if (f.id == fila.id) {
+        existe = true;
+        indice = i;
+      }
+      if (f.chats) {
+        tmp = tmp.concat(f.chats);
+      }
+
+    });
+    this.fila_chats = tmp;
+    console.log(this.fila_chats);
 
   }
 
@@ -840,8 +867,10 @@ export class ChatExpertoComponent {
       m.uuid = uuid.v4();
       m.tipo_conversacion = chat.id_tipo_conversacion;
       m.id_usuario = this.user.getId();
-      m.texto = chat.texto_mensaje;
-      chat.texto_mensaje = '';
+      if (tipo_mensaje == 1) {
+        m.texto = chat.texto_mensaje;
+        chat.texto_mensaje = '';
+      }
       m.fecha_mensaje = moment().utc();
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
@@ -897,9 +926,13 @@ export class ChatExpertoComponent {
       //this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
 
       this.chatService.enviarMensaje(m);
-      delete chat.texto_mensaje;
-      delete chat.archivo_adjunto;
-      delete chat.grabando_nota;
+      if (tipo_mensaje == 1) {
+        delete chat.texto_mensaje;
+      }
+      if (tipo_mensaje == 2 || tipo_mensaje == 3) {
+        delete chat.archivo_adjunto;
+        delete chat.grabando_nota;
+      }
       this.changeRef.detectChanges();
     }
   }
@@ -1266,13 +1299,14 @@ export class ChatExpertoComponent {
     let cliente = c.cliente.nombre;
     this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true, cliente: cliente } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
-        this.chatService.cerrarConversacionUsuario(c, c.id_estado_conversacion, d.motivo).then(() => {
-          c.motivo_cierre_enviado = true;
-          this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true });
-          this.obtenerEncuestaExperto(c);
-          if (this.user.experto_activo) {
-            this.recibirChatAutomatico();
-          }
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true }).then(() => {
+          this.chatService.cerrarConversacionUsuario(c, c.id_estado_conversacion, d.motivo).then(() => {
+            c.motivo_cierre_enviado = true;
+            this.obtenerEncuestaExperto(c);
+            if (this.user.experto_activo) {
+              this.recibirChatAutomatico();
+            }
+          });
         });
       }
     });
