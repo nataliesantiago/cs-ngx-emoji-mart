@@ -277,7 +277,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       });
     this.getPlaceholder();
     this.primero.nativeElement.addEventListener('*', e => {
-      console.log(e);
+      // console.log(e);
       // var percentage = this.primero.nativeElement.scrollTop / (this.primero.nativeElement.scrollHeight - this.primero.nativeElement.offsetHeight);
       //this.segundo.nativeElement.scrollLeft = percentage * (this.segundo.nativeElement.scrollWidth - this.segundo.nativeElement.offsetWidth);
       this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
