@@ -66,6 +66,7 @@ export class ResultadosComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.params = params;
       this.tipo_busqueda = params['tipo'] || 1;
+      this.url_imagen_busqueda = null;
       if (this.tipo_busqueda == 2) {
         this.url_imagen_busqueda = decodeURI(atob(params['url']));
       }
@@ -184,7 +185,6 @@ export class ResultadosComponent implements OnInit {
     });
   }
   buscar() {
-
     this.router.navigate(['/search/' + this.valorBusqueda]);
   }
 
