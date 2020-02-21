@@ -672,9 +672,11 @@ export class ChatExpertoComponent implements OnInit {
     }
 
     if (!c.primera_vez) {
-      for (let i = 0; i < tmp.length; i++) {
-        if (!this.new_messages.includes(tmp[i].id_conversacion)) {
-          this.new_messages.push(tmp[i].id_conversacion);
+      for(let i = 0; i < tmp.length; i++) {
+        if(tmp[i].id_usuario != this.user.idtbl_usuario){
+          if (!this.new_messages.includes(tmp[i].id_conversacion)) {
+            this.new_messages.push(tmp[i].id_conversacion);
+          }
         }
       }
     }
@@ -792,7 +794,6 @@ export class ChatExpertoComponent implements OnInit {
       this.setFocus(chat, true);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
         chat.esta_seleccionado = false;
-        // console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
         if (!chat.motivo_cierre_enviado && !chat.mostro_modal_cierre) {
          //  console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
           this.motivoCierreChat(chat);

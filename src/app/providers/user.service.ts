@@ -218,7 +218,6 @@ export class UserService {
             }
             this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia });
         }
-
     }
 
     setActivoExpertoGlobal(estado: number) {
@@ -282,6 +281,8 @@ export class UserService {
             this.actualizarNotificaciones().then(r => {
                 if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
                     if (!this.primera_vez_notificacion && this.suena_notificacion) {
+                        this.soundService.sonar(4);
+                    }else if(this.cant_mensajes_actuales < this.respuesta_nlp[1].length){
                         this.soundService.sonar(4);
                     }
                 }
