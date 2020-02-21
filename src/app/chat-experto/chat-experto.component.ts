@@ -131,7 +131,7 @@ export class ChatExpertoComponent implements OnInit {
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
             cola.subscribe(chats => {
-              console.log(chats);
+              // console.log(chats);
               let tmp = [];
 
               if (chats.length < 1) {
@@ -147,7 +147,7 @@ export class ChatExpertoComponent implements OnInit {
                 fila.chats = [];
                 this.procesaFilas(fila);
               } else {
-                console.log('por aca paso')
+               // console.log('por aca paso')
                 this.soundService.sonar(2);
                 chats.forEach((c: any, index) => {
                   let refConversacion = c.payload.doc.id;
@@ -181,7 +181,7 @@ export class ChatExpertoComponent implements OnInit {
                         fila.chats = tmp;
 
                         this.procesaFilas(fila);
-                        console.log(this.user);
+                        // console.log(this.user);
                         if (this.user.estado_actual == 1) {
                           this.recibirChatAutomatico();
                         }
@@ -237,7 +237,7 @@ export class ChatExpertoComponent implements OnInit {
                     if (index == (chat.length - 1)) {
                       paso_por_chats = true;
                       this.chats_experto = temporal;
-                      this.changeRef.detectChanges();
+                      // this.changeRef.detectChanges();
                     }
                   });
                   this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
@@ -509,7 +509,7 @@ export class ChatExpertoComponent implements OnInit {
 
     });
     this.fila_chats = tmp;
-    console.log(this.fila_chats);
+    // console.log(this.fila_chats);
 
   }
 
@@ -794,7 +794,7 @@ export class ChatExpertoComponent implements OnInit {
         chat.esta_seleccionado = false;
         // console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
         if (!chat.motivo_cierre_enviado && !chat.mostro_modal_cierre) {
-          console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
+         //  console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
           this.motivoCierreChat(chat);
         }
       }
@@ -933,7 +933,7 @@ export class ChatExpertoComponent implements OnInit {
         delete chat.archivo_adjunto;
         delete chat.grabando_nota;
       }
-      this.changeRef.detectChanges();
+      //this.changeRef.detectChanges();
     }
   }
 

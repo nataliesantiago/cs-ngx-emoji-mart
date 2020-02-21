@@ -266,7 +266,7 @@ export class RespuestasComponent implements OnInit {
               if (this.searchService.busqueda_actual) {
                 id_busqueda = this.searchService.busqueda_actual.idtbl_busqueda_usuario;
               }
-              // console.log(this.pregunta.id_producto);
+              console.log('Creando conversacion cliente');
               this.chatService.crearConversacion(this.pregunta.id_producto, id_busqueda);
               this.router.navigate(['/home']);
             }
