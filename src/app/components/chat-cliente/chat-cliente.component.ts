@@ -600,8 +600,11 @@ export class ChatClienteComponent implements OnInit {
       m.tipo_conversacion = 1;
       m.es_cliente = true;
       m.id_usuario = this.user.getId();
-      m.texto = chat.texto_mensaje;
-      chat.texto_mensaje = '';
+      if (tipo_mensaje == 1) {
+        m.texto = chat.texto_mensaje;
+        chat.texto_mensaje = '';
+      }
+
       m.fecha_mensaje = moment().utc();
       m.codigo = chat.codigo;
       m.id_conversacion = chat.idtbl_conversacion;
@@ -646,11 +649,15 @@ export class ChatClienteComponent implements OnInit {
           chat.ocultar_nuevos_mensajes = true;
         }, 1);
       }
-      //this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
+      
       this.chatService.enviarMensaje(m);
-      delete chat.texto_mensaje;
-      delete chat.archivo_adjunto;
-      delete chat.grabando_nota;
+      if (tipo_mensaje == 1) {
+        delete chat.texto_mensaje;
+      }
+      if (tipo_mensaje == 2 || tipo_mensaje == 3) {
+        delete chat.archivo_adjunto;
+        delete chat.grabando_nota;
+      }
       this.changeRef.detectChanges();
     }
   }

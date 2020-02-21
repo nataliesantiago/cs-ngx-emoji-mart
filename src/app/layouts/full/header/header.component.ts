@@ -43,6 +43,7 @@ export class AppHeaderComponent {
   validacion_pais_usuario = [];
   ambiente = environment.ambiente;
   perfil_usuario;
+  actual;
 
   constructor(private userService: UserService, private chatService: ChatService, private dialog: MatDialog, private fireStore: AngularFirestore,
     private snackBar: MatSnackBar, private sonidosService: SonidosService, @Inject(DOCUMENT) private _document: HTMLDocument,
@@ -78,7 +79,7 @@ export class AppHeaderComponent {
   }
 
   init() {
-
+    this.actual = this.user.estado_actual;
     if (this.user.boton_sos_perfil && this.user.boton_sos_rol) {
       this.muestra_boton_sos = true;
     }
@@ -111,10 +112,9 @@ export class AppHeaderComponent {
   }
 
   cambiarEstadoExperto(e) {
-    //debugger;    
-
-    let actual = this.user.estado_actual;
+    //debugger;  
     this.user.estado_actual = e.value;
+    
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
       let activo = (e.value == 1) ? true : false;
@@ -122,7 +122,7 @@ export class AppHeaderComponent {
     } else {
       let activo = (e.value == 1) ? true : false;
       if (activo) {
-        this.createLogState(1, 1, 1);
+        this.createLogStateAdvisor(1, 1, 1);
       }
       this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       this.intervalo = setInterval(() => {
@@ -135,11 +135,20 @@ export class AppHeaderComponent {
         this.listenEmergenciaExperto();
       }
     }
-    this.userService.setActivoExpertoGlobal(e.value);
-    if (actual != null) {
-      this.createLogState(actual, e.value, null);
+
+    let activo = (e.value == 1) ? true : false;
+    if (activo) {
+      if (this.actual != undefined && (this.actual != 1 || e.value != 1)) {
+        this.createLogStateAdvisor(this.actual, e.value, 1);
+      }
+    } else {
+      this.createLogStateAdvisor(this.actual, e.value, 1);
     }
+    
+    this.userService.setActivoExpertoGlobal(e.value);
     this.user.setEstadoExpertoActual(e.value);
+
+    this.actual = this.user.estado_actual;
   }
 
   listenEmergenciaExperto() {
@@ -234,7 +243,7 @@ export class AppHeaderComponent {
     });
   }
 
-  createLogState(id_estado_actual: number, id_estado_nuevo: number, estado_ingreso?: number) {
+  createLogStateAdvisor(id_estado_actual: number, id_estado_nuevo: number, estado_ingreso?: number) {
     this.state.id_usuario_experto = this.user.getId();
     this.state.id_estado_experto_actual = id_estado_actual;
     this.state.id_estado_experto_nuevo = id_estado_nuevo;
