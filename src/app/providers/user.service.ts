@@ -218,7 +218,6 @@ export class UserService {
             }
             this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia });
         }
-
     }
 
     setActivoExpertoGlobal(estado: number) {

@@ -913,7 +913,7 @@ export class ChatService {
 
       this.ajax.post('chat/recordatorio/crear', { id_conversacion: c.idtbl_conversacion, codigo: c.codigo, id_usuario: this.user.getId(), correo_cliente: c.cliente.correo, nombre_cliente: c.cliente.nombre, token: this.user.token_acceso, hora_recordatorio: hora_recordatorio, id_estado: estado }).subscribe(d => {
         if (d.success) {
-          console.log(d);
+          // console.log(d);
           resolve();
         }
       })
