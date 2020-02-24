@@ -63,6 +63,7 @@ export class ChatClienteComponent implements OnInit {
     });
 
     this.chatService.nuevasConversaciones.subscribe(d => {
+      console.log('Abriendo chat');
       this.openChat(d);
     });
   }
@@ -528,8 +529,10 @@ export class ChatClienteComponent implements OnInit {
     this.mensajeBuscandoExperto();
   }
   openChat(data?: any) {
+    let abriendo = true;
     this.chatService.getConversacionActivaUsuario().then(result => {
-      if (result.conversacion.length < result.cantidad_chat_cliente) {
+      if (result.conversacion.length < result.cantidad_chat_cliente && abriendo) {
+        abriendo = false;
         this.crearNuevaConversacion(data);
       } else {
         swal.fire({
