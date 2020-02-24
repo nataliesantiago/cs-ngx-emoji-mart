@@ -161,7 +161,9 @@ export class DialogoDetalleChatComponent implements OnInit {
    * @param text 
    */
   decodeText(text) {
-    return decodeURI(text);
+    if (text != 'undefined') {
+      return decodeURI(text);
+    }
   }
 
   /**
