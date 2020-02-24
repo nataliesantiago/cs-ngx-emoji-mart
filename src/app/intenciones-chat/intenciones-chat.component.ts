@@ -119,7 +119,7 @@ export class IntencionesChatComponent implements OnInit {
   eliminarIntencion(i: IntencionChat) {
     swal.fire({
       title: 'Cuidado',
-      text: "Desea Borrar la intención",
+      text: "Desea borrar la intención",
       type: 'warning',
       showCancelButton: true,
       buttonsStyling: false,

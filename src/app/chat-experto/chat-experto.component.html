@@ -49,7 +49,7 @@
                 <div [transition-group]="'flip-list'">
                   <mat-list-item (click)="abrirConversacionExperto(experto)" class="item-experto-chat"
                     *ngFor="let experto of expertos_filtro | ordenarExpertos" transition-group-item
-                    [ngClass]="{'mensajes-nuevos':new_messages.includes(experto.conversacion_experto.idtbl_conversacion)}">
+                    [ngClass]="{'mensajes-nuevos':experto.conversacion_experto && new_messages.includes(experto.conversacion_experto.idtbl_conversacion)}">
 
                     <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
                     <div *ngIf="!esSupervisor" class="punt-estado-chat"
@@ -223,7 +223,7 @@
                         <mat-icon>close</mat-icon>
                       </button>
                     </div>
-                    <button mat-icon-button color="basic" class="boton-mic" (click)="enviarNota(chat,este)">
+                    <button mat-icon-button color="basic" class="boton-mic" (click)="enviarNota(chat,este)" title="Enviar Nota">
                       <mat-icon>mic</mat-icon>
                     </button>
                     <div class="cuenta-regresiva">
