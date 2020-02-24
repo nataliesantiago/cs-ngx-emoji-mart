@@ -147,7 +147,7 @@ export class ChatExpertoComponent implements OnInit {
                 fila.chats = [];
                 this.procesaFilas(fila);
               } else {
-               // console.log('por aca paso')
+                // console.log('por aca paso')
                 this.soundService.sonar(2);
                 chats.forEach((c: any, index) => {
                   let refConversacion = c.payload.doc.id;
@@ -371,6 +371,7 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    console.log('destruyendo listeners ', this.listeners_conversaciones.length);
     this.listeners_conversaciones.forEach(l => {
       l.unsubscribe();
     });
@@ -672,8 +673,8 @@ export class ChatExpertoComponent implements OnInit {
     }
 
     if (!c.primera_vez) {
-      for(let i = 0; i < tmp.length; i++) {
-        if(tmp[i].id_usuario != this.user.idtbl_usuario){
+      for (let i = 0; i < tmp.length; i++) {
+        if (tmp[i].id_usuario != this.user.idtbl_usuario) {
           if (!this.new_messages.includes(tmp[i].id_conversacion)) {
             this.new_messages.push(tmp[i].id_conversacion);
           }
@@ -795,7 +796,7 @@ export class ChatExpertoComponent implements OnInit {
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
         chat.esta_seleccionado = false;
         if (!chat.motivo_cierre_enviado && !chat.mostro_modal_cierre) {
-         //  console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
+          //  console.log('select', chat.motivo_cierre_enviado, chat.mostro_modal_cierre);
           this.motivoCierreChat(chat);
         }
       }
@@ -978,80 +979,47 @@ export class ChatExpertoComponent implements OnInit {
 
     c.iniciando_grabacion = true;
     let minutos;
-    if (this.buscarConfiguracion(7)) {
-      minutos = parseInt(this.buscarConfiguracion(7).valor);
 
-      let tiempo = minutos * 60;
-      const options = { mimeType: 'audio/webm' };
-      let detenido = false;
-      let calculaTiempo = { fechaIni: null, fechaFin: null };
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-          this.stream = stream;
-          c.mediaRecorder = new StereoAudioRecorder(stream, {
-            sampleRate: 48000,
-            get16BitAudio: true,
-            //bufferSize: 4096,
-            numberOfAudioChannels: 1,
-            disableLogs: true
-          });
-          this.startTimer(tiempo, c).then(() => {
-            c.mediaRecorder.stop(audioBlob => {
-              this.onStopRecordingNotaVoz(audioBlob, c, comp);
+    minutos = parseInt(this.buscarConfiguracion(7).valor);
 
-            });
-          });
-
-        }).catch(() => {
-          c.iniciando_grabacion = false;
-          swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
+    let tiempo = minutos * 60;
+    const options = { mimeType: 'audio/webm' };
+    let detenido = false;
+    let calculaTiempo = { fechaIni: null, fechaFin: null };
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        this.stream = stream;
+        c.mediaRecorder = new StereoAudioRecorder(stream, {
+          sampleRate: 48000,
+          get16BitAudio: true,
+          bufferSize: 4096,
+          numberOfAudioChannels: 1,
+          disableLogs: true
         });
-    } else {
-      this.init();
-      this.chatService.getConfiguracionesChat().then(configs => {
-        this.configuraciones = configs.configuraciones;
-        minutos = parseInt(this.buscarConfiguracion(7).valor);
+        this.startTimer(tiempo, c, comp).then(() => {
+          c.mediaRecorder.stop(audioBlob => {
+            this.onStopRecordingNotaVoz(audioBlob, c, comp);
 
-        let tiempo = minutos * 60;
-        const options = { mimeType: 'audio/webm' };
-        let detenido = false;
-        let calculaTiempo = { fechaIni: null, fechaFin: null };
-        navigator.mediaDevices.getUserMedia({ audio: true })
-          .then(stream => {
-            this.stream = stream;
-            c.mediaRecorder = new StereoAudioRecorder(stream, {
-              sampleRate: 48000,
-              get16BitAudio: true,
-              bufferSize: 4096,
-              numberOfAudioChannels: 1,
-              disableLogs: true
-            });
-            this.startTimer(tiempo, c).then(() => {
-              c.mediaRecorder.stop(audioBlob => {
-                this.onStopRecordingNotaVoz(audioBlob, c, comp);
-
-              });
-            });
-
-          }).catch(() => {
-            c.iniciando_grabacion = false;
-            swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
           });
+        });
+
+      }).catch(() => {
+        c.iniciando_grabacion = false;
+        swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
       });
-    }
+
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-
+    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
-    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
     this.adjuntarNotaVoz(c, voice_file, duration, comp);
     this.stream.getTracks().forEach(track => track.stop());
 
   }
 
-  startTimer(duration: number, c: Conversacion): Promise<any> {
+  startTimer(duration: number, c: Conversacion, comp: PerfectScrollbarComponent): Promise<any> {
 
     var timer: number = duration;
     let minutes;
@@ -1083,8 +1051,8 @@ export class ChatExpertoComponent implements OnInit {
 
 
         if (timer <= 0) {
-          window.clearInterval(c.interval_grabando);
-          resolve();
+          c.cuenta_regresiva = minutes + ":" + seconds;
+          this.enviarNota(c, comp);
         } else {
           c.cuenta_regresiva = minutes + ":" + seconds;
           this.chatService.usuarioEscribiendoConversacion(c, 2);
