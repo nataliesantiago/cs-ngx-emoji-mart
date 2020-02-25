@@ -529,6 +529,7 @@ export class ChatClienteComponent implements OnInit {
     this.mensajeBuscandoExperto();
   }
   openChat(data?: any) {
+    
     let last_open = window.sessionStorage.getItem('loc');
     if (last_open) {
       let diff = moment().diff(moment(last_open), 'minutes');
@@ -538,7 +539,7 @@ export class ChatClienteComponent implements OnInit {
       }else{
         swal.fire('Cuidado','No puedes abrir un chat en este momento por favor espera 1 minuto','warning');
       }
-    } else {
+    } else { 
       window.sessionStorage.setItem('loc', moment().unix());
       this.abrirChat(data);
     }
