@@ -13,7 +13,7 @@
         <div class="element-filter element-filter-2" *ngIf="!consola">
           <mat-form-field>
             <mat-label>Estado Conversación</mat-label>
-            <mat-select name="estado" (selectionChange)="filterData('estado',$event)">
+            <mat-select name="estado" (selectionChange)="filterData('estado',$event.value)" >
               <mat-option value="todos">Todos</mat-option>
               <mat-option *ngFor="let state of chat_states" [value]="state.nombre">{{state.nombre}}</mat-option>
             </mat-select>

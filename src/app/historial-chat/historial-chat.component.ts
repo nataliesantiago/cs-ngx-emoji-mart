@@ -45,7 +45,7 @@ export class HistorialChatComponent implements OnInit {
   categorias_experticia;
   loading = false;
   cargar_chat_pendiente;
-
+  estado_filtro;
   constructor(private user_service: UserService, private historial_service: HistorialChatService, private change_detector: ChangeDetectorRef, public dialog: MatDialog,
     private route: ActivatedRoute, private filtros_service: FiltrosService, private chatService: ChatService) {
     this.user = this.user_service.getUsuario();
@@ -74,8 +74,8 @@ export class HistorialChatComponent implements OnInit {
         if (id_conversacion) {
           this.getOneConversation(id_conversacion);
         }
-    });
-    
+      });
+
     if (this.consola != undefined && this.user.getIdRol() == 3) {
       this.loadPendingChat();
     }
@@ -151,7 +151,11 @@ export class HistorialChatComponent implements OnInit {
   getExpertChat() {
     this.historial_service.getExpertChats(this.user.getId()).then(result => {
       this.chats = result;
-      this.createTable(this.chats);
+      if (this.estado_filtro) {
+        this.filterData('estado', this.estado_filtro);
+      } else {
+        this.createTable(this.chats);
+      }
       this.change_detector.detectChanges();
     });
   }
@@ -230,11 +234,16 @@ export class HistorialChatComponent implements OnInit {
    * @param name 
    * @param event 
    */
-  filterData(name, event) {
-    if (event.value == 'todos') {
+  filterData(name, estado) {
+
+    if (estado == 'todos') {
       this.createTable(this.chats);
     } else {
-      this.filters[name] = event.value;
+
+      this.estado_filtro = estado;
+
+      this.filters[name] = this.estado_filtro;
+
       let newArray = this.chats;
       for (const key in this.filters) {
         newArray = newArray.filter(element => {
