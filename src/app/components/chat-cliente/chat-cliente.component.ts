@@ -538,11 +538,11 @@ export class ChatClienteComponent implements OnInit {
     this.mensajeBuscandoExperto();
   }
   openChat(data?: any) {
-    
+
     let last_open = window.sessionStorage.getItem('loc');
     if (last_open) {
-      let diff = moment().diff(moment(last_open), 'minutes');
-      if (diff > 0) {
+      let diff = moment().diff(moment(last_open), 'seconds');
+      if (diff > 10) {
         window.sessionStorage.setItem('loc', moment().unix());
         this.abrirChat(data);
       }else{
