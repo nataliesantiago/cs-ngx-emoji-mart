@@ -100,7 +100,7 @@ export class ResultadosComponent implements OnInit {
       let cantidad_palabras = this.params['busqueda'].split(" ").length;
       let cantidad_palabras_minimas_buscador = parseInt(d['configuraciones'][0]['valor']);
 
-      if(cantidad_palabras < cantidad_palabras_minimas_buscador){
+      if (cantidad_palabras < cantidad_palabras_minimas_buscador) {
         this.mostrar_alerta_palabras = true;
       }
     })
@@ -110,10 +110,13 @@ export class ResultadosComponent implements OnInit {
     let id_busqueda = this.searchService.busqueda_actual.idtbl_busqueda_usuario;
     //// console.log(id_busqueda);
     this.chatService.crearConversacion(null, id_busqueda);
-    this.router.navigate(['/home']);
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 500);
+
   }
 
-  cambiaTab(e: MatTabChangeEvent) {    
+  cambiaTab(e: MatTabChangeEvent) {
     // console.log(e);
     this.page = 0;
     switch (e.tab.textLabel) {

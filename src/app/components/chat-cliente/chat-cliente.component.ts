@@ -63,6 +63,7 @@ export class ChatClienteComponent implements OnInit {
     });
 
     this.chatService.nuevasConversaciones.subscribe(d => {
+      console.log('Abriendo chat');
       this.openChat(d);
     });
   }
@@ -336,11 +337,11 @@ export class ChatClienteComponent implements OnInit {
     })
 
     m.audio.addEventListener('pause', e => {
-      let target = <HTMLAudioElement>e.target;
+
       m.audioControls.reproduciendo = false;
     });
     m.audio.addEventListener('play', e => {
-      let target = <HTMLAudioElement>e.target;
+
       m.audioControls.reproduciendo = true;
     });
 
@@ -528,8 +529,10 @@ export class ChatClienteComponent implements OnInit {
     this.mensajeBuscandoExperto();
   }
   openChat(data?: any) {
+    let abriendo = true;
     this.chatService.getConversacionActivaUsuario().then(result => {
-      if (result.conversacion.length < result.cantidad_chat_cliente) {
+      if (result.conversacion.length < result.cantidad_chat_cliente && abriendo) {
+        abriendo = false;
         this.crearNuevaConversacion(data);
       } else {
         swal.fire({
@@ -649,7 +652,7 @@ export class ChatClienteComponent implements OnInit {
           chat.ocultar_nuevos_mensajes = true;
         }, 1);
       }
-      
+
       this.chatService.enviarMensaje(m);
       if (tipo_mensaje == 1) {
         delete chat.texto_mensaje;
@@ -732,10 +735,10 @@ export class ChatClienteComponent implements OnInit {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
+    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
     this.stream.getTracks().forEach(track => track.stop());
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
-    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
     this.adjuntarNotaVoz(c, voice_file, duration, comp);
 
 
@@ -770,6 +773,7 @@ export class ChatClienteComponent implements OnInit {
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
         if (timer <= 0) {
+          c.cuenta_regresiva = minutes + ":" + seconds;
           this.enviarNota(c, comp);
         } else {
           c.cuenta_regresiva = minutes + ":" + seconds;

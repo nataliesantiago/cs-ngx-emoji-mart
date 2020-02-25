@@ -3296,7 +3296,7 @@ input:-webkit-autofill:active {
     z-index: 1;
   }
 
-  &.mat-focused {
+  &.mat-focused,&.mat-form-field-should-float {
     .mat-form-field-label {
       display: none !important;
     }

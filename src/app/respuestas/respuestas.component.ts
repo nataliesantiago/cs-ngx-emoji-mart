@@ -36,6 +36,7 @@ export class RespuestasComponent implements OnInit {
   pregunta_nueva = false;
   dias_pregunta_nueva;
   limite_texto_observacion;
+  mensaje_enviado = false;
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef, private chatService: ChatService, private searchService: SearchService) {
 
@@ -245,7 +246,7 @@ export class RespuestasComponent implements OnInit {
 
     this.ajax.post('preguntas/observaciones-respuesta', { comentario: this.observaciones, positivo: this.valor_calificacion, id_usuario: this.usuario.idtbl_usuario, id_pregunta: this.id_pregunta_visualizar }).subscribe(d => {
       if (d.success) {
-
+        this.mensaje_enviado = true;
         if (this.valor_calificacion == 2 && this.usuario.id_rol != 2 && this.usuario.id_rol != 3) {
           swal.fire({
             title: '¿Deseas buscar un experto?',
