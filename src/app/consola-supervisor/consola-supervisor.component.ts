@@ -15,6 +15,7 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { Experto } from '../../schemas/xhr.schema';
 import { environment } from '../../environments/environment';
+import { ActivatedRoute } from '@angular/router';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -41,8 +42,8 @@ export class ConsolaSupervisorComponent implements OnInit {
   cargar_pendientes = false;
   es_col = false;
   tableros: any;
-
-  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog) {
+  id_conversacion: number;
+  constructor(private userService: UserService, private chatService: ChatService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService, private dialog: MatDialog, private route: ActivatedRoute) {
     this.user = this.userService.getUsuario();
     if (this.user) {
       this.init();
@@ -56,6 +57,21 @@ export class ConsolaSupervisorComponent implements OnInit {
   }
 
   init() {
+    this.route.params
+      .filter(params => params.id_conversacion)
+      .subscribe(params => {
+        let id_conversacion = params.id_conversacion;
+        if (id_conversacion) {
+          this.id_conversacion = id_conversacion;
+          if (this.chats_activos_filtrados) {
+            this.chats_activos_filtrados.forEach((c: Conversacion) => {
+              if (c.idtbl_conversacion == id_conversacion) {
+                c.viendo_supervisor = true;
+              }
+            })
+          }
+        }
+      });
 
     this.tableros = environment.tableros[this.user.pais];
 
@@ -68,6 +84,10 @@ export class ConsolaSupervisorComponent implements OnInit {
         for (let c of this.chats_activos) {
           this.agregarListenerMensaes(c);
           this.agregarTiempoConversacion(c);
+          console.log(c.idtbl_conversacion, this.id_conversacion);
+          if (c.idtbl_conversacion == this.id_conversacion) {
+            c.viendo_supervisor = true;
+          }
         }
       } else {
         chats.forEach(cn => {
@@ -86,6 +106,10 @@ export class ConsolaSupervisorComponent implements OnInit {
             this.agregarTiempoConversacion(cn);
             this.chats_activos.push(cn);
 
+          }
+          console.log(cn.idtbl_conversacion, this.id_conversacion);
+          if (cn.idtbl_conversacion == this.id_conversacion) {
+            cn.viendo_supervisor = true;
           }
 
         });
@@ -169,7 +193,7 @@ export class ConsolaSupervisorComponent implements OnInit {
       if (c.fecha_asignacion) {
 
         c.tiempo_en_conversacion = moment().diff(moment(c.fecha_asignacion), 'seconds');
-      }else if(c.fecha_creacion){
+      } else if (c.fecha_creacion) {
         c.tiempo_en_conversacion = moment().diff(moment(c.fecha_creacion), 'seconds');
       }
 

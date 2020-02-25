@@ -135,7 +135,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
    * de cada evento del api
    */
   private initRecognition() {
-    if (this.recognition) {  
+    if (this.recognition) {
       this.recognition.onerror = event => {
         alert("Error con el micrófono");
       }
@@ -150,7 +150,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
         this.changeDetector.detectChanges();
       }
 
-      this.recognition.onresult = event => {       
+      this.recognition.onresult = event => {
         let interimTranscript = '';
         for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
           let transcript = event.results[i][0].transcript;
@@ -189,7 +189,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
         //debugger;
         this.dataImage = data.data.parrafos;
         this.url = encodeURI(data.data.url);
-        let texto = this.dataImage.join('+');
+        let texto = this.dataImage.join(' ').trim();
         if (this.dataImage && this.dataImage.length > 0) {
           this.def.setValue(texto);
           this.adjunto.nativeElement.value = '';
@@ -312,7 +312,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
         }
         setTimeout(() => {
           this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
-          
+
         }, 0);
 
       }
@@ -372,6 +372,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     }
     this.metodo = metodo;
     if (this.modo == 3) {
+      this.def.setValue(this.def.value.trim());
       this.busqueda = this.def.value;
       this.cargando_respuestas = true;
       this.searchService.queryCloudSearch(this.busqueda, metodo, 'conecta', this.page).then(d => {
