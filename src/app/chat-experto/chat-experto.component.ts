@@ -671,7 +671,7 @@ export class ChatExpertoComponent implements OnInit {
       }
     }
 
-    if (!c.primera_vez) {
+    if (!c.primera_vez && !c.esta_seleccionado) {
       for(let i = 0; i < tmp.length; i++) {
         if(tmp[i].id_usuario != this.user.idtbl_usuario){
           if (!this.new_messages.includes(tmp[i].id_conversacion)) {
