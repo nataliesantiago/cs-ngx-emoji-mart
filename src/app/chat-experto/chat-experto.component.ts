@@ -70,6 +70,7 @@ export class ChatExpertoComponent implements OnInit {
   nombre_pestana = 'Conecta';
   new_messages = [];
   listeners_conversaciones = [];
+  chats_listener;
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -377,7 +378,10 @@ export class ChatExpertoComponent implements OnInit {
     });
     this.chats_experto.forEach(c => {
       c.listener_mensajes.unsubscribe();
-    })
+    });
+    this.chats_experto.forEach((c: Conversacion) => {
+      c.codigo_abandonado = true;
+    });
 
   }
 
@@ -403,12 +407,16 @@ export class ChatExpertoComponent implements OnInit {
         c.motivo_cierre_enviado = c.motivo_cierre_enviado ? c.motivo_cierre_enviado : false;
         c.esta_pendiente = c.esta_pendiente ? c.esta_pendiente : false;
         c.mostro_modal_cierre = c.mostro_modal_cierre ? c.mostro_modal_cierre : false;
-
+        c.mostrar_encuesta = data.mostrar_encuesta;
         if (c.id_estado_conversacion == 3 || c.id_estado_conversacion == 4 || c.id_estado_conversacion == 5 || c.id_estado_conversacion == 6) {
           if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente && !c.mostro_modal_cierre) {
             // console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
+
             c.mostro_modal_cierre = true;
-            this.motivoCierreChat(c);
+            if (!c.codigo_abandonado) {
+              this.motivoCierreChat(c);
+
+            }
           }
         }
 
@@ -673,8 +681,8 @@ export class ChatExpertoComponent implements OnInit {
     }
 
     if (!c.primera_vez && !c.esta_seleccionado) {
-      for(let i = 0; i < tmp.length; i++) {
-        if(tmp[i].id_usuario != this.user.idtbl_usuario){
+      for (let i = 0; i < tmp.length; i++) {
+        if (tmp[i].id_usuario != this.user.idtbl_usuario) {
           if (!this.new_messages.includes(tmp[i].id_conversacion)) {
             this.new_messages.push(tmp[i].id_conversacion);
           }

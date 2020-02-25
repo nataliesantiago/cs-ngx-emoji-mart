@@ -538,6 +538,23 @@ export class ChatClienteComponent implements OnInit {
     this.mensajeBuscandoExperto();
   }
   openChat(data?: any) {
+    let last_open = window.sessionStorage.getItem('loc');
+    if (last_open) {
+      let diff = moment().diff(moment(last_open), 'minutes');
+      if (diff > 0) {
+        window.sessionStorage.setItem('loc', moment().unix());
+        this.abrirChat(data);
+      }else{
+        swal.fire('Cuidado','No puedes abrir un chat en este momento por favor espera 1 minuto','warning');
+      }
+    } else {
+      window.sessionStorage.setItem('loc', moment().unix());
+      this.abrirChat(data);
+    }
+
+  }
+
+  abrirChat(data: any) {
     let abriendo = true;
     this.chatService.getConversacionActivaUsuario().then(result => {
       if (result.conversacion.length < result.cantidad_chat_cliente && abriendo) {
