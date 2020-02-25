@@ -271,11 +271,13 @@ export class ChatClienteComponent implements OnInit {
       }
 
     }
-    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
+    
+    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2 && c.minimizado) {
       this.soundService.sonar(1);
       //c.cantidad_mensajes_nuevos++;
       c.mensajes_nuevos = true;
     }
+
     //// console.log(tmp);
     return tmp;
     /*
@@ -314,6 +316,13 @@ export class ChatClienteComponent implements OnInit {
         } else {
           return tmp;
         }*/
+  }
+
+  changeChatSize(c: Conversacion){
+    c.minimizado = !c.minimizado;
+    if(!c.minimizado){
+      c.mensajes_nuevos = false;
+    }
   }
 
 
