@@ -7,6 +7,7 @@ import * as _moment from 'moment-timezone';
 import { default as _rollupMoment } from 'moment-timezone';
 import { ChatService } from '../providers/chat.service';
 import { SearchService } from '../providers/search.service';
+import { User } from '../../schemas/user.schema';
 const moment = _rollupMoment || _moment;
 
 @Component({
@@ -18,7 +19,7 @@ export class RespuestasComponent implements OnInit {
 
   id_pregunta_visualizar;
   id_usuario;
-  usuario;
+  usuario: User;
   pregunta: any;
   subrespuestas = [];
   segmentos = [];
@@ -109,7 +110,7 @@ export class RespuestasComponent implements OnInit {
 
         this.pregunta = p.pregunta[0];
 
-        if(cantidad_flujos_curaduria == 0){
+        if (cantidad_flujos_curaduria == 0) {
           let fecha_creacion = moment(this.pregunta.fecha_creacion).tz('America/Bogota');
 
           let diferencia_dias = fecha_actual.diff(fecha_creacion, 'days');
@@ -212,7 +213,13 @@ export class RespuestasComponent implements OnInit {
         })
 
       }
-    })
+      let b = window.sessionStorage.getItem('ubc');
+      let id_b;
+      if (b) {
+        id_b = JSON.parse(b).idtbl_busqueda_usuario;
+      }
+      this.searchService.guardarTrazabilidad(this.id_pregunta_visualizar, this.usuario.idtbl_usuario, id_b);
+    });
 
   }
 

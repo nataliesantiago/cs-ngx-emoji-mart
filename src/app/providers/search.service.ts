@@ -16,7 +16,7 @@ import { resolve } from 'url';
 const moment = _rollupMoment || _moment;
 @Injectable({
   providedIn: 'root'
-}) 
+})
 export class SearchService {
   user: User;
   busqueda_actual: Busqueda;
@@ -132,9 +132,15 @@ export class SearchService {
     return this.ajax.post(url_api, json);
   }
 
+  guardarTrazabilidad(id_pregunta: number, id_usuario: number, id_busqueda: number) {
+    this.ajax.post('preguntas/cloud-search/guardar-trazabilidad', { id_pregunta: id_pregunta, id_usuario: id_usuario, id_busqueda: id_busqueda }).subscribe(d => {
+
+    });
+  }
+
   async validaOpenChat() {
 
-    
+
     let tiempo_minimo = parseInt(this.utilsService.buscarConfiguracion('cantidad_minutos_minimo_chat').valor);
     let consultas_minimas = parseInt(this.utilsService.buscarConfiguracion('cantidad_consultas_minima_chat').valor);
     if (this.busqueda_actual) {
@@ -144,12 +150,12 @@ export class SearchService {
         if (this.cantidad_busquedas >= consultas_minimas && diff >= segundos && this.user.id_rol != 2 && this.user.id_rol != 3) {
           //// console.log('abrir chat', this.busqueda_actual);
           let id_busqueda = this.busqueda_actual.idtbl_busqueda_usuario;
-          delete this.busqueda_actual;
+          // delete this.busqueda_actual;
           delete this.cantidad_busquedas;
           delete this.fecha_inicio_busquedas;
           sessionStorage.removeItem('fib');
           sessionStorage.removeItem('cmc');
-          sessionStorage.removeItem('ubc');
+          // sessionStorage.removeItem('ubc');
           Swal.fire({
             title: '¿Deseas buscar un experto?',
             text: '',
@@ -177,7 +183,26 @@ export class SearchService {
     }
   }
 
+  guardarHistorial(datos: any) {
 
+    this.ajax.post('preguntas/cloud-search/guardar-historial', datos).subscribe(d => {
+      if (d.success) {
+        this.busqueda_actual = d.busqueda;
+        sessionStorage.setItem('ubc', JSON.stringify(this.busqueda_actual));
+      }
+    });
+    if (!this.cantidad_busquedas) {
+      this.cantidad_busquedas = 1;
+    } else {
+      this.cantidad_busquedas++;
+    }
+    sessionStorage.setItem('cmc', this.cantidad_busquedas + '');
+    if (!this.fecha_inicio_busquedas) {
+      this.fecha_inicio_busquedas = moment().utc();
+      //// console.log(this.fecha_inicio_busquedas);
+      sessionStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
+    }
+  }
 
   queryCloudSearch(query: string, tipo: number, origen: string, page?: number, guardar?: boolean, url?: string): Promise<any> {
     let start;
@@ -189,31 +214,20 @@ export class SearchService {
 
     return new Promise((resolve, reject) => {
 
+      if (url == 'null' || url == '') {
+        url = null;
+      }
 
       // // console.log('cargo', this.user.nombre_perfil);
-      let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen, cargo: this.user.nombre_perfil };
-      if (guardar) {
-        this.ajax.post('preguntas/cloud-search/guardar-historial', datos).subscribe(d => {
-          if (d.success) {
-            this.busqueda_actual = d.busqueda;
-            sessionStorage.setItem('ubc', JSON.stringify(this.busqueda_actual));
-          }
-        });
-        if (!this.cantidad_busquedas) {
-          this.cantidad_busquedas = 1;
-        } else {
-          this.cantidad_busquedas++;
-        }
-        sessionStorage.setItem('cmc', this.cantidad_busquedas + '');
-        if (!this.fecha_inicio_busquedas) {
-          this.fecha_inicio_busquedas = moment().utc();
-          //// console.log(this.fecha_inicio_busquedas);
-          sessionStorage.setItem('fib', this.fecha_inicio_busquedas.unix());
-        }
-      }
+      let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen, cargo: this.user.nombre_perfil, cantidad_resultados: null };
+
       this.ajax.post('preguntas/cloud-search/query', datos).subscribe(async d => {
         if (d.success) {
           d.resultados.results = (d.resultados.results) ? d.resultados.results : [];
+          if (guardar) {
+            datos.cantidad_resultados = d.resultados.resultCountExact;
+            this.guardarHistorial(datos);
+          }
           if (origen == 'conecta') {
             for (let index = 0; index < d.resultados.results.length; index++) {
               const r = d.resultados.results[index];
@@ -234,11 +248,7 @@ export class SearchService {
                 if (r.metadata.source.name == environment.pais[this.user.pais].id_origen_conecta) {
                   r.url_icono = pregunta.icono_padre;
                 }
-                //// console.log(this.respuesta, pregunta);
-                //this.mostrando = true;
-                /*if (index == d.resultados.results.length - 1) {
-                  resolve(d.resultados);
-                }*/
+               
               });
 
             }
@@ -251,6 +261,13 @@ export class SearchService {
             resolve(d.resultados);
           }
 
+        } else {
+          d.resultados = { results: [], resultCountExact: 0 };
+          if (guardar) {
+            datos.cantidad_resultados = d.resultados.results.length;
+            this.guardarHistorial(datos);
+          }
+          resolve(d.resultados);
         }
       })
     });

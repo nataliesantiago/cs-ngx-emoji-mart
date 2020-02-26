@@ -29,6 +29,7 @@ export class ResultadosComponent implements OnInit {
   tipo_busqueda: any;
   params: any;
   url_imagen_busqueda: string;
+  url_imagen: string;
   origen: string;
   mostrar_alerta_palabras: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -57,7 +58,7 @@ export class ResultadosComponent implements OnInit {
   paginar(pagina: any) {
     //// console.log(pagina);
     this.page = pagina.pageIndex;
-    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
+    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen + '&&origen=' + this.origen);
   }
 
 
@@ -68,6 +69,7 @@ export class ResultadosComponent implements OnInit {
       this.tipo_busqueda = params['tipo'] || 1;
       this.url_imagen_busqueda = null;
       if (this.tipo_busqueda == 2) {
+        this.url_imagen = params['url'];
         this.url_imagen_busqueda = decodeURI(atob(params['url']));
       }
       if (params['origen']) {
@@ -138,6 +140,7 @@ export class ResultadosComponent implements OnInit {
   }
   cambioParametros(params) {
     // Se reinicializa el componente
+    // console.log('paso por aca')
     this.page = params.page || 0;
     this.cargando_respuestas = true;
     this.resultados = [];

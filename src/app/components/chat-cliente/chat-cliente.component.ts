@@ -546,7 +546,7 @@ export class ChatClienteComponent implements OnInit {
         window.sessionStorage.setItem('loc', moment().unix());
         this.abrirChat(data);
       }else{
-        swal.fire('Cuidado','No puedes abrir un chat en este momento por favor espera 1 minuto','warning');
+        swal.fire('Cuidado','No puedes abrir un chat en este momento, por favor espera 10 segundos','warning');
       }
     } else { 
       window.sessionStorage.setItem('loc', moment().unix());

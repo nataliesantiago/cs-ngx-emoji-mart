@@ -143,8 +143,8 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
       this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
-      console.log(this.notificaciones_usuario_nuevas);
-      console.log(this.notificaicones_sin_leer);
+      // console.log(this.notificaciones_usuario_nuevas);
+      // console.log(this.notificaicones_sin_leer);
     });
 
   }
@@ -173,7 +173,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
 
     this.notificacionService.obtenerNotificacionesAntiguas(this.id_usuario).then(r => {
       this.notificaciones_usuario = r;
-      console.log(this.notificaciones_usuario);
+      // console.log(this.notificaciones_usuario);
     });
 
     this.user.actualizarMensajesNLP().then(r => {
@@ -185,8 +185,8 @@ export class FullComponent implements OnDestroy, AfterViewInit {
       this.notificaciones_usuario_nuevas = this.user.notificaciones_usuario;
       this.notificaicones_sin_leer = this.user.notificaciones_sin_leer;
       this.conversaciones_nlp = this.user.respuesta_nlp;
-      console.log(this.notificaciones_usuario_nuevas);
-      console.log(this.notificaicones_sin_leer);
+      // console.log(this.notificaciones_usuario_nuevas);
+      // console.log(this.notificaicones_sin_leer);
       //this.mensajes_sin_leer_nlp = this.user.cantidad_mensajes_sin_leer_nlp;
     });
   }
