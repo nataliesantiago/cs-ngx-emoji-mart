@@ -544,7 +544,7 @@ export class ChatClienteComponent implements OnInit {
     if (last_open) {
       let diff = moment().diff(moment().unix(last_open), 'seconds');
       // console.log('diferencia', diff)
-      if (diff > 10) {
+      if (diff > 2) {
         window.sessionStorage.setItem('loc', moment().unix());
         this.abrirChat(data);
       } else {
