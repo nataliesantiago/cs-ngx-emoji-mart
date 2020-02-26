@@ -878,8 +878,12 @@ export class ChatExpertoComponent implements OnInit {
       m.tipo_conversacion = chat.id_tipo_conversacion;
       m.id_usuario = this.user.getId();
       if (tipo_mensaje == 1) {
-        m.texto = chat.texto_mensaje;
-        chat.texto_mensaje = '';
+        if (chat.texto_mensaje && chat.texto_mensaje != '') {
+          m.texto = chat.texto_mensaje;
+        } else {
+          m.texto = '';
+        }
+
       }
       m.fecha_mensaje = moment().utc();
       m.codigo = chat.codigo;
@@ -899,6 +903,12 @@ export class ChatExpertoComponent implements OnInit {
           m.es_archivo = true;
           m.es_nota_voz = false;
           m.nombre_archivo = chat.archivo_adjunto.name;
+          
+          if (chat.texto_mensaje && chat.texto_mensaje != '') {
+            m.texto = chat.texto_mensaje;
+          } else {
+            m.texto = '';
+          }
           break;
         case 3:
           m.es_archivo = false;
@@ -936,7 +946,7 @@ export class ChatExpertoComponent implements OnInit {
       //this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
 
       this.chatService.enviarMensaje(m);
-      if (tipo_mensaje == 1) {
+      if (tipo_mensaje == 1 || tipo_mensaje == 2) {
         delete chat.texto_mensaje;
       }
       if (tipo_mensaje == 2 || tipo_mensaje == 3) {

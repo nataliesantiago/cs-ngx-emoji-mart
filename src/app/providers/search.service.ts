@@ -214,7 +214,7 @@ export class SearchService {
 
     return new Promise((resolve, reject) => {
 
-      if (url == 'null' || url == '') {
+      if (url == 'null' || url == 'undefined' || url == '') {
         url = null;
       }
 
