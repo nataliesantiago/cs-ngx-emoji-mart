@@ -564,7 +564,7 @@ export class ChatClienteComponent implements OnInit {
       } else {
         swal.fire({
           title: 'Lo sentimos',
-          text: 'Ha llegado al limite de conversaciones permitidas, si desea abrir una nueva conversación por favor cierre una de las que estan abiertas.',
+          text: 'Ha llegado al límite de conversaciones permitidas, si desea abrir una nueva conversación por favor cierre una de las que están abiertas.',
           type: 'warning',
           buttonsStyling: false,
           confirmButtonClass: 'custom__btn custom__btn--accept',
