@@ -235,12 +235,11 @@
               </mat-sidenav-container>
               <div class="componente-pequeno" [hidden]="!chat.minimizado"
                 [ngClass]="{'mensajes-nuevos':chat.mensajes_nuevos}">
-                <div class="font-14 nombre-asesor">
+                <div class="font-14 nombre-asesor" (click)="changeChatSize(chat)">
                   <mat-icon class="icono-mensaje">message</mat-icon>
-                  <span *ngIf="!chat.asesor_actual" (click)="chat.minimizado=!chat.minimizado">Chat de experto</span>
-                  <span *ngIf="chat.asesor_actual"
-                    (click)="chat.minimizado=!chat.minimizado">{{chat.asesor_actual.nombre}}</span>
-                  <button mat-icon-button class="ml-1" (click)="chat.minimizado=false">
+                  <span *ngIf="!chat.asesor_actual">Chat de experto</span>
+                  <span *ngIf="chat.asesor_actual">{{chat.asesor_actual.nombre}}</span>
+                  <button mat-icon-button class="ml-1">
                     <mat-icon>maximize</mat-icon>
                   </button>
                 </div>

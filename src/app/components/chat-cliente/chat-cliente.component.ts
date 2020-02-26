@@ -271,11 +271,13 @@ export class ChatClienteComponent implements OnInit {
       }
 
     }
-    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
+    
+    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2 && c.minimizado) {
       this.soundService.sonar(1);
       //c.cantidad_mensajes_nuevos++;
       c.mensajes_nuevos = true;
     }
+
     //// console.log(tmp);
     return tmp;
     /*
@@ -314,6 +316,13 @@ export class ChatClienteComponent implements OnInit {
         } else {
           return tmp;
         }*/
+  }
+
+  changeChatSize(c: Conversacion){
+    c.minimizado = !c.minimizado;
+    if(!c.minimizado){
+      c.mensajes_nuevos = false;
+    }
   }
 
 
@@ -529,6 +538,24 @@ export class ChatClienteComponent implements OnInit {
     this.mensajeBuscandoExperto();
   }
   openChat(data?: any) {
+
+    let last_open = window.sessionStorage.getItem('loc');
+    if (last_open) {
+      let diff = moment().diff(moment(last_open), 'seconds');
+      if (diff > 10) {
+        window.sessionStorage.setItem('loc', moment().unix());
+        this.abrirChat(data);
+      }else{
+        swal.fire('Cuidado','No puedes abrir un chat en este momento por favor espera 1 minuto','warning');
+      }
+    } else { 
+      window.sessionStorage.setItem('loc', moment().unix());
+      this.abrirChat(data);
+    }
+
+  }
+
+  abrirChat(data: any) {
     let abriendo = true;
     this.chatService.getConversacionActivaUsuario().then(result => {
       if (result.conversacion.length < result.cantidad_chat_cliente && abriendo) {
