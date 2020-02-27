@@ -337,9 +337,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
           this.pregunta.muestra_fecha_actualizacion = 0;
         }
         this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
-        for (let i = 0; i < this.array_mostrar.length; i++) {
-          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
-        }
+        
         this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.router.navigate(['/admin/preguntas']);
@@ -481,14 +479,12 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     }*/
   }
 
-  anadirSubRespuestaSegmento(e) {
-    this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: e, segmento: '' });
-
-    /*for(let i of this.subrespuestas_segmentos){
-      if(i.pos_segmento == e){
-        this.array_mostrar.push(i);
-      }
-    }*/
+  anadirSubRespuestaSegmento(e, pos) {
+    this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: pos, segmento: '' });
+    
+    if(e.idtbl_segmento){
+      this.array_mostrar[this.array_mostrar.length - 1].segmento = e.idtbl_segmento;
+    }
 
   }
 
