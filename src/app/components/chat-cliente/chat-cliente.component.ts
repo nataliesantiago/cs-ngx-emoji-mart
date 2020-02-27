@@ -45,7 +45,7 @@ export class ChatClienteComponent implements OnInit {
   mensaje_despedida;
   file_url;
   loading = false;
-
+  observable_chats;
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
@@ -62,7 +62,7 @@ export class ChatClienteComponent implements OnInit {
       }
     });
 
-    this.chatService.nuevasConversaciones.subscribe(d => {
+    this.observable_chats = this.chatService.nuevasConversaciones.subscribe(d => {
       console.log('Abriendo chat');
       this.openChat(d);
     });
@@ -77,6 +77,11 @@ export class ChatClienteComponent implements OnInit {
     photo: 'assets/images/users/1.jpg',
     subject: 'Arti thai gai ne?',
   };
+
+  ngOnDestroy() {
+    this.observable_chats.unsubscribe();
+  }
+
 
   init() {
 

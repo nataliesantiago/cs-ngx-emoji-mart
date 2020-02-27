@@ -168,7 +168,7 @@ export class ChatService {
    */
   cambiaEstadoMensajes(mensaje: Mensaje, c: Conversacion) {
     mensaje.estado = 3;
-    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes').doc(mensaje.id).set(mensaje);
+    this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo + '/mensajes').doc(mensaje.id).update({ estado: mensaje.estado });
   }
   /**
    * @description Esta función se encarga de subir los archivos al servidor que se adjuntan en el chat
@@ -633,7 +633,7 @@ export class ChatService {
               this.getEmergenciaUsuario().then((e: Emergencia) => {
                 this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + experto.id_usuario + '/emergencia/1').set({ id_emergencia: e.idtbl_consultas_sos });
               })
-      
+
             })
           } else {
             this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId() }).subscribe(d => {
