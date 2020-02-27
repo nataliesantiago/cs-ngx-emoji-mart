@@ -271,7 +271,7 @@ export class ChatClienteComponent implements OnInit {
       }
 
     }
-    
+
     if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2 && c.minimizado) {
       this.soundService.sonar(1);
       //c.cantidad_mensajes_nuevos++;
@@ -318,9 +318,9 @@ export class ChatClienteComponent implements OnInit {
         }*/
   }
 
-  changeChatSize(c: Conversacion){
+  changeChatSize(c: Conversacion) {
     c.minimizado = !c.minimizado;
-    if(!c.minimizado){
+    if (!c.minimizado) {
       c.mensajes_nuevos = false;
     }
   }
@@ -540,15 +540,17 @@ export class ChatClienteComponent implements OnInit {
   openChat(data?: any) {
 
     let last_open = window.sessionStorage.getItem('loc');
+    // console.log('las opent', last_open);
     if (last_open) {
-      let diff = moment().diff(moment(last_open), 'seconds');
-      if (diff > 10) {
+      let diff = moment().diff(moment().unix(last_open), 'seconds');
+      // console.log('diferencia', diff)
+      if (diff > 2) {
         window.sessionStorage.setItem('loc', moment().unix());
         this.abrirChat(data);
-      }else{
-        swal.fire('Cuidado','No puedes abrir un chat en este momento, por favor espera 10 segundos','warning');
+      } else {
+        // swal.fire('Cuidado','No puedes abrir un chat en este momento, por favor espera 10 segundos','warning');
       }
-    } else { 
+    } else {
       window.sessionStorage.setItem('loc', moment().unix());
       this.abrirChat(data);
     }
@@ -632,7 +634,7 @@ export class ChatClienteComponent implements OnInit {
       m.id_usuario = this.user.getId();
       if (tipo_mensaje == 1) {
         m.texto = chat.texto_mensaje;
-        chat.texto_mensaje = '';
+        //chat.texto_mensaje = '';
       }
 
       m.fecha_mensaje = moment().utc();
@@ -653,6 +655,11 @@ export class ChatClienteComponent implements OnInit {
           m.es_archivo = true;
           m.es_nota_voz = false;
           m.nombre_archivo = chat.archivo_adjunto.name;
+          if (chat.texto_mensaje && chat.texto_mensaje != '') {
+            m.texto = chat.texto_mensaje;
+          } else {
+            m.texto = '';
+          }
           break;
         case 3:
           m.es_archivo = false;
@@ -681,7 +688,7 @@ export class ChatClienteComponent implements OnInit {
       }
 
       this.chatService.enviarMensaje(m);
-      if (tipo_mensaje == 1) {
+      if (tipo_mensaje == 1 || tipo_mensaje == 2) {
         delete chat.texto_mensaje;
       }
       if (tipo_mensaje == 2 || tipo_mensaje == 3) {
