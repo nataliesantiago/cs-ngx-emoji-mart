@@ -20,10 +20,13 @@ export class BuscadorHightlighter implements PipeTransform {
         let snippet = plainText.toLowerCase().split(' ');
         let snippet_bk = plainText.split(' ');
         tmp.forEach(palabra => {
+
             let np = this.utils.normalizeText(palabra);
+
             for (let index = 0; index < snippet.length; index++) {
                 let p = snippet[index];
-                let n = this.utils.normalizeText(p);
+                let n = this.utils.normalizeText(p).toLocaleLowerCase();
+                // console.log('palabra ', palabra, np, n);
                 if (n.indexOf(np) == (0) || np.indexOf(n) == (0)) {
                     snippet[index] = '<b> ' + snippet_bk[index] + ' </b>'
                 } else {
