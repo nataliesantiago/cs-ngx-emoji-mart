@@ -132,7 +132,7 @@ export class ResultadosComponent implements OnInit {
         this.origen = 'drive';
         break;
     }
-    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
+    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + btoa(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
   }
   abrirRuta(ruta) {
 
@@ -147,7 +147,7 @@ export class ResultadosComponent implements OnInit {
     this.resultado = true;
     let guardar = true;
     if (this.busqueda != params.busqueda) {
-      this.busqueda = params.busqueda;
+      this.busqueda = atob(params.busqueda);
       this.ortografia = false;
       delete this.busquedaUrl;
       delete this.valorBusqueda;
