@@ -260,7 +260,7 @@ export class UserService {
         this.actualizarTodo();
 
         if (this.respuesta_nlp && this.respuesta_nlp[1]) {
-            this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
+            this.cant_mensajes_actuales = this.respuesta_nlp[1];
         }
         if (this.notificaciones_sin_leer) {
             this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
@@ -279,14 +279,15 @@ export class UserService {
     actualizarTodo() {
         this.actualizarMensajesNLP().then(() => {
             this.actualizarNotificaciones().then(r => {
-                if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
+                if (this.cant_mensajes_actuales < this.respuesta_nlp[1] || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
                     if (!this.primera_vez_notificacion && this.suena_notificacion) {
                         this.soundService.sonar(4);
-                    }else if(this.cant_mensajes_actuales < this.respuesta_nlp[1].length){
+                    }else if(this.cant_mensajes_actuales < this.respuesta_nlp[1]){
                         this.soundService.sonar(4);
                     }
                 }
-                this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
+                this.cant_mensajes_actuales = this.respuesta_nlp[1];
+                console.log(this.cant_mensajes_actuales);
                 this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
                 this.primera_vez_notificacion = false;
                 this.subjectNotificaciones.next(1);
