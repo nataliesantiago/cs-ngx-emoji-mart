@@ -37,6 +37,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
   url: string = '';
   metodo = 1;
   public def = new FormControl(''); // Model del autocomplete
+  public defo = new FormControl(''); // Model del autocomplete
   searchText: string; // ngModel del autocomplete
   defaultSelectedNgAutocomplete: string;
   file: File; // guardar archivo para buscar
@@ -292,9 +293,11 @@ export class AppSearchComponent implements OnChanges, OnInit {
     this.segundo.nativeElement.scrollLeft = 0;
   }
   procesaValorCaja(value: string) {
-
+    this.mostrando_sugerencia = false;
     this.searchService.suggestCloudSearch(value, this.sugerencias).then(d => {
       // // console.log(d);
+      //console.log(value);
+      let original_value = value;
       value = this.utilsService.normalizeText(value);
       delete this.texto_sugerido;
       this.sugerencias = d.suggestResults;
@@ -304,9 +307,10 @@ export class AppSearchComponent implements OnChanges, OnInit {
         if (value && value != '' && value != 'undefined') {
           if (t.indexOf(value) != 0) {
             this.mostrando_sugerencia = false;
+            this.defo.setValue('');
           } else {
             this.mostrando_sugerencia = true;
-            this.texto_sugerido = value + t.replace(value, '');
+            this.defo.setValue(original_value + t.replace(value, ''));
           }
 
         }
@@ -330,8 +334,8 @@ export class AppSearchComponent implements OnChanges, OnInit {
   completarTexto(event: KeyboardEvent) {
     event.preventDefault();
     event.stopPropagation();
-    if (this.texto_sugerido) {
-      this.def.setValue(this.texto_sugerido);
+    if (this.defo.value && this.defo.value != '') {
+      this.def.setValue(this.defo.value);
       setTimeout(() => {
         let element = this.primero.nativeElement;
         this.primero.nativeElement.scrollLeft = element.scrollWidth - element.clientWidth;
@@ -414,7 +418,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       let url = btoa(this.url);
 
       setTimeout(() => {
-        this.router.navigateByUrl('/search?tipo=' + metodo + '&&url=' + url + '&&busqueda=' + encodeURI(this.def.value));
+        this.router.navigateByUrl('/search?tipo=' + metodo + '&&url=' + url + '&&busqueda=' + btoa(this.def.value));
       }, 0);
 
     }
