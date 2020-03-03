@@ -44,9 +44,9 @@
         <button [matMenuTriggerFor]="message" mat-icon-button class="m-r-10 icono-nlp" *ngIf="muetra_alarmas_nlp">
             <mat-icon>message</mat-icon>
             <div class="notify" *ngIf="conversaciones_nlp && conversaciones_nlp[1]">
-                <span *ngIf="conversaciones_nlp[1].length > 0" class="heartbit-notificaciones"></span>
-                <span *ngIf="conversaciones_nlp[1].length > 0" class="point-notificaciones"
-                    matBadge="{{conversaciones_nlp[1].length}}" matBadgeColor="warn" matBadgeOverlap="false"></span>
+                <span *ngIf="conversaciones_nlp[1] > 0" class="heartbit-notificaciones"></span>
+                <span *ngIf="conversaciones_nlp[1] > 0" class="point-notificaciones"
+                    matBadge="{{conversaciones_nlp[1]}}" matBadgeColor="warn" matBadgeOverlap="false"></span>
             </div>
         </button>
 

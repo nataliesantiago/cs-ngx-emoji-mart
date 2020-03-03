@@ -198,7 +198,7 @@ export class ChatExpertoComponent implements OnInit {
           chats.subscribe(chaters => {
 
             this.chatService.getConversacionesExperto().then(chat => {
-
+              // console.log('chats', chat);
               if (!chat) {
                 chat = [];
 
@@ -207,7 +207,9 @@ export class ChatExpertoComponent implements OnInit {
 
               this.chats_experto.forEach((c: Conversacion) => {
                 c.listener_mensajes.unsubscribe();
+                c.listener_conversacion.unsubscribe();
               });
+
               if (chat.length > 0) {
                 this.soundService.sonar(2);
               }
@@ -393,7 +395,7 @@ export class ChatExpertoComponent implements OnInit {
   agregaListenerConversacion(c: Conversacion) {
 
 
-    let l = this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+    let l = c.listener_conversacion = this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       if (data && data.id_experto_actual != this.user.getId()) {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
@@ -523,7 +525,9 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   buscarConfiguracion(id: number | string): Configuracion {
+
     return this.configuraciones.find((c: Configuracion) => {
+
       return c.idtbl_configuracion === id || c.nombre == id;
     });
   }
@@ -546,6 +550,7 @@ export class ChatExpertoComponent implements OnInit {
       c.primera_vez = false;
       if (this.intervalo) {
         window.clearInterval(this.intervalo);
+        document.title = this.nombre_pestana;
       }
 
       this.intervalo = setInterval(() => {
@@ -903,7 +908,7 @@ export class ChatExpertoComponent implements OnInit {
           m.es_archivo = true;
           m.es_nota_voz = false;
           m.nombre_archivo = chat.archivo_adjunto.name;
-          
+
           if (chat.texto_mensaje && chat.texto_mensaje != '') {
             m.texto = chat.texto_mensaje;
           } else {
@@ -998,7 +1003,7 @@ export class ChatExpertoComponent implements OnInit {
     c.iniciando_grabacion = true;
     let minutos;
 
-    minutos = parseInt(this.buscarConfiguracion(7).valor);
+    minutos = parseInt(this.utilService.buscarConfiguracion('cantidad_tiempo_maximo_nota_voz').valor);
 
     let tiempo = minutos * 60;
     const options = { mimeType: 'audio/webm' };
@@ -1019,13 +1024,18 @@ export class ChatExpertoComponent implements OnInit {
             this.onStopRecordingNotaVoz(audioBlob, c, comp);
 
           });
+          this.startTimer(tiempo, c, comp).then(() => {
+            c.mediaRecorder.stop(audioBlob => {
+              this.onStopRecordingNotaVoz(audioBlob, c, comp);
+
+            });
+          });
+
+        }).catch(() => {
+          c.iniciando_grabacion = false;
+          swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
         });
-
-      }).catch(() => {
-        c.iniciando_grabacion = false;
-        swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
       });
-
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
@@ -1179,7 +1189,6 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
-    // // console.log(c);
     if (c.conversacion_recomendada || c.recomendacion_manual) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
@@ -1195,6 +1204,7 @@ export class ChatExpertoComponent implements OnInit {
   finalizaEncuesta(c: Conversacion) {
     c.mostrar_encuesta = false;
     c.encuesta_realizada = true;
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mostrar_encuesta: c.mostrar_encuesta, encuesta_realizada: c.encuesta_realizada });
     this.validarCerrarConversacion(c);
   }
 
