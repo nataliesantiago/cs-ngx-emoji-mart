@@ -207,7 +207,9 @@ export class ChatExpertoComponent implements OnInit {
 
               this.chats_experto.forEach((c: Conversacion) => {
                 c.listener_mensajes.unsubscribe();
+                c.listener_conversacion.unsubscribe();
               });
+              
               if (chat.length > 0) {
                 this.soundService.sonar(2);
               }
@@ -393,7 +395,7 @@ export class ChatExpertoComponent implements OnInit {
   agregaListenerConversacion(c: Conversacion) {
 
 
-    let l = this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
+    let l = c.listener_conversacion = this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).snapshotChanges().subscribe(datos => {
       let data = datos.payload.data() as Conversacion;
       if (data && data.id_experto_actual != this.user.getId()) {
         //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + data.codigo).delete();
@@ -523,9 +525,9 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   buscarConfiguracion(id: number | string): Configuracion {
-    console.log(id);
+    // console.log(id);
     return this.configuraciones.find((c: Configuracion) => {
-      console.log(c);
+      //console.log(c);
       return c.idtbl_configuracion === id || c.nombre == id;
     });
   }
@@ -548,6 +550,7 @@ export class ChatExpertoComponent implements OnInit {
       c.primera_vez = false;
       if (this.intervalo) {
         window.clearInterval(this.intervalo);
+        document.title = this.nombre_pestana;
       }
 
       this.intervalo = setInterval(() => {
@@ -1032,7 +1035,7 @@ export class ChatExpertoComponent implements OnInit {
           c.iniciando_grabacion = false;
           swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
         });
-    });
+      });
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
