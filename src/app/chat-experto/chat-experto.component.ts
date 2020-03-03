@@ -523,9 +523,9 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   buscarConfiguracion(id: number | string): Configuracion {
-    console.log(id);
+    
     return this.configuraciones.find((c: Configuracion) => {
-      console.log(c);
+      
       return c.idtbl_configuracion === id || c.nombre == id;
     });
   }
@@ -1181,7 +1181,6 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
-    // // console.log(c);
     if (c.conversacion_recomendada || c.recomendacion_manual) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;

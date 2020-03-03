@@ -127,10 +127,9 @@ export class VisualizarEncuestaComponent implements OnInit {
     this.ajax.post('encuestas/guardar-respuesta', { preguntas: this.preguntas, id_conversacion: this.chat.idtbl_conversacion, id_usuario: this.user.idtbl_usuario, id_encuesta: this.idtbl_encuesta }).subscribe(d => {
       if (d.success) {
         this.onfinish.emit(true);
-      } else {
-
       }
     })
+    
   }
 
 }
