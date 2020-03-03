@@ -271,7 +271,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     this.def.setValue(this.texto_buscar);
     this.def.valueChanges
       .pipe(
-        debounceTime(200),
+        debounceTime(0),
         switchMap(value => this.procesaValorCaja(value))
       ).subscribe(d => {
         // // console.log(d);
@@ -309,8 +309,9 @@ export class AppSearchComponent implements OnChanges, OnInit {
             this.mostrando_sugerencia = false;
             this.defo.setValue('');
           } else {
-            this.mostrando_sugerencia = true;
             this.defo.setValue(original_value + t.replace(value, ''));
+            this.mostrando_sugerencia = true;
+
           }
 
         }
@@ -416,9 +417,8 @@ export class AppSearchComponent implements OnChanges, OnInit {
         this.searchText = '';
       }
       let url = btoa(this.url);
-
       setTimeout(() => {
-        this.router.navigateByUrl('/search?tipo=' + metodo + '&&url=' + url + '&&busqueda=' + btoa(this.def.value));
+        this.router.navigateByUrl('/search?tipo=' + metodo + '&&url=' + url + '&&busqueda=' + this.def.value.trim());
       }, 0);
 
     }
