@@ -198,7 +198,7 @@ export class ChatExpertoComponent implements OnInit {
           chats.subscribe(chaters => {
 
             this.chatService.getConversacionesExperto().then(chat => {
-
+              // console.log('chats', chat);
               if (!chat) {
                 chat = [];
 
@@ -209,7 +209,7 @@ export class ChatExpertoComponent implements OnInit {
                 c.listener_mensajes.unsubscribe();
                 c.listener_conversacion.unsubscribe();
               });
-              
+
               if (chat.length > 0) {
                 this.soundService.sonar(2);
               }
@@ -525,9 +525,9 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   buscarConfiguracion(id: number | string): Configuracion {
-    // console.log(id);
+
     return this.configuraciones.find((c: Configuracion) => {
-      //console.log(c);
+
       return c.idtbl_configuracion === id || c.nombre == id;
     });
   }
@@ -1189,7 +1189,6 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   validaRecomendacionConversacion(c: Conversacion) {
-    // // console.log(c);
     if (c.conversacion_recomendada || c.recomendacion_manual) {
       if (!c.muestra_interfaz_recomendacion) {
         c.muestra_boton_recomendacion = true;
@@ -1205,6 +1204,7 @@ export class ChatExpertoComponent implements OnInit {
   finalizaEncuesta(c: Conversacion) {
     c.mostrar_encuesta = false;
     c.encuesta_realizada = true;
+    this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ mostrar_encuesta: c.mostrar_encuesta, encuesta_realizada: c.encuesta_realizada });
     this.validarCerrarConversacion(c);
   }
 
