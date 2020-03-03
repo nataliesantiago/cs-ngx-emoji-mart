@@ -523,7 +523,9 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   buscarConfiguracion(id: number | string): Configuracion {
+    console.log(id);
     return this.configuraciones.find((c: Configuracion) => {
+      console.log(c);
       return c.idtbl_configuracion === id || c.nombre == id;
     });
   }
@@ -903,7 +905,7 @@ export class ChatExpertoComponent implements OnInit {
           m.es_archivo = true;
           m.es_nota_voz = false;
           m.nombre_archivo = chat.archivo_adjunto.name;
-          
+
           if (chat.texto_mensaje && chat.texto_mensaje != '') {
             m.texto = chat.texto_mensaje;
           } else {
@@ -997,35 +999,35 @@ export class ChatExpertoComponent implements OnInit {
 
     c.iniciando_grabacion = true;
     let minutos;
-
-    minutos = parseInt(this.buscarConfiguracion(7).valor);
-
-    let tiempo = minutos * 60;
-    const options = { mimeType: 'audio/webm' };
-    let detenido = false;
-    let calculaTiempo = { fechaIni: null, fechaFin: null };
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        this.stream = stream;
-        c.mediaRecorder = new StereoAudioRecorder(stream, {
-          sampleRate: 48000,
-          get16BitAudio: true,
-          bufferSize: 4096,
-          numberOfAudioChannels: 1,
-          disableLogs: true
-        });
-        this.startTimer(tiempo, c, comp).then(() => {
-          c.mediaRecorder.stop(audioBlob => {
-            this.onStopRecordingNotaVoz(audioBlob, c, comp);
-
+    this.chatService.getConfiguracionesChat().then(configs => {
+      this.configuraciones = configs.configuraciones;
+      minutos = parseInt(this.buscarConfiguracion(7).valor);
+      let tiempo = minutos * 60;
+      const options = { mimeType: 'audio/webm' };
+      let detenido = false;
+      let calculaTiempo = { fechaIni: null, fechaFin: null };
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          this.stream = stream;
+          c.mediaRecorder = new StereoAudioRecorder(stream, {
+            sampleRate: 48000,
+            get16BitAudio: true,
+            bufferSize: 4096,
+            numberOfAudioChannels: 1,
+            disableLogs: true
           });
+          this.startTimer(tiempo, c, comp).then(() => {
+            c.mediaRecorder.stop(audioBlob => {
+              this.onStopRecordingNotaVoz(audioBlob, c, comp);
+
+            });
+          });
+
+        }).catch(() => {
+          c.iniciando_grabacion = false;
+          swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
         });
-
-      }).catch(() => {
-        c.iniciando_grabacion = false;
-        swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
-      });
-
+    });
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
