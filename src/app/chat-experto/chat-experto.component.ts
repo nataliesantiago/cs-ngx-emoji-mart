@@ -999,22 +999,27 @@ export class ChatExpertoComponent implements OnInit {
 
     c.iniciando_grabacion = true;
     let minutos;
-    this.chatService.getConfiguracionesChat().then(configs => {
-      this.configuraciones = configs.configuraciones;
-      minutos = parseInt(this.buscarConfiguracion(7).valor);
-      let tiempo = minutos * 60;
-      const options = { mimeType: 'audio/webm' };
-      let detenido = false;
-      let calculaTiempo = { fechaIni: null, fechaFin: null };
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-          this.stream = stream;
-          c.mediaRecorder = new StereoAudioRecorder(stream, {
-            sampleRate: 48000,
-            get16BitAudio: true,
-            bufferSize: 4096,
-            numberOfAudioChannels: 1,
-            disableLogs: true
+
+    minutos = parseInt(this.utilService.buscarConfiguracion('cantidad_tiempo_maximo_nota_voz').valor);
+
+    let tiempo = minutos * 60;
+    const options = { mimeType: 'audio/webm' };
+    let detenido = false;
+    let calculaTiempo = { fechaIni: null, fechaFin: null };
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        this.stream = stream;
+        c.mediaRecorder = new StereoAudioRecorder(stream, {
+          sampleRate: 48000,
+          get16BitAudio: true,
+          bufferSize: 4096,
+          numberOfAudioChannels: 1,
+          disableLogs: true
+        });
+        this.startTimer(tiempo, c, comp).then(() => {
+          c.mediaRecorder.stop(audioBlob => {
+            this.onStopRecordingNotaVoz(audioBlob, c, comp);
+
           });
           this.startTimer(tiempo, c, comp).then(() => {
             c.mediaRecorder.stop(audioBlob => {

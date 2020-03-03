@@ -742,7 +742,7 @@ export class ChatClienteComponent implements OnInit {
 
   grabarNotaVoz(c: Conversacion, comp: PerfectScrollbarComponent) {
     c.iniciando_grabacion = true;
-    let minutos = parseInt(this.buscarConfiguracion(7).valor);
+    let minutos = parseInt(this.utilService.buscarConfiguracion('cantidad_tiempo_maximo_nota_voz').valor);
     let tiempo = minutos * 60;
     const options = { mimeType: 'audio/webm' };
     let detenido = false;
