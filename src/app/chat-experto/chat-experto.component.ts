@@ -73,6 +73,7 @@ export class ChatExpertoComponent implements OnInit {
   new_messages = [];
   listeners_conversaciones = [];
   chats_listener;
+  listener_cola;
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -133,7 +134,7 @@ export class ChatExpertoComponent implements OnInit {
             let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
-            cola.pipe(debounceTime(1000)).subscribe(chats => {
+            this.listener_cola = cola.pipe(debounceTime(1000)).subscribe(chats => {
               // console.log(chats);
               let tmp = [];
 
@@ -386,6 +387,8 @@ export class ChatExpertoComponent implements OnInit {
     this.chats_experto.forEach((c: Conversacion) => {
       c.codigo_abandonado = true;
     });
+
+    this.listener_cola.unsubscribe();
 
   }
 
