@@ -22,7 +22,7 @@ export class BuscadorHightlighter implements PipeTransform {
             busqueda_array.forEach(palabra => {
                 palabra = this.utils.normalizeText(palabra).toLocaleLowerCase();
                 if (pa == palabra) {
-                    console.log('encuentra ', snippet[i]);
+                    // console.log('encuentra ', snippet[i]);
                     snippet[i] = '<b> ' + snippet[i] + ' </b>'
                 } else if (pa.includes(palabra) && palabra.length > 3) {
                     snippet[i] = '<b> ' + snippet[i] + ' </b>'

@@ -26,6 +26,8 @@ import { TouchSequence } from 'selenium-webdriver';
 import { EstadoExpertoService } from '../providers/estado-experto.service';
 import * as uuid from 'uuid';
 import { Experto } from '../../schemas/xhr.schema';
+import { debounceTime } from 'rxjs/operators';
+
 const moment = _rollupMoment || _moment;
 
 declare var StereoAudioRecorder: any;
@@ -131,7 +133,7 @@ export class ChatExpertoComponent implements OnInit {
             let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
-            cola.subscribe(chats => {
+            cola.pipe(debounceTime(1000)).subscribe(chats => {
               // console.log(chats);
               let tmp = [];
 
@@ -195,7 +197,7 @@ export class ChatExpertoComponent implements OnInit {
             })
           });
           let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
-          chats.subscribe(chaters => {
+          chats.pipe(debounceTime(1000)).subscribe(chaters => {
 
             this.chatService.getConversacionesExperto().then(chat => {
               // console.log('chats', chat);
