@@ -825,9 +825,9 @@ export class ChatExpertoComponent implements OnInit {
   onSelectCola(c: Conversacion): void {
     // this.chat = chat;
     // chat.mensajes_nuevos = false;
-    if (c.chat_tomado) {
-      c.chat_tomado = true;
-      this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ chat_tomado: true }).then(() => {
+    if (!c.chat_tomado || c.chat_tomado != this.user.getId()) {
+      c.chat_tomado = this.user.getId();
+      this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ chat_tomado: c.chat_tomado }).then(() => {
         this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
         });
       });
