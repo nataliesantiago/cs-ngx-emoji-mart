@@ -147,7 +147,7 @@ export class ResultadosComponent implements OnInit {
     this.resultado = true;
     let guardar = true;
     if (this.busqueda != params.busqueda) {
-      console.log(params.busqueda);
+      //console.log(params.busqueda);
       this.busqueda = decodeURI(params.busqueda);
       this.ortografia = false;
       delete this.busquedaUrl;

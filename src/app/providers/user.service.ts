@@ -287,7 +287,7 @@ export class UserService {
                     }
                 }
                 this.cant_mensajes_actuales = this.respuesta_nlp[1];
-                console.log(this.cant_mensajes_actuales);
+                // console.log(this.cant_mensajes_actuales);
                 this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
                 this.primera_vez_notificacion = false;
                 this.subjectNotificaciones.next(1);
