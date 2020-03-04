@@ -154,6 +154,7 @@ export class AdMotivoCierreChatComponent implements OnInit {
         }
       });
     } else {
+      this.reason.name = this.reason.name.trim();
       this.motivo_service.saveReason(this.reason, this.user_id).then((result) => {
         this.getReasons();
         this.is_created = false;
