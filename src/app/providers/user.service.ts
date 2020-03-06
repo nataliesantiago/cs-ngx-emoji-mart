@@ -277,7 +277,7 @@ export class UserService {
 
 
     actualizarTodo() {
-        this.actualizarMensajesNLP().then(() => {
+        /*this.actualizarMensajesNLP().then(() => {
             this.actualizarNotificaciones().then(r => {
                 if (this.cant_mensajes_actuales < this.respuesta_nlp[1] || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
                     if (!this.primera_vez_notificacion && this.suena_notificacion) {
@@ -287,6 +287,22 @@ export class UserService {
                     }
                 }
                 this.cant_mensajes_actuales = this.respuesta_nlp[1];
+                // console.log(this.cant_mensajes_actuales);
+                this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
+                this.primera_vez_notificacion = false;
+                this.subjectNotificaciones.next(1);
+            });
+        });*/
+        this.actualizarMensajesNLP().then(() => {
+            this.actualizarNotificaciones().then(r => {
+                if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
+                    if (!this.primera_vez_notificacion && this.suena_notificacion) {
+                        this.soundService.sonar(4);
+                    }else if(this.cant_mensajes_actuales < this.respuesta_nlp[1].length){
+                        this.soundService.sonar(4);
+                    }
+                }
+                this.cant_mensajes_actuales = this.respuesta_nlp[1].length;
                 // console.log(this.cant_mensajes_actuales);
                 this.cant_notificaciones_sin_leer = this.notificaciones_sin_leer;
                 this.primera_vez_notificacion = false;
