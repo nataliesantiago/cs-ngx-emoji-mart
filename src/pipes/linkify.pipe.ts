@@ -18,7 +18,7 @@ export class LinkifyPipe implements PipeTransform {
 
         //URLs starting with http://, https://, or ftp://
         replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-        if (plainText) {
+        if (plainText && plainText != '') {
             replacedText = plainText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
 
             //URLs starting with "www." (without // before it, or it'd re-link the ones done above).

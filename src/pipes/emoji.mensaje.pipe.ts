@@ -68,13 +68,17 @@ export class ReplaceEmojisMensajePipe implements PipeTransform {
         backgroundImageFn?: (set: string, sheetSize: number) => string): any {
         // // console.log('validando emoji', html);
         //return this.sanitizer.bypassSecurityTrustHtml(
-        return this.emojisToImages(
-            html,
-            set,
-            size,
-            sheetSize,
-            backgroundImageFn
-        )
+        if (html && html != '') {
+            return this.emojisToImages(
+                html,
+                set,
+                size,
+                sheetSize,
+                backgroundImageFn
+            )
+        } else {
+            return html;
+        }
         // );
     }
 

@@ -379,17 +379,20 @@ export class ChatExpertoComponent implements OnInit {
   ngOnDestroy() {
     console.log('destruyendo listeners ', this.listeners_conversaciones.length);
     this.listeners_conversaciones.forEach(l => {
-      l.unsubscribe();
+      if (l)
+        l.unsubscribe();
     });
     this.chats_experto.forEach(c => {
-      c.listener_mensajes.unsubscribe();
+      if (c.listener_mensajes)
+        c.listener_mensajes.unsubscribe();
     });
     this.chats_experto.forEach((c: Conversacion) => {
       c.codigo_abandonado = true;
     });
 
     this.listener_cola.forEach(lc => {
-      lc.unsubscribe();
+      if (lc)
+        lc.unsubscribe();
     });
 
   }
@@ -945,7 +948,7 @@ export class ChatExpertoComponent implements OnInit {
           m.url = url;
           break;
       }
-
+      console.log(m);
       chat.mensajes.push(m);
       /*this.ngZone.runOutsideAngular(() => {
         chat.mensajes.push(m);
