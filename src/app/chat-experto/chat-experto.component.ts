@@ -73,7 +73,7 @@ export class ChatExpertoComponent implements OnInit {
   new_messages = [];
   listeners_conversaciones = [];
   chats_listener;
-  listener_cola;
+  listener_cola = [];
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -134,7 +134,7 @@ export class ChatExpertoComponent implements OnInit {
             let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
             //this.chats_cola.push(fila)
             let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
-            this.listener_cola = cola.pipe(debounceTime(1000)).subscribe(chats => {
+            this.listener_cola.push(cola.pipe(debounceTime(1000)).subscribe(chats => {
               // console.log(chats);
               let tmp = [];
 
@@ -195,7 +195,7 @@ export class ChatExpertoComponent implements OnInit {
                   });
                 });
               }
-            })
+            }));
           });
           let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
           chats.pipe(debounceTime(1000)).subscribe(chaters => {
@@ -341,7 +341,7 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   recibirChatAutomatico() {
-    let config = this.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
+    let config = this.utilService.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
 
     this.chatService.getConversacionesExperto().then(async (conversaciones: Array<Conversacion>) => {
       if (config) {
@@ -388,7 +388,9 @@ export class ChatExpertoComponent implements OnInit {
       c.codigo_abandonado = true;
     });
 
-    this.listener_cola.unsubscribe();
+    this.listener_cola.forEach(lc => {
+      lc.unsubscribe();
+    });
 
   }
 
