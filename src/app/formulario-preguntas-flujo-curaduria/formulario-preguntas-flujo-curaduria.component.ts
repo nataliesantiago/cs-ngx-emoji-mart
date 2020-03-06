@@ -335,9 +335,12 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         this.notas.id_usuario_comentario = this.id_usuario;
 
         this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
+
         for (let i = 0; i < this.array_mostrar.length; i++) {
-          this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+          this.array_mostrar[i].pos_segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
+
+        console.log(this.array_mostrar);
 
         if (!this.pregunta.id_usuario_revision || this.pregunta.id_usuario_revision == 'undefined' || this.pregunta.id_usuario_revision == null) {
 
@@ -351,7 +354,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           })
 
         } else {
-          
+
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
               // console.log(enviar_correo);
@@ -681,15 +684,14 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
    * crea una sub respuesta a un segmento especifico
    * @param e 
    */
-  anadirSubRespuestaSegmento(e) {
-    this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: e, segmento: '' });
+  anadirSubRespuestaSegmento(e, pos) {
+    this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: pos, segmento: '' });
 
-    /*for(let i of this.subrespuestas_segmentos){
-      if(i.pos_segmento == e){
-        this.array_mostrar.push(i);
-      }
-    }*/
+    if (e.idtbl_segmento) {
+      this.array_mostrar[this.array_mostrar.length - 1].segmento = e.idtbl_segmento;
+    }
 
+    console.log(this.array_mostrar);
   }
 
   /**
