@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { HistorialChatService } from '../../providers/historial-chat.service';
 import { Conversacion } from '../../../schemas/conversacion.schema';
@@ -13,6 +13,7 @@ import swal from 'sweetalert2';
 import { Configuracion, AudioControls } from '../../../schemas/interfaces';
 import { FormControl } from '@angular/forms';
 import { CerrarChatExpertoComponent } from '../../components/cerrar-chat-experto/cerrar-chat-experto.component';
+import { UtilsService } from '../../providers/utils.service';
 
 const moment = _rollupMoment || _moment;
 declare var StereoAudioRecorder: any;
@@ -42,10 +43,11 @@ export class DialogoDetalleChatComponent implements OnInit {
   is_recording = false;
   is_closed = false;
   is_user;
+  @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
   
   constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
               private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef, 
-              private dialog: MatDialog) {
+              private dialog: MatDialog, private utilService: UtilsService) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -161,7 +163,7 @@ export class DialogoDetalleChatComponent implements OnInit {
    * @param text 
    */
   decodeText(text) {
-    if (text != 'undefined') {
+    if (text != 'undefined' && text != '') {
       return decodeURI(text);
     }
   }
@@ -382,6 +384,7 @@ export class DialogoDetalleChatComponent implements OnInit {
       c.texto_mensaje = '';
       c.texto_mensaje += evento.emoji.native;
     }
+    this.escribir_mensaje.nativeElement.focus();
     //c.mostrar_emojis = false;
   }
 
@@ -392,7 +395,11 @@ export class DialogoDetalleChatComponent implements OnInit {
    */
   grabarNotaVoz(c: Conversacion, comp: PerfectScrollbarComponent) {
 
-    let minutos = parseInt(this.buscarConfiguracion(7).valor);
+    c.iniciando_grabacion = true;
+    let minutos;
+
+    minutos = parseInt(this.utilService.buscarConfiguracion('cantidad_tiempo_maximo_nota_voz').valor);
+
     let tiempo = minutos * 60;
     const options = { mimeType: 'audio/webm' };
     let detenido = false;
@@ -407,14 +414,22 @@ export class DialogoDetalleChatComponent implements OnInit {
           numberOfAudioChannels: 1,
           disableLogs: true
         });
-
-        this.startTimer(tiempo, c).then(() => {
+        this.startTimer(tiempo, c, comp).then(() => {
           c.mediaRecorder.stop(audioBlob => {
             this.onStopRecordingNotaVoz(audioBlob, c, comp);
 
           });
-        });
+          this.startTimer(tiempo, c, comp).then(() => {
+            c.mediaRecorder.stop(audioBlob => {
+              this.onStopRecordingNotaVoz(audioBlob, c, comp);
 
+            });
+          });
+
+        }).catch(() => {
+          c.iniciando_grabacion = false;
+          swal.fire('Alerta', 'No se pudo acivar el micrófono, por favor habilítalo en la parte superior junto a la URL', 'error');
+        });
       });
   }
 
@@ -433,12 +448,12 @@ export class DialogoDetalleChatComponent implements OnInit {
    * @param duration 
    * @param c 
    */
-  startTimer(duration: number, c: Conversacion): Promise<any> {
+  startTimer(duration: number, c: Conversacion, comp: PerfectScrollbarComponent): Promise<any> {
 
     var timer: number = duration;
     let minutes;
     let seconds;
-
+    c.inicia_grabacion = new Date();
 
     return new Promise((resolve, reject) => {
 
@@ -450,7 +465,7 @@ export class DialogoDetalleChatComponent implements OnInit {
       c.cuenta_regresiva = minutes + ":" + seconds;
       c.mediaRecorder.record();
       c.grabando_nota = true;
-      c.inicia_grabacion = new Date();
+
       this.chatService.usuarioEscribiendoConversacion(c, 2);
       c.interval_grabando = setInterval(() => {
         timer -= 1;
@@ -460,15 +475,14 @@ export class DialogoDetalleChatComponent implements OnInit {
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        c.cuenta_regresiva = minutes + ":" + seconds;
-
-
-
         if (timer <= 0) {
-          window.clearInterval(c.interval_grabando);
-          resolve();
+          c.cuenta_regresiva = minutes + ":" + seconds;
+          this.enviarNota(c, comp);
+        } else {
+          c.cuenta_regresiva = minutes + ":" + seconds;
+          this.chatService.usuarioEscribiendoConversacion(c, 2);
         }
-        this.chatService.usuarioEscribiendoConversacion(c, 2);
+
       }, 1000);
     });
 
@@ -481,10 +495,9 @@ export class DialogoDetalleChatComponent implements OnInit {
    * @param comp 
    */
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-
+    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
-    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
     this.adjuntarNotaVoz(c, voice_file, duration, comp);
     this.stream.getTracks().forEach(track => track.stop());
 
@@ -501,6 +514,7 @@ export class DialogoDetalleChatComponent implements OnInit {
 
     c.cargando_archivo = true;
     c.grabando_nota = false;
+    c.iniciando_grabacion = false;
     this.chatService.adjuntarArchivosServidor(file, true).then(archivo => {
       this.chatService.usuarioDejaEscribir(c, this.user.getId());
       this.enviarMensaje(c, 3, archivo.url, null, comp, duration);
@@ -527,6 +541,7 @@ export class DialogoDetalleChatComponent implements OnInit {
    */
   quitarNotaVoz(c: Conversacion) {
     delete c.grabando_nota;
+    delete c.iniciando_grabacion;
     c.mediaRecorder.stop();
     window.clearInterval(c.interval_grabando);
     this.stream.getTracks().forEach(track => track.stop());
