@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ViewChildren, QueryList, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
 import { UserService } from '../../providers/user.service';
 import { Conversacion } from '../../../schemas/conversacion.schema';
 import { AjaxService } from '../../providers/ajax.service';
@@ -46,6 +46,8 @@ export class ChatClienteComponent implements OnInit {
   file_url;
   loading = false;
   observable_chats;
+  @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
+
   constructor(private userService: UserService, private ajax: AjaxService, private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef, private chatService: ChatService, private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService) {
     this.user = this.userService.getUsuario();
     this.urlAdjuntos = this.ajax.host + 'chat/adjuntarArchivo';
@@ -857,6 +859,7 @@ export class ChatClienteComponent implements OnInit {
       c.texto_mensaje = '';
       c.texto_mensaje += evento.emoji.native;
     }
+    this.escribir_mensaje.nativeElement.focus();
     //c.mostrar_emojis = false;
   }
 

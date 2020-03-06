@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild, ModuleWithComponentFactories, NgZone, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, ModuleWithComponentFactories, NgZone, Input, Output, EventEmitter, OnInit, ViewChildren, ElementRef } from '@angular/core';
 import { UserService } from '../providers/user.service';
 import { ChatService } from '../providers/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -74,6 +74,8 @@ export class ChatExpertoComponent implements OnInit {
   listeners_conversaciones = [];
   chats_listener;
   listener_cola = [];
+  
+  @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
 
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
@@ -864,6 +866,7 @@ export class ChatExpertoComponent implements OnInit {
       c.texto_mensaje = '';
       c.texto_mensaje += evento.emoji.native;
     }
+    this.escribir_mensaje.nativeElement.focus();
     //c.mostrar_emojis = false;
   }
 

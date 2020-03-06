@@ -184,7 +184,7 @@
                       <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                         <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                       </button>
-                      <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
+                      <textarea #escribirMensaje autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
                         (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
                         (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
                         [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"

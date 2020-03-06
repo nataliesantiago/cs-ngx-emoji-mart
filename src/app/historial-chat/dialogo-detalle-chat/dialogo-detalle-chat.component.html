@@ -88,7 +88,7 @@
                               [ngClass]="{'odd': message.id_usuario_envia!==chat.idtbl_usuario,'even': message.id_usuario_envia===chat.idtbl_usuario || message.id_usuario===chat.idtbl_usuario}">
           
           <div class="chat-block" [ngClass]="{'encontrado':message.encontrado && chat.buscando_texto}">
-            <div *ngIf="!message.es_archivo || !message.es_nota_voz"
+            <div *ngIf="(!message.es_archivo || !message.es_nota_voz) && message.texto != '' && message.texto != 'undefined'"
               [innerHTML]="decodeText(message.texto) | linkify | replaceEmojisMensaje:'google' | safe:'html'"> </div>
             <div class="contendor-archivo" *ngIf="message.es_archivo || message.es_nota_voz">
               <div *ngIf="message.es_archivo">
@@ -110,7 +110,7 @@
                     <mat-icon *ngIf="message.audioControls.reproduciendo">pause</mat-icon>
                   </button>
                   <mat-slider [max]="message.audioControls.max" [min]="message.audioControls.min" [step]="1"
-                    [(ngModel)]="message.audioControls.segundo" (change)="cambiarSegundoAudio(m)">
+                    [(ngModel)]="message.audioControls.segundo" (change)="cambiarSegundoAudio(message)">
                   </mat-slider>
                   <div class="tiempo-audio"><span>{{message.audioControls.segundo | minuteSeconds}}</span>
 
@@ -154,6 +154,7 @@
           </button>
         </div>
       </div>
+      
       <div *ngIf="chat.grabando_nota" class="ventana-grabacion-nota">
         <div class="contenedor-adjunto">
           <div class="boton-cerrar">
@@ -161,16 +162,15 @@
               <mat-icon>close</mat-icon>
             </button>
           </div>
-          <button mat-icon-button color="basic" class="boton-mic">
+          <button mat-icon-button color="basic" class="boton-mic" (click)="enviarNota(chat,este)" title="Enviar Nota">
             <mat-icon>mic</mat-icon>
           </button>
           <div class="cuenta-regresiva">
             <div>{{chat.cuenta_regresiva}}</div>
             <div>
-              <button mat-icon-button color="basic" class="boton-enviar"
-                (click)="enviarNota(chat,este)">
+              <!--<button mat-icon-button color="basic" class="boton-enviar" (click)="enviarNota(chat,este)">
                 <mat-icon>send</mat-icon>
-              </button>
+              </button>-->
             </div>
           </div>
         </div>
@@ -187,7 +187,7 @@
           <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
             <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
           </button>
-          <textarea autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
+          <textarea #escribirMensaje autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
           (keydown.enter)="enviarMensaje(chat,1,null,$event,este)"
           (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
           [(ngModel)]="chat.texto_mensaje" (focus)="setFocus(chat,true)"
