@@ -279,13 +279,21 @@ export class UserService {
 
 
     actualizarTodo() {
-        /*this.actualizarMensajesNLP().then(() => {
+        this.actualizarMensajesNLP().then(() => {
             this.actualizarNotificaciones().then(r => {
+                console.log(this.cant_mensajes_actuales);
+                console.log(this.cant_notificaciones_sin_leer);
+                console.log(this.cant_mensajes_actuales < this.respuesta_nlp[1] || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer);
+                console.log(this.respuesta_nlp[1]);
+                console.log(this.notificaciones_sin_leer);
                 if (this.cant_mensajes_actuales < this.respuesta_nlp[1] || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
                     if (!this.primera_vez_notificacion && this.suena_notificacion) {
+                        console.log("Entra a esto");
                         this.soundService.sonar(4);
                     }else if(this.cant_mensajes_actuales < this.respuesta_nlp[1]){
-                        this.soundService.sonar(4);
+                        if(this.user.getIdRol() == 3){
+                            this.soundService.sonar(4);
+                        }
                     }
                 }
                 this.cant_mensajes_actuales = this.respuesta_nlp[1];
@@ -294,10 +302,12 @@ export class UserService {
                 this.primera_vez_notificacion = false;
                 this.subjectNotificaciones.next(1);
             });
-        });*/
-        this.actualizarMensajesNLP().then(() => {
+        });
+        /*this.actualizarMensajesNLP().then(() => {
             this.actualizarNotificaciones().then(r => {
                 if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
+                    console.log(this.primera_vez_notificacion);
+                    console.log(this.suena_notificacion);
                     if (!this.primera_vez_notificacion && this.suena_notificacion) {
                         this.soundService.sonar(4);
                     } else if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length) {
@@ -310,7 +320,7 @@ export class UserService {
                 this.primera_vez_notificacion = false;
                 this.subjectNotificaciones.next(1);
             });
-        });
+        });*/
     }
 
 
