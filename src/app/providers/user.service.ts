@@ -192,9 +192,11 @@ export class UserService {
             this.ajax.get('user/experto/getFilas', { id_usuario: this.user.getId() }).subscribe((d: xhrFilasExperto) => {
                 if (d.success) {
                     this.user.filas = d.filas;
+                    this.user.filas_ids = [];
                     this.user.filas.forEach(f => {
-                        let r = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).ref;
-                        this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/expertos').doc('' + this.user.getId()).set({ experto: r });
+                        this.user.filas_ids.push(f.id_categoria_experticia);
+                        //let r = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).ref;
+                        // this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/expertos').doc('' + this.user.getId()).set({ experto: r });
                     });
                     resolve();
                 } else {
@@ -304,7 +306,7 @@ export class UserService {
                     console.log(this.suena_notificacion);
                     if (!this.primera_vez_notificacion && this.suena_notificacion) {
                         this.soundService.sonar(4);
-                    }else if(this.cant_mensajes_actuales < this.respuesta_nlp[1].length){
+                    } else if (this.cant_mensajes_actuales < this.respuesta_nlp[1].length) {
                         this.soundService.sonar(4);
                     }
                 }

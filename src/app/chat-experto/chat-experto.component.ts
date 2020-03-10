@@ -74,7 +74,7 @@ export class ChatExpertoComponent implements OnInit {
   listeners_conversaciones = [];
   chats_listener;
   listener_cola = [];
-  
+  listener_fila;
   @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
 
   constructor(private userService: UserService, private chatService: ChatService,
@@ -132,6 +132,56 @@ export class ChatExpertoComponent implements OnInit {
         this.userService.getFilasExperto().then(() => {
           this.userService.setActivoExpertoGlobal(1);
           this.insertarLogEstadoExperto();
+          let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).valueChanges();
+          this.listener_fila = cola.pipe(debounceTime(1000)).subscribe(async chaters => {
+            let tmp = [];
+            this.chats_cola.forEach((c: Conversacion) => {
+              if (c.interval_tiempo_cola) {
+                window.clearInterval(c.interval_tiempo_cola);
+              }
+            });
+            if (chaters.length < 1) {
+              this.fila_chats = [];
+            }
+            chaters = chaters.filter((c: Conversacion) => {
+              let pasa = false;
+              if (c.categorias_ids) {
+                c.categorias_ids.forEach(cate => {
+                  if (this.user.filas_ids.indexOf(cate) != (-1)) {
+                    pasa = true;
+                  }
+                })
+              }
+              return pasa;
+            });
+            chaters.forEach(async (c: Conversacion, index) => {
+              c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
+              tmp.push(c);
+              this.utilService.getConfiguraciones().then(configs => {
+                let tiempo_cola = configs.find((c: Configuracion) => {
+                  return c.idtbl_configuracion == 6;
+                });
+                c.interval_tiempo_cola = setInterval(() => {
+                  let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
+                  if (duration > (tiempo_cola.valor * 60)) {
+                    c.tiempo_cola = true;
+                    window.clearInterval(c.interval_tiempo_cola);
+                    delete c.interval_tiempo_cola;
+                  }
+                }, 1000);
+              });
+
+              if (index == chaters.length - 1) {
+                this.fila_chats = tmp;
+                // console.log(this.user);
+                if (this.user.estado_actual == 1) {
+                  this.recibirChatAutomatico();
+                }
+              }
+            })
+
+          });
+          /*
           this.user.filas.forEach(f => {
             let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
             //this.chats_cola.push(fila)
@@ -139,7 +189,7 @@ export class ChatExpertoComponent implements OnInit {
             this.listener_cola.push(cola.pipe(debounceTime(1000)).subscribe(chats => {
               // console.log(chats);
               let tmp = [];
-
+ 
               if (chats.length < 1) {
                 if (fila.listener_conversacion) {
                   fila.listener_conversacion.unsubscribe();
@@ -176,7 +226,7 @@ export class ChatExpertoComponent implements OnInit {
                           }
                         }, 1000);
                       });
-
+ 
                       if (index == chats.length - 1) {
                         if (f.chats)
                           f.chats.forEach((c: Conversacion) => {
@@ -185,13 +235,13 @@ export class ChatExpertoComponent implements OnInit {
                             }
                           });
                         fila.chats = tmp;
-
+ 
                         this.procesaFilas(fila);
                         // console.log(this.user);
                         if (this.user.estado_actual == 1) {
                           this.recibirChatAutomatico();
                         }
-
+ 
                       }
                     }
                   });
@@ -199,6 +249,10 @@ export class ChatExpertoComponent implements OnInit {
               }
             }));
           });
+ 
+          */
+
+
           let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
           chats.pipe(debounceTime(1000)).subscribe(chaters => {
 
@@ -351,11 +405,11 @@ export class ChatExpertoComponent implements OnInit {
           return c.id_estado_conversacion == 2;
         });
         if (parseInt(config.valor) > conversaciones.length) {
-          let chats = [];
-          this.chats_cola.forEach(f => {
+          let chats = this.fila_chats;
+          /*this.chats_cola.forEach(f => {
             chats = chats.concat(f.chats);
           });
-
+          */
           chats.sort((a, b) => {
             if (a.peso_chat > b.peso_chat) {
               return 1;
@@ -396,6 +450,9 @@ export class ChatExpertoComponent implements OnInit {
       if (lc)
         lc.unsubscribe();
     });
+    if (this.listener_fila) {
+      this.listener_fila.unsubscribe();
+    }
 
   }
 
@@ -837,6 +894,8 @@ export class ChatExpertoComponent implements OnInit {
       this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ chat_tomado: c.chat_tomado }).then(() => {
         this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
         });
+      }).catch(e => {
+        console.log('la concha');
       });
     }
   }
