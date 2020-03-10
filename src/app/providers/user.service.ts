@@ -279,11 +279,7 @@ export class UserService {
     actualizarTodo() {
         this.actualizarMensajesNLP().then(() => {
             this.actualizarNotificaciones().then(r => {
-                console.log(this.cant_mensajes_actuales);
-                console.log(this.cant_notificaciones_sin_leer);
-                console.log(this.cant_mensajes_actuales < this.respuesta_nlp[1] || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer);
-                console.log(this.respuesta_nlp[1]);
-                console.log(this.notificaciones_sin_leer);
+            
                 if (this.cant_mensajes_actuales < this.respuesta_nlp[1] || this.cant_notificaciones_sin_leer < this.notificaciones_sin_leer) {
                     if (!this.primera_vez_notificacion && this.suena_notificacion) {
                         console.log("Entra a esto");
