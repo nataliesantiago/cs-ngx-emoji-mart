@@ -132,10 +132,11 @@ export class ChatExpertoComponent implements OnInit {
         this.userService.getFilasExperto().then(() => {
           this.userService.setActivoExpertoGlobal(1);
           this.insertarLogEstadoExperto();
-          let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).valueChanges();
+          let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).snapshotChanges();
           this.listener_fila = cola.pipe(debounceTime(1000)).subscribe(async chaters => {
             let tmp = [];
-            this.chats_cola.forEach((c: Conversacion) => {
+            console.log('ll');
+            this.fila_chats.forEach((c: Conversacion) => {
               if (c.interval_tiempo_cola) {
                 window.clearInterval(c.interval_tiempo_cola);
               }
@@ -143,7 +144,8 @@ export class ChatExpertoComponent implements OnInit {
             if (chaters.length < 1) {
               this.fila_chats = [];
             }
-            chaters = chaters.filter((c: Conversacion) => {
+            chaters = chaters.filter((d) => {
+              let c = d.payload.doc.data() as Conversacion;
               let pasa = false;
               if (c.categorias_ids) {
                 c.categorias_ids.forEach(cate => {
@@ -154,7 +156,8 @@ export class ChatExpertoComponent implements OnInit {
               }
               return pasa;
             });
-            chaters.forEach(async (c: Conversacion, index) => {
+            chaters.forEach(async (d, index) => {
+              let c = d.payload.doc.data() as Conversacion;
               c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
               tmp.push(c);
               this.utilService.getConfiguraciones().then(configs => {
