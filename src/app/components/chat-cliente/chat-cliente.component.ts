@@ -609,9 +609,12 @@ export class ChatClienteComponent implements OnInit {
             c.asesor_actual.nombre = c.nombre_experto_actual;
           });
         } else {
+          let filas = [];
           c.filas.forEach((ce, index) => {
-            this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+            //this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
+            filas.push(ce.id);
           });
+          this.fireStore.doc('paises/' + this.user.pais + '/conversaciones/' + c.codigo).update({ categorias_ids: filas });
         }
       }
     });
