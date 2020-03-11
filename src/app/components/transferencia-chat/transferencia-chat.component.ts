@@ -38,6 +38,8 @@ export class TransferenciaChatComponent implements OnInit {
   filteredOptions;
   expertOptions;
   asginado = false;
+  transfiriendo = false;
+
   constructor(private dialogRef: MatDialogRef<TransferenciaChatComponent>, private chatService: ChatService, private userService: UserService, private fireStore: AngularFirestore, @Inject(MAT_DIALOG_DATA) private data: TransferenciaData, private utilsService: UtilsService) {
     this.user = this.userService.getUsuario();
     
@@ -82,6 +84,7 @@ export class TransferenciaChatComponent implements OnInit {
   transferirChat() {
     let id: number;
     delete this.error_transferencia;
+    this.transfiriendo = true;
     if (this.tipo == 1) {
       id = this.categoria.idtbl_categoria_experticia;
     } else {
@@ -95,6 +98,7 @@ export class TransferenciaChatComponent implements OnInit {
     this.chatService.transferirChat(this.data.conversacion, id, this.tipo).then(() => {
       this.dialogRef.close({ success: true });
     }, () => {
+      this.transfiriendo = false;
       this.error_transferencia = 'Error realizando la transferencia, por favor intente más tarde';
     })
 
