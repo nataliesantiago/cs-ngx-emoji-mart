@@ -133,7 +133,7 @@ export class ChatExpertoComponent implements OnInit {
           this.userService.setActivoExpertoGlobal(1);
           this.insertarLogEstadoExperto();
           let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).snapshotChanges();
-          this.listener_fila = cola.pipe(debounceTime(1000)).subscribe(async chaters => {
+          this.listener_fila = cola./*pipe(debounceTime(1000)).*/subscribe(async chaters => {
             let tmp = [];
             console.log('ll');
             this.fila_chats.forEach((c: Conversacion) => {
@@ -184,81 +184,15 @@ export class ChatExpertoComponent implements OnInit {
             })
 
           });
-          /*
-          this.user.filas.forEach(f => {
-            let fila = { chats: null, id: f.id_categoria_experticia, listener_conversacion: null };
-            //this.chats_cola.push(fila)
-            let cola = this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + f.id_categoria_experticia + '/chats').snapshotChanges();
-            this.listener_cola.push(cola.pipe(debounceTime(1000)).subscribe(chats => {
-              // console.log(chats);
-              let tmp = [];
- 
-              if (chats.length < 1) {
-                if (fila.listener_conversacion) {
-                  fila.listener_conversacion.unsubscribe();
-                }
-                if (f.chats)
-                  f.chats.forEach((c: Conversacion) => {
-                    if (c.interval_tiempo_cola) {
-                      window.clearInterval(c.interval_tiempo_cola);
-                    }
-                  });
-                fila.chats = [];
-                this.procesaFilas(fila);
-              } else {
-                // console.log('por aca paso')
-                this.soundService.sonar(2);
-                chats.forEach((c: any, index) => {
-                  let refConversacion = c.payload.doc.id;
-                  this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + refConversacion).then(async datos => {
-                    let c: Conversacion = datos;
-                    if (c) {
-                      c.codigo = refConversacion;
-                      c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
-                      tmp.push(c);
-                      this.utilService.getConfiguraciones().then(configs => {
-                        let tiempo_cola = configs.find((c: Configuracion) => {
-                          return c.idtbl_configuracion == 6;
-                        });
-                        c.interval_tiempo_cola = setInterval(() => {
-                          let duration = moment().diff(moment(c.fecha_creacion), 'seconds');
-                          if (duration > (tiempo_cola.valor * 60)) {
-                            c.tiempo_cola = true;
-                            window.clearInterval(c.interval_tiempo_cola);
-                            delete c.interval_tiempo_cola;
-                          }
-                        }, 1000);
-                      });
- 
-                      if (index == chats.length - 1) {
-                        if (f.chats)
-                          f.chats.forEach((c: Conversacion) => {
-                            if (c.interval_tiempo_cola) {
-                              window.clearInterval(c.interval_tiempo_cola);
-                            }
-                          });
-                        fila.chats = tmp;
- 
-                        this.procesaFilas(fila);
-                        // console.log(this.user);
-                        if (this.user.estado_actual == 1) {
-                          this.recibirChatAutomatico();
-                        }
- 
-                      }
-                    }
-                  });
-                });
-              }
-            }));
-          });
- 
-          */
+
 
 
           let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
-          chats.pipe(debounceTime(1000)).subscribe(chaters => {
-
+          chats./*pipe(debounceTime(1000)).*/subscribe(chaters => {
+            this.chats_experto.forEach((c: Conversacion) => {
+              c.listener_mensajes.unsubscribe();
+              c.listener_conversacion.unsubscribe();
+            });
             this.chatService.getConversacionesExperto().then(chat => {
               // console.log('chats', chat);
               if (!chat) {
@@ -267,10 +201,7 @@ export class ChatExpertoComponent implements OnInit {
               }
               let temporal: Array<Conversacion> = [];
 
-              this.chats_experto.forEach((c: Conversacion) => {
-                c.listener_mensajes.unsubscribe();
-                c.listener_conversacion.unsubscribe();
-              });
+
 
               if (chat.length > 0) {
                 this.soundService.sonar(2);
