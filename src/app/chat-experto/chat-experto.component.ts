@@ -1055,8 +1055,7 @@ export class ChatExpertoComponent implements OnInit {
 
   startTimer(duration: number, c: Conversacion, comp: PerfectScrollbarComponent): Promise<any> {
 
-    // var timer: number = duration;
-    var timer: number = 10;
+    var timer: number = duration;
     let minutes;
     let seconds;
     c.inicia_grabacion = moment().valueOf();
