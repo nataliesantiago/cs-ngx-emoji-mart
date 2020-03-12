@@ -361,7 +361,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           })
 
         } else {
-          console.log('pregunta editada', this.pregunta);
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
               // console.log(enviar_correo);
@@ -408,7 +407,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             this.pregunta.id_usuario_revision = this.id_usuario;
           }
         }
-        console.log('pregunta nueva', this.pregunta);
         this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.chatService.sugerencia_activa = false;
@@ -490,7 +488,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             for (let i = 0; i < this.array_mostrar.length; i++) {
               this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
             }
-            console.log('pregunta editada', this.pregunta);
             this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
               if (d.success) {
 
@@ -522,7 +519,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             for (let i = 0; i < this.array_mostrar.length; i++) {
               this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
             }
-            console.log('pregunta editada', this.pregunta);
             this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
               if (d.success) {
 
@@ -557,7 +553,6 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           for (let i = 0; i < this.array_mostrar.length; i++) {
             this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
           }
-          console.log('pregunta editada', this.pregunta);
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
 
