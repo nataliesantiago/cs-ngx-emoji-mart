@@ -65,6 +65,7 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="transferirChat()"
-    [disabled]="!tipo || (tipo==1 && !categoria) || (tipo==2 && !experto)">Ok</button>
+    [disabled]="!tipo || (tipo==1 && !categoria) || (tipo==2 && !experto)" *ngIf="!transfiriendo">Ok</button>
+  <mat-progress-spinner color="basic" [mode]="'indeterminate'" [diameter]="36" *ngIf="transfiriendo"></mat-progress-spinner>
   <button mat-button (click)="onNoClick()">Cancelar</button>
 </div>
