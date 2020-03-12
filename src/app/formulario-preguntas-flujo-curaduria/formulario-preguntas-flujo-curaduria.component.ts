@@ -6,7 +6,7 @@ import { RouterModule, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { map, startWith, debounceTime, switchMap } from 'rxjs/operators';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatChipInputEvent } from '@angular/material';
 import swal from 'sweetalert2';
 import { QuillService } from '../providers/quill.service';
 import * as _moment from 'moment-timezone';
@@ -18,6 +18,7 @@ import { Location } from '@angular/common';
 import { SearchService } from '../providers/search.service';
 import { ResultadoCloudSearch } from '../../schemas/interfaces';
 import { environment } from '../../environments/environment';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-formulario-preguntas-flujo-curaduria',
@@ -27,7 +28,7 @@ import { environment } from '../../environments/environment';
 export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
 
   productos = [];
-  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 1, id_estado_flujo: 2, muestra_fecha_actualizacion: 0, id_usuario_revision: null };
+  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: 1, id_estado_flujo: 2, muestra_fecha_actualizacion: 0, id_usuario_revision: null, keywords: [] };
   segmentos = [];
   subrespuestas = [];
   subrespuestas_segmentos = [];
@@ -72,6 +73,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
   rol_usuario;
   nombre_boton = "Aprobar";
   ambiente = environment.ambiente;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes = [ENTER, COMMA];
+  addOnBlur = true;
+  keywords = [];
 
   constructor(private ajax: AjaxService, private user: UserService, private route: ActivatedRoute, private router: Router, private cg: ChangeDetectorRef,
     private qs: QuillService, private utilsService: UtilsService, private chatService: ChatService, private location: Location, private searchService: SearchService) {
@@ -202,6 +208,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               if (p.success) {
 
                 this.pregunta = p.pregunta[0];
+                this.pregunta.keywords = p.pregunta[0].keywords.split(',');
                 this.validar_flujo = p.pregunta[0].id_usuario_revision;
                 if (p.pregunta[0].id_estado_flujo == 4) {
                   this.nombre_boton = "Guardar";
@@ -305,7 +312,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       })
 
     } else {
-
+      
       if (this.editar) {
 
         if (this.pregunta.muestra_fecha_actualizacion) {
@@ -354,7 +361,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           })
 
         } else {
-
+          console.log('pregunta editada', this.pregunta);
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
               // console.log(enviar_correo);
@@ -401,7 +408,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             this.pregunta.id_usuario_revision = this.id_usuario;
           }
         }
-
+        console.log('pregunta nueva', this.pregunta);
         this.ajax.post('preguntas/guardar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.chatService.sugerencia_activa = false;
@@ -483,6 +490,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             for (let i = 0; i < this.array_mostrar.length; i++) {
               this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
             }
+            console.log('pregunta editada', this.pregunta);
             this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
               if (d.success) {
 
@@ -514,6 +522,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
             for (let i = 0; i < this.array_mostrar.length; i++) {
               this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
             }
+            console.log('pregunta editada', this.pregunta);
             this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
               if (d.success) {
 
@@ -548,6 +557,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           for (let i = 0; i < this.array_mostrar.length; i++) {
             this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
           }
+          console.log('pregunta editada', this.pregunta);
           this.ajax.post('preguntas/editar-curaduria', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, notas: this.notas, cargos_asociados: this.cargos_asociados }).subscribe(d => {
             if (d.success) {
 
@@ -994,6 +1004,24 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     } else {
       this.location.back();
 
+    }
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    if ((value || '').trim()) {
+      this.pregunta.keywords.push(value.trim());
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  remove(keyword: any): void {
+    const index = this.pregunta.keywords.indexOf(keyword);
+    if (index >= 0) {
+      this.pregunta.keywords.splice(index, 1);
     }
   }
 

@@ -6,13 +6,14 @@ import { RouterModule, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { map, startWith, debounce, switchMap, debounceTime } from 'rxjs/operators';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatChipInputEvent } from '@angular/material';
 import swal from 'sweetalert2';
 import { QuillEditorComponent } from 'ngx-quill';
 import { QuillService } from '../providers/quill.service';
 import { UtilsService } from '../providers/utils.service';
 import { SearchService } from '../providers/search.service';
 import { ResultadoCloudSearch } from '../../schemas/interfaces';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-formulario-preguntas',
@@ -22,7 +23,7 @@ import { ResultadoCloudSearch } from '../../schemas/interfaces';
 export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   productos = [];
-  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 4, muestra_fecha_actualizacion: 0 };
+  pregunta = { titulo: '', respuesta: '', id_producto: '', id_usuario: '', id_usuario_ultima_modificacion: '', id_estado: '', id_estado_flujo: 4, muestra_fecha_actualizacion: 0, keywords: [] };
   segmentos = [];
   subrespuestas = [];
   subrespuestas_segmentos = [];
@@ -63,6 +64,11 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   buscador = false;
   estado_flujo_pregunta = [];
   loading = false;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes = [ENTER, COMMA];
+  addOnBlur = true;
+  keywords = [];
 
   @ViewChildren(QuillEditorComponent) editores?: QueryList<QuillEditorComponent>;
 
@@ -213,6 +219,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
             if (p.success) {
 
               this.pregunta = p.pregunta[0];
+              this.pregunta.keywords = p.pregunta[0].keywords.split(',');
               this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
               this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sr => {
                 if (sr.success) {
@@ -742,6 +749,24 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource2.filter = filterValue;
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    if ((value || '').trim()) {
+      this.pregunta.keywords.push(value.trim());
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  remove(keyword: any): void {
+    const index = this.pregunta.keywords.indexOf(keyword);
+    if (index >= 0) {
+      this.pregunta.keywords.splice(index, 1);
+    }
   }
 
 }
