@@ -44,10 +44,10 @@ export class DialogoDetalleChatComponent implements OnInit {
   is_closed = false;
   is_user;
   @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
-  
-  constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any, 
-              private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef, 
-              private dialog: MatDialog, private utilService: UtilsService) {
+
+  constructor(public dialogRef: MatDialogRef<DialogoDetalleChatComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
+    private historial_service: HistorialChatService, private chatService: ChatService, private userService: UserService, private changeRef: ChangeDetectorRef,
+    private dialog: MatDialog, private utilService: UtilsService) {
 
     this.user = this.userService.getUsuario();
     if (this.user) {
@@ -65,7 +65,7 @@ export class DialogoDetalleChatComponent implements OnInit {
     this.chat = data;
     this.is_user = data.user_chat;
     this.chats.push(this.chat);
-    
+
     this.getMessages();
     this.getRecordingUrl();
   }
@@ -96,7 +96,7 @@ export class DialogoDetalleChatComponent implements OnInit {
         this.extensiones_archivos.push(e.extension);
       });
     });
-    
+
   }
 
   /**
@@ -125,7 +125,7 @@ export class DialogoDetalleChatComponent implements OnInit {
       this.chat.mensajes.forEach(element => {
         element.mensaje_antiguo = true;
         if (element.es_nota_voz == 1) {
-          element.audioControls = {reproduciendo: false, min: 0};
+          element.audioControls = { reproduciendo: false, min: 0 };
           this.asignarAudio(element)
         }
       });
@@ -141,19 +141,19 @@ export class DialogoDetalleChatComponent implements OnInit {
   validateMessages(mensajes, index, mensaje_anterior?) {
     let m = mensajes[index];
     if (m) {
-        m.muestra_hora = true;
-        index++;
-        if (mensaje_anterior && m.id_usuario_envia == mensaje_anterior.id_usuario_envia) {
-          let fecha_anterior = moment(mensaje_anterior.fecha_envio);
-          let fecha_actual = moment(m.fecha_envio);
-          let diff = fecha_anterior.diff(fecha_actual, 'minutes');
-          
-          if (diff == 0) {
-            mensaje_anterior.muestra_hora = false;
-            delete mensaje_anterior.url_imagen_gsuite;
-          }
+      m.muestra_hora = true;
+      index++;
+      if (mensaje_anterior && m.id_usuario_envia == mensaje_anterior.id_usuario_envia) {
+        let fecha_anterior = moment(mensaje_anterior.fecha_envio);
+        let fecha_actual = moment(m.fecha_envio);
+        let diff = fecha_anterior.diff(fecha_actual, 'minutes');
+
+        if (diff == 0) {
+          mensaje_anterior.muestra_hora = false;
+          delete mensaje_anterior.url_imagen_gsuite;
         }
-        this.validateMessages(mensajes, index, m);
+      }
+      this.validateMessages(mensajes, index, m);
     }
     return mensajes;
   }
@@ -313,7 +313,7 @@ export class DialogoDetalleChatComponent implements OnInit {
     m.audio.load();
     m.audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
-      let d = Math.floor(target.duration);
+      let d = Math.round(target.duration);
       if (d > 0) {
         m.audioControls.max = d;
         m.audioControls.segundo = d;
@@ -598,7 +598,7 @@ export class DialogoDetalleChatComponent implements OnInit {
           c.cant_coincidencias = 0;
           c.mensajes.forEach((m: Mensaje) => {
             if (m.texto.toLowerCase().indexOf(value.toLowerCase()) != -1) {
-              
+
               m.encontrado = true;
               c.cant_coincidencias++;
             } else {
@@ -626,7 +626,7 @@ export class DialogoDetalleChatComponent implements OnInit {
         this.chatService.cerrarConversacion(c, 3, d.motivo).then(() => {
           c.mostrar_encuesta = true;
           c.mostrar_descarga_chat = true;
-          this.chatService.eliminarRecordatorioPendiente(c.idtbl_conversacion).then(() => {});
+          this.chatService.eliminarRecordatorioPendiente(c.idtbl_conversacion).then(() => { });
           this.is_closed = true;
           this.chatService.obtenerEncuestaExperto().then((d: any) => {
             if (d.encuesta.length != 0) {
@@ -634,7 +634,7 @@ export class DialogoDetalleChatComponent implements OnInit {
                 this.dialogRef.disableClose = true;
               }
             } else {
-              this.dialogRef.close({closed: this.is_closed});
+              this.dialogRef.close({ closed: this.is_closed });
             }
           });
         });
@@ -653,7 +653,7 @@ export class DialogoDetalleChatComponent implements OnInit {
     if (index !== (-1)) {
       this.chats.splice(index, 1);
     }
-    this.dialogRef.close({closed: this.is_closed});
+    this.dialogRef.close({ closed: this.is_closed });
   }
 
   /**
@@ -668,12 +668,12 @@ export class DialogoDetalleChatComponent implements OnInit {
         const byteCharacters = atob(file);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'application/pdf' });
         this.file_url = URL.createObjectURL(blob);
-  
+
         let date = moment(c.fecha_creacion).format('YYYY-MM-DD');
         let hour = moment(c.fecha_creacion).format('HH:mm');
 

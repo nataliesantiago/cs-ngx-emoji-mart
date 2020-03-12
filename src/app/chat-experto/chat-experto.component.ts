@@ -135,7 +135,7 @@ export class ChatExpertoComponent implements OnInit {
           let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).snapshotChanges();
           this.listener_fila = cola./*pipe(debounceTime(1000)).*/subscribe(async chaters => {
             let tmp = [];
-            console.log('ll');
+            //console.log('ll');
             this.fila_chats.forEach((c: Conversacion) => {
               if (c.interval_tiempo_cola) {
                 window.clearInterval(c.interval_tiempo_cola);
@@ -728,7 +728,7 @@ export class ChatExpertoComponent implements OnInit {
     m.audio.load();
     m.audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
-      let d = Math.floor(target.duration);
+      let d = Math.round(target.duration);
       if (d > 0) {
         m.audioControls.max = d;
         m.audioControls.segundo = d;
@@ -1043,7 +1043,8 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-    var duration = Math.ceil(moment().unix() - c.inicia_grabacion);
+    let milli = (moment().valueOf() - c.inicia_grabacion);
+    var duration = Math.round(milli / 1000);
     this.stream.getTracks().forEach(track => track.stop());
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '_' + this.user.getId() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
@@ -1054,10 +1055,11 @@ export class ChatExpertoComponent implements OnInit {
 
   startTimer(duration: number, c: Conversacion, comp: PerfectScrollbarComponent): Promise<any> {
 
-    var timer: number = duration;
+    // var timer: number = duration;
+    var timer: number = 10;
     let minutes;
     let seconds;
-    c.inicia_grabacion = moment().unix();
+    c.inicia_grabacion = moment().valueOf();
 
     return new Promise((resolve, reject) => {
 

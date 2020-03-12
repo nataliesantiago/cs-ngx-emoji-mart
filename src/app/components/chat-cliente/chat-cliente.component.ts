@@ -341,7 +341,7 @@ export class ChatClienteComponent implements OnInit {
     m.audio.load();
     m.audio.addEventListener('durationchange', e => {
       let target = <HTMLAudioElement>e.target;
-      let d = Math.floor(target.duration);
+      let d = Math.round(target.duration);
       if (d > 0) {
         m.audioControls.max = d;
         m.audioControls.segundo = d;
@@ -779,7 +779,8 @@ export class ChatClienteComponent implements OnInit {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-    var duration = Math.ceil(moment().unix() - c.inicia_grabacion);
+    let milli = (moment().valueOf() - c.inicia_grabacion);
+    var duration = Math.round(milli / 1000);
     this.stream.getTracks().forEach(track => track.stop());
     var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '_' + this.user.getId() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
@@ -794,7 +795,7 @@ export class ChatClienteComponent implements OnInit {
     let minutes;
     let seconds;
     // // console.log(timer)
-    c.inicia_grabacion = moment().unix();
+    c.inicia_grabacion = moment().valueOf();
 
     return new Promise((resolve, reject) => {
 
