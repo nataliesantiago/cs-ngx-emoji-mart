@@ -779,9 +779,9 @@ export class ChatClienteComponent implements OnInit {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
+    var duration = Math.ceil(moment().unix() - c.inicia_grabacion);
     this.stream.getTracks().forEach(track => track.stop());
-    var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
+    var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '_' + this.user.getId() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
     this.adjuntarNotaVoz(c, voice_file, duration, comp);
 
@@ -794,6 +794,7 @@ export class ChatClienteComponent implements OnInit {
     let minutes;
     let seconds;
     // // console.log(timer)
+    c.inicia_grabacion = moment().unix();
 
     return new Promise((resolve, reject) => {
 
@@ -803,7 +804,7 @@ export class ChatClienteComponent implements OnInit {
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
       c.cuenta_regresiva = minutes + ":" + seconds;
-      c.inicia_grabacion = new Date();
+
       c.mediaRecorder.record();
       c.grabando_nota = true;
       this.chatService.usuarioEscribiendoConversacion(c, 2);

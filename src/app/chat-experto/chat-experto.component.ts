@@ -1034,12 +1034,6 @@ export class ChatExpertoComponent implements OnInit {
             this.onStopRecordingNotaVoz(audioBlob, c, comp);
 
           });
-          this.startTimer(tiempo, c, comp).then(() => {
-            c.mediaRecorder.stop(audioBlob => {
-              this.onStopRecordingNotaVoz(audioBlob, c, comp);
-
-            });
-          });
 
         }).catch(() => {
           c.iniciando_grabacion = false;
@@ -1049,11 +1043,12 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   onStopRecordingNotaVoz(audioBlob: Blob, c: Conversacion, comp: PerfectScrollbarComponent) {
-    var duration = moment().diff(moment(c.inicia_grabacion), 'seconds');
-    var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '.wav', { type: 'audio/wav' });
+    var duration = Math.ceil(moment().unix() - c.inicia_grabacion);
+    this.stream.getTracks().forEach(track => track.stop());
+    var voice_file = new File([audioBlob], 'nota_voz_' + moment().unix() + '_' + this.user.getId() + '.wav', { type: 'audio/wav' });
     delete c.mediaRecorder;
     this.adjuntarNotaVoz(c, voice_file, duration, comp);
-    this.stream.getTracks().forEach(track => track.stop());
+
 
   }
 
@@ -1062,7 +1057,7 @@ export class ChatExpertoComponent implements OnInit {
     var timer: number = duration;
     let minutes;
     let seconds;
-    c.inicia_grabacion = new Date();
+    c.inicia_grabacion = moment().unix();
 
     return new Promise((resolve, reject) => {
 

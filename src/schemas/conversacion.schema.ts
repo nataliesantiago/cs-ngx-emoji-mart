@@ -57,7 +57,7 @@ export class Conversacion {
     notas_voz: boolean;
     ultimo_mensaje: Mensaje;
     agrandado: boolean;
-    inicia_grabacion: Date;
+    inicia_grabacion: any;
     tiempo_cola: boolean;
     cantidad_mensajes_nuevos = 0;
     codigo_chat: string;

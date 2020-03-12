@@ -310,7 +310,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
             this.defo.setValue('');
           } else {
             this.defo.setValue(original_value + t.replace(value, ''));
-            this.mostrando_sugerencia = true;
+            //this.mostrando_sugerencia = true;
 
           }
 
