@@ -267,9 +267,9 @@ export class ChatService {
    * @param  {number} categoria?
    * @param  {number} id_busqueda?
    */
-  crearConversacion(categoria?: number, id_busqueda?: number) {
+  crearConversacion(categoria?: number, id_busqueda?: number, id_pregunta?: number) {
     if (this.user.id_rol != 2 && this.user.id_rol != 3) {
-      this.subjectConversacion.next({ id_producto: categoria, id_busqueda: id_busqueda });
+      this.subjectConversacion.next({ id_producto: categoria, id_busqueda: id_busqueda, id_pregunta: id_pregunta });
     }
   }
   /**

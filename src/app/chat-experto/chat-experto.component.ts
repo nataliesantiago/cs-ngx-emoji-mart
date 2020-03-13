@@ -141,9 +141,8 @@ export class ChatExpertoComponent implements OnInit {
                 window.clearInterval(c.interval_tiempo_cola);
               }
             });
-            if (chaters.length < 1) {
-              this.fila_chats = [];
-            }
+
+
             chaters = chaters.filter((d) => {
               let c = d.payload.doc.data() as Conversacion;
               let pasa = false;
@@ -156,9 +155,14 @@ export class ChatExpertoComponent implements OnInit {
               }
               return pasa;
             });
+            if (chaters.length < 1) {
+              this.fila_chats = [];
+            } else {
+              this.soundService.sonar(2);
+            }
             chaters.forEach(async (d, index) => {
               let c = d.payload.doc.data() as Conversacion;
-              c.cliente = await this.userService.getInfoUsuario(c.id_usuario_creador) as User;
+              c.cliente = await this.buscarUsuario(c.id_usuario_creador) as User;
               tmp.push(c);
               this.utilService.getConfiguraciones().then(configs => {
                 let tiempo_cola = configs.find((c: Configuracion) => {
@@ -220,7 +224,7 @@ export class ChatExpertoComponent implements OnInit {
                 this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo).then((d: Conversacion) => {
                   let c = d;
                   c.codigo = codigo;
-                  this.userService.getInfoUsuario(c.id_usuario_creador).then((d: User) => {
+                  this.buscarUsuario(c.id_usuario_creador).then((d: User) => {
                     //// // console.log(d);
                     c.cliente = d;
                     this.agregarListenerMensajes(c);
@@ -285,6 +289,23 @@ export class ChatExpertoComponent implements OnInit {
         });
       });
     })
+  }
+
+  async buscarUsuario(id_usuario: number) {
+    return new Promise((resolve, reject) => {
+      let u = this.usuarios.find((user: User) => {
+        return user.idtbl_usuario === id_usuario;
+      });
+      if (u) {
+        resolve(u);
+      } else {
+        this.userService.getInfoUsuario(id_usuario).then(u => {
+          this.usuarios.push(u);
+          resolve(u);
+        })
+      }
+    });
+
   }
 
   buscarTexto(c: Conversacion, e: KeyboardEvent, input: HTMLInputElement) {
