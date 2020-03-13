@@ -306,6 +306,21 @@
               </div>
             </div>
           </div>
+
+          <div class="keywords-container">
+            <mat-card-title>Palabras Clave</mat-card-title>
+            <mat-form-field>
+              <mat-chip-list #chipList>
+                <mat-chip *ngFor="let keyword of pregunta.keywords" [selectable]="selectable" [removable]="removable" (removed)="remove(keyword)">
+                  {{keyword}}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
+              <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)">
+            </mat-form-field>
+          </div>
+
           <br>
           <br>
           <div fxLayout="row wrap">
