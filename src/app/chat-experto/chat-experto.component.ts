@@ -75,6 +75,7 @@ export class ChatExpertoComponent implements OnInit {
   chats_listener;
   listener_cola = [];
   listener_fila;
+  listener_activos;
   @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
 
   constructor(private userService: UserService, private chatService: ChatService,
@@ -192,11 +193,11 @@ export class ChatExpertoComponent implements OnInit {
 
 
           let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
-          chats./*pipe(debounceTime(1000)).*/subscribe(chaters => {
-            this.chats_experto.forEach((c: Conversacion) => {
-              c.listener_mensajes.unsubscribe();
-              c.listener_conversacion.unsubscribe();
-            });
+          this.listener_activos = chats./*pipe(debounceTime(1000)).*/subscribe(chaters => {
+            /* this.chats_experto.forEach((c: Conversacion) => {
+               c.listener_mensajes.unsubscribe();
+               c.listener_conversacion.unsubscribe();
+             });*/
             this.chatService.getConversacionesExperto().then(chat => {
               // console.log('chats', chat);
               if (!chat) {
@@ -212,39 +213,109 @@ export class ChatExpertoComponent implements OnInit {
               }
 
               if (chat.length < 1) {
-                this.chats_experto = [];
+                // this.chats_experto = [];
 
                 if (this.chat && this.chat.id_tipo_conversacion == 1) {
 
                   delete this.chat;
                 }
               }
-              chat.forEach((change: any, index) => {
-                let codigo = change.codigo;
-                this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo).then((d: Conversacion) => {
-                  let c = d;
-                  c.codigo = codigo;
-                  this.buscarUsuario(c.id_usuario_creador).then((d: User) => {
-                    //// // console.log(d);
-                    c.cliente = d;
-                    this.agregarListenerMensajes(c);
-                    this.agregaListenerConversacion(c);
-                    temporal.push(c);
-                    if (!this.chat) {
-                      this.obligaCambio = false;
-                      this.onSelect(c);
-                    }
-                    if (index == (chat.length - 1)) {
-                      paso_por_chats = true;
-                      this.chats_experto = temporal;
-                      // this.changeRef.detectChanges();
-                    }
-                  });
-                  this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
-                    c.historial = historial;
-                  })
+
+              /*
+               Logica para mantener los objetos y nos destruirlos hasta que la conversacion finalice o sea trasnferida
+              */
+              let finales = [];
+              let eliminar = [];
+              let nuevos = [];
+              this.chats_experto.forEach((c: Conversacion) => {
+                let conversa = chat.find((co: Conversacion) => {
+                  return co.codigo === c.codigo;
                 });
+                if (conversa) {
+                  finales.push(c);
+                } else {
+                  eliminar.push(c);
+                }
               });
+              // console.log(finales);
+              chat.forEach((c: Conversacion) => {
+                let t = finales.find((cc: Conversacion) => {
+                  return cc.codigo === c.codigo;
+                });
+                if (!t) {
+                  nuevos.push(c);
+                }
+              });
+
+              /*console.log(nuevos);
+              console.log(finales);
+              console.log(eliminar);*/
+              eliminar.forEach((c: Conversacion) => {
+                c.listener_conversacion.unsubscribe();
+                c.listener_mensajes.unsubscribe();
+              });
+              if (nuevos.length < 1) {
+                this.chats_experto = finales;
+              }
+              nuevos.forEach(async (c: Conversacion, index) => {
+                let codigo = c.codigo;
+                let d = await this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo);
+                c = d;
+                temporal.push(c);
+                //c.codigo = codigo;
+                let us = await this.buscarUsuario(c.id_usuario_creador) as User;
+                //// // console.log(d);
+                c.cliente = us;
+                // this.changeRef.detectChanges();
+                this.agregarListenerMensajes(c);
+                this.agregaListenerConversacion(c);
+                if (!this.chat) {
+                  this.obligaCambio = false;
+                  this.onSelect(c);
+                }
+                if (index == (nuevos.length - 1)) {
+                  paso_por_chats = true;
+
+                  this.chats_experto = [...finales, ...temporal];
+                  this.changeRef.detectChanges();
+                }
+                this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
+                  c.historial = historial;
+                })
+
+              });
+              //this.chats_experto = finales.concat(nuevos);
+              //console.log(this.chats_experto);
+              ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+              /* chat.forEach((change: any, index) => {
+                 let codigo = change.codigo;
+                 this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo).then((d: Conversacion) => {
+                   let c = d;
+                   c.codigo = codigo;
+                   this.buscarUsuario(c.id_usuario_creador).then((d: User) => {
+                     //// // console.log(d);
+                     c.cliente = d;
+                     this.agregarListenerMensajes(c);
+                     this.agregaListenerConversacion(c);
+                     temporal.push(c);
+                     if (!this.chat) {
+                       this.obligaCambio = false;
+                       this.onSelect(c);
+                     }
+                     if (index == (chat.length - 1)) {
+                       paso_por_chats = true;
+                       this.chats_experto = temporal;
+                       // this.changeRef.detectChanges();
+                     }
+                   });
+                   this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
+                     c.historial = historial;
+                   })
+                 });
+               });*/
+
             });
           });
         });
@@ -407,6 +478,9 @@ export class ChatExpertoComponent implements OnInit {
     });
     if (this.listener_fila) {
       this.listener_fila.unsubscribe();
+    }
+    if (this.listener_activos) {
+      this.listener_activos.unsubscribe();
     }
 
   }
@@ -965,7 +1039,7 @@ export class ChatExpertoComponent implements OnInit {
           m.url = url;
           break;
       }
-      console.log(m);
+      // console.log(m);
       chat.mensajes.push(m);
       /*this.ngZone.runOutsideAngular(() => {
         chat.mensajes.push(m);
