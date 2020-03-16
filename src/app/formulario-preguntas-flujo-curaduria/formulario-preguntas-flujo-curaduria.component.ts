@@ -208,7 +208,11 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
               if (p.success) {
 
                 this.pregunta = p.pregunta[0];
-                this.pregunta.keywords = p.pregunta[0].keywords.split(',');
+                if (this.pregunta.keywords != null) {
+                  this.pregunta.keywords = p.pregunta[0].keywords.split(',');
+                } else {
+                  this.pregunta.keywords = [];
+                }
                 this.validar_flujo = p.pregunta[0].id_usuario_revision;
                 if (p.pregunta[0].id_estado_flujo == 4) {
                   this.nombre_boton = "Guardar";

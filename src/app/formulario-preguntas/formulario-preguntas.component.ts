@@ -219,7 +219,11 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
             if (p.success) {
 
               this.pregunta = p.pregunta[0];
-              this.pregunta.keywords = p.pregunta[0].keywords.split(',');
+              if (this.pregunta.keywords != null) {
+                this.pregunta.keywords = p.pregunta[0].keywords.split(',');
+              } else {
+                this.pregunta.keywords = [];
+              }
               this.pregunta.id_usuario = p.pregunta[0].id_usuario_creacion;
               this.ajax.get('preguntas/obtener-subrespuesta', { idtbl_pregunta: this.id_pregunta_editar }).subscribe(sr => {
                 if (sr.success) {
