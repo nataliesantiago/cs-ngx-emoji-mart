@@ -219,7 +219,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
             if (p.success) {
 
               this.pregunta = p.pregunta[0];
-              if (this.pregunta.keywords != null) {
+              if (p.pregunta[0].keywords != null && p.pregunta[0].keywords != '') {
                 this.pregunta.keywords = p.pregunta[0].keywords.split(',');
               } else {
                 this.pregunta.keywords = [];

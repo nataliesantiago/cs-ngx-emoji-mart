@@ -367,7 +367,7 @@
               <br>
             </div>
 
-            <div class="keywords-container">
+            <div class="keywords-container" *ngIf="id_pregunta_editar!='sugerida'">
               <mat-card-title>Palabras Clave</mat-card-title>
               <mat-form-field>
                 <mat-chip-list #chipList>
