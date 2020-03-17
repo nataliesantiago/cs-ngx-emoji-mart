@@ -192,7 +192,7 @@ export class AdministradorShortcutsComponent implements OnInit {
     }).catch((err) => {
       swal.fire({
         title: 'Advertencia',
-        text: "El Shortcut que intenta ingresar ya existe, por favor ingrese uno diferente",
+        text: "El shortcut que intenta ingresar ya existe o no esta creado como guión, por favor revise los datos ingresados",
         type: 'warning',
         buttonsStyling: false,
         confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
