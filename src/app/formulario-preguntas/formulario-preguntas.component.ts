@@ -758,8 +758,24 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
+    const length_keywords = this.pregunta.keywords.length;
+    
     if ((value || '').trim()) {
-      this.pregunta.keywords.push(value.trim());
+      if (length_keywords <= 99) {
+        this.pregunta.keywords.push(value.trim());
+      } else {
+        swal.fire({
+          title: 'Advertencia',
+          text: "El límite de palabras clave permitidas por pregunta es 100",
+          type: 'warning',
+          buttonsStyling: false,
+          confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+          confirmButtonText: 'Aceptar',
+          customClass: {
+            container: 'custom-sweet'
+          }
+        });
+      }
     }
     if (input) {
       input.value = '';
