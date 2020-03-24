@@ -43,7 +43,7 @@
               <mat-tab *ngFor="let segmento of segmentos; let i = index;" label="{{segmento.titulo}}">
                 <div class="contenedor-segmento-pad">
 
-                  <div [innerHTML]="segmento.texto | safe:'html'"></div>
+                  <div class="texto-respuesta" [innerHTML]="segmento.texto | safe:'html'"></div>
                   <div *ngIf="array_mostrar.length > 0">
                     <div *ngFor="let arr of array_mostrar; let cont = index;">
                       <mat-accordion *ngIf="arr.pos_segmento == i">

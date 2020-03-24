@@ -577,12 +577,15 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   trasnferirChat(c: Conversacion) {
-    this.dialog.open(TransferenciaChatComponent, { width: '400px', data: { conversacion: c } }).afterClosed().subscribe((result) => {
+    c.ventana_transferencia = this.dialog.open(TransferenciaChatComponent, { width: '400px', data: { conversacion: c } });
+
+    c.ventana_transferencia.afterClosed().subscribe((result) => {
       if (result && result.success) {
         if (this.user.experto_activo) {
           this.recibirChatAutomatico();
         }
         this.onSelect(null);
+        delete c.ventana_transferencia;
       }
     });
   }
@@ -1395,6 +1398,9 @@ export class ChatExpertoComponent implements OnInit {
   motivoCierreChat(c) {
     c.cerro_experto = false;
     let cliente = c.cliente.nombre;
+    if (c.ventana_transferencia) {
+      c.ventana_transferencia.close();
+    }
     this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true, cliente: cliente } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true }).then(() => {

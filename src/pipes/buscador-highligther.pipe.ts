@@ -24,9 +24,9 @@ export class BuscadorHightlighter implements PipeTransform {
                 if (pa == palabra) {
                     // console.log('encuentra ', snippet[i]);
                     snippet[i] = '<b> ' + snippet[i] + ' </b>'
-                } else if (pa.includes(palabra) && palabra.length > 3) {
+                } else if (pa.includes(palabra) && palabra.length >= 3) {
                     snippet[i] = '<b> ' + snippet[i] + ' </b>'
-                } else if (palabra.includes(pa) && pa.length > 3) {
+                } else if (palabra.includes(pa) && pa.length >= 3) {
                     snippet[i] = '<b> ' + snippet[i] + ' </b>'
                 }
             })

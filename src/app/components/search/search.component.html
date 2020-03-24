@@ -23,7 +23,7 @@
       <input type="text" [placeholder]="search_placeholder" matInput (keydown.enter)="buscar(1)" [formControl]="def" floatLabel="never" (focus)="mostrando_sugerencia=true" (blur)="soltarCaja()"
         floatPlaceholder="never" #primero (keydown.Tab)="completarTexto($event)" [matAutocomplete]="auto"
         autocomplete="off" (keydown)="limpiarSugerencia()">
-      <input #segundo class="contenido" [formControl]="defo" matInput [hidden]="!mostrando_sugerencia"  />
+      <!---<input #segundo class="contenido" [formControl]="defo" matInput [hidden]="!mostrando_sugerencia"  />-->
       <button mat-button *ngIf="def.value" matSuffix mat-icon-button aria-label="Clear"
         (click)="def.setValue('');texto_sugerido=null;">
         <mat-icon>close</mat-icon>

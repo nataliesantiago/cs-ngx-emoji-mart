@@ -58,7 +58,7 @@ export class ResultadosComponent implements OnInit {
   paginar(pagina: any) {
     //// console.log(pagina);
     this.page = pagina.pageIndex;
-    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + (this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen + '&&origen=' + this.origen);
+    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen + '&&origen=' + this.origen);
   }
 
 
@@ -132,7 +132,7 @@ export class ResultadosComponent implements OnInit {
         this.origen = 'drive';
         break;
     }
-    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + (this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
+    this.router.navigateByUrl('/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen);
   }
   abrirRuta(ruta) {
 
@@ -147,14 +147,19 @@ export class ResultadosComponent implements OnInit {
     this.resultado = true;
     let guardar = true;
     if (this.busqueda != params.busqueda) {
-      //console.log(params.busqueda);
-      this.busqueda = decodeURI(params.busqueda);
+      console.log(params.busqueda);
+      try {
+        this.busqueda = decodeURI(params.busqueda);
+      } catch (error) {
+        this.busqueda = (params.busqueda);
+      }
+
       this.ortografia = false;
       delete this.busquedaUrl;
       delete this.valorBusqueda;
       delete this.busquedaCorregida;
       delete this.respuesta;
-      this.busquedaUrl = '/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + (this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen;
+      this.busquedaUrl = '/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busqueda) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen;
     } else {
       this.resultado = true;
       guardar = false;
@@ -179,7 +184,7 @@ export class ResultadosComponent implements OnInit {
       if (d.spellResults) {
         this.ortografia = true;
         this.busquedaCorregida = d.spellResults[0].suggestedQuery;
-        this.busquedaUrl = '/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + this.busquedaCorregida.trim() + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen;
+        this.busquedaUrl = '/search?tipo=' + this.tipo_busqueda + '&&busqueda=' + encodeURI(this.busquedaCorregida.trim()) + '&&page=' + this.page + '&&url=' + this.url_imagen_busqueda + '&&origen=' + this.origen;
       }
       setTimeout(() => {
         if (this.paginator) {

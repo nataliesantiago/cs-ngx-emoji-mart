@@ -281,7 +281,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       // console.log(e);
       // var percentage = this.primero.nativeElement.scrollTop / (this.primero.nativeElement.scrollHeight - this.primero.nativeElement.offsetHeight);
       //this.segundo.nativeElement.scrollLeft = percentage * (this.segundo.nativeElement.scrollWidth - this.segundo.nativeElement.offsetWidth);
-      this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
+      //this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
 
 
     });
@@ -290,7 +290,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
 
   soltarCaja() {
     this.mostrando_sugerencia = false;
-    this.segundo.nativeElement.scrollLeft = 0;
+    //this.segundo.nativeElement.scrollLeft = 0;
   }
   procesaValorCaja(value: string) {
     this.mostrando_sugerencia = false;
@@ -316,7 +316,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
 
         }
         setTimeout(() => {
-          this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
+          //this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
 
         }, 0);
 
@@ -340,7 +340,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       setTimeout(() => {
         let element = this.primero.nativeElement;
         this.primero.nativeElement.scrollLeft = element.scrollWidth - element.clientWidth;
-        this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
+        //this.segundo.nativeElement.scrollLeft = this.primero.nativeElement.scrollLeft;
         //// console.log(this.segundo, this.primero);
       }, 0);
     }
@@ -418,7 +418,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
       }
       let url = btoa(this.url);
       setTimeout(() => {
-        this.router.navigateByUrl('/search?tipo=' + metodo + '&&url=' + url + '&&busqueda=' + this.def.value.trim());
+        this.router.navigateByUrl('/search?tipo=' + metodo + '&&url=' + url + '&&busqueda=' + encodeURI(this.def.value.trim()));
       }, 0);
 
     }

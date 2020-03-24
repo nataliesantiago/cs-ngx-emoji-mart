@@ -224,7 +224,7 @@ export class SearchService {
       this.ajax.post('preguntas/cloud-search/query', datos).subscribe(async d => {
         if (d.success) {
           d.resultados.results = (d.resultados.results) ? d.resultados.results : [];
-          if (guardar) {
+          if (guardar && d.resultados.results) {
             datos.cantidad_resultados = d.resultados.resultCountExact;
             this.guardarHistorial(datos);
           }
@@ -265,7 +265,7 @@ export class SearchService {
           d.resultados = { results: [], resultCountExact: 0 };
           if (guardar) {
             datos.cantidad_resultados = d.resultados.results.length;
-            this.guardarHistorial(datos);
+            //this.guardarHistorial(datos);
           }
           resolve(d.resultados);
         }
