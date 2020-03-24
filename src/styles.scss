@@ -3962,5 +3962,8 @@ mat-card {
 .keywords-container {
   input {
     width: 100% !important;
+    &.mat-chip-input {
+      margin: 0;
+    }
   }
 }
