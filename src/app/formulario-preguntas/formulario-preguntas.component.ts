@@ -755,6 +755,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     this.dataSource2.filter = filterValue;
   }
 
+  /**
+   * funcion que agrega nuevas palabras clave 
+   * @param event 
+   */
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -782,6 +786,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * funcion que remueve una palabra clave
+   * @param keyword 
+   */
   remove(keyword: any): void {
     const index = this.pregunta.keywords.indexOf(keyword);
     if (index >= 0) {
