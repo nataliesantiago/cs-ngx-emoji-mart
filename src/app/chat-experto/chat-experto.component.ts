@@ -646,7 +646,7 @@ export class ChatExpertoComponent implements OnInit {
       }
       //// console.log('Escucha mensajes del colega', c.cantidad_mensajes_nuevos);
       let mensajes_nuevos = await this.procesarMensajes(d, c, c.primera_vez, 0, []);
-      c.mensajes = c.mensajes.concat(mensajes_nuevos);
+      c.mensajes = this.utilService.getUnique(c.mensajes.concat(mensajes_nuevos), 'uuid');
 
       c.primera_vez = false;
       if (this.intervalo) {
