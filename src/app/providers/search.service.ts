@@ -265,7 +265,7 @@ export class SearchService {
           d.resultados = { results: [], resultCountExact: 0 };
           if (guardar) {
             datos.cantidad_resultados = d.resultados.results.length;
-            //this.guardarHistorial(datos);
+            this.guardarHistorial(datos);
           }
           resolve(d.resultados);
         }

@@ -511,7 +511,9 @@ export class ChatExpertoComponent implements OnInit {
         if (c.id_estado_conversacion == 3 || c.id_estado_conversacion == 4 || c.id_estado_conversacion == 5 || c.id_estado_conversacion == 6) {
           if (!c.cerro_experto && c.esta_seleccionado && !c.motivo_cierre_enviado && !c.esta_pendiente && !c.mostro_modal_cierre) {
             // console.log('listener', c.cerro_experto, c.esta_seleccionado, c.motivo_cierre_enviado, c.esta_pendiente);
-
+            if (c.grabando_nota) {
+              this.quitarNotaVoz(c);
+            }
             c.mostro_modal_cierre = true;
             if (!c.codigo_abandonado) {
               this.motivoCierreChat(c);

@@ -279,7 +279,7 @@ export class ChatClienteComponent implements OnInit {
 
     }
 
-    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2 && c.minimizado) {
+    if (!primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
       this.soundService.sonar(1);
       //c.cantidad_mensajes_nuevos++;
       c.mensajes_nuevos = true;
@@ -536,6 +536,11 @@ export class ChatClienteComponent implements OnInit {
       if (data.id_estado_conversacion == 6) {
         c.cerrado_inactividad = true;
         this.mensajeInactividadExperto(c);
+      }
+      if (data.id_estado_conversacion > 2) {
+        if (c.grabando_nota) {
+          this.quitarNotaVoz(c);
+        }
       }
 
     });
