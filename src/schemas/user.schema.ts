@@ -6,6 +6,8 @@ export class User {
     idtbl_usuario: number;
     correo: string;
     token_acceso: string;
+    access_token: string;
+    token_drive: string;
     nombre: string;
     tbl_estado: number;
     rol_usuario: number;

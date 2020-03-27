@@ -271,7 +271,7 @@ export class AppSearchComponent implements OnChanges, OnInit {
     this.def.setValue(this.texto_buscar);
     this.def.valueChanges
       .pipe(
-        debounceTime(0),
+        debounceTime(200),
         switchMap(value => this.procesaValorCaja(value))
       ).subscribe(d => {
         // // console.log(d);

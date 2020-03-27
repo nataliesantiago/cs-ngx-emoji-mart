@@ -27,15 +27,15 @@ export class UtilsService {
         this.userService.observableUsuario.subscribe(u => {
             this.user = u;
             if (u) {
-                
+
                 this.getConfiguraciones();
             }
         });
         if (this.user) {
-            
+
             this.getConfiguraciones();
         }
-       
+
 
     }
 
@@ -83,7 +83,7 @@ export class UtilsService {
 
         return new Promise(async (resolve, reject) => {
 
-           
+
 
             if (recarga) {
                 this.ajax.get('administracion/obtener', {}).subscribe(d => {
@@ -201,16 +201,21 @@ export class UtilsService {
 
 
     abrirPickerDrive(): Promise<any> {
+        if (!this.oauthToken) {
+            this.oauthToken = localStorage.getItem('dtk');
+        }
         return new Promise(resolve => {
-            this.ajax.post('user/getAccessToken', { token: this.user.token_acceso }).subscribe(d => {
+            this.ajax.post('user/getAccessToken', { token: this.user.token_acceso, dtk: this.oauthToken }).subscribe(d => {
+
                 if (d.success) {
                     this.oauthToken = d.token;
-                    // console.log(this.oauthToken);
+                    console.log(this.oauthToken);
                     if (this.pickerApiLoaded) {
                         this.createPicker(resolve);
                     } else {
                         this.loadPicker(resolve);
                     }
+                    localStorage.setItem('dtk', this.oauthToken);
                 }
             })
         });

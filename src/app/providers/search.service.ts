@@ -35,7 +35,7 @@ export class SearchService {
         //this.callTestEsquemaChat();
         //this.callTestEsquemaConecta();
         //this.callTestEsquemaSynonyms();
-
+        this.user.access_token = localStorage.getItem('atk');
         this.interval_chat = setInterval(() => {
           this.validaOpenChat();
         }, 1000);
@@ -219,9 +219,14 @@ export class SearchService {
       }
 
       // // console.log('cargo', this.user.nombre_perfil);
-      let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen, cargo: this.user.nombre_perfil, cantidad_resultados: null };
+      let datos = { token: this.user.token_acceso, query: query, id_usuario: this.user.getId(), correo: this.user.getCorreo(), start: start, tipo: tipo, url: url, origen: origen, cargo: this.user.nombre_perfil, cantidad_resultados: null, atk: this.user.access_token };
 
       this.ajax.post('preguntas/cloud-search/query', datos).subscribe(async d => {
+        console.log(d.atk);
+        if (d.atk) {
+          this.user.access_token = d.atk;
+          localStorage.setItem('atk', d.atk);
+        }
         if (d.success) {
           d.resultados.results = (d.resultados.results) ? d.resultados.results : [];
           if (guardar && d.resultados.results) {
@@ -248,7 +253,7 @@ export class SearchService {
                 if (r.metadata.source.name == environment.pais[this.user.pais].id_origen_conecta) {
                   r.url_icono = pregunta.icono_padre;
                 }
-               
+
               });
 
             }
@@ -275,7 +280,12 @@ export class SearchService {
 
   suggestCloudSearch(query?: string, sugerencias?: Array<any>): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.post('preguntas/cloud-search/suggest', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo() }).subscribe(d => {
+      this.ajax.post('preguntas/cloud-search/suggest', { token: this.user.token_acceso, query: query, correo: this.user.getCorreo(), atk: this.user.access_token }).subscribe(d => {
+        console.log(d.atk);
+        if (d.atk) {
+          this.user.access_token = d.atk;
+          localStorage.setItem('atk', d.atk);
+        }
         if (d.success) {
           sugerencias = d.sugerencias;
           resolve(d.sugerencias);
