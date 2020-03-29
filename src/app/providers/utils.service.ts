@@ -41,6 +41,9 @@ export class UtilsService {
 
 
     normalizeText(str: string): string {
+        if (!str) {
+            str = '';
+        }
         var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç",
             to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
             mapping = {};

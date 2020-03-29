@@ -53,7 +53,7 @@
 
                     <img mat-list-avatar src="{{experto.url_imagen_gsuite}}" alt="">
                     <div *ngIf="!esSupervisor" class="punt-estado-chat"
-                      [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat,'punto-supervisor':esSupervisor}">
+                      [ngClass]="{'red':experto.activo_chat && experto.atendiendo_emergencia,'green':experto.activo_chat && !experto.atendiendo_emergencia,'gris':!experto.activo_chat,'punto-supervisor':esSupervisor}">
                     </div>
                     <div *ngIf="esSupervisor" class="punt-estado-chat"
                       [ngClass]="{'green':experto.activo_chat,'gris':!experto.activo_chat,'red-emergency':experto.atendiendo_emergencia,'punto-supervisor':esSupervisor}">

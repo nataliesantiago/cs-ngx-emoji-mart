@@ -553,7 +553,11 @@ export class ChatExpertoComponent implements OnInit {
 
   filtraExpertos() {
     this.expertos_filtro = this.expertos.filter(e => {
-      return (this.utilService.normalizeText(e.nombre).toLowerCase().indexOf(this.buscar_experto.toLowerCase()) != (-1) || this.utilService.normalizeText(e.correo).toLowerCase().indexOf(this.buscar_experto.toLowerCase()) != (-1));
+      let busqueda = this.utilService.normalizeText(this.buscar_experto).toLowerCase();
+      return (
+        this.utilService.normalizeText(e.estado_actual_experto).toLowerCase().indexOf(busqueda) != (-1) ||
+        this.utilService.normalizeText(e.nombre).toLowerCase().indexOf(busqueda) != (-1) ||
+        this.utilService.normalizeText(e.correo).toLowerCase().indexOf(busqueda) != (-1));
     });
   }
 
