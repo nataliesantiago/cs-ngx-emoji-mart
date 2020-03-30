@@ -343,7 +343,7 @@ export class ChatExpertoComponent implements OnInit {
               e.atendiendo_emergencia = false;
               // this.fireStore.firestore.
               var duration = moment(new Date()).unix() - experto.fecha.seconds;
-              //console.log(e.nombre, experto.fecha.seconds, duration);
+              console.log(e.nombre, experto.fecha.seconds, duration);
               if (experto.activo && duration < 30) {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
@@ -488,7 +488,7 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   toggleRecomendacion(c: Conversacion) {
-    console.log(c);
+
     this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ recomendacion_manual: c.recomendacion_manual });
   }
 
@@ -688,7 +688,7 @@ export class ChatExpertoComponent implements OnInit {
             if (rta && !c.primera_consulta) {
               c.primera_consulta = m.texto;
               c.busqueda_interna = m.texto;
-              console.log(c);
+
               this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ primera_consulta: c.primera_consulta });
             }
           });
@@ -781,7 +781,7 @@ export class ChatExpertoComponent implements OnInit {
       }
 
     }
-    console.log(c);
+
     if (c.id_tipo_conversacion == 1) {
       if (!c.primera_vez && !c.focuseado && c.id_estado_conversacion == 2) {
         this.soundService.sonar(1);
@@ -915,7 +915,7 @@ export class ChatExpertoComponent implements OnInit {
 
       chat.esta_seleccionado = true;
       chat.mensajes_nuevos = false;
-      console.log(chat); 
+
       this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + chat.codigo).update({ mensajes_nuevos: false });
       this.setFocus(chat, true);
       if (chat.id_estado_conversacion == 3 || chat.id_estado_conversacion == 4 || chat.id_estado_conversacion == 5 || chat.id_estado_conversacion == 6) {
@@ -1414,7 +1414,7 @@ export class ChatExpertoComponent implements OnInit {
     }
     this.dialog.open(CerrarChatExpertoComponent, { width: '80%', data: { no_cerro_experto: true, cliente: cliente } }).afterClosed().subscribe(d => {
       if (d && d.motivo) {
-        console.log(c);
+
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ motivo_cierre_enviado: true, mostrar_encuesta: true }).then(() => {
           this.chatService.cerrarConversacionUsuario(c, c.id_estado_conversacion, d.motivo).then(() => {
             c.motivo_cierre_enviado = true;
