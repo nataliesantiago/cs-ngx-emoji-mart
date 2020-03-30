@@ -341,7 +341,7 @@ export class ChatExpertoComponent implements OnInit {
               e.atendiendo_emergencia = true;
             } else {
               e.atendiendo_emergencia = false;
-              var duration = moment().unix() - experto.fecha.seconds;
+              var duration = moment(new Date()).unix() - experto.fecha.seconds;              
               if (experto.activo && duration < 30) {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
