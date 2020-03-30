@@ -332,7 +332,7 @@ export class ChatExpertoComponent implements OnInit {
       // // console.log(this.expertos);
       this.expertos.forEach(e => {
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + e.idtbl_usuario).valueChanges().subscribe((experto: any) => {
-          // console.log(experto);
+
           if (!experto || !experto.fecha) {
             e.activo_chat = false;
             e.estado_actual_experto = "Desconectado";
@@ -341,7 +341,9 @@ export class ChatExpertoComponent implements OnInit {
               e.atendiendo_emergencia = true;
             } else {
               e.atendiendo_emergencia = false;
-              var duration = moment().unix() - experto.fecha.seconds;
+              // this.fireStore.firestore.
+              var duration = moment(new Date()).unix() - experto.fecha.seconds;
+              console.log(e.nombre, experto.fecha.seconds, duration);
               if (experto.activo && duration < 30) {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
