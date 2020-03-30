@@ -683,7 +683,7 @@ export class ChatService {
       if (!e.ultima_conexion) {
         return false;
       }
-      var duration = moment().unix() - e.ultima_conexion._seconds;
+      var duration = moment().unix() - e.ultima_conexion.seconds;
       return e.activo && duration < 11;
     });
     expertos.sort((a, b) => {
