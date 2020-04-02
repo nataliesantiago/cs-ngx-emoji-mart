@@ -342,7 +342,7 @@ export class ChatExpertoComponent implements OnInit {
 
             e.atendiendo_emergencia = experto.atendiendo_emergencia;
             var duration = moment(new Date()).unix() - experto.fecha.seconds;
-            console.log(e.nombre, experto.fecha.seconds, duration);
+            // console.log(e.nombre, experto.fecha.seconds, duration);
             if (experto.activo && duration < 30) {
               if (!e.activo_chat) {
                 e.activo_chat = true;
@@ -459,7 +459,7 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    console.log('destruyendo listeners ', this.listeners_conversaciones.length);
+    // console.log('destruyendo listeners ', this.listeners_conversaciones.length);
     this.listeners_conversaciones.forEach(l => {
       if (l)
         l.unsubscribe();

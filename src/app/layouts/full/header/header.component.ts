@@ -123,9 +123,9 @@ export class AppHeaderComponent {
 
 
       this.intervalo = setInterval(() => {
-        console.log('estado actual', this.user.estado_actual);
+        // console.log('estado actual', this.user.estado_actual);
         let activo = (this.user.estado_actual == 1) ? true : false;
-        console.log('estado', activo, this.user.estado_actual);
+        // console.log('estado', activo, this.user.estado_actual);
         this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       }, 5000);
 
