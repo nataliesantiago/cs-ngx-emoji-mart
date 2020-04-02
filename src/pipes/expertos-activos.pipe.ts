@@ -27,7 +27,7 @@ export class ExpertosActivosePipe implements PipeTransform {
             }
             var duration = moment().tz(tz).unix() - e.ultima_conexion.seconds;
             // // console.log(duration, e);
-            return e.activo && duration < 11;
+            return e.activo && duration < 30;
         });
     }
 }
