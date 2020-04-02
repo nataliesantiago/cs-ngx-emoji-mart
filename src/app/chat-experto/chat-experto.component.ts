@@ -337,25 +337,21 @@ export class ChatExpertoComponent implements OnInit {
             e.activo_chat = false;
             e.estado_actual_experto = "Desconectado";
           } else {
-            if (experto.atendiendo_emergencia == true) {
-              e.atendiendo_emergencia = true;
-            } else {
-              e.atendiendo_emergencia = false;
-              // this.fireStore.firestore.
-              var duration = moment(new Date()).unix() - experto.fecha.seconds;
-              console.log(e.nombre, experto.fecha.seconds, duration);
-              if (experto.activo && duration < 30) {
-                if (!e.activo_chat) {
-                  e.activo_chat = true;
-                }
 
-                e.estado_actual_experto = experto.estado_experto;
-
-              } else {
-                e.activo_chat = false;
-                e.estado_actual_experto = experto.estado_experto;
+            e.atendiendo_emergencia = experto.atendiendo_emergencia;
+            var duration = moment(new Date()).unix() - experto.fecha.seconds;
+            console.log(e.nombre, experto.fecha.seconds, duration);
+            if (experto.activo && duration < 30) {
+              if (!e.activo_chat) {
+                e.activo_chat = true;
               }
+              e.estado_actual_experto = experto.estado_experto;
+
+            } else {
+              e.activo_chat = false;
+              e.estado_actual_experto = experto.estado_experto;
             }
+
           }
           this.abrirConversacionExperto(e, true);
           //console.log(e);
