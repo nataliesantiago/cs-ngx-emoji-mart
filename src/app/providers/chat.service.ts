@@ -624,7 +624,7 @@ export class ChatService {
 
   crearSOS(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.ajax.get('chat/obtener-experto-sos', {}).subscribe(e => {
+      this.ajax.get('chat/obtener-experto-sos', { id_usuario: this.user.getId() }).subscribe(e => {
         if (e.success) {
           let experto = e.experto;
           if (experto) {
@@ -632,9 +632,9 @@ export class ChatService {
               resolve(d.success);
               this.getEmergenciaUsuario().then((e: Emergencia) => {
                 this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + experto.id_usuario + '/emergencia/1').set({ id_emergencia: e.idtbl_consultas_sos });
-              })
+              });
 
-            })
+            });
           } else {
             this.ajax.post('chat/sos/crear', { id_usuario: this.user.getId() }).subscribe(d => {
               resolve(false);
