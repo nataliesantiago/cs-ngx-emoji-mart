@@ -625,8 +625,6 @@ export class ChatService {
   crearSOS(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ajax.get('chat/obtener-experto-sos', {}).subscribe(e => {
-        console.log('sos', e);
-        
         if (e.success) {
           let experto = e.experto;
           if (experto) {
