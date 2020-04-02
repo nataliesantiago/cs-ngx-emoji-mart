@@ -208,6 +208,7 @@ export class UserService {
 
     setActivoExperto(activo, value_estado, atendiendo_emergencia?) {
         this.user.experto_activo = activo;
+        console.log('lo que se envia', value_estado);
         this.ajax.post('chat/setActivoExperto', { activo: activo, value_estado: value_estado, atendiendo_emergencia: atendiendo_emergencia, id_experto: this.user.getId() }).subscribe(d => {
 
         });

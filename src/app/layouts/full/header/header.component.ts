@@ -114,7 +114,7 @@ export class AppHeaderComponent {
   cambiarEstadoExperto(e) {
     //debugger;  
     this.user.estado_actual = e.value;
-    
+
     if (this.intervalo) {
       //window.clearInterval(this.intervalo);
       let activo = (e.value == 1) ? true : false;
@@ -126,6 +126,7 @@ export class AppHeaderComponent {
       }
       this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
       this.intervalo = setInterval(() => {
+        console.log('estado actual', this.user.estado_actual);
         let activo = (this.user.estado_actual == 1) ? true : false;
         console.log('estado', activo, this.user.estado_actual);
         this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
@@ -144,7 +145,7 @@ export class AppHeaderComponent {
     } else {
       this.createLogStateAdvisor(this.actual, e.value, 1);
     }
-    
+
     this.userService.setActivoExpertoGlobal(e.value);
     this.user.setEstadoExpertoActual(e.value);
 
