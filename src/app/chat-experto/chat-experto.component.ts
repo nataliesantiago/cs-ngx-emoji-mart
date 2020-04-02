@@ -131,8 +131,10 @@ export class ChatExpertoComponent implements OnInit {
         this.configuraciones = configs.configuraciones;
         // console.log(this.configuraciones);
         this.userService.getFilasExperto().then(() => {
-          this.userService.setActivoExpertoGlobal(1);
-          this.insertarLogEstadoExperto();
+          if (this.user.estado_actual != 7) {
+            this.userService.setActivoExpertoGlobal(1);
+            this.insertarLogEstadoExperto();
+          }
           let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).snapshotChanges();
           this.listener_fila = cola./*pipe(debounceTime(1000)).*/subscribe(async chaters => {
             let tmp = [];
