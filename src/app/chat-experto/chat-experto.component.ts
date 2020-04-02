@@ -343,7 +343,7 @@ export class ChatExpertoComponent implements OnInit {
               e.atendiendo_emergencia = false;
               // this.fireStore.firestore.
               var duration = moment(new Date()).unix() - experto.fecha.seconds;
-              //console.log(e.nombre, experto.fecha.seconds, duration);
+              console.log(e.nombre, experto.fecha.seconds, duration);
               if (experto.activo && duration < 30) {
                 if (!e.activo_chat) {
                   e.activo_chat = true;
