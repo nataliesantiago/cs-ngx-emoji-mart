@@ -131,8 +131,10 @@ export class ChatExpertoComponent implements OnInit {
         this.configuraciones = configs.configuraciones;
         // console.log(this.configuraciones);
         this.userService.getFilasExperto().then(() => {
-          this.userService.setActivoExpertoGlobal(1);
-          this.insertarLogEstadoExperto();
+          if (this.user.estado_actual != 7) {
+            this.userService.setActivoExpertoGlobal(1);
+            this.insertarLogEstadoExperto();
+          }
           let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).snapshotChanges();
           this.listener_fila = cola./*pipe(debounceTime(1000)).*/subscribe(async chaters => {
             let tmp = [];
@@ -337,25 +339,21 @@ export class ChatExpertoComponent implements OnInit {
             e.activo_chat = false;
             e.estado_actual_experto = "Desconectado";
           } else {
-            if (experto.atendiendo_emergencia == true) {
-              e.atendiendo_emergencia = true;
-            } else {
-              e.atendiendo_emergencia = false;
-              // this.fireStore.firestore.
-              var duration = moment(new Date()).unix() - experto.fecha.seconds;
-              console.log(e.nombre, experto.fecha.seconds, duration);
-              if (experto.activo && duration < 30) {
-                if (!e.activo_chat) {
-                  e.activo_chat = true;
-                }
 
-                e.estado_actual_experto = experto.estado_experto;
-
-              } else {
-                e.activo_chat = false;
-                e.estado_actual_experto = experto.estado_experto;
+            e.atendiendo_emergencia = experto.atendiendo_emergencia;
+            var duration = moment(new Date()).unix() - experto.fecha.seconds;
+            console.log(e.nombre, experto.fecha.seconds, duration);
+            if (experto.activo && duration < 30) {
+              if (!e.activo_chat) {
+                e.activo_chat = true;
               }
+              e.estado_actual_experto = experto.estado_experto;
+
+            } else {
+              e.activo_chat = false;
+              e.estado_actual_experto = experto.estado_experto;
             }
+
           }
           this.abrirConversacionExperto(e, true);
           //console.log(e);
