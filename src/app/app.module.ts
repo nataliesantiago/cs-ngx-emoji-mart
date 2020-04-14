@@ -132,6 +132,8 @@ import { AdminsitracionRolesComponent } from './adminsitracion-roles/adminsitrac
 import { HttpConfigInterceptor } from './providers/generalHttpInterceptor';
 import { MinuteSecondsPipe } from '../pipes/minute.seconds.pipe';
 import { HomepageComponent } from './homepage/homepage.component';
+import { enableProdMode } from '@angular/core';
+
 declare var gtag: any;
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -147,7 +149,9 @@ script.childNodes.forEach(c => {
 })*/
 
 gtag('config', environment.analytics);
-
+if (environment.production) {
+  enableProdMode();
+}
 
 @NgModule({
   declarations: [
@@ -299,4 +303,5 @@ gtag('config', environment.analytics);
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

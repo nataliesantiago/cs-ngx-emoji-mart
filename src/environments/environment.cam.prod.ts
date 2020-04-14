@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
+    production: true,
     URL_BACK: 'https://comusoportecam-produccion.appspot.com/api/',
     CLIENT_ID: '945105371213-csv59pllqu99c4t3ltnal1915cc3mg61.apps.googleusercontent.com', //id de cliente de google para la aplicacion
     APIKEY: 'AIzaSyDOgOkyOuWaq4Z0YVzNuUPpcJD1DG4ZWBE',

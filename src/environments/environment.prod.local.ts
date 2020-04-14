@@ -1,5 +1,5 @@
 export const environment = {
-	production: true,
+	production: false,
 	URL_BACK: 'http://localhost:8080/api/',
 	CLIENT_ID: '157185516619-i8f1ja653q3fgvpnin3b1hvdl3199dvj.apps.googleusercontent.com', //id de cliente de google para la aplicacion
 	APIKEY: 'AIzaSyAmEXq-6U5ZvYzuYyfP1EIs5BfqBj_Sy1A',

@@ -212,7 +212,7 @@ export class UtilsService {
 
                 if (d.success) {
                     this.oauthToken = d.token;
-                    console.log(this.oauthToken);
+                    // console.log(this.oauthToken);
                     if (this.pickerApiLoaded) {
                         this.createPicker(resolve);
                     } else {
