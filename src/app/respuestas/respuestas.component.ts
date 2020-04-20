@@ -106,7 +106,11 @@ export class RespuestasComponent implements OnInit {
     this.ajax.get('preguntas/obtenerInd', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(p => {
       if (p.success) {
         // // console.log('pregunta',p.pregunta[0].fecha_ultima_modificacion)
-        p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
+        if(p.pregunta[0].fecha_ultima_modificacion){
+          p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_ultima_modificacion).tz('America/Bogota').format('YYYY-MM-DD');
+        }else{
+          p.pregunta[0].fecha_ultima_modificacion = moment(p.pregunta[0].fecha_creacion).tz('America/Bogota').format('YYYY-MM-DD');
+        }
 
         this.pregunta = p.pregunta[0];
 
