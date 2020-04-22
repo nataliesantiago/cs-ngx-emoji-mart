@@ -212,25 +212,13 @@ export class UserService {
         this.ajax.post('chat/setActivoExperto', { activo: activo, value_estado: value_estado, atendiendo_emergencia: atendiendo_emergencia, id_experto: this.user.getId() }).subscribe(d => {
 
         });
-        /* if (value_estado) {
-             this.ajax.get('user/getEstadoExperto', { id_estado: value_estado }).subscribe(d => {
-                 if (d.success) {
-                     this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: d.estado[0].nombre, atendiendo_emergencia: atendiendo_emergencia });
-                 }
-             })
-         } else {
-             if (!atendiendo_emergencia) {
-                 atendiendo_emergencia = false;
-             }
-             this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date(), estado_experto: 'Desconectado', atendiendo_emergencia: atendiendo_emergencia });
-         }*/
+        
     }
 
     setActivoExpertoGlobal(estado: number) {
         this.user.estado_actual = estado;
         this.subjectEstadoExperto.next(estado);
-        //// console.log(activo)
-        //this.fireStore.collection('paises/'+this.user.pais+'/'+'expertos').doc('' + this.user.getId()).set({ activo: activo, fecha: new Date() });
+        
     }
 
     getInfoUsuario(id): Promise<User> {

@@ -70,6 +70,7 @@ export class AppSidebarComponent implements OnDestroy {
       this.state.id_usuario_experto = this.user.getId();
       this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
       this.state.estado_ingreso = 0;
+      this.userService.setActivoExperto(false, null);
       this.estadoExpertoService.createLogState(this.state);
     }
     this.autenticationService.logOut();
