@@ -348,7 +348,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
         this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
 
         for (let i = 0; i < this.array_mostrar.length; i++) {
-          this.array_mostrar[i].pos_segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+          if (this.segmentos[this.array_mostrar[i].pos_segmento].titulo !== undefined) {
+            this.array_mostrar[i].pos_segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+          }
         }
 
         console.log(this.array_mostrar);

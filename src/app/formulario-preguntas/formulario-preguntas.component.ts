@@ -350,9 +350,11 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         this.pregunta.id_usuario_ultima_modificacion = this.id_usuario;
 
         for (let i = 0; i < this.array_mostrar.length; i++) {
-          this.array_mostrar[i].pos_segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+          if (this.segmentos[this.array_mostrar[i].pos_segmento].titulo !== undefined) {
+            this.array_mostrar[i].pos_segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
+          }
         }
-        
+
         this.ajax.post('preguntas/editar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.router.navigate(['/admin/preguntas']);
