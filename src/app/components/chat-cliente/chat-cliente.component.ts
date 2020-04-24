@@ -116,7 +116,7 @@ export class ChatClienteComponent implements OnInit {
               console.log(c);
               this.chatService.getExpertoDisponible(c.filas).then(experto => {
                 if (experto) {
-                  this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
+                  this.userService.getInfoUsuario(experto.id_usuario).then(u => {
                     c.id_experto_actual = u.idtbl_usuario;
                     c.nombre_experto_actual = u.nombre;
                     c.asesor_actual = new User(null, null, null);
