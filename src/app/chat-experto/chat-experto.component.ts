@@ -76,8 +76,9 @@ export class ChatExpertoComponent implements OnInit {
   listener_cola = [];
   listener_fila;
   listener_activos;
-  @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
 
+  @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
+  validando_automatico = false;
   constructor(private userService: UserService, private chatService: ChatService,
     private fireStore: AngularFirestore, private changeRef: ChangeDetectorRef,
     private ngZone: NgZone, private soundService: SonidosService, private utilService: UtilsService,
@@ -132,13 +133,13 @@ export class ChatExpertoComponent implements OnInit {
         // console.log(this.configuraciones);
         this.userService.getFilasExperto().then(() => {
           if (this.user.estado_actual != 7) {
-            this.userService.setActivoExpertoGlobal(1);
             this.insertarLogEstadoExperto();
+            this.userService.setActivoExpertoGlobal(1);
           }
           let cola = this.fireStore.collection('paises/' + this.user.pais + '/conversaciones/', ref => ref.where('id_estado_conversacion', '==', 1)).snapshotChanges();
           this.listener_fila = cola./*pipe(debounceTime(1000)).*/subscribe(async chaters => {
             let tmp = [];
-            //console.log('ll');
+
             this.fila_chats.forEach((c: Conversacion) => {
               if (c.interval_tiempo_cola) {
                 window.clearInterval(c.interval_tiempo_cola);
@@ -195,12 +196,12 @@ export class ChatExpertoComponent implements OnInit {
 
 
           let chats = this.fireStore.collection('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats').valueChanges();
-          this.listener_activos = chats./*pipe(debounceTime(1000)).*/subscribe(chaters => {
+          this.listener_activos = chats.subscribe(chaters => {
             /* this.chats_experto.forEach((c: Conversacion) => {
                c.listener_mensajes.unsubscribe();
                c.listener_conversacion.unsubscribe();
              });*/
-            this.chatService.getConversacionesExperto().then(chat => {
+            this.chatService.getConversacionesExperto().then(async chat => {
               // console.log('chats', chat);
               if (!chat) {
                 chat = [];
@@ -259,12 +260,20 @@ export class ChatExpertoComponent implements OnInit {
               if (nuevos.length < 1) {
                 this.chats_experto = finales;
               }
-              nuevos.forEach(async (c: Conversacion, index) => {
+              let index = 0;
+              for (let c of nuevos) {
+                c = c as Conversacion;
                 let codigo = c.codigo;
                 let d = await this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + codigo);
                 c = d;
                 temporal.push(c);
                 c.codigo = codigo;
+                if (index == (nuevos.length - 1)) {
+                  paso_por_chats = true;
+
+                  this.chats_experto = [...finales, ...temporal];
+                  this.changeRef.detectChanges();
+                }
                 let us = await this.buscarUsuario(c.id_usuario_creador) as User;
                 //// // console.log(d);
                 c.cliente = us;
@@ -275,17 +284,12 @@ export class ChatExpertoComponent implements OnInit {
                   this.obligaCambio = false;
                   this.onSelect(c);
                 }
-                if (index == (nuevos.length - 1)) {
-                  paso_por_chats = true;
-
-                  this.chats_experto = [...finales, ...temporal];
-                  this.changeRef.detectChanges();
-                }
                 this.chatService.buscarHistorialClienteUsuario(c.id_usuario_creador).then(historial => {
                   c.historial = historial;
-                })
+                });
+                index++;
+              }
 
-              });
               //this.chats_experto = finales.concat(nuevos);
               //console.log(this.chats_experto);
               ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -414,47 +418,64 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   insertarLogEstadoExperto() {
-    if (this.user.getEstadoExpertoActual() != 1) {
+    if (this.user.estado_actual != 1) {
       this.state.id_usuario_experto = this.user.getId();
-      this.state.id_estado_experto_actual = this.user.getEstadoExpertoActual();
+      this.state.id_estado_experto_actual = this.user.estado_actual;
       this.state.id_estado_experto_nuevo = 1;
+      this.state.estado_ingreso = 1;
       this.estadoExpertoService.createLogState(this.state);
     }
   }
 
   recibirChatAutomatico() {
-    let config = this.utilService.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
+    if (!this.validando_automatico) {
+      this.validando_automatico = true;
+      let config = this.utilService.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
 
-    this.chatService.getConversacionesExperto().then(async (conversaciones: Array<Conversacion>) => {
-      if (config) {
-        conversaciones = conversaciones.filter((c: Conversacion) => {
-          return c.id_estado_conversacion == 2;
-        });
-        if (parseInt(config.valor) > conversaciones.length) {
-          let chats = this.fila_chats;
-          /*this.chats_cola.forEach(f => {
-            chats = chats.concat(f.chats);
+      this.chatService.getConversacionesExperto().then(async (conversaciones: Array<Conversacion>) => {
+        if (config) {
+          conversaciones = conversaciones.filter((c: Conversacion) => {
+            return c.id_estado_conversacion == 2;
           });
-          */
-          chats.sort((a, b) => {
-            if (a.peso_chat > b.peso_chat) {
-              return 1;
-            } else if (a.peso_chat < b.peso_chat) {
-              return -1;
-            } else {
+          if (parseInt(config.valor) > conversaciones.length) {
+            let chats = this.fila_chats;
+            /*this.chats_cola.forEach(f => {
+              chats = chats.concat(f.chats);
+            });
+            */
+            chats.sort((a, b) => {
+              if (a.peso_chat > b.peso_chat) {
+                return 1;
+              } else if (a.peso_chat < b.peso_chat) {
+                return -1;
+              } else {
 
-              return (new Date(a.fecha_creacion) < new Date(b.fecha_creacion)) ? 1 : -1;
+                return (new Date(a.fecha_creacion) < new Date(b.fecha_creacion)) ? 1 : -1;
+              }
+            });
+            let c = chats.pop();
+            let disponibilidad = await this.chatService.getDisponibilidadExperto();
+            console.log('disponibilidad: ', disponibilidad, c, new Date().getTime());
+            if (c && disponibilidad && !c.id_experto_actual) {
+              this.onSelectCola(c).then(r => {
+                if (chats.length > 0) {
+                  this.recibirChatAutomatico();
+                }
+              });
             }
-          });
-          let c = chats.pop();
-          let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          console.log('disponibilidad: ', disponibilidad, c);
-          if (c && disponibilidad && !c.id_experto_actual) {
-            this.onSelectCola(c);
+            this.validando_automatico = false;
+
+          } else {
+            console.log('No tengo cupo');
+            this.validando_automatico = false;
           }
+
+
+        } else {
+          this.validando_automatico = false;
         }
-      }
-    });
+      });
+    }
 
   }
 
@@ -927,18 +948,23 @@ export class ChatExpertoComponent implements OnInit {
     }
   }
 
-  onSelectCola(c: Conversacion): void {
+  onSelectCola(c: Conversacion): Promise<any> {
     // this.chat = chat;
     // chat.mensajes_nuevos = false;
-    if (!c.chat_tomado || c.chat_tomado != this.user.getId()) {
-      c.chat_tomado = this.user.getId();
-      this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ chat_tomado: c.chat_tomado }).then(() => {
-        this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
+    return new Promise((resolve, reject) => {
+      if (!c.chat_tomado || c.chat_tomado != this.user.getId()) {
+        c.chat_tomado = this.user.getId();
+        this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ chat_tomado: c.chat_tomado }).then(() => {
+          this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
+            resolve(true);
+          });
+        }).catch(e => {
+          console.log('Error asignando al experto');
+          resolve(false);
         });
-      }).catch(e => {
-        console.log('la concha');
-      });
-    }
+      }
+    });
+
   }
 
   remplazaEmoji(c: Conversacion) {
@@ -1327,6 +1353,8 @@ export class ChatExpertoComponent implements OnInit {
         delete this.chat;
       }
       this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
+      c.listener_mensajes.unsubscribe();
+      c.listener_conversacion.unsubscribe();
     }
   }
 

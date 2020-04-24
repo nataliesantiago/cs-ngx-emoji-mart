@@ -87,12 +87,13 @@ export class AppHeaderComponent {
       this.chatService.getEstadosExperto().then(estados => {
         this.estados_operador = estados;
         if (this.user.getIdRol() == 2) {
+          this.actual = 1;
+          this.createLogStateAdvisor(this.actual, 1, 1);
           this.cambiarEstadoExperto({ value: 1 });
-          this.user.estado_actual = 1;
+          //this.user.estado_actual = 1;
         }
         if (this.user.getIdRol() == 3) {
           this.user.estado_actual = 1;
-
           this.cambiarEstadoExperto({ value: this.user.estado_actual });
         }
       });
@@ -109,15 +110,13 @@ export class AppHeaderComponent {
         });
       }
     });
+    
   }
 
   cambiarEstadoExperto(e) {
     //debugger;  
     this.user.estado_actual = e.value;
     let activo = (e.value == 1) ? true : false;
-    if (activo) {
-      this.createLogStateAdvisor(1, 1, 1);
-    }
     this.userService.setActivoExperto(activo, this.user.estado_actual, this.emergencia_actual);
     if (!this.intervalo) {
 
@@ -133,18 +132,16 @@ export class AppHeaderComponent {
         this.listenEmergenciaExperto();
       }
     }
-    if (activo) {
-      if (this.actual != undefined && (this.actual != 1 || e.value != 1)) {
-        this.createLogStateAdvisor(this.actual, e.value, 1);
-      }
-    } else {
+    if (e.value != this.actual) {
+      console.log('paso por aca fome')
       this.createLogStateAdvisor(this.actual, e.value, 1);
     }
+    this.actual = this.user.estado_actual;
 
     this.userService.setActivoExpertoGlobal(e.value);
     this.user.setEstadoExpertoActual(e.value);
 
-    this.actual = this.user.estado_actual;
+
   }
 
   listenEmergenciaExperto() {

@@ -113,7 +113,7 @@ export class ChatClienteComponent implements OnInit {
 
             this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + c.codigo).then(conversa => {
               c.transferido = conversa.transferido;
-              //this.procesaFilas(c);
+              console.log(c);
               this.chatService.getExpertoDisponible(c.filas).then(experto => {
                 if (experto) {
                   this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
@@ -604,6 +604,7 @@ export class ChatClienteComponent implements OnInit {
         this.agregarListenerMensajes(c);
         c.expertos = [];
         //his.procesaFilas(c);
+        console.log(d);
         if (d.experto) {
           this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
             c.id_experto_actual = u.idtbl_usuario;
