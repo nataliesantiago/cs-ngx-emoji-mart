@@ -35,7 +35,7 @@
                   </mat-menu>
 
                 </mat-toolbar>
-                <div *ngIf="chat.id_experto_actual && !chat.mostrar_encuesta" class="contenedor-grande">
+                <div *ngIf="chat.id_experto_actual && !chat.mostrar_encuesta && chat.id_estado_conversacion==2" class="contenedor-grande">
                   <mat-card-content class="chat-middle-box contenedor-mensajes">
                     <perfect-scrollbar class="contenedor" [config]="config" scroll-down="true"
                       refresh-on-change="chat.mensajes" [attr.data-conversacion-id]="chat.codigo" scrollDirective
