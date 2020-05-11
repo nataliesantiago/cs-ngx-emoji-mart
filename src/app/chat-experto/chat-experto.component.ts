@@ -448,7 +448,7 @@ export class ChatExpertoComponent implements OnInit {
           });
           let c = chats.pop();
           let disponibilidad = await this.chatService.getDisponibilidadExperto();
-          console.log('disponibilidad: ', disponibilidad, c);
+          console.log('disponibilidad: ', disponibilidad, c, new Date().getTime());
           if (c && disponibilidad && !c.id_experto_actual) {
             this.onSelectCola(c);
           }
