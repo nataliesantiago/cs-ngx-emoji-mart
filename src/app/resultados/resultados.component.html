@@ -43,7 +43,7 @@
         </ul>
 
       </div>
-      <div *ngIf="!origen || origen=='conecta'"><button fxFlex="45" class="custom__btn custom__btn--accept"
+      <div *ngIf="(!origen || origen=='conecta') && puedeAbrirChat()"><button fxFlex="45" class="custom__btn custom__btn--accept"
           (click)="abrirChat()">Abrir Chat</button></div>
     </div>
   </div>

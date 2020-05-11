@@ -221,7 +221,7 @@
 
                 </div>
 
-                <perfect-scrollbar class="contenedor-encuesta">
+                <perfect-scrollbar class="contenedor-encuesta" [hidden]="!chat.mostrar_encuesta && chat.id_estado_conversacion<3">
                   <div *ngIf="es_despedida" class="goodbye-message">
                     <h2>{{mensaje_despedida}}</h2>
                   </div>

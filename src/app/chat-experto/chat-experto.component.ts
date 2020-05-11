@@ -1093,7 +1093,10 @@ export class ChatExpertoComponent implements OnInit {
       }
       //this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
 
-      this.chatService.enviarMensaje(m);
+      this.chatService.enviarMensaje(m).then(f => {
+        // 'YYYY-MM-DD HH:mm:ss'
+        // m.fecha_mensaje = moment(f);
+      });
       if (tipo_mensaje == 1 || tipo_mensaje == 2) {
         delete chat.texto_mensaje;
       }

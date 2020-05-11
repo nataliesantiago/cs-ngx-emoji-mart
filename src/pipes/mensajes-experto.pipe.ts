@@ -16,12 +16,28 @@ export class MensajesExpertoPipe implements PipeTransform {
   constructor(private userService: UserService) {
     this.user = this.userService.getUsuario();
   }
-  transform(mensajes: Array<Mensaje>, args?: Array<any>): any {
+  transform(mensajes: Array<Mensaje>, args?: Array<any>) {
 
     this.expertos = args[1];
-    if (mensajes)
+    if (mensajes) {
+      // this.sortMensajes(mensajes);
       this.passByMensajes(args[0], mensajes, 0);
+    }
     //// console.log(mensajes);
+    
+    return mensajes;
+  }
+
+  sortMensajes(mensajes: Array<Mensaje>) {
+    mensajes = mensajes.sort((a, b) => {
+      if (a.fecha_mensaje > b.fecha_mensaje) {
+        return -1;
+      }
+      if (b.fecha_mensaje > a.fecha_mensaje) {
+        return 1;
+      }
+      return 0;
+    });
     return mensajes;
   }
 

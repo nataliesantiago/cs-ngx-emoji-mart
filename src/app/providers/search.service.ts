@@ -263,6 +263,7 @@ export class SearchService {
           }
           if (!d.resultados.results || d.resultados.results.length < 1) {
             d.resultados.results = [];
+            d.resultados.resultCountExact = 0;
             resolve(d.resultados);
           }
 
@@ -274,6 +275,8 @@ export class SearchService {
           }
           resolve(d.resultados);
         }
+      }, e => {
+        resolve({ results: [], resultCountExact: 0 });
       })
     });
   }
