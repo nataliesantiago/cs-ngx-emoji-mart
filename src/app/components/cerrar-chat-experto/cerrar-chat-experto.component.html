@@ -15,7 +15,7 @@
   </mat-radio-button>
 </mat-radio-group>
 <div class="botonera">
-  <button class="custom__btn custom__btn--accept m-r-20" [disabled]="!id_motivo_cierre && loading"
+  <button class="custom__btn custom__btn--accept m-r-20" [disabled]="!id_motivo_cierre || loading"
     (click)="cerrar(true)">Enviar</button>
   <button class="custom__btn custom__btn--cancel m-r-20" (click)="cerrar(false)" *ngIf="!data.no_cerro_experto" [disabled]="loading">Cancelar</button>
 </div>
