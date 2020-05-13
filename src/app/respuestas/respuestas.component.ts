@@ -222,7 +222,6 @@ export class RespuestasComponent implements OnInit {
       if (b) {
         id_b = JSON.parse(b).idtbl_busqueda_usuario;
       }
-      console.log(id_b);
       this.searchService.guardarTrazabilidad(this.id_pregunta_visualizar, this.usuario.idtbl_usuario, id_b);
     });
 

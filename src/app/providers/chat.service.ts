@@ -137,7 +137,7 @@ export class ChatService {
     return new Promise((r, re) => {
       this.ajax.post('chat/conversacion/enviarMensaje', mensaje).subscribe(d => {
         if (d.success) {
-          r(true);
+          r(d.fecha);
         } else {
           reject();
         }

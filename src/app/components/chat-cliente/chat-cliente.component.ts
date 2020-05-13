@@ -113,11 +113,10 @@ export class ChatClienteComponent implements OnInit {
 
             this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + c.codigo).then(conversa => {
               c.transferido = conversa.transferido;
-              //this.procesaFilas(c);
               console.log(c);
               this.chatService.getExpertoDisponible(c.filas).then(experto => {
                 if (experto) {
-                  this.chatService.asignarUsuarioExperto(experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
+                  this.userService.getInfoUsuario(experto.id_usuario).then(u => {
                     c.id_experto_actual = u.idtbl_usuario;
                     c.nombre_experto_actual = u.nombre;
                     c.asesor_actual = new User(null, null, null);
@@ -605,7 +604,7 @@ export class ChatClienteComponent implements OnInit {
         this.agregarListenerMensajes(c);
         c.expertos = [];
         //his.procesaFilas(c);
-        console.log(d);
+        // console.log(d);
         if (d.experto) {
           this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
             c.id_experto_actual = u.idtbl_usuario;
@@ -704,7 +703,11 @@ export class ChatClienteComponent implements OnInit {
         }, 1);
       }
 
-      this.chatService.enviarMensaje(m);
+      this.chatService.enviarMensaje(m).then(f => {
+        // 'YYYY-MM-DD HH:mm:ss'
+        console.log(f)
+        // m.fecha_mensaje = moment(f);
+      });;
       if (tipo_mensaje == 1 || tipo_mensaje == 2) {
         delete chat.texto_mensaje;
       }

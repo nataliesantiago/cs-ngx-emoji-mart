@@ -292,7 +292,11 @@ export class DialogoDetalleChatComponent implements OnInit {
         }, 1);
       }
       //this.fireStore.collection('paises/'+this.user.pais+'/'+'conversaciones/' + chat.codigo + '/mensajes').add(JSON.parse(JSON.stringify(m)));
-      this.chatService.enviarMensaje(m);
+      this.chatService.enviarMensaje(m).then(f => {
+        // 'YYYY-MM-DD HH:mm:ss'
+        console.log(f)
+        // m.fecha_mensaje = moment(f);
+      });;
       delete chat.texto_mensaje;
       delete chat.archivo_adjunto;
       delete chat.grabando_nota;

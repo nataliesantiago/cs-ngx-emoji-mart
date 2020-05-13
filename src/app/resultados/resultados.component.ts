@@ -40,7 +40,7 @@ export class ResultadosComponent implements OnInit {
     private router: Router,
     public responseSearch: ResponseSearch,
     private homeService: HomeService,
-    private searchService: SearchService,
+    public searchService: SearchService,
     private chatService: ChatService
   ) {
     this.searchService.buscarOrigenesDrive().then(origenes => {
@@ -106,6 +106,14 @@ export class ResultadosComponent implements OnInit {
         this.mostrar_alerta_palabras = true;
       }
     })
+  }
+
+  puedeAbrirChat() {
+    if (this.searchService.busqueda_actual) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   abrirChat() {
