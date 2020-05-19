@@ -1,6 +1,5 @@
 <div class="general-container">
-
-  <mat-card>
+  <mat-card >
     <mat-card-content>
       <div fxLayout="row wrap">
         <div fxFlex.gt-sm="100" fxFlex="100">
@@ -118,7 +117,8 @@
             <strong>Preguntas Asociadas</strong>
             <div class="panel-contenido" *ngFor="let pregunta_asociada of preguntas_adicion">
               <div class="contenido-respuesta">
-                <mat-icon class="icono-asociado">{{pregunta_asociada.icono_padre}}</mat-icon>
+                <mat-icon class="icono-asociado" *ngIf="pregunta_asociada.tipo">{{pregunta_asociada.pregunta.url_icono}}</mat-icon>
+                <mat-icon class="icono-asociado" *ngIf="!pregunta_asociada.tipo">{{pregunta_asociada.icono_padre}}</mat-icon>
                 <p class="mouse-over contenedor-texto" (click)="preguntaAsociada(pregunta_asociada.idtbl_pregunta)">
                   {{pregunta_asociada.titulo}}</p>
               </div>
