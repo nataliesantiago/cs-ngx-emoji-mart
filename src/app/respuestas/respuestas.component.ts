@@ -63,7 +63,6 @@ export class RespuestasComponent implements OnInit {
   }
 
   init() {
-
     this.chatService.obtenerLimiteTexto().then(valor => {
       this.limite_texto_observacion = valor;
     });
@@ -127,23 +126,19 @@ export class RespuestasComponent implements OnInit {
         this.ajax.get('preguntas/obtener-preguntas-asociadas', { idtbl_pregunta: this.id_pregunta_visualizar }).subscribe(pras => {
           if (pras.success) {
             this.preguntas_adicion = pras.preguntas_asociadas;
-            // console.log(pras);
             if (this.preguntas_adicion.length < 5) {
               this.searchService.queryCloudSearch(this.pregunta.titulo, 1, 'conecta', 0, false).then(asociadas => {
-                // console.log(asociadas);
                 if (asociadas.results) {
-
                   asociadas.results.filter(f => {
-                    return f.idtbl_pregunta != this.pregunta.idtbl_pregunta;
+                    return f.idtbl_pregunta !== this.pregunta.idtbl_pregunta;
                   }).forEach(a => {
                     if (this.preguntas_adicion.length < 5) {
-                      this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta });
+                      this.preguntas_adicion.push({ titulo: a.title, idtbl_pregunta: a.idtbl_pregunta, tipo: 1, pregunta: a });
                     }
                   });
                 }
-              })
+              });
             }
-            //this.cg.detectChanges();
           }
         });
 
