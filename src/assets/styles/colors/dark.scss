@@ -53,6 +53,10 @@ span {
     color: $color-ffffff;
 }
 
+a {
+    text-decoration: underline;
+}
+
 .texto_gris {
     color: $color-ffffff;
 }
@@ -438,6 +442,7 @@ span {
             .mat-icon,
             img {
                 color: $color-ffffff;
+
                 &.url-drive-icono {
                     top: 5px;
                     left: -20px;
@@ -542,46 +547,48 @@ mat-card {
             .barra-superior {
                 background-color: $color-7a7a7a !important;
             }
+
             .contenedor-mensajes {
                 .contenedor {
                     .chat-list.odd {
                         .chat-block {
                             background-color: $color-7a7a7a !important;
                         }
-                    } 
-                } 
-            } 
+                    }
+                }
+            }
+
             .contenedor-encuesta {
                 background-color: $color-424242 !important;
             }
-        } 
-    } 
-} 
+        }
+    }
+}
 
 @keyframes titila {
     0% {
-      color: #888888 !important;
-      background: whitesmoke;
+        color: #888888 !important;
+        background: whitesmoke;
     }
-  
+
     25% {
-      background: orange;
-      color: white !important;
+        background: orange;
+        color: white !important;
     }
-  
+
     50% {
-      color: #888888 !important;
-      background: whitesmoke;
+        color: #888888 !important;
+        background: whitesmoke;
     }
-  
+
     75% {
-      background: orange;
-      color: white !important;
+        background: orange;
+        color: white !important;
     }
-  
+
     100% {
-      color: #967777 !important;
-      background: whitesmoke;
+        color: #967777 !important;
+        background: whitesmoke;
     }
 }
 
@@ -605,6 +612,7 @@ mat-card {
                             background-color: $color-7a7a7a;
                         }
                     }
+
                     &.even {
                         .chat-block {
                             background-color: $color-999999;

@@ -918,7 +918,7 @@ Mat card
     border-radius: $radius;
     
     .mat-card-content{
-        font-size:1rem;
+        font-size:1rem !important;
         line-height: 23px;
         padding: 24px;    
     }
@@ -936,7 +936,7 @@ Mat card
         .mat-card-subtitle, .mat-card-subtitle:not(:first-child){
             margin-bottom: 0px;
             margin-top: 0px;
-            font-size: 14px;
+            //font-size: 14px;
         }
         &.text-white{
            .mat-card-title{

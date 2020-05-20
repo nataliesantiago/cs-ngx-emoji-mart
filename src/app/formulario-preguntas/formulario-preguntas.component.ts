@@ -1,4 +1,4 @@
-  import { Component, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { AjaxService } from '../providers/ajax.service';
 import { UserService } from '../providers/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -151,10 +151,10 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
   }
 
   buscarPreguntas(query: string) {
-    
+
     if (query && query != '')
       this.searchService.queryCloudSearch(query, 1, 'conecta', 0, false).then(preguntas => {
-        
+
         let tmp = [];
         preguntas.results.forEach((r: ResultadoCloudSearch) => {
           let id = r.metadata.fields.find(f => {
@@ -373,7 +373,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < this.array_mostrar.length; i++) {
           this.array_mostrar[i].segmento = this.segmentos[this.array_mostrar[i].pos_segmento].titulo;
         }
-        
+        console.log(this.pregunta)
         this.ajax.post('preguntas/guardar', { pregunta: this.pregunta, segmentos: this.segmentos, subrespuestas: this.subrespuestas, subrespuestas_segmentos: this.array_mostrar, preguntas_adicion: this.preguntas_adicion, cargos_asociados: this.cargos_asociados }).subscribe(d => {
           if (d.success) {
             this.router.navigate(['/admin/preguntas']);
@@ -498,8 +498,8 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
 
   anadirSubRespuestaSegmento(e, pos) {
     this.array_mostrar.push({ titulo: '', respuesta: '', pos_segmento: pos, segmento: '' });
-    
-    if(e.idtbl_segmento){
+
+    if (e.idtbl_segmento) {
       this.array_mostrar[this.array_mostrar.length - 1].segmento = e.idtbl_segmento;
     }
 
@@ -765,7 +765,7 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
     const input = event.input;
     const value = event.value;
     const length_keywords = this.pregunta.keywords.length;
-    
+
     if ((value || '').trim()) {
       if (length_keywords <= 99) {
         this.pregunta.keywords.push(value.trim());

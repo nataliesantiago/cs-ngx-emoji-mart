@@ -1,25 +1,34 @@
-.checkbox{
+.checkbox {
     margin-right: 10px;
 }
 
-.elementos-seleccionados{
+.elementos-seleccionados {
     text-align: center;
 }
 
-.elementos{
+.elementos {
     display: inline-block !important;
     margin-bottom: 10px;
 }
 
-.icon-close{
+.icon-close {
     color: red;
 }
 
-.chip{
+.chip {
     background-color: #3f51b5;
 }
 
-.opcion-seleccionar-todos{
+.opcion-seleccionar-todos {
     margin-left: 25px;
     margin-top: 15px;
+}
+
+.spinner-cargando-flujo {
+    display: flex;
+    margin-top: 20px;
+
+    .mat-progress-spinner {
+        margin: auto;
+    }
 }

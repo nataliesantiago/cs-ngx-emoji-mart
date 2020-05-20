@@ -44,8 +44,13 @@ export class AdministradorUsuariosComponent implements OnInit {
   ];
   filters = {};
 
-  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router, 
-              private cg: ChangeDetectorRef, private qs: QuillService) {
+  cargando_usuarios = true;
+  progreso = 0;
+  modo_spinner = 'determinate';
+  total_usuarios;
+  limite = 200;
+  constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router,
+    private cg: ChangeDetectorRef, private qs: QuillService) {
     this.user = this.userService.getUsuario();
     this.userService.observableUsuario.subscribe(u => {
       if (u) {
@@ -53,10 +58,7 @@ export class AdministradorUsuariosComponent implements OnInit {
       }
     });
 
-    this.userService.getAllUsers().then(p => {
-      this.usuarios = p;
-      this.createTable(p);
-    });
+    this.actualizarDatos();
 
     this.userService.getPerfilesUsuario().then(p => {
       this.perfiles = p;
@@ -99,12 +101,31 @@ export class AdministradorUsuariosComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  actualizarDatos() {
+  cargarUsuarios() {
     this.modificarUsuario = false;
-    this.userService.getAllUsers().then(p => {
-      this.usuarios = p;
-      this.createTable(p);
-    });
+    let peticiones = Math.ceil(this.total_usuarios / this.limite);
+    let paso = Math.ceil(100 / peticiones);
+    let temp = [];
+    for (let index = 0; index < peticiones; index++) {
+      this.userService.getAllUsersPaginado(this.limite, index).then(p => {
+        temp = temp.concat(p);
+        this.progreso += paso;
+        if (temp.length >= this.total_usuarios) {
+          this.usuarios = temp;
+          this.cargando_usuarios = false;
+          this.createTable(this.usuarios);
+        }
+      });
+    }
+  }
+
+  actualizarDatos() {
+    this.cargando_usuarios = true;
+    this.userService.getTotalUsuarios().then(total => {
+      this.total_usuarios = total;
+      console.log(total)
+      this.cargarUsuarios();
+    })
   }
 
   selectAll(all) {
@@ -158,27 +179,24 @@ export class AdministradorUsuariosComponent implements OnInit {
     this.userService.enviarPesos(this.usuarios, this.peso_todos).then(r => {
       if (r.success) {
         this.closeAll();
-        this.userService.getAllUsers().then(p => {
-          this.usuarios = p;
-          this.createTable(p);
-        });
+        this.actualizarDatos();
       }
     })
   }
 
-  editarVarios(){
-    if(!this.mostrar_acciones){
+  editarVarios() {
+    if (!this.mostrar_acciones) {
       this.displayedColumns = ['check', 'acciones', 'idtbl_usuario', 'nombre', 'correo', 'rol', 'perfil', 'peso_chat'];
       this.texto_boton = "Ocultar Acciones"
       this.mostrar_acciones = true;
-    }else{
+    } else {
       this.displayedColumns = ['acciones', 'idtbl_usuario', 'nombre', 'correo', 'rol', 'perfil', 'peso_chat'];
       this.texto_boton = "Editar Varios"
       this.mostrar_acciones = false;
     }
-    
-  }
 
+  }
+  texto_filtro;
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.usuarios);
@@ -191,6 +209,7 @@ export class AdministradorUsuariosComponent implements OnInit {
         });
       }
       this.createTable(newArray);
+      this.applyFilter(this.texto_filtro);
     }
   }
 
