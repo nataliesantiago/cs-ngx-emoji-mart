@@ -10,7 +10,7 @@
             <div class="container-filter">
                 <div class="element-filter element-filter-3">
                     <mat-form-field>
-                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda">
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar busqueda" [(ngModel)]="texto_filtro">
                         <mat-icon class="search-icon">search</mat-icon>
                     </mat-form-field>
                 </div>
@@ -126,6 +126,9 @@
                         <mat-row *matRowDef="let row; columns: displayedColumns;">
                         </mat-row>
                     </mat-table>
+                </div>
+                <div class="spinner-cargando-flujo" >
+                    <mat-progress-spinner [mode]="modo_spinner" [value]="progreso" *ngIf="cargando_usuarios"></mat-progress-spinner>
                 </div>
                 <mat-paginator [pageSizeOptions]="[50, 100, 200]"></mat-paginator>
             </div>

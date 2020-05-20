@@ -75,6 +75,16 @@ export class UserService {
 
     }
 
+    getTotalUsuarios() {
+        return new Promise((res, rej) => {
+            this.ajax.get('user/obtenerTotalUsuarios', {}).subscribe(d => {
+                if (d.success) {
+                    res(d.total);
+                }
+            })
+        });
+    }
+
     definirPaisUsuario(p: string) {
         this.ajax.pais = p;
         localStorage.setItem('pais', p);
@@ -212,13 +222,13 @@ export class UserService {
         this.ajax.post('chat/setActivoExperto', { activo: activo, value_estado: value_estado, atendiendo_emergencia: atendiendo_emergencia, id_experto: this.user.getId() }).subscribe(d => {
 
         });
-        
+
     }
 
     setActivoExpertoGlobal(estado: number) {
         this.user.estado_actual = estado;
         this.subjectEstadoExperto.next(estado);
-        
+
     }
 
     getInfoUsuario(id): Promise<User> {
@@ -388,6 +398,17 @@ export class UserService {
     getAllUsers() {
         return new Promise((resolve, reject) => {
             this.ajax.get('user/obtener-usuarios').subscribe(p => {
+                if (p.success) {
+                    resolve(p.usuarios);
+                } else {
+                    reject();
+                }
+            })
+        });
+    }
+    getAllUsersPaginado(limite, pagina) {
+        return new Promise((resolve, reject) => {
+            this.ajax.get('user/obtener-usuarios-paginado', { limite: limite, pagina: pagina }).subscribe(p => {
                 if (p.success) {
                     resolve(p.usuarios);
                 } else {

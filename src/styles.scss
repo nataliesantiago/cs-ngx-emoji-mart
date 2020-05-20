@@ -2262,7 +2262,7 @@ a:hover {
 }
 
 .ql-snow a {
-  color: #06c;
+  color: #06c !important;
 }
 
 .ql-container.ql-snow {
@@ -3495,7 +3495,7 @@ input:-webkit-autofill:active {
   @extend .ql-editor;
 
   a {
-    color: blue !important;
+    color: blue;
   }
 
   span,
@@ -3510,7 +3510,7 @@ input:-webkit-autofill:active {
   p,
   li,
   strong {
-    color: rgb(96, 96, 96);
+  //  color: rgb(96, 96, 96);
     ;
   }
 }
