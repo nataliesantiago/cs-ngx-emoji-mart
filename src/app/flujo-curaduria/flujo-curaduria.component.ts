@@ -386,6 +386,7 @@ export class FlujoCuraduriaComponent implements OnInit {
 
     if (this.rol_usuario == 5) {
       this.ajax.get('preguntas/obtener-cantidad-preguntas-flujo-curaduria-persona', { estado_flujo_pregunta: 1, id_usuario: this.id_usuario }).subscribe(p => {
+        console.log(p);
         if (p.success) {
 
           this.cant_curaduria = p.cantidad;
