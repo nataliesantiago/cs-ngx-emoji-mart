@@ -106,6 +106,7 @@ export class AdministradorUsuariosComponent implements OnInit {
     let peticiones = Math.ceil(this.total_usuarios / this.limite);
     let paso = Math.ceil(100 / peticiones);
     let temp = [];
+    this.progreso = 0;
     for (let index = 0; index < peticiones; index++) {
       this.userService.getAllUsersPaginado(this.limite, index).then(p => {
         temp = temp.concat(p);
@@ -114,6 +115,7 @@ export class AdministradorUsuariosComponent implements OnInit {
           this.usuarios = temp;
           this.cargando_usuarios = false;
           this.createTable(this.usuarios);
+          this.applyFilter(this.texto_filtro);
         }
       });
     }
