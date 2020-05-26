@@ -49,6 +49,7 @@ export class AdministradorUsuariosComponent implements OnInit {
   modo_spinner = 'determinate';
   total_usuarios;
   limite = 200;
+  texto_filtro='';
   constructor(private ajax: AjaxService, private userService: UserService, private route: ActivatedRoute, private router: Router,
     private cg: ChangeDetectorRef, private qs: QuillService) {
     this.user = this.userService.getUsuario();
@@ -111,6 +112,7 @@ export class AdministradorUsuariosComponent implements OnInit {
       this.userService.getAllUsersPaginado(this.limite, index).then(p => {
         temp = temp.concat(p);
         this.progreso += paso;
+        // console.log(temp.length);
         if (temp.length >= this.total_usuarios) {
           this.usuarios = temp;
           this.cargando_usuarios = false;
@@ -125,7 +127,7 @@ export class AdministradorUsuariosComponent implements OnInit {
     this.cargando_usuarios = true;
     this.userService.getTotalUsuarios().then(total => {
       this.total_usuarios = total;
-      console.log(total)
+      // console.log(total)
       this.cargarUsuarios();
     })
   }
@@ -198,7 +200,7 @@ export class AdministradorUsuariosComponent implements OnInit {
     }
 
   }
-  texto_filtro;
+  
   filterData(name, event) {
     if (event.value == 'todos') {
       this.createTable(this.usuarios);

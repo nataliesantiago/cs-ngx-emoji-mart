@@ -948,14 +948,17 @@ export class ChatExpertoComponent implements OnInit {
     }
   }
 
-  onSelectCola(c: Conversacion): Promise<any> {
+  onSelectCola(c: Conversacion, clicked?: boolean): Promise<any> {
     // this.chat = chat;
     // chat.mensajes_nuevos = false;
+    
     return new Promise((resolve, reject) => {
       if (!c.chat_tomado || c.chat_tomado != this.user.getId()) {
         c.chat_tomado = this.user.getId();
+        let asignado_por = (clicked) ? 'click experto' : 'sistema experto fila';
+        console.log('clit');
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ chat_tomado: c.chat_tomado }).then(() => {
-          this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
+          this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false, asignado_por).then(u => {
             resolve(true);
           });
         }).catch(e => {

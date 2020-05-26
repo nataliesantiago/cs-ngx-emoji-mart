@@ -78,7 +78,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 2).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
 
       let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
-      console.log(chats);
+      // console.log(chats);
       if (!this.chats_activos || this.chats_activos.length < 1) {
         this.chats_activos = chats;
         for (let c of this.chats_activos) {
@@ -131,7 +131,7 @@ export class ConsolaSupervisorComponent implements OnInit {
     });
     this.fireStore.collection('paises/' + this.user.pais + '/' + 'conversaciones', ref => ref.where('id_tipo_conversacion', '==', 1).where('id_estado_conversacion', '==', 1).orderBy('fecha_creacion')).snapshotChanges().subscribe(async changes => {
       let chats = await this.procesaConversaciones(changes) as Array<Conversacion>;
-      console.log(chats);
+      // console.log(chats);
       for (let c of chats) {
         setInterval(() => {
 
