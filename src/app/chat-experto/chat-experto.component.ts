@@ -38,7 +38,11 @@ declare var StereoAudioRecorder: any;
   styleUrls: ['./chat-experto.component.scss']
 })
 export class ChatExpertoComponent implements OnInit {
-  ngOnInit() { }
+  ngOnInit() {
+    this.interval_recibir = setInterval(() => {
+      this.recibirChatAutomatico();
+    }, 10000);
+  }
   them;
   sidePanelOpened = true;
   texto_mensaje: string;
@@ -76,7 +80,7 @@ export class ChatExpertoComponent implements OnInit {
   listener_cola = [];
   listener_fila;
   listener_activos;
-
+  interval_recibir;
   @ViewChild('escribirMensaje') escribir_mensaje: ElementRef;
   validando_automatico = false;
   constructor(private userService: UserService, private chatService: ChatService,
@@ -366,6 +370,7 @@ export class ChatExpertoComponent implements OnInit {
     })
   }
 
+
   async buscarUsuario(id_usuario: number) {
     return new Promise((resolve, reject) => {
       let u = this.usuarios.find((user: User) => {
@@ -428,6 +433,7 @@ export class ChatExpertoComponent implements OnInit {
   }
 
   recibirChatAutomatico() {
+    console.log('Recibiendo automático');
     if (!this.validando_automatico) {
       this.validando_automatico = true;
       let config = this.utilService.buscarConfiguracion('cantidad_usuarios_simultaneos_operador');
@@ -503,7 +509,9 @@ export class ChatExpertoComponent implements OnInit {
     if (this.listener_activos) {
       this.listener_activos.unsubscribe();
     }
-
+    if (this.interval_recibir) {
+      window.clearInterval(this.interval_recibir);
+    }
   }
 
   toggleRecomendacion(c: Conversacion) {
@@ -948,14 +956,17 @@ export class ChatExpertoComponent implements OnInit {
     }
   }
 
-  onSelectCola(c: Conversacion): Promise<any> {
+  onSelectCola(c: Conversacion, clicked?: boolean): Promise<any> {
     // this.chat = chat;
     // chat.mensajes_nuevos = false;
+
     return new Promise((resolve, reject) => {
       if (!c.chat_tomado || c.chat_tomado != this.user.getId()) {
         c.chat_tomado = this.user.getId();
+        let asignado_por = (clicked) ? 'click experto' : 'sistema experto fila';
+        console.log('clit');
         this.fireStore.doc('paises/' + this.user.pais + '/' + 'conversaciones/' + c.codigo).update({ chat_tomado: c.chat_tomado }).then(() => {
-          this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false).then(u => {
+          this.chatService.asignarUsuarioExperto(this.user.getId(), c.idtbl_conversacion, c.codigo, false, asignado_por).then(u => {
             resolve(true);
           });
         }).catch(e => {

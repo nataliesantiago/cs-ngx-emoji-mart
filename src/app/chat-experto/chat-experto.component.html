@@ -8,15 +8,8 @@
           <div class="panel-chats primero" *ngIf="!esSupervisor">
             <perfect-scrollbar class="contenido">
               <mat-nav-list>
-                <mat-list-item (click)="onSelectCola(chat)" *ngFor="let chat of fila_chats | filaChats" class="espera">
-                  <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
-                  <div class="punt-estado-chat"
-                    [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola),'gris':(chat.id_estado_conversacion!=2 && chat.id_estado_conversacion!=1)}">
-                  </div>
-                  <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
-                </mat-list-item>
-                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos" 
-                  [ngClass]="{
+                <div mat-subheader>Chats Activos</div>
+                <mat-list-item (click)="onSelect(chat)" *ngFor="let chat of chats_experto" class="activos" [ngClass]="{
                     'mensajes-nuevos':new_messages.includes(chat.idtbl_conversacion)
                   }">
                   <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
@@ -33,7 +26,15 @@
                     </span>
                     {{chat.ultimo_mensaje.label}} </p>
                 </mat-list-item>
-
+                <mat-divider></mat-divider>
+                <div mat-subheader>Chats en espera</div>
+                <mat-list-item (click)="onSelectCola(chat,true)" *ngFor="let chat of fila_chats | filaChats" class="espera">
+                  <img mat-list-avatar src="{{chat.cliente.url_imagen_gsuite}}" alt="" *ngIf="chat.cliente">
+                  <div class="punt-estado-chat"
+                    [ngClass]="{'green':(chat.id_estado_conversacion==2),'orange':(chat.id_estado_conversacion==1 && !chat.tiempo_cola),'red':(chat.id_estado_conversacion==1 && chat.tiempo_cola),'gris':(chat.id_estado_conversacion!=2 && chat.id_estado_conversacion!=1)}">
+                  </div>
+                  <h3 matLine *ngIf="chat.cliente"> {{chat.cliente.nombre}} </h3>
+                </mat-list-item>
               </mat-nav-list>
             </perfect-scrollbar>
           </div>
@@ -223,7 +224,8 @@
                         <mat-icon>close</mat-icon>
                       </button>
                     </div>
-                    <button mat-icon-button color="basic" class="boton-mic" (click)="enviarNota(chat,este)" title="Enviar Nota">
+                    <button mat-icon-button color="basic" class="boton-mic" (click)="enviarNota(chat,este)"
+                      title="Enviar Nota">
                       <mat-icon>mic</mat-icon>
                     </button>
                     <div class="cuenta-regresiva">
@@ -297,10 +299,11 @@
                 <button mat-icon-button color="primary" (click)="toggleEmojis(chat)">
                   <mat-icon aria-label="Example icon-button with a heart icon">tag_faces</mat-icon>
                 </button>
-                <textarea #escribirMensaje autosize class="input-mensaje" placeholder="Envía un mensaje" [minHeight]="30"
-                  (keydown.enter)="enviarMensaje(chat,1,null,$event,este)" (keydown)="escribiendo(chat,$event)"
-                  (keydown.control.f)="buscarTexto(chat,$event,search)" (keyup)="remplazaEmoji(chat)"
-                  [(ngModel)]="chat.texto_mensaje" (focus)="onSelect(chat)" (blur)="setFocus(chat,false)"></textarea>
+                <textarea #escribirMensaje autosize class="input-mensaje" placeholder="Envía un mensaje"
+                  [minHeight]="30" (keydown.enter)="enviarMensaje(chat,1,null,$event,este)"
+                  (keydown)="escribiendo(chat,$event)" (keydown.control.f)="buscarTexto(chat,$event,search)"
+                  (keyup)="remplazaEmoji(chat)" [(ngModel)]="chat.texto_mensaje" (focus)="onSelect(chat)"
+                  (blur)="setFocus(chat,false)"></textarea>
                 <button mat-icon-button color="primary" (click)="adjuntos.click()"
                   [disabled]="chat.cargando_archivo || chat.grabando_nota">
                   <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>

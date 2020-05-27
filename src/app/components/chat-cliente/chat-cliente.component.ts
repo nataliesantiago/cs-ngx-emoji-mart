@@ -111,7 +111,7 @@ export class ChatClienteComponent implements OnInit {
           }
           if (c.filas && c.id_estado_conversacion == 1) {
 
-            this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + c.codigo).then(conversa => {
+           /* this.chatService.getDocumentoFirebase('paises/' + this.user.pais + '/conversaciones/' + c.codigo).then(conversa => {
               c.transferido = conversa.transferido;
               console.log(c);
               this.chatService.getExpertoDisponible(c.filas).then(experto => {
@@ -130,7 +130,7 @@ export class ChatClienteComponent implements OnInit {
                   });
                 }
               })
-            })
+            })*/
           } else {
             c.no_hay_filas = "1";
           }
@@ -442,14 +442,14 @@ export class ChatClienteComponent implements OnInit {
       c.filas.forEach((ce, index) => {
         this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).delete();
       });
-      this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
+     /* this.chatService.asignarUsuarioExperto(experto.idtbl_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
         c.id_experto_actual = u.idtbl_usuario;
         c.nombre_experto_actual = u.nombre;
         c.asesor_actual = new User(null, null, null);
         c.asesor_actual.url_foto = u.url_foto;
         c.asesor_actual.idtbl_usuario = c.id_experto_actual;
         c.asesor_actual.nombre = c.nombre_experto_actual;
-      });
+      });*/
     } else if (!c.transferido) {
       c.filas.forEach((ce, index) => {
         this.fireStore.collection('paises/' + this.user.pais + '/' + 'categorias_experticia/' + ce.id + '/chats/').doc(c.codigo).set({ activo: true });
@@ -606,14 +606,14 @@ export class ChatClienteComponent implements OnInit {
         //his.procesaFilas(c);
         // console.log(d);
         if (d.experto) {
-          this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
+         /* this.chatService.asignarUsuarioExperto(d.experto.id_usuario, c.idtbl_conversacion, c.codigo, false).then(u => {
             c.id_experto_actual = u.idtbl_usuario;
             c.nombre_experto_actual = u.nombre;
             c.asesor_actual = new User(null, null, null);
             c.asesor_actual.url_foto = u.url_foto;
             c.asesor_actual.idtbl_usuario = c.id_experto_actual;
             c.asesor_actual.nombre = c.nombre_experto_actual;
-          });
+          });*/
         } else {
           let filas = [];
           c.filas.forEach((ce, index) => {

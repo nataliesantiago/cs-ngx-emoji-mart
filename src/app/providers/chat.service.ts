@@ -118,9 +118,9 @@ export class ChatService {
    * @param  {string} codigo
    * @returns Promise
    */
-  asignarUsuarioExperto(id_usuario: number, id_conversacion: number, codigo: string, supervisor: boolean): Promise<User> {
+  asignarUsuarioExperto(id_usuario: number, id_conversacion: number, codigo: string, supervisor: boolean, asignado_por: string): Promise<User> {
     return new Promise((r, re) => {
-      this.ajax.post('chat/conversacion/asignarExperto', { id_usuario: id_usuario, id_conversacion: id_conversacion, codigo, supervisor: supervisor }).subscribe(d => {
+      this.ajax.post('chat/conversacion/asignarExperto', { id_usuario: id_usuario, id_conversacion: id_conversacion, codigo, supervisor: supervisor, asignado_por: asignado_por }).subscribe(d => {
         if (d.success) {
           r(d.usuario);
         }
@@ -481,10 +481,10 @@ export class ChatService {
    * @param  {number} id_tipo
    * @returns Promise
    */
-  transferirChat(c: Conversacion, id_transferencia: number, id_tipo: number): Promise<any> {
+  transferirChat(c: Conversacion, id_transferencia: number, id_tipo: number, supervisor?: boolean): Promise<any> {
     return new Promise((resolve, reject) => {
 
-      this.ajax.post('chat/conversacion/transferir', { id_experto: this.user.getId(), id_conversacion: c.idtbl_conversacion, id_cliente: c.cliente.idtbl_usuario, codigo: c.codigo, id_tipo: id_tipo, coidgo_chat: c.codigo_chat, id_transferencia: id_transferencia }).subscribe(d => {
+      this.ajax.post('chat/conversacion/transferir', { id_experto: this.user.getId(), supervisor: supervisor, id_conversacion: c.idtbl_conversacion, id_cliente: c.cliente.idtbl_usuario, codigo: c.codigo, id_tipo: id_tipo, coidgo_chat: c.codigo_chat, id_transferencia: id_transferencia }).subscribe(d => {
         if (d.success) {
           //this.fireStore.doc('paises/' + this.user.pais + '/' + 'expertos/' + this.user.getId() + '/chats/' + c.codigo).delete();
           resolve();
