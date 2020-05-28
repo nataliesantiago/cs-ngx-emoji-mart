@@ -126,6 +126,9 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
           }
         })
       });
+      ql.getModule('toolbar').addHandler('image', () => {
+        this.qs.fileStorageHandler(ql);
+      });
     }, 1000);
 
   }
@@ -316,7 +319,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
       })
 
     } else {
-      
+
       if (this.editar) {
 
         if (this.pregunta.muestra_fecha_actualizacion) {
@@ -1012,7 +1015,7 @@ export class FormularioPreguntasFlujoCuraduriaComponent implements OnInit {
     const input = event.input;
     const value = event.value;
     const length_keywords = this.pregunta.keywords.length;
-    
+
     if ((value || '').trim()) {
       if (length_keywords <= 99) {
         this.pregunta.keywords.push(value.trim());

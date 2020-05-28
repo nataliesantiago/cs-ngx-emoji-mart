@@ -123,6 +123,9 @@ export class FormularioPreguntasComponent implements OnInit, AfterViewInit {
           }
         })
       });
+      ql.getModule('toolbar').addHandler('image', () => {
+        this.qs.fileStorageHandler(ql);
+      });
     }, 1000);
 
   }
