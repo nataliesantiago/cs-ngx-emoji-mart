@@ -104,6 +104,7 @@ export class Conversacion {
     chat_tomado: number;
     categorias_ids: Array<number>;
     ventana_transferencia:any;
+    tema_busqueda: string;
     constructor(id_usuario?, tipo_conversacion?, codigo?) {
         this.id_usuario_creador = id_usuario;
         this.id_tipo_conversacion = tipo_conversacion;
