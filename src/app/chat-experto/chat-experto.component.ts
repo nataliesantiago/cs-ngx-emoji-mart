@@ -1309,7 +1309,7 @@ export class ChatExpertoComponent implements OnInit {
     cadena = cadena.replace('{correo_cliente}', c.cliente.correo);
     cadena = cadena.replace('{categoria}', c.nombre_producto);
     cadena = cadena.replace('{fecha_actual}', moment().format('DD-MM-YYYY hh:mm:ss a'));
-    cadena = cadena.replace('{busqueda}', c.texto_busqueda);
+    cadena = cadena.replace('{busqueda}', c.tema_busqueda);
     cadena = cadena.replace('{id_conversacion}', c.idtbl_conversacion);
     return cadena;
   }
