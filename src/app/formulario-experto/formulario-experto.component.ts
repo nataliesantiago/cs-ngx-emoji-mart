@@ -173,87 +173,104 @@ export class FormularioExpertoComponent implements OnInit {
       }
     }).then((result) => {
       if (result.value) {
-        if(this.editar){
-          
-          if(e.idtbl_categoria_experticia != undefined){
-            this.ajax.post('user/eliminar-asociacion-categoria-experticia', { experticia_asociada: e, id_experto: this.id_experto }).subscribe(d => {
-              if(d.success){
+        if (this.editar) {
+          if (e.idtbl_categoria_experticia !== undefined) {
+            this.ajax.post('user/eliminar-asociacion-categoria-experticia',
+                            { experticia_asociada: e, id_experto: this.id_experto }).subscribe(d => {
+              if (d.success) {
                 let pos = 0;
-                for(let i = 0; i < this.experticia_asociada.length; i++){
-                  if((this.experticia_asociada[i].idtbl_categoria_experticia == e.idtbl_categoria_experticia) && (this.experticia_asociada[i].idtbl_horario_chat == e.idtbl_horario_chat)){
+                for (let i = 0; i < this.experticia_asociada.length; i++) {
+                  if ((this.experticia_asociada[i].idtbl_categoria_experticia === e.idtbl_categoria_experticia) &&
+                        (this.experticia_asociada[i].idtbl_horario_chat === e.idtbl_horario_chat)) {
                     pos = i;
                   }
                 }
-                this.experticia_asociada.splice(pos,1);
+                this.experticia_asociada.splice(pos, 1);
                 this.createTable(this.experticia_asociada);
                 this.cg.detectChanges();
               }
-            })
-          }else{
+            });
+          } else {
             let pos = 0;
-            for(let i = 0; i < this.experticia_asociada.length; i++){
-              if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
+            for (let i = 0; i < this.experticia_asociada.length; i++) {
+              if (this.experticia_asociada[i].idtbl_pregunta === e.idtbl_pregunta) {
                 pos = i;
               }
             }
-            this.experticia_asociada.splice(pos,1);
+            this.experticia_asociada.splice(pos, 1);
             this.createTable(this.experticia_asociada);
             this.cg.detectChanges();
           }
-        }else{
+        } else {
           let pos = 0;
-          for(let i = 0; i < this.experticia_asociada.length; i++){
-            if(this.experticia_asociada[i].idtbl_pregunta == e.idtbl_pregunta){
+          for (let i = 0; i < this.experticia_asociada.length; i++) {
+            if (this.experticia_asociada[i].idtbl_pregunta === e.idtbl_pregunta) {
               pos = i;
             }
           }
-          this.experticia_asociada.splice(pos,1);
+          this.experticia_asociada.splice(pos, 1);
           this.createTable(this.experticia_asociada);
           this.cg.detectChanges();
         }
       }
-    })
+    });
   }
 
   enviarDato(){
     let enviarInfo = true;
     let esNuevo = false;
-    for(let i = 0; i < this.experticia_asociada.length; i++){
-      if(!this.experticia_asociada[i].idtbl_horario_chat){
+    for (let i = 0; i < this.experticia_asociada.length; i++) {
+      if (!this.experticia_asociada[i].idtbl_horario_chat || this.experticia_asociada[i].idtbl_horario_chat === null) {
         enviarInfo = false;
       }
       if (this.experticia_asociada[i].nuevo) {
         esNuevo = true;
       }
     }
-    
+
     if (esNuevo) {
-      if(enviarInfo){
+      if (enviarInfo) {
         this.loading = true;
-        if(this.editar){
-          this.ajax.post('user/agregar-expertiz', { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto, id_usuario: this.id_usuario }).subscribe(d => {
-            if(d.success){
+        if (this.editar) {
+          this.ajax.post('user/agregar-expertiz', { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto,
+              id_usuario: this.id_usuario }).subscribe(d => {
+            if (d.success) {
               this.loading = false;
               this.router.navigate(['/ad-expertos']);
             }
-          })
-        } 
-      }else{
-        swal.fire({
-          title: 'Datos Incompletos',
-          text: 'Porfavor seleccione horario para todas las categorias de expertiz',
-          type: 'warning',
-          buttonsStyling: false,
-          confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
-          confirmButtonText: 'Aceptar',
-          customClass: {
-            container: 'custom-sweet'
-          }
-        });
+          });
+        }
+      } else {
+        this.mostrarModalAdvertencia();
       }
     } else {
-      this.router.navigate(['/ad-expertos']);
+      if (enviarInfo) {
+        this.loading = true;
+        this.ajax.post('user/agregar-horario-categoria-experticia',
+                        { experticia_asociada: this.experticia_asociada, id_experto: this.id_experto }).subscribe(d => {
+          if (d.success) {
+            this.loading = false;
+            this.router.navigate(['/ad-expertos']);
+          }
+        });
+      } else {
+        this.mostrarModalAdvertencia();
+      }
     }
+  }
+
+  mostrarModalAdvertencia() {
+    swal.fire({
+      title: 'Datos Incompletos',
+      text: 'Porfavor seleccione horario para todas las categorias de expertiz',
+      type: 'warning',
+      buttonsStyling: false,
+      confirmButtonClass: 'custom__btn custom__btn--accept m-r-20',
+      confirmButtonText: 'Aceptar',
+      customClass: {
+        container: 'custom-sweet'
+      }
+    });
   }
 
   habilitarExperticia(){
