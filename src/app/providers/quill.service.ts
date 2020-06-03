@@ -20,7 +20,7 @@ export class QuillService {
       this.utilService.abrirPickerDrive().then(archivo => {
         //// console.log(archivo);
         const range = this.editor.getSelection();
-        let url = (archivo.mimeType.indexOf('google-apps') != (-1)) ? archivo.embedUrl+'?' : archivo.embedUrl;
+        let url = (archivo.mimeType.indexOf('google-apps') != (-1)) ? archivo.embedUrl + '?' : archivo.embedUrl;
         url += '&&iconodrive=' + archivo.iconUrl;
         this.editor.insertEmbed(range.index, 'video', `${url}`, 'user');
         //this.editor.insertText(range.index+2,' ')
@@ -37,11 +37,11 @@ export class QuillService {
     // console.log('paso')
     return new Promise(resolve => {
       this.editor = a;
-      this.selectLocalImage();
+      this.selectLocalImage(resolve);
     });
   }
 
-  selectLocalImage() {
+  selectLocalImage(resolve) {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.click();
@@ -51,7 +51,7 @@ export class QuillService {
       const file = input.files[0];
       // file type is only image.
       if (/^image\//.test(file.type) || /^video\//.test(file.type)) {
-        this.saveToServer(file);
+        this.saveToServer(file, resolve);
       } else {
         console.warn('You could only upload images.');
       }
@@ -63,7 +63,7 @@ export class QuillService {
    *
    * @param {File} file
    */
-  saveToServer(file: File) {
+  saveToServer(file: File, resolve) {
     const range = this.editor.getSelection();
     var resultado = this.editor.insertEmbed(range.index, 'image', '/assets/images/loading-image.gif');
 
@@ -71,7 +71,8 @@ export class QuillService {
     fd.append('archivo', file);
     this.ajax.postData('preguntas/cargar-imagen', fd).subscribe(d => {
       if (d.success) {
-        this.insertToEditor(range.index, d.archivo.url, d.archivo.tipo_archivo);
+        this.insertToEditor(range.index, d.archivo.url, d.archivo.tipo_archivo, resolve);
+
       }
     });
   }
@@ -81,16 +82,17 @@ export class QuillService {
    *
    * @param {string} url
    */
-  insertToEditor(rango, url: string, tipo_archivo: number) {
+  insertToEditor(rango, url: string, tipo_archivo: number, resolve) {
     // push image url to rich editor.
     this.editor.deleteText(rango, 1);
     const range = this.editor.getSelection();
     if (tipo_archivo === 1) {
-      this.editor.insertEmbed(range.index, 'image', `${url}`);
+      this.editor.insertEmbed(range.index, 'image', `${url}`, 'user');
     } else if (tipo_archivo === 2) {
-      this.editor.insertEmbed(range.index, 'video', `${url}`);
+      this.editor.insertEmbed(range.index, 'video', `${url}`, 'user');
     }
 
+    resolve();
   }
 
 }
