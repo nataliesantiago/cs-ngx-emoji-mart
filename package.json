@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/package.schema.json",
+  "_from": "@ctrl/ngx-emoji-mart@^0.17.0",
+  "_id": "@ctrl/ngx-emoji-mart@0.17.0",
+  "_inBundle": false,
+  "_integrity": "sha512-gdHM/OPTbqWMIlFPAbjgAPo5BGsjkehILCInw5OttuT25HMZXJFjWVpi6vGixNVrAs8kz6sTYM/wbldS5GP9yQ==",
+  "_location": "/@ctrl/ngx-emoji-mart",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@ctrl/ngx-emoji-mart@^0.17.0",
+    "name": "@ctrl/ngx-emoji-mart",
+    "escapedName": "@ctrl%2fngx-emoji-mart",
+    "scope": "@ctrl",
+    "rawSpec": "^0.17.0",
+    "saveSpec": null,
+    "fetchSpec": "^0.17.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@ctrl/ngx-emoji-mart/-/ngx-emoji-mart-0.17.0.tgz",
+  "_shasum": "14368c55171be6a8ac31f1cc40b89ffd2bcfa596",
+  "_spec": "@ctrl/ngx-emoji-mart@^0.17.0",
+  "_where": "C:\\Users\\DVT-COLOMBIA\\Desktop\\Pasar Nuevo Pc\\Comunidades de Soporte\\Fronend",
+  "bugs": {
+    "url": "https://github.com/TypeCtrl/ngx-emoji-mart/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  },
+  "deprecated": false,
+  "description": "Customizable Slack-like emoji picker for Angular",
+  "es2015": "fesm2015/ctrl-ngx-emoji-mart.js",
+  "esm2015": "esm2015/ctrl-ngx-emoji-mart.js",
+  "esm5": "esm5/ctrl-ngx-emoji-mart.js",
+  "fesm2015": "fesm2015/ctrl-ngx-emoji-mart.js",
+  "fesm5": "fesm5/ctrl-ngx-emoji-mart.js",
+  "homepage": "https://github.com/TypeCtrl/ngx-emoji-mart",
+  "keywords": [
+    "angular",
+    "emoji",
+    "picker"
+  ],
+  "license": "MIT",
+  "main": "bundles/ctrl-ngx-emoji-mart.umd.js",
+  "metadata": "ctrl-ngx-emoji-mart.metadata.json",
+  "module": "fesm5/ctrl-ngx-emoji-mart.js",
+  "name": "@ctrl/ngx-emoji-mart",
+  "peerDependencies": {
+    "@angular/core": ">=6.0.0 <9.0.0",
+    "@angular/common": ">=6.0.0 <9.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TypeCtrl/ngx-emoji-mart.git"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "typings": "ctrl-ngx-emoji-mart.d.ts",
+  "version": "0.17.0"
+}
